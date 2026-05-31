@@ -22,7 +22,12 @@ import { UserRole } from '@prisma/client';
 import { deleteFromBucket } from '@src/shared/lib/supabase/storage';
 
 // Validators
-import { AnnouncementRouteParams } from '@src/features/announcements/validators';
+import {
+  AnnouncementRouteParams,
+  AnnouncementUploadFormData,
+} from '@src/features/announcements/validators';
+import { uploadAnnouncementImage } from '../services';
+import { BadRequestError } from '@src/shared/errors';
 
 /**
  * POST /api/announcements/:announcementId/upload
@@ -32,9 +37,10 @@ import { AnnouncementRouteParams } from '@src/features/announcements/validators'
  * @type {RequestHandler[]}
  */
 export const postUploadImage: RequestHandler[] = [
-  validate({ params: AnnouncementRouteParams }),
+  validate({ params: AnnouncementRouteParams, body: AnnouncementUploadFormData }),
 
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
+    const contentType = req.headers['content-type'] || '';
     const traceId = (req.traceId as string) || '';
     const announcementId = req.params.announcementId;
 
@@ -55,9 +61,24 @@ export const postUploadImage: RequestHandler[] = [
       { traceId, announcementId },
       'POST /api/announcements/[id]/upload - Uploading image',
     );
+    let file: Express.Multer.File | undefined;
+
+    if (contentType.includes('multipart/form-data')) {
+      file = (req as any).file as Express.Multer.File | undefined;
+    }
+
+    if (!file) {
+      throw new BadRequestError('Invalid request body');
+    }
 
     // TODO: wire up actual uploadAnnouncementImage service call
-    const announcement = {} as any;
+    const announcement = uploadAnnouncementImage({
+      announcementId: announcementId as string,
+      associationId: user.associationId,
+      file: file as any,
+      uploadedById: user.id,
+    });
+
     const oldStorageKey = undefined as string | undefined;
 
     // Clean up the previous image from storage if one existed
@@ -72,10 +93,7 @@ export const postUploadImage: RequestHandler[] = [
       }
     }
 
-    logger.info(
-      { traceId, announcementId },
-      'POST /api/announcements/[id]/upload - Success',
-    );
+    logger.info({ traceId, announcementId }, 'POST /api/announcements/[id]/upload - Success');
 
     return success(res, { data: announcement }, 200);
   }),

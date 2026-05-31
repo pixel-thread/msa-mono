@@ -23,6 +23,11 @@ import {
   UpdateAnnouncementSchema,
   PublishAnnouncementSchema,
 } from '@src/features/announcements/validators';
+import {
+  findUniqueAnnouncement,
+  updateAnnouncement,
+  deleteAnnouncement as deleteAnnouncementData,
+} from '../services';
 
 /**
  * @description Fetch a single announcement by ID.
@@ -50,8 +55,10 @@ export const getAnnouncement: RequestHandler[] = [
 
     logger.info({ traceId, announcementId }, 'GET /api/announcements/[id] - User authorized');
 
-    // TODO: wire up actual findUniqueAnnouncement service call
-    const announcement = {} as any;
+    const announcement = findUniqueAnnouncement({
+      announcementId: announcementId as string,
+      associationId: association.id,
+    });
 
     logger.info({ traceId, announcementId }, 'GET /api/announcements/[id] - Success');
 
@@ -105,13 +112,14 @@ export const putAnnouncement: RequestHandler[] = [
       throw new ForbiddenError('Only high role users can update announcements');
     }
 
-    logger.info(
-      { traceId, announcementId },
-      'PUT /api/announcements/[id] - Updating announcement',
-    );
+    logger.info({ traceId, announcementId }, 'PUT /api/announcements/[id] - Updating announcement');
 
-    // TODO: wire up actual updateAnnouncement service call
-    const announcement = {} as any;
+    const announcement = updateAnnouncement({
+      announcementId: announcementId as string,
+      associationId: association.id,
+      authorId: userId,
+      ...req.body,
+    });
 
     logger.info({ traceId, announcementId }, 'PUT /api/announcements/[id] - Success');
 
@@ -160,7 +168,11 @@ export const deleteAnnouncement: RequestHandler[] = [
       'DELETE /api/announcements/[id] - Deleting announcement',
     );
 
-    // TODO: wire up actual deleteAnnouncement service call
+    await deleteAnnouncementData({
+      announcementId: announcementId as string,
+      associationId: association.id,
+      authorId: userId,
+    });
 
     logger.info({ traceId, announcementId }, 'DELETE /api/announcements/[id] - Success');
 
@@ -217,7 +229,12 @@ export const patchAnnouncement: RequestHandler[] = [
     // Dispatch based on the requested action
     if (action === 'publish') {
       // TODO: wire up actual publish service call
-      const announcement = {} as any;
+      const announcement = await updateAnnouncement({
+        announcementId: announcementId as string,
+        associationId: association.id,
+        authorId: userId,
+        data: { status: 'PUBLISHED' },
+      });
 
       logger.info({ traceId, announcementId }, 'PATCH /api/announcements/[id] - Published');
 
