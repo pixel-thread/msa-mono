@@ -20,7 +20,7 @@ import { createRefreshToken } from '@src/features/auth/services/create-refresh-t
 import { createVerificationCode } from '@src/features/auth/services/create-verification-code';
 
 import { SignInSchema } from '@src/features/auth/validators';
-import { mockAsyncVerification } from '../utils/mock-async-veriification';
+import { mockAsyncVerification } from '../utils/mock-async-verification';
 
 /**
  * POST /api/auth/sign-in — Authenticate user with email and password
@@ -180,7 +180,7 @@ export const postSignIn: RequestHandler[] = [
       httpOnly: true,
       secure: env.NODE_ENV === 'production',
       sameSite: env.NODE_ENV === 'development' ? 'strict' : 'none',
-      maxAge: 15 * 60 * 1000, // 15 minutes
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
       path: '/',
     });
 

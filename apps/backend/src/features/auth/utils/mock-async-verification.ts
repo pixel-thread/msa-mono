@@ -1,7 +1,7 @@
 import { randomBetween } from './random-between';
 
 export const mockAsyncVerification = () => {
-  const delay = randomBetween(1000, 3000);
+  const delay = randomBetween(2000, 3000);
 
   return new Promise<boolean>((resolve) => {
     setTimeout(() => {
