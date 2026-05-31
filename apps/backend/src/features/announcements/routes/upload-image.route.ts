@@ -26,7 +26,7 @@ import {
   AnnouncementRouteParams,
   AnnouncementUploadFormData,
 } from '@src/features/announcements/validators';
-import { uploadAnnouncementImage } from '../services';
+import { uploadAnnouncementImage } from '@feature/announcements/services';
 import { BadRequestError } from '@src/shared/errors';
 
 /**
@@ -71,15 +71,13 @@ export const postUploadImage: RequestHandler[] = [
       throw new BadRequestError('Invalid request body');
     }
 
-    // TODO: wire up actual uploadAnnouncementImage service call
-    const announcement = uploadAnnouncementImage({
+    // Wire up actual uploadAnnouncementImage service call
+    const { announcement, oldStorageKey } = await uploadAnnouncementImage({
       announcementId: announcementId as string,
       associationId: user.associationId,
       file: file as any,
       uploadedById: user.id,
     });
-
-    const oldStorageKey = undefined as string | undefined;
 
     // Clean up the previous image from storage if one existed
     if (oldStorageKey) {
