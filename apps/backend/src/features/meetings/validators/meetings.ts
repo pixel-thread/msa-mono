@@ -35,7 +35,7 @@ export const UpdateMeetingSchema = z.object({
     .min(3, 'Title must be at least 3 characters')
     .optional(),
   type: z.enum(MeetingType, { message: 'Invalid meeting type' }).optional(),
-  scheduledAt: z.date({ message: 'Invalid scheduled date' }).optional(),
+  scheduledAt: z.coerce.date({ message: 'Invalid scheduled date' }).optional(),
   venue: z
     .string({ message: 'Venue must be a string' })
     .max(500, 'Venue cannot exceed 500 characters')
