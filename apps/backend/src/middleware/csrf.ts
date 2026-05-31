@@ -2,8 +2,11 @@ import { Request, Response, NextFunction } from 'express';
 import { generateCsrfToken, verifyCsrfToken } from '@src/shared/lib/csrf';
 import { ForbiddenError } from '@src/shared/errors';
 import { env } from '@src/env';
+import { logger } from '@src/shared/logger';
+import { getTraceId } from '@src/shared/utils';
 
 export function csrf(req: Request, res: Response, next: NextFunction) {
+  const traceId = getTraceId();
   const method = req.method.toUpperCase();
   const path = req.path;
   const authHeader = req.headers.authorization;
@@ -19,7 +22,7 @@ export function csrf(req: Request, res: Response, next: NextFunction) {
     res.cookie('csrf-token', token, {
       httpOnly: false,
       secure: env.NODE_ENV === 'production',
-      sameSite: 'none',
+      sameSite: env.NODE_ENV === 'production' ? 'none' : 'lax',
       path: '/',
       maxAge: 60 * 60 * 24,
     });
@@ -27,7 +30,17 @@ export function csrf(req: Request, res: Response, next: NextFunction) {
   }
 
   const csrfCookie = req.cookies?.['csrf-token'];
+
   const csrfHeader = req.headers['x-csrf-token'] as string | undefined;
+
+  if (!csrfCookie && !csrfHeader) {
+    logger.info({ csrfCookie, csrfHeader, traceId }, 'CSRF cookie and header are not present');
+    return next(new ForbiddenError('Invalid CSRF token'));
+  }
+
+  if (!csrfCookie !== !csrfHeader) {
+    return next(new ForbiddenError('Invalid CSRF token'));
+  }
 
   if (!csrfCookie || !csrfHeader || !verifyCsrfToken(csrfHeader, csrfCookie)) {
     return next(new ForbiddenError('Invalid or missing CSRF token'));

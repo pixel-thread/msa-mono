@@ -34,6 +34,7 @@ import paymentsRouter from '@feature/payments/routes/index';
 import subscriptionsRouter from '@feature/subscriptions/routes/index';
 import trainingRouter from '@feature/training/routes/index';
 import userRouter from '@feature/user/routes/index';
+import { csrf } from './middleware';
 
 export function createApp(): express.Express {
   const app = express();
@@ -46,6 +47,7 @@ export function createApp(): express.Express {
 
   app.use(cors);
   app.use(contextMiddleware);
+  app.use(csrf);
   app.use(securityHeaders);
   app.use(cookieParser());
   app.use(express.json({ limit: '5mb' }));
