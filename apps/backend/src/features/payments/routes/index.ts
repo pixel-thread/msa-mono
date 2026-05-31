@@ -54,63 +54,63 @@ const router: Router = Router();
 // ===========================================================================
 // Static Routes
 // ===========================================================================
-
-router.get('/', auth, listPayments);
-router.get('/my', auth, myPayments);
-router.get('/history', auth, paymentHistory);
-router.get('/stats', auth, paymentStats);
+router.use(auth);
+router.get('/', listPayments);
+router.get('/my', myPayments);
+router.get('/history', paymentHistory);
+router.get('/stats', paymentStats);
 
 // ===========================================================================
 // Razorpay Flow
 // ===========================================================================
 
-router.post('/order', auth, createOrder);
-router.post('/verify', auth, verifyPayment);
+router.post('/order', createOrder);
+router.post('/verify', verifyPayment);
 router.post('/webhook', webhook);
-router.post('/record', auth, recordPayment);
+router.post('/record', recordPayment);
 
 // ===========================================================================
 // User-Specific
 // ===========================================================================
 
-router.get('/users/:userId', auth, userPayments);
-router.get('/users/:userId/contributions', auth, userContributions);
+router.get('/users/:userId', userPayments);
+router.get('/users/:userId/contributions', userContributions);
 
 // ===========================================================================
 // Contributions
 // ===========================================================================
 
-router.get('/contributions', auth, listContributions);
-router.post('/contributions', auth, generateContributions);
-router.patch('/contributions', auth, waiveContributionHandler);
-router.get('/contributions/:contributionId', auth, getContribution);
+router.get('/contributions', listContributions);
+router.post('/contributions', generateContributions);
+router.patch('/contributions', waiveContributionHandler);
+router.get('/contributions/:contributionId', getContribution);
 
 // ===========================================================================
 // Reports
 // ===========================================================================
 
-router.get('/reports/collections', auth, collectionsReport);
+router.get('/reports/collections', collectionsReport);
 
 // ===========================================================================
 // Providers
 // Must come before :paymentId to avoid route collision with /providers
 // ===========================================================================
 
-router.get('/providers', auth, listProviders);
-router.post('/providers', auth, createProviderHandler);
-router.get('/providers/status', auth, providerStatus);
-router.get('/providers/:providerId', auth, getProvider);
-router.patch('/providers/:providerId', auth, updateProviderHandler);
-router.delete('/providers/:providerId', auth, deleteProviderHandler);
-router.post('/providers/:providerId/activate', auth, activateProvider);
-router.post('/providers/:providerId/test', auth, testProvider);
-router.post('/providers/:providerId/test/verify', auth, verifyTestProvider);
+router.get('/providers', listProviders);
+router.post('/providers', createProviderHandler);
+router.get('/providers/status', providerStatus);
+router.get('/providers/:providerId', getProvider);
+router.patch('/providers/:providerId', updateProviderHandler);
+router.delete('/providers/:providerId', deleteProviderHandler);
+router.post('/providers/:providerId/activate', activateProvider);
+router.post('/providers/:providerId/test', testProvider);
+router.post('/providers/:providerId/test/verify', verifyTestProvider);
 
 // ===========================================================================
 // Parameterized Routes (must be last — catch-all /:paymentId)
 // ===========================================================================
 
-router.get('/:paymentId', auth, getPayment);
-router.get('/:paymentId/receipt', auth, getReceipt);
+router.get('/:paymentId', getPayment);
+router.get('/:paymentId/receipt', getReceipt);
 
 export default router;
