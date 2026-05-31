@@ -25,7 +25,10 @@ import { UserRole } from '@prisma/client';
 import { ConsentService } from '@src/features/consent/services/consent.service';
 
 // Validators
-import { AllConsentRecordsQuerySchema } from '@src/features/consent/validators/consent.validators';
+import {
+  AllConsentRecordsQuerySchema,
+  AllConsentRecordsQueryInput,
+} from '@src/features/consent/validators/consent.validators';
 
 // ---- Declarations
 
@@ -105,11 +108,11 @@ export const getAllConsentRecords: RequestHandler[] = [
     const page = (req.query as any).page ?? 1;
 
     // ---- Fetch consent records
-    // TODO: wire up actual typed service call (currently uses `as any` cast)
+    // Wire up actual typed service call
 
     const { records, total } = await ConsentService.getAllConsentRecords(
       association.id,
-      req.query as any,
+      req.query as AllConsentRecordsQueryInput,
     );
 
     // ---- Log success and return response
