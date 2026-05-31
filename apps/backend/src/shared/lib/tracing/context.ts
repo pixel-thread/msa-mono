@@ -10,7 +10,7 @@ export type Context = {
   userId?: string;
   /** Association ID for multi-tenant scoping, if available */
   associationId?: string;
-  role: string[];
+  role?: string[];
 };
 
 const asyncLocalStorage = new AsyncLocalStorage<Context>();
