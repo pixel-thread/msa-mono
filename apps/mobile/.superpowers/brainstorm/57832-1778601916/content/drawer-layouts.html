@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drawer Layout Options</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #f8fafc; font-family: sans-serif; }
+        .drawer-preview { width: 300px; height: 600px; border-radius: 20px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); overflow: hidden; position: relative; }
+        .active-item { background-color: #f1f5f9; border-left: 4px solid #4f46e5; color: #4f46e5; }
+    </style>
+</head>
+<body class="p-8 flex flex-wrap gap-12 justify-center">
+    <!-- Option 1: Minimalist -->
+    <div class="flex flex-col items-center">
+        <h3 class="mb-4 font-bold text-slate-700">Option 1: Minimalist</h3>
+        <div class="drawer-preview bg-white border border-slate-200">
+            <div class="p-6 border-b border-slate-100">
+                <h1 class="text-2xl font-black text-indigo-600">MFSA</h1>
+                <p class="text-xs text-slate-400 uppercase tracking-widest font-bold mt-1">Association App</p>
+            </div>
+            <div class="py-4">
+                <div class="px-6 py-3 active-item font-medium flex items-center gap-3">
+                    <span class="w-5 h-5 bg-indigo-100 rounded"></span> Home
+                </div>
+                <div class="px-6 py-3 text-slate-600 font-medium flex items-center gap-3 hover:bg-slate-50">
+                    <span class="w-5 h-5 bg-slate-100 rounded"></span> Meetings
+                </div>
+                <div class="px-6 py-3 text-slate-600 font-medium flex items-center gap-3 hover:bg-slate-50">
+                    <span class="w-5 h-5 bg-slate-100 rounded"></span> Profile
+                </div>
+                <div class="px-6 py-3 text-slate-600 font-medium flex items-center gap-3 hover:bg-slate-50">
+                    <span class="w-5 h-5 bg-slate-100 rounded"></span> Settings
+                </div>
+            </div>
+            <div class="absolute bottom-0 w-full p-6 border-t border-slate-100">
+                <div class="text-red-500 font-bold flex items-center gap-3 cursor-pointer">
+                    <span class="w-5 h-5 bg-red-50 rounded"></span> Logout
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Option 2: Profile-Centric -->
+    <div class="flex flex-col items-center">
+        <h3 class="mb-4 font-bold text-slate-700">Option 2: Profile-Centric</h3>
+        <div class="drawer-preview bg-white border border-slate-200">
+            <div class="p-6 bg-slate-900 text-white">
+                <div class="w-12 h-12 bg-indigo-500 rounded-full mb-3 flex items-center justify-center text-xl font-bold">JD</div>
+                <h1 class="text-lg font-bold">John Doe</h1>
+                <p class="text-sm text-slate-400">john.doe@example.com</p>
+            </div>
+            <div class="p-4 bg-slate-50 border-b border-slate-200">
+                <p class="text-[10px] font-bold text-slate-500 uppercase">App</p>
+                <p class="text-sm font-black text-indigo-600">MFSA PRO</p>
+            </div>
+            <div class="py-4">
+                <div class="px-6 py-3 active-item font-medium flex items-center gap-3">
+                    <span class="w-5 h-5 bg-indigo-100 rounded"></span> Dashboard
+                </div>
+                <div class="px-6 py-3 text-slate-600 font-medium flex items-center gap-3">
+                    <span class="w-5 h-5 bg-slate-100 rounded"></span> Calendar
+                </div>
+                <div class="border-t border-slate-100 my-2 mx-6"></div>
+                <div class="px-6 py-3 text-slate-600 font-medium flex items-center gap-3">
+                    <span class="w-5 h-5 bg-slate-100 rounded"></span> Subscriptions
+                </div>
+                <div class="px-6 py-3 text-slate-600 font-medium flex items-center gap-3">
+                    <span class="w-5 h-5 bg-slate-100 rounded"></span> Support
+                </div>
+            </div>
+            <div class="absolute bottom-0 w-full p-6 bg-slate-50 border-t border-slate-200">
+                <div class="text-slate-600 font-bold flex items-center justify-between">
+                    <span>Logout</span>
+                    <span class="text-xs text-slate-400">v1.0.0</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Option 3: Modern Layout -->
+    <div class="flex flex-col items-center">
+        <h3 class="mb-4 font-bold text-slate-700">Option 3: Modern & Grouped</h3>
+        <div class="drawer-preview bg-slate-50 border border-slate-200">
+            <div class="p-6 flex items-center gap-3">
+                <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white font-bold">M</div>
+                <h1 class="text-xl font-bold text-slate-800 tracking-tight">MFSA</h1>
+            </div>
+            <div class="px-3 pb-4">
+                <p class="px-4 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Main Menu</p>
+                <div class="px-4 py-3 bg-white rounded-xl shadow-sm border border-slate-100 mb-2 font-medium text-slate-800 flex items-center gap-3">
+                    <div class="w-2 h-2 rounded-full bg-indigo-500"></div> Home
+                </div>
+                <div class="px-4 py-3 text-slate-500 font-medium flex items-center gap-3">
+                    <div class="w-2 h-2 rounded-full bg-slate-300"></div> Meetings
+                </div>
+                <div class="px-4 py-3 text-slate-500 font-medium flex items-center gap-3">
+                    <div class="w-2 h-2 rounded-full bg-slate-300"></div> Members
+                </div>
+                
+                <p class="px-4 py-2 mt-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Account</p>
+                <div class="px-4 py-3 text-slate-500 font-medium flex items-center gap-3">
+                    <div class="w-2 h-2 rounded-full bg-slate-300"></div> My Profile
+                </div>
+                <div class="px-4 py-3 text-slate-500 font-medium flex items-center gap-3">
+                    <div class="w-2 h-2 rounded-full bg-slate-300"></div> Notification Settings
+                </div>
+                <div class="px-4 py-3 text-slate-500 font-medium flex items-center gap-3">
+                    <div class="w-2 h-2 rounded-full bg-slate-300"></div> Privacy Policy
+                </div>
+            </div>
+            <div class="absolute bottom-6 left-6 right-6">
+                <div class="p-4 bg-indigo-600 rounded-2xl text-white shadow-lg shadow-indigo-200">
+                    <p class="text-xs opacity-80">Connected as</p>
+                    <p class="font-bold truncate">Harrison</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

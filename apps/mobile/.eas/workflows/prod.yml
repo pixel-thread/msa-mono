@@ -1,0 +1,22 @@
+name: Production Build & OTA
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Build Production
+    type: build
+    params:
+      platform: ios
+      profile: production
+
+  publish-ota:
+    name: Publish OTA Update
+    needs: [build]
+    type: update
+    params:
+      channel: production
+      message: "${{ github.commit_message }}"

@@ -1,0 +1,37 @@
+<h2>Subscription Layout Options</h2>
+<p class="subtitle">How should we organize the active plan, user details, and payment history?</p>
+
+<div class="options">
+  <div class="option" data-choice="unified" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>Unified Single-Scroll</h3>
+      <p>A single long page with clear sections:</p>
+      <ul>
+        <li><strong>Top:</strong> Profile Card (Name, ID, Email)</li>
+        <li><strong>Middle:</strong> Billing Stats Grid (Total Paid, Due, etc.)</li>
+        <li><strong>Center:</strong> Active Plan card with "Pay" button</li>
+        <li><strong>Bottom:</strong> Payment History list (expandable)</li>
+      </ul>
+      <p><em>Best for a quick overview of everything in one place.</em></p>
+    </div>
+  </div>
+
+  <div class="option" data-choice="tabbed" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>Tabbed Layout</h3>
+      <p>Split view for better focus:</p>
+      <ul>
+        <li><strong>Tab 1 (Plan):</strong> Profile summary + Active Plan + Pay button</li>
+        <li><strong>Tab 2 (History):</strong> Detailed Billing Stats + Full Audit Trail list</li>
+      </ul>
+      <p><em>Best for managing long payment histories without cluttering the main view.</em></p>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>Audit Trail Detail Level</h3>
+  <p>The history will include: <strong>Date, Amount, Status, Currency, Created By, and Allocation details</strong> (which month/period the payment covered).</p>
+</div>

@@ -1,0 +1,14 @@
+name: Development Build
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  build:
+    name: Build Development
+    type: build
+    params:
+      platform: ios
+      profile: development

@@ -1,0 +1,14 @@
+{
+  "id": "db58e6cc-4f71-4b4b-be9e-63b81e2a3568",
+  "name": "/Users/harrison/Downloads/msa",
+  "projectResources": {
+    "resources": [
+      {
+        "gitFolder": {
+          "folderUri": "file:///Users/harrison/Downloads/msa",
+          "allowWrite": true
+        }
+      }
+    ]
+  }
+}

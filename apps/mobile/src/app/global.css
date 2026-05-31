@@ -1,0 +1,134 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Core Semantic Tokens */
+    --background: 0 0% 100%;
+    --foreground: 220 13% 5%;
+    --card: 0 0% 100%;
+    --card-foreground: 220 13% 5%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 13% 5%;
+    --primary: 221 100% 50%;
+    --primary-foreground: 0 0% 100%;
+    --primary-active: 221 100% 40%;
+    --primary-disabled: 216 26% 73%;
+    --on-primary: 0 0% 100%;
+    --on-dark: 0 0% 100%;
+    --on-dark-soft: 218 7% 68%;
+    --secondary: 216 17% 94%;
+    --secondary-foreground: 220 13% 5%;
+    --muted: 0 0% 97%;
+    --muted-foreground: 214 6% 51%;
+    --accent: 0 0% 97%;
+    --accent-foreground: 220 13% 5%;
+    --destructive: 355 73% 47%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 218 14% 89%;
+    --input: 218 14% 89%;
+    --ring: 221 100% 50%;
+    --radius: 0.5rem;
+
+    /* Extended Semantic Tokens */
+    --ink: 220 13% 5%;
+    --body: 221 10% 39%;
+    --body-strong: 220 13% 5%;
+    --muted-soft: 218 7% 68%;
+    --hairline: 218 14% 89%;
+    --hairline-soft: 216 17% 94%;
+    --canvas: 0 0% 100%;
+    --surface-soft: 0 0% 97%;
+    --surface-card: 0 0% 100%;
+    --surface-strong: 216 17% 94%;
+    --surface-dark: 220 13% 5%;
+    --surface-dark-elevated: 220 12% 10%;
+
+    /* Indicator Tokens */
+    --semantic-up: 155 94% 36%;
+    --semantic-down: 355 73% 47%;
+    --accent-yellow: 44 100% 48%;
+
+    /* Chart Tokens */
+    --chart-1: 221 100% 50%;
+    --chart-2: 155 94% 36%;
+    --chart-3: 44 100% 48%;
+    --chart-4: 355 73% 47%;
+    --chart-5: 216 26% 73%;
+
+    /* Sidebar Tokens */
+    --sidebar: 0 0% 97%;
+    --sidebar-foreground: 220 13% 5%;
+    --sidebar-primary: 221 100% 50%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 216 17% 94%;
+    --sidebar-accent-foreground: 220 13% 5%;
+    --sidebar-border: 218 14% 89%;
+    --sidebar-ring: 221 100% 50%;
+  }
+
+  .dark {
+    /* Core Semantic Tokens */
+    --background: 220 13% 5%;
+    --foreground: 0 0% 100%;
+    --card: 220 12% 10%;
+    --card-foreground: 0 0% 100%;
+    --popover: 220 12% 10%;
+    --popover-foreground: 0 0% 100%;
+    --primary: 221 100% 50%;
+    --primary-foreground: 0 0% 100%;
+    --primary-active: 221 100% 40%;
+    --primary-disabled: 211 23% 29%;
+    --on-primary: 0 0% 100%;
+    --on-dark: 220 13% 5%;
+    --on-dark-soft: 221 10% 39%;
+    --secondary: 220 12% 10%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 220 12% 10%;
+    --muted-foreground: 218 7% 68%;
+    --accent: 220 12% 10%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 355 73% 47%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 220 7% 18%;
+    --input: 220 7% 18%;
+    --ring: 221 100% 50%;
+
+    /* Extended Semantic Tokens */
+    --ink: 0 0% 100%;
+    --body: 218 7% 68%;
+    --body-strong: 0 0% 100%;
+    --muted-soft: 221 10% 39%;
+    --hairline: 220 7% 18%;
+    --hairline-soft: 220 12% 10%;
+    --canvas: 220 13% 5%;
+    --surface-soft: 220 13% 5%;
+    --surface-card: 220 12% 10%;
+    --surface-strong: 220 7% 18%;
+    --surface-dark: 0 0% 100%;
+    --surface-dark-elevated: 0 0% 97%;
+
+    /* Indicator Tokens (same as light) */
+    --semantic-up: 155 94% 36%;
+    --semantic-down: 355 73% 47%;
+    --accent-yellow: 44 100% 48%;
+
+    /* Chart Tokens */
+    --chart-1: 221 100% 50%;
+    --chart-2: 155 94% 36%;
+    --chart-3: 44 100% 48%;
+    --chart-4: 355 73% 47%;
+    --chart-5: 211 23% 29%;
+
+    /* Sidebar Tokens */
+    --sidebar: 220 12% 10%;
+    --sidebar-foreground: 0 0% 100%;
+    --sidebar-primary: 221 100% 50%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 7% 18%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 220 7% 18%;
+    --sidebar-ring: 221 100% 50%;
+  }
+}
