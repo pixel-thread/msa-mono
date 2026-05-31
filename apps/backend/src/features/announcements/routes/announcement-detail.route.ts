@@ -55,7 +55,7 @@ export const getAnnouncement: RequestHandler[] = [
 
     logger.info({ traceId, announcementId }, 'GET /api/announcements/[id] - User authorized');
 
-    const announcement = findUniqueAnnouncement({
+    const announcement = await findUniqueAnnouncement({
       announcementId: announcementId as string,
       associationId: association.id,
     });
@@ -228,7 +228,6 @@ export const patchAnnouncement: RequestHandler[] = [
 
     // Dispatch based on the requested action
     if (action === 'publish') {
-      // TODO: wire up actual publish service call
       const announcement = await updateAnnouncement({
         announcementId: announcementId as string,
         associationId: association.id,
@@ -242,8 +241,12 @@ export const patchAnnouncement: RequestHandler[] = [
     }
 
     if (action === 'archive') {
-      // TODO: wire up actual archive service call
-      const announcement = {} as any;
+      const announcement = await updateAnnouncement({
+        announcementId: announcementId as string,
+        associationId: association.id,
+        authorId: userId,
+        data: { status: 'ARCHIVED' },
+      });
 
       logger.info({ traceId, announcementId }, 'PATCH /api/announcements/[id] - Archived');
 
@@ -251,8 +254,12 @@ export const patchAnnouncement: RequestHandler[] = [
     }
 
     if (action === 'unpublish') {
-      // TODO: wire up actual unpublish service call
-      const announcement = {} as any;
+      const announcement = await updateAnnouncement({
+        announcementId: announcementId as string,
+        associationId: association.id,
+        authorId: userId,
+        data: { status: 'DRAFT' },
+      });
 
       logger.info({ traceId, announcementId }, 'PATCH /api/announcements/[id] - Unpublished');
 
