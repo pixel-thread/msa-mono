@@ -23,7 +23,7 @@ import { routeRateLimiter } from '@src/middleware/rate-limiter';
 
 /** Aggregates all authentication-related route handlers under a single router. */
 const router: Router = Router();
-router.use(routeRateLimiter(5, '60 s'));
+router.use(routeRateLimiter(20, '60 s'));
 
 // ---- Public auth routes ----
 router.post('/sign-up', postSignUp);

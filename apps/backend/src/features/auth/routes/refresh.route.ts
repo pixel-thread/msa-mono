@@ -34,6 +34,7 @@ export const postRefresh: RequestHandler[] = [
 
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
+
     logger.info({ traceId }, 'POST /api/auth/refresh - Request started');
 
     const bodyToken = req.body?.token;
@@ -45,7 +46,15 @@ export const postRefresh: RequestHandler[] = [
     // ---- Verify the JWT signature ----
     try {
       await verifyRefreshToken(refreshCookie);
-    } catch {
+    } catch (error) {
+      logger.error(
+        {
+          traceId,
+          error: error instanceof Error ? error.message : 'Unknown error',
+        },
+        'POST /api/auth/refresh - Invalid refresh token',
+      );
+
       throw new UnauthorizedError('Invalid refresh token');
     }
 
@@ -118,7 +127,9 @@ export const postRefresh: RequestHandler[] = [
       { accessToken: newAccessToken, refreshToken: newRefreshToken },
       30,
     );
+
     await updateRefreshToken({ where: { id: storedToken.id }, data: { revokedAt: new Date() } });
+
     await createRefreshToken({
       data: {
         user: { connect: { id: user.id } },

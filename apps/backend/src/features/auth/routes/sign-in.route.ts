@@ -135,7 +135,6 @@ export const postSignIn: RequestHandler[] = [
       httpOnly: true,
       secure: env.NODE_ENV === 'production',
       sameSite: 'none',
-      maxAge: 15 * 60 * 1000,
       path: '/',
     });
 
@@ -143,7 +142,6 @@ export const postSignIn: RequestHandler[] = [
       httpOnly: true,
       secure: env.NODE_ENV === 'production',
       sameSite: 'none',
-      maxAge: 7 * 24 * 60 * 60 * 1000,
       path: '/',
     });
 

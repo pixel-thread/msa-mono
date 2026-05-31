@@ -8,6 +8,7 @@ import { logger } from '@src/shared/logger/server';
 
 export const GET = withAssociation({}, async (_association, { traceId }, req) => {
   const userId = req.headers.get('x-user-id');
+
   logger.info({ traceId, userId }, 'GET /api/auth/me - Request started');
 
   if (!userId) {

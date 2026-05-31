@@ -19,8 +19,10 @@ import { getAuthCachedUser, cacheAuthUser } from '@src/features/auth/lib/cache';
  * caches the result to reduce database load on repeated requests.
  */
 export const getMe: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
-  const traceId = (req.traceId as string) || '';
-  const userId = req.userId as string;
+  const traceId = req.traceId;
+
+  const userId = req.user.id;
+
   logger.info({ traceId, userId }, 'GET /api/auth/me - Request started');
 
   if (!userId) throw new UnauthorizedError('Unauthorized');
@@ -36,6 +38,7 @@ export const getMe: RequestHandler = asyncHandler(async (req: Request, res: Resp
 
   // ---- Fetch fresh user data from the database ----
   const user = await getUniqueUser({ where: { id: userId } });
+
   if (!user || user.status !== 'ACTIVE') throw new UnauthorizedError('User not found or inactive');
 
   // Cache the result so subsequent requests are faster
