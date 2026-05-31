@@ -5,7 +5,6 @@ import { env } from '@src/env';
 
 import { cors } from '@middleware/cors';
 import { contextMiddleware } from '@middleware/context';
-import { traceId } from '@middleware/trace-id';
 import { securityHeaders } from '@middleware/security-headers';
 import { rateLimiter } from '@middleware/rate-limiter';
 import { errorHandler } from '@middleware/error-handler';
@@ -46,7 +45,6 @@ export function createApp(): express.Express {
 
   app.use(cors);
   app.use(contextMiddleware);
-  app.use(traceId);
   app.use(securityHeaders);
   app.use(cookieParser());
   app.use(express.json({ limit: '5mb' }));
@@ -97,14 +95,6 @@ export function createApp(): express.Express {
       message: 'Route not found',
     });
   });
-
-  /**
-   * -------------------------------------------------------
-   * Global Rate Limiter
-   * -------------------------------------------------------
-   */
-
-  app.use(rateLimiter);
 
   /**
    * -------------------------------------------------------

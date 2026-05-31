@@ -30,7 +30,9 @@ export async function auth(req: Request, _res: Response, next: NextFunction) {
 
   const user = await prisma.user.findUnique({ where: { id: payload.sub } });
 
-  if (!user) throw new UnauthorizedError('Invalid token');
+  if (!user) {
+    return next(new UnauthorizedError('Invalid token'));
+  }
 
   req.userId = payload.sub;
 
@@ -42,6 +44,7 @@ export async function auth(req: Request, _res: Response, next: NextFunction) {
   };
 
   ContextStore.set('userId', user.id);
+  ContextStore.set('associationId', user.associationId);
 
   next();
 }

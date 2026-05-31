@@ -10,3 +10,4 @@ export * from './password';
 export * from './redis';
 export * from './resend';
 export * from './token';
+export * from './tracing';

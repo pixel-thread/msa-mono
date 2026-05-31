@@ -4,17 +4,23 @@ import { ContextStore } from '@src/shared/lib/tracing/context';
 
 /**
  * Middleware to initialize the AsyncLocalStorage context for each request.
- * Sets a unique requestId by default.
+ * Sets a unique traceId by default.
  */
 export function contextMiddleware(
   req: Request,
-  _res: Response,
+  res: Response,
   next: NextFunction,
 ) {
-  const requestId = (req.headers['x-request-id'] as string) || randomUUID();
-  
-  // Also attach to request object for compatibility with existing trace-id middleware if needed
+  const requestId =
+    (req.headers['x-trace-id'] as string) ||
+    (req.headers['x-request-id'] as string) ||
+    randomUUID();
+
+  // Also attach to request object for compatibility
   req.traceId = requestId;
+
+  // Set the response header
+  res.setHeader('x-trace-id', requestId);
 
   ContextStore.run(
     {
