@@ -118,3 +118,4 @@ temp
 # Generated Prisma Client
 # =========================================
 node_modules/.prisma
+apps/web/next-env.d.ts

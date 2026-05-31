@@ -9,7 +9,7 @@ import type { RequestHandler } from 'express';
 
 import { UserRole } from '@prisma/client';
 
-import { validate } from '@src/shared/lib/validate';
+import { validate } from '@lib/validate';
 import { prisma } from '@src/shared/lib/prisma';
 import { success } from '@src/shared/utils/responses';
 import { ConflictError, NotFoundError } from '@src/shared/errors';
@@ -34,7 +34,7 @@ import type { CreateAssociationInput } from '@validator/associations';
  */
 export const getAssociations: RequestHandler[] = [
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
-    const traceId = (req.traceId as string) || '';
+    const traceId = req.traceId as string;
 
     logger.info({ traceId }, 'GET /api/admin/associations - Request started');
 
