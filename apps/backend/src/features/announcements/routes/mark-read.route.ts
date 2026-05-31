@@ -63,15 +63,12 @@ export const postMarkRead: RequestHandler[] = [
 
     // Wire up actual markAnnouncementRead service call
     const readReceipt = await markAnnouncementRead({
-      announcementId,
+      announcementId: announcementId as string,
       userId,
       associationId: association.id,
     });
 
-    logger.info(
-      { traceId, announcementId },
-      'POST /api/announcements/[id]/read - Success',
-    );
+    logger.info({ traceId, announcementId }, 'POST /api/announcements/[id]/read - Success');
 
     return success(res, {
       data: readReceipt,
