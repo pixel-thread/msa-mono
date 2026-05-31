@@ -8,6 +8,7 @@ import { contextMiddleware } from '@middleware/context';
 import { securityHeaders } from '@middleware/security-headers';
 import { rateLimiter } from '@middleware/rate-limiter';
 import { errorHandler } from '@middleware/error-handler';
+import { timeout } from '@middleware/timeout';
 
 import { logger } from './shared/logger';
 
@@ -49,6 +50,7 @@ export function createApp(): express.Express {
   app.use(cookieParser());
   app.use(express.json({ limit: '5mb' }));
   app.use(rateLimiter);
+  app.use(timeout(10_000));
 
   /**
    * -------------------------------------------------------

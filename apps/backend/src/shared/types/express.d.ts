@@ -11,6 +11,7 @@ declare global {
         role?: UserRole[];
         associationId?: string;
       };
+      signal?: AbortSignal;
     }
   }
 }

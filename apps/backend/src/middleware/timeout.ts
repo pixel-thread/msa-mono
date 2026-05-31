@@ -1,0 +1,25 @@
+import type { Request, Response, NextFunction } from 'express';
+
+export function timeout(ms: number) {
+  return (req: Request, res: Response, next: NextFunction) => {
+    const controller = new AbortController();
+
+    req.signal = controller.signal;
+
+    const timer = setTimeout(() => {
+      controller.abort();
+
+      if (!res.headersSent) {
+        res.status(408).json({
+          success: false,
+          message: 'Request timeout',
+        });
+      }
+    }, ms);
+
+    res.on('finish', () => clearTimeout(timer));
+    res.on('close', () => clearTimeout(timer));
+
+    next();
+  };
+}
