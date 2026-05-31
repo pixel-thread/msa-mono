@@ -63,7 +63,7 @@ export type UpdateSupplementInput = z.infer<typeof UpdateSupplementSchema>;
 export const CreateTrainingCertificateSchema = z.object({
   userId: z.uuid('Invalid user ID'),
   certificateNumber: z.string().max(100).optional(),
-  issuedAt: z.coerce.date().optional(),
+  issuedAt: z.coerce.date(),
   thumbnailUrl: z.url('Invalid thumbnail URL').optional(),
 });
 

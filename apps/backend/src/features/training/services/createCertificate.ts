@@ -6,6 +6,7 @@ import { prisma } from '@lib/prisma';
 
 // ---- Validators ----
 import { CreateTrainingCertificateInput } from '../validators/training';
+import { BadRequestError, NotFoundError } from '@src/shared/errors';
 
 // ---- Interfaces ----
 
@@ -37,7 +38,23 @@ export async function createCertificate({
     });
 
     if (!trainingModule) {
-      throw new Error('Training module not found');
+      throw new NotFoundError('Training module not found');
+    }
+    // check if user exists
+    const user = await tx.user.findFirst({
+      where: { id: data.userId, associationId },
+    });
+
+    if (!user) {
+      throw new NotFoundError('User not found');
+    }
+    //check if user is already has a certificate under this module
+    const existingCertificate = await tx.trainingCertificate.findFirst({
+      where: { moduleId, userId: data.userId },
+    });
+
+    if (existingCertificate) {
+      throw new BadRequestError('User already has a certificate under this module');
     }
 
     // Create the certificate record
