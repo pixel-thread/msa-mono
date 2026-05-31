@@ -41,6 +41,7 @@
     "resend": "^6.12.3",
     "ssh2-sftp-client": "^12.1.1",
     "tsconfig-paths": "^4.2.0",
+    "ws": "^8.21.0",
     "zod": "^4.4.3"
   },
   "devDependencies": {
