@@ -17,6 +17,7 @@
     "isolatedModules": true,
     "paths": {
       "@src/*": ["./src/*"],
+      "@middleware/*": ["./src/middleware/*"],
       "@feature/*": ["./src/features/*"],
       "@validator/*": ["./src/shared/validators/*"],
       "@lib/*": ["./src/shared/lib/*"],

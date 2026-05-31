@@ -3,12 +3,12 @@ import cookieParser from 'cookie-parser';
 
 import { env } from '@src/env';
 
-import { cors } from './middleware/cors';
-import { contextMiddleware } from './middleware/context';
-import { traceId } from './middleware/trace-id';
-import { securityHeaders } from './middleware/security-headers';
-import { rateLimiter } from './middleware/rate-limiter';
-import { errorHandler } from './middleware/error-handler';
+import { cors } from '@middleware/cors';
+import { contextMiddleware } from '@middleware/context';
+import { traceId } from '@middleware/trace-id';
+import { securityHeaders } from '@middleware/security-headers';
+import { rateLimiter } from '@middleware/rate-limiter';
+import { errorHandler } from '@middleware/error-handler';
 
 import { logger } from './shared/logger';
 
