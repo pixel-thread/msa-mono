@@ -1,5 +1,7 @@
 # Backend Development rules baseline
 
-- APIs reside in `src/app/api/`.
-- Scoping via `withAssociation` is mandatory.
-- Schema verification using Zod validation.
+- APIs reside in `src/features/*/routes/`.
+- Scoping via `associationId` in services is mandatory (retrieved from `ContextStore` or `req.user`).
+- Input validation using `validate()` middleware and Zod schemas.
+- Use `asyncHandler()` for all asynchronous route handlers.
+- Return responses using `success()` and `error()` helpers.

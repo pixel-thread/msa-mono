@@ -6,7 +6,7 @@
 
 **Architecture:** Split-endpoint registration (Public `register`, Protected `link`) with a global `PushToken` model and an `ExpoNotificationService` wrapper around `expo-server-sdk`.
 
-**Tech Stack:** Next.js, Prisma, Expo Server SDK, TypeScript.
+**Tech Stack:** Express 5, Prisma, Expo Server SDK, TypeScript.
 
 ---
 
