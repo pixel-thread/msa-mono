@@ -2,7 +2,7 @@ import helmet from 'helmet';
 
 /**
  * Middleware to set security-related HTTP headers using Helmet.
- * 
+ *
  * Configures:
  * - Content Security Policy (CSP)
  * - Referrer Policy
