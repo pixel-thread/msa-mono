@@ -35,6 +35,7 @@ import {
 
 // ---- External libs ----
 import { z } from 'zod';
+import { fileUpload } from '@src/middleware/file-upload';
 
 // ---- Schemas ----
 
@@ -96,6 +97,7 @@ export const getCertificates: RequestHandler[] = [
 // ---------------------------------------------------------------------------
 
 export const postCertificate: RequestHandler[] = [
+  fileUpload.single('file'),
   validate({ params: ModuleParamsSchema }),
 
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
@@ -121,7 +123,7 @@ export const postCertificate: RequestHandler[] = [
       // Parse request: file + metadata JSON
       const { moduleId } = req.params;
 
-      const file = (req as any).file as Express.Multer.File | undefined;
+      const file = req.file;
       const metadataRaw = req.body.metadata as string | undefined;
 
       if (!file || !metadataRaw) {
@@ -142,9 +144,8 @@ export const postCertificate: RequestHandler[] = [
       }
 
       // Upload file to Supabase storage
-      const webFile = new File([file.buffer], file.originalname, { type: file.mimetype });
       const uploadResult = await uploadToBucket(
-        webFile,
+        file,
         `certificates/${association.slug}/${moduleId}`,
         traceId,
       );
@@ -244,6 +245,7 @@ export const getCertificate: RequestHandler[] = [
 // ---------------------------------------------------------------------------
 
 export const patchCertificate: RequestHandler[] = [
+  fileUpload.single('file'),
   validate({ params: CertificateParamsSchema }),
 
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
@@ -268,7 +270,7 @@ export const patchCertificate: RequestHandler[] = [
 
       // Parse request: optional file + required metadata JSON
       const { moduleId, certificateId } = req.params;
-      const file = (req as any).file as Express.Multer.File | undefined;
+      const file = req.file;
       const metadataRaw = req.body.metadata as string | undefined;
 
       if (!metadataRaw) {
@@ -293,9 +295,8 @@ export const patchCertificate: RequestHandler[] = [
           throw new BadRequestError('File is empty');
         }
 
-        const webFile = new File([file.buffer], file.originalname, { type: file.mimetype });
         const uploadResult = await uploadToBucket(
-          webFile,
+          file,
           `certificates/${association.slug}/${moduleId}`,
           traceId,
         );
@@ -415,6 +416,7 @@ export const deleteCertificateHandler: RequestHandler[] = [
 // ---------------------------------------------------------------------------
 
 export const postCertificateTemplate: RequestHandler[] = [
+  fileUpload.single('file'),
   validate({ params: ModuleParamsSchema }),
 
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
@@ -439,7 +441,7 @@ export const postCertificateTemplate: RequestHandler[] = [
 
       // Parse request: file + optional name
       const { moduleId } = req.params;
-      const file = (req as any).file as Express.Multer.File | undefined;
+      const file = req.file;
 
       if (!file || !file.size) {
         throw new BadRequestError('File is required');
@@ -448,9 +450,8 @@ export const postCertificateTemplate: RequestHandler[] = [
       const name = (req.body.name as string) || 'Module Certificate';
 
       // Upload template file to Supabase storage
-      const webFile = new File([file.buffer], file.originalname, { type: file.mimetype });
       const uploadResult = await uploadToBucket(
-        webFile,
+        file,
         `certificates/${association.slug}/${moduleId}/template`,
         traceId,
       );

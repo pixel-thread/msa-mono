@@ -95,17 +95,17 @@ export type UpdateSupplementInput = z.infer<typeof UpdateSupplementSchema>;
 
 /** Schema for creating a training certificate. */
 export const CreateTrainingCertificateSchema = z.object({
-  userId: z.string().uuid('Invalid user ID'),
+  userId: z.uuid('Invalid user ID'),
   certificateNumber: z.string().max(100).optional(),
-  issuedAt: z.string().datetime().optional(),
-  thumbnailUrl: z.string().url('Invalid thumbnail URL').optional(),
+  issuedAt: z.coerce.date().optional(),
+  thumbnailUrl: z.url('Invalid thumbnail URL').optional(),
 });
 
 /** Schema for updating a training certificate. */
 export const UpdateTrainingCertificateSchema = z.object({
   certificateNumber: z.string().max(100).optional(),
-  issuedAt: z.string().datetime().optional(),
-  thumbnailUrl: z.string().url('Invalid thumbnail URL').optional(),
+  issuedAt: z.coerce.date().optional(),
+  thumbnailUrl: z.url('Invalid thumbnail URL').optional(),
 });
 
 /** Validated type for creating a certificate. */

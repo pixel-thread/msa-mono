@@ -29,6 +29,7 @@ import { RecordCompletionSchema } from '@src/features/training/validators/traini
 
 // ---- External libs ----
 import { z } from 'zod';
+import { fileUpload } from '@src/middleware/file-upload';
 
 // ---- Schemas ----
 
@@ -145,6 +146,7 @@ export const postModuleComplete: RequestHandler[] = [
 // ---------------------------------------------------------------------------
 
 export const postAdminComplete: RequestHandler[] = [
+  fileUpload.single('file'),
   validate({ params: AssignmentParamsSchema }),
 
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
@@ -178,15 +180,18 @@ export const postAdminComplete: RequestHandler[] = [
 
       if (contentType.includes('multipart/form-data')) {
         const metadataRaw = req.body.metadata as string | undefined;
-        file = (req as any).file as Express.Multer.File | undefined;
+
+        file = req.file;
 
         if (!metadataRaw) {
           throw new BadRequestError('Metadata is required');
         }
 
         let metadata: z.infer<typeof MetadataSchema>;
+
         try {
           const parsed = JSON.parse(metadataRaw);
+
           metadata = MetadataSchema.parse(parsed);
         } catch (error) {
           if (error instanceof SyntaxError) throw new BadRequestError('Invalid metadata JSON');
@@ -211,9 +216,8 @@ export const postAdminComplete: RequestHandler[] = [
 
         // Upload custom certificate file if provided
         if (certificateOption === 'custom' && file && file.size > 0) {
-          const webFile = new File([file.buffer], file.originalname, { type: file.mimetype });
           const uploadResult = await uploadToBucket(
-            webFile,
+            file,
             `certificates/${association.slug}/${moduleId}`,
             traceId,
           );

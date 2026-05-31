@@ -242,8 +242,8 @@ export const getSupplement: RequestHandler[] = [
 // ---------------------------------------------------------------------------
 
 export const updateSupplementHandler: RequestHandler[] = [
+  fileUpload.single('file'),
   validate({ params: SupplementParamsSchema }),
-
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
 
@@ -266,7 +266,7 @@ export const updateSupplementHandler: RequestHandler[] = [
 
       // Parse request: optional file + required metadata JSON
       const { moduleId, supplementId } = req.params;
-      const file = (req as any).file as Express.Multer.File | undefined;
+      const file = req.file;
       const metadataRaw = req.body.metadata as string | undefined;
 
       if (!metadataRaw) {
@@ -291,9 +291,8 @@ export const updateSupplementHandler: RequestHandler[] = [
           throw new BadRequestError('File is empty');
         }
 
-        const webFile = new File([file.buffer], file.originalname, { type: file.mimetype });
         const uploadResult = await uploadToBucket(
-          webFile,
+          file,
           `supplements/${association.slug}/${moduleId}`,
           traceId,
         );
