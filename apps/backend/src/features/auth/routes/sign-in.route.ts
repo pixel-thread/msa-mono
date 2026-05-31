@@ -20,6 +20,7 @@ import { createRefreshToken } from '@src/features/auth/services/create-refresh-t
 import { createVerificationCode } from '@src/features/auth/services/create-verification-code';
 
 import { SignInSchema } from '@src/features/auth/validators';
+import { mockAsyncVerification } from '../utils/mock-async-veriification';
 
 /**
  * POST /api/auth/sign-in — Authenticate user with email and password
@@ -29,6 +30,7 @@ import { SignInSchema } from '@src/features/auth/validators';
  * attempt tracking, and either issues tokens (no MFA) or sends an
  * MFA verification code and returns a temp token.
  */
+
 export const postSignIn: RequestHandler[] = [
   validate({ body: SignInSchema }),
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
@@ -38,6 +40,7 @@ export const postSignIn: RequestHandler[] = [
 
     // ---- Handle invalid credentials ----
     if (!user) {
+      logger.info({ traceId }, 'POST /api/auth/sign-in - Invalid credentials');
       throw new UnauthorizedError('Invalid credentials');
     }
 
@@ -45,19 +48,26 @@ export const postSignIn: RequestHandler[] = [
     // If the user has been locked due to too many failed attempts, reject early
     if (user?.lockedUntil && user.lockedUntil > new Date()) {
       const remainingMinutes = Math.ceil((user.lockedUntil.getTime() - Date.now()) / 1000 / 60);
+      logger.info(
+        { traceId, lockUntil: user.lockedUntil, remainingMinutes, userId: user.id },
+        'POST /api/auth/sign-in - Account locked',
+      );
       throw new ForbiddenError(`Account is locked. Try again in ${remainingMinutes} minutes`);
     }
-
     // ---- Verify password ----
     const isPasswordValid = user?.password
       ? await verifyPassword(req.body?.password || '', user.password)
-      : false;
+      : await mockAsyncVerification();
 
     // Handle invalid credentials: increment failed attempts, lock if threshold reached
     if (!isPasswordValid) {
       if (user) {
         const failedAttempts = user.failedLoginAttempts + 1;
         const shouldLock = failedAttempts >= 5;
+        logger.info(
+          { traceId, failedAttempts, shouldLock, userId: user.id },
+          'POST /api/auth/sign-in - Invalid email or password',
+        );
         await updateUser({
           where: { id: user.id },
           data: {
@@ -65,13 +75,29 @@ export const postSignIn: RequestHandler[] = [
             lockedUntil: shouldLock ? new Date(Date.now() + 15 * 60 * 1000) : null,
           },
         });
-        if (shouldLock) throw new ForbiddenError('Too many failed attempts. Account locked');
+        if (shouldLock) {
+          logger.info(
+            { traceId, failedAttempts, shouldLock, userId: user.id },
+            'POST /api/auth/sign-in - Account locked',
+          );
+          throw new ForbiddenError('Too many failed attempts. Account locked');
+        }
       }
+      logger.info(
+        { traceId, userId: user?.id },
+        'POST /api/auth/sign-in - Invalid email or password',
+      );
       throw new UnauthorizedError('Invalid email or password');
     }
 
     // Defensive: should not happen after password check above, but ensures type safety
-    if (!user) throw new UnauthorizedError('Invalid email or password');
+    if (!user) {
+      logger.info(
+        { traceId, isPasswordValid: true },
+        'POST /api/auth/sign-in - Invalid email or password',
+      );
+      throw new UnauthorizedError('Invalid email or password');
+    }
 
     // ---- Reset failed attempt counter on successful login ----
     await updateUser({
@@ -97,18 +123,29 @@ export const postSignIn: RequestHandler[] = [
 
       // Log OTP in development for debugging; always email in production
       if (env.NODE_ENV === 'development') logger.debug(`OTP: ${otp}`);
-      if (env.NODE_ENV === 'production') await sendVerificationEmail(user.email, otp, 'LOGIN_MFA');
+
+      if (env.NODE_ENV === 'production') {
+        logger.info(
+          { traceId, userId: user.id, mfaEnable: user.mfaEnabled },
+          'POST /api/auth/sign-in - MFA Signin email sent',
+        );
+        await sendVerificationEmail(user.email, otp, 'LOGIN_MFA');
+      }
 
       const mfaTempToken = await signMfaTempToken(user.id);
 
       res.cookie('mfa_temp_token', mfaTempToken, {
         httpOnly: true,
         secure: env.NODE_ENV === 'production',
-        sameSite: 'strict',
+        sameSite: env.NODE_ENV === 'production' ? 'none' : 'strict',
         maxAge: 5 * 60 * 1000,
         path: '/',
       });
 
+      logger.info(
+        { traceId, userId: user.id },
+        'POST /api/auth/sign-in - MFA verification required',
+      );
       return success(res, {
         message: 'MFA verification required',
         data: { tempToken: mfaTempToken, mfaRequired: true },

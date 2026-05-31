@@ -110,7 +110,6 @@ export const postLogBatch: RequestHandler[] = [
         type: l.level,
         message: l.message,
         content: JSON.parse(JSON.stringify({ ...l.context, traceId })) as Prisma.InputJsonValue,
-        isBackend: false,
       })),
     });
 

@@ -6,19 +6,12 @@ import { success } from '@src/shared/utils/responses';
 import { asyncHandler } from '@src/shared/utils/async-handler';
 import { logger } from '@src/shared/logger';
 
-import {
-  hashPassword,
-  validatePasswordStrength,
-  verifyPassword,
-} from '@src/shared/lib/password';
+import { hashPassword, validatePasswordStrength, verifyPassword } from '@src/shared/lib/password';
 
-import {
-  BadRequestError,
-  UnauthorizedError,
-  ValidationError,
-} from '@src/shared/errors';
+import { BadRequestError, UnauthorizedError, ValidationError } from '@src/shared/errors';
 
 import { getUniqueUserNoFilter } from '@src/shared/services/user/get-unique-user-no-filter';
+
 import { updateUser } from '@src/features/user/services';
 
 import { deleteRefreshTokens } from '@src/features/auth/services/delete-refresh-tokens';
@@ -33,6 +26,7 @@ import { ChangePasswordInput, ChangePasswordSchema } from '@src/features/auth/va
  * requirements, updates it, and revokes all existing refresh tokens to
  * force re-authentication on all devices.
  */
+
 export const postChangePassword: RequestHandler[] = [
   validate({ body: ChangePasswordSchema }),
 

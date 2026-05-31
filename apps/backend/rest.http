@@ -1,0 +1,1827 @@
+@associationsId=c5b791b4-f628-477b-b606-557ba3d2dbaa
+@meetingId=505cc596-f978-45fa-b891-9fd3e3a4ad36
+@userId=7e534916-ffcc-467a-811a-b2544840777d
+@test3UserId=9a6043b7-2b58-425a-9912-3275dd4153fe
+@test2UserId=0d627af0-bcb4-4b11-8934-0a3f3bfc53e8
+@moduleId=b5063e33-f356-4a30-9256-fbbb1abb3fa4
+@supplementId=REPLACE_WITH_SUPPLEMENT_ID
+@dsarTicketId=REPLACE_WITH_DSAR_TICKET_ID
+@notificationId=REPLACE_WITH_NOTIFICATION_ID
+@paymentId=REPLACE_WITH_PAYMENT_ID
+@providerId=REPLACE_WITH_PROVIDER_ID
+@announcementId=6fd37ef7-007b-4a2f-8a04-0932e94b4f2a
+@traceId=6fd37ef7-007b-4a2f-8a04-0932e94b4f2a
+@invoiceId=bb5ffbdd-6652-4c9e-a305-378d51dd3ffd
+@minuitesId=REPLACE_WITH_MINUTES_ID
+@complaintId=REPLACE_WITH_COMPLAINT_ID
+@certificateId=REPLACE_WITH_CERTIFICATE_ID
+@applicationId=REPLACE_WITH_APPLICATION_ID
+@accountId=REPLACE_WITH_ACCOUNT_ID
+@entryId=REPLACE_WITH_ENTRY_ID
+@memberTypeId=REPLACE_WITH_MEMBER_TYPE_ID
+@planId=REPLACE_WITH_PLAN_ID
+@subscriptionId=REPLACE_WITH_SUBSCRIPTION_ID
+@contributionId=REPLACE_WITH_CONTRIBUTION_ID
+@receiptId=REPLACE_WITH_RECEIPT_ID
+@agendaItemId=REPLACE_WITH_AGENDA_ITEM_ID
+
+
+### ----------------- AUTH ------------------
+
+###
+# @name Sign Up
+POST {{NEXT_PUBLIC_API_BASE_URL}}/auth/sign-up
+Content-Type: application/json
+
+{
+  "email": "super_admin@mfsa.org",
+  "firstName":"super_admin",
+  "lastName":"super_adminl",
+  "dateOfBirth":"12-12-2024",
+  "age":18,
+  "gender":"MALE",
+  "associationSlug": "mfsa"
+}
+
+###
+# @name Sign In
+POST {{NEXT_PUBLIC_API_BASE_URL}}/auth/sign-in
+Content-Type: application/json
+
+{
+  "email": "{{EMAIL}}",
+  "password": "{{PASSWORD}}"
+}
+
+###
+# @name Get Me
+GET {{NEXT_PUBLIC_API_BASE_URL}}/auth/me
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+x-trace-id: {{traceId}}
+
+###
+# @name Logout
+POST {{NEXT_PUBLIC_API_BASE_URL}}/auth/logout
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name Forgot Password
+POST {{NEXT_PUBLIC_API_BASE_URL}}/auth/forgot-password
+Content-Type: application/json
+
+{
+  "email": "user@example.com"
+}
+
+###
+# @name Reset Password
+POST {{NEXT_PUBLIC_API_BASE_URL}}/auth/reset-password
+Content-Type: application/json
+
+{
+  "token": "reset-token-from-email",
+  "password": "NewPassword123!"
+}
+
+###
+# @name Change Password
+POST {{NEXT_PUBLIC_API_BASE_URL}}/auth/change-password
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "currentPassword": "Password123!",
+  "newPassword": "NewPassword123!"
+}
+
+### ----------------- ADMIN ------------------
+
+### 
+# @name Get associations
+GET {{NEXT_PUBLIC_API_BASE_URL}}/admin/associations
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+### 
+
+# @name create associations
+POST {{NEXT_PUBLIC_API_BASE_URL}}/admin/associations
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "slug": "mfsa",
+  "name": "MFSA",
+  "state": "Delhi",
+  "country": "IN",
+  "contactEmail": "contact@delhicricket.org",
+  "primaryColor": "#1e40af",
+  "secondaryColor": "#f59e0b"
+}
+
+### 
+
+# @name add associations member
+POST {{NEXT_PUBLIC_API_BASE_URL}}/admin/associations/{{associationsId}}/member
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{ 
+    "association_id":"{{associationsId}}",
+    "user_id":"{{userId}}"
+}
+
+### 
+
+# @name update associations
+PUT {{NEXT_PUBLIC_API_BASE_URL}}/admin/associations/{{associationsId}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "slug": "mfsc",
+  "name": "sDesslhi Cricket Association",
+  "state": "Delhi",
+  "country": "IN",
+  "contactEmail": "contact@delhicricket.org",
+  "primaryColor": "#1e40af",
+  "secondaryColor": "#f59e0b"
+}
+
+### 
+
+# @name delete associations
+DELETE {{NEXT_PUBLIC_API_BASE_URL}}/admin/associations/{{associationsId}}
+Content-Type: application/json
+
+### 
+# @name get unique associations
+GET {{NEXT_PUBLIC_API_BASE_URL}}/admin/associations/{{associationsId}}
+Content-Type: application/json
+
+
+### 
+# @name get unique associations
+POST {{NEXT_PUBLIC_API_BASE_URL}}/admin/users/role
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{ 
+
+  "userId":"{{userId}}",
+  "role":"SUPER_ADMIN"
+}
+
+### ----------------- ADMIN MEMBERSHIP APPLICATIONS ------------------
+
+###
+# @name List Membership Applications
+GET {{NEXT_PUBLIC_API_BASE_URL}}/admin/membership-applications
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name Approve Membership Application
+POST {{NEXT_PUBLIC_API_BASE_URL}}/admin/membership-applications/{{applicationId}}/approve
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name Reject Membership Application
+POST {{NEXT_PUBLIC_API_BASE_URL}}/admin/membership-applications/{{applicationId}}/reject
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+### ----------------- MEETINGS ------------------
+
+###
+# @name List meetings
+GET {{NEXT_PUBLIC_API_BASE_URL}}/meetings?page=1
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name Create meeting
+POST {{NEXT_PUBLIC_API_BASE_URL}}/meetings
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "title": "Executive Committee Meeting",
+  "type": "EC_MEETING",
+  "scheduledAt": "2026-06-15T10:00:00Z",
+  "venue": "Conference Room A",
+  "agendaItems": [
+    {
+      "order": 1,
+      "title": "Approval of Previous Minutes",
+      "description": "Review and approve the minutes from the last EC meeting"
+    },
+    {
+      "order": 2,
+      "title": "Financial Report Q1",
+      "description": "Presentation of quarterly financial statements"
+    },
+    {
+      "order": 3,
+      "title": "Member Applications",
+      "description": "Review new membership applications for approval"
+    }
+  ]
+}
+
+###
+# @name Get meeting details
+GET {{NEXT_PUBLIC_API_BASE_URL}}/meetings/{{meetingId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name Update meeting
+PATCH {{NEXT_PUBLIC_API_BASE_URL}}/meetings/{{meetingId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "title": "Updated Meeting Title",
+  "venue": "New Venue"
+}
+
+###
+# @name Delete meeting
+DELETE {{NEXT_PUBLIC_API_BASE_URL}}/meetings/{{meetingId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+### ----------------- MEETING ATTENDEES ------------------
+
+###
+# @name List meeting attendees
+GET {{NEXT_PUBLIC_API_BASE_URL}}/meetings/{{meetingId}}/attendees
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name Assign single attendee
+POST {{NEXT_PUBLIC_API_BASE_URL}}/meetings/{{meetingId}}/attendees
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "userId": "{{test2UserId}}",
+  "attendeeRole": "OPTIONAL"
+}
+
+###
+# @name Bulk assign attendees
+PUT {{NEXT_PUBLIC_API_BASE_URL}}/meetings/{{meetingId}}/attendees
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "userIds": ["uuid-1", "uuid-2", "uuid-3"],
+  "attendeeRole": "REQUIRED"
+}
+
+###
+# @name  meeting agenda
+GET {{NEXT_PUBLIC_API_BASE_URL}}/meetings/{{meetingId}}/agenda
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+
+###
+# @name Update attendee RSVP
+PATCH {{NEXT_PUBLIC_API_BASE_URL}}/meetings/{{meetingId}}/rsvp
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "rsvpStatus": "ACCEPTED",
+  "rsvpNote": "I will attend"
+}
+
+###
+# @name Remove attendee
+DELETE {{NEXT_PUBLIC_API_BASE_URL}}/meetings/{{meetingId}}/rsvp
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name Remove attendee by ID
+DELETE {{NEXT_PUBLIC_API_BASE_URL}}/meetings/{{meetingId}}/attendees/{{userId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name Bulk assign attendees
+POST {{NEXT_PUBLIC_API_BASE_URL}}/meetings/{{meetingId}}/attendees/bulk
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "userIds": ["{{userId}}", "{{test2UserId}}"]
+}
+
+###
+# @name List My Meetings
+GET {{NEXT_PUBLIC_API_BASE_URL}}/meetings/my
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name Cancel Meeting
+POST {{NEXT_PUBLIC_API_BASE_URL}}/meetings/{{meetingId}}/cancel
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name Get Meeting Notice
+GET {{NEXT_PUBLIC_API_BASE_URL}}/meetings/{{meetingId}}/notice
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name Get Meeting Report
+GET {{NEXT_PUBLIC_API_BASE_URL}}/meetings/{{meetingId}}/report
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name Update Agenda Item
+PATCH {{NEXT_PUBLIC_API_BASE_URL}}/meetings/{{meetingId}}/agenda/{{agendaItemId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "title": "Updated Agenda Item",
+  "order": 1
+}
+
+###
+# @name Delete Agenda Item
+DELETE {{NEXT_PUBLIC_API_BASE_URL}}/meetings/{{meetingId}}/agenda/{{agendaItemId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+### ----------------- MEETING MINUITES ------------------
+
+###
+# @name list meeting minuites 
+GET {{NEXT_PUBLIC_API_BASE_URL}}/meetings/{{meetingId}}/minutes
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name add meeting minuites 
+POST {{NEXT_PUBLIC_API_BASE_URL}}/meetings/{{meetingId}}/minutes
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "agendaPoint": "Meeting minutes",
+  "decision": "Approved"
+}
+
+###
+# @name delete meeting minuites 
+GET {{NEXT_PUBLIC_API_BASE_URL}}/meetings/{{meetingId}}/minutes/{{minuitesId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+
+### ----------------- SUBSCRIPTIONS & PAYMENTS ------------------
+
+###
+# @name Get Subscription Plans
+GET {{NEXT_PUBLIC_API_BASE_URL}}/subscriptions/plans
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name Create Subscription Plan
+POST {{NEXT_PUBLIC_API_BASE_URL}}/subscriptions/plans
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+X-TRACE-ID: {{traceId}}
+
+{
+  "name": "05783cf9-5801-4ce7-845c-a4bad6a377e8",
+  "description": "Full access to all association benefits",
+  "amount": 3000,
+  "currency": "INR",
+  "billingCycle": "YEARLY",
+  "memberTypeId":"05783cf9-5801-4ce7-845c-a4bad6a377e8",
+  "effectiveTo":"2023-12-31",
+  "features": {
+    "events": true,
+    "voting": true
+  }
+}
+
+###
+# @name Subscribe to Plan
+POST {{NEXT_PUBLIC_API_BASE_URL}}/subscriptions/subscribe
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "planId": "REPLACE_WITH_PLAN_ID"
+}
+
+###
+# @name Waive Subscription
+POST {{NEXT_PUBLIC_API_BASE_URL}}/subscriptions/waive
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "subscriptionId": "REPLACE_WITH_SUBSCRIPTION_ID",
+  "reason": "Exempted by the board"
+}
+
+###
+# @name Get Payment History
+GET {{NEXT_PUBLIC_API_BASE_URL}}/payments/history?page=1&pageSize=20
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name Create Payment Order
+POST {{NEXT_PUBLIC_API_BASE_URL}}/payments/order
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "userId": "{{userId}}",
+  "amount": 5000,
+  "notes": "Monthly contribution for May 2026"
+}
+
+###
+# @name Verify Payment
+POST {{NEXT_PUBLIC_API_BASE_URL}}/payments/verify
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "razorpayOrderId": "order_12345",
+  "razorpayPaymentId": "pay_12345",
+  "razorpaySignature": "sig_12345"
+}
+
+###
+# @name Record Manual Payment
+POST {{NEXT_PUBLIC_API_BASE_URL}}/payments/record
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "userId": "{{userId}}",
+  "amount": 5000,
+  "method": "CASH",
+  "notes": "Paid in cash at the office",
+  "receiptNumber": "REC-001",
+  "referenceNumber": "REF-12345"
+}
+
+###
+# @name Generate Contributions
+POST {{NEXT_PUBLIC_API_BASE_URL}}/payments/contributions
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "year": 2026,
+  "month": 5
+}
+
+###
+# @name Waive Contribution
+PATCH {{NEXT_PUBLIC_API_BASE_URL}}/payments/contributions
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "contributionPeriodId": "REPLACE_WITH_UUID",
+  "reason": "Hardship case"
+}
+
+###
+# @name Payment Webhook
+POST {{NEXT_PUBLIC_API_BASE_URL}}/payments/webhook
+Content-Type: application/json
+x-razorpay-signature: REPLACE_WITH_HMAC
+
+{
+  "entity": "event",
+  "account_id": "acc_BFQ7uS97yRUrSg",
+  "event": "payment.captured",
+  "contains": ["payment"],
+  "payload": {
+    "payment": {
+      "entity": {
+        "id": "pay_DESLFWSkdsc9",
+        "amount": 5000,
+        "currency": "INR",
+        "status": "captured",
+        "order_id": "order_DESLFWSkdsc9",
+        "notes": {
+          "associationId": "{{associationsId}}"
+        }
+      }
+    }
+  },
+  "created_at": 1400826750
+}
+
+### ----------------- PAYMENT PROVIDERS ------------------
+
+###
+# @name Upsert Payment Provider (Create or Update)
+POST {{NEXT_PUBLIC_API_BASE_URL}}/payments/providers
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "provider": "RAZORPAY",
+  "keyId": "{{RAZORPAY_KEY_ID}}",
+  "keySecret": "{{RAZORPAY_KEY_SECRET}}",
+  "webhookSecret": "{{RAZORPAY_WEBHOOK_SECRET}}",
+  "isActive": true
+}
+
+###
+# @name List Payment Providers
+GET {{NEXT_PUBLIC_API_BASE_URL}}/payments/providers
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name Get Payment Provider
+GET {{NEXT_PUBLIC_API_BASE_URL}}/payments/providers/{{providerId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name Get Payment Provider
+GET {{NEXT_PUBLIC_API_BASE_URL}}/payments/providers/status
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name Update Payment Provider
+PATCH {{NEXT_PUBLIC_API_BASE_URL}}/payments/providers/{{providerId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "keyId": "rzp_test_updated",
+  "keySecret": "new_secret"
+}
+
+###
+# @name Delete Payment Provider
+DELETE {{NEXT_PUBLIC_API_BASE_URL}}/payments/providers/{{providerId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name Activate Payment Provider
+POST {{NEXT_PUBLIC_API_BASE_URL}}/payments/providers/{{providerId}}/activate
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+### ----------------- PAYMENTS (Additional) ------------------
+
+###
+# @name Get My Payments
+GET {{NEXT_PUBLIC_API_BASE_URL}}/payments/my
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name Get Payment Detail
+GET {{NEXT_PUBLIC_API_BASE_URL}}/payments/{{paymentId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name Get User Payments
+GET {{NEXT_PUBLIC_API_BASE_URL}}/payments/users/{{userId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name Get User Contributions
+GET {{NEXT_PUBLIC_API_BASE_URL}}/payments/users/{{userId}}/contributions
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name Get Contribution Detail
+GET {{NEXT_PUBLIC_API_BASE_URL}}/payments/contributions/{{contributionId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+### ----------------- SUBSCRIPTIONS (Additional) ------------------
+
+###
+# @name Get My Subscription
+GET {{NEXT_PUBLIC_API_BASE_URL}}/subscriptions/my
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name Upgrade Subscription Plan
+POST {{NEXT_PUBLIC_API_BASE_URL}}/subscriptions/upgrade
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "planId": "{{planId}}"
+}
+
+###
+# @name Get Subscription Payments
+GET {{NEXT_PUBLIC_API_BASE_URL}}/subscriptions/{{subscriptionId}}/payments
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+### ----------------- MEMBERS ------------------
+
+###
+# @name List Members
+GET {{NEXT_PUBLIC_API_BASE_URL}}/members?page=0
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name Get Member Details
+GET {{NEXT_PUBLIC_API_BASE_URL}}/members/{{userId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+### ----------------- USER ------------------
+
+###
+# @name Update My Profile
+POST {{NEXT_PUBLIC_API_BASE_URL}}/user
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "name": "Updated Name",
+  "mobile": "9876543210",
+  "designation": "Executive Member",
+  "dateOfJoiningGovt": "2015-01-01",
+  "dateOfJoiningAssociation": "2020-01-01"
+}
+
+### ----------------- NOTIFICATIONS ------------------
+
+###
+# @name Register Push Token
+POST {{NEXT_PUBLIC_API_BASE_URL}}/notifications/register
+Content-Type: application/json
+
+{
+  "token": "exponent-push-token-here"
+}
+
+###
+# @name Link Token to User
+POST {{NEXT_PUBLIC_API_BASE_URL}}/notifications/link
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "token": "exponent-push-token-here"
+}
+
+### ----------------- ASSOCIATIONS (General) ------------------
+
+###
+# @name List All Associations
+GET {{NEXT_PUBLIC_API_BASE_URL}}/associations
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name Add Member to Association
+POST {{NEXT_PUBLIC_API_BASE_URL}}/associations/{{associationsId}}/members
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "memberId": "{{userId}}"
+}
+
+### ----------------- TRAINING MODULES ------------------
+
+###
+# @name List Training Modules
+GET {{NEXT_PUBLIC_API_BASE_URL}}/training/modules
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name Create Training Module
+POST {{NEXT_PUBLIC_API_BASE_URL}}/training/modules
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "title": "Data Privacy Training",
+  "description": "Understanding GDPR and data protection",
+  "content": "Training content here...",
+  "requiredForRoles": ["MEMBER"],
+  "isActive": true
+}
+
+###
+# @name Get Training Module
+GET {{NEXT_PUBLIC_API_BASE_URL}}/training/modules/{{moduleId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name Update Training Module
+PATCH {{NEXT_PUBLIC_API_BASE_URL}}/training/modules/{{moduleId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "title": "Updated Training Module",
+  "isActive": false
+}
+
+### ----------------- TRAINING MODULE SELF-COMPLETE ------------------
+
+###
+# @name List Training Module Completes (Self)
+GET {{NEXT_PUBLIC_API_BASE_URL}}/training/modules/{{moduleId}}/complete
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name Complete Training Module (Self)
+POST {{NEXT_PUBLIC_API_BASE_URL}}/training/modules/{{moduleId}}/complete
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{}
+
+### ----------------- TRAINING ASSIGNMENTS ------------------
+
+###
+# @name List Module Assignments
+GET {{NEXT_PUBLIC_API_BASE_URL}}/training/modules/{{moduleId}}/assign
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name Assign User to Module
+POST {{NEXT_PUBLIC_API_BASE_URL}}/training/modules/{{moduleId}}/assign
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "userId": "{{userId}}"
+}
+
+###
+# @name Bulk Assign Users to Module
+PUT {{NEXT_PUBLIC_API_BASE_URL}}/training/modules/{{moduleId}}/assign
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "userIds": ["{{userId}}"]
+}
+
+###
+# @name Remove User Assignment
+DELETE {{NEXT_PUBLIC_API_BASE_URL}}/training/modules/{{moduleId}}/assign
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "userId": "{{userId}}"
+}
+
+###
+# @name Bulk Remove Assignments
+PATCH {{NEXT_PUBLIC_API_BASE_URL}}/training/modules/{{moduleId}}/assign
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "userIds": ["{{userId}}"]
+}
+
+### ----------------- TRAINING ASSIGNED USERS ------------------
+
+###
+# @name List Assigned Users with Completion Status
+GET {{NEXT_PUBLIC_API_BASE_URL}}/training/modules/{{moduleId}}/assigned-users
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+### ----------------- TRAINING ADMIN COMPLETE ASSIGNMENT ------------------
+
+###
+# @name Admin Mark Assignment Complete
+POST {{NEXT_PUBLIC_API_BASE_URL}}/training/modules/{{moduleId}}/assignments/{{userId}}/complete
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "scorePercent": 95
+}
+
+### ----------------- TRAINING COMPLETIONS (Admin) ------------------
+
+###
+# @name List All Completions
+GET {{NEXT_PUBLIC_API_BASE_URL}}/training/completions?page=1
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name Admin Record Completion
+POST {{NEXT_PUBLIC_API_BASE_URL}}/training/completions
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "userId": "{{userId}}",
+  "moduleId": "{{moduleId}}",
+  "scorePercent": 95
+}
+
+### ----------------- TRAINING MY ASSIGNMENTS ------------------
+
+###
+# @name Get My Assignments
+GET {{NEXT_PUBLIC_API_BASE_URL}}/training/my-assignments
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+### ----------------- TRAINING MY COMPLETIONS ------------------
+
+###
+# @name Get My Completions
+GET {{NEXT_PUBLIC_API_BASE_URL}}/training/my-completions
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+### ----------------- TRAINING SUPPLEMENTS ------------------
+
+### @supplementId=REPLACE_WITH_SUPPLEMENT_ID
+
+###
+# @name List Training Supplements
+GET {{NEXT_PUBLIC_API_BASE_URL}}/training/modules/{{moduleId}}/supplements
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name Create Training Supplement (PDF)
+POST {{NEXT_PUBLIC_API_BASE_URL}}/training/modules/{{moduleId}}/supplements
+Content-Type: multipart/form-data; boundary=supplement
+
+--supplement
+Content-Disposition: form-data; name="metadata"
+Content-Type: application/json
+
+{"title": "GDPR Reference Guide", "description": "A PDF guide to GDPR compliance", "type": "PDF", "sortOrder": 1, "isActive": true}
+
+--supplement
+Content-Disposition: form-data; name="file"; filename="test-supplement.pdf"
+Content-Type: application/pdf
+
+< ./test-data/test-supplement.pdf
+--supplement--
+
+###
+# @name Create Training Supplement (Image)
+POST {{NEXT_PUBLIC_API_BASE_URL}}/training/modules/{{moduleId}}/supplements
+Content-Type: multipart/form-data;
+
+--supplement
+Content-Disposition: form-data; name="metadata"
+Content-Type: application/json
+
+{"title": "Training Infographic", "description": "An infographic on data privacy", "type": "IMAGE", "sortOrder": 2, "isActive": true}
+
+--supplement
+Content-Disposition: form-data; name="file"; filename="test-supplement.png"
+Content-Type: image/png
+
+< ./test-data/test-supplement.png
+--supplement--
+
+###
+# @name Get Training Supplement
+GET {{NEXT_PUBLIC_API_BASE_URL}}/training/modules/{{moduleId}}/supplements/{{supplementId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name Update Training Supplement (metadata only)
+PATCH {{NEXT_PUBLIC_API_BASE_URL}}/training/modules/{{moduleId}}/supplements/{{supplementId}}
+Content-Type: multipart/form-data; boundary=supplement
+
+--supplement
+Content-Disposition: form-data; name="metadata"
+Content-Type: application/json
+
+{"title": "Updated GDPR Reference Guide", "sortOrder": 2}
+--supplement--
+
+###
+# @name Update Training Supplement (with file replacement)
+PATCH {{NEXT_PUBLIC_API_BASE_URL}}/training/modules/{{moduleId}}/supplements/{{supplementId}}
+Content-Type: multipart/form-data; boundary=supplement
+
+--supplement
+Content-Disposition: form-data; name="metadata"
+Content-Type: application/json
+
+{"title": "Updated GDPR Reference Guide", "sortOrder": 3}
+
+--supplement
+Content-Disposition: form-data; name="file"; filename="test-supplement.pdf"
+Content-Type: application/pdf
+
+< ./test-data/test-supplement.pdf
+--supplement--
+
+###
+# @name Delete Training Supplement
+DELETE {{NEXT_PUBLIC_API_BASE_URL}}/training/modules/{{moduleId}}/supplements/{{supplementId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+### ----------------- TRAINING CERTIFICATE TEMPLATE ------------------
+
+###
+# @name Upload Certificate Template (multipart)
+POST {{NEXT_PUBLIC_API_BASE_URL}}/training/modules/{{moduleId}}/certificate-template
+Content-Type: multipart/form-data; boundary=cert
+
+--cert
+Content-Disposition: form-data; name="name"
+
+Module Certificate Template
+--cert
+Content-Disposition: form-data; name="file"; filename="template.pdf"
+Content-Type: application/pdf
+
+< ./test-data/test-supplement.pdf
+--cert--
+
+###
+# @name Remove Certificate Template
+DELETE {{NEXT_PUBLIC_API_BASE_URL}}/training/modules/{{moduleId}}/certificate-template
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+### ----------------- TRAINING CERTIFICATES ------------------
+
+###
+# @name List Training Certificates
+GET {{NEXT_PUBLIC_API_BASE_URL}}/training/modules/{{moduleId}}/certificates
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name Create Training Certificate (multipart)
+POST {{NEXT_PUBLIC_API_BASE_URL}}/training/modules/{{moduleId}}/certificates
+Content-Type: multipart/form-data; boundary=cert
+
+--cert
+Content-Disposition: form-data; name="metadata"
+Content-Type: application/json
+
+{"userId": "{{userId}}", "certificateNumber": "CERT-001"}
+
+--cert
+Content-Disposition: form-data; name="file"; filename="certificate.pdf"
+Content-Type: application/pdf
+
+< ./test-data/test-supplement.pdf
+--cert--
+
+###
+# @name Get Training Certificate
+GET {{NEXT_PUBLIC_API_BASE_URL}}/training/modules/{{moduleId}}/certificates/{{certificateId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name Update Training Certificate (multipart)
+PATCH {{NEXT_PUBLIC_API_BASE_URL}}/training/modules/{{moduleId}}/certificates/{{certificateId}}
+Content-Type: multipart/form-data; boundary=cert
+
+--cert
+Content-Disposition: form-data; name="metadata"
+Content-Type: application/json
+
+{"certificateNumber": "CERT-002"}
+
+--cert
+Content-Disposition: form-data; name="file"; filename="certificate.pdf"
+Content-Type: application/pdf
+
+< ./test-data/test-supplement.pdf
+--cert--
+
+###
+# @name Delete Training Certificate
+DELETE {{NEXT_PUBLIC_API_BASE_URL}}/training/modules/{{moduleId}}/certificates/{{certificateId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+### ----------------- COMPLIANCE ------------------
+
+###
+# @name List All Complaints (DPO)
+GET {{NEXT_PUBLIC_API_BASE_URL}}/compliance?page=1&limit=20
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name List My Complaints
+GET {{NEXT_PUBLIC_API_BASE_URL}}/compliance/my?page=1&limit=20
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name Get Complaint Detail
+GET {{NEXT_PUBLIC_API_BASE_URL}}/compliance/my/{{complaintId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name Run Compliance Checks
+POST {{NEXT_PUBLIC_API_BASE_URL}}/compliance/checks
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "checkType": "DATA_RETENTION",
+  "targetUserId": "{{userId}}"
+}
+
+###
+# @name Add Compliance Evidence
+POST {{NEXT_PUBLIC_API_BASE_URL}}/compliance/evidence
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "checkId": "REPLACE_WITH_CHECK_ID",
+  "evidence": {
+    "documentUrl": "https://example.com/doc.pdf",
+    "notes": "Evidence for compliance"
+  }
+}
+
+### ----------------- AUDIT LOGS ------------------
+
+###
+# @name List Audit Logs
+GET {{NEXT_PUBLIC_API_BASE_URL}}/audit-logs?page=1&limit=20
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+### ----------------- CONSENT ------------------
+
+###
+# @name Grant Consent
+POST {{NEXT_PUBLIC_API_BASE_URL}}/consent/grant
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "purpose": "MARKETING",
+  "granted": true
+}
+
+###
+# @name Revoke Consent
+POST {{NEXT_PUBLIC_API_BASE_URL}}/consent/revoke
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "purpose": "MARKETING"
+}
+
+###
+# @name Get My Consent
+GET {{NEXT_PUBLIC_API_BASE_URL}}/consent/my
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name Get All Consent (Admin)
+GET {{NEXT_PUBLIC_API_BASE_URL}}/consent/all?page=1&limit=10
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name Get Consent History
+GET {{NEXT_PUBLIC_API_BASE_URL}}/consent/history?page=1&limit=10
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name Get Consent Receipt
+GET {{NEXT_PUBLIC_API_BASE_URL}}/consent/{{receiptId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name Get Consent Report
+GET {{NEXT_PUBLIC_API_BASE_URL}}/consent/report
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name Get User Consent (Admin)
+GET {{NEXT_PUBLIC_API_BASE_URL}}/consent/users/{{userId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+### ----------------- DSAR ------------------
+
+###
+# @name Submit DSAR Request
+POST {{NEXT_PUBLIC_API_BASE_URL}}/dsar/submit
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "requestType": "ACCESS",
+  "reason": "Requesting my data"
+}
+
+###
+# @name List DSAR Tickets (Admin)
+GET {{NEXT_PUBLIC_API_BASE_URL}}/dsar?page=1&limit=10&status=PENDING
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name Get My DSAR Requests
+GET {{NEXT_PUBLIC_API_BASE_URL}}/dsar/my?page=1&limit=10
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name Get DSAR SLA Report
+GET {{NEXT_PUBLIC_API_BASE_URL}}/dsar/sla-report
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name Get DSAR Ticket Details
+GET {{NEXT_PUBLIC_API_BASE_URL}}/dsar/{{dsarTicketId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name Respond to DSAR
+POST {{NEXT_PUBLIC_API_BASE_URL}}/dsar/{{dsarTicketId}}/respond
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "response": "Data provided as requested"
+}
+
+###
+# @name Assign DSAR Ticket
+POST {{NEXT_PUBLIC_API_BASE_URL}}/dsar/{{dsarTicketId}}/assign
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "assignedTo": "{{userId}}"
+}
+
+###
+# @name Reject DSAR Ticket
+POST {{NEXT_PUBLIC_API_BASE_URL}}/dsar/{{dsarTicketId}}/reject
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "reason": "Invalid request"
+}
+
+###
+# @name Get DSAR Ticket Detail
+GET {{NEXT_PUBLIC_API_BASE_URL}}/dsar/{{dsarTicketId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name Delete DSAR Ticket
+DELETE {{NEXT_PUBLIC_API_BASE_URL}}/dsar/{{dsarTicketId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name List DSAR Admins
+GET {{NEXT_PUBLIC_API_BASE_URL}}/dsar/admins
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+### ----------------- USER MFA ------------------
+
+###
+# @name Manage User MFA
+POST {{NEXT_PUBLIC_API_BASE_URL}}/user/mfa
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "enabled": true
+}
+
+### ----------------- AUTH MFA ------------------
+
+###
+# @name Setup MFA
+POST {{NEXT_PUBLIC_API_BASE_URL}}/auth/mfa/setup
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{}
+###
+# @name Verify MFA
+POST {{NEXT_PUBLIC_API_BASE_URL}}/auth/mfa/verify
+Content-Type: application/json
+
+{
+  "code": "123456"
+}
+
+###
+# @name Resend MFA Code
+POST {{NEXT_PUBLIC_API_BASE_URL}}/auth/mfa/resend
+Content-Type: application/json
+
+{
+  "email": "user@example.com"
+}
+
+###
+# @name Disable MFA
+POST {{NEXT_PUBLIC_API_BASE_URL}}/auth/mfa/disable
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "password": "Password123!"
+}
+
+### ----------------- AUTH REFRESH ------------------
+
+###
+# @name Refresh Token
+POST {{NEXT_PUBLIC_API_BASE_URL}}/auth/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "REPLACE_WITH_REFRESH_TOKEN"
+}
+
+### ----------------- SIGN-IN VERIFY/RESEND ------------------
+
+###
+# @name Verify Sign-In
+POST {{NEXT_PUBLIC_API_BASE_URL}}/auth/sign-in/verify
+Content-Type: application/json
+
+{
+  "email": "user@example.com",
+  "code": "123456"
+}
+
+###
+# @name Resend Sign-In Code
+POST {{NEXT_PUBLIC_API_BASE_URL}}/auth/sign-in/resend
+Content-Type: application/json
+
+{
+  "email": "user@example.com"
+}
+
+### ----------------- ASSOCIATIONS DEACTIVATE ------------------
+
+###
+# @name Deactivate Association
+POST {{NEXT_PUBLIC_API_BASE_URL}}/associations/deactivate
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "reason": "Association dissolved"
+}
+
+### ----------------- NOTIFICATIONS STATUS ------------------
+
+###
+# @name Update Notification Status
+PATCH {{NEXT_PUBLIC_API_BASE_URL}}/notifications/{{notificationId}}/status
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "read": true
+}
+
+### ----------------- PAYMENTS STATS & REPORTS ------------------
+
+###
+# @name Get Payment Stats
+GET {{NEXT_PUBLIC_API_BASE_URL}}/payments/stats?year=2026&month=5
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name Get Payment Receipt
+GET {{NEXT_PUBLIC_API_BASE_URL}}/payments/{{paymentId}}/receipt
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name Generate Collection Report
+POST {{NEXT_PUBLIC_API_BASE_URL}}/payments/reports/collections
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "year": 2026,
+  "month": 5,
+  "format": "PDF"
+}
+
+### ----------------- DOCS ------------------
+
+###
+# @name Get API Documentation
+GET {{NEXT_PUBLIC_API_BASE_URL}}/docs
+Content-Type: application/json
+
+### ----------------- MEMBERS (Additional) ------------------
+
+###
+# @name Get Member Ledger
+GET {{NEXT_PUBLIC_API_BASE_URL}}/members/{{userId}}/ledger
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name Complete Member Onboarding
+POST {{NEXT_PUBLIC_API_BASE_URL}}/members/{{userId}}/onboarding
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "step": "PROFILE_COMPLETE"
+}
+
+###
+# @name Add Member to Suspense
+POST {{NEXT_PUBLIC_API_BASE_URL}}/members/{{userId}}/suspense
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "reason": "Non-payment of dues"
+}
+
+###
+# @name Update Member Role
+POST {{NEXT_PUBLIC_API_BASE_URL}}/members/{{userId}}/role
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "role": "SECRETARY"
+}
+
+###
+# @name Update Member Status
+POST {{NEXT_PUBLIC_API_BASE_URL}}/members/{{userId}}/status
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "status": "ACTIVE",
+  "reason": "Reinstated"
+}
+
+###
+# @name Suspend Member
+POST {{NEXT_PUBLIC_API_BASE_URL}}/members/{{userId}}/suspend
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "reason": "Violation of association rules"
+}
+
+### ----------------- DASHBOARD ------------------
+
+###
+# @name Get Dashboard Overview
+GET {{NEXT_PUBLIC_API_BASE_URL}}/dashboard/overview
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+### ----------------- CRON ------------------
+
+###
+# @name Anonymize Old Data
+GET {{NEXT_PUBLIC_API_BASE_URL}}/cron/anonymize
+Content-Type: application/json
+
+###
+# @name Check DSAR SLA Deadlines
+GET {{NEXT_PUBLIC_API_BASE_URL}}/cron/dsar-sla
+Content-Type: application/json
+
+###
+# @name Process Subscription Expiry
+GET {{NEXT_PUBLIC_API_BASE_URL}}/cron/subscription-expiry
+Content-Type: application/json
+
+### ----------------- LEDGER ------------------
+
+###
+# @name List Ledger Accounts
+GET {{NEXT_PUBLIC_API_BASE_URL}}/ledger/accounts
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name Create Ledger Account
+POST {{NEXT_PUBLIC_API_BASE_URL}}/ledger/accounts
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "name": "Membership Dues",
+  "type": "INCOME",
+  "code": "DUES-001"
+}
+
+###
+# @name List Ledger Entries
+GET {{NEXT_PUBLIC_API_BASE_URL}}/ledger/entries
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name Create Ledger Entry
+POST {{NEXT_PUBLIC_API_BASE_URL}}/ledger/entries
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "accountId": "{{accountId}}",
+  "type": "DEBIT",
+  "amount": 1000,
+  "description": "Monthly membership fee"
+}
+
+###
+# @name Approve Ledger Entry
+POST {{NEXT_PUBLIC_API_BASE_URL}}/ledger/entries/{{entryId}}/approve
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name Get Member Ledger
+GET {{NEXT_PUBLIC_API_BASE_URL}}/ledger/member/{{userId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name Get Ledger Summary
+GET {{NEXT_PUBLIC_API_BASE_URL}}/ledger/summary
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+### ----------------- MEMBER TYPES ------------------
+
+###
+# @name List Member Types
+GET {{NEXT_PUBLIC_API_BASE_URL}}/member-types
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name Create Member Type
+POST {{NEXT_PUBLIC_API_BASE_URL}}/member-types
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "name": "Senior Member",
+  "monthlyContribution": 500
+}
+
+###
+# @name Get Member Type
+GET {{NEXT_PUBLIC_API_BASE_URL}}/member-types/{{memberTypeId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name Update Member Type
+PATCH {{NEXT_PUBLIC_API_BASE_URL}}/member-types/{{memberTypeId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "monthlyContribution": 600
+}
+
+###
+# @name Delete Member Type
+DELETE {{NEXT_PUBLIC_API_BASE_URL}}/member-types/{{memberTypeId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+### ----------------- ASSOCIATIONS (Detail) ------------------
+
+###
+# @name Get Association Detail
+GET {{NEXT_PUBLIC_API_BASE_URL}}/associations/{{associationsId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name Update Association
+PATCH {{NEXT_PUBLIC_API_BASE_URL}}/associations/{{associationsId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "name": "Updated Association Name",
+  "contactEmail": "updated@association.org",
+  "logo": "https://picsum.photos/200/300"
+}
+
+###
+# @name Delete Association
+DELETE {{NEXT_PUBLIC_API_BASE_URL}}/associations/{{associationsId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+### ----------------- HEALTH ------------------
+
+###
+# @name Health Check
+GET {{NEXT_PUBLIC_API_BASE_URL}}/health
+Content-Type: application/json
+
+### ----------------- ANNOUNCEMENTS ------------------
+
+###
+# @name List Announcements
+GET {{NEXT_PUBLIC_API_BASE_URL}}/announcement?page=1&limit=10
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name List Announcements with filters
+GET {{NEXT_PUBLIC_API_BASE_URL}}/announcements?status=PUBLISHED&priority=HIGH&page=1&limit=10
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name Search Announcements
+GET {{NEXT_PUBLIC_API_BASE_URL}}/announcements?search=important&page=1
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name Create Announcement (Draft)
+POST {{NEXT_PUBLIC_API_BASE_URL}}/announcements
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "title": "Important Update on Membership",
+  "summary": "New membership benefits starting next month",
+  "content": "We are excited to announce new benefits for all members...",
+  "status": "DRAFT",
+  "priority": "NORMAL",
+  "isPinned": false
+}
+
+###
+# @name Create and Publish Announcement
+POST {{NEXT_PUBLIC_API_BASE_URL}}/announcements
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "title": "Emergency Meeting Notice",
+  "summary": "Urgent: All members please note",
+  "content": "There will be an emergency meeting on June 20th...",
+  "status": "PUBLISHED",
+  "priority": "URGENT",
+  "targetRoles": ["PRESIDENT", "SECRETARY", "FINANCE"],
+  "isPinned": true
+}
+
+###
+# @name Create Scheduled Announcement
+POST {{NEXT_PUBLIC_API_BASE_URL}}/announcements
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "title": "Upcoming Annual General Meeting",
+  "summary": "AGM scheduled for July 15th",
+  "content": "The Annual General Meeting will be held on July 15th at 10:00 AM...",
+  "status": "SCHEDULED",
+  "priority": "HIGH",
+  "publishedAt": "2026-06-01T00:00:00Z",
+  "targetRoles": []
+}
+
+###
+# @name Get Announcement by ID
+GET {{NEXT_PUBLIC_API_BASE_URL}}/announcements/{{announcementId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name Update Announcement
+PUT {{NEXT_PUBLIC_API_BASE_URL}}/announcements/{{announcementId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "title": "Updated Announcement Title",
+  "summary": "Updated summary text",
+  "priority": "HIGH",
+  "isPinned": true
+}
+
+###
+# @name Delete Announcement
+DELETE {{NEXT_PUBLIC_API_BASE_URL}}/announcements/{{announcementId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name Publish Announcement
+PATCH {{NEXT_PUBLIC_API_BASE_URL}}/announcements/{{announcementId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "action": "publish"
+}
+
+###
+# @name Archive Announcement
+PATCH {{NEXT_PUBLIC_API_BASE_URL}}/announcements/{{announcementId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "action": "archive"
+}
+
+###
+# @name Unpublish Announcement
+PATCH {{NEXT_PUBLIC_API_BASE_URL}}/announcements/{{announcementId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "action": "unpublish"
+}
+
+###
+# @name Upload Announcement Image
+POST {{NEXT_PUBLIC_API_BASE_URL}}/announcements/{{announcementId}}/upload
+Content-Type: multipart/form-data; boundary=ann
+Authorization: Bearer {{TOKEN}}
+
+--ann
+Content-Disposition: form-data; name="file"; filename="image.png"
+Content-Type: image/png
+
+< ./test-data/test-supplement.png
+--ann--
+
+###
+# @name Mark Announcement as Read
+POST {{NEXT_PUBLIC_API_BASE_URL}}/announcements/{{announcementId}}/read
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+### 
+
+###
+# @name Get Logs (with pagination)
+GET {{NEXT_PUBLIC_API_BASE_URL}}/logs?page=1&limit=20
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name Get Logs (filtered by level)
+GET {{NEXT_PUBLIC_API_BASE_URL}}/logs?level=error&page=1&limit=10
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name Get Logs (search by message)
+GET {{NEXT_PUBLIC_API_BASE_URL}}/logs?search=payment&page=1&limit=20
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name Get Logs (date range filter)
+GET {{NEXT_PUBLIC_API_BASE_URL}}/logs?startDate=2026-05-01T00:00:00Z&endDate=2026-05-17T23:59:59Z&page=1&limit=50
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name Get Logs (frontend only)
+GET {{NEXT_PUBLIC_API_BASE_URL}}/logs?isBackend=false&page=1&limit=20&startDate=2026-2-1&endDate=2026-5-20
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name Ingest Log
+POST {{NEXT_PUBLIC_API_BASE_URL}}/logs
+Content-Type: application/json
+
+{
+  "level": "error",
+  "message":1
+ , "context": {
+    "userId": "{{userId}}",
+    "action": "payment.process"
+  }
+}
+
+###
+# @name Batch Ingest Logs
+POST {{NEXT_PUBLIC_API_BASE_URL}}/logs/batch
+Content-Type: application/json
+
+{
+  "logs": [
+    {
+      "level": "error",
+      "message": "Payment failed",
+      "context": { "userId": "{{userId}}" }
+    },
+    {
+      "level": "warn",
+      "message": "Slow query detected",
+      "context": { "duration": 2500 }
+    },
+    {
+      "level": "info",
+      "message": "User logged in",
+      "context": { "userId": "{{userId}}" }
+    }
+  ]
+}
+
+### ----------------- USER ------------------ 
+GET {{NEXT_PUBLIC_API_BASE_URL}}/user/invoices
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+
+###
+# @name get user invoices 
+GET {{NEXT_PUBLIC_API_BASE_URL}}/user/invoices/{{invoiceId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name get user 
+GET {{NEXT_PUBLIC_API_BASE_URL}}/user
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
