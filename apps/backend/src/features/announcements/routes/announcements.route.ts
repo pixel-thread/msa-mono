@@ -23,7 +23,7 @@ import { UserRole, AnnouncementStatus } from '@prisma/client';
 
 // Services
 import { getAssociation } from '@src/shared/services/association/get-association';
-import { findManyAnnouncements, createAnnouncement } from '../services';
+import { findManyAnnouncements, createAnnouncement } from '@feature/announcements/services';
 
 // Validators
 import {

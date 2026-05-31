@@ -14,9 +14,14 @@ import { validate } from '@src/shared/lib/validate';
 import { withRole } from '@src/shared/utils/with-role';
 import { asyncHandler } from '@src/shared/utils/async-handler';
 import { logger } from '@src/shared/logger';
+import { BadRequestError } from '@src/shared/errors';
 
 // Prisma
 import { UserRole } from '@prisma/client';
+
+// Services
+import { markAnnouncementRead } from '@feature/announcements/services';
+import { getAssociation } from '@src/shared/services/association/get-association';
 
 // Validators
 import { AnnouncementRouteParams } from '@src/features/announcements/validators';
@@ -36,11 +41,13 @@ export const postMarkRead: RequestHandler[] = [
     const announcementId = req.params.announcementId;
 
     if (!announcementId) {
-      throw new Error('Invalid announcement id');
+      throw new BadRequestError('Invalid announcement id');
     }
 
+    const association = await getAssociation(req);
+
     logger.info(
-      { traceId, announcementId },
+      { traceId, announcementId, associationId: association.id },
       'POST /api/announcements/[id]/read - Request started',
     );
 
@@ -54,8 +61,12 @@ export const postMarkRead: RequestHandler[] = [
       'POST /api/announcements/[id]/read - User authorized',
     );
 
-    // TODO: wire up actual markAnnouncementRead service call
-    const readReceipt = {} as any;
+    // Wire up actual markAnnouncementRead service call
+    const readReceipt = await markAnnouncementRead({
+      announcementId,
+      userId,
+      associationId: association.id,
+    });
 
     logger.info(
       { traceId, announcementId },
