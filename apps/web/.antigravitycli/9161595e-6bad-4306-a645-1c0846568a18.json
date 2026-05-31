@@ -1,0 +1,14 @@
+{
+  "id": "9161595e-6bad-4306-a645-1c0846568a18",
+  "name": "/Users/harrison/Downloads/mfsa",
+  "projectResources": {
+    "resources": [
+      {
+        "gitFolder": {
+          "folderUri": "file:///Users/harrison/Downloads/mfsa",
+          "allowWrite": true
+        }
+      }
+    ]
+  }
+}
