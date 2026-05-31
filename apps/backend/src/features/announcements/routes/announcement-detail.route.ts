@@ -100,7 +100,7 @@ export const putAnnouncement: RequestHandler[] = [
     const userId = req.userId as string;
 
     // Enforce MEMBER role as base gate
-    const user = await withRole(req, UserRole.MEMBER);
+    const user = await withRole(req, UserRole.SECRETARY);
 
     logger.info(
       { traceId, userId, announcementId },
