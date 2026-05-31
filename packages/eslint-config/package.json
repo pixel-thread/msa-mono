@@ -1,0 +1,14 @@
+{
+  "name": "@repo/eslint-config",
+  "version": "1.0.0",
+  "private": true,
+  "main": "base.mjs",
+  "exports": {
+    "./base.mjs": "./base.mjs",
+    "./react.mjs": "./react.mjs"
+  },
+  "files": [
+    "base.mjs",
+    "react.mjs"
+  ]
+}

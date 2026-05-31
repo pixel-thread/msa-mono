@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "lib": ["es2022"],
+    "outDir": "dist",
+    "rootDir": "src",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "isolatedModules": true,
+    "paths": {
+      "@src/*": ["./src/*"],
+      "@feature/*": ["./src/features/*"],
+      "@validator/*": ["./src/shared/validators/*"],
+      "@lib/*": ["./src/shared/lib/*"],
+      "@middleware/*": ["./src/middleware/*"],
+      "@utils/*": ["./src/shared/utils/*"],
+      "@errors/*": ["./src/shared/errors/*"],
+      "@sharedType/*": ["./src/shared/types/*"]
+    }
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "dist", "src/__tests__", "src/__mocks__"]
+}
