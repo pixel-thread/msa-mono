@@ -45,6 +45,7 @@ export async function auth(req: Request, _res: Response, next: NextFunction) {
 
   ContextStore.set('userId', user.id);
   ContextStore.set('associationId', user.associationId);
+  ContextStore.set('role', user.role);
 
   next();
 }

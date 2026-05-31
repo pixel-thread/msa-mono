@@ -10,6 +10,7 @@ export type Context = {
   userId?: string;
   /** Association ID for multi-tenant scoping, if available */
   associationId?: string;
+  role: string[];
 };
 
 const asyncLocalStorage = new AsyncLocalStorage<Context>();
@@ -40,7 +41,9 @@ export const ContextStore = {
   set<K extends keyof Context>(key: K, value: Context[K]): void {
     const store = asyncLocalStorage.getStore();
     if (!store) {
-      throw new Error('No async context found. Ensure the execution is wrapped in a ContextStore.run() call.');
+      throw new Error(
+        'No async context found. Ensure the execution is wrapped in a ContextStore.run() call.',
+      );
     }
     store[key] = value;
   },
@@ -50,5 +53,5 @@ export const ContextStore = {
    */
   getByKey<K extends keyof Context>(key: K): Context[K] | undefined {
     return asyncLocalStorage.getStore()?.[key];
-  }
+  },
 };
