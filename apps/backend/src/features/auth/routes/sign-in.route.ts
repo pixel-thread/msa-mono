@@ -87,7 +87,7 @@ export const postSignIn: RequestHandler[] = [
         { traceId, userId: user?.id },
         'POST /api/auth/sign-in - Invalid email or password',
       );
-      throw new UnauthorizedError('Invalid email or password');
+      throw new UnauthorizedError('Invalid credentials');
     }
 
     // Defensive: should not happen after password check above, but ensures type safety
@@ -96,7 +96,7 @@ export const postSignIn: RequestHandler[] = [
         { traceId, isPasswordValid: true },
         'POST /api/auth/sign-in - Invalid email or password',
       );
-      throw new UnauthorizedError('Invalid email or password');
+      throw new UnauthorizedError('Invalid credentials');
     }
 
     // ---- Reset failed attempt counter on successful login ----
