@@ -24,7 +24,7 @@ export interface UploadImageProps {
   associationId: string;
 
   /** The image file object to upload. */
-  file: File;
+  file: Express.Multer.File;
 
   /** The ID of the user performing the upload. */
   uploadedById: string;
@@ -85,10 +85,10 @@ export async function uploadAnnouncementImage({
   const fileRecord = await prisma.file.create({
     data: {
       associationId,
-      originalName: file.name,
+      originalName: file.originalname,
       storedName: uploadResult.key,
       mimeType: uploadResult.mimeType,
-      extension: file.name.split('.').pop() || null,
+      extension: file.originalname.split('.').pop() || null,
       sizeBytes: uploadResult.sizeBytes,
       bucket: env.STORAGE_BUCKET,
       storageKey: uploadResult.key,

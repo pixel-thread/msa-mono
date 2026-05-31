@@ -28,6 +28,7 @@ import {
 } from '@src/features/announcements/validators';
 import { uploadAnnouncementImage } from '@feature/announcements/services';
 import { BadRequestError } from '@src/shared/errors';
+import { fileUpload } from '@src/middleware/file-upload';
 
 /**
  * POST /api/announcements/:announcementId/upload
@@ -37,10 +38,10 @@ import { BadRequestError } from '@src/shared/errors';
  * @type {RequestHandler[]}
  */
 export const postUploadImage: RequestHandler[] = [
-  validate({ params: AnnouncementRouteParams, body: AnnouncementUploadFormData }),
+  fileUpload.single('file'),
+  validate({ params: AnnouncementRouteParams }),
 
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
-    const contentType = req.headers['content-type'] || '';
     const traceId = (req.traceId as string) || '';
     const announcementId = req.params.announcementId;
 
@@ -61,11 +62,8 @@ export const postUploadImage: RequestHandler[] = [
       { traceId, announcementId },
       'POST /api/announcements/[id]/upload - Uploading image',
     );
-    let file: Express.Multer.File | undefined;
 
-    if (contentType.includes('multipart/form-data')) {
-      file = (req as any).file as Express.Multer.File | undefined;
-    }
+    const file = req.file;
 
     if (!file) {
       throw new BadRequestError('Invalid request body');
@@ -75,7 +73,7 @@ export const postUploadImage: RequestHandler[] = [
     const { announcement, oldStorageKey } = await uploadAnnouncementImage({
       announcementId: announcementId as string,
       associationId: user.associationId,
-      file: file as any,
+      file: file,
       uploadedById: user.id,
     });
 

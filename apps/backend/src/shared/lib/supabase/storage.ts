@@ -13,19 +13,17 @@ export interface UploadResult {
 
 /** Uploads a file to the configured storage provider. Returns the upload result metadata. */
 export async function uploadToBucket(
-  file: File,
+  file: Express.Multer.File,
   pathPrefix: string,
   traceId?: string,
 ): Promise<UploadResult> {
   const storage = getStorageProvider();
-  const ext = file.name.split('.').pop() || '';
+  const ext = file.originalname.split('.').pop() || '';
   const fileName = `${crypto.randomUUID()}${ext ? `.${ext}` : ''}`;
-  const mimeType = file.type;
+  const mimeType = file.mimetype;
   const fileSize = file.size;
 
-  const arrayBuffer = await file.arrayBuffer();
-
-  const buffer = Buffer.from(arrayBuffer);
+  const buffer = Buffer.from(file.buffer);
 
   logger.info(
     {

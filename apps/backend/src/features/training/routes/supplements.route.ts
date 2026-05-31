@@ -33,6 +33,7 @@ import {
 
 // ---- External libs ----
 import { z } from 'zod';
+import { fileUpload } from '@src/middleware/file-upload';
 
 // ---- Schemas ----
 
@@ -94,6 +95,7 @@ export const getSupplements: RequestHandler[] = [
 // ---------------------------------------------------------------------------
 
 export const postSupplement: RequestHandler[] = [
+  fileUpload.single('file'),
   validate({ params: ModuleParamsSchema }),
 
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
@@ -118,7 +120,7 @@ export const postSupplement: RequestHandler[] = [
 
       // Parse request: file + metadata JSON
       const { moduleId } = req.params;
-      const file = (req as any).file as Express.Multer.File | undefined;
+      const file = req.file;
       const metadataRaw = req.body.metadata as string | undefined;
 
       if (!file || !metadataRaw) {
@@ -127,6 +129,7 @@ export const postSupplement: RequestHandler[] = [
 
       // Validate metadata against schema
       let metadata: z.infer<typeof CreateSupplementSchema>;
+
       try {
         metadata = CreateSupplementSchema.parse(JSON.parse(metadataRaw));
       } catch (error) {
@@ -139,9 +142,8 @@ export const postSupplement: RequestHandler[] = [
       }
 
       // Upload file to Supabase storage
-      const webFile = new File([file.buffer], file.originalname, { type: file.mimetype });
       const uploadResult = await uploadToBucket(
-        webFile,
+        file,
         `supplements/${association.slug}/${moduleId}`,
         traceId,
       );
