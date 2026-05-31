@@ -23,7 +23,7 @@ import { UserRole, AnnouncementStatus } from '@prisma/client';
 
 // Services
 import { getAssociation } from '@src/shared/services/association/get-association';
-import { findManyAnnouncements } from '../services';
+import { findManyAnnouncements, createAnnouncement } from '../services';
 
 // Validators
 import {
@@ -157,8 +157,12 @@ export const postAnnouncement: RequestHandler[] = [
       'POST /api/announcements - Creating announcement',
     );
 
-    // TODO: wire up actual createAnnouncement service call
-    const announcement = {} as any;
+    const announcement = await createAnnouncement({
+      associationId: association.id,
+      authorId: user.id,
+      data: req.body,
+      sendNotification: isPublishing, // Assuming notifications only on publish
+    });
 
     logger.info({ traceId, announcementId: announcement.id }, 'POST /api/announcements - Success');
 

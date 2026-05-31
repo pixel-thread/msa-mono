@@ -106,3 +106,8 @@ export class JOSEError extends Error {
     this.name = 'JOSEError';
   }
 }
+
+export const errors = {
+  JOSEError,
+  JWTClaimValidationFailed,
+};
