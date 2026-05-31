@@ -1,6 +1,7 @@
 import multer, { FileFilterCallback } from 'multer';
 import { ForbiddenError } from '@src/shared/errors';
 import type { Request } from 'express';
+import { MAX_IMAGE_SIZE, BLOCK_FILE_EXT } from '@src/shared/constants';
 
 /**
  * Multer middleware for handling file uploads.
@@ -19,13 +20,12 @@ import type { Request } from 'express';
  * );
  * ```
  */
-const BLOCK_EXT = ['.exe', '.bat', '.sh', '.cmd', '.php', '.js'];
 
 export const fileUpload = multer({
   storage: multer.memoryStorage(),
 
   limits: {
-    fileSize: 5 * 1024 * 1024, // 10 MB
+    fileSize: MAX_IMAGE_SIZE, // 10 MB
   },
 
   fileFilter(_req, file, cb) {
@@ -39,7 +39,7 @@ export const fileUpload = multer({
       return cb(new ForbiddenError('File name is missing'));
     }
 
-    const blockedExtensions = BLOCK_EXT;
+    const blockedExtensions = BLOCK_FILE_EXT;
 
     const lowerName = file.originalname.toLowerCase();
 
@@ -108,7 +108,7 @@ export function createUploadMiddleware(options: UploadOptions = {}) {
       }
 
       // Block suspicious filenames
-      const blockedExtensions = BLOCK_EXT;
+      const blockedExtensions = BLOCK_FILE_EXT;
 
       const lowerName = file.originalname.toLowerCase();
 

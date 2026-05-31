@@ -6,6 +6,8 @@ export const PAGE_SIZE = 10;
  */
 export const MAX_IMAGE_SIZE = 2 * 1024 * 1024;
 
+export const BLOCK_FILE_EXT = ['.exe', '.bat', '.sh', '.cmd', '.php', '.js'];
+
 /** @see MAX_IMAGE_SIZE */
 export const MAX_VIDEO_SIZE = 20 * 1024 * 1024;
 
