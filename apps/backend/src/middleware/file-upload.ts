@@ -1,5 +1,6 @@
-import multer from 'multer';
+import multer, { FileFilterCallback } from 'multer';
 import { ForbiddenError } from '@src/shared/errors';
+import type { Request } from 'express';
 
 /**
  * Multer middleware for handling file uploads.
@@ -18,6 +19,8 @@ import { ForbiddenError } from '@src/shared/errors';
  * );
  * ```
  */
+const BLOCK_EXT = ['.exe', '.bat', '.sh', '.cmd', '.php', '.js'];
+
 export const fileUpload = multer({
   storage: multer.memoryStorage(),
 
@@ -32,6 +35,88 @@ export const fileUpload = multer({
       return cb(new ForbiddenError('Invalid file type: must be PNG, JPEG, WEBP or MP4'));
     }
 
+    if (!file.originalname) {
+      return cb(new ForbiddenError('File name is missing'));
+    }
+
+    const blockedExtensions = BLOCK_EXT;
+
+    const lowerName = file.originalname.toLowerCase();
+
+    if (blockedExtensions.some((ext) => lowerName.endsWith(ext))) {
+      return cb(new ForbiddenError('Suspicious file detected'));
+    }
+
     cb(null, true);
   },
 });
+
+type UploadOptions = {
+  maxFileSizeMB?: number;
+  allowedMimeTypes?: string[];
+};
+
+const DEFAULT_ALLOWED_MIME_TYPES = ['image/png', 'image/jpeg', 'image/webp', 'video/mp4'];
+
+/**
+ * Create reusable multer upload middleware.
+ *
+ * Features:
+ * - Memory storage
+ * - Configurable file size limit
+ * - Configurable MIME type validation
+ * - Strong reusable validation
+ * - Centralized configuration
+ *
+ * Example:
+ * ```ts
+ * export const imageUpload = createUploadMiddleware({
+ *   maxFileSizeMB: 5,
+ *   allowedMimeTypes: ['image/png', 'image/jpeg'],
+ * });
+ *
+ * router.post(
+ *   '/upload',
+ *   imageUpload.single('file'),
+ *   controller
+ * );
+ * ```
+ */
+export function createUploadMiddleware(options: UploadOptions = {}) {
+  const { maxFileSizeMB = 5, allowedMimeTypes = DEFAULT_ALLOWED_MIME_TYPES } = options;
+
+  return multer({
+    storage: multer.memoryStorage(),
+
+    limits: {
+      fileSize: maxFileSizeMB * 1024 * 1024,
+      files: 1,
+      fieldSize: 2 * 1024 * 1024,
+    },
+
+    fileFilter(_req: Request, file: Express.Multer.File, cb: FileFilterCallback) {
+      // Validate filename
+      if (!file.originalname) {
+        return cb(new ForbiddenError('File name is missing'));
+      }
+
+      // Validate mimetype
+      if (!allowedMimeTypes.includes(file.mimetype)) {
+        return cb(
+          new ForbiddenError(`Invalid file type: allowed types are ${allowedMimeTypes.join(', ')}`),
+        );
+      }
+
+      // Block suspicious filenames
+      const blockedExtensions = BLOCK_EXT;
+
+      const lowerName = file.originalname.toLowerCase();
+
+      if (blockedExtensions.some((ext) => lowerName.endsWith(ext))) {
+        return cb(new ForbiddenError('Suspicious file detected'));
+      }
+
+      cb(null, true);
+    },
+  });
+}
