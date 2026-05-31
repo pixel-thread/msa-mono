@@ -13,6 +13,8 @@ export function csrf(req: Request, res: Response, next: NextFunction) {
   const clientType = req.headers['x-client-type'];
 
   const isPublicPath = path.startsWith('/auth');
+
+  // skipping csrf check for public routes and auth routes also for mobile
   if (isPublicPath || authHeader?.startsWith('Bearer ') || clientType === 'mobile') {
     return next();
   }
