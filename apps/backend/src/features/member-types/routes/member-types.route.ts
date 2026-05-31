@@ -67,11 +67,8 @@ export const getMemberTypes: RequestHandler[] = [
     logger.info({ traceId, userId: user.id }, 'GET /api/member-types - User authorized');
 
     // ---- Business logic -----------------------------------------------------
-    // TODO: wire up actual service call (guard for stub/unimplemented service)
 
-    const memberTypes = findManyMemberTypes
-      ? await findManyMemberTypes({ associationId: association.id })
-      : [];
+    const memberTypes = await findManyMemberTypes({ associationId: association.id });
 
     // ---- Result ------------------------------------------------------------
 
@@ -86,8 +83,7 @@ export const getMemberTypes: RequestHandler[] = [
 // ---------------------------------------------------------------------------
 
 export const postMemberType: RequestHandler[] = [
-  // TODO: wire up actual validator (guarded for when schema is not yet defined)
-  ...(CreateMemberTypeSchema ? [validate({ body: CreateMemberTypeSchema })] : []),
+  validate({ body: CreateMemberTypeSchema }),
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
 
@@ -173,8 +169,7 @@ export const getMemberTypeById: RequestHandler[] = [
 // ---------------------------------------------------------------------------
 
 export const patchMemberType: RequestHandler[] = [
-  // TODO: wire up actual validator (guarded for when schema is not yet defined)
-  ...(UpdateMemberTypeSchema ? [validate({ body: UpdateMemberTypeSchema })] : []),
+  validate({ body: UpdateMemberTypeSchema }),
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
 
@@ -247,13 +242,10 @@ export const deleteMemberType: RequestHandler[] = [
     );
 
     // ---- Business logic -----------------------------------------------------
-    // TODO: wire up actual service call (guarded for stub/unimplemented service)
 
     const memberTypeId = req.params.memberTypeId as string;
 
-    if (_deleteMemberType) {
-      await _deleteMemberType({ associationId: association.id, actorId: user.id, memberTypeId });
-    }
+    await _deleteMemberType({ associationId: association.id, actorId: user.id, memberTypeId });
 
     // ---- Result ------------------------------------------------------------
 
