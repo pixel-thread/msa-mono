@@ -19,7 +19,10 @@ import { asyncHandler } from '@src/shared/utils/async-handler';
 import { UserRole } from '@prisma/client';
 
 // Services
-import { findAuditLogs, getAuditLogStats } from '@src/features/audit-logs/services';
+import { findAuditLogs, getAuditLogStats } from '@feature/audit-logs/services';
+
+// Types
+import { AuditLogQuery } from '../types';
 
 export const getAuditLogs: RequestHandler[] = [
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
@@ -62,13 +65,13 @@ export const getAuditLogs: RequestHandler[] = [
     const actorId = req.query.actorId as string | undefined;
     const fromDate = req.query.fromDate ? new Date(req.query.fromDate as string) : undefined;
     const toDate = req.query.toDate ? new Date(req.query.toDate as string) : undefined;
-    const query = { page, action, resourceType, actorId, fromDate, toDate, limit: 10 };
+    const query: AuditLogQuery = { page, action, resourceType, actorId, fromDate, toDate, limit: 10 };
 
     // ---- Fetch audit logs and stats concurrently
-    // TODO: wire up actual typed service call (currently uses `as any` cast)
+    // Wire up actual typed service call
 
     const [logsResult, stats] = await Promise.all([
-      findAuditLogs(association.id, query as any),
+      findAuditLogs(association.id, query),
       getAuditLogStats(association.id),
     ]);
 
