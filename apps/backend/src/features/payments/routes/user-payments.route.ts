@@ -15,13 +15,7 @@ import { validate } from '@src/shared/lib/validate';
 import { success } from '@src/shared/utils/responses';
 import { buildPagination } from '@src/shared/utils/build-pagination';
 import { logger } from '@src/shared/logger';
-import {
-  UnauthorizedError,
-  ForbiddenError,
-  NotFoundError,
-  ValidationError,
-} from '@src/shared/errors';
-import { UserRole } from '@prisma/client';
+import { UnauthorizedError, ForbiddenError, NotFoundError } from '@src/shared/errors';
 import { z } from 'zod';
 import {
   UserPaymentsParamsSchema,
@@ -34,6 +28,9 @@ import { findContributionPeriods } from '@src/features/payments/services/findCon
 import { pageNumberValidation } from '@src/shared/validators/common';
 import { PAGE_SIZE } from '@src/shared/constants';
 import { asyncHandler } from '@src/shared/utils/async-handler';
+import { hasHighRoleAccess } from '@src/shared/utils';
+import { withRole } from '@src/shared/utils/with-role';
+import { UserRole } from '@prisma/client';
 
 // ---- Validation schemas ----
 
@@ -90,15 +87,8 @@ export const userPayments: RequestHandler[] = [
     const association = await getAssociation(req);
 
     // --- Auth: enforce FINANCE role ---
-    const authUserId = req.userId as string;
-    const authUser = await prisma.user.findUnique({
-      where: { id: authUserId },
-      select: { role: true },
-    });
-    // Only finance officers can view another user's payment details
-    if (!authUser || !authUser.role.includes(UserRole.FINANCE)) {
-      throw new ForbiddenError('Insufficient permissions');
-    }
+    await withRole(req, UserRole.FINANCE);
+
     logger.info({ traceId }, 'GET /api/payments/users/[userId] - User authorized');
 
     // --- Business logic: fetch member and their transactions ---
@@ -160,14 +150,8 @@ export const userContributions: RequestHandler[] = [
     const association = await getAssociation(req);
 
     // --- Auth: enforce FINANCE role ---
-    const authUserId = req.userId as string;
-    const authUser = await prisma.user.findUnique({
-      where: { id: authUserId },
-      select: { role: true },
-    });
-    if (!authUser || !authUser.role.includes(UserRole.FINANCE)) {
-      throw new ForbiddenError('Insufficient permissions');
-    }
+    await withRole(req, UserRole.FINANCE);
+
     logger.info({ traceId }, 'GET /api/payments/users/[userId]/contributions - User authorized');
 
     // --- Business logic: fetch contributions with date range filter ---
