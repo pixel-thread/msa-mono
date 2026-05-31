@@ -1,6 +1,7 @@
 import multer, { FileFilterCallback } from 'multer';
 import { ForbiddenError } from '@src/shared/errors';
 import type { Request } from 'express';
+import path from 'node:path';
 import { MAX_IMAGE_SIZE, BLOCK_FILE_EXT } from '@src/shared/constants';
 
 /**
@@ -31,6 +32,15 @@ export const fileUpload = multer({
   fileFilter(_req, file, cb) {
     const allowedMimeTypes = ['image/png', 'image/jpeg', 'image/webp', 'video/mp4'];
 
+    const filenameWithoutExt = path.parse(file.originalname).name;
+
+    const validFilenameRegex = /^[a-zA-Z0-9-]+$/;
+
+    if (!validFilenameRegex.test(filenameWithoutExt)) {
+      return cb(
+        new ForbiddenError('Invalid filename: only letters, numbers and hyphens are allowed'),
+      );
+    }
     if (!allowedMimeTypes.includes(file.mimetype)) {
       return cb(new ForbiddenError('Invalid file type: must be PNG, JPEG, WEBP or MP4'));
     }
