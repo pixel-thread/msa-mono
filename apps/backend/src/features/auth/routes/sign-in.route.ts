@@ -134,7 +134,7 @@ export const postSignIn: RequestHandler[] = [
     res.cookie('access_token', accessToken, {
       httpOnly: true,
       secure: env.NODE_ENV === 'production',
-      sameSite: env.NODE_ENV === 'development' ? 'lax' : 'none',
+      sameSite: env.NODE_ENV === 'development' ? 'strict' : 'none',
       maxAge: 15 * 60 * 1000, // 15 minutes
       path: '/',
     });
@@ -142,7 +142,7 @@ export const postSignIn: RequestHandler[] = [
     res.cookie('refresh_token', refreshToken, {
       httpOnly: true,
       secure: env.NODE_ENV === 'production',
-      sameSite: env.NODE_ENV === 'development' ? 'lax' : 'none',
+      sameSite: env.NODE_ENV === 'development' ? 'strict' : 'none',
       maxAge: 15 * 60 * 1000, // 15 minutes
       path: '/',
     });
