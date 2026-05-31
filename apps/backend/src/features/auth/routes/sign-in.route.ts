@@ -134,14 +134,16 @@ export const postSignIn: RequestHandler[] = [
     res.cookie('access_token', accessToken, {
       httpOnly: true,
       secure: env.NODE_ENV === 'production',
-      sameSite: 'none',
+      sameSite: env.NODE_ENV === 'development' ? 'lax' : 'none',
+      maxAge: 15 * 60 * 1000, // 15 minutes
       path: '/',
     });
 
     res.cookie('refresh_token', refreshToken, {
       httpOnly: true,
       secure: env.NODE_ENV === 'production',
-      sameSite: 'none',
+      sameSite: env.NODE_ENV === 'development' ? 'lax' : 'none',
+      maxAge: 15 * 60 * 1000, // 15 minutes
       path: '/',
     });
 
