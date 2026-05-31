@@ -4,6 +4,7 @@ import cookieParser from 'cookie-parser';
 import { env } from '@src/env';
 
 import { cors } from './middleware/cors';
+import { contextMiddleware } from './middleware/context';
 import { traceId } from './middleware/trace-id';
 import { securityHeaders } from './middleware/security-headers';
 import { rateLimiter } from './middleware/rate-limiter';
@@ -44,6 +45,7 @@ export function createApp(): express.Express {
    */
 
   app.use(cors);
+  app.use(contextMiddleware);
   app.use(traceId);
   app.use(securityHeaders);
   app.use(cookieParser());

@@ -3,6 +3,7 @@ import { verifyAccessToken } from '@src/shared/lib/jwt';
 import { UnauthorizedError } from '@src/shared/errors';
 import { API_PUBLIC_ROUTES } from '@src/shared/constants';
 import { prisma } from '@src/shared/lib';
+import { ContextStore } from '@src/shared/lib/tracing/context';
 
 export async function auth(req: Request, _res: Response, next: NextFunction) {
   const path = req.path;
@@ -39,6 +40,8 @@ export async function auth(req: Request, _res: Response, next: NextFunction) {
     associationId: user.associationId,
     memberTypeId: user.memberTypeId,
   };
+
+  ContextStore.set('userId', user.id);
 
   next();
 }
