@@ -1,5 +1,5 @@
 import multer, { FileFilterCallback } from 'multer';
-import { ForbiddenError } from '@src/shared/errors';
+import { BadRequestError } from '@src/shared/errors';
 import type { Request } from 'express';
 import path from 'node:path';
 import { MAX_IMAGE_SIZE, BLOCK_FILE_EXT } from '@src/shared/constants';
@@ -38,15 +38,15 @@ export const fileUpload = multer({
 
     if (!validFilenameRegex.test(filenameWithoutExt)) {
       return cb(
-        new ForbiddenError('Invalid filename: only letters, numbers and hyphens are allowed'),
+        new BadRequestError('Invalid filename: only letters, numbers and hyphens are allowed'),
       );
     }
     if (!allowedMimeTypes.includes(file.mimetype)) {
-      return cb(new ForbiddenError('Invalid file type: must be PNG, JPEG, WEBP or MP4'));
+      return cb(new BadRequestError('Invalid file type: must be PNG, JPEG, WEBP or MP4'));
     }
 
     if (!file.originalname) {
-      return cb(new ForbiddenError('File name is missing'));
+      return cb(new BadRequestError('File name is missing'));
     }
 
     const blockedExtensions = BLOCK_FILE_EXT;
@@ -54,7 +54,7 @@ export const fileUpload = multer({
     const lowerName = file.originalname.toLowerCase();
 
     if (blockedExtensions.some((ext) => lowerName.endsWith(ext))) {
-      return cb(new ForbiddenError('Suspicious file detected'));
+      return cb(new BadRequestError('Suspicious file detected'));
     }
 
     cb(null, true);
@@ -107,13 +107,15 @@ export function createUploadMiddleware(options: UploadOptions = {}) {
     fileFilter(_req: Request, file: Express.Multer.File, cb: FileFilterCallback) {
       // Validate filename
       if (!file.originalname) {
-        return cb(new ForbiddenError('File name is missing'));
+        return cb(new BadRequestError('File name is missing'));
       }
 
       // Validate mimetype
       if (!allowedMimeTypes.includes(file.mimetype)) {
         return cb(
-          new ForbiddenError(`Invalid file type: allowed types are ${allowedMimeTypes.join(', ')}`),
+          new BadRequestError(
+            `Invalid file type: allowed types are ${allowedMimeTypes.join(', ')}`,
+          ),
         );
       }
 
@@ -123,7 +125,7 @@ export function createUploadMiddleware(options: UploadOptions = {}) {
       const lowerName = file.originalname.toLowerCase();
 
       if (blockedExtensions.some((ext) => lowerName.endsWith(ext))) {
-        return cb(new ForbiddenError('Suspicious file detected'));
+        return cb(new BadRequestError('Suspicious file detected'));
       }
 
       cb(null, true);
