@@ -10,7 +10,7 @@ type UseLedgerAccounts = {
 export function useLedgerAccounts({ page }: UseLedgerAccounts = { page: 1 }) {
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ['ledger-accounts', page],
-    queryFn: () => http.get<Account[]>(ledgerEndpoints.accounts),
+    queryFn: () => http.get<Account[]>(`${ledgerEndpoints.accounts}?page=${page}`),
   });
 
   return {
