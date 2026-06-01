@@ -38,6 +38,7 @@ import {
 } from '@src/features/ledger/services/ledger.service';
 import { seedChartOfAccounts } from '@src/features/ledger/services/seed-chart-of-accounts';
 import { NotFoundError } from '@src/shared/errors';
+import { incomeStatement, trialBalance } from '../services/reports.service';
 
 // ---------------------------------------------------------------------------
 // Local schemas
@@ -306,6 +307,16 @@ export const getAccountHandler: RequestHandler[] = [
       { traceId, accountId: existingAccount.id },
       'GET /api/ledger/accounts/:id - Success',
     );
-    return success(res, { data: existingAccount, message: 'Ledger Account Updated' });
+    const trailBalance = await trialBalance(association.id, accountId as string);
+    const incomeStatementReport = await incomeStatement(association.id, undefined, undefined, accountId as string);
+
+    const dataWithReport = {
+      ...existingAccount,
+      report: {
+        trailBalance,
+        incomeStatement: incomeStatementReport,
+      },
+    };
+    return success(res, { data: dataWithReport, message: 'Ledger Account Updated' });
   }),
 ];

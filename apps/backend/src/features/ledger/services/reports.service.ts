@@ -1,15 +1,21 @@
 import { prisma } from '@src/shared/lib/prisma';
 import { Prisma } from '@prisma/client';
 
-export async function trialBalance(associationId: string) {
+export async function trialBalance(associationId: string, accountId?: string) {
   const accounts = await prisma.account.findMany({
-    where: { associationId },
+    where: { 
+      associationId,
+      ...(accountId ? { id: accountId } : {})
+    },
   });
 
   const totals = await prisma.ledgerLine.groupBy({
     by: ['accountId', 'isDebit'],
     where: {
-      account: { associationId },
+      account: { 
+        associationId,
+        ...(accountId ? { id: accountId } : {})
+      },
       ledgerEntry: { approvalStatus: 'APPROVED' },
     },
     _sum: { amount: true },
@@ -49,9 +55,18 @@ export async function trialBalance(associationId: string) {
   };
 }
 
-export async function incomeStatement(associationId: string, fromDate?: Date, toDate?: Date) {
+export async function incomeStatement(
+  associationId: string,
+  fromDate?: Date,
+  toDate?: Date,
+  accountId?: string
+) {
   const where: Prisma.LedgerLineWhereInput = {
-    account: { associationId, type: { in: ['INCOME', 'EXPENSE'] } },
+    account: { 
+      associationId, 
+      type: { in: ['INCOME', 'EXPENSE'] },
+      ...(accountId ? { id: accountId } : {})
+    },
     ledgerEntry: { approvalStatus: 'APPROVED' },
   };
 
@@ -72,7 +87,11 @@ export async function incomeStatement(associationId: string, fromDate?: Date, to
   });
 
   const accounts = await prisma.account.findMany({
-    where: { associationId, type: { in: ['INCOME', 'EXPENSE'] } },
+    where: { 
+      associationId, 
+      type: { in: ['INCOME', 'EXPENSE'] },
+      ...(accountId ? { id: accountId } : {})
+    },
   });
 
   let totalIncome = new Prisma.Decimal(0);
