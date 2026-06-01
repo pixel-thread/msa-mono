@@ -28,9 +28,7 @@ export async function trialBalance(associationId: string) {
 
     // Asset and Expense have debit normal balances, others have credit
     const isDebitNormal = account.type === 'ASSET' || account.type === 'EXPENSE';
-    const balance = isDebitNormal
-      ? debitTotal.sub(creditTotal)
-      : creditTotal.sub(debitTotal);
+    const balance = isDebitNormal ? debitTotal.sub(creditTotal) : creditTotal.sub(debitTotal);
 
     return {
       accountId: account.id,
@@ -134,9 +132,7 @@ export async function accountBalance(associationId: string, accountId: string) {
   const creditTotal = totals.find((t) => !t.isDebit)?._sum.amount ?? new Prisma.Decimal(0);
 
   const isDebitNormal = account.type === 'ASSET' || account.type === 'EXPENSE';
-  const balance = isDebitNormal
-    ? debitTotal.sub(creditTotal)
-    : creditTotal.sub(debitTotal);
+  const balance = isDebitNormal ? debitTotal.sub(creditTotal) : creditTotal.sub(debitTotal);
 
   return {
     debitTotal,

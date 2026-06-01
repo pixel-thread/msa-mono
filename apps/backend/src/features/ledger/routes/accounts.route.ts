@@ -242,7 +242,7 @@ export const seedAccountsHandler: RequestHandler[] = [
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
     const association = await getAssociation(req);
-    
+
     logger.info(
       { traceId, associationId: association.id },
       'POST /api/ledger/accounts/seed - Request started',
@@ -254,5 +254,58 @@ export const seedAccountsHandler: RequestHandler[] = [
 
     logger.info({ traceId }, 'POST /api/ledger/accounts/seed - Success');
     return success(res, { data: null, message: 'Chart of accounts seeded successfully' }, 201);
-  })
+  }),
+];
+
+// ---------------------------------------------------------------------------
+// GET /api/ledger/accounts/:id  –   Get a ledger account
+// Security: FINANCE role required
+// ---------------------------------------------------------------------------
+const GetAccountRouteParam = z.object({
+  id: z.uuid('Invalid Ledger Account ID'),
+});
+
+export const getAccountHandler: RequestHandler[] = [
+  validate({ params: GetAccountRouteParam }),
+  asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
+    const traceId = (req.traceId as string) || '';
+    const accountId = req.params.id;
+
+    // ---- Resolve association & log request ---------------------------------
+    const association = await getAssociation(req);
+
+    logger.info(
+      { traceId, associationId: association.id },
+      'GET /api/ledger/accounts/:id - Request started',
+    );
+
+    // ---- Authorize (FINANCE role) ------------------------------------------
+
+    const user = await withRole(req, UserRole.FINANCE);
+
+    // ---- Business logic ----------------------------------------------------
+    // check if account exist
+    const existingAccount = await getAccount(association.id, accountId as string);
+
+    if (!existingAccount) {
+      logger.info(
+        { traceId, accountId, userId: user.id },
+        'GET /api/ledger/accounts/:id - Account not found',
+      );
+      throw new NotFoundError('Account not found');
+    }
+
+    logger.info(
+      { traceId, accountId, userId: user.id },
+      'GET /api/ledger/accounts/:id - Account found',
+    );
+
+    // ---- Result ------------------------------------------------------------
+
+    logger.info(
+      { traceId, accountId: existingAccount.id },
+      'GET /api/ledger/accounts/:id - Success',
+    );
+    return success(res, { data: existingAccount, message: 'Ledger Account Updated' });
+  }),
 ];

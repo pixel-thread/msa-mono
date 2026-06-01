@@ -8,7 +8,7 @@ import { Router } from 'express';
 // Shared utilities
 // ---------------------------------------------------------------------------
 
-import { auth } from '@src/middleware/auth';
+import { auth } from '@middleware/auth';
 
 // ---------------------------------------------------------------------------
 // Route handlers
@@ -20,6 +20,7 @@ import {
   deleteAccountHandler,
   updateAccountHandler,
   seedAccountsHandler,
+  getAccountHandler,
 } from './accounts.route';
 import { listEntries, createEntry, approveEntryHandler, rejectEntryHandler } from './entries.route';
 import { getLedgerSummary } from './summary.route';
@@ -41,6 +42,7 @@ router.post('/accounts', createAccountHandler);
 router.put('/accounts/:id', updateAccountHandler);
 router.post('/accounts/seed', seedAccountsHandler);
 router.delete('/accounts/:id', deleteAccountHandler);
+router.get('/accounts/:id', getAccountHandler);
 
 // ---- Entries ----------------------------------------------------------------
 
