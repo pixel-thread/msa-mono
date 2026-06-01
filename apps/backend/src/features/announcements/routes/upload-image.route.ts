@@ -9,26 +9,23 @@ import { Request, NextFunction, Response } from 'express';
 import type { RequestHandler } from 'express';
 
 // Shared utilities
-import { success } from '@src/shared/utils/responses';
-import { validate } from '@src/shared/lib/validate';
-import { withRole } from '@src/shared/utils/with-role';
-import { asyncHandler } from '@src/shared/utils/async-handler';
+import { success } from '@utils/responses';
+import { validate } from '@lib/validate';
+import { withRole } from '@utils/with-role';
+import { asyncHandler } from '@utils/async-handler';
 import { logger } from '@src/shared/logger';
 
 // Prisma
 import { UserRole } from '@prisma/client';
 
 // Storage
-import { deleteFromBucket } from '@src/shared/lib/supabase/storage';
+import { deleteFromBucket } from '@lib/supabase/storage';
 
 // Validators
-import {
-  AnnouncementRouteParams,
-  AnnouncementUploadFormData,
-} from '@src/features/announcements/validators';
+import { AnnouncementRouteParams } from '@feature/announcements/validators';
 import { uploadAnnouncementImage } from '@feature/announcements/services';
 import { BadRequestError } from '@src/shared/errors';
-import { fileUpload } from '@src/middleware/file-upload';
+import { fileUpload } from '@middleware/file-upload';
 
 /**
  * POST /api/announcements/:announcementId/upload
@@ -40,7 +37,6 @@ import { fileUpload } from '@src/middleware/file-upload';
 export const postUploadImage: RequestHandler[] = [
   fileUpload.single('file'),
   validate({ params: AnnouncementRouteParams }),
-
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
     const announcementId = req.params.announcementId;

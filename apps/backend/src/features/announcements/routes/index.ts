@@ -9,10 +9,13 @@
 import { Router } from 'express';
 
 // Middleware
-import { auth } from '@src/middleware/auth';
+import { auth } from '@middleware/auth';
 
 // Route handlers — announcements CRUD
-import { getAnnouncements, postAnnouncement } from './announcements.route';
+import {
+  getAnnouncements,
+  postAnnouncement,
+} from '@feature/announcements/routes/announcements.route';
 
 // Route handlers — single announcement operations
 import {
@@ -20,11 +23,11 @@ import {
   putAnnouncement,
   deleteAnnouncement,
   patchAnnouncement,
-} from './announcement-detail.route';
+} from '@feature/announcements/routes/announcement-detail.route';
 
 // Route handlers — read receipts & image uploads
-import { postMarkRead } from './mark-read.route';
-import { postUploadImage } from './upload-image.route';
+import { postMarkRead } from '@feature/announcements/routes/mark-read.route';
+import { postUploadImage } from '@feature/announcements/routes/upload-image.route';
 
 /**
  * Express router for announcements.

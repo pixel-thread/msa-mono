@@ -9,10 +9,10 @@ import { Request, NextFunction, Response } from 'express';
 import type { RequestHandler } from 'express';
 
 // Shared utilities
-import { success } from '@src/shared/utils/responses';
-import { validate } from '@src/shared/lib/validate';
-import { withRole } from '@src/shared/utils/with-role';
-import { asyncHandler } from '@src/shared/utils/async-handler';
+import { success } from '@utils/responses';
+import { validate } from '@lib/validate';
+import { withRole } from '@utils/with-role';
+import { asyncHandler } from '@utils/async-handler';
 import { logger } from '@src/shared/logger';
 import { BadRequestError } from '@src/shared/errors';
 
@@ -24,7 +24,7 @@ import { markAnnouncementRead } from '@feature/announcements/services';
 import { getAssociation } from '@src/shared/services/association/get-association';
 
 // Validators
-import { AnnouncementRouteParams } from '@src/features/announcements/validators';
+import { AnnouncementRouteParams } from '@feature/announcements/validators';
 
 /**
  * POST /api/announcements/:announcementId/read
