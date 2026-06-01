@@ -18,6 +18,7 @@ export default function LedgerAccountsPage() {
   const { accounts, isLoading, meta } = useLedgerAccounts({ page });
   const [createOpen, setCreateOpen] = useState(false);
   const { columns } = useLedgerAccountColumns();
+  const { mutate: seedAccounts, isPending: isSeeding } = useSeedAccounts();
 
   return (
     <>
@@ -25,10 +26,16 @@ export default function LedgerAccountsPage() {
         title="Chart of Accounts"
         description="Manage the Chart of Accounts for your association"
       >
-        <Button onClick={() => setCreateOpen(true)}>
-          <Plus className="h-4 w-4 mr-2" />
-          Create Account
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button variant="outline" onClick={() => seedAccounts()} disabled={isSeeding || accounts.length > 0}>
+            <Sprout className="h-4 w-4 mr-2" />
+            Seed Accounts
+          </Button>
+          <Button onClick={() => setCreateOpen(true)}>
+            <Plus className="h-4 w-4 mr-2" />
+            Create Account
+          </Button>
+        </div>
       </SectionHeader>
 
       <div className="grid gap-4 md:grid-cols-3">
