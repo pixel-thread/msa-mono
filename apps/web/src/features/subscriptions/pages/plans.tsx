@@ -64,7 +64,7 @@ export default function PlansPage() {
       <DataTablePagination meta={meta} onPageChange={setPage} label="plans" />
 
       <EditPlanDialog
-        plan={editingPlan}
+        planId={editingPlan?.id || ''}
         open={!!editingPlan}
         onOpenChange={(open) => {
           if (!open) setEditingPlan(null);
