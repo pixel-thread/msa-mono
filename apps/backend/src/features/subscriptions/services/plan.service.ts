@@ -291,3 +291,15 @@ export async function softDeletePlan(associationId: string, planId: string) {
 
   return plan;
 }
+
+export async function getPlan(id: string, associationId: string) {
+  const plan = await prisma.subscriptionPlan.findUnique({
+    where: { id: id, associationId },
+    include: { versions: { orderBy: { createdAt: 'desc' } } },
+  });
+
+  return {
+    ...plan,
+    activeVersion: plan?.versions[0],
+  };
+}

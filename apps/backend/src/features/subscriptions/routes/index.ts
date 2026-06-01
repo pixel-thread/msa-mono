@@ -17,6 +17,7 @@ import {
   setDefaultPlanHandler,
   updatePlanHandler,
   deletePlanHandler,
+  getPlanDetailsHandler,
 } from './plans.route';
 import { getMySubscriptionHandler } from './my-subscription.route';
 import { postSubscribe } from './subscribe.route';
@@ -36,6 +37,7 @@ router.use(auth);
 router.get('/plans', getPlansHandler);
 router.post('/plans', createPlanHandler);
 router.post('/plans/default', setDefaultPlanHandler);
+router.get('/plans/:planId', getPlanDetailsHandler);
 router.patch('/plans/:planId', updatePlanHandler);
 router.delete('/plans/:planId', deletePlanHandler);
 

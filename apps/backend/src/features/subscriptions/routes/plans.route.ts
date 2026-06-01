@@ -25,11 +25,12 @@ import { UserRole } from '@prisma/client';
 // Services
 // ---------------------------------------------------------------------------
 import {
-  getPlans,
   createPlan,
   setDefaultPlan,
   updatePlan,
   softDeletePlan,
+  getPlan,
+  getPlans,
 } from '@feature/subscriptions/services';
 
 // ---------------------------------------------------------------------------
@@ -185,5 +186,34 @@ export const deletePlanHandler: RequestHandler[] = [
     logger.info({ traceId, planId }, 'Plan deleted successfully');
 
     return success(res, { data: plan, message: 'Plan deleted successfully' });
+  }),
+];
+
+// ---- GET /api/subscriptions/plans/:planId ----------------------------------
+/** @desc  GET a subscription plan details
+ *  @role  SUPER_ADMIN */
+export const getPlanDetailsHandler: RequestHandler[] = [
+  asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
+    const traceId = (req.traceId as string) || '';
+
+    // Validate association membership
+    const association = await getAssociation(req);
+
+    // Authorize user — only SUPER_ADMIN may update plans
+    const user = await withRole(req, UserRole.MEMBER);
+
+    logger.info(
+      { traceId, userId: user.id },
+      'GET /api/subscriptions/plans/[planId] - User authorized',
+    );
+
+    const { planId } = req.params;
+
+    // Apply partial update; price changes trigger a new version
+    const plan = await getPlan(planId as string, association.id);
+
+    logger.info({ traceId, planId }, 'GET /api/subscriptions/plans/[planId] - Success');
+
+    return success(res, { data: plan });
   }),
 ];
