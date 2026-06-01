@@ -2,7 +2,7 @@ import { type ColumnDef } from '@tanstack/react-table';
 import type { Account } from '@src/shared/types';
 import { DeleteAccountCell } from '../components/account/cell/delete-cell';
 
-export function useLedgerAccountColumns() {
+export function useLedgerAccountColumns(onEdit: (account: Account) => void) {
   const columns: ColumnDef<Account>[] = [
     {
       accessorKey: 'code',
@@ -48,8 +48,16 @@ export function useLedgerAccountColumns() {
       ),
     },
     {
-      header: 'Account',
-      cell: ({ row }) => <DeleteAccountCell id={row.original.id} />,
+      id: 'actions',
+      header: 'Actions',
+      cell: ({ row }) => (
+        <div className="flex items-center justify-end gap-2">
+          <Button variant="ghost" size="icon" onClick={() => onEdit(row.original)}>
+            <Edit2 className="h-4 w-4" />
+          </Button>
+          <DeleteAccountCell id={row.original.id} />
+        </div>
+      ),
     },
   ];
 

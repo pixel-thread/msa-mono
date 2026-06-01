@@ -8,16 +8,27 @@ import { Card, CardContent } from '@src/shared/components/ui/card';
 import { Button } from '@src/shared/components/ui/button';
 import { SectionHeader } from '@src/shared/components/section-header';
 import { CreateAccountDialog } from '../components/create-account-dialog';
+import { UpdateAccountDialog } from '../components/update-account-dialog';
 import { useLedgerAccountColumns } from '../hooks/useLedgerAccountColumns';
-import { Plus, BanknoteIcon } from 'lucide-react';
+import { useSeedAccounts } from '../hooks/useSeedAccounts';
+import { Plus, BanknoteIcon, Sprout } from 'lucide-react';
 import { DataTablePagination } from '@src/shared/components/data-table-pagination';
 import { useUrlFilters } from '@src/shared/hooks';
+import type { Account } from '@src/shared/types';
 
 export default function LedgerAccountsPage() {
   const { page, setPage } = useUrlFilters({ basePath: '/ledger/accounts' });
   const { accounts, isLoading, meta } = useLedgerAccounts({ page });
   const [createOpen, setCreateOpen] = useState(false);
-  const { columns } = useLedgerAccountColumns();
+  const [updateOpen, setUpdateOpen] = useState(false);
+  const [accountToUpdate, setAccountToUpdate] = useState<Account | null>(null);
+
+  const handleEdit = (account: Account) => {
+    setAccountToUpdate(account);
+    setUpdateOpen(true);
+  };
+
+  const { columns } = useLedgerAccountColumns(handleEdit);
   const { mutate: seedAccounts, isPending: isSeeding } = useSeedAccounts();
 
   return (
@@ -71,6 +82,7 @@ export default function LedgerAccountsPage() {
       <DataTablePagination meta={meta} onPageChange={setPage} />
 
       <CreateAccountDialog open={createOpen} onOpenChange={setCreateOpen} />
+      <UpdateAccountDialog account={accountToUpdate} open={updateOpen} onOpenChange={setUpdateOpen} />
     </>
   );
 }
