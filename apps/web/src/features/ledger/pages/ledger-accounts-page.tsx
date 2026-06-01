@@ -15,7 +15,7 @@ import { useUrlFilters } from '@src/shared/hooks';
 
 export default function LedgerAccountsPage() {
   const { page, setPage } = useUrlFilters({ basePath: '/ledger/accounts' });
-  const { accounts, isLoading, meta } = useLedgerAccounts();
+  const { accounts, isLoading, meta } = useLedgerAccounts({ page });
   const [createOpen, setCreateOpen] = useState(false);
   const { columns } = useLedgerAccountColumns();
 

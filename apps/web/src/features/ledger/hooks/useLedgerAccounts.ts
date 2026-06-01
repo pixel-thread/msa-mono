@@ -3,10 +3,14 @@ import http from '@src/shared/utils/http';
 import type { Account } from '@src/shared/types';
 import { ledgerEndpoints } from '../utils/constants/endpoints';
 
-export function useLedgerAccounts() {
+type UseLedgerAccounts = {
+  page?: number;
+};
+
+export function useLedgerAccounts({ page }: UseLedgerAccounts = { page: 1 }) {
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['ledger-accounts'],
-    queryFn: () => http.get<Account[]>(ledgerEndpoints.accounts),
+    queryKey: ['ledger-accounts', page],
+    queryFn: () => http.get<Account[]>(ledgerEndpoints.accounts(page)),
   });
 
   return {

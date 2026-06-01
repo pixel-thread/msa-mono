@@ -1,11 +1,8 @@
 import { type ColumnDef } from '@tanstack/react-table';
 import type { Account } from '@src/shared/types';
-import { TrashIcon } from 'lucide-react';
-import { Button } from '@components/ui/button';
-import { useDeleteLedgerAccount } from './use-delete-ledger-account';
+import { DeleteAccountCell } from '../components/account/cell/delete-cell';
 
 export function useLedgerAccountColumns() {
-  const { mutate, isPending: isDeleting } = useDeleteLedgerAccount();
   const columns: ColumnDef<Account>[] = [
     {
       accessorKey: 'code',
@@ -52,19 +49,7 @@ export function useLedgerAccountColumns() {
     },
     {
       header: 'Account',
-      cell: ({ row }) => (
-        <Button
-          onClick={() => {
-            const id = row.original.id;
-            mutate(id);
-          }}
-          variant={'destructive'}
-          disabled={isDeleting}
-          size={'icon'}
-        >
-          <TrashIcon className="h-4 w-4" />
-        </Button>
-      ),
+      cell: ({ row }) => <DeleteAccountCell id={row.original.id} />,
     },
   ];
 
