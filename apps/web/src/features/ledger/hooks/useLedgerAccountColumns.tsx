@@ -1,6 +1,8 @@
 import { type ColumnDef } from '@tanstack/react-table';
 import type { Account } from '@src/shared/types';
 import { DeleteAccountCell } from '../components/account/cell/delete-cell';
+import { Button } from '@src/shared/components/ui/button';
+import { Edit2 } from 'lucide-react';
 
 export function useLedgerAccountColumns(onEdit: (account: Account) => void) {
   const columns: ColumnDef<Account>[] = [

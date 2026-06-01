@@ -1,11 +1,13 @@
 export const ledgerEndpoints = {
-  entries: '/api/ledger/entries',
-  accounts: '/api/ledger/accounts',
-  summary: '/api/ledger/summary',
-  seedAccounts: '/api/ledger/accounts/seed',
-  rejectEntry: (id: string) => `/api/ledger/entries/${id}/reject`,
-  approveEntry: (id: string) => `/api/ledger/entries/${id}/approve`,
-  updateAccount: (id: string) => `/api/ledger/accounts/${id}`,
-  trialBalance: '/api/ledger/reports/trial-balance',
-  incomeStatement: '/api/ledger/reports/income-statement',
+  entries: '/ledger/entries',
+  accounts: '/ledger/accounts',
+  summary: '/ledger/summary',
+  seedAccounts: '/ledger/accounts/seed',
+  rejectEntry: (id: string) => `/ledger/entries/${id}/reject`,
+  approveEntry: (id: string) => `/ledger/entries/${id}/approve`,
+  updateAccount: (id: string) => `/ledger/accounts/${id}`,
+  accountsDetails: (id: string) => `/ledger/accounts/${id}`,
+  trialBalance: '/ledger/reports/trial-balance',
+  incomeStatement: '/ledger/reports/income-statement',
 };
+
