@@ -140,6 +140,10 @@ export const DRAWER_NAV_MAIN = [
         title: 'Accounts',
         url: '/ledger/accounts',
       },
+      {
+        title: 'Report',
+        url: '/ledger/reports',
+      },
     ],
   },
   {
