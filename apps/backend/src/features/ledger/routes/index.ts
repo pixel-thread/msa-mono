@@ -14,8 +14,13 @@ import { auth } from '@src/middleware/auth';
 // Route handlers
 // ---------------------------------------------------------------------------
 
-import { listAccounts, createAccountHandler, deleteAccountHandler, updateAccountHandler } from './accounts.route';
-import { seedAccountsHandler } from './accounts.route';
+import {
+  listAccounts,
+  createAccountHandler,
+  deleteAccountHandler,
+  updateAccountHandler,
+  seedAccountsHandler,
+} from './accounts.route';
 import { listEntries, createEntry, approveEntryHandler, rejectEntryHandler } from './entries.route';
 import { getLedgerSummary } from './summary.route';
 import { getMemberLedger } from './member-ledger.route';
