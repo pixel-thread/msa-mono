@@ -14,7 +14,6 @@ import { PAGE_SIZE } from '@src/shared/constants';
 import { logger } from '@src/shared/logger';
 import { ContextStore } from '@src/shared/lib';
 
-
 // ---------------------------------------------------------------------------
 // Interfaces
 // ---------------------------------------------------------------------------
@@ -52,7 +51,7 @@ export async function getEntries(associationId: string, page = 1) {
   const validPage = Math.max(1, page);
   const skip = (validPage - 1) * PAGE_SIZE;
 
-  const where = {
+  const where: Prisma.LedgerEntryWhereInput = {
     OR: [
       { paymentTransaction: { associationId } },
       { lines: { some: { account: { associationId } } } },
@@ -138,6 +137,7 @@ export async function createManualEntry(
           accountId: line.accountId,
           isDebit: line.isDebit,
           amount: line.amount,
+          associationId,
         })),
       },
     },
@@ -250,14 +250,18 @@ export async function getSummary(associationId: string) {
     where: { associationId },
   });
 
+  if (!accounts) throw new NotFoundError('Accounts not found');
+
   const totals = await prisma.ledgerLine.groupBy({
     by: ['accountId', 'isDebit'],
     where: {
       account: { associationId },
-      entry: { approvalStatus: 'APPROVED' },
+      ledgerEntry: { approvalStatus: 'APPROVED' },
     },
     _sum: { amount: true },
   });
+
+  if (!totals) throw new NotFoundError('Ledger lines not found');
 
   let totalAssets = new Prisma.Decimal(0);
   let totalLiabilities = new Prisma.Decimal(0);
@@ -292,31 +296,31 @@ export async function getSummary(associationId: string) {
         approvalStatus: 'PENDING',
         OR: [
           { paymentTransaction: { associationId } },
-          { lines: { some: { account: { associationId } } } }
-        ]
-      }
+          { lines: { some: { account: { associationId } } } },
+        ],
+      },
     }),
     prisma.ledgerEntry.count({
       where: {
         approvalStatus: 'APPROVED',
         OR: [
           { paymentTransaction: { associationId } },
-          { lines: { some: { account: { associationId } } } }
-        ]
-      }
+          { lines: { some: { account: { associationId } } } },
+        ],
+      },
     }),
   ]);
 
-  return { 
-    accounts, 
+  return {
+    accounts,
     summary: {
       totalAssets,
       totalLiabilities,
       totalIncome,
       totalExpenses,
       pendingEntries: pendingCount,
-      approvedEntries: approvedCount
-    } 
+      approvedEntries: approvedCount,
+    },
   };
 }
 
@@ -333,7 +337,7 @@ export async function getMemberEntries(associationId: string, memberId: string, 
   const validPage = Math.max(1, page);
   const skip = (validPage - 1) * PAGE_SIZE;
 
-  const where = { 
+  const where = {
     createdById: memberId,
     OR: [
       { paymentTransaction: { associationId } },

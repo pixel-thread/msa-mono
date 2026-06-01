@@ -49,7 +49,12 @@ export async function createJournalEntry(tx: Prisma.TransactionClient, options: 
   const resolvedLines = await Promise.all(
     lines.map(async (line) => {
       const account = await getAccountByCode(tx, associationId, line.accountCode);
-      return { accountId: account.id, isDebit: line.isDebit, amount: line.amount };
+      return { 
+        accountId: account.id, 
+        isDebit: line.isDebit, 
+        amount: line.amount,
+        associationId 
+      };
     })
   );
 

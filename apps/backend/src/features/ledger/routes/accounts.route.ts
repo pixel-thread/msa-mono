@@ -253,6 +253,6 @@ export const seedAccountsHandler: RequestHandler[] = [
     await seedChartOfAccounts(association.id);
 
     logger.info({ traceId }, 'POST /api/ledger/accounts/seed - Success');
-    return success(res, { message: 'Chart of accounts seeded successfully' }, 201);
+    return success(res, { data: null, message: 'Chart of accounts seeded successfully' }, 201);
   })
 ];

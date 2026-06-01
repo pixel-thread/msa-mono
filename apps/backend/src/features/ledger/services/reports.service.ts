@@ -10,7 +10,7 @@ export async function trialBalance(associationId: string) {
     by: ['accountId', 'isDebit'],
     where: {
       account: { associationId },
-      entry: { approvalStatus: 'APPROVED' },
+      ledgerEntry: { approvalStatus: 'APPROVED' },
     },
     _sum: { amount: true },
   });
@@ -54,12 +54,12 @@ export async function trialBalance(associationId: string) {
 export async function incomeStatement(associationId: string, fromDate?: Date, toDate?: Date) {
   const where: Prisma.LedgerLineWhereInput = {
     account: { associationId, type: { in: ['INCOME', 'EXPENSE'] } },
-    entry: { approvalStatus: 'APPROVED' },
+    ledgerEntry: { approvalStatus: 'APPROVED' },
   };
 
   if (fromDate || toDate) {
-    where.entry = {
-      ...((where.entry as Prisma.LedgerEntryWhereInput) || {}),
+    where.ledgerEntry = {
+      ...((where.ledgerEntry as Prisma.LedgerEntryWhereInput) || {}),
       createdAt: {
         ...(fromDate ? { gte: fromDate } : {}),
         ...(toDate ? { lte: toDate } : {}),
@@ -125,7 +125,7 @@ export async function accountBalance(associationId: string, accountId: string) {
     by: ['isDebit'],
     where: {
       accountId,
-      entry: { approvalStatus: 'APPROVED' },
+      ledgerEntry: { approvalStatus: 'APPROVED' },
     },
     _sum: { amount: true },
   });
