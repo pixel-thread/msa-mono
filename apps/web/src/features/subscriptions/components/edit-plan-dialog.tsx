@@ -31,7 +31,7 @@ import { Switch } from '@src/shared/components/ui/switch';
 import { useUpdatePlan } from '@src/features/subscriptions/hooks/useUpdatePlan';
 import { useMemberTypes } from '@src/features/members/hooks/useMemberTypes';
 import { BILLING_CYCLES } from '../utils/constants';
-import { SubscriptionPlan } from '../types';
+import { usePlan } from '../hooks/usePlan';
 
 const EditPlanSchema = z.object({
   name: z.string().min(1, 'Plan name is required'),
@@ -49,13 +49,14 @@ const EditPlanSchema = z.object({
 type EditPlanForm = z.infer<typeof EditPlanSchema>;
 
 interface EditPlanDialogProps {
-  plan: SubscriptionPlan | null;
+  planId: string;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
 
-export function EditPlanDialog({ plan, open, onOpenChange }: EditPlanDialogProps) {
+export function EditPlanDialog({ planId, open, onOpenChange }: EditPlanDialogProps) {
   const updatePlan = useUpdatePlan();
+  const { data: plan, isFetching } = usePlan({ planId: planId });
   const { memberTypes } = useMemberTypes();
 
   const form = useForm<EditPlanForm>({
