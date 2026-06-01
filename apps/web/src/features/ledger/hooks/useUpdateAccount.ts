@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
 import { ledgerEndpoints } from '../utils/constants/endpoints';
-import { useToast } from '@src/shared/hooks/use-toast';
+import { toast } from 'sonner';
 
 interface UpdateAccountPayload {
   id: string;
@@ -11,7 +11,6 @@ interface UpdateAccountPayload {
 
 export function useUpdateAccount() {
   const queryClient = useQueryClient();
-  const { toast } = useToast();
 
   return useMutation({
     mutationFn: async (payload: UpdateAccountPayload) => {
@@ -21,17 +20,14 @@ export function useUpdateAccount() {
       });
     },
     onSuccess: () => {
-      toast({
-        title: 'Account Updated',
+      toast.success('Account Updated', {
         description: 'The account has been updated successfully.',
       });
       queryClient.invalidateQueries({ queryKey: ['ledger-accounts'] });
     },
     onError: (error: Error) => {
-      toast({
-        title: 'Error',
+      toast.error('Error', {
         description: error.message || 'Failed to update account.',
-        variant: 'destructive',
       });
     },
   });
