@@ -16,7 +16,7 @@
 @complaintId=REPLACE_WITH_COMPLAINT_ID
 @certificateId=REPLACE_WITH_CERTIFICATE_ID
 @applicationId=REPLACE_WITH_APPLICATION_ID
-@accountId=0be1abd5-1a39-4651-a752-c92cd1549bb6
+@accountId=f361096a-ce6b-4074-a026-cae02e1d960e
 @entryId=REPLACE_WITH_ENTRY_ID
 @memberTypeId=REPLACE_WITH_MEMBER_TYPE_ID
 @planId=REPLACE_WITH_PLAN_ID
@@ -1486,7 +1486,13 @@ Authorization: Bearer {{TOKEN}}
 }
 
 ###
-# @name Delete Ledger Accounts
+# @name get Ledger Account
+GET {{NEXT_PUBLIC_API_BASE_URL}}/ledger/accounts/{{accountId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name Delete Ledger Account
 DELETE {{NEXT_PUBLIC_API_BASE_URL}}/ledger/accounts/{{accountId}}
 Content-Type: application/json
 Authorization: Bearer {{TOKEN}}
