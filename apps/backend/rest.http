@@ -16,7 +16,7 @@
 @complaintId=REPLACE_WITH_COMPLAINT_ID
 @certificateId=REPLACE_WITH_CERTIFICATE_ID
 @applicationId=REPLACE_WITH_APPLICATION_ID
-@accountId=REPLACE_WITH_ACCOUNT_ID
+@accountId=0be1abd5-1a39-4651-a752-c92cd1549bb6
 @entryId=REPLACE_WITH_ENTRY_ID
 @memberTypeId=REPLACE_WITH_MEMBER_TYPE_ID
 @planId=REPLACE_WITH_PLAN_ID
@@ -1484,6 +1484,12 @@ Authorization: Bearer {{TOKEN}}
   "type": "INCOME",
   "code": "DUES-001"
 }
+
+###
+# @name Delete Ledger Accounts
+DELETE {{NEXT_PUBLIC_API_BASE_URL}}/ledger/accounts/{{accountId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
 
 ###
 # @name List Ledger Entries

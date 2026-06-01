@@ -122,7 +122,7 @@ export function AddCertificateDialog({ open, onOpenChange, moduleId }: AddCertif
                 <FormItem>
                   <FormLabel>Issued Date (Optional)</FormLabel>
                   <FormControl>
-                    <Input type="datetime-local" {...field} />
+                    <Input type="text" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

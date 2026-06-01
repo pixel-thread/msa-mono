@@ -29,7 +29,14 @@ import { asyncHandler } from '@src/shared/utils/async-handler';
 // Services
 // ---------------------------------------------------------------------------
 
-import { getAccounts, createAccount } from '@src/features/ledger/services/ledger.service';
+import {
+  getAccounts,
+  createAccount,
+  deleteAccount,
+  getAccount,
+  updateAccount,
+} from '@src/features/ledger/services/ledger.service';
+import { NotFoundError } from '@src/shared/errors';
 
 // ---------------------------------------------------------------------------
 // Local schemas
@@ -112,5 +119,115 @@ export const createAccountHandler: RequestHandler[] = [
 
     logger.info({ traceId, accountId: account.id }, 'POST /api/ledger/accounts - Success');
     return success(res, { data: account }, 201);
+  }),
+];
+
+// ---------------------------------------------------------------------------
+// DELETE /api/ledger/accounts/:id  –   Delete a ledger account
+// Security: FINANCE role required
+// ---------------------------------------------------------------------------
+const DeleteAccountRouteParam = z.object({
+  id: z.uuid('Invalid Ledger Account ID'),
+});
+
+export const deleteAccountHandler: RequestHandler[] = [
+  validate({ params: DeleteAccountRouteParam }),
+  asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
+    const traceId = (req.traceId as string) || '';
+    const accountId = req.params.id;
+
+    // ---- Resolve association & log request ---------------------------------
+    const association = await getAssociation(req);
+
+    logger.info(
+      { traceId, associationId: association.id },
+      'DELETE /api/ledger/accounts/:id - Request started',
+    );
+
+    // ---- Authorize (FINANCE role) ------------------------------------------
+
+    const user = await withRole(req, UserRole.FINANCE);
+
+    // ---- Business logic ----------------------------------------------------
+    // check if account exist
+    const existingAccount = await getAccount(association.id, accountId as string);
+
+    if (!existingAccount) {
+      logger.info(
+        { traceId, accountId, userId: user.id },
+        'DELETE /api/ledger/accounts/:id - Account not found',
+      );
+      throw new NotFoundError('Account not found');
+    }
+
+    logger.info(
+      { traceId, accountId, userId: user.id },
+      'DELETE /api/ledger/accounts/:id - Ledger Account found',
+    );
+    logger.info(
+      { traceId, accountId },
+      'DELETE /api/ledger/accounts/:id - Ledger Account Deleting',
+    );
+    const account = await deleteAccount(association.id, existingAccount.id);
+    logger.info({ traceId, accountId }, 'DELETE /api/ledger/accounts/:id - Ledger Account Deleted');
+
+    // ---- Result ------------------------------------------------------------
+
+    logger.info({ traceId, accountId: account.id }, 'DELETE /api/ledger/accounts/:id - Success');
+    return success(res, { data: account, message: 'Ledger Account Deleted' });
+  }),
+];
+
+// ---------------------------------------------------------------------------
+// PUT /api/ledger/accounts/:id  –   Delete a ledger account
+// Security: FINANCE role required
+// ---------------------------------------------------------------------------
+const UpdateAccountRouteParam = z.object({
+  id: z.uuid('Invalid Ledger Account ID'),
+});
+
+export const updateAccountHandler: RequestHandler[] = [
+  validate({ params: UpdateAccountRouteParam, body: CreateAccountSchema.partial().strict() }),
+  asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
+    const traceId = (req.traceId as string) || '';
+    const accountId = req.params.id;
+    const data = req.body;
+
+    // ---- Resolve association & log request ---------------------------------
+    const association = await getAssociation(req);
+
+    logger.info(
+      { traceId, associationId: association.id },
+      'PUT /api/ledger/accounts/:id - Request started',
+    );
+
+    // ---- Authorize (FINANCE role) ------------------------------------------
+
+    const user = await withRole(req, UserRole.FINANCE);
+
+    // ---- Business logic ----------------------------------------------------
+    // check if account exist
+    const existingAccount = await getAccount(association.id, accountId as string);
+
+    if (!existingAccount) {
+      logger.info(
+        { traceId, accountId, userId: user.id },
+        'PUT /api/ledger/accounts/:id - Account not found',
+      );
+      throw new NotFoundError('Account not found');
+    }
+
+    logger.info(
+      { traceId, accountId, userId: user.id },
+      'PUT /api/ledger/accounts/:id - Account found',
+    );
+    logger.info({ traceId, accountId }, 'PUT /api/ledger/accounts/:id - Ledger Account Deleting');
+    const account = await updateAccount(association.id, existingAccount.id, data);
+    logger.info({ traceId, accountId }, 'PUT /api/ledger/accounts/:id - Ledger Account Deleted');
+
+    // ---- Result ------------------------------------------------------------
+
+    logger.info({ traceId, accountId: account.id }, 'PUT /api/ledger/accounts/:id - Success');
+    return success(res, { data: account, message: 'Ledger Account Updated' });
   }),
 ];

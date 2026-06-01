@@ -11,6 +11,8 @@ import { prisma } from '@src/shared/lib/prisma';
 
 import { ValidationError, NotFoundError } from '@src/shared/errors';
 import { PAGE_SIZE } from '@src/shared/constants';
+import { logger } from '@src/shared/logger';
+import { ContextStore } from '@src/shared/lib';
 
 // ---------------------------------------------------------------------------
 // Auto-create ledger entry for payment transactions
@@ -337,4 +339,36 @@ export async function getMemberEntries(memberId: string, page = 1) {
   ]);
 
   return { entries, total, page: validPage };
+}
+
+export async function getAccount(associationId: string, accountId: string) {
+  return await prisma.account.findUnique({
+    where: { id: accountId, associationId, isActive: true },
+  });
+}
+
+export async function deleteAccount(associationId: string, accountId: string) {
+  const context = ContextStore.get();
+  const userId = context?.userId;
+  const traceId = context?.requestId;
+  logger.info({ accountId, associationId, traceId, userId }, 'Deleting Leger Account started');
+  return await prisma.account.update({
+    where: { id: accountId, associationId, isActive: true },
+    data: { isActive: false },
+  });
+}
+
+export async function updateAccount(
+  associationId: string,
+  accountId: string,
+  data: Partial<CreateAccountInput>,
+) {
+  const context = ContextStore.get();
+  const userId = context?.userId;
+  const traceId = context?.requestId;
+  logger.info({ accountId, associationId, traceId, userId }, 'Deleting Leger Account started');
+  return await prisma.account.update({
+    where: { id: accountId, associationId, isActive: true },
+    data: data,
+  });
 }

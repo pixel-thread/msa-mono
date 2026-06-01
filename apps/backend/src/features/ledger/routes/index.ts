@@ -14,7 +14,7 @@ import { auth } from '@src/middleware/auth';
 // Route handlers
 // ---------------------------------------------------------------------------
 
-import { listAccounts, createAccountHandler } from './accounts.route';
+import { listAccounts, createAccountHandler, deleteAccountHandler } from './accounts.route';
 import { listEntries, createEntry, approveEntryHandler } from './entries.route';
 import { getLedgerSummary } from './summary.route';
 import { getMemberLedger } from './member-ledger.route';
@@ -31,6 +31,7 @@ router.use(auth);
 
 router.get('/accounts', listAccounts);
 router.post('/accounts', createAccountHandler);
+router.delete('/accounts/:id', deleteAccountHandler);
 
 // ---- Entries ----------------------------------------------------------------
 
