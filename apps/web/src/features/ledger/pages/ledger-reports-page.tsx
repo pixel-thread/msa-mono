@@ -14,8 +14,9 @@ import {
 } from '@components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@components/ui/tabs';
 
-function formatCurrency(amount: number) {
-  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
+function formatCurrency(amount: string) {
+  const num = Number(amount);
+  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(num);
 }
 
 export function LedgerReportsPage() {
@@ -54,16 +55,16 @@ export function LedgerReportsPage() {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {trialData.lines.map((line) => (
-                        <TableRow key={line.accountId}>
+                      {trialData.balances.map((bal) => (
+                        <TableRow key={bal.accountId}>
                           <TableCell>
-                            {line.accountCode} - {line.accountName}
+                            {bal.name} - {bal.name}
                           </TableCell>
                           <TableCell className="text-right">
-                            {line.debit > 0 ? formatCurrency(line.debit) : '-'}
+                            {parseInt(bal.debitTotal) > 0 ? formatCurrency(bal.debitTotal) : '-'}
                           </TableCell>
                           <TableCell className="text-right">
-                            {line.credit > 0 ? formatCurrency(line.credit) : '-'}
+                            {parseInt(bal.creditTotal) > 0 ? formatCurrency(bal.creditTotal) : '-'}
                           </TableCell>
                         </TableRow>
                       ))}
@@ -99,13 +100,13 @@ export function LedgerReportsPage() {
                       <h3 className="font-semibold mb-2">Income</h3>
                       <Table>
                         <TableBody>
-                          {incomeData.income.map((line) => (
-                            <TableRow key={line.accountId}>
+                          {incomeData.details.map((del) => (
+                            <TableRow key={del.accountId}>
                               <TableCell>
-                                {line.accountCode} - {line.accountName}
+                                {del.code} - {del.name}
                               </TableCell>
                               <TableCell className="text-right">
-                                {formatCurrency(line.amount)}
+                                {formatCurrency(del.balance)}
                               </TableCell>
                             </TableRow>
                           ))}
@@ -122,20 +123,20 @@ export function LedgerReportsPage() {
                       <h3 className="font-semibold mb-2">Expenses</h3>
                       <Table>
                         <TableBody>
-                          {incomeData.expenses.map((line) => (
+                          {incomeData.details.map((line) => (
                             <TableRow key={line.accountId}>
                               <TableCell>
-                                {line.accountCode} - {line.accountName}
+                                {line.code} - {line.name}
                               </TableCell>
                               <TableCell className="text-right">
-                                {formatCurrency(line.amount)}
+                                {formatCurrency(line.balance)}
                               </TableCell>
                             </TableRow>
                           ))}
                           <TableRow className="font-bold">
                             <TableCell>Total Expenses</TableCell>
                             <TableCell className="text-right">
-                              {formatCurrency(incomeData.totalExpenses)}
+                              {formatCurrency(incomeData.totalExpense)}
                             </TableCell>
                           </TableRow>
                         </TableBody>
@@ -144,7 +145,9 @@ export function LedgerReportsPage() {
                     <div className="flex justify-between items-center p-4 bg-muted rounded-lg font-bold text-lg">
                       <span>Net Income</span>
                       <span
-                        className={incomeData.netIncome >= 0 ? 'text-green-600' : 'text-red-600'}
+                        className={
+                          parseInt(incomeData.netIncome) >= 0 ? 'text-green-600' : 'text-red-600'
+                        } // Use parseInt to convert the string to a numberincomeData.netIncome >= 0 ? 'text-green-600' : 'text-red-600'}
                       >
                         {formatCurrency(incomeData.netIncome)}
                       </span>
