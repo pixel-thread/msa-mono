@@ -31,6 +31,7 @@ import {
   getEntries,
   createManualEntry,
   approveEntry,
+  rejectEntry,
 } from '@src/features/ledger/services/ledger.service';
 
 // ---------------------------------------------------------------------------
@@ -141,5 +142,28 @@ export const approveEntryHandler = async (req: Request, res: Response, _next: Ne
   // ---- Result ------------------------------------------------------------
 
   logger.info({ traceId, entryId }, 'POST /api/ledger/entries/[entryId]/approve - Success');
+  return success(res, { data: entry });
+};
+
+// ---------------------------------------------------------------------------
+// POST /api/ledger/entries/:entryId/reject  –  Reject a ledger entry
+// Security: PRESIDENT role required
+// ---------------------------------------------------------------------------
+
+export const rejectEntryHandler = async (req: Request, res: Response, _next: NextFunction) => {
+  const traceId = (req.traceId as string) || '';
+  const association = await getAssociation(req);
+  
+  logger.info(
+    { traceId, associationId: association.id },
+    'POST /api/ledger/entries/[entryId]/reject - Request started',
+  );
+
+  await withRole(req, UserRole.PRESIDENT);
+  
+  const { entryId } = req.params;
+  const entry = await rejectEntry(entryId as string);
+
+  logger.info({ traceId, entryId }, 'POST /api/ledger/entries/[entryId]/reject - Success');
   return success(res, { data: entry });
 };

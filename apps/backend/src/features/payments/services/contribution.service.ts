@@ -1,5 +1,6 @@
 import { prisma } from '@src/shared/lib/prisma';
 import { ContributionStatus, UserStatus } from '@prisma/client';
+import { recordWaiver } from '@src/features/ledger/services/accounting.service';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -192,15 +193,39 @@ export async function getUserContributionSummary(userId: string): Promise<Contri
 /**
  * Waive a contribution period (e.g. for hardship, honorary members, etc.).
  */
-export async function waiveContribution(contributionPeriodId: string, reason: string) {
-  return prisma.contributionPeriod.update({
-    where: { id: contributionPeriodId },
-    data: {
-      status: ContributionStatus.WAIVED,
-      dueAmount: 0,
-      waivedAt: new Date(),
-      waivedReason: reason,
-    },
+export async function waiveContribution(contributionPeriodId: string, reason: string, approvedById: string) {
+  return prisma.$transaction(async (tx) => {
+    const period = await tx.contributionPeriod.findUnique({
+      where: { id: contributionPeriodId }
+    });
+
+    if (!period) {
+      throw new Error('Contribution period not found');
+    }
+
+    const amount = Number(period.dueAmount);
+
+    const updated = await tx.contributionPeriod.update({
+      where: { id: contributionPeriodId },
+      data: {
+        status: ContributionStatus.WAIVED,
+        dueAmount: 0,
+        waivedAt: new Date(),
+        waivedReason: reason,
+      },
+    });
+
+    if (amount > 0) {
+      await recordWaiver(tx, {
+        associationId: period.associationId,
+        amount,
+        memberId: period.userId,
+        period: `${period.year}-${period.month}`,
+        approvedById,
+      });
+    }
+
+    return updated;
   });
 }
 

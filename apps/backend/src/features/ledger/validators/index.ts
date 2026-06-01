@@ -37,3 +37,14 @@ export const CreateLedgerEntrySchema = z.object({
   paymentId: z.string().uuid().optional().nullable(),
   lines: z.array(CreateLedgerLineSchema).min(2),
 });
+
+/** Schema for rejecting a ledger entry. */
+export const RejectEntrySchema = z.object({
+  reason: z.string().optional(),
+});
+
+/** Schema for report queries with optional dates. */
+export const ReportQuerySchema = z.object({
+  fromDate: z.string().optional(),
+  toDate: z.string().optional(),
+});

@@ -208,11 +208,11 @@ export const waiveContributionHandler: RequestHandler[] = [
 
     // --- Auth: enforce FINANCE role ---
     // Waiving contributions is a financial decision — restricted to finance
-    await withRole(req, UserRole.FINANCE);
+    const user = await withRole(req, UserRole.FINANCE);
     logger.info({ traceId }, 'PATCH /api/payments/contributions - User authorized');
 
     // --- Business logic: waive the contribution period ---
-    const waived = await waiveContribution(req.body.contributionPeriodId, req.body.reason);
+    const waived = await waiveContribution(req.body.contributionPeriodId, req.body.reason, user.id);
 
     // --- Log: success ---
     logger.info(

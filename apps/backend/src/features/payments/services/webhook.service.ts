@@ -1,5 +1,6 @@
 import { prisma } from '@src/shared/lib/prisma';
 import { AuditAction, PaymentGateway } from '@prisma/client';
+import { recordMemberPayment, recordRefund } from '@src/features/ledger/services/accounting.service';
 import { verifyWebhookSignature } from './razorpay.service';
 import { markPaymentFailed } from './payment.service';
 import { getActiveProvider } from './payment-provider.service';
@@ -315,27 +316,12 @@ async function handleRefund(payload: RazorpayWebhookPayload): Promise<void> {
     });
 
     // Create reverse ledger entry
-    await tx.ledgerEntry.create({
-      data: {
-        paymentTransactionId: transaction.id,
-        description: `Refund — Razorpay refund ${refund.id}`,
-        approvalStatus: 'APPROVED',
-        createdById: transaction.userId,
-        lines: {
-          create: [
-            {
-              accountId: 'SUBSCRIPTION_INCOME',
-              isDebit: true,
-              amount: refund.amount / 100,
-            },
-            {
-              accountId: 'BANK',
-              isDebit: false,
-              amount: refund.amount / 100,
-            },
-          ],
-        },
-      },
+    await recordRefund(tx, {
+      associationId: transaction.associationId,
+      paymentTransactionId: transaction.id,
+      amount: refund.amount / 100,
+      description: `Razorpay refund ${refund.id}`,
+      createdById: transaction.userId,
     });
   });
 }
@@ -410,27 +396,14 @@ async function verifyAndCompletePaymentFromWebhook(
     }
 
     // Create ledger entry
-    await tx.ledgerEntry.create({
-      data: {
-        paymentTransactionId: transactionId,
-        description: 'Online payment via Razorpay (webhook confirmed)',
-        approvalStatus: 'APPROVED',
-        createdById: transaction.userId,
-        lines: {
-          create: [
-            {
-              accountId: 'BANK',
-              isDebit: true,
-              amount: Number(transaction.amount),
-            },
-            {
-              accountId: 'SUBSCRIPTION_INCOME',
-              isDebit: false,
-              amount: Number(transaction.amount),
-            },
-          ],
-        },
-      },
+    await recordMemberPayment(tx, {
+      associationId: transaction.associationId,
+      paymentTransactionId: transactionId,
+      amount: Number(transaction.amount),
+      description: 'Online payment via Razorpay (webhook confirmed)',
+      createdById: transaction.userId,
+      memberId: transaction.userId,
+      method: 'ONLINE',
     });
 
     // Audit log

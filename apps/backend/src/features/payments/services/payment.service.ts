@@ -17,7 +17,7 @@ import Razorpay from 'razorpay';
 import { BadRequestError, NotFoundError, PaymentError } from '@src/shared/errors';
 import { logAction } from '@src/shared/services/audit-logs';
 import { PAGE_SIZE } from '@src/shared/constants';
-import { createLedgerEntry } from '@src/features/ledger/services/ledger.service';
+import { recordMemberPayment } from '@src/features/ledger/services/accounting.service';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -397,13 +397,15 @@ export async function verifyAndCompletePayment(input: VerifyAndCompleteInput) {
       Number(transaction.amount),
     );
 
-    await createLedgerEntry(
-      tx,
-      transaction.id,
-      Number(transaction.amount),
-      'Online payment via Razorpay',
-      transaction.userId,
-    );
+    await recordMemberPayment(tx, {
+      associationId: transaction.associationId,
+      paymentTransactionId: transaction.id,
+      amount: Number(transaction.amount),
+      description: 'Online payment via Razorpay',
+      createdById: transaction.userId,
+      memberId: transaction.userId,
+      method: 'ONLINE'
+    });
 
     await tx.auditLog.create({
       data: {
@@ -531,13 +533,15 @@ export async function recordManualPayment(input: RecordManualPaymentInput) {
     await allocatePaymentToContributions(tx, transaction.id, input.userId, input.amount);
 
     // Create ledger entry
-    await createLedgerEntry(
-      tx,
-      transaction.id,
-      input.amount,
-      `Manual payment (${input.method}) recorded by finance`,
-      input.createdById,
-    );
+    await recordMemberPayment(tx, {
+      associationId: input.associationId,
+      paymentTransactionId: transaction.id,
+      amount: input.amount,
+      description: `Manual payment (${input.method}) recorded by finance`,
+      createdById: input.createdById,
+      memberId: input.userId,
+      method: input.method
+    });
 
     // Audit log
     await tx.auditLog.create({

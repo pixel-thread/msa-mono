@@ -36,6 +36,7 @@ import {
   getAccount,
   updateAccount,
 } from '@src/features/ledger/services/ledger.service';
+import { seedChartOfAccounts } from '@src/features/ledger/services/seed-chart-of-accounts';
 import { NotFoundError } from '@src/shared/errors';
 
 // ---------------------------------------------------------------------------
@@ -221,13 +222,37 @@ export const updateAccountHandler: RequestHandler[] = [
       { traceId, accountId, userId: user.id },
       'PUT /api/ledger/accounts/:id - Account found',
     );
-    logger.info({ traceId, accountId }, 'PUT /api/ledger/accounts/:id - Ledger Account Deleting');
+    logger.info({ traceId, accountId }, 'PUT /api/ledger/accounts/:id - Ledger Account Updating');
     const account = await updateAccount(association.id, existingAccount.id, data);
-    logger.info({ traceId, accountId }, 'PUT /api/ledger/accounts/:id - Ledger Account Deleted');
+    logger.info({ traceId, accountId }, 'PUT /api/ledger/accounts/:id - Ledger Account Updated');
 
     // ---- Result ------------------------------------------------------------
 
     logger.info({ traceId, accountId: account.id }, 'PUT /api/ledger/accounts/:id - Success');
     return success(res, { data: account, message: 'Ledger Account Updated' });
   }),
+];
+
+// ---------------------------------------------------------------------------
+// POST /api/ledger/accounts/seed  –   Seed chart of accounts
+// Security: PRESIDENT role required
+// ---------------------------------------------------------------------------
+
+export const seedAccountsHandler: RequestHandler[] = [
+  asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
+    const traceId = (req.traceId as string) || '';
+    const association = await getAssociation(req);
+    
+    logger.info(
+      { traceId, associationId: association.id },
+      'POST /api/ledger/accounts/seed - Request started',
+    );
+
+    await withRole(req, UserRole.PRESIDENT);
+
+    await seedChartOfAccounts(association.id);
+
+    logger.info({ traceId }, 'POST /api/ledger/accounts/seed - Success');
+    return success(res, { message: 'Chart of accounts seeded successfully' }, 201);
+  })
 ];

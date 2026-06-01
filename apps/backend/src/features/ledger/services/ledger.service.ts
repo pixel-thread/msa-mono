@@ -2,7 +2,7 @@
 // Prisma
 // ---------------------------------------------------------------------------
 
-import { Prisma, ApprovalStatus } from '@prisma/client';
+import { ApprovalStatus, Prisma } from '@prisma/client';
 import { prisma } from '@src/shared/lib/prisma';
 
 // ---------------------------------------------------------------------------
@@ -14,94 +14,6 @@ import { PAGE_SIZE } from '@src/shared/constants';
 import { logger } from '@src/shared/logger';
 import { ContextStore } from '@src/shared/lib';
 
-// ---------------------------------------------------------------------------
-// Auto-create ledger entry for payment transactions
-//
-// Called internally when a payment transaction completes. Maps the payment
-// method to the appropriate debit account (1001 for cash, 1002 for non-cash)
-// and credits revenue account 3001. The entry is auto-approved since it
-// originates from a trusted internal process.
-// ---------------------------------------------------------------------------
-
-/**
- * Auto-create a ledger entry for a payment transaction.
- *
- * WHY: Every completed payment must produce a double-entry ledger record.
- * The mapping (method → account code) ensures correct categorisation.
- */
-export async function createLedgerEntry(
-  tx: Prisma.TransactionClient,
-  paymentTransactionId: string,
-  amount: number,
-  description: string,
-  createdById: string,
-) {
-  // ---- Look up the originating transaction -------------------------------
-
-  const transaction = await tx.paymentTransaction.findUnique({
-    where: { id: paymentTransactionId },
-    select: { associationId: true, method: true },
-  });
-
-  if (!transaction) {
-    throw new Error(`Transaction ${paymentTransactionId} not found during ledger generation.`);
-  }
-
-  // ---- Resolve debit/credit accounts by payment method -------------------
-
-  const isCash = transaction.method === 'CASH';
-  const debitAccountCode = isCash ? '1001' : '1002';
-  const creditAccountCode = '3001';
-
-  const [debitAccount, creditAccount] = await Promise.all([
-    tx.account.findFirst({
-      where: {
-        associationId: transaction.associationId,
-        code: debitAccountCode,
-        isActive: true,
-      },
-    }),
-    tx.account.findFirst({
-      where: {
-        associationId: transaction.associationId,
-        code: creditAccountCode,
-        isActive: true,
-      },
-    }),
-  ]);
-
-  if (!debitAccount || !creditAccount) {
-    throw new Error(
-      `Required accounts (debit: ${debitAccountCode}, credit: ${creditAccountCode}) not found in chart of accounts for association ${transaction.associationId}.`,
-    );
-  }
-
-  // ---- Create the auto-approved entry ------------------------------------
-
-  return tx.ledgerEntry.create({
-    data: {
-      paymentTransactionId,
-      description,
-      approvalStatus: 'APPROVED',
-      createdById,
-      approvedById: createdById,
-      lines: {
-        create: [
-          {
-            accountId: debitAccount.id,
-            isDebit: true,
-            amount,
-          },
-          {
-            accountId: creditAccount.id,
-            isDebit: false,
-            amount,
-          },
-        ],
-      },
-    },
-  });
-}
 
 // ---------------------------------------------------------------------------
 // Interfaces
@@ -140,8 +52,16 @@ export async function getEntries(associationId: string, page = 1) {
   const validPage = Math.max(1, page);
   const skip = (validPage - 1) * PAGE_SIZE;
 
+  const where = {
+    OR: [
+      { paymentTransaction: { associationId } },
+      { lines: { some: { account: { associationId } } } },
+    ],
+  };
+
   const [entries, total] = await Promise.all([
     prisma.ledgerEntry.findMany({
+      where,
       include: {
         lines: true,
         paymentTransaction: true,
@@ -150,7 +70,7 @@ export async function getEntries(associationId: string, page = 1) {
       skip,
       take: PAGE_SIZE,
     }),
-    prisma.ledgerEntry.count(),
+    prisma.ledgerEntry.count({ where }),
   ]);
 
   return { entries, total, page: validPage };
@@ -237,12 +157,33 @@ export async function approveEntry(entryId: string, approvedById: string) {
   if (!existing) {
     throw new NotFoundError(`Ledger entry ${entryId} not found.`);
   }
+  if (existing.approvalStatus === ApprovalStatus.APPROVED) {
+    throw new ValidationError('Cannot modify an approved ledger entry.');
+  }
 
   return prisma.ledgerEntry.update({
     where: { id: entryId },
     data: {
       approvalStatus: ApprovalStatus.APPROVED,
       approvedById,
+    },
+  });
+}
+
+export async function rejectEntry(entryId: string) {
+  const existing = await prisma.ledgerEntry.findUnique({ where: { id: entryId } });
+
+  if (!existing) {
+    throw new NotFoundError(`Ledger entry ${entryId} not found.`);
+  }
+  if (existing.approvalStatus !== ApprovalStatus.PENDING) {
+    throw new ValidationError('Only pending ledger entries can be rejected.');
+  }
+
+  return prisma.ledgerEntry.update({
+    where: { id: entryId },
+    data: {
+      approvalStatus: ApprovalStatus.REJECTED,
     },
   });
 }
@@ -309,7 +250,74 @@ export async function getSummary(associationId: string) {
     where: { associationId },
   });
 
-  return { accounts, summary: 'Ledger summary placeholder' };
+  const totals = await prisma.ledgerLine.groupBy({
+    by: ['accountId', 'isDebit'],
+    where: {
+      account: { associationId },
+      entry: { approvalStatus: 'APPROVED' },
+    },
+    _sum: { amount: true },
+  });
+
+  let totalAssets = new Prisma.Decimal(0);
+  let totalLiabilities = new Prisma.Decimal(0);
+  let totalIncome = new Prisma.Decimal(0);
+  let totalExpenses = new Prisma.Decimal(0);
+
+  for (const account of accounts) {
+    const accountTotals = totals.filter((t) => t.accountId === account.id);
+    const debitTotal = accountTotals.find((t) => t.isDebit)?._sum.amount ?? new Prisma.Decimal(0);
+    const creditTotal = accountTotals.find((t) => !t.isDebit)?._sum.amount ?? new Prisma.Decimal(0);
+
+    let balance = new Prisma.Decimal(0);
+
+    if (account.type === 'ASSET') {
+      balance = debitTotal.sub(creditTotal);
+      totalAssets = totalAssets.add(balance);
+    } else if (account.type === 'EXPENSE') {
+      balance = debitTotal.sub(creditTotal);
+      totalExpenses = totalExpenses.add(balance);
+    } else if (account.type === 'LIABILITY' || account.type === 'EQUITY') {
+      balance = creditTotal.sub(debitTotal);
+      totalLiabilities = totalLiabilities.add(balance);
+    } else if (account.type === 'INCOME') {
+      balance = creditTotal.sub(debitTotal);
+      totalIncome = totalIncome.add(balance);
+    }
+  }
+
+  const [pendingCount, approvedCount] = await Promise.all([
+    prisma.ledgerEntry.count({
+      where: {
+        approvalStatus: 'PENDING',
+        OR: [
+          { paymentTransaction: { associationId } },
+          { lines: { some: { account: { associationId } } } }
+        ]
+      }
+    }),
+    prisma.ledgerEntry.count({
+      where: {
+        approvalStatus: 'APPROVED',
+        OR: [
+          { paymentTransaction: { associationId } },
+          { lines: { some: { account: { associationId } } } }
+        ]
+      }
+    }),
+  ]);
+
+  return { 
+    accounts, 
+    summary: {
+      totalAssets,
+      totalLiabilities,
+      totalIncome,
+      totalExpenses,
+      pendingEntries: pendingCount,
+      approvedEntries: approvedCount
+    } 
+  };
 }
 
 // ---------------------------------------------------------------------------
@@ -321,11 +329,17 @@ export async function getSummary(associationId: string) {
  *
  * WHY: The member profile page shows a per-member transaction history.
  */
-export async function getMemberEntries(memberId: string, page = 1) {
+export async function getMemberEntries(associationId: string, memberId: string, page = 1) {
   const validPage = Math.max(1, page);
   const skip = (validPage - 1) * PAGE_SIZE;
 
-  const where = { createdById: memberId };
+  const where = { 
+    createdById: memberId,
+    OR: [
+      { paymentTransaction: { associationId } },
+      { lines: { some: { account: { associationId } } } },
+    ],
+  };
 
   const [entries, total] = await Promise.all([
     prisma.ledgerEntry.findMany({
@@ -366,7 +380,7 @@ export async function updateAccount(
   const context = ContextStore.get();
   const userId = context?.userId;
   const traceId = context?.requestId;
-  logger.info({ accountId, associationId, traceId, userId }, 'Deleting Leger Account started');
+  logger.info({ accountId, associationId, traceId, userId }, 'Updating Leger Account started');
   return await prisma.account.update({
     where: { id: accountId, associationId, isActive: true },
     data: data,

@@ -14,10 +14,12 @@ import { auth } from '@src/middleware/auth';
 // Route handlers
 // ---------------------------------------------------------------------------
 
-import { listAccounts, createAccountHandler, deleteAccountHandler } from './accounts.route';
-import { listEntries, createEntry, approveEntryHandler } from './entries.route';
+import { listAccounts, createAccountHandler, deleteAccountHandler, updateAccountHandler } from './accounts.route';
+import { seedAccountsHandler } from './accounts.route';
+import { listEntries, createEntry, approveEntryHandler, rejectEntryHandler } from './entries.route';
 import { getLedgerSummary } from './summary.route';
 import { getMemberLedger } from './member-ledger.route';
+import { getTrialBalanceHandler, getIncomeStatementHandler } from './reports.route';
 
 // ---------------------------------------------------------------------------
 // Router setup – all routes require authentication
@@ -31,6 +33,8 @@ router.use(auth);
 
 router.get('/accounts', listAccounts);
 router.post('/accounts', createAccountHandler);
+router.put('/accounts/:id', updateAccountHandler);
+router.post('/accounts/seed', seedAccountsHandler);
 router.delete('/accounts/:id', deleteAccountHandler);
 
 // ---- Entries ----------------------------------------------------------------
@@ -38,10 +42,13 @@ router.delete('/accounts/:id', deleteAccountHandler);
 router.get('/entries', listEntries);
 router.post('/entries', createEntry);
 router.post('/entries/:entryId/approve', approveEntryHandler);
+router.post('/entries/:entryId/reject', rejectEntryHandler);
 
-// ---- Summary ----------------------------------------------------------------
+// ---- Summary & Reports ------------------------------------------------------
 
 router.get('/summary', getLedgerSummary);
+router.get('/reports/trial-balance', getTrialBalanceHandler);
+router.get('/reports/income-statement', getIncomeStatementHandler);
 
 // ---- Member-specific ledger -------------------------------------------------
 

@@ -66,7 +66,7 @@ export const getMemberLedger: RequestHandler[] = [
 
     const { memberId } = req.params;
     const page = (req.query as any).page || 1;
-    const { entries, total } = await getMemberEntries(memberId as string, page);
+    const { entries, total } = await getMemberEntries(association.id, memberId as string, page);
 
     // ---- Result ------------------------------------------------------------
 
