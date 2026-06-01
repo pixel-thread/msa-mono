@@ -1,7 +1,11 @@
 export const ledgerEndpoints = {
-  accounts: (page?: number) => `/ledger/accounts?page=${page ?? 1}` as const,
-  accountsDetails: (id: string) => `/ledger/accounts/${id}` as const,
-  summary: '/ledger/summary' as const,
-  entries: '/ledger/entries' as const,
-  approveEntry: (id: string) => `/ledger/entries/${id}/approve`,
-} as const;
+  entries: '/api/ledger/entries',
+  accounts: '/api/ledger/accounts',
+  summary: '/api/ledger/summary',
+  seedAccounts: '/api/ledger/accounts/seed',
+  rejectEntry: (id: string) => `/api/ledger/entries/${id}/reject`,
+  approveEntry: (id: string) => `/api/ledger/entries/${id}/approve`,
+  updateAccount: (id: string) => `/api/ledger/accounts/${id}`,
+  trialBalance: '/api/ledger/reports/trial-balance',
+  incomeStatement: '/api/ledger/reports/income-statement',
+};
