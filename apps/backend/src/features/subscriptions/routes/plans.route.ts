@@ -192,6 +192,7 @@ export const deletePlanHandler: RequestHandler[] = [
 // ---- GET /api/subscriptions/plans/:planId ----------------------------------
 /** @desc  GET a subscription plan details
  *  @role  SUPER_ADMIN */
+
 export const getPlanDetailsHandler: RequestHandler[] = [
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
