@@ -10,6 +10,7 @@ import { useLedgerEntries, type LedgerEntryResponse } from '../hooks/useLedgerEn
 import { useLedgerEntriesColumns } from '../hooks/useLedgerEntriesColumns';
 import { CreateEntryDialog } from '../components/create-entry-dialog';
 import { ApproveEntryDialog } from '../components/approve-entry-dialog';
+import { RejectEntryDialog } from '../components/reject-entry-dialog';
 import { Plus } from 'lucide-react';
 import { DataTablePagination } from '@src/shared/components/data-table-pagination';
 
@@ -19,6 +20,10 @@ export default function LedgerEntriesPage() {
 
   const [createOpen, setCreateOpen] = useState(false);
   const [approveTarget, setApproveTarget] = useState<{
+    id: string;
+    description: string;
+  } | null>(null);
+  const [rejectTarget, setRejectTarget] = useState<{
     id: string;
     description: string;
   } | null>(null);
@@ -38,9 +43,14 @@ export default function LedgerEntriesPage() {
     setApproveTarget({ id: entry.id, description: entry.description });
   }, []);
 
+  const handleReject = useCallback((entry: LedgerEntryResponse) => {
+    setRejectTarget({ id: entry.id, description: entry.description });
+  }, []);
+
   const { columns } = useLedgerEntriesColumns({
     onViewDetails: handleViewDetails,
     onApprove: handleApprove,
+    onReject: handleReject,
   });
 
   return (

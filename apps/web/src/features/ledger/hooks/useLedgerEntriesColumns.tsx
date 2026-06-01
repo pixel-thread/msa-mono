@@ -8,6 +8,7 @@ import Link from 'next/link';
 interface UseLedgerEntriesColumnsOptions {
   onViewDetails?: (entry: LedgerEntryResponse) => void;
   onApprove?: (entry: LedgerEntryResponse) => void;
+  onReject?: (entry: LedgerEntryResponse) => void;
 }
 
 const statusBadgeVariant: Record<string, 'default' | 'secondary' | 'destructive' | 'outline'> = {
@@ -19,6 +20,7 @@ const statusBadgeVariant: Record<string, 'default' | 'secondary' | 'destructive'
 export function useLedgerEntriesColumns({
   onViewDetails,
   onApprove,
+  onReject,
 }: UseLedgerEntriesColumnsOptions = {}) {
   const columns: ColumnDef<LedgerEntryResponse>[] = [
     {
