@@ -7,6 +7,10 @@ export const LedgerQueryParams = z.object({
   page: pageNumberValidation,
 });
 
+export const GetAccountParamsSchema = z.object({
+  id: uuidValidiation,
+});
+
 export const CreateLedgerLineSchema = z.object({
   accountId: z.string().uuid(),
   isDebit: z.boolean(),

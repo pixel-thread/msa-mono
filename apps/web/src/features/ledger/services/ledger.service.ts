@@ -220,6 +220,85 @@ export async function createAccount(associationId: string, input: CreateAccountI
   });
 }
 
+export async function getAccountById(associationId: string, accountId: string) {
+  const account = await prisma.account.findUnique({
+    where: { id: accountId, associationId },
+  });
+
+  if (!account) {
+    throw new NotFoundError(`Account ${accountId} not found.`);
+  }
+
+  // Fetch all lines for this account to calculate totals and balance
+  const lines = await prisma.ledgerLine.findMany({
+    where: {
+      accountId,
+      ledgerEntry: {
+        approvalStatus: ApprovalStatus.APPROVED,
+      },
+    },
+    select: {
+      amount: true,
+      isDebit: true,
+    },
+  });
+
+  const debitTotal = lines
+    .filter((l) => l.isDebit)
+    .reduce((sum, l) => sum + Number(l.amount), 0);
+  const creditTotal = lines
+    .filter((l) => !l.isDebit)
+    .reduce((sum, l) => sum + Number(l.amount), 0);
+
+  // Balance calculation depends on account type
+  // Asset/Expense: Debit - Credit
+  // Liability/Equity/Income: Credit - Debit
+  const isNormalDebit = ['ASSET', 'EXPENSE'].includes(account.type);
+  const balance = isNormalDebit ? debitTotal - creditTotal : creditTotal - debitTotal;
+
+  const report = {
+    trailBalance: {
+      balances: [
+        {
+          accountId: account.id,
+          code: account.code,
+          name: account.name,
+          type: account.type,
+          debitTotal: debitTotal.toString(),
+          creditTotal: creditTotal.toString(),
+          balance: balance.toString(),
+        },
+      ],
+      totalDebits: debitTotal.toString(),
+      totalCredits: creditTotal.toString(),
+      isBalanced: debitTotal === creditTotal, // This is just for this specific account
+    },
+    incomeStatement: {
+      details: ['INCOME', 'EXPENSE'].includes(account.type)
+        ? [
+            {
+              accountId: account.id,
+              code: account.code,
+              name: account.name,
+              type: account.type as any,
+              balance: balance.toString(),
+            },
+          ]
+        : [],
+      totalIncome: account.type === 'INCOME' ? balance.toString() : '0',
+      totalExpense: account.type === 'EXPENSE' ? balance.toString() : '0',
+      netIncome:
+        account.type === 'INCOME'
+          ? balance.toString()
+          : account.type === 'EXPENSE'
+            ? (-balance).toString()
+            : '0',
+    },
+  };
+
+  return { ...account, report };
+}
+
 // ---------------------------------------------------------------------------
 // Summary
 // ---------------------------------------------------------------------------
