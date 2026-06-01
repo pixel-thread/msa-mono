@@ -60,16 +60,26 @@ export function useLedgerEntriesColumns({
       id: 'actions',
       header: '',
       cell: ({ row }) => (
-        <div>
+        <div className="flex gap-2">
           {row.original.approvalStatus === 'PENDING' && (
-            <Button
-              variant="outline"
-              size="sm"
-              className="h-8 text-xs text-green-600 border-green-200 hover:bg-green-50"
-              onClick={() => onApprove?.(row.original)}
-            >
-              Approve
-            </Button>
+            <>
+              <Button
+                variant="outline"
+                size="sm"
+                className="h-8 text-xs text-green-600 border-green-200 hover:bg-green-50"
+                onClick={() => onApprove?.(row.original)}
+              >
+                Approve
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                className="h-8 text-xs text-red-600 border-red-200 hover:bg-red-50"
+                onClick={() => onReject?.(row.original)}
+              >
+                Reject
+              </Button>
+            </>
           )}
         </div>
       ),

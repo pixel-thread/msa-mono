@@ -88,6 +88,14 @@ export default function LedgerEntriesPage() {
           if (!open) setApproveTarget(null);
         }}
       />
+      <RejectEntryDialog
+        entryId={rejectTarget?.id ?? null}
+        entryDescription={rejectTarget?.description ?? ''}
+        open={!!rejectTarget}
+        onOpenChange={(open) => {
+          if (!open) setRejectTarget(null);
+        }}
+      />
     </>
   );
 }
