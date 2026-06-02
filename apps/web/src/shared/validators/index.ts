@@ -5,3 +5,4 @@ export * from './auth';
 export * from './common';
 export * from './format-zod-issues';
 export * from './onboarding-member';
+export * from './membership-application.validator';

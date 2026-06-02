@@ -5,16 +5,16 @@ import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import { Button } from '@src/shared/components/ui/button';
-import { Input } from '@src/shared/components/ui/input';
+import { Button } from '@components/ui/button';
+import { Input } from '@components/ui/input';
 import {
   Card,
   CardHeader,
   CardTitle,
   CardDescription,
   CardContent,
-} from '@src/shared/components/ui/card';
-import { Alert, AlertDescription } from '@src/shared/components/ui/alert';
+} from '@components/ui/card';
+import { Alert, AlertDescription } from '@components/ui/alert';
 import {
   Form,
   FormControl,
@@ -22,10 +22,15 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@src/shared/components/ui/form';
-import { ChangePasswordSchema, type ChangePasswordInput } from '@src/features/auth/validators';
-import { useChangePassword } from '@src/features/auth/hooks';
+} from '@components/ui/form';
+import { ChangePasswordSchema, type ChangePasswordInput } from '@feature/auth/validators';
+import { useChangePassword } from '@feature/auth/hooks';
 
+/**
+ * Change Password page component.
+ * Allows authenticated users to update their password by providing
+ * their current password and a new one.
+ */
 export function ChangePasswordPage() {
   const router = useRouter();
   const [isSuccess, setIsSuccess] = useState(false);

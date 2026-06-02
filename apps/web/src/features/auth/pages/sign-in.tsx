@@ -14,17 +14,17 @@ import {
   ArrowRight01Icon,
 } from '@hugeicons/core-free-icons';
 
-import { Button } from '@src/shared/components/ui/button';
-import { Badge } from '@src/shared/components/ui/badge';
-import { Input } from '@src/shared/components/ui/input';
+import { Button } from '@components/ui/button';
+import { Badge } from '@components/ui/badge';
+import { Input } from '@components/ui/input';
 import {
   Card,
   CardHeader,
   CardTitle,
   CardDescription,
   CardContent,
-} from '@src/shared/components/ui/card';
-import { Alert, AlertDescription } from '@src/shared/components/ui/alert';
+} from '@components/ui/card';
+import { Alert, AlertDescription } from '@components/ui/alert';
 import {
   Form,
   FormControl,
@@ -32,18 +32,18 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@src/shared/components/ui/form';
-import { Text } from '@src/shared/components/ui/text';
-import { PublicHeader } from '@src/shared/components/public-header';
+} from '@components/ui/form';
+import { Text } from '@components/text';
+import { PublicHeader } from '@components/public-header';
 import {
   SignInSchema,
   type SignInInput,
   VerifySignInSchema,
   type VerifySignInInput,
-} from '@src/features/auth/validators';
-import { useSignIn, useVerifyMfa } from '@src/features/auth/hooks';
-import { logger } from '@src/shared/logger';
-import { PublicFooter } from '@src/shared/components/public-footer';
+} from '@feature/auth/validators';
+import { useSignIn, useVerifyMfa } from '@feature/auth/hooks';
+import { logger } from '@lib/logger';
+import { PublicFooter } from '@components/public-footer';
 import { toast } from 'sonner';
 
 const BENEFITS = [
@@ -70,6 +70,11 @@ const BENEFITS = [
   },
 ];
 
+/**
+ * Sign-in page component.
+ * Handles primary authentication and redirects to MFA verification if required.
+ * Displays association benefits to encourage sign-ups.
+ */
 export function SignInPage() {
   const signInMutation = useSignIn();
   const [mfaTempToken, setMfaTempToken] = useState<string | null>(null);
@@ -219,6 +224,10 @@ export function SignInPage() {
   );
 }
 
+/**
+ * MFA Verification sub-component.
+ * Handles the input and submission of a 6-digit verification code.
+ */
 function MfaVerify({ onBack, tempToken }: { onBack: () => void; tempToken: string }) {
   const router = useRouter();
   const verifyMfaMutation = useVerifyMfa();
@@ -314,6 +323,10 @@ function MfaVerify({ onBack, tempToken }: { onBack: () => void; tempToken: strin
   );
 }
 
+/**
+ * Common layout for authentication pages.
+ * Includes a public header, flexible child content, and a public footer.
+ */
 function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-screen flex-col bg-background">

@@ -14,17 +14,17 @@ import {
   CheckmarkCircle02Icon,
 } from '@hugeicons/core-free-icons';
 
-import { Button } from '@src/shared/components/ui/button';
-import { Badge } from '@src/shared/components/ui/badge';
-import { Input } from '@src/shared/components/ui/input';
+import { Button } from '@components/ui/button';
+import { Badge } from '@components/ui/badge';
+import { Input } from '@components/ui/input';
 import {
   Card,
   CardHeader,
   CardTitle,
   CardDescription,
   CardContent,
-} from '@src/shared/components/ui/card';
-import { Alert, AlertDescription } from '@src/shared/components/ui/alert';
+} from '@components/ui/card';
+import { Alert, AlertDescription } from '@components/ui/alert';
 import {
   Form,
   FormControl,
@@ -32,16 +32,16 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@src/shared/components/ui/form';
-import { Text } from '@src/shared/components/ui/text';
-import { PublicHeader } from '@src/shared/components/public-header';
-import { PublicFooter } from '@src/shared/components/public-footer';
+} from '@components/ui/form';
+import { Text } from '@components/text';
+import { PublicHeader } from '@components/public-header';
+import { PublicFooter } from '@components/public-footer';
 import {
   MembershipApplicationSchema,
   type MembershipApplicationInput,
-} from '@src/features/membership-applications/validators';
-import { useSignUp } from '@src/features/auth/hooks';
-import { logger } from '@src/shared/logger';
+} from '@validator/membership-application.validator';
+import { useSignUp } from '@feature/auth/hooks';
+import { logger } from '@lib/logger';
 import { env } from '@src/env';
 
 const BENEFITS = [
@@ -74,6 +74,11 @@ const BENEFITS = [
   },
 ];
 
+/**
+ * Sign up page component for membership applications.
+ * Handles the registration flow for new members, including benefit listing
+ * and the multi-field application form.
+ */
 export function SignUpPage() {
   const signUpMutation = useSignUp();
 
@@ -86,7 +91,7 @@ export function SignUpPage() {
       lastName: '',
       dateOfBirth: '',
       age: 18,
-      gender: 'MALE',
+      gender: 'MALE' as const,
       address: '',
       city: '',
       state: '',
