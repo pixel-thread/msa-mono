@@ -1,4 +1,5 @@
-import { describe, it, expect } from '@jest/globals';
+// Removed explicit @jest/globals import to use global types from @types/jest
+
 import { buildUrlWithQuery } from '../url';
 
 describe('buildUrlWithQuery', () => {

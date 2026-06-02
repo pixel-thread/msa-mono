@@ -9,10 +9,11 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "zod": "^4.4.3",
-    "@repo/eslint-config": "workspace:*"
+    "@repo/eslint-config": "workspace:*",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@types/jest": "^29.5.14",
     "typescript": "^5.0.0"
   }
 }
