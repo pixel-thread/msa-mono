@@ -6,7 +6,6 @@
   "main": "dist/index.js",
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "postinstall": "prisma generate",
     "build": "tsc && tsc-alias",
     "build:api": "tsc && tsc-alias",
     "start": "node -r tsconfig-paths/register dist/index.js",

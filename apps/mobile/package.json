@@ -78,6 +78,7 @@
     "@types/react-native-razorpay": "^2.2.6",
     "@typescript-eslint/eslint-plugin": "^8.59.2",
     "@typescript-eslint/parser": "^8.59.2",
+    "babel-preset-expo": "^56.0.14",
     "eslint": "^9.25.1",
     "eslint-config-expo": "~10.0.0",
     "eslint-config-prettier": "^10.1.2",
