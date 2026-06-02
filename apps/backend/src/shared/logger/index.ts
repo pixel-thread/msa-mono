@@ -2,7 +2,7 @@ import pino from 'pino';
 import { env } from '@src/env';
 import { createPostgresTransport } from './postgres-transport';
 
-const isProduction = env.NEXT_PUBLIC_NODE_ENV === 'production';
+const isProduction = env.NODE_ENV === 'production';
 
 const REDACTED = [
   'password',

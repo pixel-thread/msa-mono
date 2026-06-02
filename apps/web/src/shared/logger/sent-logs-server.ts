@@ -1,6 +1,5 @@
 import { Writable } from 'stream';
-import { createLogs } from '../services';
-import { env } from '@src/env';
+import http from '../utils/http';
 
 const PINO_LEVELS: Record<number, string> = {
   10: 'trace',
@@ -11,8 +10,7 @@ const PINO_LEVELS: Record<number, string> = {
   60: 'fatal',
 };
 
-/** Creates a Writable stream that persists Pino log entries to the database. */
-export function createPostgresTransport() {
+export function sentLogsToServer() {
   return new Writable({
     objectMode: true,
 
@@ -28,13 +26,15 @@ export function createPostgresTransport() {
         const parsed = JSON.parse(raw);
         const { level, time, pid, hostname, msg, ...rest } = parsed;
 
-        await createLogs({
-          data: {
-            type: PINO_LEVELS[level as number] ?? 'info',
-            message: typeof msg === 'string' ? msg : JSON.stringify(msg),
-            content: rest as object,
-            isBackend: true,
-          },
+        await http.post('/logs/batch', {
+          logs: [
+            {
+              type: PINO_LEVELS[level as number] ?? 'info',
+              message: typeof msg === 'string' ? msg : JSON.stringify(msg),
+              content: rest as object,
+              isBackend: true,
+            },
+          ],
         });
 
         callback();
