@@ -1,0 +1,45 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// ASSOCIATION  (root tenant)
+// ─────────────────────────────────────────────────────────────────────────────
+
+model Association {
+  id             String   @id @default(uuid())
+  slug           String   @unique // "mfsa" | "mpsa"
+  name           String   @unique
+  description    String?
+  logo           String?
+  country        String   @default("IN")
+  state          String?
+  timezone       String   @default("Asia/Kolkata")
+  currencyCode   String   @default("INR")
+  primaryColor   String?  @default("#1f2937")
+  secondaryColor String?  @default("#3b82f6")
+  contactEmail   String?
+  contactPhone   String?
+  isActive       Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  status         Status   @default(ACTIVE)
+
+  users               User[]
+  files               File[]
+  subscriptionPlans   SubscriptionPlan[]
+  meetings            Meeting[]
+  auditLogs           AuditLog[]
+  paymentTransactions PaymentTransaction[]
+  announcements       Announcement[]
+  notifications       Notification[]
+  dsarTickets         DsarTicket[]
+  consentReceipts     ConsentReceipt[]
+  trainingModules     TrainingModule[]
+  complaints          Complaint[]
+  complianceChecks    ComplianceCheck[]
+  memberTypes         MemberType[]
+  paymentProviders    PaymentProvider[]
+  accounts            Account[]
+  lines               LedgerLine[]
+
+  @@index([slug])
+  @@index([isActive])
+  @@map("associations")
+}

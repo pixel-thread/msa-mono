@@ -1,0 +1,159 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// TRAINING
+// ─────────────────────────────────────────────────────────────────────────────
+
+model TrainingModule {
+  id               String     @id @default(uuid())
+  associationId    String
+  title            String
+  description      String?
+  content          String
+  durationMinutes  Int?
+  requiredForRoles UserRole[] @default([MEMBER])
+  version          Int        @default(1)
+  isActive         Boolean    @default(true)
+
+  certificateTemplateId String?                      @unique
+  certificateTemplate   TrainingCertificateTemplate? @relation(fields: [certificateTemplateId], references: [id], onDelete: SetNull)
+
+  createdAt    DateTime              @default(now())
+  updatedAt    DateTime              @updatedAt
+  association  Association           @relation(fields: [associationId], references: [id], onDelete: Cascade)
+  completions  TrainingCompletion[]
+  assignments  TrainingAssignment[]
+  supplements  TrainingSupplement[]
+  certificates TrainingCertificate[]
+
+  @@unique([associationId, title])
+  @@index([associationId])
+  @@map("training_modules")
+}
+
+model TrainingCompletion {
+  id           String         @id @default(uuid())
+  userId       String
+  moduleId     String
+  scorePercent Decimal?       @db.Decimal(5, 2)
+  completedAt  DateTime       @default(now())
+  user         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  module       TrainingModule @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, moduleId])
+  @@map("training_completions")
+}
+
+model TrainingAssignment {
+  id String @id @default(uuid())
+
+  moduleId String
+  userId   String
+
+  status TrainingAssignmentStatus @default(ASSIGNED)
+
+  assignedAt DateTime @default(now())
+
+  dueDate DateTime?
+
+  startedAt DateTime?
+
+  completedAt DateTime?
+
+  reminderSentAt DateTime?
+
+  assignedById String?
+
+  notes String?
+
+  // Relations
+  module TrainingModule @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([moduleId, userId])
+  @@index([userId])
+  @@index([moduleId])
+  @@index([status])
+  @@map("training_assignments")
+}
+
+model TrainingSupplement {
+  id String @id @default(uuid())
+
+  moduleId String
+
+  title       String
+  description String?
+
+  // Storage
+  downloadUrl  String
+  thumbnailUrl String?
+  imageUrl     String?
+
+  fileId    String?
+  file      File?   @relation(fields: [fileId], references: [id], onDelete: SetNull)
+  // Ordering
+  sortOrder Int     @default(autoincrement())
+
+  // Visibility
+  isActive Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  module TrainingModule @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+
+  @@index([moduleId])
+  @@index([sortOrder])
+  @@index([moduleId, isActive])
+  @@map("training_supplements")
+}
+
+model TrainingCertificate {
+  id String @id @default(uuid())
+
+  userId   String
+  moduleId String
+
+  certificateNumber String? @unique
+
+  issuedAt DateTime @default(now())
+
+  // Fast-access URLs
+  certificateUrl String
+  thumbnailUrl   String?
+
+  // Canonical file
+  fileId String? @unique
+  file   File?   @relation(fields: [fileId], references: [id], onDelete: SetNull)
+
+  user   User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  module TrainingModule @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, moduleId])
+  @@index([userId])
+  @@index([moduleId])
+  @@map("training_certificates")
+}
+
+model TrainingCertificateTemplate {
+  id String @id @default(uuid())
+
+  associationId String
+
+  name String
+
+  certificateUrl String
+  thumbnailUrl   String?
+
+  fileId String? @unique
+  file   File?   @relation(fields: [fileId], references: [id], onDelete: SetNull)
+
+  trainingModule TrainingModule?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([associationId])
+  @@map("training_certificate_templates")
+}

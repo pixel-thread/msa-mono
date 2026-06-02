@@ -1,0 +1,80 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// MEETINGS & GOVERNANCE
+// ─────────────────────────────────────────────────────────────────────────────
+
+model Meeting {
+  id             String        @id @default(uuid())
+  associationId  String // ★
+  title          String
+  type           MeetingType
+  status         MeetingStatus @default(SCHEDULED)
+  scheduledAt    DateTime
+  venue          String?
+  noticeIssuedAt DateTime?
+  createdById    String
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  association Association @relation(fields: [associationId], references: [id], onDelete: Cascade)
+  createdBy   User        @relation("CreatedMeetings", fields: [createdById], references: [id])
+
+  attendees   MeetingAttendee[] // ★ All assigned members
+  agendaItems AgendaItem[]
+  minutes     MeetingMinutes[]
+
+  @@index([associationId])
+  @@index([type])
+  @@index([status])
+  @@index([scheduledAt])
+  @@map("meetings")
+}
+
+// ★ Meeting assignment join table
+model MeetingAttendee {
+  id           String       @id @default(uuid())
+  meetingId    String
+  userId       String
+  attendeeRole AttendeeRole @default(OPTIONAL)
+  rsvpStatus   RsvpStatus   @default(PENDING)
+  rsvpNote     String? // Decline reason, etc.
+  rsvpAt       DateTime? // Timestamp of RSVP
+  notifiedAt   DateTime? // When meeting notice was sent to them
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  meeting Meeting @relation(fields: [meetingId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([meetingId, userId]) // One row per member per meeting
+  @@index([meetingId])
+  @@index([userId])
+  @@index([rsvpStatus])
+  @@map("meeting_attendees")
+}
+
+model AgendaItem {
+  id          String   @id @default(uuid())
+  meetingId   String
+  order       Int
+  title       String
+  description String?
+  createdAt   DateTime @default(now())
+
+  meeting Meeting @relation(fields: [meetingId], references: [id], onDelete: Cascade)
+
+  @@index([meetingId])
+  @@map("agenda_items")
+}
+
+model MeetingMinutes {
+  id          String   @id @default(uuid())
+  meetingId   String
+  agendaPoint String
+  decision    String
+  actionItems Json? // [{ assigneeId, task, dueDate }]
+  recordedAt  DateTime @default(now())
+
+  meeting Meeting @relation(fields: [meetingId], references: [id], onDelete: Cascade)
+
+  @@map("meeting_minutes")
+}

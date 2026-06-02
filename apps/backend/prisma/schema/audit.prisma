@@ -1,0 +1,28 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// AUDIT LOG  (append-only — no updatedAt)
+// ─────────────────────────────────────────────────────────────────────────────
+
+model AuditLog {
+  id            String      @id @default(uuid())
+  associationId String // ★
+  actorId       String?
+  action        AuditAction
+  resourceType  String
+  resourceId    String?
+  oldValues     Json?
+  newValues     Json?
+  ipAddress     String?
+  userAgent     String?
+  traceId       String?
+  createdAt     DateTime    @default(now())
+
+  association Association @relation(fields: [associationId], references: [id], onDelete: Cascade)
+  actor       User?       @relation("ActorLogs", fields: [actorId], references: [id], onDelete: SetNull)
+
+  @@index([associationId])
+  @@index([actorId])
+  @@index([action])
+  @@index([resourceType, resourceId])
+  @@index([createdAt])
+  @@map("audit_logs")
+}

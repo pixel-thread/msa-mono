@@ -1,0 +1,19 @@
+model ComplianceCheck {
+  id              String                @id @default(uuid())
+  associationId   String
+  checkType       String
+  status          ComplianceCheckStatus
+  score           Int
+  message         String
+  details         Json?
+  recommendations Json?
+  checkedAt       DateTime              @default(now())
+
+  association Association @relation(fields: [associationId], references: [id], onDelete: Cascade)
+
+  @@index([associationId])
+  @@index([checkType])
+  @@index([status])
+  @@index([checkedAt])
+  @@map("compliance_checks")
+}

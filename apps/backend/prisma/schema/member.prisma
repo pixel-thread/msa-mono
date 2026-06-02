@@ -1,0 +1,14 @@
+model MemberType {
+  id          String  @id @default(uuid())
+  description String?
+  level       Int
+
+  associationId     String
+  association       Association        @relation(fields: [associationId], references: [id], onDelete: Cascade)
+  users             User[]
+  subscriptionPlans SubscriptionPlan[]
+
+  @@unique([associationId, level])
+  @@index([level])
+  @@map("member_types")
+}

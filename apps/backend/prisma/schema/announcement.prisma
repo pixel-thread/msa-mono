@@ -1,0 +1,53 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// ANNOUNCEMENTS (Broadcasts)
+// ─────────────────────────────────────────────────────────────────────────────
+
+model Announcement {
+  id            String @id @default(uuid())
+  associationId String
+  authorId      String
+
+  title    String
+  summary  String? // Short snippet for push/list view
+  content  String  @db.Text // Rich text/Markdown content
+  imageUrl String?
+
+  status   AnnouncementStatus   @default(DRAFT)
+  priority AnnouncementPriority @default(NORMAL)
+
+  // Targeting
+  targetRoles UserRole[] // Empty = Everyone, or specific roles like [PRESIDENT, SECRETARY]
+  isPinned    Boolean    @default(false)
+
+  // Scheduling
+  publishedAt DateTime?
+  expiresAt   DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  association  Association        @relation(fields: [associationId], references: [id], onDelete: Cascade)
+  author       User               @relation("AuthoredAnnouncements", fields: [authorId], references: [id])
+  readReceipts AnnouncementRead[]
+  imageFileId  String?            @unique
+  imageFile    File?              @relation("AnnouncementImage", fields: [imageFileId], references: [id], onDelete: SetNull)
+
+  @@index([associationId, status])
+  @@index([publishedAt])
+  @@map("announcements")
+}
+
+model AnnouncementRead {
+  id             String   @id @default(uuid())
+  announcementId String
+  userId         String
+  readAt         DateTime @default(now())
+
+  announcement Announcement @relation(fields: [announcementId], references: [id], onDelete: Cascade)
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([announcementId, userId])
+  @@index([userId])
+  @@map("announcement_reads")
+}

@@ -1,0 +1,92 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// SUBSCRIPTIONS
+// ─────────────────────────────────────────────────────────────────────────────
+
+model SubscriptionPlan {
+  id            String   @id @default(uuid())
+  associationId String
+  name          String
+  description   String?
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  isDefault     Boolean  @default(true)
+
+  association Association @relation(fields: [associationId], references: [id], onDelete: Cascade)
+
+  versions      SubscriptionPlanVersion[]
+  subscriptions Subscription[]
+
+  memberTypeId String?
+  memberType   MemberType? @relation(fields: [memberTypeId], references: [id])
+
+  @@unique([associationId, name])
+  @@index([associationId])
+  @@map("subscription_plans")
+}
+
+model SubscriptionPlanVersion {
+  id     String @id @default(uuid())
+  planId String
+
+  amount       Decimal @db.Decimal(10, 2)
+  currency     String  @default("INR")
+  billingCycle String  @default("MONTHLY")
+  features     Json
+  description  String?
+
+  effectiveFrom DateTime  @default(now())
+  effectiveTo   DateTime?
+
+  createdAt DateTime @default(now())
+
+  plan           SubscriptionPlan             @relation(fields: [planId], references: [id], onDelete: Cascade)
+  subscriptions  Subscription[]
+  billingHistory SubscriptionBillingHistory[]
+
+  @@index([planId])
+  @@map("subscription_plan_versions")
+}
+
+model Subscription {
+  id            String    @id @default(uuid())
+  userId        String    @unique
+  planId        String
+  planVersionId String
+  status        String    @default("ACTIVE")
+  startDate     DateTime  @default(now())
+  endDate       DateTime
+  waivedAt      DateTime?
+  waivedReason  String?
+  waivedBy      String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  user        User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  plan        SubscriptionPlan        @relation(fields: [planId], references: [id])
+  planVersion SubscriptionPlanVersion @relation(fields: [planVersionId], references: [id])
+
+  billingHistory SubscriptionBillingHistory[]
+
+  @@index([status])
+  @@index([endDate])
+  @@map("subscriptions")
+}
+
+model SubscriptionBillingHistory {
+  id             String   @id @default(uuid())
+  subscriptionId String
+  planVersionId  String
+  amountCharged  Decimal  @db.Decimal(10, 2)
+  status         String   @default("PENDING")
+  periodStart    DateTime
+  periodEnd      DateTime
+  dueDate        DateTime
+  createdAt      DateTime @default(now())
+
+  subscription Subscription            @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+  planVersion  SubscriptionPlanVersion @relation(fields: [planVersionId], references: [id])
+
+  @@index([subscriptionId])
+  @@map("subscription_billing_history")
+}

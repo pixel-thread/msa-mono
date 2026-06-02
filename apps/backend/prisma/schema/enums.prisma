@@ -1,0 +1,272 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// ENUMS
+// ─────────────────────────────────────────────────────────────────────────────
+enum AnnouncementStatus {
+  DRAFT
+  PUBLISHED
+  SCHEDULED
+  ARCHIVED
+
+  @@map("announcement_status")
+}
+
+enum AnnouncementPriority {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
+
+  @@map("announcement_priority")
+}
+
+enum UserRole {
+  SUPER_ADMIN
+  PRESIDENT
+  SECRETARY
+  FINANCE
+  DPO
+  MEMBER
+
+  @@map("user_role")
+}
+
+enum Status {
+  DELETED
+  ACTIVE
+  INACTIVE
+
+  @@map("status")
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+  ANONYMIZED
+  PENDING
+
+  @@map("user_status")
+}
+
+enum ConsentPurpose {
+  PAYMENTS
+  COMMUNICATIONS
+  MEETINGS
+  ANALYTICS
+  MARKETING
+
+  @@map("consent_purpose")
+}
+
+enum ConsentStatus {
+  GRANTED
+  WITHDRAWN
+
+  @@map("consent_status")
+}
+
+enum DsarRequestType {
+  ACCESS
+  CORRECTION
+  DELETION
+  PORTABILITY
+
+  @@map("dsar_request_type")
+}
+
+enum DsarStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  REJECTED
+
+  @@map("dsar_status")
+}
+
+enum PaymentMethod {
+  CASH
+  BANK_TRANSFER
+  UPI
+  CHEQUE
+  ONLINE
+
+  @@map("payment_method")
+}
+
+enum PaymentType {
+  SUBSCRIPTION
+  DONATION
+  EVENT_FEE
+  BANK_INTEREST
+  FAMILY_CONTRIBUTION
+
+  @@map("payment_type")
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+  WAIVED
+
+  @@map("payment_status")
+}
+
+enum ContributionStatus {
+  DUE
+  PARTIAL
+  PAID
+  WAIVED
+  OVERDUE
+
+  @@map("contribution_status")
+}
+
+enum PaymentProviderType {
+  RAZORPAY
+  STRIPE
+  PAYU
+  CASHFREE
+
+  @@map("payment_provider_type")
+}
+
+enum PaymentGateway {
+  RAZORPAY
+  MANUAL
+
+  @@map("payment_gateway")
+}
+
+enum ApprovalStatus {
+  PENDING
+  APPROVED
+  REJECTED
+
+  @@map("approval_status")
+}
+
+enum MeetingType {
+  EC_MEETING
+  GENERAL_MEETING
+
+  @@map("meeting_type")
+}
+
+enum MeetingStatus {
+  SCHEDULED
+  NOTICE_ISSUED
+  COMPLETED
+  CANCELLED
+
+  @@map("meeting_status")
+}
+
+enum AttendeeRole {
+  HOST // Primary meeting host
+  CO_HOST // Assistant/co-host
+  REQUIRED // Must attend
+  OPTIONAL // Invited; attendance is optional
+  OBSERVER // View-only participant
+
+  @@map("attendee_role")
+}
+
+enum RsvpStatus {
+  PENDING // Invited, not yet responded
+  ACCEPTED
+  DECLINED
+
+  @@map("rsvp_status")
+}
+
+enum AuditAction {
+  CREATE
+  UPDATE
+  DELETE
+  LOGIN
+  LOGOUT
+  CONSENT_GRANT
+  CONSENT_REVOKE
+  DSAR_SUBMIT
+  DSAR_RESPOND
+  PAYMENT_RECORD
+  SUBSCRIPTION_CHANGE
+  ANONYMIZE
+  ROLE_CHANGE
+  MEETING_ASSIGN
+  MEETING_RSVP
+  PAYMENT_CREATED
+  PAYMENT_COMPLETED
+  PAYMENT_FAILED
+  PAYMENT_REFUNDED
+  PAYMENT_VERIFIED
+  PAYMENT_WAIVED
+  WEBHOOK_RECEIVED
+  REPORT_EXPORTED
+  ANNOUNCEMENT_CREATE
+  ANNOUNCEMENT_PUBLISH
+  ANNOUNCEMENT_DELETE
+  ANNOUNCEMENT_READ
+  TRAINING_MODULE_CREATE
+  TRAINING_MODULE_UPDATE
+  TRAINING_COMPLETE
+  TRAINING_ASSIGN
+  TRAINING_UNASSIGN
+  COMPLAINT_CREATE
+  COMPLAINT_UPDATE
+
+  @@map("audit_action")
+}
+
+enum ApplicationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum NotificationType {
+  GENERAL_MESSAGE
+  FOLLOW
+  SYSTEM
+}
+
+enum TrainingAssignmentStatus {
+  ASSIGNED
+  IN_PROGRESS
+  COMPLETED
+  OVERDUE
+  EXEMPT
+
+  @@map("training_assignment_status")
+}
+
+enum ComplaintCategory {
+  MEETING_CONDUCT
+  PAYMENT_DISPUTE
+  DATA_PRIVACY
+  MEMBER_CONDUCT
+  ADMINISTRATIVE
+  OTHER
+
+  @@map("complaint_category")
+}
+
+enum ComplaintStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+
+  @@map("complaint_status")
+}
+
+enum ComplianceCheckStatus {
+  PASSED
+  FAILED
+  WARNING
+  SKIPPED
+
+  @@map("compliance_check_status")
+}

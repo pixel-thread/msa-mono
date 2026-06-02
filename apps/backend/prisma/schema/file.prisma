@@ -1,0 +1,49 @@
+model File {
+  id String @id @default(uuid())
+
+  associationId String?
+
+  originalName String
+  storedName   String
+
+  mimeType  String
+  extension String?
+
+  sizeBytes Int
+
+  // Storage provider info
+  bucket     String?
+  storageKey String
+
+  // CDN / public URLs
+  url          String
+  thumbnailUrl String?
+
+  // Optional image metadata
+  width  Int?
+  height Int?
+
+  // Video metadata
+  durationSeconds Int?
+
+  checksum String?
+
+  uploadedById String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  trainingCertificateId String?
+  trainingCertificate   TrainingCertificate?
+
+  trainingCertificateTemplate TrainingCertificateTemplate?
+
+  trainingSupplement TrainingSupplement[]
+  announcement       Announcement?        @relation("AnnouncementImage")
+
+  association Association? @relation(fields: [associationId], references: [id], onDelete: Cascade)
+
+  @@index([associationId])
+  @@index([mimeType])
+  @@map("files")
+}
