@@ -3,6 +3,7 @@ import cookieParser from 'cookie-parser';
 
 import { env } from '@src/env';
 
+import { csrf } from '@middleware/csrf';
 import { cors } from '@middleware/cors';
 import { contextMiddleware } from '@middleware/context';
 import { securityHeaders } from '@middleware/security-headers';
@@ -34,7 +35,6 @@ import paymentsRouter from '@feature/payments/routes/index';
 import subscriptionsRouter from '@feature/subscriptions/routes/index';
 import trainingRouter from '@feature/training/routes/index';
 import userRouter from '@feature/user/routes/index';
-import { csrf } from './middleware';
 
 export function createApp(): express.Express {
   const app = express();
