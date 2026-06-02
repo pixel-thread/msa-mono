@@ -1,5 +1,5 @@
 import { pageNumberValidation } from '@src/shared/validators/common';
-import { ComplaintStatus } from '@prisma/client';
+import { ComplaintStatus } from '@sharedType/enums';
 import { z } from 'zod';
 
 export const ComplaintQuerySchema = z.object({

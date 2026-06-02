@@ -1,9 +1,9 @@
 import { z } from 'zod';
-import { DsarRequestType, DsarStatus } from '@prisma/client';
+import { DsarRequestType, DsarStatus } from '@sharedType/enums';
 import { pageNumberValidation } from '@src/shared/validators/common';
 
 export const SubmitDsarSchema = z.object({
-  requestType: z.enum(DsarRequestType),
+  requestType: z.nativeEnum(DsarRequestType),
   requestedData: z.array(z.string()).min(1, 'At least one data category required'),
   description: z
     .string()
@@ -13,7 +13,7 @@ export const SubmitDsarSchema = z.object({
 });
 
 export const RespondDsarSchema = z.object({
-  status: z.enum(DsarStatus),
+  status: z.nativeEnum(DsarStatus),
   notes: z.string().max(1000).optional(),
   rejectedReason: z.string().max(500).optional(),
   responseType: z.string().optional(),
@@ -23,7 +23,7 @@ export const RespondDsarSchema = z.object({
 
 export const DsarQuerySchema = z.object({
   page: pageNumberValidation,
-  status: z.enum(DsarStatus).optional(),
-  requestType: z.enum(DsarRequestType).optional(),
+  status: z.nativeEnum(DsarStatus).optional(),
+  requestType: z.nativeEnum(DsarRequestType).optional(),
   userId: z.string().optional(),
 });

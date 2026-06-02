@@ -1,4 +1,4 @@
-import { $Enums, UserRole } from '@prisma/client';
+import { UserStatus, UserRole } from '@src/shared/types/enums';
 import { uuidValidiation } from '@src/shared/validators/common';
 import z from 'zod';
 
@@ -15,7 +15,7 @@ export const UpdateUserSchema = z.object({
 });
 
 export const AdminGetUserQuerySchema = z.object({
-  status: z.enum($Enums.UserStatus, 'Invalid User status').default('ACTIVE').optional(),
+  status: z.nativeEnum(UserStatus).default('ACTIVE').optional(),
 });
 
 export const AdminGetUserParamsSchema = z.object({
@@ -29,7 +29,7 @@ export const AdminUserApproveParamsSchema = z.object({
 export const AdminUserApproveSchema = z
   .object({
     memberTypeId: z.uuid('Invalid member type'),
-    role: z.enum(UserRole, 'Invalid role').default('MEMBER').optional(),
+    role: z.nativeEnum(UserRole).default('MEMBER').optional(),
     dateOfJoiningGovt: z.coerce.date('Invalid date').default(new Date()).optional(),
   })
   .strict();

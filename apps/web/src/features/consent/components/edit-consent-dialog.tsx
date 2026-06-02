@@ -32,7 +32,7 @@ import {
   UpdateConsentReceiptSchema,
   UpdateConsentReceiptInput,
 } from '../validators/consent.validators';
-import { ConsentStatus } from '@prisma/client';
+import { ConsentStatus } from '@sharedType/enums';
 import type { ConsentRecord } from '../types/consent.types';
 
 interface EditConsentDialogProps {

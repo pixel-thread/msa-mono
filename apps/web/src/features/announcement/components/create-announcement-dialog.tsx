@@ -34,7 +34,7 @@ import {
   SelectValue,
 } from '@src/shared/components/ui/select';
 import { Textarea } from '@src/shared/components/ui/textarea';
-import { AnnouncementStatus, AnnouncementPriority } from '@prisma/client';
+import { AnnouncementStatus, AnnouncementPriority } from '@sharedType/enums';
 
 export function CreateAnnouncementDialog() {
   const [open, setOpen] = useState(false);

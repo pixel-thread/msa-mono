@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { PaymentMethod, ContributionStatus } from '@prisma/client';
+import { PaymentMethod, ContributionStatus } from '@sharedType/enums';
 import { pageNumberValidation, pageSizeValidation } from '@src/shared/validators/common';
 
 // ---------------------------------------------------------------------------
@@ -27,7 +27,7 @@ export const VerifyPaymentSchema = z.object({
 export const RecordManualPaymentSchema = z.object({
   userId: z.uuid(),
   amount: z.number().positive('Amount must be positive'),
-  method: z.enum(PaymentMethod),
+  method: z.nativeEnum(PaymentMethod),
   notes: z.string().optional(),
   receiptNumber: z.string().optional(),
   referenceNumber: z.string().optional(),
@@ -96,7 +96,7 @@ export const CollectionReportQuerySchema = z.object({
   page: pageNumberValidation,
   year: z.coerce.number().int().min(2020).max(2100).optional(),
   month: z.coerce.number().int().min(1).max(12).optional(),
-  status: z.enum(ContributionStatus).optional(),
+  status: z.nativeEnum(ContributionStatus).optional(),
 });
 
 // ---------------------------------------------------------------------------

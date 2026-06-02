@@ -1,12 +1,12 @@
 import { z } from 'zod';
-import { UserRole } from '@prisma/client';
+import { UserRole } from '@sharedType/enums';
 
 export const CreateTrainingModuleSchema = z.object({
   title: z.string().min(3, 'Title must be at least 3 characters').max(200).trim(),
   description: z.string().max(1000, 'Description cannot exceed 1000 characters').optional(),
   content: z.string().min(1, 'Content is required'),
   durationMinutes: z.number().int().positive().optional(),
-  requiredForRoles: z.array(z.enum(UserRole)).default([UserRole.MEMBER]),
+  requiredForRoles: z.array(z.nativeEnum(UserRole)).default([UserRole.MEMBER]),
   isActive: z.boolean().default(true),
 });
 
@@ -15,7 +15,7 @@ export const UpdateTrainingModuleSchema = z.object({
   description: z.string().max(1000, 'Description cannot exceed 1000 characters').optional(),
   content: z.string().optional(),
   durationMinutes: z.number().int().positive().optional(),
-  requiredForRoles: z.array(z.enum(UserRole)).optional(),
+  requiredForRoles: z.array(z.nativeEnum(UserRole)).optional(),
   isActive: z.boolean().optional(),
   version: z.number().int().positive().optional(),
 });

@@ -8,7 +8,7 @@ import {
   DialogTitle,
 } from '@src/shared/components/ui/dialog';
 import { Badge } from '@src/shared/components/ui/badge';
-import { ConsentStatus } from '@prisma/client';
+import { ConsentStatus } from '@sharedType/enums';
 import type { ConsentRecord } from '../types/consent.types';
 
 interface ConsentDetailDialogProps {

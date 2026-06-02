@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { MeetingType, MeetingStatus } from '@prisma/client';
+import { MeetingType, MeetingStatus } from '@sharedType/enums';
 import { pageNumberValidation } from '@src/shared/validators/common';
 
 export const agendaItemSchema = z.object({
@@ -17,7 +17,7 @@ export const agendaItemSchema = z.object({
 
 export const CreateMeetingSchema = z.object({
   title: z.string({ message: 'Title is required' }).min(3, 'Title must be at least 3 characters'),
-  type: z.enum(MeetingType, { message: 'Meeting type is required' }),
+  type: z.nativeEnum(MeetingType),
   scheduledAt: z.coerce.date({ message: 'Scheduled date is required' }),
   venue: z
     .string({ message: 'Venue must be a string' })
@@ -31,18 +31,18 @@ export const UpdateMeetingSchema = z.object({
     .string({ message: 'Title must be a string' })
     .min(3, 'Title must be at least 3 characters')
     .optional(),
-  type: z.enum(MeetingType, { message: 'Invalid meeting type' }).optional(),
+  type: z.nativeEnum(MeetingType).optional(),
   scheduledAt: z.date({ message: 'Invalid scheduled date' }).optional(),
   venue: z
     .string({ message: 'Venue must be a string' })
     .max(500, 'Venue cannot exceed 500 characters')
     .optional(),
-  status: z.enum(MeetingStatus, { message: 'Invalid meeting status' }).optional(),
+  status: z.nativeEnum(MeetingStatus).optional(),
 });
 
 export const MeetingQuerySchema = z.object({
-  type: z.enum(MeetingType, { message: 'Invalid meeting type' }).optional(),
-  status: z.enum(MeetingStatus, { message: 'Invalid meeting status' }).optional(),
+  type: z.nativeEnum(MeetingType).optional(),
+  status: z.nativeEnum(MeetingStatus).optional(),
   page: pageNumberValidation,
 });
 

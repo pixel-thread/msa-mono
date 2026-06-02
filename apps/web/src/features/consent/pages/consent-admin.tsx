@@ -10,7 +10,7 @@ import { EditConsentDialog } from '../components/edit-consent-dialog';
 import { DeleteConsentDialog } from '../components/delete-consent-dialog';
 import { ConsentReportCards } from '../components/consent-report-cards';
 import { DataTablePagination } from '@src/shared/components/data-table-pagination';
-import { ConsentPurpose, ConsentStatus } from '@prisma/client';
+import { ConsentPurpose, ConsentStatus } from '@sharedType/enums';
 import type { ConsentRecord } from '../types/consent.types';
 
 export default function ConsentAdminPage() {

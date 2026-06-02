@@ -2,7 +2,7 @@
 
 import { useConsentReport } from '../hooks/useConsentReport';
 import { Skeleton } from '@src/shared/components/ui/skeleton';
-import { ConsentPurpose } from '@prisma/client';
+import { ConsentPurpose } from '@sharedType/enums';
 
 const purposeLabels: Record<ConsentPurpose, string> = {
   PAYMENTS: 'Payments',

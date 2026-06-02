@@ -204,7 +204,7 @@ git commit -m "feat: implement meeting minutes services"
 import { withAssociation } from '@src/shared/api/with-association';
 import { withRole } from '@src/shared/api/with-role';
 import { SuccessResponse } from '@src/shared/utils/responses';
-import { UserRole } from '@prisma/client';
+import { UserRole } from '@sharedType/enums';
 import { processAgendaOperations } from '@feature/meetings/services/processAgendaOperations';
 import { AgendaOperationSchema } from '@feature/meetings/validators/agenda-items';
 import { z } from 'zod';
@@ -248,7 +248,7 @@ git commit -m "feat: add agenda operations api route"
 import { withAssociation } from '@src/shared/api/with-association';
 import { withRole } from '@src/shared/api/with-role';
 import { SuccessResponse } from '@src/shared/utils/responses';
-import { UserRole } from '@prisma/client';
+import { UserRole } from '@sharedType/enums';
 import { createMeetingMinute } from '@feature/meetings/services/minutes';
 import { CreateMeetingMinuteSchema } from '@feature/meetings/validators/minutes';
 import { z } from 'zod';
@@ -278,7 +278,7 @@ export const POST = withAssociation(
 import { withAssociation } from '@src/shared/api/with-association';
 import { withRole } from '@src/shared/api/with-role';
 import { SuccessResponse } from '@src/shared/utils/responses';
-import { UserRole } from '@prisma/client';
+import { UserRole } from '@sharedType/enums';
 import { updateMeetingMinute } from '@feature/meetings/services/minutes';
 import { UpdateMeetingMinuteSchema } from '@feature/meetings/validators/minutes';
 import { z } from 'zod';

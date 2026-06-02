@@ -188,7 +188,7 @@ git commit -m "feat(payments): extend payment service for admin list and stats"
 import { withAssociation } from '@src/shared/api/with-association';
 import { withRole } from '@src/shared/api/with-role';
 import { SuccessResponse } from '@utils/responses';
-import { UserRole } from '@prisma/client';
+import { UserRole } from '@sharedType/enums';
 import { GetTransactionsQuerySchema } from '@feature/payments/validators';
 import { getAllTransactions } from '@feature/payments/services/payment.service';
 
@@ -227,7 +227,7 @@ git commit -m "feat(payments): implement admin list payments route"
 import { withAssociation } from '@src/shared/api/with-association';
 import { withRole } from '@src/shared/api/with-role';
 import { SuccessResponse, NotFoundResponse, ForbiddenResponse } from '@utils/responses';
-import { UserRole } from '@prisma/client';
+import { UserRole } from '@sharedType/enums';
 import { getTransactionById } from '@feature/payments/services/payment.service';
 
 export const GET = withAssociation(async (association, _, request, { params }) => {
@@ -253,7 +253,7 @@ export const GET = withAssociation(async (association, _, request, { params }) =
 import { withAssociation } from '@src/shared/api/with-association';
 import { withRole } from '@src/shared/api/with-role';
 import { SuccessResponse, NotFoundResponse, ForbiddenResponse } from '@utils/responses';
-import { UserRole } from '@prisma/client';
+import { UserRole } from '@sharedType/enums';
 import { getTransactionById } from '@feature/payments/services/payment.service';
 
 export const GET = withAssociation(async (association, _, request, { params }) => {
@@ -309,7 +309,7 @@ git commit -m "feat(payments): implement transaction detail and receipt routes"
 import { withAssociation } from '@src/shared/api/with-association';
 import { withRole } from '@src/shared/api/with-role';
 import { SuccessResponse } from '@utils/responses';
-import { UserRole } from '@prisma/client';
+import { UserRole } from '@sharedType/enums';
 import { getFinancialStats } from '@feature/payments/services/payment.service';
 
 export const GET = withAssociation(async (association, _, request) => {
@@ -325,7 +325,7 @@ export const GET = withAssociation(async (association, _, request) => {
 import { withAssociation } from '@src/shared/api/with-association';
 import { withRole } from '@src/shared/api/with-role';
 import { SuccessResponse } from '@utils/responses';
-import { UserRole } from '@prisma/client';
+import { UserRole } from '@sharedType/enums';
 import { CollectionReportQuerySchema } from '@feature/payments/validators';
 import { prisma } from '@src/shared/lib/prisma';
 

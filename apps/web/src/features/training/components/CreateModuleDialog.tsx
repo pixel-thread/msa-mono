@@ -112,7 +112,7 @@ export function CreateModuleDialog({ open, onOpenChange }: CreateModuleDialogPro
                   <FormControl>
                     <Textarea
                       placeholder="Add detailed training content, instructions, or links here..."
-                      className="min-h-[120px]"
+                      className="min-h-30"
                       {...field}
                     />
                   </FormControl>

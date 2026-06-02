@@ -1,5 +1,5 @@
 import z from 'zod';
-import { AnnouncementStatus, AnnouncementPriority, UserRole } from '@prisma/client';
+import { AnnouncementStatus, AnnouncementPriority, UserRole } from '@sharedType/enums';
 import { pageNumberValidation, pageSizeValidation } from '@src/shared/validators/common';
 
 import { MAX_IMAGE_SIZE, ALLOWED_IMAGE_FORMATS, ALLOWED_MIME_TYPES } from '@src/shared/constants';
@@ -8,9 +8,9 @@ export const CreateAnnouncementSchema = z.object({
   title: z.string().min(1).max(200),
   summary: z.string().max(500).optional(),
   content: z.string().min(1),
-  status: z.enum(AnnouncementStatus).default(AnnouncementStatus.DRAFT),
-  priority: z.enum(AnnouncementPriority).default(AnnouncementPriority.NORMAL),
-  targetRoles: z.array(z.enum(UserRole)).default([]),
+  status: z.nativeEnum(AnnouncementStatus).default(AnnouncementStatus.DRAFT),
+  priority: z.nativeEnum(AnnouncementPriority).default(AnnouncementPriority.NORMAL),
+  targetRoles: z.array(z.nativeEnum(UserRole)).default([]),
   isPinned: z.boolean().default(false),
   publishedAt: z.coerce.date().optional(),
   expiresAt: z.coerce.date().optional(),
@@ -21,9 +21,9 @@ export const UpdateAnnouncementSchema = z.object({
   summary: z.string().max(500).optional(),
   content: z.string().min(1).optional(),
   imageUrl: z.url().optional().nullable(),
-  status: z.enum(AnnouncementStatus).optional(),
-  priority: z.enum(AnnouncementPriority).optional(),
-  targetRoles: z.array(z.enum(UserRole)).optional(),
+  status: z.nativeEnum(AnnouncementStatus).optional(),
+  priority: z.nativeEnum(AnnouncementPriority).optional(),
+  targetRoles: z.array(z.nativeEnum(UserRole)).optional(),
   isPinned: z.boolean().optional(),
   publishedAt: z.coerce.date().optional().nullable(),
   expiresAt: z.coerce.date().optional().nullable(),
@@ -32,8 +32,8 @@ export const UpdateAnnouncementSchema = z.object({
 export const AnnouncementQuerySchema = z.object({
   page: pageNumberValidation,
   limit: pageSizeValidation,
-  status: z.enum(AnnouncementStatus).optional(),
-  priority: z.enum(AnnouncementPriority).optional(),
+  status: z.nativeEnum(AnnouncementStatus).optional(),
+  priority: z.nativeEnum(AnnouncementPriority).optional(),
   search: z.string().optional(),
 });
 

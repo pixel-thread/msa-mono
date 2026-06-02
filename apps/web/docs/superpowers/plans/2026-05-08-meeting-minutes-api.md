@@ -22,7 +22,7 @@
 import { withAssociation } from '@src/shared/api/with-association';
 import { withRole } from '@src/shared/api/with-role';
 import { SuccessResponse } from '@src/shared/utils/responses';
-import { UserRole } from '@prisma/client';
+import { UserRole } from '@sharedType/enums';
 import { createMeetingMinute } from '@src/features/meetings/services/minutes';
 import { CreateMeetingMinuteSchema } from '@src/features/meetings/validators/minutes';
 import { z } from 'zod';
@@ -72,7 +72,7 @@ git commit -m "feat: add meeting minutes collection api route"
 import { withAssociation } from '@src/shared/api/with-association';
 import { withRole } from '@src/shared/api/with-role';
 import { SuccessResponse } from '@src/shared/utils/responses';
-import { UserRole } from '@prisma/client';
+import { UserRole } from '@sharedType/enums';
 import { updateMeetingMinute } from '@src/features/meetings/services/minutes';
 import { UpdateMeetingMinuteSchema } from '@src/features/meetings/validators/minutes';
 import { z } from 'zod';

@@ -1,4 +1,4 @@
-import { $Enums, UserRole } from '@prisma/client';
+import { ApplicationStatus, UserRole } from '@src/shared/types/enums';
 import {
   pageNumberValidation,
   pageSizeValidation,
@@ -13,7 +13,7 @@ import {
 export { MembershipApplicationSchema, type MembershipApplicationInput };
 
 export const GetMembershipApplicationsQuerySchema = z.object({
-  status: z.enum($Enums.ApplicationStatus, 'Invalid application status').optional(),
+  status: z.nativeEnum(ApplicationStatus).optional(),
   page: pageNumberValidation,
   pageSize: pageSizeValidation,
 });
@@ -27,7 +27,7 @@ export const MembershipApplicationParamsSchema = z.object({
 export const ApproveApplicationSchema = z
   .object({
     memberTypeId: z.uuid('Invalid member type'),
-    role: z.enum(UserRole, 'Invalid role').default('MEMBER').optional(),
+    role: z.nativeEnum(UserRole).default('MEMBER').optional(),
     dateOfJoiningGovt: z.coerce.date('Invalid date').default(new Date()).optional(),
   })
   .strict();

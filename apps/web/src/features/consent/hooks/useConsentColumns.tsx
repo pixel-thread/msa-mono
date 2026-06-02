@@ -1,5 +1,5 @@
 import { ColumnDef } from '@tanstack/react-table';
-import { ConsentStatus } from '@prisma/client';
+import { ConsentStatus } from '@sharedType/enums';
 import { Badge } from '@src/shared/components/ui/badge';
 import { ConsentActionsCell } from '../components/cells/consent-actions-cell';
 import type { ConsentRecord } from '../types/consent.types';

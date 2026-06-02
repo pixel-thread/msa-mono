@@ -1,5 +1,5 @@
 import z from 'zod';
-import { AttendeeRole, RsvpStatus } from '@prisma/client';
+import { AttendeeRole, RsvpStatus } from '@sharedType/enums';
 
 export const AssignAttendeeSchema = z.object({
   userId: z.string('Invalid user ID format'),
@@ -22,8 +22,8 @@ export const BulkAssignAttendeesSchema = z.object({
 
 export const UpdateAttendeeSchema = z.object({
   userId: z.uuid().optional(),
-  attendeeRole: z.enum(AttendeeRole, { message: 'Invalid attendee role' }).optional(),
-  rsvpStatus: z.enum(RsvpStatus, { message: 'Invalid RSVP status' }).optional(),
+  attendeeRole: z.nativeEnum(AttendeeRole).optional(),
+  rsvpStatus: z.nativeEnum(RsvpStatus).optional(),
   rsvpNote: z
     .string({ message: 'RSVP note must be a string' })
     .max(500, 'RSVP note cannot exceed 500 characters')

@@ -1,12 +1,12 @@
 import { z } from 'zod';
-import { ConsentPurpose, ConsentStatus } from '@prisma/client';
+import { ConsentPurpose, ConsentStatus } from '@sharedType/enums';
 
 /**
  * Validator for granting or revoking consent.
  */
 export const ConsentUpdateSchema = z.object({
-  purposes: z.array(z.enum(ConsentPurpose)).min(1, 'At least one purpose is required'),
-  action: z.enum(ConsentStatus),
+  purposes: z.array(z.nativeEnum(ConsentPurpose)).min(1, 'At least one purpose is required'),
+  action: z.nativeEnum(ConsentStatus),
   channel: z.enum(['web', 'mobile', 'email']).default('web'),
   metadata: z.record(z.string(), z.any()).optional(),
 });
@@ -20,7 +20,7 @@ export type ConsentUpdateInput = z.infer<typeof ConsentUpdateSchema>;
  * Validator for consent report query parameters.
  */
 export const ConsentReportQuerySchema = z.object({
-  purpose: z.enum(ConsentPurpose).optional(),
+  purpose: z.nativeEnum(ConsentPurpose).optional(),
   startDate: z.coerce.date().optional(),
   endDate: z.coerce.date().optional(),
 });
@@ -43,7 +43,7 @@ export type ConsentReceiptParamsInput = z.infer<typeof ConsentReceiptParamsSchem
  * Validator for updating a single consent receipt.
  */
 export const UpdateConsentReceiptSchema = z.object({
-  status: z.enum(ConsentStatus).optional(),
+  status: z.nativeEnum(ConsentStatus).optional(),
   channel: z.enum(['web', 'mobile', 'email']).optional(),
 });
 
@@ -54,8 +54,8 @@ export type UpdateConsentReceiptInput = z.infer<typeof UpdateConsentReceiptSchem
  */
 export const AllConsentRecordsQuerySchema = z.object({
   page: z.coerce.number().int().min(1).catch(1).optional(),
-  purpose: z.enum(ConsentPurpose).optional(),
-  status: z.enum(ConsentStatus).optional(),
+  purpose: z.nativeEnum(ConsentPurpose).optional(),
+  status: z.nativeEnum(ConsentStatus).optional(),
   search: z.string().optional(),
 });
 

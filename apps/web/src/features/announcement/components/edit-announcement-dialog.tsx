@@ -33,7 +33,7 @@ import {
   SelectValue,
 } from '@src/shared/components/ui/select';
 import { Textarea } from '@src/shared/components/ui/textarea';
-import { AnnouncementStatus, AnnouncementPriority } from '@prisma/client';
+import { AnnouncementStatus, AnnouncementPriority } from '@sharedType/enums';
 import type { Announcement } from '@src/features/announcement/types';
 import { ImageIcon, Upload, X } from 'lucide-react';
 
