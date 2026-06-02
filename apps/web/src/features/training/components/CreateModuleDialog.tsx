@@ -2,7 +2,6 @@
 
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { UserRole } from '@prisma/client';
 
 import {
   Dialog,
@@ -27,6 +26,7 @@ import {
 } from '@src/shared/components/ui/form';
 import { CreateTrainingModuleSchema, type CreateTrainingModuleInput } from '../validators/training';
 import { useCreateTrainingModule } from '../hooks';
+import { UserRole } from '@sharedType/enums';
 
 interface CreateModuleDialogProps {
   open: boolean;

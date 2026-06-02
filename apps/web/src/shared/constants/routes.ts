@@ -1,5 +1,3 @@
-import { UserRole } from '@prisma/client';
-
 /**
  * Admin-only routes that require the 'admin' role.
  */
@@ -41,6 +39,8 @@ export const API_PUBLIC_ROUTES = [
  */
 export const AUTH_ROUTES = ['/dashboard(.*)', '/settings(.*)', '/profile(.*)'] as const;
 
+type UserRole = 'MEMBER' | 'PRESIDENT' | 'SECRETARY' | 'FINANCE' | 'DPO' | 'SUPER_ADMIN';
+
 type RouteRole = {
   url: string;
   role: UserRole[];
@@ -48,22 +48,10 @@ type RouteRole = {
   needAuth: boolean;
 };
 
-const nonMemberRoles = [
-  UserRole.SUPER_ADMIN,
-  UserRole.PRESIDENT,
-  UserRole.SECRETARY,
-  UserRole.FINANCE,
-  UserRole.DPO,
-];
+const nonMemberRoles: UserRole[] = ['SUPER_ADMIN', 'PRESIDENT', 'SECRETARY', 'FINANCE', 'DPO'];
 
-const allRoles = [
-  UserRole.SUPER_ADMIN,
-  UserRole.PRESIDENT,
-  UserRole.SECRETARY,
-  UserRole.FINANCE,
-  UserRole.DPO,
-];
-const onlySuperAdmin = [UserRole.SUPER_ADMIN];
+const allRoles: UserRole[] = ['SUPER_ADMIN', 'PRESIDENT', 'SECRETARY', 'FINANCE', 'DPO', 'MEMBER'];
+const onlySuperAdmin: UserRole[] = ['SUPER_ADMIN'];
 
 export const ROUTE_ROLE: RouteRole[] = [
   {

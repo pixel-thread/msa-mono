@@ -1,105 +1,45 @@
-export type UserRole =
-  | 'SUPER_ADMIN'
-  | 'PRESIDENT'
-  | 'SECRETARY'
-  | 'FINANCE'
-  | 'DPO'
-  | 'MEMBER';
+export const UserRole = {
+  SUPER_ADMIN: 'SUPER_ADMIN',
+  PRESIDENT: 'PRESIDENT',
+  SECRETARY: 'SECRETARY',
+  FINANCE: 'FINANCE',
+  DPO: 'DPO',
+  MEMBER: 'MEMBER',
+} as const;
 
-export type UserStatus =
-  | 'ACTIVE'
-  | 'INACTIVE'
-  | 'SUSPENDED'
-  | 'ANONYMIZED'
-  | 'PENDING';
+export type UserRole = (typeof UserRole)[keyof typeof UserRole];
 
-export type AnnouncementStatus =
-  | 'DRAFT'
-  | 'PUBLISHED'
-  | 'SCHEDULED'
-  | 'ARCHIVED';
+export type UserStatus = 'ACTIVE' | 'INACTIVE' | 'SUSPENDED' | 'ANONYMIZED' | 'PENDING';
 
-export type AnnouncementPriority =
-  | 'LOW'
-  | 'NORMAL'
-  | 'HIGH'
-  | 'URGENT';
+export type AnnouncementStatus = 'DRAFT' | 'PUBLISHED' | 'SCHEDULED' | 'ARCHIVED';
 
-export type MeetingType =
-  | 'EC_MEETING'
-  | 'GENERAL_MEETING';
+export type AnnouncementPriority = 'LOW' | 'NORMAL' | 'HIGH' | 'URGENT';
 
-export type MeetingStatus =
-  | 'SCHEDULED'
-  | 'NOTICE_ISSUED'
-  | 'COMPLETED'
-  | 'CANCELLED';
+export type MeetingType = 'EC_MEETING' | 'GENERAL_MEETING';
 
-export type AttendeeRole =
-  | 'HOST'
-  | 'CO_HOST'
-  | 'REQUIRED'
-  | 'OPTIONAL'
-  | 'OBSERVER';
+export type MeetingStatus = 'SCHEDULED' | 'NOTICE_ISSUED' | 'COMPLETED' | 'CANCELLED';
 
-export type RsvpStatus =
-  | 'PENDING'
-  | 'ACCEPTED'
-  | 'DECLINED';
+export type AttendeeRole = 'HOST' | 'CO_HOST' | 'REQUIRED' | 'OPTIONAL' | 'OBSERVER';
 
-export type DsarRequestType =
-  | 'ACCESS'
-  | 'CORRECTION'
-  | 'DELETION'
-  | 'PORTABILITY';
+export type RsvpStatus = 'PENDING' | 'ACCEPTED' | 'DECLINED';
 
-export type DsarStatus =
-  | 'PENDING'
-  | 'IN_PROGRESS'
-  | 'COMPLETED'
-  | 'REJECTED';
+export type DsarRequestType = 'ACCESS' | 'CORRECTION' | 'DELETION' | 'PORTABILITY';
 
-export type ConsentPurpose =
-  | 'PAYMENTS'
-  | 'COMMUNICATIONS'
-  | 'MEETINGS'
-  | 'ANALYTICS'
-  | 'MARKETING';
+export type DsarStatus = 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'REJECTED';
 
-export type ConsentStatus =
-  | 'GRANTED'
-  | 'WITHDRAWN';
+export type ConsentPurpose = 'PAYMENTS' | 'COMMUNICATIONS' | 'MEETINGS' | 'ANALYTICS' | 'MARKETING';
 
-export type PaymentStatus =
-  | 'PENDING'
-  | 'COMPLETED'
-  | 'FAILED'
-  | 'REFUNDED'
-  | 'WAIVED';
+export type ConsentStatus = 'GRANTED' | 'WITHDRAWN';
 
-export type PaymentMethod =
-  | 'CASH'
-  | 'BANK_TRANSFER'
-  | 'UPI'
-  | 'CHEQUE'
-  | 'ONLINE';
+export type PaymentStatus = 'PENDING' | 'COMPLETED' | 'FAILED' | 'REFUNDED' | 'WAIVED';
 
-export type PaymentGateway =
-  | 'RAZORPAY'
-  | 'MANUAL';
+export type PaymentMethod = 'CASH' | 'BANK_TRANSFER' | 'UPI' | 'CHEQUE' | 'ONLINE';
 
-export type ContributionStatus =
-  | 'DUE'
-  | 'PARTIAL'
-  | 'PAID'
-  | 'WAIVED'
-  | 'OVERDUE';
+export type PaymentGateway = 'RAZORPAY' | 'MANUAL';
 
-export type PaymentProviderType =
-  | 'RAZORPAY'
-  | 'STRIPE'
-  | 'PAYU'
-  | 'CASHFREE';
+export type ContributionStatus = 'DUE' | 'PARTIAL' | 'PAID' | 'WAIVED' | 'OVERDUE';
+
+export type PaymentProviderType = 'RAZORPAY' | 'STRIPE' | 'PAYU' | 'CASHFREE';
 
 export type AuditAction =
   | 'CREATE'
@@ -137,10 +77,7 @@ export type AuditAction =
   | 'COMPLAINT_CREATE'
   | 'COMPLAINT_UPDATE';
 
-export type NotificationType =
-  | 'GENERAL_MESSAGE'
-  | 'FOLLOW'
-  | 'SYSTEM';
+export type NotificationType = 'GENERAL_MESSAGE' | 'FOLLOW' | 'SYSTEM';
 
 export const NOTIFICATION_TYPE_VALUES = [
   'GENERAL_MESSAGE',
@@ -148,11 +85,7 @@ export const NOTIFICATION_TYPE_VALUES = [
   'SYSTEM',
 ] as const satisfies NotificationType[];
 
-export type ComplaintStatus =
-  | 'OPEN'
-  | 'IN_PROGRESS'
-  | 'RESOLVED'
-  | 'CLOSED';
+export type ComplaintStatus = 'OPEN' | 'IN_PROGRESS' | 'RESOLVED' | 'CLOSED';
 
 export type ComplaintCategory =
   | 'MEETING_CONDUCT'
@@ -162,11 +95,7 @@ export type ComplaintCategory =
   | 'ADMINISTRATIVE'
   | 'OTHER';
 
-export type ComplianceCheckStatus =
-  | 'PASSED'
-  | 'FAILED'
-  | 'WARNING'
-  | 'SKIPPED';
+export type ComplianceCheckStatus = 'PASSED' | 'FAILED' | 'WARNING' | 'SKIPPED';
 
 export type TrainingAssignmentStatus =
   | 'ASSIGNED'
@@ -175,20 +104,11 @@ export type TrainingAssignmentStatus =
   | 'OVERDUE'
   | 'EXEMPT';
 
-export type ApplicationStatus =
-  | 'PENDING'
-  | 'APPROVED'
-  | 'REJECTED';
+export type ApplicationStatus = 'PENDING' | 'APPROVED' | 'REJECTED';
 
-export type ApprovalStatus =
-  | 'PENDING'
-  | 'APPROVED'
-  | 'REJECTED';
+export type ApprovalStatus = 'PENDING' | 'APPROVED' | 'REJECTED';
 
-export type Status =
-  | 'DELETED'
-  | 'ACTIVE'
-  | 'INACTIVE';
+export type Status = 'DELETED' | 'ACTIVE' | 'INACTIVE';
 
 export type PaymentType =
   | 'SUBSCRIPTION'
