@@ -7,7 +7,10 @@
       "cache": false,
       "persistent": true
     },
-
+    "start": {
+      "dependsOn": ["^start"],
+      "outputs": ["dist/**", "build/**", ".next/**", "expo-dist/**"]
+    },
     "build": {
       "dependsOn": ["^build"],
       "outputs": ["dist/**", "build/**", ".next/**", "expo-dist/**"]
