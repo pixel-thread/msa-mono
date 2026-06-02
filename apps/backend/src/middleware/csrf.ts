@@ -13,7 +13,7 @@ export function csrf(req: Request, res: Response, next: NextFunction) {
   const authHeader = req.headers.authorization;
   const clearApiPrefix = path.startsWith('/api/v1') ? path.slice(7) : path;
 
-  // skipping csrf check for public routes and auth routes also for mobile
+  // skipping csrf check for public routes
   if (API_PUBLIC_ROUTES.some((r) => r === clearApiPrefix) || authHeader?.startsWith('Bearer ')) {
     return next();
   }
