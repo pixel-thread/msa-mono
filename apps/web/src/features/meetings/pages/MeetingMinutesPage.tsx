@@ -2,29 +2,33 @@
 
 import { useParams, useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { useMeetingDetail } from '@src/features/meetings/hooks/useMeetingDetail';
+import { useMeetingDetail } from '@feature/meetings/hooks/useMeetingDetail';
 import {
   useMeetingMinutes,
   type MeetingMinute as MeetingMinuteType,
-} from '@src/features/meetings/hooks/useMeetingMinutes';
+} from '@feature/meetings/hooks/useMeetingMinutes';
 import {
   CreateMinuteDialog,
   EditMinuteDialog,
   DeleteMinuteDialog,
-} from '@src/features/meetings/components';
-import { DataTable } from '@src/shared/components/data-table';
-import { DataTableFilters } from '@src/shared/components/data-table-filters';
-import { useMeetingMinutesColumns } from '@src/features/meetings/hooks/useMeetingMinutesColumns';
-import { Button } from '@src/shared/components/ui/button';
-import { SectionHeader } from '@src/shared/components/section-header';
-import { ArrowLeft, FileText, Plus } from 'lucide-react';
+} from '@feature/meetings/components';
+import { DataTable } from '@components/data-table';
+import { DataTableFilters } from '@components/data-table-filters';
+import { useMeetingMinutesColumns } from '@feature/meetings/hooks/useMeetingMinutesColumns';
+import { Button } from '@components/ui/button';
+import { SectionHeader } from '@components/section-header';
+import { FileText, Plus } from 'lucide-react';
 import Link from 'next/link';
 import type {
   CreateMeetingMinuteInput,
   UpdateMeetingMinuteInput,
-} from '@src/features/meetings/validators';
+} from '@feature/meetings/validators';
 
-export default function MeetingMinutesPage() {
+/**
+ * Meeting Minutes Page component.
+ * Allows viewing and managing minutes for a specific meeting.
+ */
+export function MeetingMinutesPage() {
   const params = useParams();
   const router = useRouter();
   const meetingId = params.meetingId as string;

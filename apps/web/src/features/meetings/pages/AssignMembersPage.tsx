@@ -2,19 +2,19 @@
 
 import { useParams, useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { useMeetingDetail } from '@src/features/meetings/hooks/useMeetingDetail';
-import { useMeetingAttendees } from '@src/features/meetings/hooks/useMeetings';
-import { ManageAttendeesDialog } from '@src/features/meetings/components/ManageAttendeesDialog';
-import { useMembers } from '@src/features/members/hooks/useMembers';
-import { Card, CardHeader, CardTitle, CardContent } from '@src/shared/components/ui/card';
-import { Button } from '@src/shared/components/ui/button';
-import { SectionHeader } from '@src/shared/components/section-header';
-import { DataTableFilters } from '@src/shared/components/data-table-filters';
-import { DataTable } from '@src/shared/components/data-table';
-import { useMeetingAttendeesColumns } from '@src/features/meetings/hooks/useMeetingAttendeesColumns';
+import { useMeetingDetail } from '@feature/meetings/hooks/useMeetingDetail';
+import { useMeetingAttendees } from '@feature/meetings/hooks/useMeetingAttendees';
+import { ManageAttendeesDialog } from '@feature/meetings/components/ManageAttendeesDialog';
+import { useMembers } from '@feature/members/hooks/useMembers';
+import { Card, CardHeader, CardTitle, CardContent } from '@components/ui/card';
+import { Button } from '@components/ui/button';
+import { SectionHeader } from '@components/section-header';
+import { DataTableFilters } from '@components/data-table-filters';
+import { DataTable } from '@components/data-table';
+import { useMeetingAttendeesColumns } from '@feature/meetings/hooks/useMeetingAttendeesColumns';
 import { Users, CheckCircle2, XCircle, Clock, UserPlus } from 'lucide-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import http from '@src/shared/utils/http';
+import http from '@utils/http';
 import { toast } from 'sonner';
 
 interface AttendeeRow {
@@ -30,7 +30,11 @@ interface AttendeeRow {
   rsvpStatus: string;
 }
 
-export default function AssignMembersPage() {
+/**
+ * Assign Members Page component.
+ * Allows managing and assigning members to a specific meeting as attendees.
+ */
+export function AssignMembersPage() {
   const params = useParams();
   const router = useRouter();
   const queryClient = useQueryClient();

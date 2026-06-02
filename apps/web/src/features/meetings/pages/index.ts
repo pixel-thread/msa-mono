@@ -1,2 +1,4 @@
-export { default as AssignMembersPage } from './assign-members';
-export { default as MeetingMinutesPage } from './meeting-minutes';
+export * from './AssignMembersPage';
+export * from './MeetingDetailPage';
+export * from './MeetingMinutesPage';
+export * from './MeetingsPage';
