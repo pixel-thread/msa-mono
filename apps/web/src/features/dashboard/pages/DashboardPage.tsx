@@ -1,15 +1,15 @@
 'use client';
 
-import { useDashboard } from '@src/shared/hooks/use-dashboard';
-import { SectionHeader } from '@src/shared/components/section-header';
-import { StatsCards } from '@src/shared/components/dashboard/stats-cards';
-import { RevenueAreaChart } from '@src/shared/components/dashboard/revenue-area-chart';
-import { MemberBarChart } from '@src/shared/components/dashboard/member-bar-chart';
-import { RevenueLineChart } from '@src/shared/components/dashboard/revenue-line-chart';
-import { PaymentPieChart } from '@src/shared/components/dashboard/payment-pie-chart';
-import { RolesRadarChart } from '@src/shared/components/dashboard/roles-radar-chart';
-import { RecentPaymentsTable } from '@src/shared/components/dashboard/recent-payments-table';
-import { DashboardSkeleton } from '@src/shared/components/dashboard/dashboard-skeleton';
+import { useDashboard } from '@hooks/useDashboard';
+import { SectionHeader } from '@components/section-header';
+import { StatsCards } from '@components/dashboard/stats-cards';
+import { RevenueAreaChart } from '@components/dashboard/revenue-area-chart';
+import { MemberBarChart } from '@components/dashboard/member-bar-chart';
+import { RevenueLineChart } from '@components/dashboard/revenue-line-chart';
+import { PaymentPieChart } from '@components/dashboard/payment-pie-chart';
+import { RolesRadarChart } from '@components/dashboard/roles-radar-chart';
+import { RecentPaymentsTable } from '@components/dashboard/recent-payments-table';
+import { DashboardSkeleton } from '@components/dashboard/dashboard-skeleton';
 
 /**
  * Main dashboard page component.
