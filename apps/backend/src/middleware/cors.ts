@@ -4,8 +4,8 @@ const allowedOrigins = [
   'http://localhost:3000',
   'http://localhost:4000',
   'https://mfsa.vercel.app',
-  'https://msa-mono.vercel.app',
-  'https://msa-web.vercel.app',
+  'https://msa-mono.onrender.com',
+  'https://msa-web.onrender.com',
 ];
 
 export const cors = corsLib({
