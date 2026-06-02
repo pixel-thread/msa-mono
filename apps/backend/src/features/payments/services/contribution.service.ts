@@ -50,9 +50,7 @@ export async function generateMonthlyContributions(
     where: {
       associationId,
       status: UserStatus.ACTIVE,
-      subscription: {
-        status: 'ACTIVE',
-      },
+      subscription: { status: 'ACTIVE' },
     },
     include: {
       subscription: {
@@ -84,21 +82,22 @@ export async function generateMonthlyContributions(
       };
     });
 
+  type ContributionPeriodT = {
+    associationId: string;
+    userId: string;
+    year: number;
+    month: number;
+    // eslint-disable-next-line
+    expectedAmount: any;
+    // eslint-disable-next-line
+    paidAmount: any;
+    // eslint-disable-next-line
+    dueAmount: any;
+    status: ContributionStatus;
+    dueDate: string;
+  };
   const result = await prisma.contributionPeriod.createMany({
-    data: data as Array<{
-      associationId: string;
-      userId: string;
-      year: number;
-      month: number;
-      // eslint-disable-next-line
-      expectedAmount: any;
-      // eslint-disable-next-line
-      paidAmount: any;
-      // eslint-disable-next-line
-      dueAmount: any;
-      status: ContributionStatus;
-      dueDate: Date;
-    }>,
+    data: data as Array<ContributionPeriodT>,
     skipDuplicates: true,
   });
 
@@ -193,10 +192,14 @@ export async function getUserContributionSummary(userId: string): Promise<Contri
 /**
  * Waive a contribution period (e.g. for hardship, honorary members, etc.).
  */
-export async function waiveContribution(contributionPeriodId: string, reason: string, approvedById: string) {
+export async function waiveContribution(
+  contributionPeriodId: string,
+  reason: string,
+  approvedById: string,
+) {
   return prisma.$transaction(async (tx) => {
     const period = await tx.contributionPeriod.findUnique({
-      where: { id: contributionPeriodId }
+      where: { id: contributionPeriodId },
     });
 
     if (!period) {

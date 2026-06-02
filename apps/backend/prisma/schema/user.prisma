@@ -49,6 +49,7 @@ model User {
   trainingCertificates  TrainingCertificate[]
   memberTypeId          String?
   memberType            MemberType?           @relation(fields: [memberTypeId], references: [id])
+  declerations          ContributionDeclerations[]
 
   @@unique([associationId, email])
   @@unique([associationId, membershipNumber])

@@ -83,12 +83,26 @@ model ContributionPeriod {
   user User @relation(fields: [userId], references: [id])
 
   allocations PaymentAllocation[]
+  declarations ContributionDeclerations[]
 
   @@unique([userId, year, month])
   @@index([associationId])
   @@index([userId])
   @@index([status])
   @@map("contribution_periods")
+}
+
+model ContributionDeclerations {
+  id                     String              @id @default(uuid())
+  memberId               String
+  associationId          String
+  lastDeclarationDate    DateTime?
+  isApproved             Boolean             @default(false)
+  approveBy              String?
+  approvedAt             DateTime?
+  member                 User                @relation(fields: [memberId], references: [id])
+  association           Association         @relation(fields: [associationId], references: [id])
+  periods                ContributionPeriod[]
 }
 
 model PaymentAllocation {

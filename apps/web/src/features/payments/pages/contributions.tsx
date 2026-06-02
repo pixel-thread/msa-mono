@@ -26,9 +26,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@src/shared/components/ui/select';
-import { Card } from '@components/ui/card';
 import { Label } from '@src/shared/components/ui/label';
-import { CalendarDays, Plus } from 'lucide-react';
+import {  Plus } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function ContributionsPage() {

@@ -38,6 +38,7 @@ model Association {
   paymentProviders    PaymentProvider[]
   accounts            Account[]
   lines               LedgerLine[]
+  declarations        ContributionDeclerations[]
 
   @@index([slug])
   @@index([isActive])

@@ -157,6 +157,7 @@ export const generateContributions: RequestHandler[] = [
 
     // --- Auth: enforce FINANCE role ---
     await withRole(req, UserRole.FINANCE);
+
     logger.info({ traceId }, 'POST /api/payments/contributions - User authorized');
 
     // --- Business logic: generate monthly contributions ---
@@ -164,7 +165,9 @@ export const generateContributions: RequestHandler[] = [
       { traceId, year: req.body.year, month: req.body.month },
       'POST /api/payments/contributions - Generating contributions',
     );
+
     const count = await generateMonthlyContributions(association.id, req.body.year, req.body.month);
+
     const overdueCount = await markOverdueContributions(association.id);
 
     // --- Log: success ---
