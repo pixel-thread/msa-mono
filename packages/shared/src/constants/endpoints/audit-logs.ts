@@ -1,3 +1,3 @@
 export const AUDIT_LOGS = {
-  LIST: '/api/v1/audit-logs',
+  LIST: '/audit-logs',
 } as const;

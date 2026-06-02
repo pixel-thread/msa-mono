@@ -1,3 +1,3 @@
 export const HEALTH = {
-  ROOT: '/api/v1/health',
+  ROOT: '/health',
 } as const;

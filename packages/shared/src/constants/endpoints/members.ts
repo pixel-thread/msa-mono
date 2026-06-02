@@ -1,9 +1,9 @@
 export const MEMBERS = {
-  ROOT: '/api/v1/members',
-  DETAILS: (id: string) => `/api/v1/members/${id}`,
-  STATUS: (id: string) => `/api/v1/members/${id}/status`,
-  SUSPEND: (id: string) => `/api/v1/members/${id}/suspend`,
-  ROLE: (id: string) => `/api/v1/members/${id}/role`,
-  LEDGER: (id: string) => `/api/v1/members/${id}/ledger`,
-  ONBOARDING: '/api/v1/members/onboarding',
+  ROOT: '/members',
+  DETAILS: (id: string) => `/members/${id}`,
+  STATUS: (id: string) => `/members/${id}/status`,
+  SUSPEND: (id: string) => `/members/${id}/suspend`,
+  ROLE: (id: string) => `/members/${id}/role`,
+  LEDGER: (id: string) => `/members/${id}/ledger`,
+  ONBOARDING: '/members/onboarding',
 } as const;

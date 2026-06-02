@@ -1,9 +1,9 @@
 export const SUBSCRIPTIONS = {
-  PLANS: '/api/v1/subscriptions/plans',
-  PLAN_DETAILS: (id: string) => `/api/v1/subscriptions/plans/${id}`,
-  MY: '/api/v1/subscriptions/my',
-  SUBSCRIBE: '/api/v1/subscriptions/subscribe',
-  UPGRADE: '/api/v1/subscriptions/upgrade',
-  WAIVE: '/api/v1/subscriptions/waive',
-  PAYMENTS: (id: string) => `/api/v1/subscriptions/${id}/payments`,
+  PLANS: '/subscriptions/plans',
+  PLAN_DETAILS: (id: string) => `/subscriptions/plans/${id}`,
+  MY: '/subscriptions/my',
+  SUBSCRIBE: '/subscriptions/subscribe',
+  UPGRADE: '/subscriptions/upgrade',
+  WAIVE: '/subscriptions/waive',
+  PAYMENTS: (id: string) => `/subscriptions/${id}/payments`,
 } as const;

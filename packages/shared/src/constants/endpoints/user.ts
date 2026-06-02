@@ -1,6 +1,6 @@
 export const USER = {
-  PROFILE: '/api/v1/user',
-  MFA: '/api/v1/user/mfa',
-  INVOICES: '/api/v1/user/invoices',
-  INVOICE_DETAILS: (invoiceId: string) => `/api/v1/user/invoices/${invoiceId}`,
+  PROFILE: '/user',
+  MFA: '/user/mfa',
+  INVOICES: '/user/invoices',
+  INVOICE_DETAILS: (invoiceId: string) => `/user/invoices/${invoiceId}`,
 } as const;
