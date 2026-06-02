@@ -1,0 +1,16 @@
+export const AUTH = {
+  SIGNUP: '/api/v1/auth/sign-up',
+  SIGNIN: '/api/v1/auth/sign-in',
+  SIGNIN_VERIFY: '/api/v1/auth/sign-in/verify',
+  SIGNIN_RESEND: '/api/v1/auth/sign-in/resend',
+  REFRESH: '/api/v1/auth/refresh',
+  FORGOT_PASSWORD: '/api/v1/auth/forgot-password',
+  RESET_PASSWORD: '/api/v1/auth/reset-password',
+  ME: '/api/v1/auth/me',
+  LOGOUT: '/api/v1/auth/logout',
+  CHANGE_PASSWORD: '/api/v1/auth/change-password',
+  MFA_SETUP: '/api/v1/auth/mfa/setup',
+  MFA_VERIFY: '/api/v1/auth/mfa/verify',
+  MFA_RESEND: '/api/v1/auth/mfa/resend',
+  MFA_DISABLE: '/api/v1/auth/mfa/disable',
+} as const;
