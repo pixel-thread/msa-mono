@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
 import { ContributionPeriod } from '../types';
-import { paymentEndpoints } from '../utils/constants/endpoints';
+import { buildUrlWithQuery, ENDPOINTS } from '@repo/shared';
 
 interface UseContributionsOptions {
   page?: number;
@@ -13,17 +13,17 @@ interface UseContributionsOptions {
 
 export function useContributions(options: UseContributionsOptions = {}) {
   const { page = 1, status, userId, year, month } = options;
-
-  const params = new URLSearchParams();
-  params.set('page', String(page));
-  if (status) params.set('status', status);
-  if (userId) params.set('userId', userId);
-  if (year) params.set('year', String(year));
-  if (month) params.set('month', String(month));
+  const url = buildUrlWithQuery(ENDPOINTS.PAYMENTS.CONTRIBUTIONS.LIST, {
+    page,
+    status,
+    userId,
+    year,
+    month,
+  });
 
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['all-contributions', params.toString()],
-    queryFn: () => http.get<ContributionPeriod[]>(`${paymentEndpoints.contributions}?${params.toString()}`),
+    queryKey: ['all-contributions', page, status, userId, year, month],
+    queryFn: () => http.get<ContributionPeriod[]>(url),
   });
 
   return {
