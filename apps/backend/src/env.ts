@@ -20,7 +20,7 @@ const envSchema = z.object({
   SFTP_USERNAME: z.string('SFTP_USERNAME').default('sftp_user'),
   SFTP_PASSWORD: z.string('SFTP_PASSWORD'),
   SFTP_PORT: z.coerce.number('SFTP_PORT').default(22),
-  SFTP_TIMEOUT: z.coerce.number('SFTP_TIMEOUT').default(10000),
+  SFTP_TIMEOUT: z.coerce.number('SFTP_TIMEOUT').default(30000),
   SFTP_ROOT: z.string('SFTP_ROOT').default('/'),
 
   FIELD_ENCRYPTION_KEY: z.string('FIELD_ENCRYPTION_KEY').min(32),

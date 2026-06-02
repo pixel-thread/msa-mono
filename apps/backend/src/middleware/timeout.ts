@@ -12,7 +12,7 @@ export function timeout(ms: number) {
       if (!res.headersSent) {
         res.status(408).json({
           success: false,
-          message: 'Request timeout',
+          message: 'Request timeout: Connection timed out',
         });
       }
     }, ms);

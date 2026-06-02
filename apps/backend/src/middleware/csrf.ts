@@ -35,12 +35,15 @@ export function csrf(req: Request, res: Response, next: NextFunction) {
 
   const csrfHeader = req.headers['x-csrf-token'] as string | undefined;
 
+  console.log({ csrfCookie, csrfHeader, traceId }, 'CSRF cookie and header are present');
+
   if (!csrfCookie && !csrfHeader) {
     logger.info({ csrfCookie, csrfHeader, traceId }, 'CSRF cookie and header are not present');
     return next(new ForbiddenError('Invalid CSRF token'));
   }
+  const isSameCsrf = csrfCookie === csrfHeader;
 
-  if (!csrfCookie !== !csrfHeader) {
+  if (!isSameCsrf) {
     return next(new ForbiddenError('Invalid CSRF token'));
   }
 
