@@ -33,7 +33,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@components/ui/form';
-import { Text } from '@components/text';
+import { Text } from '@components/ui/text';
 import { PublicHeader } from '@components/public-header';
 import {
   SignInSchema,
@@ -42,7 +42,7 @@ import {
   type VerifySignInInput,
 } from '@feature/auth/validators';
 import { useSignIn, useVerifyMfa } from '@feature/auth/hooks';
-import { logger } from '@lib/logger';
+import { logger } from '@src/shared/logger';
 import { PublicFooter } from '@components/public-footer';
 import { toast } from 'sonner';
 

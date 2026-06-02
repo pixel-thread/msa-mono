@@ -10,19 +10,15 @@ export const MembershipApplicationSchema = z
   .object({
     email: z.string().email('Invalid email address'),
     phone: z.string().min(10, 'Phone number must be at least 10 digits'),
-    associationSlug: z.enum(associationsSlug as [string, ...string[]], {
-      errorMap: () => ({ message: 'Invalid association' }),
-    }),
+    associationSlug: z.enum(associationsSlug as [string, ...string[]]),
     firstName: z.string().min(3, 'First name must be at least 3 characters'),
     lastName: z.string().min(3, 'Last name must be at least 3 characters'),
-    dateOfBirth: z.coerce.date().transform((val) => new Date(val)),
+    dateOfBirth: z.coerce.date(),
     age: z
-      .number({ invalid_type_error: 'Age must be a number' })
+      .number()
       .positive('Age must be a positive number')
       .gte(18, 'Age must be greater than 18'),
-    gender: z.enum(['MALE', 'FEMALE', 'OTHER'], {
-      errorMap: () => ({ message: 'Invalid gender' }),
-    }),
+    gender: z.enum(['MALE', 'FEMALE', 'OTHER']),
     address: z.string().optional(),
     city: z.string().optional(),
     state: z.string().optional(),
