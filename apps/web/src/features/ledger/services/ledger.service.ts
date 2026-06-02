@@ -62,11 +62,13 @@ export async function createLedgerEntry(
         create: [
           {
             accountId: debitAccount.id,
+            associationId: transaction.associationId,
             isDebit: true,
             amount,
           },
           {
             accountId: creditAccount.id,
+            associationId: transaction.associationId,
             isDebit: false,
             amount,
           },
@@ -153,6 +155,7 @@ export async function createManualEntry(
       lines: {
         create: input.lines.map((line) => ({
           accountId: line.accountId,
+          associationId,
           isDebit: line.isDebit,
           amount: line.amount,
         })),

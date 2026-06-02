@@ -3,6 +3,7 @@ import type { Account } from '@src/shared/types';
 import { DeleteAccountCell } from '../components/account/cell/delete-cell';
 import { Button } from '@src/shared/components/ui/button';
 import { Edit2 } from 'lucide-react';
+import Link from 'next/link';
 
 export function useLedgerAccountColumns(onEdit: (account: Account) => void) {
   const columns: ColumnDef<Account>[] = [
@@ -14,7 +15,14 @@ export function useLedgerAccountColumns(onEdit: (account: Account) => void) {
     {
       accessorKey: 'name',
       header: 'Name',
-      cell: ({ row }) => <span className="text-sm text-ink">{row.original.name}</span>,
+      cell: ({ row }) => (
+        <Link
+          href={`/ledger/accounts/${row.original.id}`}
+          className="text-sm text-ink hover:underline font-medium"
+        >
+          {row.original.name}
+        </Link>
+      ),
     },
     {
       accessorKey: 'type',
