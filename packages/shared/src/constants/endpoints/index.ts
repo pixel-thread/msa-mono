@@ -12,6 +12,7 @@ import { DSAR } from './dsar';
 import { LEDGER } from './ledger';
 import { MEMBERS } from './members';
 import { SUBSCRIPTIONS } from './subscriptions';
+import { PAYMENTS } from './payments';
 
 export const ENDPOINTS = {
   AUTH,
@@ -28,4 +29,5 @@ export const ENDPOINTS = {
   LEDGER,
   MEMBERS,
   SUBSCRIPTIONS,
+  PAYMENTS,
 } as const;
