@@ -428,7 +428,7 @@ Content-Type: application/json
 Authorization: Bearer {{TOKEN}}
 
 {
-  "planId": "REPLACE_WITH_PLAN_ID"
+  "planId": "36120a37-2201-4bda-b27d-d173d88490ec"
 }
 
 ###

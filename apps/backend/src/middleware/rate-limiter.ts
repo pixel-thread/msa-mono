@@ -76,6 +76,6 @@ export async function rateLimiter(req: Request, _res: Response, next: NextFuncti
     next();
   } catch (error) {
     logger.error({ error }, 'Rate limiter error');
-    next();
+    next(error);
   }
 }

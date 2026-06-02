@@ -49,9 +49,9 @@ export function createApp(): express.Express {
   app.use(contextMiddleware);
   // app.use(csrf);
   app.use(securityHeaders);
+  app.use(rateLimiter);
   app.use(cookieParser());
   app.use(express.json({ limit: '5mb' }));
-  app.use(rateLimiter);
   app.use(timeout(10_000));
 
   /**
