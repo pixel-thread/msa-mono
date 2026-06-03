@@ -15,7 +15,6 @@ import {
   PaymentStatus,
   PaymentGateway,
   PaymentMethod,
-  ContributionStatus,
   AnnouncementStatus,
   AnnouncementPriority,
   NotificationType,
@@ -204,8 +203,6 @@ async function seedAssociation(data: (typeof ASSOCIATIONS)[number]) {
     },
   });
 
-  const subscriptionPlanVersion = subscriptionPlan.versions[0];
-
   // ---------------------------------------------------------------------------
   // USERS
   // ---------------------------------------------------------------------------
@@ -226,6 +223,7 @@ async function seedAssociation(data: (typeof ASSOCIATIONS)[number]) {
   });
 
   for (const role of roles) {
+    let i = 1;
     const user = await prisma.user.create({
       data: {
         associationId: association.id,
@@ -239,11 +237,19 @@ async function seedAssociation(data: (typeof ASSOCIATIONS)[number]) {
         membershipNumber: `${data.short.toUpperCase()}-${role}`,
         imageUrl: 'https://placehold.co/300x300',
         mfaEnabled: false,
-        memberTypeId: memberTypes[0]?.id,
-
-        subscription: role === UserRole.MEMBER ? undefined : undefined,
+        dateOfJoiningGovt: new Date(`2025-01-01`),
+        dateOfJoiningAssociation: new Date(`2025-01-01`),
+        subscription: {
+          create: {
+            planId: subscriptionPlan.id,
+            startDate: new Date(`201${i}-01-01`),
+            endDate: new Date(`202${i}-01-01`),
+            planVersionId: subscriptionPlan.versions[0].id,
+          },
+        },
       },
     });
+    i++;
 
     users[role] = user;
   }
@@ -604,7 +610,7 @@ async function seedAssociation(data: (typeof ASSOCIATIONS)[number]) {
     },
   });
 
-  const cashAccount = await prisma.account.create({
+  await prisma.account.create({
     data: {
       associationId: association.id,
       code: '1200',

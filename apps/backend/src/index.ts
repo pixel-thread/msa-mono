@@ -49,7 +49,7 @@ export function createApp(): express.Express {
   app.use(cors);
   app.use(contextMiddleware);
   app.use(cookieParser());
-  app.use(csrf);
+  // app.use(csrf);
   app.use(securityHeaders);
   app.use(rateLimiter);
   app.use(express.json({ limit: '5mb' }));

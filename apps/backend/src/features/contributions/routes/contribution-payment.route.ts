@@ -23,9 +23,7 @@ export const CreateManualContributionPaymentSchema = z.object({
 });
 
 export const createManualContributionPaymentHandler: RequestHandler[] = [
-  validate({
-    body: CreateManualContributionPaymentSchema,
-  }),
+  validate({ body: CreateManualContributionPaymentSchema }),
   asyncHandler(async (req, res) => {
     const user = await withRole(req, UserRole.FINANCE);
 
@@ -40,11 +38,8 @@ export const createManualContributionPaymentHandler: RequestHandler[] = [
         gateway: PaymentGateway.MANUAL,
         status: PaymentStatus.PENDING,
         method: paymentMethod,
-
         referenceNumber,
-
         notes: remarks,
-
         createdById: user.id,
       },
     });
@@ -61,44 +56,50 @@ export const createManualContributionPaymentHandler: RequestHandler[] = [
 ];
 
 export const verifyManualContributionPaymentHandler: RequestHandler[] = [
-  validate({ params: z.object({ paymentId: z.uuid() }) }),
+  validate({
+    params: z.object({
+      paymentId: z.uuid(),
+    }),
+  }),
+
   asyncHandler(async (req, res) => {
     const accountant = await withRole(req, UserRole.FINANCE);
 
     const paymentId = req.params.paymentId as string;
 
-    const payment = await prisma.paymentTransaction.findUnique({
-      where: {
-        id: paymentId,
-      },
-    });
+    const result = await prisma.$transaction(async (tx) => {
+      // -------------------------------------------------------------------
+      // Load payment
+      // -------------------------------------------------------------------
 
-    if (!payment) {
-      throw new NotFoundError('Payment not found');
-    }
-
-    if (payment.status === PaymentStatus.COMPLETED) {
-      throw new ConflictError('Payment already Verified');
-    }
-
-    await prisma.$transaction(async (tx) => {
-      await tx.paymentTransaction.update({
+      const payment = await tx.paymentTransaction.findUnique({
         where: {
-          id: payment.id,
-        },
-        data: {
-          status: PaymentStatus.COMPLETED,
-          verifiedById: accountant.id,
+          id: paymentId,
         },
       });
 
+      if (!payment) {
+        throw new NotFoundError('Payment not found');
+      }
+
+      if (payment.status === PaymentStatus.COMPLETED) {
+        throw new ConflictError('Payment already verified');
+      }
+
       let remainingAmount = Number(payment.amount);
 
-      const unpaidPeriods = await tx.contributionPeriod.findMany({
+      let totalAllocated = 0;
+
+      // -------------------------------------------------------------------
+      // Fetch outstanding contribution periods
+      // FIFO allocation
+      // -------------------------------------------------------------------
+
+      const outstandingPeriods = await tx.contributionPeriod.findMany({
         where: {
           userId: payment.userId,
           status: {
-            in: ['DUE', 'PAID'],
+            in: [ContributionStatus.DUE, ContributionStatus.OVERDUE, ContributionStatus.PARTIAL],
           },
         },
         orderBy: [
@@ -111,29 +112,26 @@ export const verifyManualContributionPaymentHandler: RequestHandler[] = [
         ],
       });
 
-      for (const period of unpaidPeriods) {
+      // -------------------------------------------------------------------
+      // Allocate payment
+      // -------------------------------------------------------------------
+
+      for (const period of outstandingPeriods) {
         if (remainingAmount <= 0) {
           break;
         }
 
-        const alreadyPaid = await tx.paymentAllocation.aggregate({
-          where: {
-            contributionPeriodId: period.id,
-          },
-          _sum: {
-            allocatedAmount: true,
-          },
-        });
-
-        const paidAmount = Number(alreadyPaid._sum.allocatedAmount ?? 0);
-
-        const balance = Number(period.expectedAmount) - paidAmount;
+        const balance = Number(period.dueAmount);
 
         if (balance <= 0) {
           continue;
         }
 
         const allocation = Math.min(balance, remainingAmount);
+
+        // ---------------------------------------------------------------
+        // Create allocation record
+        // ---------------------------------------------------------------
 
         await tx.paymentAllocation.create({
           data: {
@@ -143,10 +141,14 @@ export const verifyManualContributionPaymentHandler: RequestHandler[] = [
           },
         });
 
-        remainingAmount -= allocation;
+        const newPaidAmount = Number(period.paidAmount) + allocation;
 
-        const newPaidAmount = paidAmount + allocation;
         const newDueAmount = Number(period.expectedAmount) - newPaidAmount;
+
+        // ---------------------------------------------------------------
+        // Update contribution period
+        // ---------------------------------------------------------------
+
         await tx.contributionPeriod.update({
           where: {
             id: period.id,
@@ -154,15 +156,71 @@ export const verifyManualContributionPaymentHandler: RequestHandler[] = [
           data: {
             paidAmount: newPaidAmount,
             dueAmount: newDueAmount,
+
             status: newDueAmount <= 0 ? ContributionStatus.PAID : ContributionStatus.PARTIAL,
           },
         });
+
+        totalAllocated += allocation;
+        remainingAmount -= allocation;
       }
+
+      // -------------------------------------------------------------------
+      // Store excess payment as credit
+      // -------------------------------------------------------------------
+
+      if (remainingAmount > 0) {
+        await tx.unallocatedPayment.create({
+          data: {
+            associationId: payment.associationId,
+            userId: payment.userId,
+
+            paymentTransactionId: payment.id,
+
+            amount: remainingAmount,
+            consumedAmount: 0,
+            balanceAmount: remainingAmount,
+
+            notes: 'Excess contribution payment credit',
+          },
+        });
+      }
+
+      // -------------------------------------------------------------------
+      // Mark payment completed
+      // -------------------------------------------------------------------
+
+      const updatedPayment = await tx.paymentTransaction.update({
+        where: {
+          id: payment.id,
+        },
+        data: {
+          status: PaymentStatus.COMPLETED,
+
+          verifiedById: accountant.id,
+
+          paidAt: payment.paidAt ?? new Date(),
+        },
+      });
+
+      return {
+        payment: updatedPayment,
+
+        allocatedAmount: totalAllocated,
+
+        unallocatedAmount: remainingAmount,
+
+        periodsAffected: outstandingPeriods.length,
+      };
     });
 
-    return success(res, {
-      data: payment,
-      message: 'Payment verified successfully',
-    });
+    return success(
+      res,
+      {
+        data: result,
+        message: 'Payment verified successfully',
+      },
+      200,
+    );
   }),
 ];

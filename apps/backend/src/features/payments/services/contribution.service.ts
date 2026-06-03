@@ -1,5 +1,5 @@
 import { prisma } from '@src/shared/lib/prisma';
-import { ContributionStatus, UserStatus } from '@prisma/client';
+import { ContributionStatus, Prisma, UserStatus } from '@prisma/client';
 import { recordWaiver } from '@src/features/ledger/services/accounting.service';
 
 // ---------------------------------------------------------------------------
@@ -31,6 +31,98 @@ export interface MonthlyContributionRow {
 // Service functions
 // ---------------------------------------------------------------------------
 
+export async function applyCreditsToContributionPeriod(contributionPeriodId: string) {
+  return prisma.$transaction(async (tx) => {
+    const period = await tx.contributionPeriod.findUnique({
+      where: {
+        id: contributionPeriodId,
+      },
+    });
+
+    if (!period) {
+      return;
+    }
+
+    let remainingDue = Number(period.dueAmount);
+
+    if (remainingDue <= 0) {
+      return;
+    }
+
+    const credits = await tx.unallocatedPayment.findMany({
+      where: {
+        userId: period.userId,
+        balanceAmount: {
+          gt: 0,
+        },
+      },
+      orderBy: {
+        createdAt: 'asc',
+      },
+    });
+
+    let totalApplied = 0;
+
+    for (const credit of credits) {
+      if (remainingDue <= 0) {
+        break;
+      }
+
+      const availableCredit = Number(credit.balanceAmount);
+
+      if (availableCredit <= 0) {
+        continue;
+      }
+
+      const allocation = Math.min(availableCredit, remainingDue);
+
+      await tx.paymentAllocation.create({
+        data: {
+          paymentTransactionId: credit.paymentTransactionId!,
+          contributionPeriodId: period.id,
+          allocatedAmount: allocation,
+        },
+      });
+
+      await tx.unallocatedPayment.update({
+        where: {
+          id: credit.id,
+        },
+        data: {
+          consumedAmount: {
+            increment: allocation,
+          },
+          balanceAmount: {
+            decrement: allocation,
+          },
+        },
+      });
+
+      remainingDue -= allocation;
+      totalApplied += allocation;
+    }
+
+    const newPaidAmount = Number(period.paidAmount) + totalApplied;
+
+    await tx.contributionPeriod.update({
+      where: {
+        id: period.id,
+      },
+      data: {
+        paidAmount: newPaidAmount,
+        dueAmount: remainingDue,
+
+        status:
+          remainingDue <= 0
+            ? ContributionStatus.PAID
+            : totalApplied > 0
+              ? ContributionStatus.PARTIAL
+              : ContributionStatus.DUE,
+      },
+    });
+  });
+}
+
 /**
  * Generate contribution period rows for a given month/year for ALL active
  * members of an association who have an active subscription.
@@ -45,64 +137,95 @@ export async function generateMonthlyContributions(
   year: number,
   month: number,
 ): Promise<number> {
-  // Get all active members with active subscriptions
+  const generateDate = new Date(year, month - 1, 1);
+
   const activeMembers = await prisma.user.findMany({
     where: {
       associationId,
+
       status: UserStatus.ACTIVE,
-      subscription: { status: 'ACTIVE' },
+
+      subscription: {
+        status: 'ACTIVE',
+      },
+
+      dateOfJoiningAssociation: {
+        lte: generateDate,
+      },
     },
+
     include: {
-      subscription: { include: { plan: true, planVersion: true } },
+      subscription: {
+        include: {
+          plan: true,
+          planVersion: true,
+        },
+      },
     },
   });
 
-  if (activeMembers.length === 0) return 0;
+  if (activeMembers.length === 0) {
+    return 0;
+  }
 
-  // Calculate due date — last day of the month
-  const dueDate = new Date(year, month, 0); // day 0 of next month = last day
+  const dueDate = new Date(year, month, 0);
 
   const data = activeMembers
     .filter((m) => m.subscription?.planVersion)
     .map((member) => {
+      if (!member.dateOfJoiningAssociation) {
+        return null;
+      }
+
+      const memberJoinedMonth =
+        member.dateOfJoiningAssociation.getFullYear() * 12 +
+        member.dateOfJoiningAssociation.getMonth();
+
+      const targetMonth = year * 12 + (month - 1);
+
+      if (memberJoinedMonth > targetMonth) {
+        return null;
+      }
+
       const expectedAmount = member.subscription!.planVersion.amount;
 
       return {
         associationId,
         userId: member.id,
+
         year,
         month,
+
         expectedAmount,
         paidAmount: 0,
         dueAmount: expectedAmount,
+
         status: ContributionStatus.DUE,
+
         dueDate,
       };
-    });
-
-  type ContributionPeriodT = {
-    associationId: string;
-    userId: string;
-    year: number;
-    month: number;
-    // eslint-disable-next-line
-    expectedAmount: any;
-    // eslint-disable-next-line
-    paidAmount: any;
-    // eslint-disable-next-line
-    dueAmount: any;
-    status: ContributionStatus;
-    dueDate: any;
-  };
+    })
+    .filter(Boolean);
 
   const result = await prisma.contributionPeriod.createMany({
-    data: data as Array<ContributionPeriodT>,
+    data: data as any[],
     skipDuplicates: true,
   });
 
+  const periods = await prisma.contributionPeriod.findMany({
+    where: {
+      associationId,
+      year,
+      month,
+    },
+  });
+
+  for (const period of periods) {
+    await applyCreditsToContributionPeriod(period.id);
+  }
+
   return result.count;
 }
-
 /**
  * Mark all DUE contributions whose dueDate has passed as OVERDUE.
  */

@@ -39,7 +39,7 @@ model Association {
   accounts            Account[]
   lines               LedgerLine[]
   declarations        ContributionDeclerations[]
-
+unallocatedPayments UnallocatedPayment[]
   @@index([slug])
   @@index([isActive])
   @@map("associations")
