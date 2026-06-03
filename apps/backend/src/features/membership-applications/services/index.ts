@@ -42,7 +42,7 @@ type GetApplicationsProps = {
 /** Parameters for approving a membership application. */
 type ApproveApplicationProps = {
   applicationId: string;
-  memberTypeId: string;
+  memberTypeId?: string | null;
   role?: UserRole;
   dateOfJoiningGovt?: Date;
   reviewedBy: string;
@@ -199,39 +199,106 @@ export async function approveMembershipApplication({
     throw new ConflictError('A user with this email already exists in the association');
   }
 
+  let planForCurrentUser;
+
+  if (memberTypeId) {
+    planForCurrentUser = await prisma.subscriptionPlan.findFirst({
+      where: { memberTypeId, isActive: true },
+      include: { versions: { take: 1, orderBy: { createdAt: 'desc' } } },
+    });
+  }
+
+  if (!planForCurrentUser) {
+    planForCurrentUser = await prisma.subscriptionPlan.findFirst({
+      where: { isDefault: true, isActive: true },
+      include: { versions: { take: 1, orderBy: { createdAt: 'desc' } } },
+    });
+  }
+
+  if (!planForCurrentUser) {
+    throw new NotFoundError('Cannot create user: Without a any active subscription plan');
+  }
+
   const randomPassword = generateRandomPassword();
 
   const hashedPassword = await hashPassword(randomPassword);
 
-  const user = await prisma.user.create({
-    data: {
-      email: application.email,
-      name: `${application.firstName} ${application.lastName}`,
-      mobile: application.phone,
-      associationId: association.id,
-      role: [role],
-      status: 'ACTIVE',
-      memberTypeId,
-      dateOfJoiningGovt: dateOfJoiningGovt || new Date(),
-      dateOfJoiningAssociation: new Date(),
-      password: hashedPassword,
-    },
-    select: {
-      id: true,
-      email: true,
-      name: true,
-      role: true,
-      status: true,
-    },
-  });
+  const { user, updatedApplication } = await prisma.$transaction(async (tx) => {
+    const user = await tx.user.create({
+      data: {
+        email: application.email,
+        name: `${application.firstName} ${application.lastName}`,
+        mobile: application.phone,
+        associationId: association.id,
+        role: [role],
+        status: 'ACTIVE',
+        memberTypeId: memberTypeId || null,
+        dateOfJoiningGovt: dateOfJoiningGovt || new Date(),
+        dateOfJoiningAssociation: new Date(),
+        password: hashedPassword,
+      },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        role: true,
+        status: true,
+      },
+    });
 
-  const updatedApplication = await prisma.membershipApplication.update({
-    where: { id: applicationId },
-    data: {
-      status: ApplicationStatus.APPROVED,
-      reviewedAt: new Date(),
-      reviewedBy,
-    },
+    const plan = planForCurrentUser;
+
+    const activeVersion = plan.versions[0];
+    const startDate = new Date();
+    const endDate = new Date(startDate.getTime() + 365 * 24 * 60 * 60 * 1000);
+    const userId = user.id;
+
+    const subscription = await tx.subscription.upsert({
+      where: { userId },
+      update: {
+        planId: plan.id,
+        planVersionId: activeVersion.id,
+        status: 'ACTIVE',
+        startDate,
+        endDate,
+        waivedAt: null,
+        waivedReason: null,
+        waivedBy: null,
+      },
+      create: {
+        userId,
+        planId: plan.id,
+        planVersionId: activeVersion.id,
+        status: 'ACTIVE',
+        startDate,
+        endDate,
+      },
+    });
+
+    await tx.subscriptionBillingHistory.create({
+      data: {
+        subscriptionId: subscription.id,
+        planVersionId: activeVersion.id,
+        amountCharged: activeVersion.amount,
+        status: 'PENDING',
+        periodStart: startDate,
+        periodEnd: endDate,
+        dueDate: startDate,
+      },
+    });
+
+    const updatedApplication = await tx.membershipApplication.update({
+      where: { id: applicationId },
+      data: {
+        status: ApplicationStatus.APPROVED,
+        reviewedAt: new Date(),
+        reviewedBy,
+      },
+    });
+    return {
+      user,
+      updatedApplication,
+    };
   });
 
   return {

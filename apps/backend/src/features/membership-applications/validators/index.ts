@@ -104,7 +104,7 @@ export const MembershipApplicationParamsSchema = z.object({
  */
 export const ApproveApplicationSchema = z
   .object({
-    memberTypeId: z.uuid('Invalid member type'),
+    memberTypeId: z.string('Invalid member type').optional().nullable(),
     role: z.enum(UserRole, 'Invalid role').default('MEMBER').optional(),
     dateOfJoiningGovt: z.coerce.date('Invalid date').default(new Date()).optional(),
   })
