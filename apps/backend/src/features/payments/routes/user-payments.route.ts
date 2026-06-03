@@ -217,6 +217,7 @@ export const userContributions: RequestHandler[] = [
         },
       },
     });
+
     const summary = await getUserContributionSummary(userId);
 
     // --- Log: success ---

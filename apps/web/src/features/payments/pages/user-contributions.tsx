@@ -1,6 +1,6 @@
 'use client';
 
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { useUserContributions } from '@src/features/payments/hooks/useUserContributions';
 import { Card, CardHeader, CardTitle, CardContent } from '@src/shared/components/ui/card';
 import { Button } from '@src/shared/components/ui/button';
@@ -11,14 +11,24 @@ import { useUserContributionColumns } from '@src/features/payments/hooks/useUser
 import { CalendarDays, CreditCard, AlertCircle, Receipt } from 'lucide-react';
 import Link from 'next/link';
 import { formattedAmount } from '@src/shared/utils';
+import { DataTablePagination } from '@src/shared/components/data-table-pagination';
+import { useUrlFilters } from '@hooks/use-url-filters';
 
 export function UserContributionsPage() {
   const params = useParams();
+  const search = useSearchParams();
+  const page = search.get('page');
   const router = useRouter();
   const userId = params.userId as string;
 
-  const { user, contributions, summary, isLoading } = useUserContributions({
+  const { setPage } = useUrlFilters({
+    basePath: `/payments/users/${userId}/contributions`,
+    pageKey: 'page',
+  });
+
+  const { user, contributions, summary, isLoading, meta } = useUserContributions({
     userId,
+    page: Number(page) || 1,
   });
 
   const currentYear = new Date().getFullYear();
@@ -169,6 +179,7 @@ export function UserContributionsPage() {
         </CardHeader>
         <CardContent>
           <DataTable columns={columns} data={contributions} loading={false} />
+          <DataTablePagination onPageChange={setPage} meta={meta} />
         </CardContent>
       </Card>
 

@@ -81,6 +81,7 @@ router.get('/users/:userId/contributions', userContributions);
 // ===========================================================================
 
 router.get('/contributions', listContributions);
+// NOTE: Convert this to a CRON job - RUN ONCE PER MONTH at the start of the month (3 days before the 1st)
 router.post('/contributions', generateContributions);
 router.patch('/contributions', waiveContributionHandler);
 router.get('/contributions/:contributionId', getContribution);

@@ -218,7 +218,7 @@ async function seedAssociation(data: (typeof ASSOCIATIONS)[number]) {
 
   const users: Record<UserRole, any> = {} as any;
 
-  const memberTypes = await prisma.memberType.findMany({
+  await prisma.memberType.findMany({
     where: { associationId: association.id },
   });
 

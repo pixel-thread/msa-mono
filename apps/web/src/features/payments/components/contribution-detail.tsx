@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import { Card, CardHeader, CardTitle, CardContent } from '@src/shared/components/ui/card';
-import { Separator } from '@src/shared/components/ui/separator';
 import { Badge } from '@src/shared/components/ui/badge';
 import { User, CreditCard, CalendarDays } from 'lucide-react';
 import { ContributionPeriod } from '../types';

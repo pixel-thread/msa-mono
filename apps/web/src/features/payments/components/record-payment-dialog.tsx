@@ -68,9 +68,6 @@ export function RecordPaymentDialog({ open, onOpenChange }: RecordPaymentDialogP
         toast.error(response.message || 'Failed to record payment');
       }
     },
-    onError: () => {
-      toast.error('Failed to record payment');
-    },
   });
 
   const onSubmit = (data: RecordManualPaymentInput) => {
