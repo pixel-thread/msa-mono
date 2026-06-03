@@ -38,7 +38,7 @@ import { MembershipApplicationListItem } from '../types';
 import { ROLES } from '@src/features/members/utils/constants';
 
 const ApplicationReviewSchema = z.object({
-  memberTypeId: z.string().min(1, 'Member type is required'),
+  memberTypeId: z.string().optional().nullable(),
   role: z.string(),
   dateOfJoiningGovt: z.date().optional(),
 });
@@ -74,7 +74,7 @@ export function ApplicationReviewDialog({
     approveApplication.mutate(
       {
         applicationId: application.id,
-        memberTypeId: data.memberTypeId,
+        memberTypeId: data.memberTypeId || '',
         role: data.role,
         dateOfJoiningGovt: data.dateOfJoiningGovt,
       },
