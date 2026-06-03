@@ -1,5 +1,3 @@
-@NEXT_PUBLIC_API_BASE_URL = http://localhost:4000/api/v1
-@TOKEN = REPLACE_WITH_TOKEN_FROM_AUTH_HTTP
 @meetingId = 505cc596-f978-45fa-b891-9fd3e3a4ad36
 @userId = 7e534916-ffcc-467a-811a-b2544840777d
 @test2UserId = 0d627af0-bcb4-4b11-8934-0a3f3bfc53e8
