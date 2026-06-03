@@ -27,8 +27,9 @@ import {
   SelectValue,
 } from '@src/shared/components/ui/select';
 import { Label } from '@src/shared/components/ui/label';
-import {  Plus } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import { toast } from 'sonner';
+import { ManualContributionDialog } from '../components/manual-contribution-dialog';
 
 export default function ContributionsPage() {
   const queryClient = useQueryClient();
@@ -140,7 +141,8 @@ export default function ContributionsPage() {
         title="Contributions"
         description="Manage monthly contribution periods for all members"
       >
-        <Button onClick={() => setGenerateDialogOpen(true)} className="h-10">
+        <ManualContributionDialog />
+        <Button variant={'outline'} onClick={() => setGenerateDialogOpen(true)} className="h-10">
           <Plus className="mr-2 h-4 w-4" />
           Generate Contributions
         </Button>

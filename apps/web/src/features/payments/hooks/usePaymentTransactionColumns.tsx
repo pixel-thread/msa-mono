@@ -6,8 +6,22 @@ import { formatDate, formattedAmount } from '@src/shared/utils';
 import { getMethodBadge } from '@src/shared/utils/helper/get-method-badge';
 import { getStatusBadge } from '@src/shared/utils/helper/get-status-badge';
 import type { PaymentTransaction } from '../types';
+import { Button } from '@components/ui/button';
+import { useMutation } from '@tanstack/react-query';
+import http from '@src/shared/utils/http';
+import { ENDPOINTS } from '@repo/shared';
+import { toast } from 'sonner';
 
 export function usePaymentTransactionColumns() {
+  const { mutate, isPending } = useMutation({
+    mutationFn: (id: string) => http.post(ENDPOINTS.CONTRIBUTION.VERIFY_PAYMENT(id)),
+    onSuccess: (data) => {
+      if (data.success) {
+        toast.success(data.message);
+        return;
+      }
+    },
+  });
   const columns: ColumnDef<PaymentTransaction>[] = [
     {
       accessorKey: 'paymentDate',
@@ -76,6 +90,21 @@ export function usePaymentTransactionColumns() {
           <Link href={`/payments/${tx.id}`} className="text-xs text-primary hover:underline">
             {tx.referenceNumber || tx.receiptNumber || tx.razorpayPaymentId || tx.id.slice(0, 8)}
           </Link>
+        );
+      },
+    },
+    {
+      header: 'verify',
+      cell: ({ row }) => {
+        const tx = row.original;
+        return (
+          <Button
+            disabled={tx.status === 'COMPLETED' || isPending}
+            variant={tx.status === 'COMPLETED' ? 'outline' : 'default'}
+            onClick={() => mutate(tx.id)}
+          >
+            Verify
+          </Button>
         );
       },
     },

@@ -1,3 +1,5 @@
+import { PaymentStatus } from '@src/shared/types';
+
 export interface ProviderResponse {
   id: string;
   associationId: string;
@@ -41,7 +43,7 @@ export interface PaymentTransaction {
   amount: number;
   currency: string;
   gateway: string;
-  status: string;
+  status: PaymentStatus;
   method: string | null;
   referenceNumber: string | null;
   receiptNumber: string | null;
