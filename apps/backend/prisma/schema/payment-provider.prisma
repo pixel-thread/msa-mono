@@ -1,0 +1,20 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// PAYMENT PROVIDERS (Multi-Tenant)
+// ─────────────────────────────────────────────────────────────────────────────
+
+model PaymentProvider {
+  id                     String              @id @default(uuid())
+  associationId          String
+  provider               PaymentProviderType
+  keyId                  String
+  encryptedKeySecret     String
+  encryptedWebhookSecret String?
+  isActive               Boolean             @default(false)
+  createdAt              DateTime            @default(now())
+  updatedAt              DateTime            @updatedAt
+
+  association Association @relation(fields: [associationId], references: [id], onDelete: Cascade)
+
+  @@index([associationId])
+  @@map("payment_providers")
+}

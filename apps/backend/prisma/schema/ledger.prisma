@@ -1,0 +1,54 @@
+model LedgerEntry {
+  id                   String         @id @default(uuid())
+  paymentTransactionId String?
+  description          String
+  approvalStatus       ApprovalStatus @default(PENDING)
+  createdById          String
+  approvedById         String?
+  createdAt            DateTime       @default(now())
+  updatedAt            DateTime       @updatedAt
+
+  paymentTransaction PaymentTransaction? @relation(fields: [paymentTransactionId], references: [id])
+  lines              LedgerLine[]
+
+  @@index([paymentTransactionId])
+  @@map("ledger_entries")
+}
+
+model LedgerLine {
+  id            String   @id @default(uuid())
+  ledgerEntryId String
+  associationId String
+  accountId     String // ID of the chart of accounts
+  isDebit       Boolean // true for debit, false for credit
+  amount        Decimal  @db.Decimal(10, 2)
+  createdAt     DateTime @default(now())
+
+  account     Account     @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  association Association @relation(fields: [associationId], references: [id], onDelete: Cascade)
+
+  ledgerEntry LedgerEntry @relation(fields: [ledgerEntryId], references: [id], onDelete: Cascade)
+
+  @@index([ledgerEntryId])
+  @@map("ledger_lines")
+}
+
+model Account {
+  id            String   @id @default(uuid())
+  associationId String
+  code          String
+  name          String
+  type          String
+  description   String?
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  association Association  @relation(fields: [associationId], references: [id], onDelete: Cascade)
+  lines       LedgerLine[]
+
+  @@index([associationId])
+  @@index([code])
+  @@map("accounts")
+}
+
