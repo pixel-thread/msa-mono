@@ -163,8 +163,6 @@ export async function createPaymentOrder(input: CreateOrderInput) {
       key_id: keyId,
       key_secret: keySecret,
     });
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     throw new PaymentError(
       error?.error?.description || 'Payment failed',
@@ -200,7 +198,6 @@ export async function createPaymentOrder(input: CreateOrderInput) {
         associationId: input.associationId,
       },
     });
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     throw new PaymentError(
       error?.error?.description || 'Payment failed',
@@ -266,7 +263,6 @@ export async function createTestPaymentOrder(input: CreateTestOrderInput) {
       key_id: provider.keyId,
       key_secret: keySecret,
     });
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     throw new PaymentError(
       error?.error?.description || 'Payment failed',
@@ -303,7 +299,6 @@ export async function createTestPaymentOrder(input: CreateTestOrderInput) {
         isTest: 'true',
       },
     });
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     throw new PaymentError(
       error?.error?.description || 'Payment failed',
@@ -611,14 +606,6 @@ async function allocatePaymentToContributions(
     const allocatedAmount = Math.min(remaining, dueAmount);
     const newPaidAmount = Number(period.paidAmount) + allocatedAmount;
     const newDueAmount = dueAmount - allocatedAmount;
-
-    // Determine new status
-    let newStatus: ContributionStatus;
-    if (newDueAmount <= 0) {
-      newStatus = ContributionStatus.PAID;
-    } else {
-      newStatus = ContributionStatus.PARTIAL;
-    }
 
     // Create allocation record
     await tx.paymentAllocation.create({
