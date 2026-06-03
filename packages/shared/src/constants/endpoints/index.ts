@@ -1,18 +1,19 @@
-import { AUTH } from './auth';
-import { USER } from './user';
-import { ADMIN } from './admin';
-import { ANNOUNCEMENTS } from './announcements';
-import { HEALTH } from './health';
-import { AUDIT_LOGS } from './audit-logs';
-import { COMPLIANCE } from './compliance';
-import { CONSENT } from './consent';
-import { CRON } from './cron';
-import { DASHBOARD } from './dashboard';
-import { DSAR } from './dsar';
-import { LEDGER } from './ledger';
-import { MEMBERS } from './members';
-import { SUBSCRIPTIONS } from './subscriptions';
-import { PAYMENTS } from './payments';
+import { AUTH } from "./auth";
+import { USER } from "./user";
+import { ADMIN } from "./admin";
+import { ANNOUNCEMENTS } from "./announcements";
+import { HEALTH } from "./health";
+import { AUDIT_LOGS } from "./audit-logs";
+import { COMPLIANCE } from "./compliance";
+import { CONSENT } from "./consent";
+import { CRON } from "./cron";
+import { DASHBOARD } from "./dashboard";
+import { DSAR } from "./dsar";
+import { LEDGER } from "./ledger";
+import { MEMBERS } from "./members";
+import { SUBSCRIPTIONS } from "./subscriptions";
+import { PAYMENTS } from "./payments";
+import { CONTRIBUTION } from "./contributions";
 
 export const ENDPOINTS = {
   AUTH,
@@ -30,4 +31,5 @@ export const ENDPOINTS = {
   MEMBERS,
   SUBSCRIPTIONS,
   PAYMENTS,
+  CONTRIBUTION,
 } as const;
