@@ -270,8 +270,9 @@ enum ComplianceCheckStatus {
 
   @@map("compliance_check_status")
 }
-enum DeclerationStatus{ 
-PENDING
-APPROVED
-REJECTED
+
+enum DeclerationStatus {
+  PENDING
+  APPROVED
+  REJECTED
 }

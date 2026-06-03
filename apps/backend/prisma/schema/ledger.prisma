@@ -51,4 +51,3 @@ model Account {
   @@index([code])
   @@map("accounts")
 }
-

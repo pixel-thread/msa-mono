@@ -32,23 +32,23 @@ model User {
   subscription          Subscription?
   payments              PaymentTransaction[]
   contributionPeriods   ContributionPeriod[]
-  auditLogs             AuditLog[]            @relation("ActorLogs")
-  meetingsCreated       Meeting[]             @relation("CreatedMeetings")
+  auditLogs             AuditLog[]                 @relation("ActorLogs")
+  meetingsCreated       Meeting[]                  @relation("CreatedMeetings")
   meetingAttendances    MeetingAttendee[] // ★ Meetings this user is assigned to
   refreshTokens         RefreshToken[]
   verificationCodes     VerificationCode[]
   pushTokens            PushToken[]
-  authoredAnnouncements Announcement[]        @relation("AuthoredAnnouncements")
+  authoredAnnouncements Announcement[]             @relation("AuthoredAnnouncements")
   announcementReads     AnnouncementRead[]
-  dsarTickets           DsarTicket[]          @relation("MemberTickets")
-  assignedDsarTickets   DsarTicket[]          @relation("AssignedTickets")
+  dsarTickets           DsarTicket[]               @relation("MemberTickets")
+  assignedDsarTickets   DsarTicket[]               @relation("AssignedTickets")
   consentReceipts       ConsentReceipt[]
   trainingCompletions   TrainingCompletion[]
   complaints            Complaint[]
   trainingAssignments   TrainingAssignment[]
   trainingCertificates  TrainingCertificate[]
   memberTypeId          String?
-  memberType            MemberType?           @relation(fields: [memberTypeId], references: [id])
+  memberType            MemberType?                @relation(fields: [memberTypeId], references: [id])
   declerations          ContributionDeclerations[]
 
   @@unique([associationId, email])
