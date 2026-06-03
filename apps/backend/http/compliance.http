@@ -1,0 +1,45 @@
+@complaintId = REPLACE_WITH_COMPLAINT_ID
+@userId = 7e534916-ffcc-467a-811a-b2544840777d
+
+###
+# @name listAllComplaints
+GET {{NEXT_PUBLIC_API_BASE_URL}}/compliance?page=1&limit=20
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name listMyComplaints
+GET {{NEXT_PUBLIC_API_BASE_URL}}/compliance/my?page=1&limit=20
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name getComplaintDetail
+GET {{NEXT_PUBLIC_API_BASE_URL}}/compliance/my/{{complaintId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name runComplianceChecks
+POST {{NEXT_PUBLIC_API_BASE_URL}}/compliance/checks
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "checkType": "DATA_RETENTION",
+  "targetUserId": "{{userId}}"
+}
+
+###
+# @name addComplianceEvidence
+POST {{NEXT_PUBLIC_API_BASE_URL}}/compliance/evidence
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "checkId": "REPLACE_WITH_CHECK_ID",
+  "evidence": {
+    "documentUrl": "https://example.com/doc.pdf",
+    "notes": "Evidence for compliance"
+  }
+}

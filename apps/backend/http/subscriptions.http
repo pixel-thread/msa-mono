@@ -1,0 +1,73 @@
+@NEXT_PUBLIC_API_BASE_URL = http://localhost:4000/api/v1
+@TOKEN = REPLACE_WITH_TOKEN_FROM_AUTH_HTTP
+@planId = REPLACE_WITH_PLAN_ID
+@subscriptionId = REPLACE_WITH_SUBSCRIPTION_ID
+
+###
+# @name getSubscriptionPlans
+GET {{NEXT_PUBLIC_API_BASE_URL}}/subscriptions/plans
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name createSubscriptionPlan
+POST {{NEXT_PUBLIC_API_BASE_URL}}/subscriptions/plans
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "name": "Full Access Plan",
+  "description": "Full access to all association benefits",
+  "amount": 3000,
+  "currency": "INR",
+  "billingCycle": "YEARLY",
+  "memberTypeId":"05783cf9-5801-4ce7-845c-a4bad6a377e8",
+  "effectiveTo":"2023-12-31",
+  "features": {
+    "events": true,
+    "voting": true
+  }
+}
+
+###
+# @name subscribeToPlan
+POST {{NEXT_PUBLIC_API_BASE_URL}}/subscriptions/subscribe
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "planId": "{{planId}}"
+}
+
+###
+# @name waiveSubscription
+POST {{NEXT_PUBLIC_API_BASE_URL}}/subscriptions/waive
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "subscriptionId": "{{subscriptionId}}",
+  "reason": "Exempted by the board"
+}
+
+###
+# @name getMySubscription
+GET {{NEXT_PUBLIC_API_BASE_URL}}/subscriptions/my
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name upgradeSubscription
+POST {{NEXT_PUBLIC_API_BASE_URL}}/subscriptions/upgrade
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "planId": "{{planId}}"
+}
+
+###
+# @name getSubscriptionPayments
+GET {{NEXT_PUBLIC_API_BASE_URL}}/subscriptions/{{subscriptionId}}/payments
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}

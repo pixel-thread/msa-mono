@@ -1,0 +1,203 @@
+@NEXT_PUBLIC_API_BASE_URL = http://localhost:4000/api/v1
+@TOKEN = REPLACE_WITH_TOKEN_FROM_AUTH_HTTP
+@meetingId = 505cc596-f978-45fa-b891-9fd3e3a4ad36
+@userId = 7e534916-ffcc-467a-811a-b2544840777d
+@test2UserId = 0d627af0-bcb4-4b11-8934-0a3f3bfc53e8
+@agendaItemId = REPLACE_WITH_AGENDA_ITEM_ID
+@minutesId = REPLACE_WITH_MINUTES_ID
+
+###
+# @name listMeetings
+GET {{NEXT_PUBLIC_API_BASE_URL}}/meetings?page=1
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name createMeeting
+POST {{NEXT_PUBLIC_API_BASE_URL}}/meetings
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "title": "Executive Committee Meeting",
+  "type": "EC_MEETING",
+  "scheduledAt": "2026-06-15T10:00:00Z",
+  "venue": "Conference Room A",
+  "agendaItems": [
+    {
+      "order": 1,
+      "title": "Approval of Previous Minutes",
+      "description": "Review and approve the minutes from the last EC meeting"
+    },
+    {
+      "order": 2,
+      "title": "Financial Report Q1",
+      "description": "Presentation of quarterly financial statements"
+    },
+    {
+      "order": 3,
+      "title": "Member Applications",
+      "description": "Review new membership applications for approval"
+    }
+  ]
+}
+
+###
+# @name getMeetingDetails
+GET {{NEXT_PUBLIC_API_BASE_URL}}/meetings/{{meetingId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name updateMeeting
+PATCH {{NEXT_PUBLIC_API_BASE_URL}}/meetings/{{meetingId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "title": "Updated Meeting Title",
+  "venue": "New Venue"
+}
+
+###
+# @name deleteMeeting
+DELETE {{NEXT_PUBLIC_API_BASE_URL}}/meetings/{{meetingId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+### ----------------- ATTENDEES ------------------
+
+###
+# @name listAttendees
+GET {{NEXT_PUBLIC_API_BASE_URL}}/meetings/{{meetingId}}/attendees
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name assignAttendee
+POST {{NEXT_PUBLIC_API_BASE_URL}}/meetings/{{meetingId}}/attendees
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "userId": "{{test2UserId}}",
+  "attendeeRole": "OPTIONAL"
+}
+
+###
+# @name bulkAssignAttendees
+PUT {{NEXT_PUBLIC_API_BASE_URL}}/meetings/{{meetingId}}/attendees
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "userIds": ["uuid-1", "uuid-2", "uuid-3"],
+  "attendeeRole": "REQUIRED"
+}
+
+###
+# @name updateRSVP
+PATCH {{NEXT_PUBLIC_API_BASE_URL}}/meetings/{{meetingId}}/rsvp
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "rsvpStatus": "ACCEPTED",
+  "rsvpNote": "I will attend"
+}
+
+###
+# @name removeRSVP
+DELETE {{NEXT_PUBLIC_API_BASE_URL}}/meetings/{{meetingId}}/rsvp
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name removeAttendeeById
+DELETE {{NEXT_PUBLIC_API_BASE_URL}}/meetings/{{meetingId}}/attendees/{{userId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name bulkAssignAttendeesPost
+POST {{NEXT_PUBLIC_API_BASE_URL}}/meetings/{{meetingId}}/attendees/bulk
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "userIds": ["{{userId}}", "{{test2UserId}}"]
+}
+
+###
+# @name listMyMeetings
+GET {{NEXT_PUBLIC_API_BASE_URL}}/meetings/my
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name cancelMeeting
+POST {{NEXT_PUBLIC_API_BASE_URL}}/meetings/{{meetingId}}/cancel
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name getMeetingNotice
+GET {{NEXT_PUBLIC_API_BASE_URL}}/meetings/{{meetingId}}/notice
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name getMeetingReport
+GET {{NEXT_PUBLIC_API_BASE_URL}}/meetings/{{meetingId}}/report
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+### ----------------- AGENDA ------------------
+
+###
+# @name getMeetingAgenda
+GET {{NEXT_PUBLIC_API_BASE_URL}}/meetings/{{meetingId}}/agenda
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name updateAgendaItem
+PATCH {{NEXT_PUBLIC_API_BASE_URL}}/meetings/{{meetingId}}/agenda/{{agendaItemId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "title": "Updated Agenda Item",
+  "order": 1
+}
+
+###
+# @name deleteAgendaItem
+DELETE {{NEXT_PUBLIC_API_BASE_URL}}/meetings/{{meetingId}}/agenda/{{agendaItemId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+### ----------------- MINUTES ------------------
+
+###
+# @name listMeetingMinutes
+GET {{NEXT_PUBLIC_API_BASE_URL}}/meetings/{{meetingId}}/minutes
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name addMeetingMinutes
+POST {{NEXT_PUBLIC_API_BASE_URL}}/meetings/{{meetingId}}/minutes
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "agendaPoint": "Meeting minutes",
+  "decision": "Approved"
+}
+
+###
+# @name getMeetingMinutesDetail
+GET {{NEXT_PUBLIC_API_BASE_URL}}/meetings/{{meetingId}}/minutes/{{minutesId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}

@@ -96,10 +96,13 @@ model ContributionDeclerations {
   id                     String              @id @default(uuid())
   memberId               String
   associationId          String
+  declerationStartDate   DateTime
+  declerationEndDate     DateTime
+  montlyContributionAmount Decimal @db.Decimal(10, 2)
+  status                 DeclerationStatus @default(PENDING)
   lastDeclarationDate    DateTime?
-  isApproved             Boolean             @default(false)
-  approveBy              String?
-  approvedAt             DateTime?
+  reviewBy               String?
+  reviewAt             DateTime?
   member                 User                @relation(fields: [memberId], references: [id])
   association           Association         @relation(fields: [associationId], references: [id])
   periods                ContributionPeriod[]

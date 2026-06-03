@@ -1,0 +1,6 @@
+@NEXT_PUBLIC_API_BASE_URL = http://localhost:4000/api/v1
+
+###
+# @name healthCheck
+GET {{NEXT_PUBLIC_API_BASE_URL}}/health
+Content-Type: application/json

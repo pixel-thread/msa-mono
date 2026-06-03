@@ -1,0 +1,42 @@
+@NEXT_PUBLIC_API_BASE_URL = http://localhost:4000/api/v1
+@TOKEN = REPLACE_WITH_TOKEN_FROM_AUTH_HTTP
+@memberTypeId = REPLACE_WITH_MEMBER_TYPE_ID
+
+###
+# @name listMemberTypes
+GET {{NEXT_PUBLIC_API_BASE_URL}}/member-types
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name createMemberType
+POST {{NEXT_PUBLIC_API_BASE_URL}}/member-types
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "name": "Senior Member",
+  "monthlyContribution": 500
+}
+
+###
+# @name getMemberType
+GET {{NEXT_PUBLIC_API_BASE_URL}}/member-types/{{memberTypeId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name updateMemberType
+PATCH {{NEXT_PUBLIC_API_BASE_URL}}/member-types/{{memberTypeId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "monthlyContribution": 600
+}
+
+###
+# @name deleteMemberType
+DELETE {{NEXT_PUBLIC_API_BASE_URL}}/member-types/{{memberTypeId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}

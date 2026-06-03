@@ -35,6 +35,7 @@ import paymentsRouter from '@feature/payments/routes/index';
 import subscriptionsRouter from '@feature/subscriptions/routes/index';
 import trainingRouter from '@feature/training/routes/index';
 import userRouter from '@feature/user/routes/index';
+import contributions from '@feature/contributions/routes/index';
 
 export function createApp(): express.Express {
   const app = express();
@@ -82,6 +83,7 @@ export function createApp(): express.Express {
   app.use('/api/v1/subscriptions', subscriptionsRouter);
   app.use('/api/v1/training', trainingRouter);
   app.use('/api/v1/user', userRouter);
+  app.use('/api/v1/contributions', contributions);
 
   app.get('/', (_, res) => {
     return res.redirect(`${env.BASE_URL}`);

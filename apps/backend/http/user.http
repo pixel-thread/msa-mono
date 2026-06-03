@@ -1,0 +1,45 @@
+@NEXT_PUBLIC_API_BASE_URL = http://localhost:4000/api/v1
+@TOKEN = REPLACE_WITH_TOKEN_FROM_AUTH_HTTP
+@invoiceId = bb5ffbdd-6652-4c9e-a305-378d51dd3ffd
+
+###
+# @name updateMyProfile
+POST {{NEXT_PUBLIC_API_BASE_URL}}/user
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "name": "Updated Name",
+  "mobile": "9876543210",
+  "designation": "Executive Member",
+  "dateOfJoiningGovt": "2015-01-01",
+  "dateOfJoiningAssociation": "2020-01-01"
+}
+
+###
+# @name manageUserMFA
+POST {{NEXT_PUBLIC_API_BASE_URL}}/user/mfa
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "enabled": true
+}
+
+###
+# @name getUserInvoices
+GET {{NEXT_PUBLIC_API_BASE_URL}}/user/invoices
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name getUserInvoiceDetail
+GET {{NEXT_PUBLIC_API_BASE_URL}}/user/invoices/{{invoiceId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name getUserProfile
+GET {{NEXT_PUBLIC_API_BASE_URL}}/user
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}

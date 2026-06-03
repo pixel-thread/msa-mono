@@ -1,0 +1,277 @@
+@NEXT_PUBLIC_API_BASE_URL = http://localhost:4000/api/v1
+@TOKEN = REPLACE_WITH_TOKEN_FROM_AUTH_HTTP
+@moduleId = b5063e33-f356-4a30-9256-fbbb1abb3fa4
+@userId = 7e534916-ffcc-467a-811a-b2544840777d
+@supplementId = REPLACE_WITH_SUPPLEMENT_ID
+@certificateId = REPLACE_WITH_CERTIFICATE_ID
+
+### ----------------- MODULES ------------------
+
+###
+# @name listTrainingModules
+GET {{NEXT_PUBLIC_API_BASE_URL}}/training/modules
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name createTrainingModule
+POST {{NEXT_PUBLIC_API_BASE_URL}}/training/modules
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "title": "Data Privacy Training",
+  "description": "Understanding GDPR and data protection",
+  "content": "Training content here...",
+  "requiredForRoles": ["MEMBER"],
+  "isActive": true
+}
+
+###
+# @name getTrainingModule
+GET {{NEXT_PUBLIC_API_BASE_URL}}/training/modules/{{moduleId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name updateTrainingModule
+PATCH {{NEXT_PUBLIC_API_BASE_URL}}/training/modules/{{moduleId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "title": "Updated Training Module",
+  "isActive": false
+}
+
+###
+# @name completeTrainingModuleSelf
+POST {{NEXT_PUBLIC_API_BASE_URL}}/training/modules/{{moduleId}}/complete
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{}
+
+### ----------------- ASSIGNMENTS ------------------
+
+###
+# @name listModuleAssignments
+GET {{NEXT_PUBLIC_API_BASE_URL}}/training/modules/{{moduleId}}/assign
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name assignUserToModule
+POST {{NEXT_PUBLIC_API_BASE_URL}}/training/modules/{{moduleId}}/assign
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "userId": "{{userId}}"
+}
+
+###
+# @name bulkAssignUsersToModule
+PUT {{NEXT_PUBLIC_API_BASE_URL}}/training/modules/{{moduleId}}/assign
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "userIds": ["{{userId}}"]
+}
+
+###
+# @name removeUserAssignment
+DELETE {{NEXT_PUBLIC_API_BASE_URL}}/training/modules/{{moduleId}}/assign
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "userId": "{{userId}}"
+}
+
+###
+# @name bulkRemoveAssignments
+PATCH {{NEXT_PUBLIC_API_BASE_URL}}/training/modules/{{moduleId}}/assign
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "userIds": ["{{userId}}"]
+}
+
+###
+# @name listAssignedUsers
+GET {{NEXT_PUBLIC_API_BASE_URL}}/training/modules/{{moduleId}}/assigned-users
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name adminMarkAssignmentComplete
+POST {{NEXT_PUBLIC_API_BASE_URL}}/training/modules/{{moduleId}}/assignments/{{userId}}/complete
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "scorePercent": 95
+}
+
+### ----------------- COMPLETIONS ------------------
+
+###
+# @name listAllCompletions
+GET {{NEXT_PUBLIC_API_BASE_URL}}/training/completions?page=1
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name adminRecordCompletion
+POST {{NEXT_PUBLIC_API_BASE_URL}}/training/completions
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "userId": "{{userId}}",
+  "moduleId": "{{moduleId}}",
+  "scorePercent": 95
+}
+
+###
+# @name getMyAssignments
+GET {{NEXT_PUBLIC_API_BASE_URL}}/training/my-assignments
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name getMyCompletions
+GET {{NEXT_PUBLIC_API_BASE_URL}}/training/my-completions
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+### ----------------- SUPPLEMENTS ------------------
+
+###
+# @name listTrainingSupplements
+GET {{NEXT_PUBLIC_API_BASE_URL}}/training/modules/{{moduleId}}/supplements
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name createTrainingSupplementPDF
+POST {{NEXT_PUBLIC_API_BASE_URL}}/training/modules/{{moduleId}}/supplements
+Content-Type: multipart/form-data; boundary=supplement
+
+--supplement
+Content-Disposition: form-data; name="metadata"
+Content-Type: application/json
+
+{"title": "GDPR Reference Guide", "description": "A PDF guide to GDPR compliance", "type": "PDF", "sortOrder": 1, "isActive": true}
+
+--supplement
+Content-Disposition: form-data; name="file"; filename="test-supplement.pdf"
+Content-Type: application/pdf
+
+< ./test-data/test-supplement.pdf
+--supplement--
+
+###
+# @name getTrainingSupplement
+GET {{NEXT_PUBLIC_API_BASE_URL}}/training/modules/{{moduleId}}/supplements/{{supplementId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name updateTrainingSupplement
+PATCH {{NEXT_PUBLIC_API_BASE_URL}}/training/modules/{{moduleId}}/supplements/{{supplementId}}
+Content-Type: multipart/form-data; boundary=supplement
+
+--supplement
+Content-Disposition: form-data; name="metadata"
+Content-Type: application/json
+
+{"title": "Updated GDPR Reference Guide", "sortOrder": 2}
+--supplement--
+
+###
+# @name deleteTrainingSupplement
+DELETE {{NEXT_PUBLIC_API_BASE_URL}}/training/modules/{{moduleId}}/supplements/{{supplementId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+### ----------------- CERTIFICATES ------------------
+
+###
+# @name uploadCertificateTemplate
+POST {{NEXT_PUBLIC_API_BASE_URL}}/training/modules/{{moduleId}}/certificate-template
+Content-Type: multipart/form-data; boundary=cert
+
+--cert
+Content-Disposition: form-data; name="name"
+
+Module Certificate Template
+--cert
+Content-Disposition: form-data; name="file"; filename="template.pdf"
+Content-Type: application/pdf
+
+< ./test-data/test-supplement.pdf
+--cert--
+
+###
+# @name removeCertificateTemplate
+DELETE {{NEXT_PUBLIC_API_BASE_URL}}/training/modules/{{moduleId}}/certificate-template
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name listTrainingCertificates
+GET {{NEXT_PUBLIC_API_BASE_URL}}/training/modules/{{moduleId}}/certificates
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name createTrainingCertificate
+POST {{NEXT_PUBLIC_API_BASE_URL}}/training/modules/{{moduleId}}/certificates
+Content-Type: multipart/form-data; boundary=cert
+
+--cert
+Content-Disposition: form-data; name="metadata"
+Content-Type: application/json
+
+{"userId": "{{userId}}", "certificateNumber": "CERT-001"}
+
+--cert
+Content-Disposition: form-data; name="file"; filename="certificate.pdf"
+Content-Type: application/pdf
+
+< ./test-data/test-supplement.pdf
+--cert--
+
+###
+# @name getTrainingCertificate
+GET {{NEXT_PUBLIC_API_BASE_URL}}/training/modules/{{moduleId}}/certificates/{{certificateId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name updateTrainingCertificate
+PATCH {{NEXT_PUBLIC_API_BASE_URL}}/training/modules/{{moduleId}}/certificates/{{certificateId}}
+Content-Type: multipart/form-data; boundary=cert
+
+--cert
+Content-Disposition: form-data; name="metadata"
+Content-Type: application/json
+
+{"certificateNumber": "CERT-002"}
+
+--cert
+Content-Disposition: form-data; name="file"; filename="certificate.pdf"
+Content-Type: application/pdf
+
+< ./test-data/test-supplement.pdf
+--cert--
+
+###
+# @name deleteTrainingCertificate
+DELETE {{NEXT_PUBLIC_API_BASE_URL}}/training/modules/{{moduleId}}/certificates/{{certificateId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}

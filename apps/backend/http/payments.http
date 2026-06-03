@@ -1,0 +1,179 @@
+@NEXT_PUBLIC_API_BASE_URL = http://localhost:4000/api/v1
+@TOKEN = REPLACE_WITH_TOKEN_FROM_AUTH_HTTP
+@userId = 7e534916-ffcc-467a-811a-b2544840777d
+@paymentId = REPLACE_WITH_PAYMENT_ID
+@providerId = REPLACE_WITH_PROVIDER_ID
+
+###
+# @name getPaymentHistory
+GET {{NEXT_PUBLIC_API_BASE_URL}}/payments/history?page=1&pageSize=20
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name createPaymentOrder
+POST {{NEXT_PUBLIC_API_BASE_URL}}/payments/order
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "userId": "{{userId}}",
+  "amount": 5000,
+  "notes": "Monthly contribution for May 2026"
+}
+
+###
+# @name verifyPayment
+POST {{NEXT_PUBLIC_API_BASE_URL}}/payments/verify
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "razorpayOrderId": "order_12345",
+  "razorpayPaymentId": "pay_12345",
+  "razorpaySignature": "sig_12345"
+}
+
+###
+# @name recordManualPayment
+POST {{NEXT_PUBLIC_API_BASE_URL}}/payments/record
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "userId": "{{userId}}",
+  "amount": 5000,
+  "method": "CASH",
+  "notes": "Paid in cash at the office",
+  "receiptNumber": "REC-001",
+  "referenceNumber": "REF-12345"
+}
+
+###
+# @name getPaymentStats
+GET {{NEXT_PUBLIC_API_BASE_URL}}/payments/stats?year=2026&month=5
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name getPaymentReceipt
+GET {{NEXT_PUBLIC_API_BASE_URL}}/payments/{{paymentId}}/receipt
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name generateCollectionReport
+POST {{NEXT_PUBLIC_API_BASE_URL}}/payments/reports/collections
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "year": 2026,
+  "month": 5,
+  "format": "PDF"
+}
+
+###
+# @name getMyPayments
+GET {{NEXT_PUBLIC_API_BASE_URL}}/payments/my
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name getPaymentDetail
+GET {{NEXT_PUBLIC_API_BASE_URL}}/payments/{{paymentId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name getUserPayments
+GET {{NEXT_PUBLIC_API_BASE_URL}}/payments/users/{{userId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+### ----------------- PROVIDERS ------------------
+
+###
+# @name upsertPaymentProvider
+POST {{NEXT_PUBLIC_API_BASE_URL}}/payments/providers
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "provider": "RAZORPAY",
+  "keyId": "rzp_test_key",
+  "keySecret": "rzp_test_secret",
+  "webhookSecret": "rzp_test_webhook_secret",
+  "isActive": true
+}
+
+###
+# @name listPaymentProviders
+GET {{NEXT_PUBLIC_API_BASE_URL}}/payments/providers
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name getPaymentProvider
+GET {{NEXT_PUBLIC_API_BASE_URL}}/payments/providers/{{providerId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name getPaymentProvidersStatus
+GET {{NEXT_PUBLIC_API_BASE_URL}}/payments/providers/status
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name updatePaymentProvider
+PATCH {{NEXT_PUBLIC_API_BASE_URL}}/payments/providers/{{providerId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "keyId": "rzp_test_updated",
+  "keySecret": "new_secret"
+}
+
+###
+# @name deletePaymentProvider
+DELETE {{NEXT_PUBLIC_API_BASE_URL}}/payments/providers/{{providerId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name activatePaymentProvider
+POST {{NEXT_PUBLIC_API_BASE_URL}}/payments/providers/{{providerId}}/activate
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+### ----------------- WEBHOOK ------------------
+
+###
+# @name paymentWebhook
+POST {{NEXT_PUBLIC_API_BASE_URL}}/payments/webhook
+Content-Type: application/json
+x-razorpay-signature: REPLACE_WITH_HMAC
+
+{
+  "entity": "event",
+  "account_id": "acc_BFQ7uS97yRUrSg",
+  "event": "payment.captured",
+  "contains": ["payment"],
+  "payload": {
+    "payment": {
+      "entity": {
+        "id": "pay_DESLFWSkdsc9",
+        "amount": 5000,
+        "currency": "INR",
+        "status": "captured",
+        "order_id": "order_DESLFWSkdsc9",
+        "notes": {
+          "associationId": "c5b791b4-f628-477b-b606-557ba3d2dbaa"
+        }
+      }
+    }
+  },
+  "created_at": 1400826750
+}

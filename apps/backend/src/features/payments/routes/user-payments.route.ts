@@ -171,9 +171,11 @@ export const userContributions: RequestHandler[] = [
     }) || {};
 
     const user = await findFirstMember({ where: { id: userId, associationId: association.id } });
+
     if (!user) throw new NotFoundError('User not found in this association');
 
     const whereClause: Record<string, unknown> = { userId, associationId: association.id };
+
     if (fromYear && fromMonth) {
       whereClause.AND = [
         { OR: [{ year: { gt: fromYear } }, { year: fromYear, month: { gte: fromMonth } }] },
@@ -192,6 +194,7 @@ export const userContributions: RequestHandler[] = [
       { traceId, userId },
       'GET /api/payments/users/[userId]/contributions - Fetching contributions',
     );
+
     const { contributions, total } = await findContributionPeriods({
       where: whereClause as Parameters<typeof findContributionPeriods>[0]['where'],
       page,

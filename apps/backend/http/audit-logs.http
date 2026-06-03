@@ -1,0 +1,6 @@
+
+###
+# @name listAuditLogs
+GET {{NEXT_PUBLIC_API_BASE_URL}}/audit-logs?page=1&limit=20
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}

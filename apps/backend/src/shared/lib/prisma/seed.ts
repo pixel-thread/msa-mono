@@ -241,24 +241,14 @@ async function seedAssociation(data: (typeof ASSOCIATIONS)[number]) {
         mfaEnabled: false,
         memberTypeId: memberTypes[0]?.id,
 
-        subscription:
-          role === UserRole.MEMBER
-            ? {
-                create: {
-                  planId: subscriptionPlan.id,
-                  planVersionId: subscriptionPlanVersion.id,
-                  status: 'ACTIVE',
-                  endDate: new Date('2027-01-01'),
-                },
-              }
-            : undefined,
+        subscription: role === UserRole.MEMBER ? undefined : undefined,
       },
     });
 
     users[role] = user;
   }
 
-  for (let i = 0; i < 20; i++) {
+  for (let i = 20; i !== 0; i--) {
     await prisma.membershipApplication.create({
       data: {
         associationSlug: 'mfsa',
@@ -271,7 +261,6 @@ async function seedAssociation(data: (typeof ASSOCIATIONS)[number]) {
         age: 20 + i,
       },
     });
-    console.log(i, `member_applicant_${i}@mfsa.com`);
   }
 
   // ---------------------------------------------------------------------------
@@ -557,31 +546,31 @@ async function seedAssociation(data: (typeof ASSOCIATIONS)[number]) {
   // CONTRIBUTION PERIOD
   // ---------------------------------------------------------------------------
 
-  const contributionPeriod = await prisma.contributionPeriod.create({
-    data: {
-      associationId: association.id,
-      userId: users[UserRole.MEMBER].id,
-      year: 2026,
-      month: 5,
-      expectedAmount: new Prisma.Decimal(500),
-      paidAmount: new Prisma.Decimal(500),
-      dueAmount: new Prisma.Decimal(0),
-      status: ContributionStatus.PAID,
-      dueDate: new Date('2026-05-31'),
-    },
-  });
+  // const contributionPeriod = await prisma.contributionPeriod.create({
+  //   data: {
+  //     associationId: association.id,
+  //     userId: users[UserRole.MEMBER].id,
+  //     year: 2026,
+  //     month: 5,
+  //     expectedAmount: new Prisma.Decimal(500),
+  //     paidAmount: new Prisma.Decimal(500),
+  //     dueAmount: new Prisma.Decimal(0),
+  //     status: ContributionStatus.PAID,
+  //     dueDate: new Date('2026-05-31'),
+  //   },
+  // });
 
   // ---------------------------------------------------------------------------
   // PAYMENT ALLOCATION
   // ---------------------------------------------------------------------------
 
-  await prisma.paymentAllocation.create({
-    data: {
-      paymentTransactionId: payment.id,
-      contributionPeriodId: contributionPeriod.id,
-      allocatedAmount: new Prisma.Decimal(500),
-    },
-  });
+  // await prisma.paymentAllocation.create({
+  //   data: {
+  //     paymentTransactionId: payment.id,
+  //     contributionPeriodId: contributionPeriod.id,
+  //     allocatedAmount: new Prisma.Decimal(500),
+  //   },
+  // });
 
   // ---------------------------------------------------------------------------
   // PAYMENT WEBHOOK EVENT

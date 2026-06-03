@@ -1,0 +1,103 @@
+@declarationsId = 2120a97f-63fe-4ee5-a6fe-c860c442897f
+@memberId = 9b376281-b478-4c0a-a61e-06c476838dfe
+@paymentId = 10241b64-e09a-4cad-93ea-348c89da7009
+@contributionId = REPLACE_WITH_CONTRIBUTION_ID
+@userId = 7e534916-ffcc-467a-811a-b2544840777d
+
+### ----------------- DECLARATIONS ------------------
+
+###
+# @name createDeclaration
+POST {{NEXT_PUBLIC_API_BASE_URL}}/contributions/declarations
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{ 
+  "monthlyContributionAmount":100
+}
+
+###
+# @name getMyDeclarations
+GET {{NEXT_PUBLIC_API_BASE_URL}}/contributions/declarations
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name getAllDeclarations
+GET {{NEXT_PUBLIC_API_BASE_URL}}/contributions/all-declarations
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name approveDeclaration
+POST {{NEXT_PUBLIC_API_BASE_URL}}/contributions/declarations/{{declarationsId}}/approve
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name rejectDeclaration
+POST {{NEXT_PUBLIC_API_BASE_URL}}/contributions/declarations/{{declarationsId}}/reject
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+### ----------------- PAYMENTS ------------------
+
+###
+# @name manualContributionPayment
+POST {{NEXT_PUBLIC_API_BASE_URL}}/contributions/payments
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{ 
+   "amount":100,
+   "paymentMethod":"CASH",
+   "memberId":"{{memberId}}"
+}
+
+###
+# @name verifyContributionPayment
+POST {{NEXT_PUBLIC_API_BASE_URL}}/contributions/payments/{{paymentId}}/verify
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+### ----------------- ADMINISTRATIVE ------------------
+
+###
+# @name getContributions
+GET {{NEXT_PUBLIC_API_BASE_URL}}/payments/contributions
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name generateContributions
+POST {{NEXT_PUBLIC_API_BASE_URL}}/payments/contributions
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "year": 2026,
+  "month": 5
+}
+
+###
+# @name waiveContribution
+PATCH {{NEXT_PUBLIC_API_BASE_URL}}/payments/contributions
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "contributionPeriodId": "REPLACE_WITH_UUID",
+  "reason": "Hardship case"
+}
+
+###
+# @name getUserContributions
+GET {{NEXT_PUBLIC_API_BASE_URL}}/payments/users/{{userId}}/contributions
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name getContributionDetail
+GET {{NEXT_PUBLIC_API_BASE_URL}}/payments/contributions/{{contributionId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}

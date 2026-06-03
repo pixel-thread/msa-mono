@@ -1,0 +1,52 @@
+@associationsId = c5b791b4-f628-477b-b606-557ba3d2dbaa
+@userId = 7e534916-ffcc-467a-811a-b2544840777d
+
+###
+# @name listAllAssociations
+GET {{NEXT_PUBLIC_API_BASE_URL}}/associations
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name addMemberToAssociation
+POST {{NEXT_PUBLIC_API_BASE_URL}}/associations/{{associationsId}}/members
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "memberId": "{{userId}}"
+}
+
+###
+# @name deactivateAssociation
+POST {{NEXT_PUBLIC_API_BASE_URL}}/associations/deactivate
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "reason": "Association dissolved"
+}
+
+###
+# @name getAssociationDetail
+GET {{NEXT_PUBLIC_API_BASE_URL}}/associations/{{associationsId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name updateAssociation
+PATCH {{NEXT_PUBLIC_API_BASE_URL}}/associations/{{associationsId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "name": "Updated Association Name",
+  "contactEmail": "updated@association.org",
+  "logo": "https://picsum.photos/200/300"
+}
+
+###
+# @name deleteAssociation
+DELETE {{NEXT_PUBLIC_API_BASE_URL}}/associations/{{associationsId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}

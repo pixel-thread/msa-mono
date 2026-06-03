@@ -83,7 +83,9 @@ export async function subscribe({ planId, userId, associationId }: SubscribeInpu
   }
 
   const startDate = new Date();
+
   const endDate = new Date();
+
   if (activeVersion.billingCycle === 'YEARLY') {
     endDate.setFullYear(endDate.getFullYear() + 1);
   } else {

@@ -1,0 +1,8 @@
+@NEXT_PUBLIC_API_BASE_URL = http://localhost:4000/api/v1
+@TOKEN = REPLACE_WITH_TOKEN_FROM_AUTH_HTTP
+
+###
+# @name getDashboardOverview
+GET {{NEXT_PUBLIC_API_BASE_URL}}/dashboard/overview
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}

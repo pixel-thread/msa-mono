@@ -1,0 +1,72 @@
+@NEXT_PUBLIC_API_BASE_URL = http://localhost:4000/api/v1
+@TOKEN = REPLACE_WITH_TOKEN_FROM_AUTH_HTTP
+@userId = 7e534916-ffcc-467a-811a-b2544840777d
+
+###
+# @name listMembers
+GET {{NEXT_PUBLIC_API_BASE_URL}}/members?page=0
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name getMemberDetails
+GET {{NEXT_PUBLIC_API_BASE_URL}}/members/{{userId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name getMemberLedger
+GET {{NEXT_PUBLIC_API_BASE_URL}}/members/{{userId}}/ledger
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name completeMemberOnboarding
+POST {{NEXT_PUBLIC_API_BASE_URL}}/members/{{userId}}/onboarding
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "step": "PROFILE_COMPLETE"
+}
+
+###
+# @name addMemberToSuspense
+POST {{NEXT_PUBLIC_API_BASE_URL}}/members/{{userId}}/suspense
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "reason": "Non-payment of dues"
+}
+
+###
+# @name updateMemberRole
+POST {{NEXT_PUBLIC_API_BASE_URL}}/members/{{userId}}/role
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "role": "SECRETARY"
+}
+
+###
+# @name updateMemberStatus
+POST {{NEXT_PUBLIC_API_BASE_URL}}/members/{{userId}}/status
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "status": "ACTIVE",
+  "reason": "Reinstated"
+}
+
+###
+# @name suspendMember
+POST {{NEXT_PUBLIC_API_BASE_URL}}/members/{{userId}}/suspend
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "reason": "Violation of association rules"
+}

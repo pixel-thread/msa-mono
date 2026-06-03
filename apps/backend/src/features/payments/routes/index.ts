@@ -6,7 +6,7 @@
 // ---------------------------------------------------------------------------
 
 import { Router } from 'express';
-import { auth } from '@src/middleware/auth';
+import { auth } from '@middleware/auth';
 
 // ---- Payments ----
 import { listPayments } from './list-payments.route';

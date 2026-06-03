@@ -1,0 +1,15 @@
+
+###
+# @name anonymizeOldData
+GET {{NEXT_PUBLIC_API_BASE_URL}}/cron/anonymize
+Content-Type: application/json
+
+###
+# @name checkDSARSlaDeadlines
+GET {{NEXT_PUBLIC_API_BASE_URL}}/cron/dsar-sla
+Content-Type: application/json
+
+###
+# @name processSubscriptionExpiry
+GET {{NEXT_PUBLIC_API_BASE_URL}}/cron/subscription-expiry
+Content-Type: application/json

@@ -53,9 +53,7 @@ export async function generateMonthlyContributions(
       subscription: { status: 'ACTIVE' },
     },
     include: {
-      subscription: {
-        include: { plan: true, planVersion: true },
-      },
+      subscription: { include: { plan: true, planVersion: true } },
     },
   });
 
@@ -94,8 +92,9 @@ export async function generateMonthlyContributions(
     // eslint-disable-next-line
     dueAmount: any;
     status: ContributionStatus;
-    dueDate: string;
+    dueDate: any;
   };
+
   const result = await prisma.contributionPeriod.createMany({
     data: data as Array<ContributionPeriodT>,
     skipDuplicates: true,

@@ -1,0 +1,97 @@
+@associationsId = c5b791b4-f628-477b-b606-557ba3d2dbaa
+@userId = 7e534916-ffcc-467a-811a-b2544840777d
+@applicationId = REPLACE_WITH_APPLICATION_ID
+
+### ----------------- ASSOCIATIONS ------------------
+
+### 
+# @name getAssociations
+GET {{NEXT_PUBLIC_API_BASE_URL}}/admin/associations
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+### 
+# @name createAssociation
+POST {{NEXT_PUBLIC_API_BASE_URL}}/admin/associations
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "slug": "mfsa",
+  "name": "MFSA",
+  "state": "Delhi",
+  "country": "IN",
+  "contactEmail": "contact@delhicricket.org",
+  "primaryColor": "#1e40af",
+  "secondaryColor": "#f59e0b"
+}
+
+### 
+# @name addAssociationMember
+POST {{NEXT_PUBLIC_API_BASE_URL}}/admin/associations/{{associationsId}}/member
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{ 
+    "association_id":"{{associationsId}}",
+    "user_id":"{{userId}}"
+}
+
+### 
+# @name updateAssociation
+PUT {{NEXT_PUBLIC_API_BASE_URL}}/admin/associations/{{associationsId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "slug": "mfsc",
+  "name": "sDesslhi Cricket Association",
+  "state": "Delhi",
+  "country": "IN",
+  "contactEmail": "contact@delhicricket.org",
+  "primaryColor": "#1e40af",
+  "secondaryColor": "#f59e0b"
+}
+
+### 
+# @name deleteAssociation
+DELETE {{NEXT_PUBLIC_API_BASE_URL}}/admin/associations/{{associationsId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+### 
+# @name getUniqueAssociation
+GET {{NEXT_PUBLIC_API_BASE_URL}}/admin/associations/{{associationsId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+### 
+# @name updateUserRole
+POST {{NEXT_PUBLIC_API_BASE_URL}}/admin/users/role
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{ 
+  "userId":"{{userId}}",
+  "role":"SUPER_ADMIN"
+}
+
+### ----------------- MEMBERSHIP APPLICATIONS ------------------
+
+###
+# @name listMembershipApplications
+GET {{NEXT_PUBLIC_API_BASE_URL}}/admin/membership-applications
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name approveMembershipApplication
+POST {{NEXT_PUBLIC_API_BASE_URL}}/admin/membership-applications/{{applicationId}}/approve
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name rejectMembershipApplication
+POST {{NEXT_PUBLIC_API_BASE_URL}}/admin/membership-applications/{{applicationId}}/reject
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}

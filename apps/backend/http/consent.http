@@ -1,0 +1,59 @@
+@userId = 7e534916-ffcc-467a-811a-b2544840777d
+@receiptId = REPLACE_WITH_RECEIPT_ID
+
+###
+# @name grantConsent
+POST {{NEXT_PUBLIC_API_BASE_URL}}/consent/grant
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "purpose": "MARKETING",
+  "granted": true
+}
+
+###
+# @name revokeConsent
+POST {{NEXT_PUBLIC_API_BASE_URL}}/consent/revoke
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "purpose": "MARKETING"
+}
+
+###
+# @name getMyConsent
+GET {{NEXT_PUBLIC_API_BASE_URL}}/consent/my
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name getAllConsent
+GET {{NEXT_PUBLIC_API_BASE_URL}}/consent/all?page=1&limit=10
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name getConsentHistory
+GET {{NEXT_PUBLIC_API_BASE_URL}}/consent/history?page=1&limit=10
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name getConsentReceipt
+GET {{NEXT_PUBLIC_API_BASE_URL}}/consent/{{receiptId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name getConsentReport
+GET {{NEXT_PUBLIC_API_BASE_URL}}/consent/report
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name getUserConsent
+GET {{NEXT_PUBLIC_API_BASE_URL}}/consent/users/{{userId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}

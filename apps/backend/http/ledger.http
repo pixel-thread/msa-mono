@@ -1,0 +1,72 @@
+@NEXT_PUBLIC_API_BASE_URL = http://localhost:4000/api/v1
+@TOKEN = REPLACE_WITH_TOKEN_FROM_AUTH_HTTP
+@accountId = f361096a-ce6b-4074-a026-cae02e1d960e
+@entryId = REPLACE_WITH_ENTRY_ID
+@userId = 7e534916-ffcc-467a-811a-b2544840777d
+
+###
+# @name listLedgerAccounts
+GET {{NEXT_PUBLIC_API_BASE_URL}}/ledger/accounts
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name createLedgerAccount
+POST {{NEXT_PUBLIC_API_BASE_URL}}/ledger/accounts
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "name": "Membership Dues",
+  "type": "INCOME",
+  "code": "DUES-001"
+}
+
+###
+# @name getLedgerAccount
+GET {{NEXT_PUBLIC_API_BASE_URL}}/ledger/accounts/{{accountId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name deleteLedgerAccount
+DELETE {{NEXT_PUBLIC_API_BASE_URL}}/ledger/accounts/{{accountId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name listLedgerEntries
+GET {{NEXT_PUBLIC_API_BASE_URL}}/ledger/entries
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name createLedgerEntry
+POST {{NEXT_PUBLIC_API_BASE_URL}}/ledger/entries
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "accountId": "{{accountId}}",
+  "type": "DEBIT",
+  "amount": 1000,
+  "description": "Monthly membership fee"
+}
+
+###
+# @name approveLedgerEntry
+POST {{NEXT_PUBLIC_API_BASE_URL}}/ledger/entries/{{entryId}}/approve
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name getMemberLedger
+GET {{NEXT_PUBLIC_API_BASE_URL}}/ledger/member/{{userId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name getLedgerSummary
+GET {{NEXT_PUBLIC_API_BASE_URL}}/ledger/summary
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}

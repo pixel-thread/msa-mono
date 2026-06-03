@@ -1,0 +1,32 @@
+@NEXT_PUBLIC_API_BASE_URL = http://localhost:4000/api/v1
+@TOKEN = REPLACE_WITH_TOKEN_FROM_AUTH_HTTP
+@notificationId = REPLACE_WITH_NOTIFICATION_ID
+
+###
+# @name registerPushToken
+POST {{NEXT_PUBLIC_API_BASE_URL}}/notifications/register
+Content-Type: application/json
+
+{
+  "token": "exponent-push-token-here"
+}
+
+###
+# @name linkTokenToUser
+POST {{NEXT_PUBLIC_API_BASE_URL}}/notifications/link
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "token": "exponent-push-token-here"
+}
+
+###
+# @name updateNotificationStatus
+PATCH {{NEXT_PUBLIC_API_BASE_URL}}/notifications/{{notificationId}}/status
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "read": true
+}

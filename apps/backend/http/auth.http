@@ -1,0 +1,134 @@
+###
+# @name signUp
+POST {{NEXT_PUBLIC_API_BASE_URL}}/auth/sign-up
+Content-Type: application/json
+
+{
+  "email": "member.1@mfsa.org",
+  "firstName":"First member",
+  "lastName":"Last member",
+  "dateOfBirth":"12-12-2024",
+  "phone":"1234567892",
+  "age":18,
+  "gender":"MALE",
+  "associationSlug": "mfsa"
+}
+
+###
+# @name signIn
+POST {{NEXT_PUBLIC_API_BASE_URL}}/auth/sign-in
+Content-Type: application/json
+
+{
+  "email": "{{EMAIL}}",
+  "password": "{{PASSWORD}}"
+}
+
+###
+@TOKEN = {{signIn.response.body.data.accessToken}}
+
+###
+# @name getMe
+GET {{NEXT_PUBLIC_API_BASE_URL}}/auth/me
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name logout
+POST {{NEXT_PUBLIC_API_BASE_URL}}/auth/logout
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name forgotPassword
+POST {{NEXT_PUBLIC_API_BASE_URL}}/auth/forgot-password
+Content-Type: application/json
+
+{
+  "email": "user@example.com"
+}
+
+###
+# @name resetPassword
+POST {{NEXT_PUBLIC_API_BASE_URL}}/auth/reset-password
+Content-Type: application/json
+
+{
+  "token": "reset-token-from-email",
+  "password": "NewPassword123!"
+}
+
+###
+# @name changePassword
+POST {{NEXT_PUBLIC_API_BASE_URL}}/auth/change-password
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "currentPassword": "Password123!",
+  "newPassword": "NewPassword123!"
+}
+
+###
+# @name setupMFA
+POST {{NEXT_PUBLIC_API_BASE_URL}}/auth/mfa/setup
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{}
+
+###
+# @name verifyMFA
+POST {{NEXT_PUBLIC_API_BASE_URL}}/auth/mfa/verify
+Content-Type: application/json
+
+{
+  "code": "123456"
+}
+
+###
+# @name resendMFACode
+POST {{NEXT_PUBLIC_API_BASE_URL}}/auth/mfa/resend
+Content-Type: application/json
+
+{
+  "email": "user@example.com"
+}
+
+###
+# @name disableMFA
+POST {{NEXT_PUBLIC_API_BASE_URL}}/auth/mfa/disable
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "password": "Password123!"
+}
+
+###
+# @name refreshToken
+POST {{NEXT_PUBLIC_API_BASE_URL}}/auth/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "REPLACE_WITH_REFRESH_TOKEN"
+}
+
+###
+# @name verifySignIn
+POST {{NEXT_PUBLIC_API_BASE_URL}}/auth/sign-in/verify
+Content-Type: application/json
+
+{
+  "email": "user@example.com",
+  "code": "123456"
+}
+
+###
+# @name resendSignInCode
+POST {{NEXT_PUBLIC_API_BASE_URL}}/auth/sign-in/resend
+Content-Type: application/json
+
+{
+  "email": "user@example.com"
+}

@@ -1,0 +1,81 @@
+@NEXT_PUBLIC_API_BASE_URL = http://localhost:4000/api/v1
+@TOKEN = REPLACE_WITH_TOKEN_FROM_AUTH_HTTP
+@dsarTicketId = REPLACE_WITH_DSAR_TICKET_ID
+@userId = 7e534916-ffcc-467a-811a-b2544840777d
+
+###
+# @name submitDSAR
+POST {{NEXT_PUBLIC_API_BASE_URL}}/dsar/submit
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "requestType": "ACCESS",
+  "reason": "Requesting my data"
+}
+
+###
+# @name listDSARTickets
+GET {{NEXT_PUBLIC_API_BASE_URL}}/dsar?page=1&limit=10&status=PENDING
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name getMyDSARRequests
+GET {{NEXT_PUBLIC_API_BASE_URL}}/dsar/my?page=1&limit=10
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name getDSARSlaReport
+GET {{NEXT_PUBLIC_API_BASE_URL}}/dsar/sla-report
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name getDSARTicketDetails
+GET {{NEXT_PUBLIC_API_BASE_URL}}/dsar/{{dsarTicketId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name respondToDSAR
+POST {{NEXT_PUBLIC_API_BASE_URL}}/dsar/{{dsarTicketId}}/respond
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "response": "Data provided as requested"
+}
+
+###
+# @name assignDSARTicket
+POST {{NEXT_PUBLIC_API_BASE_URL}}/dsar/{{dsarTicketId}}/assign
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "assignedTo": "{{userId}}"
+}
+
+###
+# @name rejectDSARTicket
+POST {{NEXT_PUBLIC_API_BASE_URL}}/dsar/{{dsarTicketId}}/reject
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "reason": "Invalid request"
+}
+
+###
+# @name deleteDSARTicket
+DELETE {{NEXT_PUBLIC_API_BASE_URL}}/dsar/{{dsarTicketId}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
+# @name listDSARAdmins
+GET {{NEXT_PUBLIC_API_BASE_URL}}/dsar/admins
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
