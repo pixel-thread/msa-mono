@@ -6,7 +6,7 @@ const readline = require('readline');
 const ROOT = process.cwd();
 const BASE_PATH = path.join(ROOT, 'src', 'features');
 
-const FOLDERS = ['lib', 'services', 'routes', 'types', 'utils', 'validators', 'repository'];
+const FOLDERS = ['lib', 'services', 'routes', 'types', 'utils', 'validators', 'repositories'];
 
 function ensureDir(dirPath) {
   if (!fs.existsSync(dirPath)) {
