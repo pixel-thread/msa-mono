@@ -5,6 +5,7 @@ import { formattedAmount } from '@src/shared/utils';
 import { getMonthName } from '@src/shared/utils/helper/get-month-name';
 import { getStatusBadge } from '@src/shared/utils/helper/get-status-badge';
 import type { ContributionPeriod } from '../types';
+import Link from 'next/link';
 
 export function useUserContributionColumns() {
   const columns: ColumnDef<ContributionPeriod>[] = [
@@ -12,9 +13,9 @@ export function useUserContributionColumns() {
       id: 'period',
       header: 'Period',
       cell: ({ row }) => (
-        <span className="text-sm font-medium">
+        <Link href={`/payments/contributions/${row.original.id}`} className="text-sm font-medium">
           {getMonthName(row.original.month)} {row.original.year}
-        </span>
+        </Link>
       ),
     },
     {

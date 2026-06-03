@@ -30,9 +30,9 @@ export function useContributionPeriodColumns() {
       id: 'period',
       header: 'Period',
       cell: ({ row }) => (
-        <span className="text-sm font-medium">
+        <Link href={`/payments/contributions/${row.original.id}`} className="text-sm font-medium">
           {getMonthName(row.original.month)} {row.original.year}
-        </span>
+        </Link>
       ),
     },
     {
