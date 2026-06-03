@@ -58,10 +58,7 @@ Authorization: Bearer {{TOKEN}}
 # @name verifyContributionPayment
 POST {{NEXT_PUBLIC_API_BASE_URL}}/contributions/payments/{{paymentId}}/verify
 Content-Type: application/json
-Authorization: Bearer {{TOKEN}}
-
-### ----------------- ADMINISTRATIVE ------------------
-
+Authorization: Bearer {{TOKEN}
 ###
 # @name getContributions
 GET {{NEXT_PUBLIC_API_BASE_URL}}/payments/contributions

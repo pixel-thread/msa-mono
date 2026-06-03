@@ -1,4 +1,10 @@
-import { PaymentGateway, PaymentMethod, PaymentStatus, UserRole } from '@prisma/client';
+import {
+  ContributionStatus,
+  PaymentGateway,
+  PaymentMethod,
+  PaymentStatus,
+  UserRole,
+} from '@prisma/client';
 import { ConflictError, NotFoundError } from '@src/shared/errors';
 import { prisma } from '@src/shared/lib';
 import { validate } from '@src/shared/lib/validate';
@@ -140,13 +146,15 @@ export const verifyManualContributionPaymentHandler: RequestHandler[] = [
         remainingAmount -= allocation;
 
         const newPaidAmount = paidAmount + allocation;
-
+        const newDueAmount = Number(period.expectedAmount) - newPaidAmount;
         await tx.contributionPeriod.update({
           where: {
             id: period.id,
           },
           data: {
-            status: newPaidAmount >= Number(period.expectedAmount) ? 'PAID' : 'PARTIAL',
+            paidAmount: newPaidAmount,
+            dueAmount: newDueAmount,
+            status: newDueAmount <= 0 ? ContributionStatus.PAID : ContributionStatus.PARTIAL,
           },
         });
       }
