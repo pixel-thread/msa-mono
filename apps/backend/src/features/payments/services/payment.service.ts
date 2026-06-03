@@ -404,7 +404,7 @@ export async function verifyAndCompletePayment(input: VerifyAndCompleteInput) {
       description: 'Online payment via Razorpay',
       createdById: transaction.userId,
       memberId: transaction.userId,
-      method: 'ONLINE'
+      method: 'ONLINE',
     });
 
     await tx.auditLog.create({
@@ -540,7 +540,7 @@ export async function recordManualPayment(input: RecordManualPaymentInput) {
       description: `Manual payment (${input.method}) recorded by finance`,
       createdById: input.createdById,
       memberId: input.userId,
-      method: input.method
+      method: input.method,
     });
 
     // Audit log
@@ -592,6 +592,16 @@ async function allocatePaymentToContributions(
     orderBy: [{ year: 'asc' }, { month: 'asc' }],
   });
 
+  const payment = await tx.paymentTransaction.findUnique({
+    where: {
+      id: paymentTransactionId,
+    },
+  });
+
+  if (!payment) {
+    throw new NotFoundError('Payment not found');
+  }
+
   let remaining = totalAmount;
 
   for (const period of outstanding) {
@@ -625,11 +635,28 @@ async function allocatePaymentToContributions(
       data: {
         paidAmount: newPaidAmount,
         dueAmount: Math.max(newDueAmount, 0),
-        status: newStatus,
+        status: newDueAmount <= 0 ? ContributionStatus.PAID : ContributionStatus.PARTIAL,
       },
     });
 
     remaining -= allocatedAmount;
+  }
+
+  if (remaining > 0) {
+    await tx.unallocatedPayment.create({
+      data: {
+        associationId: payment.associationId,
+        userId: userId,
+
+        paymentTransactionId: paymentTransactionId,
+
+        amount: remaining,
+        consumedAmount: 0,
+        balanceAmount: remaining,
+
+        notes: 'Excess contribution payment credit',
+      },
+    });
   }
 
   return remaining; // Excess amount (advance payment)

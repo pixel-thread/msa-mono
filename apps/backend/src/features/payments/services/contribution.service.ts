@@ -52,9 +52,7 @@ export async function applyCreditsToContributionPeriod(contributionPeriodId: str
     const credits = await tx.unallocatedPayment.findMany({
       where: {
         userId: period.userId,
-        balanceAmount: {
-          gt: 0,
-        },
+        balanceAmount: { gt: 0 },
       },
       orderBy: {
         createdAt: 'asc',
