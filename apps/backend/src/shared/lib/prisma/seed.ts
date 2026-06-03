@@ -75,13 +75,6 @@ const ASSOCIATIONS = [
     primaryColor: '#1e3a8a',
     secondaryColor: '#3b82f6',
   },
-  {
-    slug: 'mpsa',
-    short: 'mpsa',
-    name: 'Meghalaya Planning Service Association',
-    primaryColor: '#065f46',
-    secondaryColor: '#10b981',
-  },
 ];
 
 export const encrypt = (plain: string): string => {
@@ -149,10 +142,41 @@ async function seedAssociation(data: (typeof ASSOCIATIONS)[number]) {
       },
     ],
   });
+  const createdMemberTypes = await prisma.memberType.findMany({
+    where: {
+      associationId: association.id,
+    },
+  });
 
   // ---------------------------------------------------------------------------
   // SUBSCRIPTION PLAN
   // ---------------------------------------------------------------------------
+
+  for (const memberType of createdMemberTypes) {
+    await prisma.subscriptionPlan.create({
+      data: {
+        associationId: association.id,
+        name: memberType.description || 'Seed Membership',
+        description: memberType.description,
+        memberTypeId: memberType.id,
+
+        isDefault: false,
+        versions: {
+          create: {
+            amount: new Prisma.Decimal(memberType.level * 100),
+            currency: 'INR',
+            billingCycle: 'MONTHLY',
+            features: {
+              voting: true,
+              newsletter: true,
+              events: true,
+            },
+            description: 'Default membership plan',
+          },
+        },
+      },
+    });
+  }
 
   const subscriptionPlan = await prisma.subscriptionPlan.create({
     data: {
@@ -161,7 +185,7 @@ async function seedAssociation(data: (typeof ASSOCIATIONS)[number]) {
       description: 'Default membership plan',
       versions: {
         create: {
-          amount: new Prisma.Decimal(500),
+          amount: new Prisma.Decimal(50),
           currency: 'INR',
           billingCycle: 'MONTHLY',
           features: {
@@ -232,6 +256,22 @@ async function seedAssociation(data: (typeof ASSOCIATIONS)[number]) {
     });
 
     users[role] = user;
+  }
+
+  for (let i = 0; i < 20; i++) {
+    await prisma.membershipApplication.create({
+      data: {
+        associationSlug: 'mfsa',
+        firstName: `Applicatnt first-${i}`,
+        lastName: `Applicatnt last-${i}`,
+        phone: '999999999' + i,
+        email: `member_applicant_${i}@mfsa.com`,
+        status: 'PENDING',
+        dateOfBirth: new Date('2000-01-01'),
+        age: 20 + i,
+      },
+    });
+    console.log(i, `member_applicant_${i}@mfsa.com`);
   }
 
   // ---------------------------------------------------------------------------
@@ -747,6 +787,7 @@ async function main() {
   await prisma.pushToken.deleteMany();
   await prisma.refreshToken.deleteMany();
   await prisma.verificationCode.deleteMany();
+  await prisma.membershipApplication.deleteMany();
   await prisma.user.deleteMany();
   await prisma.association.deleteMany();
 
