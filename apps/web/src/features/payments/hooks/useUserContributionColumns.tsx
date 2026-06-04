@@ -21,30 +21,19 @@ export function useUserContributionColumns({ onCheck, checkValues }: Props) {
 
     const rows = table.getRowModel().rows.filter((val) => val.original.status !== 'PAID');
 
-    const pageValues = rows.map((row) => ({
-      ...row,
-    }));
-
     const allSelected = rows.every((row) => isRowSelected(row.original));
 
     if (allSelected) {
       // remove all visible rows
       const remaining =
         checkValues?.filter(
-          (selected) => !pageValues.some((pageItem) => pageItem.id === selected.id),
+          (selected) => !rows.some((pageItem) => pageItem.original.id === selected.id),
         ) ?? [];
-
       onCheck(remaining);
       return;
     }
 
-    // add missing visible rows
-    const existingIds = new Set(checkValues?.map((item) => item.id) ?? []);
-
-    const next = [
-      ...(checkValues ?? []),
-      ...pageValues.filter((item) => !existingIds.has(item.id)),
-    ];
+    const next = [...(checkValues ?? []), ...rows.map((row) => row.original)];
 
     onCheck(next);
   };
@@ -65,6 +54,7 @@ export function useUserContributionColumns({ onCheck, checkValues }: Props) {
             cell: ({ row }) => (
               <Checkbox
                 checked={isRowSelected(row.original)}
+                disabled={row.original.status === 'PAID'}
                 onCheckedChange={(checked) => {
                   if (checked) {
                     onCheck?.([...(checkValues ?? []), row.original]);

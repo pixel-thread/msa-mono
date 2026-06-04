@@ -88,24 +88,6 @@ export function RecordPaymentDialog({ open, onOpenChange }: RecordPaymentDialogP
           <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4 py-4">
             <FormField
               control={form.control}
-              name="userId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Member *</FormLabel>
-                  <FormControl>
-                    <MemberCombobox
-                      value={field.value}
-                      onValueChange={field.onChange}
-                      placeholder="Search member by name, email, or membership number..."
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
               name="amount"
               render={({ field }) => (
                 <FormItem>
@@ -182,7 +164,7 @@ export function RecordPaymentDialog({ open, onOpenChange }: RecordPaymentDialogP
               name="notes"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Notes</FormLabel>
+                  <FormLabel>Notes / Remark</FormLabel>
                   <FormControl>
                     <Textarea {...field} placeholder="Optional notes about this payment" rows={3} />
                   </FormControl>
