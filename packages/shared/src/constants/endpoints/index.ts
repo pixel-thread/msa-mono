@@ -1,9 +1,8 @@
-import { AUTH } from "./auth";
-import { USER } from "./user";
 import { ADMIN } from "./admin";
 import { ANNOUNCEMENTS } from "./announcements";
 import { ASSOCIATIONS } from "./associations";
 import { AUDIT_LOGS } from "./audit-logs";
+import { AUTH } from "./auth";
 import { COMPLIANCE } from "./compliance";
 import { CONSENT } from "./consent";
 import { CONTRIBUTION } from "./contributions";
@@ -20,14 +19,14 @@ import { NOTIFICATIONS } from "./notifications";
 import { PAYMENTS } from "./payments";
 import { SUBSCRIPTIONS } from "./subscriptions";
 import { TRAINING } from "./training";
+import { USER } from "./user";
 
 export const ENDPOINTS = {
-  AUTH,
-  USER,
   ADMIN,
   ANNOUNCEMENTS,
   ASSOCIATIONS,
   AUDIT_LOGS,
+  AUTH,
   COMPLIANCE,
   CONSENT,
   CONTRIBUTION,
@@ -44,4 +43,5 @@ export const ENDPOINTS = {
   PAYMENTS,
   SUBSCRIPTIONS,
   TRAINING,
+  USER,
 } as const;
