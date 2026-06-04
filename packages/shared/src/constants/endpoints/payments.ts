@@ -15,14 +15,6 @@ export const PAYMENTS = {
 
   USERS: {
     BY_ID: (userId: string) => `/payments/users/${userId}`,
-    CONTRIBUTIONS: (userId: string) => `/payments/users/${userId}/contributions`,
-  },
-
-  CONTRIBUTIONS: {
-    LIST: '/payments/contributions',
-    GENERATE: '/payments/contributions',
-    WAIVE: '/payments/contributions',
-    DETAIL: (id: string) => `/payments/contributions/${id}`,
   },
 
   REPORTS: {
