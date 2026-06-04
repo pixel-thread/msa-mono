@@ -109,14 +109,6 @@ export const DRAWER_NAV_MAIN = [
         url: '/payments',
       },
       {
-        title: 'Contributions',
-        url: '/payments/contributions',
-      },
-      {
-        title: 'Add Contributions',
-        url: '/payments/add-contribution',
-      },
-      {
         title: 'By Member',
         url: '/payments/users',
       },
