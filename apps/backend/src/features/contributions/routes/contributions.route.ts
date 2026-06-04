@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------
-// ENDPOINT:  CRUD /api/payments/contributions
+// ENDPOINT:  CRUD /api/v1/contributions/contributions
 // SECURITY:  Requires FINANCE role (except where noted)
 // PURPOSE:   Manage contribution periods — list, generate monthly records,
 //            waive individual periods, and view a single period by ID.

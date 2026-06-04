@@ -23,16 +23,7 @@ import { webhook } from './webhook.route';
 import { recordPayment } from './record-payment.route';
 
 // ---- User-Specific ----
-import { userPayments, userContributions } from './user-payments.route';
-
-// ---- Contributions ----
-import {
-  listContributions,
-  generateContributions,
-  waiveContributionHandler,
-  getContribution,
-  generateUserContributionsHandler,
-} from './contributions.route';
+import { userPayments } from './user-payments.route';
 
 // ---- Reports ----
 import { collectionsReport } from './collections-report.route';
@@ -75,18 +66,6 @@ router.post('/record', recordPayment);
 // ===========================================================================
 
 router.get('/users/:userId', userPayments);
-router.get('/users/:userId/contributions', userContributions);
-router.post('/users/:userId/contributions', generateUserContributionsHandler);
-
-// ===========================================================================
-// Contributions
-// ===========================================================================
-
-router.get('/contributions', listContributions);
-// NOTE: Convert this to a CRON job - RUN ONCE PER MONTH at the start of the month (3 days before the 1st)
-router.post('/contributions', generateContributions);
-router.patch('/contributions', waiveContributionHandler);
-router.get('/contributions/:contributionId', getContribution);
 
 // ===========================================================================
 // Reports
