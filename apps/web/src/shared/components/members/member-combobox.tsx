@@ -58,7 +58,12 @@ export function MemberCombobox({
         <Input
           value={displayValue}
           onChange={(e) => {
-            setSearchQuery(e.target.value);
+            const val = e.target.value;
+            setSearchQuery(val);
+            if (val === '' && value) {
+              setSelectedName('');
+              onValueChange?.('');
+            }
             setIsOpen(true);
           }}
           onFocus={() => setIsOpen(true)}

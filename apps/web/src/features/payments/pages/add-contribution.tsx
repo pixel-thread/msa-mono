@@ -6,7 +6,7 @@ import { SectionHeader } from '@src/shared/components/section-header';
 import http from '@src/shared/utils/http';
 import { formattedAmount } from '@src/shared/utils';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ContributionPeriod } from '../types';
 import { useUserContributionColumns } from '../hooks/useUserContributionColumns';
 import z from 'zod';
@@ -56,13 +56,7 @@ export const AddContributionPage = () => {
     basePath: '/payments/add-contribution',
   });
 
-  const {
-    contributions = [],
-    meta,
-    summary,
-    user,
-    refetch,
-  } = useUserContributions({ page, userId });
+  const { contributions = [], meta, summary, refetch } = useUserContributions({ page, userId });
 
   const { mutate: addUserContribution, isPending: isAdding } = useMutation({
     mutationFn: (data: AddMemberContributionInput) => http.post(`/contributions/payments`, data),
@@ -106,11 +100,16 @@ export const AddContributionPage = () => {
     );
   };
 
+  function onMemberChange(value: string) {
+    setSelectedPeriods([]);
+    setUserId(value);
+  }
+
   return (
     <div className="space-y-6 flex-col flex">
       <SectionHeader title="Add Member Contributions" />
       <Card className="p-4">
-        <MemberCombobox value={userId} onValueChange={(value) => setUserId(value)} />
+        <MemberCombobox value={userId} onValueChange={onMemberChange} />
       </Card>
 
       {selectedPeriods.length > 0 && (
