@@ -24,7 +24,7 @@ import { UserRole } from '@prisma/client';
 // External feature services
 // ---------------------------------------------------------------------------
 import { getUserPaymentHistory } from '@feature/payments/services/payment.service';
-import { getUserContributionSummary } from '@feature/payments/services/contribution.service';
+import { getUserContributionSummary } from '@src/features/contributions/services/contribution.service';
 
 // ---------------------------------------------------------------------------
 // Validators / Types

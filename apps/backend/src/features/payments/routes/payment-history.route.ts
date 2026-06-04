@@ -16,7 +16,7 @@ import { logger } from '@src/shared/logger';
 import { UnauthorizedError, ForbiddenError } from '@src/shared/errors';
 import { PaymentHistoryQuerySchema } from '@src/features/payments/validators';
 import { getUserPaymentHistory } from '@src/features/payments/services/payment.service';
-import { getUserContributionSummary } from '@src/features/payments/services/contribution.service';
+import { getUserContributionSummary } from '@src/features/contributions/services/contribution.service';
 import { asyncHandler } from '@src/shared/utils/async-handler';
 
 // ---- Helpers ----

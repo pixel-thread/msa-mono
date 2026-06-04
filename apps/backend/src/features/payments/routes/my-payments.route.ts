@@ -17,7 +17,7 @@ import { UserRole } from '@prisma/client';
 import { withRole } from '@src/shared/utils/with-role';
 import { UnauthorizedError, ForbiddenError } from '@src/shared/errors';
 import { PaymentHistoryQuerySchema } from '@src/features/payments/validators';
-import { findPaymentTransactions } from '@src/features/payments/services/findPaymentTransactions';
+import { findPaymentTransactions } from '@src/features/payments/services/find-payment-transactions';
 import { asyncHandler } from '@src/shared/utils/async-handler';
 
 // ---- Helpers ----

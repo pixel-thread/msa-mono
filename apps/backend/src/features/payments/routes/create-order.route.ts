@@ -19,7 +19,7 @@ import { withRole } from '@src/shared/utils/with-role';
 import { UnauthorizedError, ForbiddenError, NotFoundError } from '@src/shared/errors';
 import { CreateOrderSchema } from '@src/features/payments/validators';
 import { createPaymentOrder } from '@src/features/payments/services/payment.service';
-import { findSubscriptionPlans } from '@src/features/payments/services/findSubscriptionPlans';
+import { findSubscriptionPlans } from '@src/features/payments/services/find-subscription-plans';
 import { getActiveProvider } from '@src/features/payments/services/payment-provider.service';
 import { asyncHandler } from '@src/shared/utils/async-handler';
 

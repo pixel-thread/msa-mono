@@ -49,7 +49,6 @@ import {
   testProvider,
   verifyTestProvider,
 } from './providers.route';
-import { generateUserMonthlyContributions } from '../services';
 
 const router: Router = Router();
 

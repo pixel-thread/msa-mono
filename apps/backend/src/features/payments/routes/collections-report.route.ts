@@ -17,7 +17,7 @@ import { UserRole } from '@prisma/client';
 import { withRole } from '@src/shared/utils/with-role';
 import { UnauthorizedError, ForbiddenError } from '@src/shared/errors';
 import { CollectionReportQuerySchema } from '@src/features/payments/validators';
-import { findContributionPeriods } from '@src/features/payments/services/findContributionPeriods';
+import { findContributionPeriods } from '@src/features/contributions/services/find-contribution-periods';
 import { PAGE_SIZE } from '@src/shared/constants';
 import { asyncHandler } from '@src/shared/utils/async-handler';
 

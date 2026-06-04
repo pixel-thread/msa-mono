@@ -28,9 +28,9 @@ import {
   generateUserMonthlyContributions,
   markOverdueContributions,
   waiveContribution,
-} from '@src/features/payments/services/contribution.service';
-import { findContributionPeriods } from '@src/features/payments/services/findContributionPeriods';
-import { findUniqueContributionPeriod } from '@src/features/payments/services/findUniqueContributionPeriod';
+} from '@src/features/contributions/services/contribution.service';
+import { findContributionPeriods } from '@src/features/contributions/services/find-contribution-periods';
+import { findUniqueContributionPeriod } from '@src/features/contributions/services/find-unique-contribution-period';
 import { pageNumberValidation } from '@src/shared/validators/common';
 import { PAGE_SIZE } from '@src/shared/constants';
 import { asyncHandler } from '@src/shared/utils/async-handler';
@@ -149,7 +149,7 @@ export const generateUserContributionsHandler: RequestHandler[] = [
 
     // --- Business logic: generate monthly contributions ---
     logger.info(
-      { traceId, year: req.body.year, month: req.body.month },
+      { traceId, year: req.body.year, months: req.body.months },
       'POST /api/payments/contributions - Generating contributions',
     );
 
@@ -199,11 +199,11 @@ export const generateContributions: RequestHandler[] = [
 
     // --- Business logic: generate monthly contributions ---
     logger.info(
-      { traceId, year: req.body.year, month: req.body.month },
+      { traceId, year: req.body.year, months: req.body.months },
       'POST /api/payments/contributions - Generating contributions',
     );
 
-    const count = await generateMonthlyContributions(association.id, req.body.year, req.body.moth);
+    const count = await generateMonthlyContributions(association.id, req.body.year, req.body.months);
 
     const overdueCount = await markOverdueContributions(association.id);
 

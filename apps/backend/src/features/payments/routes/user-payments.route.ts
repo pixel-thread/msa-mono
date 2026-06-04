@@ -22,9 +22,9 @@ import {
   UserContributionsParamsSchema,
 } from '@src/features/payments/validators';
 import { findFirstMember } from '@src/features/members/services/findFirstMember';
-import { getUserContributionSummary } from '@src/features/payments/services/contribution.service';
-import { findPaymentTransactions } from '@src/features/payments/services/findPaymentTransactions';
-import { findContributionPeriods } from '@src/features/payments/services/findContributionPeriods';
+import { getUserContributionSummary } from '@src/features/contributions/services/contribution.service';
+import { findPaymentTransactions } from '@src/features/payments/services/find-payment-transactions';
+import { findContributionPeriods } from '@src/features/contributions/services/find-contribution-periods';
 import { pageNumberValidation } from '@src/shared/validators/common';
 import { PAGE_SIZE } from '@src/shared/constants';
 import { asyncHandler } from '@src/shared/utils/async-handler';
