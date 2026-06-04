@@ -8,7 +8,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { ContributionPeriod } from '../types';
 import { useUserContributionColumns } from '../hooks/useUserContributionColumns';
-import { Controller, SubmitHandler } from 'react-hook-form';
+import { SubmitHandler } from 'react-hook-form';
 import z from 'zod';
 import { toast } from 'sonner';
 import { Button } from '@src/shared/components/ui/button';
@@ -33,12 +33,11 @@ type AddMemberContributionInput = z.infer<typeof AddMemberContributionSchema>;
 
 export const AddContributionPage = () => {
   const [selectedPeriods, setSelectedPeriods] = useState<ContributionPeriod[]>([]);
-  const [amountToBePaid, setAmountToBePaid] = useState<number>(0);
   const [userId, setUserId] = useState<string>('');
 
-  const handleRowCheckChange = (data: ContributionPeriod) => {
-    if (selectedPeriods.some((id) => id.id === data.id)) {
-      setSelectedPeriods((prev) => prev.filter((id) => id.id !== data.id));
+  const handleRowCheckChange = (data: ContributionPeriod[]) => {
+    if (selectedPeriods.some((id) => data.some((data) => data.id === id.id))) {
+      setSelectedPeriods((prev) => prev.filter((id) => data.some((data) => data.id !== id.id)));
     } else {
       setSelectedPeriods((prev) => [...prev, data]);
     }
@@ -148,8 +147,7 @@ export const AddContributionPage = () => {
             </h1>
             <h1>
               <b>Total Amount To Pay:</b>{' '}
-              {amountToBePaid ||
-                selectedPeriods.reduce((acc, period) => acc + parseInt(period.dueAmount, 10), 0)}
+              {selectedPeriods.reduce((acc, period) => acc + parseInt(period.dueAmount, 10), 0)}
             </h1>
           </div>
         </CardContent>

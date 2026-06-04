@@ -1,5 +1,5 @@
 'use client';
-import { ColumnDef } from '@tanstack/react-table';
+import { ColumnDef, Table } from '@tanstack/react-table';
 import { Badge } from '@src/shared/components/ui/badge';
 import { formattedAmount } from '@src/shared/utils';
 import { getMonthName } from '@src/shared/utils/helper/get-month-name';
@@ -9,15 +9,49 @@ import Link from 'next/link';
 import { Checkbox } from '@components/ui/checkbox';
 
 type Props = {
-  onCheck?: (data: ContributionPeriod) => void;
+  onCheck?: (data: ContributionPeriod[]) => void;
   checkValues?: ContributionPeriod[];
 };
 
 export function useUserContributionColumns({ onCheck, checkValues }: Props = {}) {
   const isRowSelected = (data: ContributionPeriod) => checkValues?.some((id) => id.id === data.id);
 
-  const onRowChange = (data: ContributionPeriod) => {
+  const onRowChange = (data: ContributionPeriod[]) => {
     onCheck?.(data);
+  };
+
+  const onSelectAllChange = (table: Table<ContributionPeriod>) => {
+    if (!onCheck) return;
+
+    const rows = table.getRowModel().rows;
+
+    const pageValues = rows.map((row) => ({
+      id: row.original.id,
+      month: row.original.month,
+    }));
+
+    const allSelected = rows.every((row) => isRowSelected(row.original));
+
+    if (allSelected) {
+      // remove all visible rows
+      const remaining =
+        checkValues?.filter(
+          (selected) => !pageValues.some((pageItem) => pageItem.id === selected.id),
+        ) ?? [];
+
+      onCheck(remaining);
+      return;
+    }
+
+    // add missing visible rows
+    const existingIds = new Set(checkValues?.map((item) => item.id) ?? []);
+
+    const next = [
+      ...(checkValues ?? []),
+      ...pageValues.filter((item) => !existingIds.has(item.id)),
+    ];
+
+    onCheck(next);
   };
 
   const columns: ColumnDef<ContributionPeriod>[] = [
@@ -25,11 +59,18 @@ export function useUserContributionColumns({ onCheck, checkValues }: Props = {})
       ? [
           {
             id: 'select',
-            header: '',
+            header: ({ table }) => {
+              const rows = table.getRowModel().rows;
+              const allSelected =
+                rows.length > 0 && rows.every((row) => isRowSelected(row.original));
+              return (
+                <Checkbox checked={allSelected} onCheckedChange={() => onSelectAllChange(table)} />
+              );
+            },
             cell: ({ row }) => (
               <Checkbox
                 checked={isRowSelected(row.original)}
-                onCheckedChange={() => onRowChange(row.original)}
+                onCheckedChange={() => onRowChange((data) => [...data, row.original])}
               />
             ),
           } satisfies ColumnDef<ContributionPeriod>,
