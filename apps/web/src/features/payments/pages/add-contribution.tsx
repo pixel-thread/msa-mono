@@ -4,18 +4,18 @@ import { DataTablePagination } from '@src/shared/components/data-table-paginatio
 import { MemberCombobox } from '@src/shared/components/members/member-combobox';
 import { SectionHeader } from '@src/shared/components/section-header';
 import http from '@src/shared/utils/http';
+import { formattedAmount } from '@src/shared/utils';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { ContributionPeriod } from '../types';
 import { useUserContributionColumns } from '../hooks/useUserContributionColumns';
-import { SubmitHandler } from 'react-hook-form';
 import z from 'zod';
 import { toast } from 'sonner';
 import { Button } from '@src/shared/components/ui/button';
 import { useUrlFilters } from '@hooks/use-url-filters';
 import { Card, CardContent } from '@components/ui/card';
 import { useUserContributions } from '../hooks';
-import { Plus } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 
 const AddMemberContributionSchema = z.object({
   userId: z.uuid(),
@@ -36,6 +36,11 @@ export const AddContributionPage = () => {
   const [selectedPeriods, setSelectedPeriods] = useState<ContributionPeriod[]>([]);
   const [userId, setUserId] = useState<string>('');
 
+  const selectedTotal = useMemo(
+    () => selectedPeriods.reduce((acc, period) => acc + parseInt(period.dueAmount, 10), 0),
+    [selectedPeriods],
+  );
+
   const handleRowCheckChange = (data: ContributionPeriod[]) => {
     setSelectedPeriods(data);
   };
@@ -51,64 +56,40 @@ export const AddContributionPage = () => {
     basePath: '/payments/add-contribution',
   });
 
-  const { contributions = [], meta, refetch } = useUserContributions({ page, userId: userId });
+  const {
+    contributions = [],
+    meta,
+    summary,
+    user,
+    refetch,
+  } = useUserContributions({ page, userId });
 
-  const { mutate: addUserContribution } = useMutation({
+  const { mutate: addUserContribution, isPending: isAdding } = useMutation({
     mutationFn: (data: AddMemberContributionInput) => http.post(`/contributions/payments`, data),
-    onSuccess: (data) => {
-      if (data.success) {
-        toast.success('Contributions added successfully');
-
-        queryClient.invalidateQueries({ queryKey: ['all-contributions'] });
-        return;
-      }
-      toast.error(data.message || 'Failed to add contributions');
-    },
   });
 
   const genContribution = useMutation({
     mutationFn: () => http.post(`/payments/users/${userId}/contributions`, {}),
     onSuccess: (res) => {
       if (res.success) {
-        toast.success('Contributions added successfully');
+        toast.success('Contributions generated successfully');
         queryClient.invalidateQueries({ queryKey: ['all-contributions'] });
         refetch();
-        return;
       }
     },
   });
 
-  const onSubmit: SubmitHandler<AddMemberContributionInput> = (data) => {
+  const onSubmit = () => {
     if (selectedPeriods.length === 0) {
       toast.error('Please select at least one contribution period');
-      return;
-    }
-    const amount = parseFloat(data.amount);
-
-    const total = selectedPeriods.reduce((acc, period) => acc + parseInt(period.dueAmount, 10), 0);
-
-    if (!total) toast.error('Total due amount not found');
-
-    if (amount > total || amount < total) {
-      toast.error('Amount is greater or less than total due amount');
-      return;
-    }
-    const paylaod = {
-      ...data,
-      contributionPeriodIds: selectedPeriods.map((id) => id.id),
-    };
-
-    const isValidPayload = AddMemberContributionSchema.safeParse(paylaod);
-
-    if (!isValidPayload.success) {
-      toast.error(isValidPayload.error.message);
       return;
     }
 
     addUserContribution(
       {
-        ...data,
-        contributionPeriodIds: selectedPeriods.map((id) => id.id),
+        userId,
+        contributionPeriodIds: selectedPeriods.map((p) => p.id),
+        amount: selectedTotal.toString(),
       },
       {
         onSuccess: (data) => {
@@ -120,46 +101,56 @@ export const AddContributionPage = () => {
             return;
           }
           toast.error(data.message || 'Failed to add contributions');
-          return;
         },
       },
     );
-    return;
   };
 
   return (
-    <div className="space-y-2 flex-col flex ">
+    <div className="space-y-6 flex-col flex">
       <SectionHeader title="Add Member Contributions" />
-      <Card>
-        <CardContent>
-          <MemberCombobox value={userId} onValueChange={(value) => setUserId(value)} />
-          <div className="gap-4 my-4">
-            <h1>
-              <b>Contributions</b>
-              <b> {selectedPeriods.length > 0 ? `(${selectedPeriods.length})` : ''}</b>
-            </h1>
-            <h1>
-              <b>Total Due Amount:</b>{' '}
-              {selectedPeriods.reduce((acc, period) => acc + parseInt(period.dueAmount, 10), 0)}
-            </h1>
-            <h1>
-              <b>Total Amount To Pay:</b>{' '}
-              {selectedPeriods.reduce((acc, period) => acc + parseInt(period.dueAmount, 10), 0)}
-            </h1>
-          </div>
-          <Button>
-            <Plus className="mr-2 h-4 w-4" />
-            Add Contribution
-          </Button>
-        </CardContent>
+      <Card className="p-4">
+        <MemberCombobox value={userId} onValueChange={(value) => setUserId(value)} />
       </Card>
+
+      {selectedPeriods.length > 0 && (
+        <Card className="border-2 border-primary/20">
+          <CardContent className="pt-6">
+            <div className="grid gap-6 sm:grid-cols-3">
+              <div className="space-y-1">
+                <p className="text-sm text-muted-foreground">Selected Periods</p>
+                <p className="text-3xl font-bold tracking-tight">{selectedPeriods.length}</p>
+              </div>
+              <div className="space-y-1">
+                <p className="text-sm text-muted-foreground">Total Due (All)</p>
+                <p className="text-3xl font-bold tracking-tight text-destructive">
+                  {formattedAmount(summary?.totalDue ?? 0)}
+                </p>
+              </div>
+              <div className="space-y-1">
+                <p className="text-sm text-muted-foreground">Paying Today</p>
+                <p className="text-3xl font-bold tracking-tight text-green-600">
+                  {formattedAmount(selectedTotal)}
+                </p>
+              </div>
+            </div>
+            <div className="mt-6 flex justify-end">
+              <Button size="lg" onClick={() => onSubmit()} disabled={isAdding}>
+                {isAdding && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                Pay {formattedAmount(selectedTotal)}
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       <div className="flex justify-end items-center">
         <Button
           disabled={genContribution.isPending || !userId}
-          variant={'outline'}
+          variant="outline"
           onClick={() => genContribution.mutate()}
         >
+          {genContribution.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           Generate All Contributions Months
         </Button>
       </div>

@@ -32,7 +32,7 @@ export function useUserContributions(options: UseUserContributionsOptions) {
       http.get<{
         contributions: ContributionPeriod[];
         user: UserContributionData;
-        summery: ContributionSummary;
+        summary: ContributionSummary;
       }>(safeUrl),
     enabled: !!userId,
   });
@@ -43,7 +43,7 @@ export function useUserContributions(options: UseUserContributionsOptions) {
     meta: meta,
     contributions: data?.data?.contributions ?? [],
     user: data?.data?.user ?? null,
-    summary: data?.data?.summery ?? null,
+    summary: data?.data?.summary ?? null,
     isLoading,
     error,
     refetch,
