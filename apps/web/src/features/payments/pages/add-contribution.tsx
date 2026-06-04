@@ -36,11 +36,7 @@ export const AddContributionPage = () => {
   const [userId, setUserId] = useState<string>('');
 
   const handleRowCheckChange = (data: ContributionPeriod[]) => {
-    if (selectedPeriods.some((id) => data.some((data) => data.id === id.id))) {
-      setSelectedPeriods((prev) => prev.filter((id) => data.some((data) => data.id !== id.id)));
-    } else {
-      setSelectedPeriods((prev) => [...prev, data]);
-    }
+    setSelectedPeriods(data);
   };
 
   const { columns } = useUserContributionColumns({

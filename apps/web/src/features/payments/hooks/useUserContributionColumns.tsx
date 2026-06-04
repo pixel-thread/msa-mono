@@ -9,25 +9,20 @@ import Link from 'next/link';
 import { Checkbox } from '@components/ui/checkbox';
 
 type Props = {
-  onCheck?: (data: ContributionPeriod[]) => void;
-  checkValues?: ContributionPeriod[];
+  onCheck: (data: ContributionPeriod[]) => void;
+  checkValues: ContributionPeriod[];
 };
 
-export function useUserContributionColumns({ onCheck, checkValues }: Props = {}) {
+export function useUserContributionColumns({ onCheck, checkValues }: Props) {
   const isRowSelected = (data: ContributionPeriod) => checkValues?.some((id) => id.id === data.id);
-
-  const onRowChange = (data: ContributionPeriod[]) => {
-    onCheck?.(data);
-  };
 
   const onSelectAllChange = (table: Table<ContributionPeriod>) => {
     if (!onCheck) return;
 
-    const rows = table.getRowModel().rows;
+    const rows = table.getRowModel().rows.filter((val) => val.original.status !== 'PAID');
 
     const pageValues = rows.map((row) => ({
-      id: row.original.id,
-      month: row.original.month,
+      ...row,
     }));
 
     const allSelected = rows.every((row) => isRowSelected(row.original));
@@ -70,7 +65,13 @@ export function useUserContributionColumns({ onCheck, checkValues }: Props = {})
             cell: ({ row }) => (
               <Checkbox
                 checked={isRowSelected(row.original)}
-                onCheckedChange={() => onRowChange((data) => [...data, row.original])}
+                onCheckedChange={(checked) => {
+                  if (checked) {
+                    onCheck?.([...(checkValues ?? []), row.original]);
+                  } else {
+                    onCheck?.(checkValues?.filter((item) => item.id !== row.original.id) ?? []);
+                  }
+                }}
               />
             ),
           } satisfies ColumnDef<ContributionPeriod>,
