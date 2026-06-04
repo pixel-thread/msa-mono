@@ -53,3 +53,5 @@ export const AgendaOperationSchema = z.object({
 
 /** Inferred type for agenda operations input. */
 export type AgendaOperationInput = z.infer<typeof AgendaOperationSchema>;
+
+export const ProcessingAgendaParamsSchema = z.object({ meetingId: z.string('Invalid meeting ID') });
