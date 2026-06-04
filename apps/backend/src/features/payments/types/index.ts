@@ -69,8 +69,6 @@ export interface PaymentTransaction {
   };
 }
 
-import { ContributionSummary } from '@src/features/contributions/types';
-
 export interface UserPaymentData {
   user: {
     id: string;
