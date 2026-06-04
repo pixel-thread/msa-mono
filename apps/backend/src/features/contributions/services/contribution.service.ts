@@ -1,11 +1,99 @@
 import { prisma } from '@src/shared/lib/prisma';
-import { ContributionStatus, Prisma, UserStatus } from '@prisma/client';
+import { ContributionStatus, Prisma, UserStatus, PaymentStatus } from '@prisma/client';
 import { recordWaiver } from '@src/features/ledger/services/accounting.service';
 import { ContributionSummary } from '@src/features/contributions/types';
+import { NotFoundError } from '@src/shared/errors';
 
 // ---------------------------------------------------------------------------
 // Service functions
 // ---------------------------------------------------------------------------
+
+/**
+ * Allocate a payment amount across outstanding contribution periods using
+ * FIFO (oldest debt first).
+ *
+ * For each period:
+ *   - If remaining >= dueAmount → fully paid
+ *   - If remaining > 0 but < dueAmount → partially paid
+ *   - If remaining == 0 → stop
+ */
+export async function allocatePaymentToContributions(
+  tx: Prisma.TransactionClient, // Prisma transaction client
+  paymentTransactionId: string,
+  userId: string,
+  totalAmount: number,
+) {
+  const outstanding = await tx.contributionPeriod.findMany({
+    where: {
+      userId,
+      status: {
+        in: [ContributionStatus.DUE, ContributionStatus.PARTIAL, ContributionStatus.OVERDUE],
+      },
+    },
+    orderBy: [{ year: 'asc' }, { month: 'asc' }],
+  });
+
+  const payment = await tx.paymentTransaction.findUnique({
+    where: {
+      id: paymentTransactionId,
+    },
+  });
+
+  if (!payment) {
+    throw new NotFoundError('Payment not found');
+  }
+
+  let remaining = totalAmount;
+
+  for (const period of outstanding) {
+    if (remaining <= 0) break;
+
+    const dueAmount = Number(period.dueAmount);
+    const allocatedAmount = Math.min(remaining, dueAmount);
+    const newPaidAmount = Number(period.paidAmount) + allocatedAmount;
+    const newDueAmount = dueAmount - allocatedAmount;
+
+    // Create allocation record
+    await tx.paymentAllocation.create({
+      data: {
+        paymentTransactionId,
+        contributionPeriodId: period.id,
+        allocatedAmount,
+      },
+    });
+
+    // Update contribution period
+    await tx.contributionPeriod.update({
+      where: { id: period.id },
+      data: {
+        paidAmount: newPaidAmount,
+        dueAmount: Math.max(newDueAmount, 0),
+        status: newDueAmount <= 0 ? ContributionStatus.PAID : ContributionStatus.PARTIAL,
+      },
+    });
+
+    remaining -= allocatedAmount;
+  }
+
+  if (remaining > 0) {
+    await tx.unallocatedPayment.create({
+      data: {
+        associationId: payment.associationId,
+        userId: userId,
+
+        paymentTransactionId: paymentTransactionId,
+
+        amount: remaining,
+        consumedAmount: 0,
+        balanceAmount: remaining,
+
+        notes: 'Excess contribution payment credit',
+      },
+    });
+  }
+
+  return remaining; // Excess amount (advance payment)
+}
 
 export async function applyCreditsToContributionPeriod(contributionPeriodId: string) {
   return prisma.$transaction(async (tx) => {

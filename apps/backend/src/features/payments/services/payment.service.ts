@@ -18,6 +18,7 @@ import { BadRequestError, NotFoundError, PaymentError } from '@src/shared/errors
 import { logAction } from '@src/shared/services/audit-logs';
 import { PAGE_SIZE } from '@src/shared/constants';
 import { recordMemberPayment } from '@src/features/ledger/services/accounting.service';
+import { allocatePaymentToContributions } from '@src/features/contributions/services/contribution.service';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -556,97 +557,6 @@ export async function recordManualPayment(input: RecordManualPaymentInput) {
 
     return transaction;
   });
-}
-
-// ---------------------------------------------------------------------------
-// 4. FIFO Allocation — Allocate a Payment Across Contribution Periods
-// ---------------------------------------------------------------------------
-
-/**
- * Allocate a payment amount across outstanding contribution periods using
- * FIFO (oldest debt first).
- *
- * For each period:
- *   - If remaining >= dueAmount → fully paid
- *   - If remaining > 0 but < dueAmount → partially paid
- *   - If remaining == 0 → stop
- */
-async function allocatePaymentToContributions(
-  tx: Prisma.TransactionClient, // Prisma transaction client
-  paymentTransactionId: string,
-  userId: string,
-  totalAmount: number,
-) {
-  const outstanding = await tx.contributionPeriod.findMany({
-    where: {
-      userId,
-      status: {
-        in: [ContributionStatus.DUE, ContributionStatus.PARTIAL, ContributionStatus.OVERDUE],
-      },
-    },
-    orderBy: [{ year: 'asc' }, { month: 'asc' }],
-  });
-
-  const payment = await tx.paymentTransaction.findUnique({
-    where: {
-      id: paymentTransactionId,
-    },
-  });
-
-  if (!payment) {
-    throw new NotFoundError('Payment not found');
-  }
-
-  let remaining = totalAmount;
-
-  for (const period of outstanding) {
-    if (remaining <= 0) break;
-
-    const dueAmount = Number(period.dueAmount);
-    const allocatedAmount = Math.min(remaining, dueAmount);
-    const newPaidAmount = Number(period.paidAmount) + allocatedAmount;
-    const newDueAmount = dueAmount - allocatedAmount;
-
-    // Create allocation record
-    await tx.paymentAllocation.create({
-      data: {
-        paymentTransactionId,
-        contributionPeriodId: period.id,
-        allocatedAmount,
-      },
-    });
-
-    // Update contribution period
-    await tx.contributionPeriod.update({
-      where: { id: period.id },
-      data: {
-        paidAmount: newPaidAmount,
-        dueAmount: Math.max(newDueAmount, 0),
-        status: newDueAmount <= 0 ? ContributionStatus.PAID : ContributionStatus.PARTIAL,
-      },
-    });
-
-    remaining -= allocatedAmount;
-  }
-
-  if (remaining > 0) {
-    await tx.unallocatedPayment.create({
-      data: {
-        associationId: payment.associationId,
-        userId: userId,
-
-        paymentTransactionId: paymentTransactionId,
-
-        amount: remaining,
-        consumedAmount: 0,
-        balanceAmount: remaining,
-
-        notes: 'Excess contribution payment credit',
-      },
-    });
-  }
-
-  return remaining; // Excess amount (advance payment)
 }
 
 // ---------------------------------------------------------------------------
