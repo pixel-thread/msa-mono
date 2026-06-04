@@ -15,6 +15,7 @@ import { Button } from '@src/shared/components/ui/button';
 import { useUrlFilters } from '@hooks/use-url-filters';
 import { Card, CardContent } from '@components/ui/card';
 import { useUserContributions } from '../hooks';
+import { Plus } from 'lucide-react';
 
 const AddMemberContributionSchema = z.object({
   userId: z.uuid(),
@@ -146,6 +147,10 @@ export const AddContributionPage = () => {
               {selectedPeriods.reduce((acc, period) => acc + parseInt(period.dueAmount, 10), 0)}
             </h1>
           </div>
+          <Button>
+            <Plus className="mr-2 h-4 w-4" />
+            Add Contribution
+          </Button>
         </CardContent>
       </Card>
 
