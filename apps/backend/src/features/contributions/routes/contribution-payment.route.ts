@@ -32,20 +32,19 @@ export const createManualContributionPaymentHandler: RequestHandler[] = [
       typeof CreateManualContributionPaymentSchema
     >;
 
-    const payment = await prisma.paymentTransaction.create({
-      data: {
-        userId: userId,
-        associationId: user.associationId,
-        amount,
-        currency: 'INR',
-        gateway: PaymentGateway.MANUAL,
-        status: PaymentStatus.PENDING,
-        method: paymentMethod,
-        createdById: user.id,
-      },
-    });
-
     const result = await prisma.$transaction(async (tx) => {
+      const payment = await tx.paymentTransaction.create({
+        data: {
+          userId: userId,
+          associationId: user.associationId,
+          amount,
+          currency: 'INR',
+          gateway: PaymentGateway.MANUAL,
+          status: PaymentStatus.PENDING,
+          method: paymentMethod,
+          createdById: user.id,
+        },
+      });
       let remainingAmount = Number(payment.amount);
 
       let totalAllocated = 0;
