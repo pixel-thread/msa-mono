@@ -5,6 +5,11 @@ declare global {
     interface Request {
       userId?: string;
       traceId?: string;
+      association?: {
+        id: string;
+        slug: string;
+        name: string;
+      };
       user: {
         id: string;
         memberTypeId?: string | null;
