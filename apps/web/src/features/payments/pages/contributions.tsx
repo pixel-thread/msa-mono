@@ -37,6 +37,7 @@ export default function ContributionsPage() {
   });
 
   const currentYear = new Date().getFullYear();
+
   const years = Array.from({ length: 6 }, (_, i) => currentYear - 5 + i);
 
   const filterFields: FilterField[] = [

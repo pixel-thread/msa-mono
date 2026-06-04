@@ -20,7 +20,7 @@ export async function findContributionPeriods({
     prisma.contributionPeriod.findMany({
       where,
       include,
-      orderBy: [{ year: 'desc' }, { month: 'desc' }],
+      orderBy: [{ year: 'asc' }, { month: 'asc' }],
       take: pageSize,
       skip,
     }),

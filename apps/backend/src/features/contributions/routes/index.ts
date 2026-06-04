@@ -7,10 +7,7 @@ import {
   rejectDeclarationsHandler,
 } from './declarations.route';
 import { auth } from '@src/middleware';
-import {
-  createManualContributionPaymentHandler,
-  verifyManualContributionPaymentHandler,
-} from './contribution-payment.route';
+import { createManualContributionPaymentHandler } from './contribution-payment.route';
 
 const router: Router = Router();
 
@@ -24,12 +21,6 @@ router.get('/all-declarations', listDeclarationsHandler);
 // ADMIN
 router.post('/declarations/:id/approve', approveDeclarationsHandler);
 router.post('/declarations/:id/reject', rejectDeclarationsHandler);
-//
-// // ADMIN Record Contribution payment
 router.post('/payments', createManualContributionPaymentHandler);
-router.post('/payments/:paymentId/verify', verifyManualContributionPaymentHandler);
-// router.get('/payments/:paymentId/verify');
-// router.get('/payments/:paymentId/allocations');
-// router.get('/contributions/outstanding');
 
 export default router;

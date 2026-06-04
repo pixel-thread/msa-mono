@@ -15,9 +15,10 @@ import { success } from '@src/shared/utils/responses';
 import z from 'zod';
 
 export const CreateManualContributionPaymentSchema = z.object({
-  memberId: z.uuid(),
+  userId: z.uuid(),
+  contributionPeriodIds: z.array(z.uuid()),
   amount: z.coerce.number().positive(),
-  paymentMethod: z.enum(PaymentMethod),
+  paymentMethod: z.enum(PaymentMethod).default(PaymentMethod.CASH),
   referenceNumber: z.string().optional().nullable(),
   remarks: z.string().optional().nullable(),
 });
@@ -27,56 +28,27 @@ export const createManualContributionPaymentHandler: RequestHandler[] = [
   asyncHandler(async (req, res) => {
     const user = await withRole(req, UserRole.FINANCE);
 
-    const { memberId, amount, paymentMethod, referenceNumber, remarks } = req.body;
+    const { userId, amount, paymentMethod } = req.body as z.infer<
+      typeof CreateManualContributionPaymentSchema
+    >;
 
     const payment = await prisma.paymentTransaction.create({
       data: {
-        userId: memberId,
+        userId: userId,
         associationId: user.associationId,
         amount,
         currency: 'INR',
         gateway: PaymentGateway.MANUAL,
         status: PaymentStatus.PENDING,
         method: paymentMethod,
-        referenceNumber,
-        notes: remarks,
         createdById: user.id,
       },
     });
-
-    return success(
-      res,
-      {
-        data: payment,
-        message: 'Payment created successfully',
-      },
-      201,
-    );
-  }),
-];
-
-export const verifyManualContributionPaymentHandler: RequestHandler[] = [
-  validate({
-    params: z.object({
-      paymentId: z.uuid(),
-    }),
-  }),
-
-  asyncHandler(async (req, res) => {
-    const accountant = await withRole(req, UserRole.FINANCE);
-
-    const paymentId = req.params.paymentId as string;
 
     const result = await prisma.$transaction(async (tx) => {
       // -------------------------------------------------------------------
       // Load payment
       // -------------------------------------------------------------------
-
-      const payment = await tx.paymentTransaction.findUnique({
-        where: {
-          id: paymentId,
-        },
-      });
 
       if (!payment) {
         throw new NotFoundError('Payment not found');
@@ -97,6 +69,7 @@ export const verifyManualContributionPaymentHandler: RequestHandler[] = [
 
       const outstandingPeriods = await tx.contributionPeriod.findMany({
         where: {
+          id: { in: req.body.contributionPeriodIds },
           userId: payment.userId,
           status: {
             in: [ContributionStatus.DUE, ContributionStatus.OVERDUE, ContributionStatus.PARTIAL],
@@ -197,7 +170,7 @@ export const verifyManualContributionPaymentHandler: RequestHandler[] = [
         data: {
           status: PaymentStatus.COMPLETED,
 
-          verifiedById: accountant.id,
+          verifiedById: user.id,
 
           paidAt: payment.paidAt ?? new Date(),
         },

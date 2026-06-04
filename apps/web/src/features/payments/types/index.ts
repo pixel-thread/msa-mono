@@ -73,7 +73,7 @@ export interface ContributionPeriod {
   month: number;
   expectedAmount: number;
   paidAmount: number;
-  dueAmount: number;
+  dueAmount: string;
   status: string;
   dueDate: string;
   waivedAt: string | null;

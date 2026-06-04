@@ -78,7 +78,7 @@ export function MemberCombobox({
       </div>
 
       {isOpen && (
-        <div className="absolute z-50 mt-1 w-full border bg-popover shadow-md">
+        <div className="absolute z-[999] mt-1 w-full border bg-popover shadow-md">
           {isLoading ? (
             <div className="py-6 text-center text-sm text-muted-foreground">Searching...</div>
           ) : results.length === 0 && searchQuery.length >= 2 ? (

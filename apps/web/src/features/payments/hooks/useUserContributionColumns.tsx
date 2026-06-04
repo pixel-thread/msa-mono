@@ -6,9 +6,35 @@ import { getMonthName } from '@src/shared/utils/helper/get-month-name';
 import { getStatusBadge } from '@src/shared/utils/helper/get-status-badge';
 import type { ContributionPeriod } from '../types';
 import Link from 'next/link';
+import { Checkbox } from '@components/ui/checkbox';
 
-export function useUserContributionColumns() {
+type Props = {
+  onCheck?: (data: ContributionPeriod) => void;
+  checkValues?: ContributionPeriod[];
+};
+
+export function useUserContributionColumns({ onCheck, checkValues }: Props = {}) {
+  const isRowSelected = (data: ContributionPeriod) => checkValues?.some((id) => id.id === data.id);
+
+  const onRowChange = (data: ContributionPeriod) => {
+    onCheck?.(data);
+  };
+
   const columns: ColumnDef<ContributionPeriod>[] = [
+    ...(onCheck
+      ? [
+          {
+            id: 'select',
+            header: '',
+            cell: ({ row }) => (
+              <Checkbox
+                checked={isRowSelected(row.original)}
+                onCheckedChange={() => onRowChange(row.original)}
+              />
+            ),
+          } satisfies ColumnDef<ContributionPeriod>,
+        ]
+      : []),
     {
       id: 'period',
       header: 'Period',
@@ -36,7 +62,9 @@ export function useUserContributionColumns() {
       accessorKey: 'dueAmount',
       header: 'Due',
       cell: ({ row }) => (
-        <span className="text-sm text-red-600">{formattedAmount(row.original.dueAmount)}</span>
+        <span className="text-sm text-red-600">
+          {formattedAmount(parseInt(row.original.dueAmount))}
+        </span>
       ),
     },
     {

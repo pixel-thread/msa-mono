@@ -28,7 +28,6 @@ import { findContributionPeriods } from '@src/features/payments/services/findCon
 import { pageNumberValidation } from '@src/shared/validators/common';
 import { PAGE_SIZE } from '@src/shared/constants';
 import { asyncHandler } from '@src/shared/utils/async-handler';
-import { hasHighRoleAccess } from '@src/shared/utils';
 import { withRole } from '@src/shared/utils/with-role';
 import { UserRole } from '@prisma/client';
 
@@ -198,7 +197,7 @@ export const userContributions: RequestHandler[] = [
     const { contributions, total } = await findContributionPeriods({
       where: whereClause as Parameters<typeof findContributionPeriods>[0]['where'],
       page,
-      pageSize: PAGE_SIZE,
+      pageSize: PAGE_SIZE + 2,
       include: {
         allocations: {
           include: {
@@ -217,10 +216,8 @@ export const userContributions: RequestHandler[] = [
         },
       },
     });
-
     const summary = await getUserContributionSummary(userId);
 
-    // --- Log: success ---
     logger.info(
       { traceId, userId, count: contributions.length, total },
       'GET /api/payments/users/[userId]/contributions - Success',

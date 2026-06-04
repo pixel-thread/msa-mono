@@ -36,9 +36,14 @@ export const RecordManualPaymentSchema = z.object({
 
 // ---- Generate Monthly Contributions ----
 
+export const GenerateUserContributionsSchema = z.object({
+  year: z.number().int().min(2020).max(2100).default(new Date().getFullYear()).optional(),
+  months: z.number().int().min(1).max(12).default(12).optional(),
+});
+
 export const GenerateContributionsSchema = z.object({
-  year: z.number().int().min(2020).max(2100),
-  month: z.number().int().min(1).max(12),
+  year: z.number().int().min(2020).max(2100).default(new Date().getFullYear()),
+  months: z.number().int().min(1).max(12),
 });
 
 // ---- Waive Contribution ----

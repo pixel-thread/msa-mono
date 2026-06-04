@@ -31,6 +31,7 @@ import {
   generateContributions,
   waiveContributionHandler,
   getContribution,
+  generateUserContributionsHandler,
 } from './contributions.route';
 
 // ---- Reports ----
@@ -48,6 +49,7 @@ import {
   testProvider,
   verifyTestProvider,
 } from './providers.route';
+import { generateUserMonthlyContributions } from '../services';
 
 const router: Router = Router();
 
@@ -75,6 +77,7 @@ router.post('/record', recordPayment);
 
 router.get('/users/:userId', userPayments);
 router.get('/users/:userId/contributions', userContributions);
+router.post('/users/:userId/contributions', generateUserContributionsHandler);
 
 // ===========================================================================
 // Contributions

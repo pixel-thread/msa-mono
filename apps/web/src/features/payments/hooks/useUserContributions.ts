@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
-import { UserContributionData } from '../types';
+import { ContributionPeriod, ContributionSummary, UserContributionData } from '../types';
 import { paymentEndpoints } from '../utils/constants/endpoints';
 import { buildUrlWithQuery } from '@repo/shared';
 
@@ -28,17 +28,22 @@ export function useUserContributions(options: UseUserContributionsOptions) {
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ['user-contributions', userId, fromYear, fromMonth, toYear, toMonth, page],
-    queryFn: () => http.get<UserContributionData>(safeUrl),
+    queryFn: () =>
+      http.get<{
+        contributions: ContributionPeriod[];
+        user: UserContributionData;
+        summery: ContributionSummary;
+      }>(safeUrl),
     enabled: !!userId,
   });
 
   const meta = data?.meta;
 
   return {
-    user: data?.data?.user ?? null,
     meta: meta,
     contributions: data?.data?.contributions ?? [],
-    summary: data?.data?.summary ?? null,
+    user: data?.data?.user ?? null,
+    summary: data?.data?.summery ?? null,
     isLoading,
     error,
     refetch,

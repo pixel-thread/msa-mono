@@ -19,10 +19,13 @@ import { UserRole, ContributionStatus } from '@prisma/client';
 import { z } from 'zod';
 import {
   GenerateContributionsSchema,
+  GenerateUserContributionsSchema,
+  UserPaymentsParamsSchema,
   WaiveContributionSchema,
 } from '@src/features/payments/validators';
 import {
   generateMonthlyContributions,
+  generateUserMonthlyContributions,
   markOverdueContributions,
   waiveContribution,
 } from '@src/features/payments/services/contribution.service';
@@ -31,6 +34,7 @@ import { findUniqueContributionPeriod } from '@src/features/payments/services/fi
 import { pageNumberValidation } from '@src/shared/validators/common';
 import { PAGE_SIZE } from '@src/shared/constants';
 import { asyncHandler } from '@src/shared/utils/async-handler';
+import { getAssociation } from '@src/shared/services/association/get-association';
 
 // ---- Validation schemas ----
 
@@ -47,23 +51,6 @@ const ContributionIdParamsSchema = z.object({
 });
 
 // ---- Helpers ----
-
-/**
- * Resolve the authenticated user's association for multi-tenant scoping.
- */
-async function getAssociation(req: Request) {
-  const userId = req.user?.id as string;
-  if (!userId) throw new UnauthorizedError('Unauthorized');
-
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-    include: { association: true },
-  });
-
-  if (!user || !user.associationId) throw new ForbiddenError('User association not found');
-
-  return { id: user.association.id, slug: user.association.slug, name: user.association.name };
-}
 
 // ===========================================================================
 // LIST /api/payments/contributions
@@ -138,6 +125,56 @@ export const listContributions: RequestHandler[] = [
 // GENERATE /api/payments/contributions
 // ===========================================================================
 
+export const generateUserContributionsHandler: RequestHandler[] = [
+  // Step 1: Validate request body
+  validate({ body: GenerateUserContributionsSchema, params: UserPaymentsParamsSchema }),
+  // Step 2: Execute
+  asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
+    const traceId = (req.traceId as string) || '';
+    const userId = req.params.userId as string;
+
+    // --- Log: request started ---
+    logger.info(
+      { traceId, year: req.body.year, month: req.body.month },
+      'POST /api/payments/contributions - Request started',
+    );
+
+    // --- Auth: resolve association ---
+    const association = await getAssociation(req);
+
+    // --- Auth: enforce FINANCE role ---
+    await withRole(req, UserRole.FINANCE);
+
+    logger.info({ traceId }, 'POST /api/payments/contributions - User authorized');
+
+    // --- Business logic: generate monthly contributions ---
+    logger.info(
+      { traceId, year: req.body.year, month: req.body.month },
+      'POST /api/payments/contributions - Generating contributions',
+    );
+
+    const count = await generateUserMonthlyContributions(userId, req.body.year, req.body.months);
+
+    const overdueCount = await markOverdueContributions(association.id, userId);
+
+    // --- Log: success ---
+    logger.info(
+      { traceId, generated: count, markedOverdue: overdueCount },
+      'POST /api/payments/contributions - Success',
+    );
+
+    // --- Response ---
+    return success(
+      res,
+      {
+        data: { generated: count, markedOverdue: overdueCount },
+        message: `Generated ${count} contribution records, marked ${overdueCount} as overdue`,
+      },
+      201,
+    );
+  }),
+];
+
 export const generateContributions: RequestHandler[] = [
   // Step 1: Validate request body
   validate({ body: GenerateContributionsSchema }),
@@ -166,7 +203,7 @@ export const generateContributions: RequestHandler[] = [
       'POST /api/payments/contributions - Generating contributions',
     );
 
-    const count = await generateMonthlyContributions(association.id, req.body.year, req.body.month);
+    const count = await generateMonthlyContributions(association.id, req.body.year, req.body.moth);
 
     const overdueCount = await markOverdueContributions(association.id);
 
@@ -212,6 +249,7 @@ export const waiveContributionHandler: RequestHandler[] = [
     // --- Auth: enforce FINANCE role ---
     // Waiving contributions is a financial decision — restricted to finance
     const user = await withRole(req, UserRole.FINANCE);
+
     logger.info({ traceId }, 'PATCH /api/payments/contributions - User authorized');
 
     // --- Business logic: waive the contribution period ---

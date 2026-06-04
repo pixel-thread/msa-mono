@@ -17,7 +17,6 @@ import { useUrlFilters } from '@hooks/use-url-filters';
 export function UserContributionsPage() {
   const params = useParams();
   const search = useSearchParams();
-  const page = search.get('page');
   const router = useRouter();
   const userId = params.userId as string;
 
@@ -28,7 +27,6 @@ export function UserContributionsPage() {
 
   const { user, contributions, summary, isLoading, meta } = useUserContributions({
     userId,
-    page: Number(page) || 1,
   });
 
   const currentYear = new Date().getFullYear();

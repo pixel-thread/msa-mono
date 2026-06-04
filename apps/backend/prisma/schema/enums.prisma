@@ -119,6 +119,7 @@ enum ContributionStatus {
   PAID
   WAIVED
   OVERDUE
+  PENDING
 
   @@map("contribution_status")
 }
