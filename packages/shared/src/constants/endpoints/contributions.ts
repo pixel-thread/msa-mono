@@ -1,11 +1,15 @@
 export const CONTRIBUTION = {
-  DECLARATIONS: "/contributions/declarations",
-  LIST_DECLARATIONS: "/contributions/declarations",
-  LIST_ALL_DECLARATIONS: "/contributions/declarations",
-  APPROVE_DECLARATION: (id: string) =>
-    `/contributions/declarations/${id}/approve`,
-  REJECT_DECLARATION: (id: string) =>
-    `/contributions/declarations/${id}/reject`,
-  CREATE_PAYMENT: "/contributions/payments",
-  VERIFY_PAYMENT: (id: string) => `/contributions/payments/${id}/verify`,
-};
+  DECLARATIONS: '/contributions/declarations',
+  ALL_DECLARATIONS: '/contributions/all-declarations',
+  APPROVE_DECLARATION: (id: string) => `/contributions/declarations/${id}/approve`,
+  REJECT_DECLARATION: (id: string) => `/contributions/declarations/${id}/reject`,
+
+  LIST: '/contributions/contributions',
+  GENERATE: '/contributions/contributions',
+  WAIVE: '/contributions/contributions',
+  DETAIL: (id: string) => `/contributions/contributions/${id}`,
+
+  USER: (userId: string) => `/contributions/users/${userId}`,
+
+  CREATE_PAYMENT: '/contributions/payments',
+} as const;
