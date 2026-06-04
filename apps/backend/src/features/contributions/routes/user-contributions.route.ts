@@ -1,8 +1,8 @@
 // ---------------------------------------------------------------------------
 // ENDPOINT:  GET /api/contributions/users/:userId
 // SECURITY:  Requires FINANCE role
-// PURPOSE:   Fetch a specific user's contribution periods, along with a 
-//            contribution summary. Used by finance officers to review 
+// PURPOSE:   Fetch a specific user's contribution periods, along with a
+//            contribution summary. Used by finance officers to review
 //            individual member payment status.
 // ---------------------------------------------------------------------------
 
@@ -15,9 +15,7 @@ import { buildPagination } from '@src/shared/utils/build-pagination';
 import { logger } from '@src/shared/logger';
 import { NotFoundError } from '@src/shared/errors';
 import { z } from 'zod';
-import {
-  UserContributionsParamsSchema,
-} from '@src/features/contributions/validators';
+import { UserContributionsParamsSchema } from '@src/features/contributions/validators';
 import { findFirstMember } from '@src/features/members/services/findFirstMember';
 import { getUserContributionSummary } from '@src/features/contributions/services/contribution.service';
 import { findContributionPeriods } from '@src/features/contributions/services/find-contribution-periods';
@@ -42,7 +40,7 @@ const UserContributionsQuerySchema = z.object({
 // GET /api/contributions/users/:userId
 // ===========================================================================
 
-export const userContributions: RequestHandler[] = [
+export const userContributionsHandler: RequestHandler[] = [
   // Step 1: Validate params and query
   validate({ params: UserContributionsParamsSchema, query: UserContributionsQuerySchema }),
 

@@ -55,7 +55,7 @@ const ContributionIdParamsSchema = z.object({
 // LIST /api/payments/contributions
 // ===========================================================================
 
-export const listContributions: RequestHandler[] = [
+export const listContributionsHandler: RequestHandler[] = [
   // Step 1: Validate query params
   validate({ query: ContributionsQuerySchema }),
 
@@ -174,7 +174,7 @@ export const generateUserContributionsHandler: RequestHandler[] = [
   }),
 ];
 
-export const generateContributions: RequestHandler[] = [
+export const generateContributionsHandler: RequestHandler[] = [
   // Step 1: Validate request body
   validate({ body: GenerateContributionsSchema }),
 
@@ -273,7 +273,7 @@ export const waiveContributionHandler: RequestHandler[] = [
 // GET /api/payments/contributions/:contributionId
 // ===========================================================================
 
-export const getContribution: RequestHandler[] = [
+export const getContributionHandler: RequestHandler[] = [
   // Step 1: Validate path params
   validate({ params: ContributionIdParamsSchema }),
 

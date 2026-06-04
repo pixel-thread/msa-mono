@@ -6,3 +6,4 @@ export * from './error-handler';
 export * from './rate-limiter';
 export * from './security-headers';
 export * from './timeout';
+export * from './rbac';
