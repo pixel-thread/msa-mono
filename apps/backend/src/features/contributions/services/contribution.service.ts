@@ -1,31 +1,7 @@
 import { prisma } from '@src/shared/lib/prisma';
 import { ContributionStatus, Prisma, UserStatus } from '@prisma/client';
 import { recordWaiver } from '@src/features/ledger/services/accounting.service';
-
-// ---------------------------------------------------------------------------
-// Types
-// ---------------------------------------------------------------------------
-
-export interface ContributionSummary {
-  userId: string;
-  totalExpected: number;
-  totalPaid: number;
-  totalDue: number;
-  overdueMonths: number;
-  paidMonths: number;
-  partialMonths: number;
-  waivedMonths: number;
-}
-
-export interface MonthlyContributionRow {
-  year: number;
-  month: number;
-  expectedAmount: number;
-  paidAmount: number;
-  dueAmount: number;
-  status: ContributionStatus;
-  dueDate: Date;
-}
+import { ContributionSummary } from '@src/features/contributions/types';
 
 // ---------------------------------------------------------------------------
 // Service functions

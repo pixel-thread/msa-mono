@@ -2,6 +2,8 @@
 // Payment Types — shared domain interfaces used across the payments feature
 // ---------------------------------------------------------------------------
 
+import { ContributionSummary } from '@src/features/contributions/types';
+
 export interface ProviderResponse {
   id: string;
   associationId: string;
@@ -67,51 +69,7 @@ export interface PaymentTransaction {
   };
 }
 
-export interface ContributionPeriod {
-  id: string;
-  associationId: string;
-  userId: string;
-  year: number;
-  month: number;
-  expectedAmount: number;
-  paidAmount: number;
-  dueAmount: number;
-  status: string;
-  dueDate: string;
-  waivedAt: string | null;
-  waivedReason: string | null;
-  createdAt: string;
-  updatedAt: string;
-  user?: {
-    id: string;
-    name: string;
-    email: string;
-    membershipNumber: string | null;
-  };
-  allocations: {
-    id: string;
-    allocatedAmount: number;
-    paymentTransaction: {
-      id: string;
-      amount: number;
-      method: string | null;
-      status: string;
-      paidAt: string | null;
-      receiptNumber: string | null;
-    };
-  }[];
-}
-
-export interface ContributionSummary {
-  userId: string;
-  totalExpected: number;
-  totalPaid: number;
-  totalDue: number;
-  overdueMonths: number;
-  paidMonths: number;
-  partialMonths: number;
-  waivedMonths: number;
-}
+import { ContributionSummary } from '@src/features/contributions/types';
 
 export interface UserPaymentData {
   user: {
@@ -121,17 +79,6 @@ export interface UserPaymentData {
     membershipNumber: string | null;
   };
   transactions: PaymentTransaction[];
-  summary: ContributionSummary;
-}
-
-export interface UserContributionData {
-  user: {
-    id: string;
-    name: string;
-    email: string;
-    membershipNumber: string | null;
-  };
-  contributions: ContributionPeriod[];
   summary: ContributionSummary;
 }
 

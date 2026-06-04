@@ -8,21 +8,20 @@
 import { type Request, NextFunction, Response } from 'express';
 import type { RequestHandler } from 'express';
 
-import { prisma } from '@src/shared/lib/prisma';
 import { validate } from '@src/shared/lib/validate';
 import { success } from '@src/shared/utils/responses';
 import { buildPagination } from '@src/shared/utils/build-pagination';
 import { logger } from '@src/shared/logger';
 import { withRole } from '@src/shared/utils/with-role';
-import { UnauthorizedError, ForbiddenError, NotFoundError } from '@src/shared/errors';
+import { NotFoundError } from '@src/shared/errors';
 import { UserRole, ContributionStatus } from '@prisma/client';
 import { z } from 'zod';
 import {
   GenerateContributionsSchema,
   GenerateUserContributionsSchema,
-  UserPaymentsParamsSchema,
+  UserContributionsParamsSchema,
   WaiveContributionSchema,
-} from '@src/features/payments/validators';
+} from '@src/features/contributions/validators';
 import {
   generateMonthlyContributions,
   generateUserMonthlyContributions,
@@ -127,7 +126,7 @@ export const listContributions: RequestHandler[] = [
 
 export const generateUserContributionsHandler: RequestHandler[] = [
   // Step 1: Validate request body
-  validate({ body: GenerateUserContributionsSchema, params: UserPaymentsParamsSchema }),
+  validate({ body: GenerateUserContributionsSchema, params: UserContributionsParamsSchema }),
   // Step 2: Execute
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
@@ -203,7 +202,11 @@ export const generateContributions: RequestHandler[] = [
       'POST /api/payments/contributions - Generating contributions',
     );
 
-    const count = await generateMonthlyContributions(association.id, req.body.year, req.body.months);
+    const count = await generateMonthlyContributions(
+      association.id,
+      req.body.year,
+      req.body.months,
+    );
 
     const overdueCount = await markOverdueContributions(association.id);
 

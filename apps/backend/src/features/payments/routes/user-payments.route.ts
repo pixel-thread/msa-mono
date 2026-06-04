@@ -18,9 +18,8 @@ import { logger } from '@src/shared/logger';
 import { UnauthorizedError, ForbiddenError, NotFoundError } from '@src/shared/errors';
 import { z } from 'zod';
 import {
-  UserPaymentsParamsSchema,
   UserContributionsParamsSchema,
-} from '@src/features/payments/validators';
+} from '@src/features/contributions/validators';
 import { findFirstMember } from '@src/features/members/services/findFirstMember';
 import { getUserContributionSummary } from '@src/features/contributions/services/contribution.service';
 import { findPaymentTransactions } from '@src/features/payments/services/find-payment-transactions';
@@ -30,6 +29,7 @@ import { PAGE_SIZE } from '@src/shared/constants';
 import { asyncHandler } from '@src/shared/utils/async-handler';
 import { withRole } from '@src/shared/utils/with-role';
 import { UserRole } from '@prisma/client';
+import { getAssociation } from '@src/shared/services/association/get-association';
 
 // ---- Validation schemas ----
 
@@ -47,30 +47,13 @@ const UserContributionsQuerySchema = z.object({
 
 // ---- Helpers ----
 
-/**
- * Resolve the authenticated user's association for multi-tenant scoping.
- */
-async function getAssociation(req: Request) {
-  const userId = req.user?.id as string;
-  if (!userId) throw new UnauthorizedError('Unauthorized');
-
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-    include: { association: true },
-  });
-
-  if (!user || !user.associationId) throw new ForbiddenError('User association not found');
-
-  return { id: user.association.id, slug: user.association.slug, name: user.association.name };
-}
-
 // ===========================================================================
 // GET /api/payments/users/:userId
 // ===========================================================================
 
 export const userPayments: RequestHandler[] = [
   // Step 1: Validate params and query
-  validate({ params: UserPaymentsParamsSchema, query: UserPaymentsQuerySchema }),
+  validate({ params: UserContributionsParamsSchema, query: UserPaymentsQuerySchema }),
 
   // Step 2: Execute
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
