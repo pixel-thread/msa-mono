@@ -1,10 +1,10 @@
 'use client';
 
 import { useParams, useRouter } from 'next/navigation';
-import { useContributionDetail } from '@src/features/payments/hooks/useContributionDetail';
+import { useContributionDetail } from '@src/features/contributions/hooks/useContributionDetail';
 import { Button } from '@src/shared/components/ui/button';
 import { SectionHeader } from '@src/shared/components/section-header';
-import { ContributionDetail } from '@src/features/payments/components/contribution-detail';
+import { ContributionDetail } from '@src/features/contributions/components/contribution-detail';
 import { ArrowLeft } from 'lucide-react';
 
 export function ContributionDetailPage() {

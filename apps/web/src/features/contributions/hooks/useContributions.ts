@@ -13,7 +13,7 @@ interface UseContributionsOptions {
 
 export function useContributions(options: UseContributionsOptions = {}) {
   const { page = 1, status, userId, year, month } = options;
-  const url = buildUrlWithQuery(ENDPOINTS.PAYMENTS.CONTRIBUTIONS.LIST, {
+  const url = buildUrlWithQuery(ENDPOINTS.CONTRIBUTION.LIST, {
     page,
     status,
     userId,

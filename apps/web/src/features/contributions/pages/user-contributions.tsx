@@ -1,13 +1,13 @@
 'use client';
 
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
-import { useUserContributions } from '@src/features/payments/hooks/useUserContributions';
+import { useUserContributions } from '@src/features/contributions/hooks/useUserContributions';
 import { Card, CardHeader, CardTitle, CardContent } from '@src/shared/components/ui/card';
 import { Button } from '@src/shared/components/ui/button';
 import { SectionHeader } from '@src/shared/components/section-header';
 import { DataTable } from '@src/shared/components/data-table';
 import { DataTableFilters } from '@src/shared/components/data-table-filters';
-import { useUserContributionColumns } from '@src/features/payments/hooks/useUserContributionColumns';
+import { useUserContributionColumns } from '@src/features/contributions/hooks/useUserContributionColumns';
 import { CalendarDays, CreditCard, AlertCircle, Receipt } from 'lucide-react';
 import Link from 'next/link';
 import { formattedAmount } from '@src/shared/utils';

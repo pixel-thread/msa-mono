@@ -50,7 +50,7 @@ export function ContributionDetail({ contribution }: ContributionDetailProps) {
               <div>
                 <p className="text-xs font-medium text-muted-foreground">Due Amount</p>
                 <p className="text-sm text-red-600 mt-1">
-                  {formattedAmount(contribution.dueAmount)}
+                  {formattedAmount(parseInt(contribution.dueAmount, 10))}
                 </p>
               </div>
               <div>

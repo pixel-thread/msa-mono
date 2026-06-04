@@ -6,7 +6,7 @@ import { SectionHeader } from '@src/shared/components/section-header';
 import http from '@src/shared/utils/http';
 import { formattedAmount } from '@src/shared/utils';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { ContributionPeriod } from '../types';
 import { useUserContributionColumns } from '../hooks/useUserContributionColumns';
 import z from 'zod';
@@ -16,6 +16,7 @@ import { useUrlFilters } from '@hooks/use-url-filters';
 import { Card, CardContent } from '@components/ui/card';
 import { useUserContributions } from '../hooks';
 import { Loader2 } from 'lucide-react';
+import { ENDPOINTS } from '@repo/shared';
 
 const AddMemberContributionSchema = z.object({
   userId: z.uuid(),
@@ -53,17 +54,18 @@ export const AddContributionPage = () => {
   const queryClient = useQueryClient();
 
   const { setPage, page } = useUrlFilters({
-    basePath: '/payments/add-contribution',
+    basePath: '/contributions/add-contribution',
   });
 
   const { contributions = [], meta, summary, refetch } = useUserContributions({ page, userId });
 
   const { mutate: addUserContribution, isPending: isAdding } = useMutation({
-    mutationFn: (data: AddMemberContributionInput) => http.post(`/contributions/payments`, data),
+    mutationFn: (data: AddMemberContributionInput) =>
+      http.post(ENDPOINTS.CONTRIBUTION.CREATE_PAYMENT, data),
   });
 
   const genContribution = useMutation({
-    mutationFn: () => http.post(`/payments/users/${userId}/contributions`, {}),
+    mutationFn: (id: string) => http.post(ENDPOINTS.CONTRIBUTION.USER(id), {}),
     onSuccess: (res) => {
       if (res.success) {
         toast.success('Contributions generated successfully');
@@ -90,7 +92,7 @@ export const AddContributionPage = () => {
           if (data.success) {
             toast.success('Contributions added successfully');
             queryClient.invalidateQueries({ queryKey: ['all-contributions'] });
-            genContribution.mutate();
+            genContribution.mutate(userId);
             setSelectedPeriods([]);
             return;
           }
@@ -147,7 +149,7 @@ export const AddContributionPage = () => {
         <Button
           disabled={genContribution.isPending || !userId}
           variant="outline"
-          onClick={() => genContribution.mutate()}
+          onClick={() => genContribution.mutate(userId)}
         >
           {genContribution.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           Generate All Contributions Months

@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { PaymentMethod, ContributionStatus } from '@sharedType/enums';
+import { PaymentMethod } from '@sharedType/enums';
 import { pageNumberValidation, pageSizeValidation } from '@src/shared/validators/common';
 
 // ---------------------------------------------------------------------------
@@ -34,50 +34,12 @@ export const RecordManualPaymentSchema = z.object({
 });
 
 // ---------------------------------------------------------------------------
-// Generate Monthly Contributions
-// ---------------------------------------------------------------------------
-
-export const GenerateContributionsSchema = z.object({
-  year: z.number().int().min(2020).max(2100),
-  month: z.number().int().min(1).max(12),
-});
-
-// ---------------------------------------------------------------------------
-// Waive Contribution
-// ---------------------------------------------------------------------------
-
-export const WaiveContributionSchema = z.object({
-  contributionPeriodId: z.uuid(),
-  reason: z.string().min(1, 'Waiver reason is required'),
-});
-
-// ---------------------------------------------------------------------------
 // Query Schemas
 // ---------------------------------------------------------------------------
 
 export const PaymentHistoryQuerySchema = z.object({
   page: pageNumberValidation,
   pageSize: pageSizeValidation,
-});
-
-export const ContributionReportQuerySchema = z.object({
-  userId: z.uuid(),
-  fromYear: z
-    .string()
-    .transform((v) => parseInt(v, 10))
-    .pipe(z.number().int().min(2020)),
-  fromMonth: z
-    .string()
-    .transform((v) => parseInt(v, 10))
-    .pipe(z.number().int().min(1).max(12)),
-  toYear: z
-    .string()
-    .transform((v) => parseInt(v, 10))
-    .pipe(z.number().int().min(2020)),
-  toMonth: z
-    .string()
-    .transform((v) => parseInt(v, 10))
-    .pipe(z.number().int().min(1).max(12)),
 });
 
 export const GetTransactionsQuerySchema = z.object({
@@ -90,13 +52,6 @@ export const GetTransactionsQuerySchema = z.object({
   endDate: z.coerce.date().optional(),
   page: pageNumberValidation,
   pageSize: pageSizeValidation,
-});
-
-export const CollectionReportQuerySchema = z.object({
-  page: pageNumberValidation,
-  year: z.coerce.number().int().min(2020).max(2100).optional(),
-  month: z.coerce.number().int().min(1).max(12).optional(),
-  status: z.nativeEnum(ContributionStatus).optional(),
 });
 
 // ---------------------------------------------------------------------------
@@ -123,9 +78,5 @@ export const ProviderIdParamSchema = z.object({
 });
 
 export const UserPaymentsParamsSchema = z.object({
-  userId: z.uuid('Invalid user ID'),
-});
-
-export const UserContributionsParamsSchema = z.object({
   userId: z.uuid('Invalid user ID'),
 });

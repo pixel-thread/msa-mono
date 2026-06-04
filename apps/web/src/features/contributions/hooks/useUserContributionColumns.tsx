@@ -9,11 +9,11 @@ import Link from 'next/link';
 import { Checkbox } from '@components/ui/checkbox';
 
 type Props = {
-  onCheck: (data: ContributionPeriod[]) => void;
-  checkValues: ContributionPeriod[];
+  onCheck?: (data: ContributionPeriod[]) => void;
+  checkValues?: ContributionPeriod[];
 };
 
-export function useUserContributionColumns({ onCheck, checkValues }: Props) {
+export function useUserContributionColumns({ onCheck, checkValues }: Props = {}) {
   const isRowSelected = (data: ContributionPeriod) => checkValues?.some((id) => id.id === data.id);
 
   const onSelectAllChange = (table: Table<ContributionPeriod>) => {
@@ -24,7 +24,6 @@ export function useUserContributionColumns({ onCheck, checkValues }: Props) {
     const allSelected = rows.every((row) => isRowSelected(row.original));
 
     if (allSelected) {
-      // remove all visible rows
       const remaining =
         checkValues?.filter(
           (selected) => !rows.some((pageItem) => pageItem.original.id === selected.id),

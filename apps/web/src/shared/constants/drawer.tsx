@@ -127,6 +127,20 @@ export const DRAWER_NAV_MAIN = [
     ],
   },
   {
+    title: 'Contributions',
+    url: '/contributions',
+    items: [
+      {
+        title: 'All Contributions',
+        url: '/contributions',
+      },
+      {
+        title: 'Add Contributions',
+        url: '/contributions/add-contribution',
+      },
+    ],
+  },
+  {
     title: 'Ledger',
     url: '/ledger',
     icon: <BookOpenIcon />,

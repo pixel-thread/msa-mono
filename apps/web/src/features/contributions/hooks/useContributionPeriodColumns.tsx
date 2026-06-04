@@ -53,7 +53,7 @@ export function useContributionPeriodColumns() {
       accessorKey: 'dueAmount',
       header: 'Due',
       cell: ({ row }) => (
-        <span className="text-sm text-red-600">{formattedAmount(row.original.dueAmount)}</span>
+          <span className="text-sm text-red-600">{formattedAmount(parseInt(row.original.dueAmount, 10))}</span>
       ),
     },
     {
