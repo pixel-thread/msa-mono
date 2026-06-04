@@ -404,6 +404,7 @@ export async function markOverdueContributions(
     const futurePeriods = await tx.contributionPeriod.updateMany({
       where: {
         associationId,
+        status: ContributionStatus.DUE,
         dueDate: { gte: now },
         ...(userId && { userId }),
       },
