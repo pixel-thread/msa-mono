@@ -61,7 +61,7 @@ export const updateMemberRoute: RequestHandler[] = [
     const traceId = (req.traceId as string) || '';
 
     // ── Auth ────────────────────────────────────────────────────────────────
-    const userId = req.userId as string;
+    const userId = req.user?.id as string;
     if (!userId) throw new UnauthorizedError('Unauthorized');
 
     const user = await prisma.user.findUnique({

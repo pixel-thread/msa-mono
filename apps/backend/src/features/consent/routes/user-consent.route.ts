@@ -62,7 +62,7 @@ const ROLE_HIERARCHY: Record<UserRole, number> = {
 // Resolves the user's association from the request context.
 
 async function getAssociation(req: Request) {
-  const userId = req.userId as string;
+  const userId = req.user?.id as string;
   if (!userId) throw new UnauthorizedError('Unauthorized');
   const user = await prisma.user.findUnique({
     where: { id: userId },
@@ -76,7 +76,7 @@ async function getAssociation(req: Request) {
 // Ensures the authenticated user meets the minimum role requirement.
 
 async function withRole(req: Request, role: UserRole) {
-  const userId = req.userId as string;
+  const userId = req.user?.id as string;
   if (!userId) throw new UnauthorizedError('Unauthorized');
   const user = await getUniqueUser({ where: { id: userId } });
   if (!user) throw new UnauthorizedError('Unauthorized');
@@ -160,7 +160,7 @@ export const updateReceipt: RequestHandler[] = [
     const receipt = await ConsentService.updateConsentReceipt(
       association.id,
       receiptId,
-      req.userId as string,
+      req.user?.id as string,
       req.body,
     );
 
@@ -198,7 +198,7 @@ export const deleteReceipt: RequestHandler[] = [
 
     // ---- Delete the consent receipt
 
-    await ConsentService.deleteConsentReceipt(association.id, receiptId, req.userId as string);
+    await ConsentService.deleteConsentReceipt(association.id, receiptId, req.user?.id as string);
 
     // ---- Log success and return response
 

@@ -86,7 +86,7 @@ export const postRegisterPushToken: RequestHandler[] = [
 // POST /api/notifications/link
 // Link an existing push notification token to the currently authenticated
 // user so that push notifications can be routed to this device.
-// Security: Relies on req.userId from upstream auth middleware.
+// Security: Relies on req.user?.id from upstream auth middleware.
 // ---------------------------------------------------------------------------
 
 export const postLinkNotification: RequestHandler[] = [
@@ -103,7 +103,7 @@ export const postLinkNotification: RequestHandler[] = [
     // ---- Authorize
 
     // Ensure the request has a userId set by the upstream auth middleware.
-    const userId = req.userId;
+    const userId = req.user?.id;
     if (!userId) throw new UnauthorizedError('User ID is required');
 
     // ---- Validate token
@@ -162,7 +162,7 @@ export const patchNotificationStatus: RequestHandler[] = [
 
     // ---- Validate ownership
 
-    const userId = req.userId as string;
+    const userId = req.user?.id as string;
     if (!userId) throw new UnauthorizedError('Unauthorized');
 
     // Confirm the notification exists and belongs to this user so that

@@ -42,7 +42,7 @@ const ROLE_HIERARCHY: Record<UserRole, number> = {
 };
 
 async function getAssociation(req: Request) {
-  const userId = req.userId as string;
+  const userId = req.user?.id as string;
   if (!userId) throw new UnauthorizedError('Unauthorized');
   const user = await prisma.user.findUnique({
     where: { id: userId },
@@ -53,7 +53,7 @@ async function getAssociation(req: Request) {
 }
 
 async function withRole(req: Request, role: UserRole) {
-  const userId = req.userId as string;
+  const userId = req.user?.id as string;
   if (!userId) throw new UnauthorizedError('Unauthorized');
   const user = await getUniqueUser({ where: { id: userId } });
   if (!user) throw new UnauthorizedError('Unauthorized');
@@ -72,7 +72,7 @@ export const getTicket: RequestHandler[] = [
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
     const association = await getAssociation(req);
-    const userId = req.userId as string;
+    const userId = req.user?.id as string;
     const ticketId = req.params.ticketId as string;
 
     logger.info(
@@ -99,7 +99,7 @@ export const deleteTicket: RequestHandler[] = [
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
     const association = await getAssociation(req);
-    const actorId = req.userId as string;
+    const actorId = req.user?.id as string;
     const ticketId = req.params.ticketId as string;
 
     logger.info(
@@ -132,7 +132,7 @@ export const respondToTicket: RequestHandler[] = [
       'POST /api/dsar/[ticketId]/respond - Request started',
     );
 
-    const actorId = req.userId as string;
+    const actorId = req.user?.id as string;
     await withRole(req, UserRole.DPO);
 
     const ticket = await respondToDsarTicket({
@@ -160,7 +160,7 @@ export const assignTicket: RequestHandler[] = [
       'PATCH /api/dsar/[ticketId]/assign - Request started',
     );
 
-    const actorId = req.userId as string;
+    const actorId = req.user?.id as string;
     await withRole(req, UserRole.DPO);
 
     const user = await getUniqueUser({ where: { id: req.body.assignedToId } });
@@ -193,7 +193,7 @@ export const rejectTicket: RequestHandler[] = [
       'POST /api/dsar/[ticketId]/reject - Request started',
     );
 
-    const actorId = req.userId as string;
+    const actorId = req.user?.id as string;
     await withRole(req, UserRole.DPO);
 
     const ticket = await respondToDsarTicket({

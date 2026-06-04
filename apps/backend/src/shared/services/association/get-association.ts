@@ -4,7 +4,7 @@ import { UnauthorizedError, ForbiddenError } from '@src/shared/errors';
 
 /** Resolves the current user's association from the request context. */
 export async function getAssociation(req: Request) {
-  const userId = req.userId as string;
+  const userId = req?.user?.id as string;
 
   if (!userId) throw new UnauthorizedError('Unauthorized');
 

@@ -31,7 +31,7 @@ import { SubmitDsarSchema } from '@src/features/dsar/validators';
  * Business logic: Every DSAR ticket is scoped to the user's association.
  */
 async function getAssociation(req: Request) {
-  const userId = req.userId as string;
+  const userId = req.user?.id as string;
   if (!userId) throw new UnauthorizedError('Unauthorized');
 
   const user = await prisma.user.findUnique({
@@ -71,7 +71,7 @@ export const submitDsar: RequestHandler[] = [
 
     // ---- Business logic: Create DSAR ticket
 
-    const userId = req.userId as string;
+    const userId = req.user?.id as string;
 
     const ticket = await submitDsarTicket({
       associationId: association.id,

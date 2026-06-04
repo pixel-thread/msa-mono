@@ -32,7 +32,7 @@ export const postChangePassword: RequestHandler[] = [
 
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
-    const userId = req.userId as string;
+    const userId = req.user?.id as string;
     logger.info({ traceId, userId }, 'POST /api/auth/change-password - Request started');
     if (!userId) throw new UnauthorizedError('User not found');
 

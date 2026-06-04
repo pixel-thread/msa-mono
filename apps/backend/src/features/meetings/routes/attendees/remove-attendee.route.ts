@@ -32,7 +32,7 @@ export const patchUpdateAttendee: RequestHandler[] = [
     );
 
     const user = await withRole(req, UserRole.MEMBER);
-    const requestingUserId = req.userId as string;
+    const requestingUserId = req.user?.id as string;
 
     logger.info(
       { traceId, userId: user.id, role: user.role, meetingId, targetUserId },

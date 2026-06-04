@@ -39,7 +39,7 @@ export const getProfile: RequestHandler[] = [
 
     // ---- Authorize
 
-    const userId = req.userId as string;
+    const userId = req.user?.id as string;
     if (!userId) throw new UnauthorizedError('User not found');
 
     // ---- Fetch user
@@ -76,7 +76,7 @@ export const updateProfile: RequestHandler[] = [
 
     // ---- Authorize
 
-    const userId = req.userId as string;
+    const userId = req.user?.id as string;
     if (!userId) throw new UnauthorizedError('User not found');
 
     // ---- Load user + association

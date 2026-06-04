@@ -148,7 +148,7 @@ export const approveDeclarationsHandler: RequestHandler[] = [
       },
       data: {
         status: DeclerationStatus.APPROVED,
-        reviewBy: req.userId,
+        reviewBy: req.user?.id,
         reviewAt: new Date(),
         lastDeclarationDate: new Date(),
       },
@@ -264,7 +264,7 @@ export const rejectDeclarationsHandler: RequestHandler[] = [
       },
       data: {
         status: DeclerationStatus.REJECTED,
-        reviewBy: req.userId,
+        reviewBy: req.user?.id,
         reviewAt: new Date(),
       },
     });

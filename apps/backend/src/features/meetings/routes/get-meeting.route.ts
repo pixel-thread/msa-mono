@@ -34,7 +34,7 @@ export const getMeeting: RequestHandler[] = [
       'GET /api/meetings/[meetingId] - User authorized',
     );
 
-    const userId = req.userId as string;
+    const userId = req.user?.id as string;
 
     const meeting = await findUniqueMeeting({ meetingId, associationId: association.id });
 

@@ -21,7 +21,7 @@ import { getAuthCachedUser, cacheAuthUser } from '@src/features/auth/lib/cache';
 export const getMe: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
   const traceId = req.traceId;
 
-  const userId = req.user.id;
+  const userId = req.user?.id;
 
   logger.info({ traceId, userId }, 'GET /api/auth/me - Request started');
 

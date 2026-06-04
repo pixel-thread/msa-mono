@@ -13,7 +13,7 @@ const ROLE_HIERARCHY: Record<UserRole, number> = {
 };
 
 export async function withRole(req: Request, role: UserRole) {
-  const userId = req.userId;
+  const userId = req?.user?.id;
 
   if (!userId) throw new UnauthorizedError('Unauthorized');
 

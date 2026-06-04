@@ -5,7 +5,6 @@ import { validate } from '@src/shared/lib/validate';
 import { success } from '@src/shared/utils/responses';
 import { asyncHandler } from '@src/shared/utils/async-handler';
 import { logger } from '@src/shared/logger';
-import { env } from '@src/env';
 
 import { hashToken } from '@src/shared/lib/password';
 

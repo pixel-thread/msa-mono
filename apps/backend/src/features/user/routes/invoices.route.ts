@@ -54,7 +54,7 @@ export const listInvoices: RequestHandler[] = [
     // ---- Setup
 
     const traceId = (req.traceId as string) || '';
-    const userId = req.userId as string;
+    const userId = req.user?.id as string;
 
     // ---- Authorize
 
@@ -135,7 +135,7 @@ export const getInvoice: RequestHandler[] = [
     // ---- Setup
 
     const traceId = (req.traceId as string) || '';
-    const userId = req.userId as string;
+    const userId = req.user?.id as string;
 
     // ---- Authorize
 

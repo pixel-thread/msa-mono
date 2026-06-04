@@ -26,7 +26,7 @@ import { asyncHandler } from '@src/shared/utils/async-handler';
  * Resolve the authenticated user's association for multi-tenant scoping.
  */
 async function getAssociation(req: Request) {
-  const userId = req.userId as string;
+  const userId = req.user?.id as string;
   if (!userId) throw new UnauthorizedError('Unauthorized');
 
   const user = await prisma.user.findUnique({
@@ -56,7 +56,7 @@ export const myPayments: RequestHandler[] = [
     const association = await getAssociation(req);
 
     // --- Auth: enforce MEMBER role ---
-    const userId = req.userId as string;
+    const userId = req.user?.id as string;
     await withRole(req, UserRole.MEMBER);
     logger.info({ traceId, userId }, 'GET /api/payments/my - User authorized');
 

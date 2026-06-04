@@ -32,7 +32,7 @@ export const getMyMeetings: RequestHandler[] = [
       'GET /api/meetings/my - User authorized',
     );
 
-    const userId = req.userId as string;
+    const userId = req.user?.id as string;
     const page = (req.query as any)?.page || 1;
 
     const { meetings, pagination } = await findManyMeetings({

@@ -51,7 +51,7 @@ export const postMarkRead: RequestHandler[] = [
       'POST /api/announcements/[id]/read - Request started',
     );
 
-    const userId = req.userId as string;
+    const userId = req.user?.id as string;
 
     // Enforce MEMBER role — any authenticated member can mark as read
     await withRole(req, UserRole.MEMBER);

@@ -94,7 +94,7 @@ export const createEntry: RequestHandler[] = [
 
     // ---- Authorize (FINANCE role) ------------------------------------------
 
-    const userId = req.userId as string;
+    const userId = req.user?.id as string;
     await withRole(req, UserRole.FINANCE);
     logger.info({ traceId, userId }, 'POST /api/ledger/entries - User authorized');
 
@@ -132,7 +132,7 @@ export const approveEntryHandler = async (req: Request, res: Response, _next: Ne
   // ---- Authorize (PRESIDENT role) ----------------------------------------
 
   await withRole(req, UserRole.PRESIDENT);
-  const userId = req.userId as string;
+  const userId = req.user?.id as string;
 
   // ---- Business logic ----------------------------------------------------
 

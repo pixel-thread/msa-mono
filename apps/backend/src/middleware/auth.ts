@@ -28,18 +28,21 @@ export async function auth(req: Request, _res: Response, next: NextFunction) {
     return next(new UnauthorizedError('Invalid token'));
   }
 
-  const user = await prisma.user.findUnique({ where: { id: payload.sub } });
+  const user = await prisma.user.findUnique({
+    where: { id: payload.sub },
+    include: { association: true },
+  });
 
   if (!user) {
     return next(new UnauthorizedError('Invalid token'));
   }
 
-  req.userId = payload.sub;
-
   req.user = {
     id: user.id,
-    role: user.role,
+    roles: user.role,
     associationId: user.associationId,
+    associationName: user.association.name,
+    associationSlug: user.association.slug,
     memberTypeId: user.memberTypeId,
   };
 

@@ -37,7 +37,7 @@ export const listMyComplaints: RequestHandler[] = [
     const traceId = (req.traceId as string) || '';
 
     // ── Auth ────────────────────────────────────────────────────────────────
-    const userId = req.userId as string;
+    const userId = req.user?.id as string;
     if (!userId) {
       logger.error({ traceId }, 'GET /compliance/my - Unauthorized (missing x-user-id)');
       throw new UnauthorizedError('Unauthorized');
@@ -95,7 +95,7 @@ export const getMyComplaint: RequestHandler[] = [
     const traceId = (req.traceId as string) || '';
 
     // ── Auth ────────────────────────────────────────────────────────────────
-    const userId = req.userId as string;
+    const userId = req.user?.id as string;
     if (!userId) {
       logger.error(
         { traceId },

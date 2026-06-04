@@ -35,7 +35,7 @@ export const postRsvp: RequestHandler[] = [
       'POST /api/meetings/[meetingId]/rsvp - User authorized',
     );
 
-    const userId = req.userId as string;
+    const userId = req.user?.id as string;
     if (!userId) throw new ForbiddenError('Unauthorized');
 
     logger.info(

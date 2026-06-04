@@ -30,7 +30,7 @@ export const postMfaResend: RequestHandler[] = [
 
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
-    const userId = req.userId as string;
+    const userId = req.user?.id as string;
     if (!userId) throw new UnauthorizedError('Unauthorized');
 
     // ---- Look up user ----

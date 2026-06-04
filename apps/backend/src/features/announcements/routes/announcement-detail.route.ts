@@ -97,7 +97,7 @@ export const putAnnouncement: RequestHandler[] = [
       throw new ForbiddenError('Invalid announcement id');
     }
 
-    const userId = req.userId as string;
+    const userId = req.user?.id as string;
 
     // Enforce MEMBER role as base gate
     const user = await withRole(req, UserRole.SECRETARY);
@@ -148,7 +148,7 @@ export const deleteAnnouncement: RequestHandler[] = [
 
     logger.info({ traceId, announcementId }, 'DELETE /api/announcements/[id] - Request started');
 
-    const userId = req.userId as string;
+    const userId = req.user?.id as string;
 
     // Enforce MEMBER role as base gate
     const user = await withRole(req, UserRole.MEMBER);
@@ -204,7 +204,7 @@ export const patchAnnouncement: RequestHandler[] = [
 
     logger.info({ traceId, announcementId }, 'PATCH /api/announcements/[id] - Request started');
 
-    const userId = req.userId as string;
+    const userId = req.user?.id as string;
 
     // Enforce MEMBER role as base gate
     const user = await withRole(req, UserRole.MEMBER);

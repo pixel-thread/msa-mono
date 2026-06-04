@@ -111,7 +111,7 @@ export const postApproveApplication: RequestHandler[] = [
     );
 
     // Reviewer identity comes from the x-user-id header
-    const userId = req.userId as string;
+    const userId = req.user?.id as string;
 
     if (!userId) {
       logger.error(
@@ -190,7 +190,7 @@ export const postRejectApplication: RequestHandler[] = [
     );
 
     // Reviewer identity comes from the x-user-id header
-    const userId = req.userId as string;
+    const userId = req.user?.id as string;
 
     if (!userId) {
       logger.error(

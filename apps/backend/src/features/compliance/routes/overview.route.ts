@@ -111,7 +111,7 @@ export const createComplaintHandler: RequestHandler[] = [
     );
 
     // ── Business logic ──────────────────────────────────────────────────────
-    const userId = req.userId as string;
+    const userId = req.user?.id as string;
     const complaint = await createComplaint({
       associationId: association.id,
       userId,

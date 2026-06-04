@@ -32,7 +32,7 @@ export const getMeetings: RequestHandler[] = [
     const query = req.query as { page?: number; type?: string; status?: string };
     if (!query) throw new ForbiddenError('Invalid query parameters');
 
-    const userId = req.userId as string;
+    const userId = req.user?.id as string;
     const { page, type, status } = query;
 
     if (hasHighRoleAccess(user.role)) {

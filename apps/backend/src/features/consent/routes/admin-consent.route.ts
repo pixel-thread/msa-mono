@@ -53,7 +53,7 @@ const ROLE_HIERARCHY: Record<UserRole, number> = {
 // Resolves the user's association from the request context.
 
 async function getAssociation(req: Request) {
-  const userId = req.userId as string;
+  const userId = req.user?.id as string;
   if (!userId) throw new UnauthorizedError('Unauthorized');
   const user = await prisma.user.findUnique({
     where: { id: userId },
@@ -67,7 +67,7 @@ async function getAssociation(req: Request) {
 // Ensures the authenticated user meets the minimum role requirement.
 
 async function withRole(req: Request, role: UserRole) {
-  const userId = req.userId as string;
+  const userId = req.user?.id as string;
   if (!userId) throw new UnauthorizedError('Unauthorized');
   const user = await getUniqueUser({ where: { id: userId } });
   if (!user) throw new UnauthorizedError('Unauthorized');
@@ -143,7 +143,7 @@ export const getConsentHistory: RequestHandler[] = [
 
     // ---- Resolve the requesting user ID
 
-    const userId = req.userId as string;
+    const userId = req.user?.id as string;
     if (!userId) throw new UnauthorizedError();
 
     // ---- Parse query parameters

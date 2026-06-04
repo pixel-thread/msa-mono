@@ -20,7 +20,7 @@ export const postCreateMeeting: RequestHandler[] = [
     const association = await getAssociation(req);
     logger.info({ traceId, associationId: association.id }, 'POST /api/meetings - Request started');
 
-    const userId = req.userId as string;
+    const userId = req.user?.id as string;
     const user = await withRole(req, UserRole.SECRETARY);
 
     if (!hasHighRoleAccess(user.role)) {

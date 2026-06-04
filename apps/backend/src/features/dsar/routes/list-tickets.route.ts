@@ -51,7 +51,7 @@ const ROLE_HIERARCHY: Record<UserRole, number> = {
  * Business logic: Every DSAR ticket is scoped to the user's association.
  */
 async function getAssociation(req: Request) {
-  const userId = req.userId as string;
+  const userId = req.user?.id as string;
   if (!userId) throw new UnauthorizedError('Unauthorized');
 
   const user = await prisma.user.findUnique({
@@ -69,7 +69,7 @@ async function getAssociation(req: Request) {
  * Business logic: Uses a numeric hierarchy where lower values = higher privilege.
  */
 async function withRole(req: Request, role: UserRole) {
-  const userId = req.userId as string;
+  const userId = req.user?.id as string;
   if (!userId) throw new UnauthorizedError('Unauthorized');
 
   const user = await getUniqueUser({ where: { id: userId } });

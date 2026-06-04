@@ -52,7 +52,7 @@ const UserContributionsQuerySchema = z.object({
  * Resolve the authenticated user's association for multi-tenant scoping.
  */
 async function getAssociation(req: Request) {
-  const userId = req.userId as string;
+  const userId = req.user?.id as string;
   if (!userId) throw new UnauthorizedError('Unauthorized');
 
   const user = await prisma.user.findUnique({

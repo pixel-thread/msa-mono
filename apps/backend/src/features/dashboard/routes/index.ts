@@ -17,7 +17,7 @@ const router: Router = Router();
 router.get('/overview', auth, async (req, res, next) => {
   try {
     // ----- Verify authenticated user
-    const userId = req.user.id;
+    const userId = req.user?.id;
 
     if (!userId) throw new UnauthorizedError('Unauthorized');
 

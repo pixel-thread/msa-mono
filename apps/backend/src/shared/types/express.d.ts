@@ -1,21 +1,21 @@
 import { UserRole } from '@prisma/client';
 
+interface AuthenticatedUser {
+  id: string;
+  roles: UserRole[];
+  associationId: string;
+  associationSlug: string;
+  associationName: string;
+  memberTypeId?: string | null;
+}
+
 declare global {
   namespace Express {
     interface Request {
-      userId?: string;
       traceId?: string;
-      association?: {
-        id: string;
-        slug: string;
-        name: string;
-      };
-      user: {
-        id: string;
-        memberTypeId?: string | null;
-        role?: UserRole[];
-        associationId?: string;
-      };
+
+      user?: AuthenticatedUser;
+
       signal?: AbortSignal;
     }
   }

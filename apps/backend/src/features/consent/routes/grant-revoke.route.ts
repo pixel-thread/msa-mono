@@ -27,7 +27,7 @@ import { ConsentUpdateSchema } from '@src/features/consent/validators/consent.va
 // Resolves the user's association from the request context.
 
 async function getAssociation(req: Request) {
-  const userId = req.userId as string;
+  const userId = req.user?.id as string;
   if (!userId) throw new UnauthorizedError('Unauthorized');
   const user = await prisma.user.findUnique({
     where: { id: userId },
@@ -56,7 +56,7 @@ export const grantConsent: RequestHandler[] = [
 
     // ---- Validate request
 
-    const userId = req.userId as string;
+    const userId = req.user?.id as string;
     if (!userId) throw new UnauthorizedError('Unauthorized');
     if (!req.body) throw new BadRequestError('Request body is required');
 
@@ -101,7 +101,7 @@ export const revokeConsent: RequestHandler[] = [
 
     // ---- Validate request
 
-    const userId = req.userId as string;
+    const userId = req.user?.id as string;
     if (!userId) throw new UnauthorizedError('Unauthorized');
     if (!req.body) throw new BadRequestError('Request body is required');
 

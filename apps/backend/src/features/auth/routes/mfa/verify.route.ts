@@ -34,7 +34,7 @@ export const postMfaVerify: RequestHandler[] = [
 
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
-    const userId = req.userId as string;
+    const userId = req.user?.id as string;
     logger.info({ traceId, userId }, 'POST /api/auth/mfa/verify - Request started');
     if (!userId) throw new UnauthorizedError('Unauthorized');
 
