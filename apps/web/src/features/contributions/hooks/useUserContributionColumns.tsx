@@ -3,7 +3,7 @@ import { ColumnDef, Table } from '@tanstack/react-table';
 import { Badge } from '@src/shared/components/ui/badge';
 import { formattedAmount } from '@src/shared/utils';
 import { getMonthName } from '@src/shared/utils/helper/get-month-name';
-import { getStatusBadge } from '@src/shared/utils/helper/get-status-badge';
+import { ContributionStatusBadge } from '../components/contribution-status-badge';
 import type { ContributionPeriod } from '../types';
 import Link from 'next/link';
 import { Checkbox } from '@components/ui/checkbox';
@@ -101,7 +101,7 @@ export function useUserContributionColumns({ onCheck, checkValues }: Props = {})
     {
       accessorKey: 'status',
       header: 'Status',
-      cell: ({ row }) => getStatusBadge(row.original.status),
+      cell: ({ row }) => <ContributionStatusBadge status={row.original.status} />,
     },
     {
       accessorKey: 'dueDate',

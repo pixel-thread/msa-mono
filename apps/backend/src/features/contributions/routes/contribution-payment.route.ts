@@ -46,18 +46,6 @@ export const createManualContributionPaymentHandler: RequestHandler[] = [
     });
 
     const result = await prisma.$transaction(async (tx) => {
-      // -------------------------------------------------------------------
-      // Load payment
-      // -------------------------------------------------------------------
-
-      if (!payment) {
-        throw new NotFoundError('Payment not found');
-      }
-
-      if (payment.status === PaymentStatus.COMPLETED) {
-        throw new ConflictError('Payment already verified');
-      }
-
       let remainingAmount = Number(payment.amount);
 
       let totalAllocated = 0;
@@ -71,18 +59,8 @@ export const createManualContributionPaymentHandler: RequestHandler[] = [
         where: {
           id: { in: req.body.contributionPeriodIds },
           userId: payment.userId,
-          status: {
-            in: [ContributionStatus.DUE, ContributionStatus.OVERDUE, ContributionStatus.PARTIAL],
-          },
         },
-        orderBy: [
-          {
-            year: 'asc',
-          },
-          {
-            month: 'asc',
-          },
-        ],
+        orderBy: [{ year: 'asc' }, { month: 'asc' }],
       });
 
       // -------------------------------------------------------------------
@@ -121,42 +99,17 @@ export const createManualContributionPaymentHandler: RequestHandler[] = [
         // ---------------------------------------------------------------
         // Update contribution period
         // ---------------------------------------------------------------
-
         await tx.contributionPeriod.update({
-          where: {
-            id: period.id,
-          },
+          where: { id: period.id },
           data: {
             paidAmount: newPaidAmount,
             dueAmount: newDueAmount,
-
             status: newDueAmount <= 0 ? ContributionStatus.PAID : ContributionStatus.PARTIAL,
           },
         });
 
         totalAllocated += allocation;
         remainingAmount -= allocation;
-      }
-
-      // -------------------------------------------------------------------
-      // Store excess payment as credit
-      // -------------------------------------------------------------------
-
-      if (remainingAmount > 0) {
-        await tx.unallocatedPayment.create({
-          data: {
-            associationId: payment.associationId,
-            userId: payment.userId,
-
-            paymentTransactionId: payment.id,
-
-            amount: remainingAmount,
-            consumedAmount: 0,
-            balanceAmount: remainingAmount,
-
-            notes: 'Excess contribution payment credit',
-          },
-        });
       }
 
       // -------------------------------------------------------------------

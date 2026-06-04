@@ -3,7 +3,7 @@ import { ColumnDef } from '@tanstack/react-table';
 import Link from 'next/link';
 import { formattedAmount } from '@src/shared/utils';
 import { getMonthName } from '@src/shared/utils/helper/get-month-name';
-import { getStatusBadge } from '@src/shared/utils/helper/get-status-badge';
+import { ContributionStatusBadge } from '../components/contribution-status-badge';
 import type { ContributionPeriod } from '../types';
 
 export function useContributionPeriodColumns() {
@@ -59,7 +59,7 @@ export function useContributionPeriodColumns() {
     {
       accessorKey: 'status',
       header: 'Status',
-      cell: ({ row }) => getStatusBadge(row.original.status),
+      cell: ({ row }) => <ContributionStatusBadge status={row.original.status} />,
     },
     {
       accessorKey: 'dueDate',

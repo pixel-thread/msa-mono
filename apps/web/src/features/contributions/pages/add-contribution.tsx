@@ -4,7 +4,6 @@ import { DataTablePagination } from '@src/shared/components/data-table-paginatio
 import { MemberCombobox } from '@src/shared/components/members/member-combobox';
 import { SectionHeader } from '@src/shared/components/section-header';
 import http from '@src/shared/utils/http';
-import { formattedAmount } from '@src/shared/utils';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
 import { ContributionPeriod } from '../types';
@@ -13,10 +12,13 @@ import z from 'zod';
 import { toast } from 'sonner';
 import { Button } from '@src/shared/components/ui/button';
 import { useUrlFilters } from '@hooks/use-url-filters';
-import { Card, CardContent } from '@components/ui/card';
+import { Card } from '@components/ui/card';
 import { useUserContributions } from '../hooks';
 import { Loader2 } from 'lucide-react';
 import { ENDPOINTS } from '@repo/shared';
+import { MemberProfileCard } from '../components/member-profile-card';
+import { ContributionStatsPanel } from '../components/contribution-stats-panel';
+import { PaymentSummaryBar } from '../components/payment-summary-bar';
 
 const AddMemberContributionSchema = z.object({
   userId: z.uuid(),
@@ -57,7 +59,7 @@ export const AddContributionPage = () => {
     basePath: '/contributions/add-contribution',
   });
 
-  const { contributions = [], meta, summary, refetch } = useUserContributions({ page, userId });
+  const { contributions = [], meta, summary, refetch, user } = useUserContributions({ page, userId });
 
   const { mutate: addUserContribution, isPending: isAdding } = useMutation({
     mutationFn: (data: AddMemberContributionInput) =>
@@ -114,36 +116,28 @@ export const AddContributionPage = () => {
         <MemberCombobox value={userId} onValueChange={onMemberChange} />
       </Card>
 
-      {selectedPeriods.length > 0 && (
-        <Card className="border-2 border-primary/20">
-          <CardContent className="pt-6">
-            <div className="grid gap-6 sm:grid-cols-3">
-              <div className="space-y-1">
-                <p className="text-sm text-muted-foreground">Selected Periods</p>
-                <p className="text-3xl font-bold tracking-tight">{selectedPeriods.length}</p>
-              </div>
-              <div className="space-y-1">
-                <p className="text-sm text-muted-foreground">Total Due (All)</p>
-                <p className="text-3xl font-bold tracking-tight text-destructive">
-                  {formattedAmount(summary?.totalDue ?? 0)}
-                </p>
-              </div>
-              <div className="space-y-1">
-                <p className="text-sm text-muted-foreground">Paying Today</p>
-                <p className="text-3xl font-bold tracking-tight text-green-600">
-                  {formattedAmount(selectedTotal)}
-                </p>
-              </div>
-            </div>
-            <div className="mt-6 flex justify-end">
-              <Button size="lg" onClick={() => onSubmit()} disabled={isAdding}>
-                {isAdding && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                Pay {formattedAmount(selectedTotal)}
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
+      {userId && user && (
+        <MemberProfileCard
+          name={user.name}
+          email={user.email}
+          membershipNumber={user.membershipNumber}
+          userId={userId}
+          summary={summary}
+          totalPeriods={contributions.length}
+        />
       )}
+
+      {summary && (
+        <ContributionStatsPanel summary={summary} contributions={contributions} />
+      )}
+
+      <PaymentSummaryBar
+        selectedPeriods={selectedPeriods}
+        selectedTotal={selectedTotal}
+        summary={summary}
+        isAdding={isAdding}
+        onSubmit={onSubmit}
+      />
 
       <div className="flex justify-end items-center">
         <Button
