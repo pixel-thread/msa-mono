@@ -59,7 +59,13 @@ export const AddContributionPage = () => {
     basePath: '/contributions/add-contribution',
   });
 
-  const { contributions = [], meta, summary, refetch, user } = useUserContributions({ page, userId });
+  const {
+    contributions = [],
+    meta,
+    summary,
+    refetch,
+    user,
+  } = useUserContributions({ page, userId });
 
   const { mutate: addUserContribution, isPending: isAdding } = useMutation({
     mutationFn: (data: AddMemberContributionInput) =>
@@ -70,10 +76,12 @@ export const AddContributionPage = () => {
     mutationFn: (id: string) => http.post(ENDPOINTS.CONTRIBUTION.USER(id), {}),
     onSuccess: (res) => {
       if (res.success) {
-        toast.success('Contributions generated successfully');
         queryClient.invalidateQueries({ queryKey: ['all-contributions'] });
         refetch();
+        return;
       }
+      toast.error(res.message || 'Failed to generate contributions');
+      return;
     },
   });
 
@@ -127,9 +135,7 @@ export const AddContributionPage = () => {
         />
       )}
 
-      {summary && (
-        <ContributionStatsPanel summary={summary} contributions={contributions} />
-      )}
+      {summary && <ContributionStatsPanel summary={summary} contributions={contributions} />}
 
       <PaymentSummaryBar
         selectedPeriods={selectedPeriods}
