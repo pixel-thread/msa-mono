@@ -32,7 +32,7 @@ export function usePaymentTransactionColumns() {
               href={`/payments/users/${tx.userId}`}
               className="text-sm text-primary hover:underline"
             >
-              {tx.user?.name || tx.userId.slice(0, 8)}
+              {tx.userId ? tx.user?.name : 'N/A'}
             </Link>
             {tx.user?.email && <div className="text-xs text-muted-foreground">{tx.user.email}</div>}
           </>
