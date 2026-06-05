@@ -38,6 +38,7 @@ router.get('/contributions/:contributionId', getContributionHandler);
 
 // User Contributions
 router.get('/users/:userId', listUserContributionsHandler);
+// Cron Job for generating user contributions at the end of the month
 router.post('/users/:userId', generateUserContributionsHandler);
 
 // ADMIN

@@ -24,7 +24,7 @@ import {
 } from '@src/features/contributions/validators';
 import {
   generateMonthlyContributions,
-  generateUserMonthlyContributions,
+  generateUserContributions,
   markOverdueContributions,
   waiveContribution,
 } from '@src/features/contributions/services/contribution.service';
@@ -152,7 +152,7 @@ export const generateUserContributionsHandler: RequestHandler[] = [
       'POST /api/payments/contributions - Generating contributions',
     );
 
-    const count = await generateUserMonthlyContributions(userId, req.body.year, req.body.months);
+    const count = await generateUserContributions(userId, req.body.year, req.body.months);
 
     const overdueCount = await markOverdueContributions(association.id, userId);
 
@@ -311,6 +311,7 @@ export const getContributionHandler: RequestHandler[] = [
         },
       },
     });
+
     if (!contribution) throw new NotFoundError('Contribution not found');
 
     // --- Log: success ---
