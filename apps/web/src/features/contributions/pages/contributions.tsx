@@ -33,7 +33,7 @@ import { toast } from 'sonner';
 export default function ContributionsPage() {
   const queryClient = useQueryClient();
   const { filters, page, setPage, setFilters } = useUrlFilters({
-    basePath: '/payments/contributions',
+    basePath: '/contributions',
   });
 
   const currentYear = new Date().getFullYear();
