@@ -128,8 +128,7 @@ export async function processWebhookEvent(
       eventId,
       eventType: payload.event,
       gateway: PaymentGateway.RAZORPAY,
-      // eslint-disable-next-line
-      payload: payload as any,
+      payload: JSON.stringify(payload),
       signature,
       processed: false,
     },
