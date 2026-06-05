@@ -1,7 +1,9 @@
-import { Prisma } from '@prisma/client';
+import { DeclerationStatus, Prisma } from '@prisma/client';
+import { differenceInCalendarMonths, addMonths, startOfMonth, endOfMonth } from 'date-fns';
 import { PAGE_SIZE } from '@src/shared/constants';
 import { prisma } from '@src/shared/lib';
 import { buildPagination } from '@src/shared/utils';
+import { BadRequestError, NotFoundError } from '@src/shared/errors';
 
 type Props = {
   where: Prisma.DeclarationsWhereInput;
@@ -26,4 +28,102 @@ type FindUniqueDeclarationsProps = {
 
 export async function findUniqueDeclaration({ where, include }: FindUniqueDeclarationsProps) {
   return await prisma.declarations.findUnique({ where, include });
+}
+
+export async function submitDeclaration(memberId: string, associationId: string, amount: number) {
+  const lastDeclaration = await prisma.declarations.findFirst({
+    where: { memberId, status: 'APPROVED' },
+    orderBy: { lastDeclarationDate: 'desc' },
+    take: 1,
+  });
+
+  const today = new Date();
+  let startDate: Date;
+
+  if (lastDeclaration) {
+    const lastEndDate = new Date(lastDeclaration.declerationEndDate);
+    const monthSinceLastDeclaration = differenceInCalendarMonths(today, lastEndDate);
+    if (monthSinceLastDeclaration < 1) {
+      throw new BadRequestError('You must wait at least 1 months between declarations.');
+    }
+    startDate = startOfMonth(addMonths(lastEndDate, 1));
+  } else {
+    startDate = startOfMonth(today);
+  }
+
+  const endDate = endOfMonth(today);
+
+  return prisma.declarations.create({
+    data: {
+      memberId,
+      associationId,
+      declerationStartDate: startDate,
+      declerationEndDate: endDate,
+      amount,
+      status: DeclerationStatus.PENDING,
+    },
+  });
+}
+
+export async function approveDeclaration(
+  id: string,
+  associationId: string,
+  reviewBy: string,
+  remark: string,
+) {
+  const existing = await prisma.declarations.findUnique({
+    where: { id, associationId },
+  });
+
+  if (!existing) throw new NotFoundError('Declaration not found');
+
+  if (existing.status === DeclerationStatus.APPROVED) {
+    return { declaration: existing, wasAlreadyApproved: true };
+  }
+
+  const updated = await prisma.declarations.update({
+    where: { id, associationId },
+    data: {
+      status: DeclerationStatus.APPROVED,
+      reviewBy,
+      reviewAt: new Date(),
+      remark,
+      lastDeclarationDate: endOfMonth(new Date()),
+    },
+  });
+
+  return { declaration: updated, wasAlreadyApproved: false };
+}
+
+export async function rejectDeclaration(
+  id: string,
+  associationId: string,
+  reviewBy: string,
+  remark: string,
+) {
+  const existing = await prisma.declarations.findUnique({
+    where: { id, associationId },
+  });
+
+  if (!existing) throw new NotFoundError('Declaration not found');
+
+  if (existing.status === DeclerationStatus.APPROVED) {
+    throw new BadRequestError('Cannot change approved declaration.');
+  }
+
+  if (existing.status === DeclerationStatus.REJECTED) {
+    return { declaration: existing, wasAlreadyRejected: true };
+  }
+
+  const updated = await prisma.declarations.update({
+    where: { id, associationId },
+    data: {
+      status: DeclerationStatus.REJECTED,
+      reviewBy,
+      reviewAt: new Date(),
+      remark,
+    },
+  });
+
+  return { declaration: updated, wasAlreadyRejected: false };
 }

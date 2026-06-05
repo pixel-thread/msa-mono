@@ -5,10 +5,13 @@ import {
   UserStatus,
   PaymentStatus,
   ApprovalStatus,
+  Currency,
+  PaymentGateway,
+  PaymentMethod,
 } from '@prisma/client';
 import { JournalLine, recordWaiver } from '@src/features/ledger/services/accounting.service';
 import { ContributionSummary } from '@src/features/contributions/types';
-import { NotFoundError } from '@src/shared/errors';
+import { BadRequestError, NotFoundError } from '@src/shared/errors';
 
 // ---------------------------------------------------------------------------
 // Service functions
@@ -538,5 +541,46 @@ export async function getUserContributions(
       },
     },
     orderBy: [{ year: 'asc' }, { month: 'asc' }],
+  });
+}
+
+export async function recordContributionPayment(
+  userId: string,
+  associationId: string,
+  amount: number,
+  paymentMethod: PaymentMethod,
+  contributionPeriodIds: string[],
+  paidAt: Date,
+  createdById: string,
+) {
+  if (contributionPeriodIds.length === 0) {
+    throw new BadRequestError('No contribution periods selected');
+  }
+
+  return prisma.$transaction(async (tx) => {
+    const payment = await tx.paymentTransaction.create({
+      data: {
+        userId,
+        associationId,
+        amount,
+        currency: Currency.INR,
+        gateway: PaymentGateway.MANUAL,
+        status: PaymentStatus.PENDING,
+        method: paymentMethod,
+        paidAt,
+        createdById,
+      },
+    });
+
+    await allocatePaymentToContributions(
+      tx,
+      payment.id,
+      userId,
+      amount,
+      contributionPeriodIds,
+      createdById,
+    );
+
+    return payment;
   });
 }

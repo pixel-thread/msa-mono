@@ -1,14 +1,17 @@
 import { DeclerationStatus, UserRole } from '@prisma/client';
-import { prisma } from '@src/shared/lib';
 import { validate } from '@src/shared/lib/validate';
 import { asyncHandler } from '@src/shared/utils/async-handler';
 import { withRole } from '@src/shared/utils/with-role';
 import { RequestHandler } from 'express';
 import { success } from '@src/shared/utils/responses';
 import z from 'zod';
-import { BadRequestError, NotFoundError } from '@src/shared/errors';
-import { differenceInCalendarMonths, addMonths, startOfMonth, endOfMonth } from 'date-fns';
-import { findDeclarations, findUniqueDeclaration } from '../services/declarations.service';
+import {
+  findDeclarations,
+  findUniqueDeclaration,
+  submitDeclaration,
+  approveDeclaration,
+  rejectDeclaration,
+} from '../services/declarations.service';
 import {
   ApproveDeclarationSchema,
   CreateUserDeclarations,
@@ -17,6 +20,7 @@ import {
 } from '../validators';
 import { hasHighRoleAccess } from '@src/shared/utils';
 import { pageNumberValidation } from '@src/shared/validators';
+import { NotFoundError } from '@src/shared/errors';
 
 export const createUserDeclarationHandler: RequestHandler[] = [
   validate({ body: CreateUserDeclarations }),
@@ -26,44 +30,7 @@ export const createUserDeclarationHandler: RequestHandler[] = [
 
     const { amount } = req.body as CreateUserDeclarationsInput;
 
-    const lastDeclaration = await prisma.declarations.findFirst({
-      where: {
-        memberId: user.id,
-        status: 'APPROVED',
-      },
-      orderBy: { lastDeclarationDate: 'desc' },
-      take: 1,
-    });
-
-    const today = new Date();
-
-    let startDate = lastDeclaration ? new Date(lastDeclaration.declerationEndDate) : new Date();
-
-    if (lastDeclaration) {
-      const lastEndDate = new Date(lastDeclaration.declerationEndDate);
-
-      const monthSinceLastDeclaration = differenceInCalendarMonths(today, lastEndDate);
-
-      if (monthSinceLastDeclaration < 1) {
-        throw new BadRequestError('You must wait at least 1 months between declarations.');
-      }
-      startDate = startOfMonth(addMonths(lastEndDate, 1));
-    } else {
-      startDate = startOfMonth(today);
-    }
-
-    const endDate = endOfMonth(today);
-
-    const declear = await prisma.declarations.create({
-      data: {
-        memberId: user.id,
-        associationId: associationId || '',
-        declerationStartDate: startDate,
-        declerationEndDate: endDate,
-        amount,
-        status: DeclerationStatus.PENDING,
-      },
-    });
+    const declear = await submitDeclaration(user.id, associationId || '', amount);
 
     return success(res, {
       data: {
@@ -144,41 +111,26 @@ export const approveDeclarationsHandler: RequestHandler[] = [
   asyncHandler(async (req, res) => {
     const declarationId = req.params.id as string;
     const associationId = req.user?.associationId;
+    const userId = req.user?.id;
+
+    if (!userId) {
+      throw new NotFoundError('User not found');
+    }
 
     await withRole(req, UserRole.FINANCE);
 
-    const existingDeclaration = await prisma.declarations.findUnique({
-      where: { id: declarationId, associationId: associationId },
-    });
+    const { declaration, wasAlreadyApproved } = await approveDeclaration(
+      declarationId,
+      associationId!,
+      userId,
+      req.body.remark,
+    );
 
-    if (!existingDeclaration) throw new NotFoundError('Declaration not found');
-
-    if (existingDeclaration.status === DeclerationStatus.APPROVED) {
-      return success(res, {
-        data: existingDeclaration,
-        message: 'Declaration already approved.',
-      });
-    }
-
-    // 1. Update the declaration status
-    const updatedDeclaration = await prisma.declarations.update({
-      where: {
-        id: declarationId,
-        associationId: associationId,
-      },
-      data: {
-        status: DeclerationStatus.APPROVED,
-        reviewBy: req.user?.id,
-        reviewAt: new Date(),
-        remark: req.body.remark,
-        lastDeclarationDate: endOfMonth(new Date()),
-      },
-    });
-
-    // 6. Return standard success JSON response
     return success(res, {
-      data: updatedDeclaration,
-      message: 'Declarations successfully approved and contribution periods generated.',
+      data: declaration,
+      message: wasAlreadyApproved
+        ? 'Declaration already approved.'
+        : 'Declarations successfully approved and contribution periods generated.',
     });
   }),
 ];
@@ -187,47 +139,27 @@ export const rejectDeclarationsHandler: RequestHandler[] = [
   validate({ params: z.object({ id: z.string() }), body: RejectDeclarationSchema }),
   asyncHandler(async (req, res) => {
     const declarationId = req.params.id as string;
-
     const associationId = req.user?.associationId;
+    const userId = req.user?.id;
+
+    if (!userId) {
+      throw new NotFoundError('User not found');
+    }
 
     await withRole(req, UserRole.FINANCE);
 
-    const existingDeclaration = await prisma.declarations.findUnique({
-      where: { id: declarationId, associationId: associationId },
-    });
-
-    if (!existingDeclaration) throw new NotFoundError('Declaration not found');
-
-    if (existingDeclaration.status === DeclerationStatus.APPROVED) {
-      return success(res, {
-        data: existingDeclaration,
-        message: 'Cannot change approved declaration.',
-      });
-    }
-
-    if (existingDeclaration.status === DeclerationStatus.REJECTED) {
-      return success(res, {
-        data: existingDeclaration,
-        message: 'Declaration already rejected.',
-      });
-    }
-
-    const declarations = await prisma.declarations.update({
-      where: {
-        id: declarationId,
-        associationId: associationId,
-      },
-      data: {
-        status: DeclerationStatus.REJECTED,
-        reviewBy: req.user?.id,
-        reviewAt: new Date(),
-        remark: req.body.remark,
-      },
-    });
+    const { declaration, wasAlreadyRejected } = await rejectDeclaration(
+      declarationId,
+      associationId!,
+      userId,
+      req.body.remark,
+    );
 
     return success(res, {
-      data: declarations,
-      message: 'Declarations successfully rejected.',
+      data: declaration,
+      message: wasAlreadyRejected
+        ? 'Declaration already rejected.'
+        : 'Declarations successfully rejected.',
     });
   }),
 ];
