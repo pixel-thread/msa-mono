@@ -39,6 +39,10 @@ export function useDeclarationsColumns({
       ),
     },
     {
+      accessorKey: 'lastDeclarationDate',
+      header: 'Last Declaration',
+    },
+    {
       accessorKey: 'member.mobile',
       header: 'Mobile',
       cell: ({ row }) => (
