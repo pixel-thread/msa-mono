@@ -6,7 +6,7 @@ model PaymentTransaction {
   id String @id @default(uuid())
 
   associationId String
-  userId        String
+  userId        String?
 
   amount   Decimal @db.Decimal(10, 2)
   currency String  @default("INR")
@@ -43,7 +43,7 @@ model PaymentTransaction {
   updatedAt DateTime @updatedAt
 
   association Association @relation(fields: [associationId], references: [id], onDelete: Cascade)
-  user        User        @relation(fields: [userId], references: [id])
+  user        User?        @relation(fields: [userId], references: [id])
   unallocatedPayment UnallocatedPayment?
 
   allocations   PaymentAllocation[]
