@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useUrlFilters } from '@src/shared/hooks';
 import { DataTable } from '@src/shared/components/data-table';
-import { DataTableFilters } from '@src/shared/components/data-table-filters';
+import { DataTableFilters, FilterField } from '@src/shared/components/data-table-filters';
 import { DataTablePagination } from '@src/shared/components/data-table-pagination';
 import { SectionHeader } from '@src/shared/components/section-header';
 import { useDeclarations } from '../hooks/declarations/use-declarations';
@@ -11,6 +11,24 @@ import { useDeclarationsColumns } from '../hooks/declarations/use-declarations-c
 import { ApproveDialog } from '../components/declarations/approve-dialog';
 import { RejectDialog } from '../components/declarations/reject-dialog';
 import type { Declaration } from '../types';
+
+const DeclarationsDataTableFilters: FilterField[] = [
+  {
+    type: 'search',
+    id: 'search',
+    placeholder: 'Search',
+  },
+  {
+    type: 'select',
+    id: 'status',
+    label: 'Status',
+    options: [
+      { label: 'Pending', value: 'PENDING' },
+      { label: 'Approved', value: 'APPROVED' },
+      { label: 'Rejected', value: 'REJECTED' },
+    ],
+  },
+];
 
 export default function DeclarationsPage() {
   const { filters, page, setPage, setFilters } = useUrlFilters({
@@ -32,31 +50,9 @@ export default function DeclarationsPage() {
 
   return (
     <>
-      <SectionHeader
-        title="Declarations"
-        description="View and manage member declarations"
-      />
+      <SectionHeader title="Declarations" description="View and manage member declarations" />
 
-      <DataTableFilters
-        fields={[
-          {
-            type: 'search',
-            id: 'search',
-            placeholder: 'Search by member name or email...',
-          },
-          {
-            type: 'select',
-            id: 'status',
-            label: 'Status',
-            options: [
-              { value: 'PENDING', label: 'Pending' },
-              { value: 'APPROVED', label: 'Approved' },
-              { value: 'REJECTED', label: 'Rejected' },
-            ],
-          },
-        ]}
-        onFilterChange={setFilters}
-      />
+      <DataTableFilters fields={DeclarationsDataTableFilters} onFilterChange={setFilters} />
 
       <DataTable columns={columns} data={declarations} loading={isLoading} />
 
