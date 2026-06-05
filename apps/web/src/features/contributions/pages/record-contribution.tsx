@@ -20,7 +20,7 @@ import { MemberProfileCard } from '../components/member-profile-card';
 import { ContributionStatsPanel } from '../components/contribution-stats-panel';
 import { PaymentSummaryBar } from '../components/payment-summary-bar';
 
-const AddMemberContributionSchema = z.object({
+const RecordContributionSchema = z.object({
   userId: z.uuid(),
   contributionPeriodIds: z.array(z.uuid()),
   amount: z
@@ -33,7 +33,7 @@ const AddMemberContributionSchema = z.object({
     .min(1),
 });
 
-type AddMemberContributionInput = z.infer<typeof AddMemberContributionSchema>;
+type RecordContributionInput = z.infer<typeof RecordContributionSchema>;
 
 export const AddContributionPage = () => {
   const [selectedPeriods, setSelectedPeriods] = useState<ContributionPeriod[]>([]);
@@ -67,8 +67,8 @@ export const AddContributionPage = () => {
     user,
   } = useUserContributions({ page, userId });
 
-  const { mutate: addUserContribution, isPending: isAdding } = useMutation({
-    mutationFn: (data: AddMemberContributionInput) =>
+  const { mutate: recordContribution, isPending: isRecordingContribution } = useMutation({
+    mutationFn: (data: RecordContributionInput) =>
       http.post(ENDPOINTS.CONTRIBUTION.CREATE_PAYMENT, data),
   });
 
@@ -91,7 +91,7 @@ export const AddContributionPage = () => {
       return;
     }
 
-    addUserContribution(
+    recordContribution(
       {
         userId,
         contributionPeriodIds: selectedPeriods.map((p) => p.id),
@@ -119,7 +119,7 @@ export const AddContributionPage = () => {
 
   return (
     <div className="space-y-6 flex-col flex">
-      <SectionHeader title="Add Member Contributions" />
+      <SectionHeader title="Record Contributions" description="Record contributions for a member" />
       <Card className="p-4">
         <MemberCombobox value={userId} onValueChange={onMemberChange} />
       </Card>
@@ -141,7 +141,7 @@ export const AddContributionPage = () => {
         selectedPeriods={selectedPeriods}
         selectedTotal={selectedTotal}
         summary={summary}
-        isAdding={isAdding}
+        isAdding={isRecordingContribution}
         onSubmit={onSubmit}
       />
 
