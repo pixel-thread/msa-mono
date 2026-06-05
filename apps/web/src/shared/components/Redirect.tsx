@@ -17,6 +17,7 @@ const pageAccessOnlyIfUnAuthenticated: string[] = [
   '/reset-password',
   '/forgot-password',
   '/verify-email',
+  '/',
 ];
 
 export const Redirect = ({ children }: PropsT) => {
