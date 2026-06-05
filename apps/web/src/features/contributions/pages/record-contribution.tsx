@@ -30,11 +30,13 @@ const RecordContributionSchema = z.object({
     })
     .regex(/^\d+(\.\d{1,2})?$/)
     .min(1),
+  remark: z.string().optional(),
+  paidAt: z.string().optional(),
 });
 
 type RecordContributionInput = z.infer<typeof RecordContributionSchema>;
 
-export const AddContributionPage = () => {
+export const RecordContributionPage = () => {
   const [selectedPeriods, setSelectedPeriods] = useState<ContributionPeriod[]>([]);
   const [userId, setUserId] = useState<string>('');
 
@@ -86,13 +88,9 @@ export const AddContributionPage = () => {
 
   const { contributions = [], meta, summary, refetch } = useUserContributions({ page, userId });
 
-  const sortedUnpaidContributions = useMemo(
-    () =>
-      contributions
-        .filter((c) => c.status !== 'PAID' && c.status !== 'WAIVED')
-        .sort((a, b) => a.year - b.year || a.month - b.month),
-    [contributions],
-  );
+  const sortedUnpaidContributions = contributions
+    .filter((c) => c.status !== 'PAID' && c.status !== 'WAIVED')
+    .sort((a, b) => a.year - b.year || a.month - b.month);
 
   const { mutate: recordContribution, isPending: isRecordingContribution } = useMutation({
     mutationFn: (data: RecordContributionInput) =>

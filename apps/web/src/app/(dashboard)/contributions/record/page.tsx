@@ -1,5 +1,5 @@
-import { AddContributionPage } from '@src/features/contributions/pages/record-contribution';
+import { RecordContributionPage } from '@src/features/contributions/pages/record-contribution';
 
 export default function page() {
-  return <AddContributionPage />;
+  return <RecordContributionPage />;
 }

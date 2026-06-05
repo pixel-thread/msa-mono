@@ -1,24 +1,33 @@
-import http from '@src/shared/utils/http';
 import { useQuery } from '@tanstack/react-query';
-import { ENDPOINTS } from '@repo/shared';
-import { useAuthStore } from '@src/shared/stores';
-import { Declaration } from '@src/features/contributions/types';
+import http from '@src/shared/utils/http';
+import type { Declaration } from '../../types';
+import { buildUrlWithQuery, ENDPOINTS } from '@repo/shared';
 
-export function useDeclarations() {
-  const { isSignedIn } = useAuthStore();
-  const { isFetching, data, refetch } = useQuery({
-    queryKey: ['declarations'],
-    queryFn: () => http.get<Declaration[]>(ENDPOINTS.CONTRIBUTION.ALL_DECLARATIONS),
-    enabled: isSignedIn,
+interface UseDeclarationsOptions {
+  page?: number;
+  status?: string;
+  search?: string;
+}
+
+export function useDeclarations(options: UseDeclarationsOptions = {}) {
+  const { page = 1, status, search } = options;
+
+  const url = buildUrlWithQuery(ENDPOINTS.CONTRIBUTION.ALL_DECLARATIONS, {
+    page,
+    status,
+    search,
   });
 
-  const meta = data?.meta;
-  const declarations = data?.data;
+  const { data, isLoading, error, refetch } = useQuery({
+    queryKey: ['declarations', page, status, search],
+    queryFn: () => http.get<Declaration[]>(url),
+  });
 
   return {
-    isFetching,
-    declarations,
-    meta,
+    declarations: data?.data ?? [],
+    meta: data?.meta,
+    isLoading,
+    error,
     refetch,
   };
 }

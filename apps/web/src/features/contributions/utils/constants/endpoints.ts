@@ -4,3 +4,10 @@ export const contributionEndpoints = {
   userContributions: (userId: string) => `/payments/users/${userId}/contributions`,
   createPayment: '/contributions/payments' as const,
 } as const;
+
+export const declarationEndpoints = {
+  list: '/declarations' as const,
+  byId: (id: string) => `/declarations/${id}`,
+  approve: (id: string) => `/declarations/${id}/approve`,
+  reject: (id: string) => `/declarations/${id}/reject`,
+} as const;

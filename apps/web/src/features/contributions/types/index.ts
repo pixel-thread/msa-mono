@@ -55,6 +55,12 @@ export interface UserContributionData {
   summary: ContributionSummary;
 }
 
+export interface DeclarationMember {
+  name: string;
+  email: string;
+  mobile: string;
+}
+
 export const DeclarationStatus = {
   PENDING: 'PENDING',
   APPROVED: 'APPROVED',
@@ -74,10 +80,7 @@ export interface Declaration {
   lastDeclarationDate: string | null;
   reviewBy: string | null;
   reviewAt: string | null;
+  remark: string | null;
 
-  member: {
-    name: string;
-    email: string;
-    mobile: string;
-  };
+  member: DeclarationMember;
 }

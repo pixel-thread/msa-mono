@@ -7,6 +7,17 @@ import { getMonthName } from '@src/shared/utils/helper/get-month-name';
 import { Loader2 } from 'lucide-react';
 import { ContributionStatusBadge } from './contribution-status-badge';
 import type { ContributionPeriod, ContributionSummary } from '../types';
+import {
+  AlertDialogContent,
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogDescription,
+  AlertDialogHeader,
+  AlertDialogFooter,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@src/shared/components/ui/alert-dialog';
 
 interface PaymentSummaryBarProps {
   selectedPeriods: ContributionPeriod[];
@@ -15,6 +26,76 @@ interface PaymentSummaryBarProps {
   isAdding: boolean;
   onSubmit: () => void;
 }
+
+type ConfirmSavingContributionsProps = {
+  loading: boolean;
+  disable: boolean;
+  onClick: () => void;
+  periods: ContributionPeriod[];
+};
+
+const ConfirmSavingContributions = ({
+  onClick,
+  loading,
+  disable,
+  periods,
+}: ConfirmSavingContributionsProps) => {
+  return (
+    <AlertDialog>
+      <AlertDialogTrigger asChild>
+        <Button disabled={disable || loading}>Save Contribution</Button>
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Are you sure u want to continue</AlertDialogTitle>
+          <AlertDialogDescription>
+            Please confirm you want to save contributions for the selected periods
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <div className="space-y-2 p-5 bg-muted">
+          <div className="flex justify-between">
+            <div>
+              <p className="font-semibold">Periods</p>
+            </div>
+            <div>
+              <p className="font-semibold">Amount</p>
+            </div>
+          </div>
+
+          {periods.map((period) => (
+            <div key={period.id} className="flex justify-between">
+              <div>
+                <p>
+                  {getMonthName(period.month)} {period.year}
+                </p>
+              </div>
+              <div>
+                <p>{formattedAmount(parseInt(period.dueAmount))}</p>
+              </div>
+            </div>
+          ))}
+          <div className="h-0.5 bg-hairline" />
+          <div className="flex justify-between">
+            <div>
+              <p className="font-semibold">Total</p>
+            </div>
+            <div>
+              <p className="font-semibold">
+                {formattedAmount(
+                  periods.reduce((acc, period) => acc + parseInt(period.dueAmount), 0),
+                )}
+              </p>
+            </div>
+          </div>
+        </div>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction onClick={onClick}>Continue</AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  );
+};
 
 export function PaymentSummaryBar({
   selectedPeriods,
@@ -79,10 +160,12 @@ export function PaymentSummaryBar({
         </div>
 
         <div className="mt-4 flex justify-end">
-          <Button size="lg" onClick={onSubmit} disabled={isAdding || selectedTotal === 0}>
-            {isAdding && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            Pay {formattedAmount(selectedTotal)}
-          </Button>
+          <ConfirmSavingContributions
+            periods={selectedPeriods}
+            loading={isAdding}
+            disable={isAdding || selectedTotal === 0}
+            onClick={onSubmit}
+          />
         </div>
       </CardContent>
     </Card>
