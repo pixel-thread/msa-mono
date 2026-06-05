@@ -14,14 +14,6 @@ import { NotFoundError } from '@src/shared/errors';
 // Service functions
 // ---------------------------------------------------------------------------
 
-function validateBalance(lines: { amount: number; isDebit: boolean }[]) {
-  const totalDebits = lines.filter((l) => l.isDebit).reduce((s, l) => s + l.amount, 0);
-  const totalCredits = lines.filter((l) => !l.isDebit).reduce((s, l) => s + l.amount, 0);
-  if (Math.abs(totalDebits - totalCredits) > 0.001) {
-    throw new Error(`Unbalanced entry: debits=${totalDebits}, credits=${totalCredits}`);
-  }
-}
-
 /**
  * Allocate a payment amount across outstanding contribution periods using
  * FIFO (oldest debt first).
@@ -33,7 +25,7 @@ function validateBalance(lines: { amount: number; isDebit: boolean }[]) {
  */
 
 export async function allocatePaymentToContributions(
-  tx: Prisma.TransactionClient, // Prisma transaction client
+  tx: Prisma.TransactionClient,
   paymentTransactionId: string,
   userId: string,
   totalAmount: number,
@@ -45,9 +37,17 @@ export async function allocatePaymentToContributions(
     orderBy: [{ year: 'asc' }, { month: 'asc' }],
   });
 
-  const descriptionMonth = outstanding.map((p) => `${p.year}-${p.month}`).join(', ');
+  const user = await tx.user.findUnique({ where: { id: userId } });
 
-  const description = `Payment contributions (${descriptionMonth})`;
+  if (!user) {
+    throw new NotFoundError('User not found');
+  }
+
+  const descriptionMonths = outstanding
+    .map((p) => `${p.year}-${String(p.month).padStart(2, '0')}`)
+    .join(', ');
+
+  const description = `Contribution payment for ${user.name} (${user.email}) covering periods: ${descriptionMonths}`;
 
   const payment = await tx.paymentTransaction.findUnique({ where: { id: paymentTransactionId } });
 
@@ -56,18 +56,17 @@ export async function allocatePaymentToContributions(
   }
 
   let remaining = totalAmount;
+  let totalAllocated = 0;
 
+  // Phase 1: Create allocations and update each contribution period
   for (const period of outstanding) {
-    if (remaining <= 0) {
-      break;
-    }
+    if (remaining <= 0) break;
 
     const dueAmount = Number(period.dueAmount);
     const allocatedAmount = Math.min(remaining, dueAmount);
     const newPaidAmount = Number(period.paidAmount) + allocatedAmount;
     const newDueAmount = dueAmount - allocatedAmount;
 
-    // Create allocation record
     await tx.paymentAllocation.create({
       data: {
         paymentTransactionId,
@@ -76,7 +75,6 @@ export async function allocatePaymentToContributions(
       },
     });
 
-    // Update contribution period
     await tx.contributionPeriod.update({
       where: { id: period.id },
       data: {
@@ -86,23 +84,43 @@ export async function allocatePaymentToContributions(
       },
     });
 
-    await tx.paymentTransaction.update({
-      where: { id: payment.id },
-      data: {
-        status: PaymentStatus.COMPLETED,
-        verifiedById: actorId,
-        notes: description,
-        paidAt: payment.paidAt ?? new Date(),
-      },
+    remaining -= allocatedAmount;
+    totalAllocated += allocatedAmount;
+  }
+
+  // Phase 2: Update payment transaction once after all allocations
+  await tx.paymentTransaction.update({
+    where: { id: payment.id },
+    data: {
+      status: PaymentStatus.COMPLETED,
+      verifiedById: actorId,
+      notes: description,
+      paidAt: payment.paidAt ?? new Date(),
+    },
+  });
+
+  // Phase 3: Create one consolidated ledger entry for the entire payment
+  if (paymentTransactionId) {
+    const existing = await tx.ledgerEntry.findFirst({
+      where: { paymentTransactionId },
     });
 
-    // Ledger record
+    if (existing) {
+      return tx.ledgerEntry.findUnique({
+        where: { id: existing.id },
+        include: { lines: true },
+      }) as unknown as any;
+    }
+  }
+
+  if (totalAllocated > 0 && outstanding.length > 0) {
     const isCash = payment.method === 'CASH';
-    const associationId = period.associationId;
-    const debitCode = isCash ? '1200' : '1000'; // 1200 Cash, 1000 Bank
+    const associationId = outstanding[0].associationId;
+    const debitCode = isCash ? '1200' : '1000';
+
     const lines: JournalLine[] = [
-      { accountCode: debitCode, isDebit: true, amount: allocatedAmount },
-      { accountCode: '4000', isDebit: false, amount: allocatedAmount },
+      { accountCode: debitCode, isDebit: true, amount: totalAllocated },
+      { accountCode: '4000', isDebit: false, amount: totalAllocated },
     ];
 
     const resolvedLines = await Promise.all(
@@ -120,25 +138,17 @@ export async function allocatePaymentToContributions(
       }),
     );
 
-    const autoApprove = true;
-
-    const approvedById = userId;
-    // 4. Write to DB
     await tx.ledgerEntry.create({
       data: {
         paymentTransactionId: paymentTransactionId ?? null,
-        description: description,
-        approvalStatus: autoApprove ? ApprovalStatus.APPROVED : ApprovalStatus.PENDING,
+        description,
+        approvalStatus: ApprovalStatus.APPROVED,
         createdById: actorId || '',
-        approvedById: autoApprove ? (approvedById ?? 'system') : null,
-        lines: {
-          create: resolvedLines,
-        },
+        approvedById: userId ?? 'system',
+        lines: { create: resolvedLines },
       },
       include: { lines: true },
     });
-
-    remaining -= allocatedAmount;
   }
 
   return remaining;

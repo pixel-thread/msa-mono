@@ -42,7 +42,6 @@ export const AddContributionPage = () => {
     () => selectedPeriods.reduce((acc, period) => acc + parseInt(period.dueAmount, 10), 0),
     [selectedPeriods],
   );
-  console.log('selectedPeriods', selectedPeriods.length);
 
   const handleRowCheckChange = (data: ContributionPeriod[]) => {
     setSelectedPeriods(data);
@@ -94,7 +93,7 @@ export const AddContributionPage = () => {
       {
         onSuccess: (data) => {
           if (data.success) {
-            toast.success('Contributions added successfully');
+            toast.success(data.message);
             queryClient.invalidateQueries({ queryKey: ['all-contributions'] });
             genContribution.mutate(userId);
             setSelectedPeriods([]);

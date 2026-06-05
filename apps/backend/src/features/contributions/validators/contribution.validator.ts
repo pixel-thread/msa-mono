@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { PaymentMethod } from '@prisma/client';
 
 // ---- Generate Monthly Contributions ----
 
@@ -44,3 +45,14 @@ export const ContributionReportQuerySchema = z.object({
 export const UserContributionsParamsSchema = z.object({
   userId: z.uuid('Invalid user ID'),
 });
+
+export const RecordContributionSchema = z.object({
+  userId: z.uuid('Invalid User'),
+  contributionPeriodIds: z.array(z.uuid()),
+  amount: z.coerce.number().positive(),
+  paymentMethod: z.enum(PaymentMethod).default(PaymentMethod.CASH),
+  referenceNumber: z.string().optional().nullable(),
+  remarks: z.string().optional().nullable(),
+});
+
+export type RecordContributionInput = z.infer<typeof RecordContributionSchema>;
