@@ -6,6 +6,7 @@ import { prisma } from '@lib/prisma';
 
 // ---- Validators ----
 import { CreateSupplementInput } from '../validators/training';
+import { NotFoundError } from '@src/shared/errors';
 
 // ---- Interfaces ----
 
@@ -37,7 +38,7 @@ export async function createSupplement({
     });
 
     if (!trainingModule) {
-      throw new Error('Training module not found');
+      throw new NotFoundError('Training module not found');
     }
 
     // Create the supplement record

@@ -4,6 +4,7 @@ import { AuditAction, Prisma, TrainingAssignmentStatus } from '@prisma/client';
 // ---- Shared utilities ----
 import { prisma } from '@lib/prisma';
 import { PAGE_SIZE } from '@src/shared/constants';
+import { BadRequestError } from '@src/shared/errors';
 
 // ---- Interfaces ----
 
@@ -69,7 +70,7 @@ export async function completeAssignment({
 
     // Cross-tenant safety check: verify the module belongs to this association
     if (assignment.module.associationId !== associationId) {
-      throw new Error('Module does not belong to this association');
+      throw new BadRequestError('Module does not belong to this association');
     }
 
     // Update assignment status to COMPLETED

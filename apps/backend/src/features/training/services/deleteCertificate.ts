@@ -3,6 +3,7 @@ import { AuditAction, Prisma } from '@prisma/client';
 
 // ---- Shared utilities ----
 import { prisma } from '@lib/prisma';
+import { NotFoundError } from '@src/shared/errors';
 
 // ---- Interfaces ----
 
@@ -35,7 +36,7 @@ export async function deleteCertificate({
     });
 
     if (!certificate) {
-      throw new Error('Training certificate not found');
+      throw new NotFoundError('Training certificate not found');
     }
 
     const storageKey = certificate.file?.storageKey;

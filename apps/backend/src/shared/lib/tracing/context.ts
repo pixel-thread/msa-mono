@@ -1,3 +1,4 @@
+import { BadRequestError } from '@src/shared/errors';
 import { AsyncLocalStorage } from 'node:async_hooks';
 
 /**
@@ -41,7 +42,7 @@ export const ContextStore = {
   set<K extends keyof Context>(key: K, value: Context[K]): void {
     const store = asyncLocalStorage.getStore();
     if (!store) {
-      throw new Error(
+      throw new BadRequestError(
         'No async context found. Ensure the execution is wrapped in a ContextStore.run() call.',
       );
     }

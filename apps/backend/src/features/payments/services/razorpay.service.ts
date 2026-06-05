@@ -16,7 +16,9 @@ const getRazorpayInstance = (): Razorpay => {
   const keySecret = env.RAZORPAY_KEY_SECRET;
 
   if (!keyId || !keySecret) {
-    throw new Error('RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET must be set in environment variables');
+    throw new NotFoundError(
+      'RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET must be set in environment variables',
+    );
   }
 
   return createRazorpayClient(keyId, keySecret);
@@ -87,7 +89,7 @@ export function verifyPaymentSignature(params: VerifySignatureParams, keySecret?
   const secret = keySecret ?? env.RAZORPAY_KEY_SECRET;
 
   if (!secret) {
-    throw new Error('RAZORPAY_KEY_SECRET is not configured');
+    throw new NotFoundError('RAZORPAY_KEY_SECRET is not configured');
   }
 
   const body = `${params.razorpayOrderId}|${params.razorpayPaymentId}`;
@@ -111,7 +113,7 @@ export function verifyWebhookSignature(
   const secret = webhookSecret ?? env.RAZORPAY_WEBHOOK_SECRET;
 
   if (!secret) {
-    throw new Error('RAZORPAY_WEBHOOK_SECRET is not configured');
+    throw new NotFoundError('RAZORPAY_WEBHOOK_SECRET is not configured');
   }
 
   const expectedSignature = crypto.createHmac('sha256', secret).update(rawBody).digest('hex');

@@ -6,6 +6,7 @@ import { prisma } from '@lib/prisma';
 
 // ---- Validators ----
 import { UpdateSupplementInput } from '../validators/training';
+import { NotFoundError } from '@src/shared/errors';
 
 // ---- Interfaces ----
 
@@ -45,7 +46,7 @@ export async function updateSupplement({
     });
 
     if (!supplement) {
-      throw new Error('Training supplement not found');
+      throw new NotFoundError('Training supplement not found');
     }
 
     // Capture old file info before mutation (needed for cleanup)

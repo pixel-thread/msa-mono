@@ -4,6 +4,7 @@ import { AuditAction, Prisma } from '@prisma/client';
 // ---- Shared utilities ----
 import { prisma } from '@lib/prisma';
 import { PAGE_SIZE } from '@src/shared/constants';
+import { BadRequestError, NotFoundError } from '@src/shared/errors';
 
 // ---- Interfaces ----
 
@@ -112,7 +113,7 @@ export async function assignTraining({
     });
 
     if (!trainingModule) {
-      throw new Error('Training module not found');
+      throw new NotFoundError('Training module not found');
     }
 
     // Validate user exists in association
@@ -121,7 +122,7 @@ export async function assignTraining({
     });
 
     if (!user) {
-      throw new Error('User not found');
+      throw new NotFoundError('User not found');
     }
 
     // Verify user's role is compatible with module requirements
@@ -130,7 +131,9 @@ export async function assignTraining({
     );
 
     if (!hasMatchingRole) {
-      throw new Error("User's role does not match the required roles for this training module");
+      throw new BadRequestError(
+        "User's role does not match the required roles for this training module",
+      );
     }
 
     // Idempotent: return existing assignment if present
@@ -187,7 +190,7 @@ export async function bulkAssignTraining({
     });
 
     if (!trainingModule) {
-      throw new Error('Training module not found');
+      throw new NotFoundError('Training module not found');
     }
 
     // Fetch all target users in one query
@@ -199,7 +202,7 @@ export async function bulkAssignTraining({
     });
 
     if (users.length === 0) {
-      throw new Error('No valid users found');
+      throw new NotFoundError('No valid users found');
     }
 
     // Filter by role compatibility
@@ -294,7 +297,7 @@ export async function removeTrainingAssignment({
     });
 
     if (!assignment) {
-      throw new Error('Training assignment not found');
+      throw new NotFoundError('Training assignment not found');
     }
 
     // Delete the assignment

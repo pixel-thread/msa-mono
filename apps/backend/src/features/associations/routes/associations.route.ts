@@ -66,10 +66,7 @@ export const getAssociationByUser: RequestHandler[] = [
       'GET /api/associations - User authorized',
     );
 
-    logger.info(
-      { traceId, associationId: association.id },
-      'GET /api/associations - Success',
-    );
+    logger.info({ traceId, associationId: association.id }, 'GET /api/associations - Success');
 
     return success(res, { data: association });
   }),
@@ -86,10 +83,7 @@ export const postAssociationCreate: RequestHandler[] = [
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
 
-    logger.info(
-      { traceId, name: req.body?.name },
-      'POST /api/associations - Request started',
-    );
+    logger.info({ traceId, name: req.body?.name }, 'POST /api/associations - Request started');
 
     // Enforce SUPER_ADMIN role — only super admins can create associations
     const user = await withRole(req, UserRole.SUPER_ADMIN);
@@ -124,10 +118,7 @@ export const postAssociationCreate: RequestHandler[] = [
       data: req.body as CreateAssociationInput,
     });
 
-    logger.info(
-      { traceId, associationId: association.id },
-      'POST /api/associations - Success',
-    );
+    logger.info({ traceId, associationId: association.id }, 'POST /api/associations - Success');
 
     return success(
       res,
@@ -213,10 +204,7 @@ export const getAssociationDetail: RequestHandler[] = [
       throw new NotFoundError('Association not found');
     }
 
-    logger.info(
-      { traceId, associationId },
-      'GET /api/associations/[associationId] - Success',
-    );
+    logger.info({ traceId, associationId }, 'GET /api/associations/[associationId] - Success');
 
     return success(res, {
       data: association,
@@ -290,10 +278,7 @@ export const patchAssociationDetail: RequestHandler[] = [
       data: req.body as CreateAssociationInput,
     });
 
-    logger.info(
-      { traceId, associationId },
-      'PATCH /api/associations/[associationId] - Success',
-    );
+    logger.info({ traceId, associationId }, 'PATCH /api/associations/[associationId] - Success');
 
     return success(
       res,
@@ -361,7 +346,7 @@ export const postDeactivateAssociation: RequestHandler[] = [
         'POST /api/associations/[associationId]/deactivate - Association not found',
       );
 
-      throw new Error('Association not found');
+      throw new NotFoundError('Association not found');
     }
 
     // Perform soft-disable

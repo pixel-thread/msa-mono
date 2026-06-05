@@ -3,6 +3,7 @@ import { AuditAction, Prisma } from '@prisma/client';
 
 // ---- Shared utilities ----
 import { prisma } from '@lib/prisma';
+import { NotFoundError } from '@src/shared/errors';
 
 // ---- Interfaces ----
 
@@ -36,7 +37,7 @@ export async function deleteCertificateTemplate({
     });
 
     if (!mod || !mod.certificateTemplateId) {
-      throw new Error('No certificate template found');
+      throw new NotFoundError('No certificate template found');
     }
 
     // Fetch the template with its file info
@@ -46,7 +47,7 @@ export async function deleteCertificateTemplate({
     });
 
     if (!template) {
-      throw new Error('Certificate template not found');
+      throw new NotFoundError('Certificate template not found');
     }
 
     const storageKey = template.file?.storageKey;

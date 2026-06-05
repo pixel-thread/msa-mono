@@ -21,10 +21,8 @@ import {
 } from '../validators';
 import { hasHighRoleAccess } from '@src/shared/utils';
 import { NotFoundError } from '@src/shared/errors';
-import { rbac } from '@src/middleware';
 
 export const createUserDeclarationHandler: RequestHandler[] = [
-  rbac(UserRole.MEMBER),
   validate({ body: CreateUserDeclarations }),
   asyncHandler(async (req, res) => {
     const associationId = req.user?.associationId;

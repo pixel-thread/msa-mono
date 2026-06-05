@@ -1,4 +1,5 @@
 import { Prisma, PaymentMethod, ApprovalStatus } from '@prisma/client';
+import { BadRequestError, NotFoundError } from '@src/shared/errors';
 
 export interface JournalLine {
   accountCode: string;
@@ -20,7 +21,7 @@ async function getAccountByCode(tx: Prisma.TransactionClient, associationId: str
   const account = await tx.account.findFirst({
     where: { associationId, code, isActive: true },
   });
-  if (!account) throw new Error(`Account not found: ${code}`);
+  if (!account) throw new NotFoundError(`Account not found: ${code}`);
   return account;
 }
 
@@ -28,7 +29,7 @@ function validateBalance(lines: { amount: number; isDebit: boolean }[]) {
   const totalDebits = lines.filter((l) => l.isDebit).reduce((s, l) => s + l.amount, 0);
   const totalCredits = lines.filter((l) => !l.isDebit).reduce((s, l) => s + l.amount, 0);
   if (Math.abs(totalDebits - totalCredits) > 0.001) {
-    throw new Error(`Unbalanced entry: debits=${totalDebits}, credits=${totalCredits}`);
+    throw new BadRequestError(`Unbalanced entry: debits=${totalDebits}, credits=${totalCredits}`);
   }
 }
 

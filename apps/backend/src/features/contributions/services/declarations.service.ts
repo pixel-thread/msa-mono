@@ -38,6 +38,7 @@ export async function submitDeclaration(memberId: string, associationId: string,
   });
 
   const today = new Date();
+
   let startDate: Date;
 
   if (lastDeclaration) {

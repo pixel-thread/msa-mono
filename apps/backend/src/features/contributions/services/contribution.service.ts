@@ -467,7 +467,7 @@ export async function waiveContribution(
     });
 
     if (!period) {
-      throw new Error('Contribution period not found');
+      throw new NotFoundError('Contribution period not found');
     }
 
     const amount = Number(period.dueAmount);

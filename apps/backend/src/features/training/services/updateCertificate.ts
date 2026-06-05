@@ -6,6 +6,7 @@ import { prisma } from '@lib/prisma';
 
 // ---- Validators ----
 import { UpdateTrainingCertificateInput } from '../validators/training';
+import { NotFoundError } from '@src/shared/errors';
 
 // ---- Interfaces ----
 
@@ -46,7 +47,7 @@ export async function updateCertificate({
     });
 
     if (!certificate) {
-      throw new Error('Training certificate not found');
+      throw new NotFoundError('Training certificate not found');
     }
 
     // Capture old storage key for cleanup

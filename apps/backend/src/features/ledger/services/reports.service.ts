@@ -1,20 +1,21 @@
 import { prisma } from '@src/shared/lib/prisma';
 import { Prisma } from '@prisma/client';
+import { NotFoundError } from '@src/shared/errors';
 
 export async function trialBalance(associationId: string, accountId?: string) {
   const accounts = await prisma.account.findMany({
-    where: { 
+    where: {
       associationId,
-      ...(accountId ? { id: accountId } : {})
+      ...(accountId ? { id: accountId } : {}),
     },
   });
 
   const totals = await prisma.ledgerLine.groupBy({
     by: ['accountId', 'isDebit'],
     where: {
-      account: { 
+      account: {
         associationId,
-        ...(accountId ? { id: accountId } : {})
+        ...(accountId ? { id: accountId } : {}),
       },
       ledgerEntry: { approvalStatus: 'APPROVED' },
     },
@@ -59,13 +60,13 @@ export async function incomeStatement(
   associationId: string,
   fromDate?: Date,
   toDate?: Date,
-  accountId?: string
+  accountId?: string,
 ) {
   const where: Prisma.LedgerLineWhereInput = {
-    account: { 
-      associationId, 
+    account: {
+      associationId,
       type: { in: ['INCOME', 'EXPENSE'] },
-      ...(accountId ? { id: accountId } : {})
+      ...(accountId ? { id: accountId } : {}),
     },
     ledgerEntry: { approvalStatus: 'APPROVED' },
   };
@@ -87,10 +88,10 @@ export async function incomeStatement(
   });
 
   const accounts = await prisma.account.findMany({
-    where: { 
-      associationId, 
+    where: {
+      associationId,
       type: { in: ['INCOME', 'EXPENSE'] },
-      ...(accountId ? { id: accountId } : {})
+      ...(accountId ? { id: accountId } : {}),
     },
   });
 
@@ -135,7 +136,7 @@ export async function accountBalance(associationId: string, accountId: string) {
   });
 
   if (!account) {
-    throw new Error('Account not found');
+    throw new NotFoundError('Account not found');
   }
 
   const totals = await prisma.ledgerLine.groupBy({

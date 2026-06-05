@@ -3,6 +3,7 @@ import { AuditAction, Prisma } from '@prisma/client';
 
 // ---- Shared utilities ----
 import { prisma } from '@lib/prisma';
+import { NotFoundError } from '@src/shared/errors';
 
 // ---- Interfaces ----
 
@@ -35,7 +36,7 @@ export async function deleteSupplement({
     });
 
     if (!supplement) {
-      throw new Error('Training supplement not found');
+      throw new NotFoundError('Training supplement not found');
     }
 
     const storageKey = supplement.file?.storageKey;
