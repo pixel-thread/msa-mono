@@ -14,7 +14,7 @@ export const agendaItemSchema = z.object({
     .int({ message: 'Order must be an integer' })
     .positive({ message: 'Order must be a positive number' })
     .optional(),
-});
+}).strict();
 
 /** Zod schema for creating a meeting. */
 export const CreateMeetingSchema = z.object({
@@ -26,7 +26,7 @@ export const CreateMeetingSchema = z.object({
     .max(500, 'Venue cannot exceed 500 characters')
     .optional(),
   agendaItems: z.array(agendaItemSchema).min(1, 'At least one agenda item is required'),
-});
+}).strict();
 
 /** Zod schema for updating a meeting. */
 export const UpdateMeetingSchema = z.object({
@@ -41,14 +41,14 @@ export const UpdateMeetingSchema = z.object({
     .max(500, 'Venue cannot exceed 500 characters')
     .optional(),
   status: z.enum(MeetingStatus, { message: 'Invalid meeting status' }).optional(),
-});
+}).strict();
 
 /** Zod schema for meeting query parameters. */
 export const MeetingQuerySchema = z.object({
   type: z.enum(MeetingType, { message: 'Invalid meeting type' }).optional(),
   status: z.enum(MeetingStatus, { message: 'Invalid meeting status' }).optional(),
   page: pageNumberValidation,
-});
+}).strict();
 
 /** Inferred type for creating a meeting. */
 export type CreateMeetingInput = z.infer<typeof CreateMeetingSchema>;

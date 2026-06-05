@@ -27,7 +27,7 @@ export const SubmitDsarSchema = z.object({
     .max(500)
     .optional()
     .transform((v) => v?.trim()),
-});
+}).strict();
 
 // ---- Respond to DSAR Schema
 
@@ -41,7 +41,7 @@ export const RespondDsarSchema = z.object({
   responseType: z.string().optional(),
   storageKey: z.string().optional(),
   deliveryMethod: z.string().default('secure_download'),
-});
+}).strict();
 
 // ---- DSAR Query Schema
 
@@ -53,4 +53,4 @@ export const DsarQuerySchema = z.object({
   status: z.enum(DsarStatus).optional(),
   requestType: z.enum(DsarRequestType).optional(),
   userId: z.string().optional(),
-});
+}).strict();

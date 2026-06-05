@@ -35,7 +35,7 @@ const QuerySchema = z.object({
   page: pageNumberValidation,
   status: z.enum(UserStatus).optional(),
   search: z.string().optional(),
-});
+}).strict();
 
 // ---------------------------------------------------------------------------
 // GET /api/members  —  Paginated / filtered / searched member list

@@ -34,7 +34,7 @@ import { findUniqueMember } from '@src/features/members/services/findUniqueMembe
 // ---------------------------------------------------------------------------
 // Schema — route param identifying the member to soft-delete
 // ---------------------------------------------------------------------------
-const ParamSchema = z.object({ memberId: z.uuid() });
+const ParamSchema = z.object({ memberId: z.uuid() }).strict();
 
 // ---------------------------------------------------------------------------
 // DELETE /api/members/:memberId  —  Soft-delete a member

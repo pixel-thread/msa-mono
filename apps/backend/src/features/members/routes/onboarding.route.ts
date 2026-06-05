@@ -34,7 +34,7 @@ const OnboardingSchema = z.object({
     .refine((d) => new Date(d) < new Date(), 'Cannot be in the future'),
   mobile: z.string().regex(/^[6-9]\d{9}$/, 'Valid Indian mobile number required'),
   designation: z.string().min(2).max(100).trim(),
-});
+}).strict();
 
 // ---------------------------------------------------------------------------
 // POST /api/members/onboarding  —  Complete initial profile setup for the

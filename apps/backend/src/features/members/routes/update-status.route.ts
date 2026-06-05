@@ -34,12 +34,12 @@ import { updateMember } from '@src/features/members/services/updateMember';
 /** Body: which status to apply. */
 const UpdateUserStatusSchema = z.object({
   status: z.nativeEnum(UserStatus),
-});
+}).strict();
 
 /** Route param: the member whose status is being changed. */
 const UpdateUserStatusParamsSchema = z.object({
   memberId: z.uuid(),
-});
+}).strict();
 
 // ---------------------------------------------------------------------------
 // PATCH /api/members/:memberId/status  —  Change a member's status

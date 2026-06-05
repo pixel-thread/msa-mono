@@ -11,7 +11,7 @@ export const CreateAgendaItemSchema = z.object({
     .string({ message: 'Description must be a string' })
     .max(1000, 'Description cannot exceed 1000 characters')
     .optional(),
-});
+}).strict();
 
 /** Inferred type for creating an agenda item. */
 export type CreateAgendaItemInput = z.infer<typeof CreateAgendaItemSchema>;
@@ -28,30 +28,30 @@ export const AgendaOperationSchema = z.object({
       z.object({
         type: z.literal('CREATE'),
         data: CreateAgendaItemSchema,
-      }),
+      }).strict(),
       z.object({
         type: z.literal('UPDATE'),
         id: z.uuid('Invalid ID format'),
         data: UpdateAgendaItemSchema,
-      }),
+      }).strict(),
       z.object({
         type: z.literal('DELETE'),
         id: z.uuid('Invalid ID format'),
-      }),
+      }).strict(),
       z.object({
         type: z.literal('REORDER'),
         mappings: z.array(
           z.object({
             id: z.uuid('Invalid ID format'),
             order: z.number().int().positive(),
-          }),
+          }).strict(),
         ),
-      }),
+      }).strict(),
     ]),
   ),
-});
+}).strict();
 
 /** Inferred type for agenda operations input. */
 export type AgendaOperationInput = z.infer<typeof AgendaOperationSchema>;
 
-export const ProcessingAgendaParamsSchema = z.object({ meetingId: z.string('Invalid meeting ID') });
+export const ProcessingAgendaParamsSchema = z.object({ meetingId: z.string('Invalid meeting ID') }).strict();

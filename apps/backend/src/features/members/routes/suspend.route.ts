@@ -37,7 +37,7 @@ import { updateMember } from '@src/features/members/services/updateMember';
 // ---------------------------------------------------------------------------
 const SuspenseUserRouteParams = z.object({
   memberId: z.uuid(),
-});
+}).strict();
 
 // ---------------------------------------------------------------------------
 // POST /api/members/:memberId/suspend  —  Suspend a member's account

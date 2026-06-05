@@ -10,10 +10,10 @@ export const CreateMeetingMinuteSchema = z.object({
         assigneeId: z.uuid('Invalid assignee ID').optional(),
         task: z.string().min(1, 'Task description is required'),
         dueDate: z.coerce.date('Invalid date format').optional(),
-      }),
+      }).strict(),
     )
     .optional(),
-});
+}).strict();
 
 /** Inferred type for creating a meeting minute. */
 export type CreateMeetingMinuteInput = z.infer<typeof CreateMeetingMinuteSchema>;

@@ -31,7 +31,7 @@ import { updateMember } from '@src/features/members/services/updateMember';
 // ---------------------------------------------------------------------------
 
 /** Route param: the member being updated. */
-const ParamSchema = z.object({ memberId: z.uuid() });
+const ParamSchema = z.object({ memberId: z.uuid() }).strict();
 
 /** Request body: fields an admin / secretary may change on a member profile. */
 const AdminOnboardingSchema = z.object({
@@ -47,7 +47,7 @@ const AdminOnboardingSchema = z.object({
   dateOfJoiningAssociation: z.coerce.date().optional(),
   membershipNumber: z.string().optional(),
   associationId: z.uuid(),
-});
+}).strict();
 
 // ---------------------------------------------------------------------------
 // PATCH /api/members/:memberId  —  Update a member's profile fields

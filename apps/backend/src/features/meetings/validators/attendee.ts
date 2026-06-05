@@ -7,7 +7,7 @@ export const AssignAttendeeSchema = z.object({
   attendeeRole: z
     .enum(AttendeeRole, { message: 'Invalid attendee role' })
     .default(AttendeeRole.OPTIONAL),
-});
+}).strict();
 
 /** Zod schema for bulk-assigning attendees. */
 export const BulkAssignAttendeesSchema = z.object({
@@ -20,7 +20,7 @@ export const BulkAssignAttendeesSchema = z.object({
   attendeeRole: z
     .enum(AttendeeRole, { message: 'Invalid attendee role' })
     .default(AttendeeRole.OPTIONAL),
-});
+}).strict();
 
 /** Zod schema for updating an attendee. */
 export const UpdateAttendeeSchema = z.object({
@@ -31,7 +31,7 @@ export const UpdateAttendeeSchema = z.object({
     .string({ message: 'RSVP note must be a string' })
     .max(500, 'RSVP note cannot exceed 500 characters')
     .optional(),
-});
+}).strict();
 
 /** Inferred type for assigning an attendee. */
 export type AssignAttendeeInput = z.infer<typeof AssignAttendeeSchema>;

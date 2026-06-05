@@ -29,7 +29,7 @@ import { findFirstMember } from '@src/features/members/services/findFirstMember'
 // ---------------------------------------------------------------------------
 // Schema — route param identifying the member to fetch
 // ---------------------------------------------------------------------------
-const ParamSchema = z.object({ memberId: z.uuid() });
+const ParamSchema = z.object({ memberId: z.uuid() }).strict();
 
 // ---------------------------------------------------------------------------
 // GET /api/members/:memberId  —  Full member profile including attendance
