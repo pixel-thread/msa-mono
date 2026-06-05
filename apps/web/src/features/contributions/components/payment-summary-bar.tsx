@@ -28,15 +28,22 @@ export function PaymentSummaryBar({
   return (
     <Card className="border-2 border-primary/20">
       <CardContent className="pt-6">
-        <div className="grid gap-6 sm:grid-cols-3">
+        <div className="grid gap-6 sm:grid-cols-4">
           <div className="space-y-1">
             <p className="text-sm text-muted-foreground">Selected Periods</p>
             <p className="text-3xl font-bold tracking-tight">{selectedPeriods.length}</p>
           </div>
+
           <div className="space-y-1">
             <p className="text-sm text-muted-foreground">Total Due (All)</p>
             <p className="text-3xl font-bold tracking-tight text-destructive">
               {formattedAmount(summary?.totalDue ?? 0)}
+            </p>
+          </div>
+          <div className="space-y-1">
+            <p className="text-sm text-muted-foreground">Selected Total</p>
+            <p className="text-3xl font-bold tracking-tight text-destructive">
+              {formattedAmount(selectedTotal ?? 0)}
             </p>
           </div>
           <div className="space-y-1">
