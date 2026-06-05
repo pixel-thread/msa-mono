@@ -16,12 +16,10 @@ import {
   ApproveDeclarationSchema,
   CreateUserDeclarations,
   CreateUserDeclarationsInput,
-  ListDeclarationsQueryInput,
   ListDeclarationsQuerySchema,
   RejectDeclarationSchema,
 } from '../validators';
 import { hasHighRoleAccess } from '@src/shared/utils';
-import { pageNumberValidation } from '@src/shared/validators';
 import { NotFoundError } from '@src/shared/errors';
 
 export const createUserDeclarationHandler: RequestHandler[] = [
