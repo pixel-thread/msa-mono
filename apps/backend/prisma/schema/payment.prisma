@@ -43,8 +43,7 @@ model PaymentTransaction {
   updatedAt DateTime @updatedAt
 
   association Association @relation(fields: [associationId], references: [id], onDelete: Cascade)
-  user        User?        @relation(fields: [userId], references: [id])
-  unallocatedPayment UnallocatedPayment?
+  user        User?       @relation(fields: [userId], references: [id])
 
   allocations   PaymentAllocation[]
   ledgerEntries LedgerEntry[]
@@ -72,37 +71,6 @@ model PaymentAllocation {
   @@index([paymentTransactionId])
   @@index([contributionPeriodId])
   @@map("payment_allocations")
-}
-
-model UnallocatedPayment{ 
-id                   String   @id @default(uuid())
-
-  associationId        String
-  userId               String
-
-  paymentTransactionId String? @unique
-
-  amount               Decimal @db.Decimal(12,2)
-
-  consumedAmount       Decimal @default(0) @db.Decimal(12,2)
-
-  balanceAmount        Decimal @db.Decimal(12,2)
-
-  notes                String?
-
-  expiresAt            DateTime?
-
-  createdAt            DateTime @default(now())
-  updatedAt            DateTime @updatedAt
-
-  association          Association @relation(fields: [associationId], references: [id])
-  user                 User @relation(fields: [userId], references: [id])
-
-  paymentTransaction   PaymentTransaction? @relation(fields: [paymentTransactionId], references: [id])
-
-  @@index([userId])
-  @@index([associationId])
-  @@map("unallocated_payments")
 }
 
 model PaymentWebhookEvent {

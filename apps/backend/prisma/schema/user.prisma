@@ -50,7 +50,6 @@ model User {
   memberTypeId          String?
   memberType            MemberType?                @relation(fields: [memberTypeId], references: [id])
   declerations          ContributionDeclerations[]
-  unallocatedPayments   UnallocatedPayment[]
 
   @@unique([associationId, email])
   @@unique([associationId, membershipNumber])

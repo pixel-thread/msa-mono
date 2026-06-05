@@ -154,96 +154,6 @@ export async function allocatePaymentToContributions(
   return remaining;
 }
 
-export async function applyCreditsToContributionPeriod(contributionPeriodId: string) {
-  return prisma.$transaction(async (tx) => {
-    const period = await tx.contributionPeriod.findUnique({
-      where: {
-        id: contributionPeriodId,
-      },
-    });
-
-    if (!period) {
-      return;
-    }
-
-    let remainingDue = Number(period.dueAmount);
-
-    if (remainingDue <= 0) {
-      return;
-    }
-
-    const credits = await tx.unallocatedPayment.findMany({
-      where: {
-        userId: period.userId,
-        balanceAmount: { gt: 0 },
-      },
-      orderBy: {
-        createdAt: 'asc',
-      },
-    });
-
-    let totalApplied = 0;
-
-    for (const credit of credits) {
-      if (remainingDue <= 0) {
-        break;
-      }
-
-      const availableCredit = Number(credit.balanceAmount);
-
-      if (availableCredit <= 0) {
-        continue;
-      }
-
-      const allocation = Math.min(availableCredit, remainingDue);
-
-      await tx.paymentAllocation.create({
-        data: {
-          paymentTransactionId: credit.paymentTransactionId!,
-          contributionPeriodId: period.id,
-          allocatedAmount: allocation,
-        },
-      });
-
-      await tx.unallocatedPayment.update({
-        where: {
-          id: credit.id,
-        },
-        data: {
-          consumedAmount: {
-            increment: allocation,
-          },
-          balanceAmount: {
-            decrement: allocation,
-          },
-        },
-      });
-
-      remainingDue -= allocation;
-      totalApplied += allocation;
-    }
-
-    const newPaidAmount = Number(period.paidAmount) + totalApplied;
-
-    await tx.contributionPeriod.update({
-      where: {
-        id: period.id,
-      },
-      data: {
-        paidAmount: newPaidAmount,
-        dueAmount: remainingDue,
-
-        status:
-          remainingDue <= 0
-            ? ContributionStatus.PAID
-            : totalApplied > 0
-              ? ContributionStatus.PARTIAL
-              : ContributionStatus.DUE,
-      },
-    });
-  });
-}
-
 /**
  * Generate contribution period rows for a given month/year for ALL active
  * members of an association who have an active subscription.
@@ -327,18 +237,6 @@ export async function generateUserContributions( //
     });
 
     totalCreated += result.count;
-
-    const periods = await prisma.contributionPeriod.findMany({
-      where: {
-        userId,
-        year,
-        month,
-      },
-    });
-
-    for (const period of periods) {
-      await applyCreditsToContributionPeriod(period.id);
-    }
   }
 
   return totalCreated;
@@ -423,18 +321,6 @@ export async function generateMonthlyContributions(
     data: data as any[],
     skipDuplicates: true,
   });
-
-  const periods = await prisma.contributionPeriod.findMany({
-    where: {
-      associationId,
-      year,
-      month,
-    },
-  });
-
-  for (const period of periods) {
-    await applyCreditsToContributionPeriod(period.id);
-  }
 
   return result.count;
 }
