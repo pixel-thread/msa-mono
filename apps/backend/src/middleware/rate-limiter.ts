@@ -4,6 +4,7 @@ import type { Duration } from '@upstash/ratelimit';
 import { TooManyRequestsError } from '@src/shared/errors';
 import { logger } from '@src/shared/logger';
 import { redis } from '@lib/redis';
+import { env } from '@src/env';
 
 // Singleton Redis client
 
@@ -62,7 +63,12 @@ function getRatelimiter() {
 }
 
 export async function rateLimiter(req: Request, _res: Response, next: NextFunction) {
+  const isDevelopment = env.NODE_ENV === 'development';
+
+  if (!isDevelopment) return next();
+
   const limiter = getRatelimiter();
+
   if (!limiter) return next();
 
   try {
