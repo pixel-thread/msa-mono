@@ -17,11 +17,12 @@ tags:
 
 ## 🚧 In Progress
 
-- [ ]
+- [ ] Declarations
 
 ## ⏳ Backlog
 
-- [ ]
+- [ ] Cron Job
+  - [ ] Generate All User Contribution periods/month
 
 ## 🛑 Blocked
 
