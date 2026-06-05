@@ -50,10 +50,7 @@ export const recordPayment: RequestHandler[] = [
     const traceId = (req.traceId as string) || '';
 
     // --- Log: request started ---
-    logger.info(
-      { traceId, userId: req.body.userId },
-      'POST /api/payments/record - Request started',
-    );
+    logger.info({ traceId }, 'POST /api/payments/record - Request started');
 
     // --- Auth: resolve association ---
     const association = await getAssociation(req);
@@ -65,12 +62,11 @@ export const recordPayment: RequestHandler[] = [
 
     // --- Business logic: record the manual payment ---
     logger.info(
-      { traceId, targetUserId: req.body.userId, amount: req.body.amount },
+      { traceId, amount: req.body.amount, actorId: user.id },
       'POST /api/payments/record - Recording manual payment',
     );
     const transaction = await recordManualPayment({
       associationId: association.id,
-      userId: req.body.userId,
       amount: req.body.amount,
       method: req.body.method,
       notes: req.body.notes,

@@ -18,7 +18,6 @@ import { BadRequestError, NotFoundError, PaymentError } from '@src/shared/errors
 import { logAction } from '@src/shared/services/audit-logs';
 import { PAGE_SIZE } from '@src/shared/constants';
 import { recordMemberPayment } from '@src/features/ledger/services/accounting.service';
-import { allocatePaymentToContributions } from '@src/features/contributions/services/contribution.service';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -51,7 +50,7 @@ export interface VerifyAndCompleteInput {
 
 export interface RecordManualPaymentInput {
   associationId: string;
-  userId: string;
+  userId?: string | null;
   amount: number;
   method: PaymentMethod;
   notes?: string;
@@ -386,20 +385,12 @@ export async function verifyAndCompletePayment(input: VerifyAndCompleteInput) {
       },
     });
 
-    await allocatePaymentToContributions(
-      tx,
-      transaction.id,
-      transaction.userId,
-      Number(transaction.amount),
-    );
-
     await recordMemberPayment(tx, {
       associationId: transaction.associationId,
       paymentTransactionId: transaction.id,
       amount: Number(transaction.amount),
       description: 'Online payment via Razorpay',
-      createdById: transaction.userId,
-      memberId: transaction.userId,
+      createdById: transaction.userId || '',
       method: 'ONLINE',
     });
 
@@ -480,7 +471,7 @@ export async function verifyTestPayment(input: VerifyAndCompleteInput) {
   // Minimal audit log
   await logAction({
     associationId: transaction.associationId,
-    actorId: transaction.userId,
+    actorId: transaction.userId || '',
     action: AuditAction.PAYMENT_COMPLETED,
     resourceType: 'PaymentTransaction',
     resourceId: transaction.id,
@@ -525,9 +516,6 @@ export async function recordManualPayment(input: RecordManualPaymentInput) {
       },
     });
 
-    // Allocate to contribution periods
-    await allocatePaymentToContributions(tx, transaction.id, input.userId, input.amount);
-
     // Create ledger entry
     await recordMemberPayment(tx, {
       associationId: input.associationId,
@@ -535,23 +523,20 @@ export async function recordManualPayment(input: RecordManualPaymentInput) {
       amount: input.amount,
       description: `Manual payment (${input.method}) recorded by finance`,
       createdById: input.createdById,
-      memberId: input.userId,
       method: input.method,
     });
 
     // Audit log
-    await tx.auditLog.create({
-      data: {
-        associationId: input.associationId,
-        actorId: input.createdById,
-        action: AuditAction.PAYMENT_CREATED,
-        resourceType: 'PaymentTransaction',
-        resourceId: transaction.id,
-        newValues: {
-          amount: input.amount,
-          method: input.method,
-          userId: input.userId,
-        },
+    await logAction({
+      associationId: input.associationId,
+      actorId: input.createdById,
+      action: AuditAction.PAYMENT_CREATED,
+      resourceType: 'PaymentTransaction',
+      resourceId: transaction.id,
+      newValues: {
+        amount: input.amount,
+        method: input.method,
+        userId: input.userId,
       },
     });
 
@@ -582,7 +567,7 @@ export async function markPaymentFailed(razorpayOrderId: string, reason?: string
   // Audit log
   await logAction({
     associationId: transaction.associationId,
-    actorId: transaction.userId,
+    actorId: transaction.userId || '',
     action: AuditAction.PAYMENT_FAILED,
     resourceType: 'PaymentTransaction',
     resourceId: transaction.id,

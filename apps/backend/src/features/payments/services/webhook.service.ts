@@ -1,11 +1,16 @@
 import { prisma } from '@src/shared/lib/prisma';
 import { AuditAction, PaymentGateway } from '@prisma/client';
-import { recordMemberPayment, recordRefund } from '@src/features/ledger/services/accounting.service';
+import {
+  recordMemberPayment,
+  recordRefund,
+} from '@src/features/ledger/services/accounting.service';
 import { verifyWebhookSignature } from './razorpay.service';
 import { markPaymentFailed } from './payment.service';
 import { getActiveProvider } from './payment-provider.service';
 import { decrypt } from '@src/shared/lib/crypto';
-import { WebhookSignatureError } from '@src/shared/errors';
+import { NotFoundError, WebhookSignatureError } from '@src/shared/errors';
+import { logAction } from '@src/shared/services';
+import { logger } from '@src/shared/logger';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -194,7 +199,7 @@ async function routeWebhookEvent(payload: RazorpayWebhookPayload): Promise<void>
 
     default:
       // Log but don't fail for unknown events
-      console.warn(`[Webhook] Unhandled Razorpay event: ${event}`);
+      logger.warn(`[Webhook] Unhandled Razorpay event: ${event}`);
   }
 }
 
@@ -207,7 +212,7 @@ async function handlePaymentAuthorized(payload: RazorpayWebhookPayload): Promise
   if (!payment) return;
 
   // Just log it — we wait for payment.captured to complete the flow
-  console.info(`[Webhook] Payment authorized: ${payment.id} for order ${payment.order_id}`);
+  logger.info(`[Webhook] Payment authorized: ${payment.id} for order ${payment.order_id}`);
 }
 
 async function handlePaymentCaptured(payload: RazorpayWebhookPayload): Promise<void> {
@@ -220,7 +225,7 @@ async function handlePaymentCaptured(payload: RazorpayWebhookPayload): Promise<v
   });
 
   if (!transaction) {
-    console.error(`[Webhook] No transaction found for order: ${payment.order_id}`);
+    logger.error(`[Webhook] No transaction found for order: ${payment.order_id}`);
     return;
   }
 
@@ -259,7 +264,7 @@ async function handleRefund(payload: RazorpayWebhookPayload): Promise<void> {
   });
 
   if (!transaction) {
-    console.error(`[Webhook] No transaction found for refund payment: ${refund.payment_id}`);
+    logger.error(`[Webhook] No transaction found for refund payment: ${refund.payment_id}`);
     return;
   }
 
@@ -321,7 +326,7 @@ async function handleRefund(payload: RazorpayWebhookPayload): Promise<void> {
       paymentTransactionId: transaction.id,
       amount: refund.amount / 100,
       description: `Razorpay refund ${refund.id}`,
-      createdById: transaction.userId,
+      createdById: transaction?.userId || 'N/A',
     });
   });
 }
@@ -355,6 +360,10 @@ async function verifyAndCompletePaymentFromWebhook(
         method: 'ONLINE',
       },
     });
+
+    if (!transaction.userId) {
+      throw new NotFoundError(`No transaction found for User order: ${razorpayPaymentId}`);
+    }
 
     // Allocate to contribution periods
     const outstanding = await tx.contributionPeriod.findMany({
@@ -401,24 +410,21 @@ async function verifyAndCompletePaymentFromWebhook(
       paymentTransactionId: transactionId,
       amount: Number(transaction.amount),
       description: 'Online payment via Razorpay (webhook confirmed)',
-      createdById: transaction.userId,
-      memberId: transaction.userId,
+      createdById: transaction?.userId || 'N/A',
       method: 'ONLINE',
     });
 
     // Audit log
-    await tx.auditLog.create({
-      data: {
-        associationId: transaction.associationId,
-        actorId: transaction.userId,
-        action: AuditAction.PAYMENT_COMPLETED,
-        resourceType: 'PaymentTransaction',
-        resourceId: transactionId,
-        newValues: {
-          razorpayPaymentId,
-          source: 'webhook',
-          amount: Number(transaction.amount),
-        },
+    await logAction({
+      associationId: transaction.associationId,
+      actorId: transaction.userId,
+      action: AuditAction.PAYMENT_COMPLETED,
+      resourceType: 'PaymentTransaction',
+      resourceId: transactionId,
+      newValues: {
+        razorpayPaymentId,
+        source: 'webhook',
+        amount: Number(transaction.amount),
       },
     });
 

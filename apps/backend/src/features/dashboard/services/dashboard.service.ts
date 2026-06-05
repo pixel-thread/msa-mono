@@ -188,7 +188,7 @@ async function getRecentPayments(associationId: string) {
 
   return payments.map((p) => ({
     id: p.id,
-    userName: p.user.name,
+    userName: p?.user?.name || 'N/A',
     amount: Number(p.amount),
     status: p.status,
     method: p.method,

@@ -19,7 +19,7 @@ import {
   generateUserContributionsHandler,
 } from './contributions.route';
 
-import { userContributionsHandler } from './user-contributions.route';
+import { listUserContributionsHandler } from './user-contributions.route';
 
 const router: Router = Router();
 
@@ -37,7 +37,7 @@ router.patch('/contributions', waiveContributionHandler);
 router.get('/contributions/:contributionId', getContributionHandler);
 
 // User Contributions
-router.get('/users/:userId', userContributionsHandler);
+router.get('/users/:userId', listUserContributionsHandler);
 router.post('/users/:userId', generateUserContributionsHandler);
 
 // ADMIN

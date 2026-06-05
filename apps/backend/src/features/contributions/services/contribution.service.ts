@@ -22,22 +22,14 @@ export async function allocatePaymentToContributions(
   paymentTransactionId: string,
   userId: string,
   totalAmount: number,
+  ids: string[],
 ) {
   const outstanding = await tx.contributionPeriod.findMany({
-    where: {
-      userId,
-      status: {
-        in: [ContributionStatus.DUE, ContributionStatus.PARTIAL, ContributionStatus.OVERDUE],
-      },
-    },
+    where: { id: { in: ids }, userId },
     orderBy: [{ year: 'asc' }, { month: 'asc' }],
   });
 
-  const payment = await tx.paymentTransaction.findUnique({
-    where: {
-      id: paymentTransactionId,
-    },
-  });
+  const payment = await tx.paymentTransaction.findUnique({ where: { id: paymentTransactionId } });
 
   if (!payment) {
     throw new NotFoundError('Payment not found');
@@ -72,24 +64,20 @@ export async function allocatePaymentToContributions(
       },
     });
 
-    remaining -= allocatedAmount;
-  }
-
-  if (remaining > 0) {
-    await tx.unallocatedPayment.create({
+    await tx.paymentTransaction.update({
+      where: {
+        id: payment.id,
+      },
       data: {
-        associationId: payment.associationId,
-        userId: userId,
+        status: PaymentStatus.COMPLETED,
 
-        paymentTransactionId: paymentTransactionId,
+        verifiedById: userId,
 
-        amount: remaining,
-        consumedAmount: 0,
-        balanceAmount: remaining,
-
-        notes: 'Excess contribution payment credit',
+        paidAt: payment.paidAt ?? new Date(),
       },
     });
+
+    remaining -= allocatedAmount;
   }
 
   return remaining; // Excess amount (advance payment)
@@ -408,9 +396,7 @@ export async function markOverdueContributions(
         dueDate: { gte: now },
         ...(userId && { userId }),
       },
-      data: {
-        status: ContributionStatus.PENDING,
-      },
+      data: { status: ContributionStatus.PENDING },
     });
 
     return presentPeriods.count + futurePeriods.count;
@@ -440,7 +426,12 @@ export async function getOutstandingContributions(userId: string) {
  */
 export async function getUserContributionSummary(userId: string): Promise<ContributionSummary> {
   const contributions = await prisma.contributionPeriod.findMany({
-    where: { userId },
+    where: {
+      userId,
+      status: {
+        in: [ContributionStatus.DUE, ContributionStatus.PARTIAL, ContributionStatus.OVERDUE],
+      },
+    },
   });
 
   let totalExpected = 0;
