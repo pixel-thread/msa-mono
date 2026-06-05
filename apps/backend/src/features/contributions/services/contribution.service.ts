@@ -256,7 +256,7 @@ export async function applyCreditsToContributionPeriod(contributionPeriodId: str
  * Intended to be called by a monthly cron job.
  */
 
-export async function generateUserMonthlyContributions(
+export async function generateUserContributions( //
   userId: string,
   year: number,
   numberOfMonth: number, // expected 1–12
@@ -448,14 +448,17 @@ export async function markOverdueContributions(
   userId?: string,
 ): Promise<number> {
   const now = new Date();
+  const filter = {
+    associationId,
+    ...(userId && { userId }),
+  };
 
-  const totalUpdated = await prisma.$transaction(async (tx) => {
+  return await prisma.$transaction(async (tx) => {
     const presentPeriods = await tx.contributionPeriod.updateMany({
       where: {
-        associationId,
+        ...filter,
         status: ContributionStatus.DUE,
         dueDate: { lte: now },
-        ...(userId && { userId }),
       },
       data: {
         status: ContributionStatus.OVERDUE,
@@ -464,18 +467,33 @@ export async function markOverdueContributions(
 
     const futurePeriods = await tx.contributionPeriod.updateMany({
       where: {
-        associationId,
+        ...filter,
         status: ContributionStatus.DUE,
         dueDate: { gte: now },
-        ...(userId && { userId }),
       },
       data: { status: ContributionStatus.PENDING },
     });
 
+    await tx.contributionPeriod.updateMany({
+      where: {
+        ...filter,
+        status: ContributionStatus.PENDING,
+        dueDate: { lte: now },
+      },
+      data: { status: ContributionStatus.DUE },
+    });
+
+    await tx.contributionPeriod.updateMany({
+      where: {
+        ...filter,
+        status: ContributionStatus.PARTIAL,
+        dueDate: { lte: now },
+      },
+      data: { status: ContributionStatus.DUE },
+    });
+
     return presentPeriods.count + futurePeriods.count;
   });
-
-  return totalUpdated;
 }
 
 /**
