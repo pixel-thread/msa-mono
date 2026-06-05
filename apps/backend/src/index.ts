@@ -66,6 +66,7 @@ export function createApp(): express.Express {
   app.use('/api/v1/associations', associationsRouter);
   app.use('/api/v1/audit-logs', auditLogsRouter);
   app.use('/api/v1/auth', authRouter);
+  app.use('/api/v1/contributions', contributions);
   app.use('/api/v1/compliance', complianceRouter);
   app.use('/api/v1/consent', consentRouter);
   app.use('/api/v1/cron', cronRouter);
@@ -83,7 +84,6 @@ export function createApp(): express.Express {
   app.use('/api/v1/subscriptions', subscriptionsRouter);
   app.use('/api/v1/training', trainingRouter);
   app.use('/api/v1/user', userRouter);
-  app.use('/api/v1/contributions', contributions);
 
   app.get('/', (_, res) => {
     return res.redirect(`${env.BASE_URL}`);

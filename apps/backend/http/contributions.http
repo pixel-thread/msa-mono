@@ -44,7 +44,7 @@ Authorization: Bearer {{TOKEN}}
 
 ###
 # @name manualContributionPayment
-POST {{NEXT_PUBLIC_API_BASE_URL}}/contributions/payments
+POST {{NEXT_PUBLIC_API_BASE_URL}}/contributions/record
 Content-Type: application/json
 Authorization: Bearer {{TOKEN}}
 
@@ -67,7 +67,7 @@ Authorization: Bearer {{TOKEN}}
 
 ###
 # @name generateContributions
-POST {{NEXT_PUBLIC_API_BASE_URL}}/payments/contributions
+POST {{NEXT_PUBLIC_API_BASE_URL}}/contributions
 Content-Type: application/json
 Authorization: Bearer {{TOKEN}}
 
@@ -78,7 +78,7 @@ Authorization: Bearer {{TOKEN}}
 
 ###
 # @name waiveContribution
-PATCH {{NEXT_PUBLIC_API_BASE_URL}}/payments/contributions
+PATCH {{NEXT_PUBLIC_API_BASE_URL}}/contributions
 Content-Type: application/json
 Authorization: Bearer {{TOKEN}}
 
@@ -89,12 +89,12 @@ Authorization: Bearer {{TOKEN}}
 
 ###
 # @name getUserContributions
-GET {{NEXT_PUBLIC_API_BASE_URL}}/payments/users/{{userId}}/contributions
+GET {{NEXT_PUBLIC_API_BASE_URL}}/contributions/users/{{userId}}
 Content-Type: application/json
 Authorization: Bearer {{TOKEN}}
 
 ###
 # @name getContributionDetail
-GET {{NEXT_PUBLIC_API_BASE_URL}}/payments/contributions/{{contributionId}}
+GET {{NEXT_PUBLIC_API_BASE_URL}}/contributions/{{contributionId}}
 Content-Type: application/json
 Authorization: Bearer {{TOKEN}}

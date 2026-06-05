@@ -130,6 +130,10 @@ export const DRAWER_NAV_MAIN = [
         title: 'Record',
         url: '/contributions/record',
       },
+      {
+        title: 'Declarations',
+        url: '/contributions/declarations',
+      },
     ],
   },
   {

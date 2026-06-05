@@ -15,6 +15,7 @@ import { success } from '@src/shared/utils/responses';
 import z from 'zod';
 import { BadRequestError, NotFoundError } from '@src/shared/errors';
 import { differenceInCalendarMonths, addMonths, startOfMonth, endOfMonth } from 'date-fns';
+import { findDeclarations } from '../services/find-declarations';
 
 const CreateUserDeclarations = z.object({
   monthlyContributionAmount: z.number().int().min(1).max(10000),
@@ -28,7 +29,7 @@ export const createUserDeclarationHandler: RequestHandler[] = [
 
     const { monthlyContributionAmount } = req.body;
 
-    const lastDeclaration = await prisma.contributionDeclerations.findFirst({
+    const lastDeclaration = await prisma.declarations.findFirst({
       where: {
         memberId: user.id,
         status: 'APPROVED',
@@ -55,7 +56,7 @@ export const createUserDeclarationHandler: RequestHandler[] = [
 
     const endDate = endOfMonth(startDate);
 
-    const declear = await prisma.contributionDeclerations.create({
+    const declear = await prisma.declarations.create({
       data: {
         memberId: user.id,
         associationId: association.id,
@@ -63,7 +64,7 @@ export const createUserDeclarationHandler: RequestHandler[] = [
         declerationStartDate: startDate,
         declerationEndDate: endDate,
 
-        montlyContributionAmount: monthlyContributionAmount,
+        amount: monthlyContributionAmount,
 
         status: DeclerationStatus.PENDING,
       },
@@ -75,7 +76,7 @@ export const createUserDeclarationHandler: RequestHandler[] = [
         status: DeclerationStatus.PENDING,
         declerationStartDate: declear.declerationStartDate,
         declerationEndDate: declear.declerationEndDate,
-        montlyContributionAmount: declear.montlyContributionAmount,
+        amount: declear.amount,
       },
       message: 'Declaration submitted successfully.',
     });
@@ -87,7 +88,7 @@ export const listUserDeclarationsHandler: RequestHandler[] = [
     const association = await getAssociation(req);
     const user = await withRole(req, UserRole.MEMBER);
 
-    const declarations = await prisma.contributionDeclerations.findMany({
+    const declarations = await findDeclarations({
       where: {
         memberId: user.id,
         associationId: association.id,
@@ -106,10 +107,9 @@ export const listDeclarationsHandler: RequestHandler[] = [
     const association = await getAssociation(req);
     await withRole(req, UserRole.FINANCE);
 
-    const declarations = await prisma.contributionDeclerations.findMany({
-      where: {
-        associationId: association.id,
-      },
+    const declarations = await findDeclarations({
+      where: { associationId: association.id },
+      include: { member: { select: { name: true, email: true, mobile: true } } },
     });
 
     return success(res, {
@@ -127,7 +127,7 @@ export const approveDeclarationsHandler: RequestHandler[] = [
 
     await withRole(req, UserRole.FINANCE);
 
-    const existingDeclaration = await prisma.contributionDeclerations.findUnique({
+    const existingDeclaration = await prisma.declarations.findUnique({
       where: { id: declarationId, associationId: association.id },
     });
 
@@ -141,7 +141,7 @@ export const approveDeclarationsHandler: RequestHandler[] = [
     }
 
     // 1. Update the declaration status
-    const updatedDeclaration = await prisma.contributionDeclerations.update({
+    const updatedDeclaration = await prisma.declarations.update({
       where: {
         id: declarationId,
         associationId: association.id,
@@ -237,7 +237,7 @@ export const rejectDeclarationsHandler: RequestHandler[] = [
 
     await withRole(req, UserRole.FINANCE);
 
-    const existingDeclaration = await prisma.contributionDeclerations.findUnique({
+    const existingDeclaration = await prisma.declarations.findUnique({
       where: { id: declarationId, associationId: association.id },
     });
 
@@ -257,7 +257,7 @@ export const rejectDeclarationsHandler: RequestHandler[] = [
       });
     }
 
-    const declarations = await prisma.contributionDeclerations.update({
+    const declarations = await prisma.declarations.update({
       where: {
         id: declarationId,
         associationId: association.id,

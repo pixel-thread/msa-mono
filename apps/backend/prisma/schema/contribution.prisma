@@ -30,7 +30,7 @@ model ContributionPeriod {
   user User @relation(fields: [userId], references: [id])
 
   allocations  PaymentAllocation[]
-  declarations ContributionDeclerations[]
+  declarations Declarations[]
 
   @@unique([userId, year, month])
   @@index([associationId])
@@ -39,20 +39,20 @@ model ContributionPeriod {
   @@map("contribution_periods")
 }
 
-model ContributionDeclerations {
-  id                       String               @id @default(uuid())
-  memberId                 String
-  associationId            String
-  declerationStartDate     DateTime
-  declerationEndDate       DateTime
-  montlyContributionAmount Decimal              @db.Decimal(10, 2)
-  status                   DeclerationStatus    @default(PENDING)
-  lastDeclarationDate      DateTime?
-  reviewBy                 String?
-  reviewAt                 DateTime?
-  member                   User                 @relation(fields: [memberId], references: [id])
-  association              Association          @relation(fields: [associationId], references: [id])
-  periods                  ContributionPeriod[]
+model Declarations {
+  id                   String               @id @default(uuid())
+  memberId             String
+  associationId        String
+  declerationStartDate DateTime
+  declerationEndDate   DateTime
+  amount               Decimal              @db.Decimal(10, 2)
+  status               DeclerationStatus    @default(PENDING)
+  lastDeclarationDate  DateTime?
+  reviewBy             String?
+  reviewAt             DateTime?
+  member               User                 @relation(fields: [memberId], references: [id])
+  association          Association          @relation(fields: [associationId], references: [id])
+  periods              ContributionPeriod[]
 
-  @@map("contribution_declerations")
+  @@map("declerations")
 }

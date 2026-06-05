@@ -54,3 +54,30 @@ export interface UserContributionData {
   contributions: ContributionPeriod[];
   summary: ContributionSummary;
 }
+
+export const DeclarationStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+} as const;
+
+export type DeclarationStatus = (typeof DeclarationStatus)[keyof typeof DeclarationStatus];
+
+export interface Declaration {
+  id: string;
+  memberId: string;
+  associationId: string;
+  declerationStartDate: string; // ISO date string
+  declerationEndDate: string; // ISO date string
+  amount: string;
+  status: DeclarationStatus;
+  lastDeclarationDate: string | null;
+  reviewBy: string | null;
+  reviewAt: string | null;
+
+  member: {
+    name: string;
+    email: string;
+    mobile: string;
+  };
+}
