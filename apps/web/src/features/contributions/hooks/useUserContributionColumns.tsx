@@ -53,7 +53,7 @@ export function useUserContributionColumns({ onCheck, checkValues }: Props = {})
             cell: ({ row }) => (
               <Checkbox
                 checked={isRowSelected(row.original)}
-                disabled={row.original.status === 'PAID'}
+                disabled={row.original.status === 'PAID' || row.original.status === 'WAIVED'}
                 onCheckedChange={(checked) => {
                   if (checked) {
                     onCheck?.([...(checkValues ?? []), row.original]);

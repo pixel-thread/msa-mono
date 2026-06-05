@@ -44,7 +44,33 @@ export const AddContributionPage = () => {
   );
 
   const handleRowCheckChange = (data: ContributionPeriod[]) => {
-    setSelectedPeriods(data);
+    if (data.length > selectedPeriods.length) {
+      const furthestAdded = data
+        .filter((d) => !selectedPeriods.some((s) => s.id === d.id))
+        .sort((a, b) => b.year - a.year || b.month - a.month)[0];
+
+      const newSelection = sortedUnpaidContributions.filter(
+        (pm) =>
+          pm.year < furthestAdded.year ||
+          (pm.year === furthestAdded.year && pm.month <= furthestAdded.month),
+      );
+      setSelectedPeriods(newSelection);
+    } else if (data.length < selectedPeriods.length) {
+      const removedIds = selectedPeriods
+        .filter((s) => !data.some((d) => d.id === s.id))
+        .map((s) => s.id);
+
+      const earliestRemoved = selectedPeriods
+        .filter((s) => removedIds.includes(s.id))
+        .sort((a, b) => a.year - b.year || a.month - b.month)[0];
+
+      const newSelection = selectedPeriods.filter(
+        (sp) =>
+          sp.year < earliestRemoved.year ||
+          (sp.year === earliestRemoved.year && sp.month < earliestRemoved.month),
+      );
+      setSelectedPeriods(newSelection);
+    }
   };
 
   const { columns } = useUserContributionColumns({
@@ -59,6 +85,14 @@ export const AddContributionPage = () => {
   });
 
   const { contributions = [], meta, summary, refetch } = useUserContributions({ page, userId });
+
+  const sortedUnpaidContributions = useMemo(
+    () =>
+      contributions
+        .filter((c) => c.status !== 'PAID' && c.status !== 'WAIVED')
+        .sort((a, b) => a.year - b.year || a.month - b.month),
+    [contributions],
+  );
 
   const { mutate: recordContribution, isPending: isRecordingContribution } = useMutation({
     mutationFn: (data: RecordContributionInput) =>
