@@ -30,3 +30,5 @@ export const ListDeclarationsQuerySchema = z.object({
   page: pageNumberValidation,
   status: z.enum(DeclarationStatus).optional(),
 });
+
+export type ListDeclarationsQueryInput = z.infer<typeof ListDeclarationsQuerySchema>;

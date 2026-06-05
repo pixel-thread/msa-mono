@@ -56,5 +56,5 @@ model Declarations {
   remark              String?
   reviewer             User?                @relation("reviewedBy", fields: [reviewBy], references: [id])
 
-  @@map("declerations")
+  @@map("declarations")
 }

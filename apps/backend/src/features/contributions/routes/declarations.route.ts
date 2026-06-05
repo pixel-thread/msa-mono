@@ -16,6 +16,8 @@ import {
   ApproveDeclarationSchema,
   CreateUserDeclarations,
   CreateUserDeclarationsInput,
+  ListDeclarationsQueryInput,
+  ListDeclarationsQuerySchema,
   RejectDeclarationSchema,
 } from '../validators';
 import { hasHighRoleAccess } from '@src/shared/utils';
@@ -72,25 +74,32 @@ export const getDeclarationHandler: RequestHandler[] = [
 ];
 
 export const listDeclarationsHandler: RequestHandler[] = [
-  validate({ query: z.object({ page: pageNumberValidation }) }),
+  validate({ query: ListDeclarationsQuerySchema }),
   asyncHandler(async (req, res) => {
     const user = await withRole(req, UserRole.MEMBER);
-    const page = req.query.page;
 
+    const page = req.query.page;
+    const status = req.query.status;
     const associationId = req.user?.associationId;
+
+    const where: Record<string, unknown> = { associationId: associationId };
+
+    if (status) where.status = status;
+
     let result;
 
     if (hasHighRoleAccess(user.role)) {
       result = await findDeclarations({
-        where: { associationId: associationId },
+        where,
         include: {
           member: { select: { name: true, email: true, mobile: true } },
         },
         page: parseInt(page as string),
       });
     } else {
+      where.memberId = user.id;
       result = await findDeclarations({
-        where: { memberId: user.id, associationId: associationId },
+        where,
         include: {
           member: { select: { name: true, email: true, mobile: true } },
         },
