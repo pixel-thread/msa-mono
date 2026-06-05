@@ -123,12 +123,12 @@ export const DRAWER_NAV_MAIN = [
     url: '/contributions',
     items: [
       {
-        title: 'All Contributions',
+        title: 'List',
         url: '/contributions',
       },
       {
-        title: 'Add Contributions',
-        url: '/contributions/add-contribution',
+        title: 'Record',
+        url: '/contributions/record',
       },
     ],
   },
