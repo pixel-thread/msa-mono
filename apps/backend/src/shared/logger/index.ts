@@ -10,8 +10,11 @@ const REDACTED = [
   'token',
   'authorization',
   'key',
-  'refreshToken',
+  'refersh_token',
   'access_token',
+  'data',
+  "data['token']",
+  "data['refreshToken']",
 ];
 
 const streams: pino.StreamEntry[] = [
