@@ -46,7 +46,7 @@ model Declarations {
   declerationStartDate DateTime
   declerationEndDate   DateTime
   amount               Decimal              @db.Decimal(10, 2)
-  status               DeclerationStatus    @default(PENDING)
+  status               DeclarationStatus    @default(PENDING)
   lastDeclarationDate  DateTime?
   reviewBy             String?
   reviewAt             DateTime?

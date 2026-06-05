@@ -1,4 +1,4 @@
-import { DeclerationStatus, UserRole } from '@prisma/client';
+import { DeclarationStatus, UserRole } from '@prisma/client';
 import { validate } from '@src/shared/lib/validate';
 import { asyncHandler } from '@src/shared/utils/async-handler';
 import { withRole } from '@src/shared/utils/with-role';
@@ -35,7 +35,7 @@ export const createUserDeclarationHandler: RequestHandler[] = [
     return success(res, {
       data: {
         id: declear.id,
-        status: DeclerationStatus.PENDING,
+        status: DeclarationStatus.PENDING,
         declerationStartDate: declear.declerationStartDate,
         declerationEndDate: declear.declerationEndDate,
         amount: declear.amount,
@@ -45,7 +45,7 @@ export const createUserDeclarationHandler: RequestHandler[] = [
   }),
 ];
 
-export const userDeclarationsHandler: RequestHandler[] = [
+export const getDeclarationHandler: RequestHandler[] = [
   validate({ params: z.object({ id: z.string() }) }),
   asyncHandler(async (req, res) => {
     const associationId = req.user?.associationId;

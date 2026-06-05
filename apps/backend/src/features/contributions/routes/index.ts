@@ -5,7 +5,7 @@ import {
   approveDeclarationsHandler,
   createUserDeclarationHandler,
   listDeclarationsHandler,
-  userDeclarationsHandler,
+  getDeclarationHandler,
   rejectDeclarationsHandler,
 } from './declarations.route';
 
@@ -27,7 +27,7 @@ router.use(auth);
 
 // members
 router.post('/declarations', createUserDeclarationHandler);
-router.get('/declarations/:id', userDeclarationsHandler);
+router.get('/declarations/:id', getDeclarationHandler);
 router.get('/declarations', listDeclarationsHandler);
 
 // Contributions

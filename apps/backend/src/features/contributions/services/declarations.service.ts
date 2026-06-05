@@ -1,4 +1,4 @@
-import { DeclerationStatus, Prisma } from '@prisma/client';
+import { DeclarationStatus, Prisma } from '@prisma/client';
 import { differenceInCalendarMonths, addMonths, startOfMonth, endOfMonth } from 'date-fns';
 import { PAGE_SIZE } from '@src/shared/constants';
 import { prisma } from '@src/shared/lib';
@@ -60,7 +60,7 @@ export async function submitDeclaration(memberId: string, associationId: string,
       declerationStartDate: startDate,
       declerationEndDate: endDate,
       amount,
-      status: DeclerationStatus.PENDING,
+      status: DeclarationStatus.PENDING,
     },
   });
 }
@@ -77,14 +77,14 @@ export async function approveDeclaration(
 
   if (!existing) throw new NotFoundError('Declaration not found');
 
-  if (existing.status === DeclerationStatus.APPROVED) {
+  if (existing.status === DeclarationStatus.APPROVED) {
     return { declaration: existing, wasAlreadyApproved: true };
   }
 
   const updated = await prisma.declarations.update({
     where: { id, associationId },
     data: {
-      status: DeclerationStatus.APPROVED,
+      status: DeclarationStatus.APPROVED,
       reviewBy,
       reviewAt: new Date(),
       remark,
@@ -107,18 +107,18 @@ export async function rejectDeclaration(
 
   if (!existing) throw new NotFoundError('Declaration not found');
 
-  if (existing.status === DeclerationStatus.APPROVED) {
+  if (existing.status === DeclarationStatus.APPROVED) {
     throw new BadRequestError('Cannot change approved declaration.');
   }
 
-  if (existing.status === DeclerationStatus.REJECTED) {
+  if (existing.status === DeclarationStatus.REJECTED) {
     return { declaration: existing, wasAlreadyRejected: true };
   }
 
   const updated = await prisma.declarations.update({
     where: { id, associationId },
     data: {
-      status: DeclerationStatus.REJECTED,
+      status: DeclarationStatus.REJECTED,
       reviewBy,
       reviewAt: new Date(),
       remark,

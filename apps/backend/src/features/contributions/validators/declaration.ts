@@ -1,3 +1,5 @@
+import { DeclarationStatus } from '@prisma/client';
+import { pageNumberValidation } from '@src/shared/validators';
 import z from 'zod';
 
 const remakeValidiation = z.string('Remark is required').min(3, 'Remark must atleast of 3 in char');
@@ -23,3 +25,8 @@ export const CreateUserDeclarations = z.object({
 });
 
 export type CreateUserDeclarationsInput = z.infer<typeof CreateUserDeclarations>;
+
+export const ListDeclarationsQuerySchema = z.object({
+  page: pageNumberValidation,
+  status: z.enum(DeclarationStatus).optional(),
+});
