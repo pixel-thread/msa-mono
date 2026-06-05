@@ -42,6 +42,7 @@ export const AddContributionPage = () => {
     () => selectedPeriods.reduce((acc, period) => acc + parseInt(period.dueAmount, 10), 0),
     [selectedPeriods],
   );
+  console.log('selectedPeriods', selectedPeriods.length);
 
   const handleRowCheckChange = (data: ContributionPeriod[]) => {
     setSelectedPeriods(data);
@@ -58,13 +59,7 @@ export const AddContributionPage = () => {
     basePath: '/contributions/add-contribution',
   });
 
-  const {
-    contributions = [],
-    meta,
-    summary,
-    refetch,
-    user,
-  } = useUserContributions({ page, userId });
+  const { contributions = [], meta, summary, refetch } = useUserContributions({ page, userId });
 
   const { mutate: recordContribution, isPending: isRecordingContribution } = useMutation({
     mutationFn: (data: RecordContributionInput) =>

@@ -58,7 +58,9 @@ export async function allocatePaymentToContributions(
   let remaining = totalAmount;
 
   for (const period of outstanding) {
-    if (remaining <= 0) break;
+    if (remaining <= 0) {
+      break;
+    }
 
     const dueAmount = Number(period.dueAmount);
     const allocatedAmount = Math.min(remaining, dueAmount);
@@ -117,20 +119,6 @@ export async function allocatePaymentToContributions(
         };
       }),
     );
-
-    if (paymentTransactionId) {
-      const existing = await tx.ledgerEntry.findFirst({
-        where: { paymentTransactionId },
-      });
-
-      if (existing) {
-        // if it exists, it's possible it was an auto-retry of webhook
-        return tx.ledgerEntry.findUnique({
-          where: { id: existing.id },
-          include: { lines: true },
-        }) as unknown as any;
-      }
-    }
 
     const autoApprove = true;
 

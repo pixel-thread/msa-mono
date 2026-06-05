@@ -24,7 +24,8 @@ export const recordContributionHandler: RequestHandler[] = [
   asyncHandler(async (req, res) => {
     const user = await withRole(req, UserRole.FINANCE);
 
-    const { userId, amount, paymentMethod } = req.body as RecordContributionInput;
+    const { userId, amount, paymentMethod, contributionPeriodIds } =
+      req.body as RecordContributionInput;
 
     const result = await prisma.$transaction(async (tx) => {
       const payment = await tx.paymentTransaction.create({
@@ -40,6 +41,7 @@ export const recordContributionHandler: RequestHandler[] = [
         },
       });
 
+      console.log('Contribtion periods before allocate payment', contributionPeriodIds.length);
       await allocatePaymentToContributions(
         tx,
         payment.id,
