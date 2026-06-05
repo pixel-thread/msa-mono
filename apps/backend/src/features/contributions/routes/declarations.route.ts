@@ -14,7 +14,7 @@ import { RequestHandler } from 'express';
 import { success } from '@src/shared/utils/responses';
 import z from 'zod';
 import { BadRequestError, NotFoundError } from '@src/shared/errors';
-import { differenceInCalendarMonths, addMonths, startOfMonth, endOfMonth } from 'date-fns';
+import { differenceInCalendarMonths, addMonths, startOfMonth, endOfMonth, toDate } from 'date-fns';
 import { findDeclarations } from '../services/declarations.service';
 import { ApproveDeclarationSchema, RejectDeclarationSchema } from '../validators';
 
@@ -35,16 +35,17 @@ export const createUserDeclarationHandler: RequestHandler[] = [
         memberId: user.id,
         status: 'APPROVED',
       },
-      orderBy: {
-        declerationEndDate: 'desc',
-      },
+      orderBy: { lastDeclarationDate: 'desc' },
+      take: 1,
     });
 
     const today = new Date();
+
     let startDate = lastDeclaration ? new Date(lastDeclaration.declerationEndDate) : new Date();
 
     if (lastDeclaration) {
       const lastEndDate = new Date(lastDeclaration.declerationEndDate);
+
       const monthSinceLastDeclaration = differenceInCalendarMonths(today, lastEndDate);
 
       if (monthSinceLastDeclaration < 1) {
@@ -55,7 +56,7 @@ export const createUserDeclarationHandler: RequestHandler[] = [
       startDate = startOfMonth(today);
     }
 
-    const endDate = endOfMonth(startDate);
+    const endDate = endOfMonth(today);
 
     const declear = await prisma.declarations.create({
       data: {
@@ -110,7 +111,9 @@ export const listDeclarationsHandler: RequestHandler[] = [
 
     const declarations = await findDeclarations({
       where: { associationId: association.id },
-      include: { member: { select: { name: true, email: true, mobile: true } } },
+      include: {
+        member: { select: { name: true, email: true, mobile: true } },
+      },
     });
 
     return success(res, {

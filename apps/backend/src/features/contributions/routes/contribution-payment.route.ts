@@ -14,7 +14,7 @@ export const recordContributionHandler: RequestHandler[] = [
   asyncHandler(async (req, res) => {
     const user = await withRole(req, UserRole.FINANCE);
 
-    const { userId, amount, paymentMethod, contributionPeriodIds } =
+    const { userId, amount, paymentMethod, contributionPeriodIds, paidAt } =
       req.body as RecordContributionInput;
 
     if (contributionPeriodIds.length === 0) {
@@ -31,6 +31,7 @@ export const recordContributionHandler: RequestHandler[] = [
           gateway: PaymentGateway.MANUAL,
           status: PaymentStatus.PENDING,
           method: paymentMethod,
+          paidAt: paidAt,
           createdById: user.id,
         },
       });
