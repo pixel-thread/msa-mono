@@ -15,6 +15,7 @@ import {
   CreateUserDeclarationsInput,
   RejectDeclarationSchema,
 } from '../validators';
+import { hasHighRoleAccess } from '@src/shared/utils';
 
 export const createUserDeclarationHandler: RequestHandler[] = [
   validate({ body: CreateUserDeclarations }),
@@ -76,25 +77,6 @@ export const createUserDeclarationHandler: RequestHandler[] = [
   }),
 ];
 
-export const listUserDeclarationsHandler: RequestHandler[] = [
-  asyncHandler(async (req, res) => {
-    const associationId = req.user?.associationId;
-    const user = await withRole(req, UserRole.MEMBER);
-
-    const declarations = await findDeclarations({
-      where: {
-        memberId: user.id,
-        associationId: associationId,
-      },
-    });
-
-    return success(res, {
-      data: declarations,
-      message: 'Declarations successfully fetch.',
-    });
-  }),
-];
-
 export const userDeclarationsHandler: RequestHandler[] = [
   validate({ params: z.object({ id: z.string() }) }),
   asyncHandler(async (req, res) => {
@@ -123,15 +105,26 @@ export const userDeclarationsHandler: RequestHandler[] = [
 
 export const listDeclarationsHandler: RequestHandler[] = [
   asyncHandler(async (req, res) => {
-    await withRole(req, UserRole.FINANCE);
-    const associationId = req.user?.associationId;
+    const user = await withRole(req, UserRole.MEMBER);
 
-    const declarations = await findDeclarations({
-      where: { associationId: associationId },
-      include: {
-        member: { select: { name: true, email: true, mobile: true } },
-      },
-    });
+    const associationId = req.user?.associationId;
+    let declarations;
+
+    if (hasHighRoleAccess(user.role)) {
+      declarations = await findDeclarations({
+        where: { associationId: associationId },
+        include: {
+          member: { select: { name: true, email: true, mobile: true } },
+        },
+      });
+    } else {
+      declarations = await findDeclarations({
+        where: { memberId: user.id, associationId: associationId },
+        include: {
+          member: { select: { name: true, email: true, mobile: true } },
+        },
+      });
+    }
 
     return success(res, {
       data: declarations,

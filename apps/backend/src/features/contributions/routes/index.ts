@@ -28,9 +28,8 @@ router.use(auth);
 
 // members
 router.post('/declarations', createUserDeclarationHandler);
-router.get('/declarations', listUserDeclarationsHandler);
 router.get('/declarations/:id', userDeclarationsHandler);
-router.get('/all-declarations', listDeclarationsHandler);
+router.get('/declarations', listDeclarationsHandler);
 
 // Contributions
 router.get('/contributions', listContributionsHandler);
