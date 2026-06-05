@@ -21,18 +21,19 @@ export const VerifyPaymentSchema = z.object({
 
 // ---- Record Manual Payment (cash/UPI/bank transfer) ----
 
-export const RecordManualPaymentSchema = z.object({
-  userId: z.uuid('Invalid user ID'),
-  amount: z
-    .number()
-    .positive('Amount must be positive')
-    .min(1, 'Amount is required')
-    .max(99999999, 'Amount must be less than 99999999'),
-  method: z.enum(PaymentMethod, 'Invalid payment method').default(PaymentMethod.CASH),
-  notes: z.string("Notes can't be empty").optional(),
-  receiptNumber: z.string("Receipt number can't be empty").optional(),
-  referenceNumber: z.string("Reference number can't be empty").optional(),
-});
+export const RecordManualPaymentSchema = z
+  .object({
+    notes: z.string("Notes/Remark can't be empty").min(10, 'Remark should be atleast 10 character'),
+    amount: z
+      .number()
+      .positive('Amount must be positive')
+      .min(1, 'Amount is required')
+      .max(99999999, 'Amount must be less than 99999999'),
+    method: z.enum(PaymentMethod, 'Invalid payment method').default(PaymentMethod.CASH),
+    receiptNumber: z.string("Receipt number can't be empty").optional(),
+    referenceNumber: z.string("Reference number can't be empty").optional(),
+  })
+  .strict();
 
 // ---- Query Schemas ----
 
