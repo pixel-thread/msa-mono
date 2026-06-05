@@ -40,7 +40,7 @@ const UserContributionsQuerySchema = z.object({
 // GET /api/contributions/users/:userId
 // ===========================================================================
 
-export const userContributionsHandler: RequestHandler[] = [
+export const listUserContributionsHandler: RequestHandler[] = [
   // Step 1: Validate params and query
   validate({ params: UserContributionsParamsSchema, query: UserContributionsQuerySchema }),
 
@@ -125,6 +125,7 @@ export const userContributionsHandler: RequestHandler[] = [
         },
       },
     });
+
     const summary = await getUserContributionSummary(userId);
 
     logger.info(
