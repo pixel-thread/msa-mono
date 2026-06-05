@@ -39,7 +39,6 @@ export class ExpoNotificationService {
         sound: 'default',
         title,
         body,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         data: data as Record<string, any>,
       });
     }

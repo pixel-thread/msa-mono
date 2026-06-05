@@ -266,7 +266,7 @@ export async function updatePlan(associationId: string, planId: string, body: Up
     return updatedPlan;
   }
 
-  const { amount, currency, billingCycle, features, ...metadata } = body;
+  const { ...metadata } = body;
   const plan = await prisma.subscriptionPlan.update({
     where: { id: planId, associationId },
     data: metadata,
