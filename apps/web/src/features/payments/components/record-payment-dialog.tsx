@@ -33,7 +33,6 @@ import {
 import { Textarea } from '@src/shared/components/ui/textarea';
 import { toast } from 'sonner';
 import { RecordManualPaymentSchema } from '@src/features/payments/validators';
-import { MemberCombobox } from '@src/shared/components/members/member-combobox';
 
 type RecordManualPaymentInput = z.infer<typeof RecordManualPaymentSchema>;
 
@@ -45,14 +44,14 @@ interface RecordPaymentDialogProps {
 export function RecordPaymentDialog({ open, onOpenChange }: RecordPaymentDialogProps) {
   const queryClient = useQueryClient();
 
-  const form = useForm<RecordManualPaymentInput>({
+  const form = useForm({
     resolver: zodResolver(RecordManualPaymentSchema),
     defaultValues: {
-      userId: '',
       amount: 0,
       notes: '',
       receiptNumber: '',
       referenceNumber: '',
+      method: 'CASH',
     },
   });
 
@@ -86,6 +85,20 @@ export function RecordPaymentDialog({ open, onOpenChange }: RecordPaymentDialogP
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4 py-4">
+            <FormField
+              control={form.control}
+              name="notes"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Notes / Remark</FormLabel>
+                  <FormControl>
+                    <Textarea {...field} placeholder="Optional notes about this payment" rows={3} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             <FormField
               control={form.control}
               name="amount"
@@ -153,20 +166,6 @@ export function RecordPaymentDialog({ open, onOpenChange }: RecordPaymentDialogP
                   <FormLabel>Reference Number</FormLabel>
                   <FormControl>
                     <Input {...field} placeholder="Optional reference number" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="notes"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Notes / Remark</FormLabel>
-                  <FormControl>
-                    <Textarea {...field} placeholder="Optional notes about this payment" rows={3} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

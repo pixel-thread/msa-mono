@@ -25,10 +25,9 @@ export const VerifyPaymentSchema = z.object({
 // ---------------------------------------------------------------------------
 
 export const RecordManualPaymentSchema = z.object({
-  userId: z.uuid(),
   amount: z.number().positive('Amount must be positive'),
-  method: z.nativeEnum(PaymentMethod),
-  notes: z.string().optional(),
+  method: z.enum(PaymentMethod).default(PaymentMethod.CASH),
+  notes: z.string(),
   receiptNumber: z.string().optional(),
   referenceNumber: z.string().optional(),
 });
