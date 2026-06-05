@@ -17,7 +17,11 @@ import { NotFoundError } from '@src/shared/errors';
 import { z } from 'zod';
 import { UserContributionsParamsSchema } from '@src/features/contributions/validators';
 import { findFirstMember } from '@src/features/members/services/findFirstMember';
-import { getUserContributionSummary } from '@src/features/contributions/services/contribution.service';
+import {
+  generateUserContributions,
+  getUserContributionSummary,
+  markOverdueContributions,
+} from '@src/features/contributions/services/contribution.service';
 import { findContributionPeriods } from '@src/features/contributions/services/find-contribution-periods';
 import { pageNumberValidation } from '@src/shared/validators/common';
 import { PAGE_SIZE } from '@src/shared/constants';
@@ -102,6 +106,10 @@ export const listUserContributionsHandler: RequestHandler[] = [
       { traceId, userId },
       'GET /api/contributions/users/[userId] - Fetching contributions',
     );
+
+    await generateUserContributions(userId, new Date().getFullYear(), 12);
+
+    await markOverdueContributions(association.id, userId);
 
     const { contributions, total } = await findContributionPeriods({
       where: whereClause as Parameters<typeof findContributionPeriods>[0]['where'],
