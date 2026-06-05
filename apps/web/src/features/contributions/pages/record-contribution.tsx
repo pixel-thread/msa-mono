@@ -3,12 +3,10 @@ import { DataTable } from '@src/shared/components/data-table';
 import { DataTablePagination } from '@src/shared/components/data-table-pagination';
 import { MemberCombobox } from '@src/shared/components/members/member-combobox';
 import { SectionHeader } from '@src/shared/components/section-header';
-import http from '@src/shared/utils/http';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
 import { ContributionPeriod } from '../types';
 import { useUserContributionColumns } from '../hooks/useUserContributionColumns';
-import z from 'zod';
 import { toast } from 'sonner';
 import { Button } from '@src/shared/components/ui/button';
 import { useUrlFilters } from '@hooks/use-url-filters';
@@ -16,29 +14,14 @@ import { Card } from '@components/ui/card';
 import { useUserContributions } from '../hooks';
 import { Loader2 } from 'lucide-react';
 import { ENDPOINTS } from '@repo/shared';
+import http from '@src/shared/utils/http';
 import { ContributionStatsPanel } from '../components/contribution-stats-panel';
 import { PaymentSummaryBar } from '../components/payment-summary-bar';
-
-const RecordContributionSchema = z.object({
-  userId: z.uuid(),
-  contributionPeriodIds: z.array(z.uuid()),
-  amount: z
-    .string()
-    .refine((value) => {
-      const amount = parseFloat(value);
-      return !isNaN(amount);
-    })
-    .regex(/^\d+(\.\d{1,2})?$/)
-    .min(1),
-  remark: z.string().optional(),
-  paidAt: z.string().optional(),
-});
-
-type RecordContributionInput = z.infer<typeof RecordContributionSchema>;
 
 export const RecordContributionPage = () => {
   const [selectedPeriods, setSelectedPeriods] = useState<ContributionPeriod[]>([]);
   const [userId, setUserId] = useState<string>('');
+  const [paidAt, setPaidAt] = useState<Date>(new Date());
 
   const selectedTotal = useMemo(
     () => selectedPeriods.reduce((acc, period) => acc + parseInt(period.dueAmount, 10), 0),
@@ -92,11 +75,6 @@ export const RecordContributionPage = () => {
     .filter((c) => c.status !== 'PAID' && c.status !== 'WAIVED')
     .sort((a, b) => a.year - b.year || a.month - b.month);
 
-  const { mutate: recordContribution, isPending: isRecordingContribution } = useMutation({
-    mutationFn: (data: RecordContributionInput) =>
-      http.post(ENDPOINTS.CONTRIBUTION.CREATE_PAYMENT, data),
-  });
-
   const genContribution = useMutation({
     mutationFn: (id: string) => http.post(ENDPOINTS.CONTRIBUTION.USER(id), {}),
     onSuccess: (res) => {
@@ -110,31 +88,10 @@ export const RecordContributionPage = () => {
     },
   });
 
-  const onSubmit = () => {
-    if (selectedPeriods.length === 0) {
-      toast.error('Please select at least one contribution period');
-      return;
-    }
-
-    recordContribution(
-      {
-        userId,
-        contributionPeriodIds: selectedPeriods.map((p) => p.id),
-        amount: selectedTotal.toString(),
-      },
-      {
-        onSuccess: (data) => {
-          if (data.success) {
-            toast.success(data.message);
-            queryClient.invalidateQueries({ queryKey: ['all-contributions'] });
-            genContribution.mutate(userId);
-            setSelectedPeriods([]);
-            return;
-          }
-          toast.error(data.message || 'Failed to add contributions');
-        },
-      },
-    );
+  const handleRecordingSuccess = () => {
+    queryClient.invalidateQueries({ queryKey: ['all-contributions'] });
+    genContribution.mutate(userId);
+    setSelectedPeriods([]);
   };
 
   function onMemberChange(value: string) {
@@ -155,8 +112,10 @@ export const RecordContributionPage = () => {
         selectedPeriods={selectedPeriods}
         selectedTotal={selectedTotal}
         summary={summary}
-        isAdding={isRecordingContribution}
-        onSubmit={onSubmit}
+        paidAt={paidAt}
+        onPaidAtChange={(date) => date && setPaidAt(date)}
+        userId={userId}
+        onRecordingSuccess={handleRecordingSuccess}
       />
 
       <div className="flex justify-end items-center">

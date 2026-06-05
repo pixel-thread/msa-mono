@@ -22,6 +22,7 @@ export interface ContributionPeriod {
   allocations: {
     id: string;
     allocatedAmount: number;
+    contributionPeriodId: string;
     paymentTransaction: {
       id: string;
       amount: number;
@@ -80,6 +81,11 @@ export interface Declaration {
   lastDeclarationDate: string | null;
   reviewBy: string | null;
   reviewAt: string | null;
+  reviewer: {
+    id: string;
+    name: string;
+    email: string;
+  } | null;
   remark: string | null;
 
   member: DeclarationMember;

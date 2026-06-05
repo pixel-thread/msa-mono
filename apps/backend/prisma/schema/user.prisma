@@ -50,6 +50,7 @@ model User {
   memberTypeId          String?
   memberType            MemberType?           @relation(fields: [memberTypeId], references: [id])
   declerations          Declarations[]
+  reviewedDeclerations  Declarations[]        @relation("reviewedBy")
 
   @@unique([associationId, email])
   @@unique([associationId, membershipNumber])

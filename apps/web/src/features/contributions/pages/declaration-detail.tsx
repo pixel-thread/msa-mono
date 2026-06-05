@@ -114,7 +114,9 @@ export function DeclarationDetailPage() {
                 <>
                   <Separator className="bg-hairline" />
                   <div>
-                    <p className="text-xs font-medium text-muted-foreground">Last Declaration Date</p>
+                    <p className="text-xs font-medium text-muted-foreground">
+                      Last Declaration Date
+                    </p>
                     <p className="text-sm text-ink mt-1">
                       {formatDate(declaration.lastDeclarationDate)}
                     </p>
@@ -155,7 +157,7 @@ export function DeclarationDetailPage() {
                 <div className="space-y-3">
                   <div>
                     <p className="text-xs font-medium text-muted-foreground">Reviewed By</p>
-                    <p className="text-sm text-ink mt-1">{declaration.reviewBy || '-'}</p>
+                    <p className="text-sm text-ink mt-1">{declaration.reviewer.name || '-'}</p>
                   </div>
                   <div>
                     <p className="text-xs font-medium text-muted-foreground">Reviewed At</p>

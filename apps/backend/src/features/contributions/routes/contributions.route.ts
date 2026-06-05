@@ -93,6 +93,8 @@ export const listContributionsHandler: RequestHandler[] = [
       include: {
         user: { select: { id: true, name: true, email: true, membershipNumber: true } },
         allocations: {
+          take: 1,
+          where: { paymentTransaction: { paidAt: { not: null } } },
           include: {
             paymentTransaction: {
               select: {

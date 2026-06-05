@@ -53,7 +53,8 @@ model Declarations {
   member               User                 @relation(fields: [memberId], references: [id])
   association          Association          @relation(fields: [associationId], references: [id])
   periods              ContributionPeriod[]
-  remarks              String?
+  remark              String?
+  reviewer             User?                @relation("reviewedBy", fields: [reviewBy], references: [id])
 
   @@map("declerations")
 }

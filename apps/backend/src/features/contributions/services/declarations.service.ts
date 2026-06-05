@@ -15,6 +15,6 @@ type FindUniqueDeclarationsProps = {
   include?: Prisma.DeclarationsInclude;
 };
 
-export async function findUniqueDeclarations({ where, include }: FindUniqueDeclarationsProps) {
+export async function findUniqueDeclaration({ where, include }: FindUniqueDeclarationsProps) {
   return await prisma.declarations.findUnique({ where, include });
 }

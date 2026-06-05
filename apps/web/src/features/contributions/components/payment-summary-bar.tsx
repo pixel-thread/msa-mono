@@ -4,7 +4,7 @@ import { Button } from '@components/ui/button';
 import { Card, CardContent } from '@components/ui/card';
 import { formattedAmount } from '@src/shared/utils';
 import { getMonthName } from '@src/shared/utils/helper/get-month-name';
-import { Loader2 } from 'lucide-react';
+import { CalendarIcon, Loader2 } from 'lucide-react';
 import { ContributionStatusBadge } from './contribution-status-badge';
 import type { ContributionPeriod, ContributionSummary } from '../types';
 import {
@@ -18,34 +18,83 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@src/shared/components/ui/alert-dialog';
+import { Popover, PopoverContent, PopoverTrigger } from '@src/shared/components/ui/popover';
+import { Calendar } from '@src/shared/components/ui/calendar';
+import { cn } from '@src/shared/lib/utils';
+import { formatDate } from '@src/shared/utils/format';
+import http from '@src/shared/utils/http';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
+import { ENDPOINTS } from '@repo/shared';
 
 interface PaymentSummaryBarProps {
   selectedPeriods: ContributionPeriod[];
   selectedTotal: number;
   summary: ContributionSummary | null;
-  isAdding: boolean;
-  onSubmit: () => void;
+  paidAt: Date | undefined;
+  onPaidAtChange: (date: Date | undefined) => void;
+  userId: string;
+  onRecordingSuccess: () => void;
 }
 
 type ConfirmSavingContributionsProps = {
-  loading: boolean;
-  disable: boolean;
-  onClick: () => void;
   periods: ContributionPeriod[];
+  paidAt: Date | undefined;
+  userId: string;
+  selectedTotal: number;
+  onSuccess: () => void;
 };
 
 const ConfirmSavingContributions = ({
-  onClick,
-  loading,
-  disable,
   periods,
+  paidAt,
+  userId,
+  selectedTotal,
+  onSuccess,
 }: ConfirmSavingContributionsProps) => {
+  const queryClient = useQueryClient();
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: (data: {
+      userId: string;
+      contributionPeriodIds: string[];
+      amount: string;
+      paidAt?: string;
+    }) => http.post(ENDPOINTS.CONTRIBUTION.CREATE_PAYMENT, data),
+  });
+
+  const handleConfirm = () => {
+    mutate(
+      {
+        userId,
+        contributionPeriodIds: periods.map((p) => p.id),
+        amount: selectedTotal.toString(),
+        paidAt: paidAt?.toISOString(),
+      },
+      {
+        onSuccess: (data) => {
+          if (data.success) {
+            toast.success(data.message);
+            queryClient.invalidateQueries({ queryKey: ['all-contributions'] });
+            onSuccess();
+            return;
+          }
+          toast.error(data.message || 'Failed to add contributions');
+        },
+      },
+    );
+  };
+
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button disabled={disable || loading}>Save Contribution</Button>
+        <Button disabled={isPending || selectedTotal === 0}>
+          {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+          Save Contribution
+        </Button>
       </AlertDialogTrigger>
-      <AlertDialogContent>
+
+      <AlertDialogContent className="min-w-[600px]">
         <AlertDialogHeader>
           <AlertDialogTitle>Are you sure u want to continue</AlertDialogTitle>
           <AlertDialogDescription>
@@ -87,10 +136,14 @@ const ConfirmSavingContributions = ({
               </p>
             </div>
           </div>
+          <div className="flex justify-between">
+            <p className="font-semibold">Cash Received Date</p>
+            <p>{paidAt ? formatDate(paidAt.toISOString()) : '-'}</p>
+          </div>
         </div>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={onClick}>Continue</AlertDialogAction>
+          <AlertDialogAction onClick={handleConfirm}>Continue</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
@@ -101,8 +154,10 @@ export function PaymentSummaryBar({
   selectedPeriods,
   selectedTotal,
   summary,
-  isAdding,
-  onSubmit,
+  paidAt,
+  onPaidAtChange,
+  userId,
+  onRecordingSuccess,
 }: PaymentSummaryBarProps) {
   if (selectedPeriods.length === 0) return null;
 
@@ -137,6 +192,31 @@ export function PaymentSummaryBar({
 
         <div className="mt-4 border-t border-hairline pt-3">
           <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold mb-2">
+            Cash Received Date
+          </p>
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                variant="outline"
+                className={cn('pl-3 text-left font-normal', !paidAt && 'text-muted-foreground')}
+              >
+                {paidAt ? formatDate(paidAt.toISOString()) : <span>Pick a date</span>}
+                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="start">
+              <Calendar
+                mode="single"
+                selected={paidAt}
+                onSelect={onPaidAtChange}
+                disabled={{ after: new Date() }}
+              />
+            </PopoverContent>
+          </Popover>
+        </div>
+
+        <div className="mt-4 border-t border-hairline pt-3">
+          <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold mb-2">
             Selected Periods Breakdown
           </p>
           <div className="space-y-1">
@@ -162,9 +242,10 @@ export function PaymentSummaryBar({
         <div className="mt-4 flex justify-end">
           <ConfirmSavingContributions
             periods={selectedPeriods}
-            loading={isAdding}
-            disable={isAdding || selectedTotal === 0}
-            onClick={onSubmit}
+            paidAt={paidAt}
+            userId={userId}
+            selectedTotal={selectedTotal}
+            onSuccess={onRecordingSuccess}
           />
         </div>
       </CardContent>

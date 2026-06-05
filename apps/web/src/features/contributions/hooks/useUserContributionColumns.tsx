@@ -1,12 +1,13 @@
 'use client';
 import { ColumnDef, Table } from '@tanstack/react-table';
 import { Badge } from '@src/shared/components/ui/badge';
-import { formattedAmount } from '@src/shared/utils';
+import { formatDate, formattedAmount } from '@src/shared/utils';
 import { getMonthName } from '@src/shared/utils/helper/get-month-name';
 import { ContributionStatusBadge } from '../components/contribution-status-badge';
 import type { ContributionPeriod } from '../types';
 import Link from 'next/link';
 import { Checkbox } from '@components/ui/checkbox';
+import { WaivedContributionCell } from '../components/cells/waived-contribution-cell';
 
 type Props = {
   onCheck?: (data: ContributionPeriod[]) => void;
@@ -104,6 +105,18 @@ export function useUserContributionColumns({ onCheck, checkValues }: Props = {})
       cell: ({ row }) => <ContributionStatusBadge status={row.original.status} />,
     },
     {
+      header: 'Paid At',
+      cell: ({ row }) => {
+        const contribution = row.original;
+        const contributionId = contribution.id;
+        const payments = contribution.allocations.find(
+          (allocation) => allocation.contributionPeriodId === contributionId,
+        );
+        const paidAt = payments?.paymentTransaction.paidAt;
+        return <span className="text-sm text-muted-foreground">{formatDate(paidAt)}</span>;
+      },
+    },
+    {
       accessorKey: 'dueDate',
       header: 'Due Date',
       cell: ({ row }) => (
@@ -116,6 +129,7 @@ export function useUserContributionColumns({ onCheck, checkValues }: Props = {})
         </span>
       ),
     },
+
     {
       id: 'payments',
       header: 'Payments',
@@ -133,6 +147,10 @@ export function useUserContributionColumns({ onCheck, checkValues }: Props = {})
           <span className="text-xs text-muted-foreground">No payments</span>
         );
       },
+    },
+    {
+      header: 'WAIVED',
+      cell: ({ row }) => <WaivedContributionCell contributionPeriod={row.original} />,
     },
   ];
   return { columns };

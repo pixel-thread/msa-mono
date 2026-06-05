@@ -12,6 +12,8 @@ export const WaiveContributionSchema = z.object({
   reason: z.string().min(1, 'Waiver reason is required'),
 });
 
+export type WaiveContributionInput = z.infer<typeof WaiveContributionSchema>;
+
 export const ContributionReportQuerySchema = z.object({
   userId: z.uuid(),
   fromYear: z

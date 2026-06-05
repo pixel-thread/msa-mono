@@ -41,6 +41,7 @@ export function useDeclarationsColumns({
     {
       accessorKey: 'lastDeclarationDate',
       header: 'Last Declaration',
+      cell: ({ row }) => formatDate(row.original.lastDeclarationDate),
     },
     {
       accessorKey: 'member.mobile',

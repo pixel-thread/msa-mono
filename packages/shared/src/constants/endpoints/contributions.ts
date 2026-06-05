@@ -7,10 +7,10 @@ export const CONTRIBUTION = {
   REJECT_DECLARATION: (id: string) =>
     `/contributions/declarations/${id}/reject`,
 
-  LIST: "/contributions/contributions",
-  GENERATE: "/contributions/contributions",
-  WAIVE: "/contributions/contributions",
-  DETAIL: (id: string) => `/contributions/contributions/${id}`,
+  LIST: "/contributions",
+  GENERATE: "/contributions/generate-periodic",
+  WAIVE: "/contributions/waive",
+  DETAIL: (id: string) => `/contributions/${id}`,
 
   USER: (userId: string) => `/contributions/users/${userId}`,
 

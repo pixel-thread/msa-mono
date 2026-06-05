@@ -6,6 +6,7 @@ import {
   createUserDeclarationHandler,
   listDeclarationsHandler,
   listUserDeclarationsHandler,
+  userDeclarationsHandler,
   rejectDeclarationsHandler,
 } from './declarations.route';
 
@@ -28,13 +29,14 @@ router.use(auth);
 // members
 router.post('/declarations', createUserDeclarationHandler);
 router.get('/declarations', listUserDeclarationsHandler);
+router.get('/declarations/:id', userDeclarationsHandler);
 router.get('/all-declarations', listDeclarationsHandler);
 
 // Contributions
 router.get('/contributions', listContributionsHandler);
-router.post('/contributions', generateContributionsHandler);
-router.patch('/contributions', waiveContributionHandler);
-router.get('/contributions/:contributionId', getContributionHandler);
+router.post('/generate-periodic', generateContributionsHandler);
+router.patch('/waive', waiveContributionHandler);
+router.get('/:contributionId', getContributionHandler);
 
 // User Contributions
 router.get('/users/:userId', listUserContributionsHandler);
