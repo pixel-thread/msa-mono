@@ -16,7 +16,6 @@ import { Card } from '@components/ui/card';
 import { useUserContributions } from '../hooks';
 import { Loader2 } from 'lucide-react';
 import { ENDPOINTS } from '@repo/shared';
-import { MemberProfileCard } from '../components/member-profile-card';
 import { ContributionStatsPanel } from '../components/contribution-stats-panel';
 import { PaymentSummaryBar } from '../components/payment-summary-bar';
 
@@ -123,17 +122,6 @@ export const AddContributionPage = () => {
       <Card className="p-4">
         <MemberCombobox value={userId} onValueChange={onMemberChange} />
       </Card>
-
-      {userId && user && (
-        <MemberProfileCard
-          name={user.name}
-          email={user.email}
-          membershipNumber={user.membershipNumber}
-          userId={userId}
-          summary={summary}
-          totalPeriods={contributions.length}
-        />
-      )}
 
       {summary && <ContributionStatsPanel summary={summary} contributions={contributions} />}
 

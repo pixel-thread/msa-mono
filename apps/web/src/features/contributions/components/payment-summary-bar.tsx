@@ -53,7 +53,10 @@ export function PaymentSummaryBar({
           </p>
           <div className="space-y-1">
             {selectedPeriods.map((period) => (
-              <div key={period.id} className="flex items-center justify-between py-1 px-2 rounded hover:bg-muted/50">
+              <div
+                key={period.id}
+                className="flex items-center justify-between py-1 px-2 rounded hover:bg-muted/50"
+              >
                 <div className="flex items-center gap-2">
                   <span className="text-sm text-ink">
                     {getMonthName(period.month)} {period.year}
@@ -69,7 +72,7 @@ export function PaymentSummaryBar({
         </div>
 
         <div className="mt-4 flex justify-end">
-          <Button size="lg" onClick={onSubmit} disabled={isAdding}>
+          <Button size="lg" onClick={onSubmit} disabled={isAdding || selectedTotal === 0}>
             {isAdding && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Pay {formattedAmount(selectedTotal)}
           </Button>
