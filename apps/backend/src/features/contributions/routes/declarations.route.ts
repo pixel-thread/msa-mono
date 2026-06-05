@@ -15,7 +15,8 @@ import { success } from '@src/shared/utils/responses';
 import z from 'zod';
 import { BadRequestError, NotFoundError } from '@src/shared/errors';
 import { differenceInCalendarMonths, addMonths, startOfMonth, endOfMonth } from 'date-fns';
-import { findDeclarations } from '../services/find-declarations';
+import { findDeclarations } from '../services/declarations.service';
+import { ApproveDeclarationSchema, RejectDeclarationSchema } from '../validators';
 
 const CreateUserDeclarations = z.object({
   monthlyContributionAmount: z.number().int().min(1).max(10000),
@@ -120,7 +121,7 @@ export const listDeclarationsHandler: RequestHandler[] = [
 ];
 
 export const approveDeclarationsHandler: RequestHandler[] = [
-  validate({ params: z.object({ id: z.string() }) }),
+  validate({ params: z.object({ id: z.string() }), body: ApproveDeclarationSchema }),
   asyncHandler(async (req, res) => {
     const declarationId = req.params.id as string;
     const association = await getAssociation(req);
@@ -229,7 +230,7 @@ export const approveDeclarationsHandler: RequestHandler[] = [
 ];
 
 export const rejectDeclarationsHandler: RequestHandler[] = [
-  validate({ params: z.object({ id: z.string() }) }),
+  validate({ params: z.object({ id: z.string() }), body: RejectDeclarationSchema }),
   asyncHandler(async (req, res) => {
     const declarationId = req.params.id as string;
 
