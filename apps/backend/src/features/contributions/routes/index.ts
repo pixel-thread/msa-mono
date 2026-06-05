@@ -9,7 +9,7 @@ import {
   rejectDeclarationsHandler,
 } from './declarations.route';
 
-import { createManualContributionPaymentHandler } from './contribution-payment.route';
+import { recordContributionHandler } from './contribution-payment.route';
 
 import {
   listContributionsHandler,
@@ -43,6 +43,6 @@ router.post('/users/:userId', generateUserContributionsHandler);
 // ADMIN
 router.post('/declarations/:id/approve', approveDeclarationsHandler);
 router.post('/declarations/:id/reject', rejectDeclarationsHandler);
-router.post('/record', createManualContributionPaymentHandler);
+router.post('/record', recordContributionHandler);
 
 export default router;

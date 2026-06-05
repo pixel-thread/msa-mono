@@ -16,7 +16,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@components/ui/tabs';
 
 function formatCurrency(amount: string) {
   const num = Number(amount);
-  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(num);
+  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'INR' }).format(num);
 }
 
 export function LedgerReportsPage() {

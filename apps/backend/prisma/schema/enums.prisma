@@ -124,6 +124,10 @@ enum ContributionStatus {
   @@map("contribution_status")
 }
 
+enum Currency {
+  INR
+}
+
 enum PaymentProviderType {
   RAZORPAY
   STRIPE

@@ -1,12 +1,26 @@
 import { prisma } from '@src/shared/lib/prisma';
-import { ContributionStatus, Prisma, UserStatus, PaymentStatus } from '@prisma/client';
-import { recordWaiver } from '@src/features/ledger/services/accounting.service';
+import {
+  ContributionStatus,
+  Prisma,
+  UserStatus,
+  PaymentStatus,
+  ApprovalStatus,
+} from '@prisma/client';
+import { JournalLine, recordWaiver } from '@src/features/ledger/services/accounting.service';
 import { ContributionSummary } from '@src/features/contributions/types';
 import { NotFoundError } from '@src/shared/errors';
 
 // ---------------------------------------------------------------------------
 // Service functions
 // ---------------------------------------------------------------------------
+
+function validateBalance(lines: { amount: number; isDebit: boolean }[]) {
+  const totalDebits = lines.filter((l) => l.isDebit).reduce((s, l) => s + l.amount, 0);
+  const totalCredits = lines.filter((l) => !l.isDebit).reduce((s, l) => s + l.amount, 0);
+  if (Math.abs(totalDebits - totalCredits) > 0.001) {
+    throw new Error(`Unbalanced entry: debits=${totalDebits}, credits=${totalCredits}`);
+  }
+}
 
 /**
  * Allocate a payment amount across outstanding contribution periods using
@@ -17,17 +31,23 @@ import { NotFoundError } from '@src/shared/errors';
  *   - If remaining > 0 but < dueAmount → partially paid
  *   - If remaining == 0 → stop
  */
+
 export async function allocatePaymentToContributions(
   tx: Prisma.TransactionClient, // Prisma transaction client
   paymentTransactionId: string,
   userId: string,
   totalAmount: number,
   ids: string[],
+  actorId?: string,
 ) {
   const outstanding = await tx.contributionPeriod.findMany({
     where: { id: { in: ids }, userId },
     orderBy: [{ year: 'asc' }, { month: 'asc' }],
   });
+
+  const descriptionMonth = outstanding.map((p) => `${p.year}-${p.month}`).join(', ');
+
+  const description = `Payment contributions (${descriptionMonth})`;
 
   const payment = await tx.paymentTransaction.findUnique({ where: { id: paymentTransactionId } });
 
@@ -65,22 +85,75 @@ export async function allocatePaymentToContributions(
     });
 
     await tx.paymentTransaction.update({
-      where: {
-        id: payment.id,
-      },
+      where: { id: payment.id },
       data: {
         status: PaymentStatus.COMPLETED,
-
-        verifiedById: userId,
-
+        verifiedById: actorId,
+        notes: description,
         paidAt: payment.paidAt ?? new Date(),
       },
+    });
+
+    // Ledger record
+    const isCash = payment.method === 'CASH';
+    const associationId = period.associationId;
+    const debitCode = isCash ? '1200' : '1000'; // 1200 Cash, 1000 Bank
+    const lines: JournalLine[] = [
+      { accountCode: debitCode, isDebit: true, amount: allocatedAmount },
+      { accountCode: '4000', isDebit: false, amount: allocatedAmount },
+    ];
+
+    const resolvedLines = await Promise.all(
+      lines.map(async (line) => {
+        const account = await tx.account.findFirst({
+          where: { associationId, code: line.accountCode, isActive: true },
+        });
+        if (!account) throw new NotFoundError(`Account not found: ${line.accountCode}`);
+        return {
+          accountId: account.id,
+          isDebit: line.isDebit,
+          amount: line.amount,
+          associationId,
+        };
+      }),
+    );
+
+    if (paymentTransactionId) {
+      const existing = await tx.ledgerEntry.findFirst({
+        where: { paymentTransactionId },
+      });
+
+      if (existing) {
+        // if it exists, it's possible it was an auto-retry of webhook
+        return tx.ledgerEntry.findUnique({
+          where: { id: existing.id },
+          include: { lines: true },
+        }) as unknown as any;
+      }
+    }
+
+    const autoApprove = true;
+
+    const approvedById = userId;
+    // 4. Write to DB
+    await tx.ledgerEntry.create({
+      data: {
+        paymentTransactionId: paymentTransactionId ?? null,
+        description: description,
+        approvalStatus: autoApprove ? ApprovalStatus.APPROVED : ApprovalStatus.PENDING,
+        createdById: actorId || '',
+        approvedById: autoApprove ? (approvedById ?? 'system') : null,
+        lines: {
+          create: resolvedLines,
+        },
+      },
+      include: { lines: true },
     });
 
     remaining -= allocatedAmount;
   }
 
-  return remaining; // Excess amount (advance payment)
+  return remaining;
 }
 
 export async function applyCreditsToContributionPeriod(contributionPeriodId: string) {

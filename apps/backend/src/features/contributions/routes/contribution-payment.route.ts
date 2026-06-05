@@ -1,10 +1,4 @@
-import {
-  ContributionStatus,
-  PaymentGateway,
-  PaymentMethod,
-  PaymentStatus,
-  UserRole,
-} from '@prisma/client';
+import { PaymentGateway, PaymentMethod, Currency, PaymentStatus, UserRole } from '@prisma/client';
 import { prisma } from '@src/shared/lib';
 import { validate } from '@src/shared/lib/validate';
 import { asyncHandler } from '@src/shared/utils/async-handler';
@@ -14,8 +8,8 @@ import { success } from '@src/shared/utils/responses';
 import z from 'zod';
 import { allocatePaymentToContributions } from '../services';
 
-export const CreateManualContributionPaymentSchema = z.object({
-  userId: z.uuid(),
+export const RecordContributionSchema = z.object({
+  userId: z.uuid('Invalid User'),
   contributionPeriodIds: z.array(z.uuid()),
   amount: z.coerce.number().positive(),
   paymentMethod: z.enum(PaymentMethod).default(PaymentMethod.CASH),
@@ -23,14 +17,14 @@ export const CreateManualContributionPaymentSchema = z.object({
   remarks: z.string().optional().nullable(),
 });
 
-export const createManualContributionPaymentHandler: RequestHandler[] = [
-  validate({ body: CreateManualContributionPaymentSchema }),
+type RecordContributionInput = z.infer<typeof RecordContributionSchema>;
+
+export const recordContributionHandler: RequestHandler[] = [
+  validate({ body: RecordContributionSchema }),
   asyncHandler(async (req, res) => {
     const user = await withRole(req, UserRole.FINANCE);
 
-    const { userId, amount, paymentMethod } = req.body as z.infer<
-      typeof CreateManualContributionPaymentSchema
-    >;
+    const { userId, amount, paymentMethod } = req.body as RecordContributionInput;
 
     const result = await prisma.$transaction(async (tx) => {
       const payment = await tx.paymentTransaction.create({
@@ -38,7 +32,7 @@ export const createManualContributionPaymentHandler: RequestHandler[] = [
           userId: userId,
           associationId: user.associationId,
           amount,
-          currency: 'INR',
+          currency: Currency.INR,
           gateway: PaymentGateway.MANUAL,
           status: PaymentStatus.PENDING,
           method: paymentMethod,
@@ -52,109 +46,13 @@ export const createManualContributionPaymentHandler: RequestHandler[] = [
         userId,
         amount,
         req.body.contributionPeriodIds,
+        user.id,
       );
-
-      // let remainingAmount = Number(payment.amount);
-      //
-      // let totalAllocated = 0;
-      //
-      // // -------------------------------------------------------------------
-      // // Fetch outstanding contribution periods
-      // // FIFO allocation
-      // // -------------------------------------------------------------------
-      //
-      // const outstandingPeriods = await tx.contributionPeriod.findMany({
-      //   where: {
-      //     id: { in: req.body.contributionPeriodIds },
-      //     userId: userId,
-      //   },
-      //   orderBy: [{ year: 'asc' }, { month: 'asc' }],
-      // });
-      //
-      // // -------------------------------------------------------------------
-      // // Allocate payment
-      // // -------------------------------------------------------------------
-      //
-      // for (const period of outstandingPeriods) {
-      //   if (remainingAmount <= 0) {
-      //     break;
-      //   }
-      //
-      //   const balance = Number(period.dueAmount);
-      //
-      //   if (balance <= 0) {
-      //     continue;
-      //   }
-      //
-      //   const allocation = Math.min(balance, remainingAmount);
-      //
-      //   // ---------------------------------------------------------------
-      //   // Create allocation record
-      //   // ---------------------------------------------------------------
-      //
-      //   await tx.paymentAllocation.create({
-      //     data: {
-      //       paymentTransactionId: payment.id,
-      //       contributionPeriodId: period.id,
-      //       allocatedAmount: allocation,
-      //     },
-      //   });
-      //
-      //   const newPaidAmount = Number(period.paidAmount) + allocation;
-      //
-      //   const newDueAmount = Number(period.expectedAmount) - newPaidAmount;
-      //
-      //   // ---------------------------------------------------------------
-      //   // Update contribution period
-      //   // ---------------------------------------------------------------
-      //   await tx.contributionPeriod.update({
-      //     where: { id: period.id },
-      //     data: {
-      //       paidAmount: newPaidAmount,
-      //       dueAmount: newDueAmount,
-      //       status: newDueAmount <= 0 ? ContributionStatus.PAID : ContributionStatus.PARTIAL,
-      //     },
-      //   });
-      //
-      //   totalAllocated += allocation;
-      //   remainingAmount -= allocation;
-      // }
-      //
-      // // -------------------------------------------------------------------
-      // // Mark payment completed
-      // // -------------------------------------------------------------------
-      //
-      // const updatedPayment = await tx.paymentTransaction.update({
-      //   where: {
-      //     id: payment.id,
-      //   },
-      //   data: {
-      //     status: PaymentStatus.COMPLETED,
-      //
-      //     verifiedById: user.id,
-      //
-      //     paidAt: payment.paidAt ?? new Date(),
-      //   },
-      // });
-      //
-      // return {
-      //   payment: updatedPayment,
-      //
-      //   allocatedAmount: totalAllocated,
-      //
-      //   unallocatedAmount: remainingAmount,
-      //
-      //   periodsAffected: outstandingPeriods.length,
-      // };
     });
 
-    return success(
-      res,
-      {
-        data: result,
-        message: 'Payment verified successfully',
-      },
-      200,
-    );
+    return success(res, {
+      data: result,
+      message: 'Contribution recorded successfully',
+    });
   }),
 ];

@@ -25,7 +25,9 @@ export default function LedgerEntryDetailPage() {
   const { entries, isLoading: entriesLoading } = useLedgerEntries({
     page: 1,
   });
+
   const { accounts, isLoading: accountsLoading } = useLedgerAccounts();
+
   const approveEntry = useApproveEntry();
 
   const entry = useMemo(() => {
@@ -58,6 +60,7 @@ export default function LedgerEntryDetailPage() {
   const totalDebits = entry.lines
     .filter((l) => l.isDebit)
     .reduce((sum, l) => sum + Number(l.amount), 0);
+
   const totalCredits = entry.lines
     .filter((l) => !l.isDebit)
     .reduce((sum, l) => sum + Number(l.amount), 0);
