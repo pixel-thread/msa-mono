@@ -12,7 +12,7 @@ interface UseDeclarationsOptions {
 export function useDeclarations(options: UseDeclarationsOptions = {}) {
   const { page = 1, status, search } = options;
 
-  const url = buildUrlWithQuery(ENDPOINTS.CONTRIBUTION.ALL_DECLARATIONS, {
+  const url = buildUrlWithQuery(ENDPOINTS.CONTRIBUTION.DECLARATIONS, {
     page,
     status,
     search,

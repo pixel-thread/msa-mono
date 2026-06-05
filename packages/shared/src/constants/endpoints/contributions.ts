@@ -1,7 +1,6 @@
 export const CONTRIBUTION = {
   DECLARATIONS: "/contributions/declarations",
   DECLARATION: (id: string) => `/contributions/declarations/${id}`,
-  ALL_DECLARATIONS: "/contributions/all-declarations",
   APPROVE_DECLARATION: (id: string) =>
     `/contributions/declarations/${id}/approve`,
   REJECT_DECLARATION: (id: string) =>
