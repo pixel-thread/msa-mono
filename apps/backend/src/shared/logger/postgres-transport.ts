@@ -1,6 +1,5 @@
 import { Writable } from 'stream';
 import { createLogs } from '../services';
-import { env } from '@src/env';
 
 const PINO_LEVELS: Record<number, string> = {
   10: 'trace',
@@ -26,7 +25,7 @@ export function createPostgresTransport() {
               : JSON.stringify(chunk);
 
         const parsed = JSON.parse(raw);
-        const { level, time, pid, hostname, msg, ...rest } = parsed;
+        const { level, msg, ...rest } = parsed;
 
         await createLogs({
           data: {
@@ -38,8 +37,7 @@ export function createPostgresTransport() {
         });
 
         callback();
-      } catch (error) {
-        console.error('Postgres log transport error:', error);
+      } catch {
         callback();
       }
     },
