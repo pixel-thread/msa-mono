@@ -65,7 +65,7 @@ function getRatelimiter() {
 export async function rateLimiter(req: Request, _res: Response, next: NextFunction) {
   const isDevelopment = env.NODE_ENV === 'development';
 
-  if (!isDevelopment) return next();
+  if (isDevelopment) return next();
 
   const limiter = getRatelimiter();
 
