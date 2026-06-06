@@ -22,6 +22,7 @@ import {
 import { getMySubscriptionHandler } from './my-subscription.route';
 import { postSubscribe } from './subscribe.route';
 import { postUpgrade } from './upgrade.route';
+import { postDowngrade } from './downgrade.route';
 import { postWaive } from './waive.route';
 import { getSubscriptionPaymentsHandler } from './subscription-payments.route';
 
@@ -49,6 +50,7 @@ router.get('/my', getMySubscriptionHandler);
 
 router.post('/subscribe', postSubscribe);
 router.post('/upgrade', postUpgrade);
+router.post('/downgrade', postDowngrade);
 router.post('/waive', postWaive);
 
 // ---- Payments ----------------------------------------------------------------
