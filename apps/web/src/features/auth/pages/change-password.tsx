@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useNavigate } from '@tanstack/react-router';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
@@ -32,7 +32,7 @@ import { useChangePassword } from '@feature/auth/hooks';
  * their current password and a new one.
  */
 export function ChangePasswordPage() {
-  const router = useRouter();
+  const navigate = useNavigate();
   const [isSuccess, setIsSuccess] = useState(false);
   const changePasswordMutation = useChangePassword();
 
@@ -68,7 +68,7 @@ export function ChangePasswordPage() {
           <CardContent>
             <Button
               className="h-11 w-full bg-primary px-5 text-base font-semibold text-on-primary hover:bg-primary-active"
-              onClick={() => router.push('/sign-in')}
+              onClick={() => navigate({ to: '/sign-in' })}
             >
               Go to sign in
             </Button>
@@ -172,7 +172,7 @@ export function ChangePasswordPage() {
               </Button>
 
               <div className="text-center">
-                <Button variant={'link'} onClick={() => router.back()}>
+                <Button variant={'link'} onClick={() => window.history.back()}>
                   Go Back
                 </Button>
               </div>

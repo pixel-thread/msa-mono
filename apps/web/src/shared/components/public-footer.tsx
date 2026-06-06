@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import { Link } from '@tanstack/react-router';
 import { Separator } from '@src/shared/components/ui/separator';
 import { Text } from '@src/shared/components/ui/text';
 

@@ -1,7 +1,6 @@
 'use client';
 
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { Link, useLocation } from '@tanstack/react-router';
 
 import {
   Collapsible,
@@ -34,7 +33,7 @@ export function NavMain({
     }[];
   }[];
 }) {
-  const pathname = usePathname();
+  const pathname = useLocation().pathname;
 
   return (
     <SidebarGroup>

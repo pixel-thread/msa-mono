@@ -1,7 +1,6 @@
 'use client';
 
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { Link, useLocation } from '@tanstack/react-router';
 import {
   NavigationMenu,
   NavigationMenuList,
@@ -24,7 +23,7 @@ const NAV_ITEMS = [
 export function PublicHeader() {
   const { user, isLoading: isAuthLoading } = useAuthStore();
   const { mutate: logout, isPending: isLoading } = useSignOut();
-  const pathname = usePathname();
+  const pathname = useLocation().pathname;
   const isSignIn = pathname.startsWith('/sign-in');
   const isSignUp = pathname.startsWith('/sign-up');
 

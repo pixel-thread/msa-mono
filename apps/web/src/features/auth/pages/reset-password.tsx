@@ -1,8 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import Link from 'next/link';
+import { useNavigate, useSearchParams, Link } from '@tanstack/react-router';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
@@ -33,7 +32,6 @@ import { useResetPassword } from '@feature/auth/hooks';
  * Validates the new password using Zod and handles success/error states.
  */
 export function ResetPasswordPage() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const token = searchParams.get('token');
   const [isSuccess, setIsSuccess] = useState(false);

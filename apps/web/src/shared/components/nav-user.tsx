@@ -1,7 +1,6 @@
 'use client';
 
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { Link, useNavigate } from '@tanstack/react-router';
 
 import { Avatar, AvatarFallback } from '@src/shared/components/ui/avatar';
 import {
@@ -43,14 +42,14 @@ export function NavUser({
 }) {
   const { isMobile } = useSidebar();
   const { mutate: signOut, isPending } = useSignOut();
-  const router = useRouter();
+  const navigate = useNavigate();
 
   const handleSignOut = async () => {
     signOut(undefined, {
       onSuccess: (data) => {
         if (data.success) {
           toast.success(data.message);
-          router.replace('/sign-in');
+          navigate({ to: '/sign-in', replace: true });
           return;
         }
         toast.error(data?.message);

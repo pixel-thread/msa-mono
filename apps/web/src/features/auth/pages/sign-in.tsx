@@ -1,8 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
+import { useNavigate, Link } from '@tanstack/react-router';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { HugeiconsIcon } from '@hugeicons/react';
@@ -229,7 +228,7 @@ export function SignInPage() {
  * Handles the input and submission of a 6-digit verification code.
  */
 function MfaVerify({ onBack, tempToken }: { onBack: () => void; tempToken: string }) {
-  const router = useRouter();
+  const navigate = useNavigate();
   const verifyMfaMutation = useVerifyMfa();
 
   const form = useForm<VerifySignInInput>({
@@ -251,7 +250,7 @@ function MfaVerify({ onBack, tempToken }: { onBack: () => void; tempToken: strin
           toast.error(data.message);
         },
       });
-      router.push('/dashboard');
+      navigate({ to: '/dashboard' });
     } catch {}
   };
 
