@@ -24,13 +24,23 @@ import {
   Pencil,
   Trash2,
   ClipboardList,
+  MoreHorizontal,
+  CalendarX,
 } from 'lucide-react';
 import { EditMeetingDialog } from '@feature/meetings/components/EditMeetingDialog';
 import { DeleteMeetingDialog } from '@feature/meetings/components/DeleteMeetingDialog';
+import { CancelMeetingDialog } from '@feature/meetings/components/CancelMeetingDialog';
 import { ManageAttendeesDialog } from '@feature/meetings/components/ManageAttendeesDialog';
 import type { AssignAttendeeInput } from '@feature/meetings/validators';
 import { useMembers } from '@feature/members/hooks/useMembers';
-import { Link } from '@tanstack/react-router';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@components/ui/dropdown-menu';
 import {
   getTypeBadge,
   getStatusBadge,
@@ -49,6 +59,7 @@ export function MeetingDetailPage() {
   const [editOpen, setEditOpen] = useState(searchParams.edit === 'true');
   const [manageAttendeesOpen, setManageAttendeesOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
+  const [cancelOpen, setCancelOpen] = useState(false);
 
   const { meeting, isLoading, error } = useMeetingDetail(meetingId);
   const { members } = useMembers();
@@ -93,32 +104,41 @@ export function MeetingDetailPage() {
         titleBadges={<>{getStatusBadge(meeting.status)}{getTypeBadge(meeting.type)}</>}
         description="Meeting details and agenda"
       >
-        <Link to={`/meetings/${meetingId}/minutes`}>
-          <Button
-            variant="outline"
-            className="h-11 border-hairline bg-canvas px-5 text-sm font-medium text-ink hover:bg-surface-strong"
-          >
-            <ClipboardList className="mr-2 h-4 w-4" />
-            Minutes
-          </Button>
-        </Link>
-        <Link to={`/meetings/${meetingId}/assign`}>
-          <Button
-            variant="outline"
-            className="h-11 border-hairline bg-canvas px-5 text-sm font-medium text-ink hover:bg-surface-strong"
-          >
-            <Users className="mr-2 h-4 w-4" />
-            Manage Attendees
-          </Button>
-        </Link>
         <Button
           variant="outline"
-          onClick={() => setDeleteOpen(true)}
-          className="h-11 border-hairline bg-canvas px-5 text-sm font-medium text-red-600 hover:bg-red-50 hover:border-red-200"
+          className="h-11 border-hairline bg-canvas px-5 text-sm font-medium text-ink hover:bg-surface-strong"
+          onClick={() => navigate({ to: '/meetings/$meetingId/assign', params: { meetingId } })}
         >
-          <Trash2 className="mr-2 h-4 w-4" />
-          Delete
+          <Users className="mr-2 h-4 w-4" />
+          Manage Attendees
         </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon" className="h-11 w-11">
+              <MoreHorizontal className="h-5 w-5" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={() => navigate({ to: '/meetings/$meetingId/minutes', params: { meetingId } })}>
+              <ClipboardList className="mr-2 h-4 w-4" />
+              Minutes
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setCancelOpen(true)}>
+              <CalendarX className="mr-2 h-4 w-4" />
+              Cancel Meeting
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              className="text-destructive focus:text-destructive"
+              onClick={() => setDeleteOpen(true)}
+            >
+              <Trash2 className="mr-2 h-4 w-4" />
+              Delete
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
         <Button
           onClick={() => setEditOpen(true)}
           className="h-11 bg-primary px-5 text-sm font-semibold text-on-primary hover:bg-primary-active"
@@ -273,6 +293,13 @@ export function MeetingDetailPage() {
         onRemoveAttendee={handleRemoveAttendee}
         isAdding={isAdding}
         isRemoving={isRemoving}
+      />
+
+      <CancelMeetingDialog
+        meetingId={meeting.id}
+        meetingTitle={meeting.title}
+        open={cancelOpen}
+        onOpenChange={setCancelOpen}
       />
 
       <DeleteMeetingDialog

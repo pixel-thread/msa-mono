@@ -15,6 +15,7 @@ import { useMeetings } from '../hooks';
 import type { Meeting } from '../types';
 import { getTypeBadge } from '@src/shared/utils/helper/get-type-badge';
 import { getStatusBadge } from '@src/shared/utils/helper/get-status-badge';
+import { CancelMeetingCell } from '../components/cells/cancel-meeting';
 
 export const useMeetingTableColumns = (): {
   columns: ColumnDef<Meeting>[];
@@ -71,10 +72,21 @@ export const useMeetingTableColumns = (): {
       ),
     },
     {
+      header: 'Cancel',
+      cell: ({ row }) => (
+        <CancelMeetingCell
+          isDisabled={row.original.status !== 'SCHEDULED'}
+          meetingId={row.original.id}
+          meetingTitle={row.original.title}
+        />
+      ),
+    },
+    {
       id: 'actions',
       header: 'Actions',
       cell: ({ row }) => {
         const meeting = row.original;
+        const meetingId = row.original.id || '';
 
         return (
           <DropdownMenu>
@@ -93,10 +105,23 @@ export const useMeetingTableColumns = (): {
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link to={`/meetings/${meeting.id}?edit=true`}>
+                <Link to={`/meetings/${meetingId}`}>
                   <Pencil className="mr-2 h-4 w-4" />
                   Edit
                 </Link>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                className="text-destructive focus:text-destructive"
+                onClick={() => {
+                  if (confirm('Are you sure you want to delete this meeting?')) {
+                    deleteMeeting(meeting.id);
+                  }
+                }}
+                disabled={isDeleting}
+              >
+                <Trash2 className="mr-2 h-4 w-4" />
+                Delete
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem
