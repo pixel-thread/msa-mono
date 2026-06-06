@@ -309,6 +309,29 @@ export async function waiveSubscription({
   return updated;
 }
 
+// ---- getMyActiveSubscription -------------------------------------------------
+
+/**
+ * Retrieve the current user's active subscription.
+ *
+ * Returns the subscription with status 'ACTIVE', including its plan and planVersion,
+ * or null if the user has no active subscription.
+ */
+export async function getMyActiveSubscription(userId: string) {
+  const subscription = await prisma.subscription.findFirst({
+    where: {
+      userId,
+      status: 'ACTIVE',
+    },
+    include: {
+      plan: true,
+      planVersion: true,
+    },
+  });
+
+  return subscription;
+}
+
 // ---- getMySubscription -------------------------------------------------------
 
 /**
