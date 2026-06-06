@@ -3,7 +3,9 @@ import { Roboto, Roboto_Mono, JetBrains_Mono } from 'next/font/google';
 import { AppProviders } from '@src/shared/providers/AppProviders';
 import './globals.css';
 import { cn } from '@src/shared/lib/utils';
-import { Suspense } from 'react';
+import React, { Suspense } from 'react';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { env } from '@src/env';
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin'],
@@ -48,7 +50,14 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <Suspense>
-          <AppProviders>{children}</AppProviders>
+          <AppProviders>
+            {children}
+            {env.NEXT_PUBLIC_NODE_ENV === 'development' && (
+              <React.Suspense fallback={null}>
+                <ReactQueryDevtools />
+              </React.Suspense>
+            )}
+          </AppProviders>
         </Suspense>
       </body>
     </html>

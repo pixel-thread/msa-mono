@@ -14,11 +14,12 @@ export function useChangePlan() {
   return useMutation({
     mutationFn: ({ planId, userId }: ChangePlanData) =>
       http.post(subscriptionEndpoints.upgrade, { planId, userId }),
-    onSuccess: (data) => {
+    onSuccess: (data, variables) => {
+      const { userId } = variables;
       if (data.success) {
-        toast.success('Plan changed successfully');
-        queryClient.invalidateQueries({ queryKey: ['user-subscription'] });
+        queryClient.invalidateQueries({ queryKey: ['user-contributions', userId, 1] });
         queryClient.invalidateQueries({ queryKey: ['subscription-plans'] });
+        toast.success(data.message);
         return;
       }
       toast.error(data.message);

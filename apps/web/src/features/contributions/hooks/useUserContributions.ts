@@ -26,7 +26,9 @@ export function useUserContributions(options: UseUserContributionsOptions) {
   });
 
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['user-contributions', userId, fromYear, fromMonth, toYear, toMonth, page],
+    queryKey: ['user-contributions', userId, fromYear, fromMonth, toYear, toMonth, page].filter(
+      Boolean,
+    ),
     queryFn: () =>
       http.get<{
         contributions: ContributionPeriod[];
