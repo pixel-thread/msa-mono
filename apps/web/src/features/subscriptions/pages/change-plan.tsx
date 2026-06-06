@@ -16,7 +16,8 @@ import {
   SelectValue,
 } from '@src/shared/components/ui/select';
 import { formattedAmount } from '@src/shared/utils/format';
-import { User, CreditCard, ArrowRight, Loader2, Calendar, BadgeCheck, XCircle } from 'lucide-react';
+import { ChangePlanDialog } from '@src/features/subscriptions/components/change-plan-dialog';
+import { User, CreditCard, ArrowRight, Calendar, BadgeCheck, XCircle, Loader2 } from 'lucide-react';
 
 interface SelectedMember {
   id: string;
@@ -27,6 +28,7 @@ interface SelectedMember {
 export function ChangePlanPage() {
   const [selectedMember, setSelectedMember] = useState<SelectedMember | null>(null);
   const [selectedPlanId, setSelectedPlanId] = useState<string>('');
+  const [confirmOpen, setConfirmOpen] = useState(false);
 
   const { subscription, isLoading: subscriptionLoading } = useUserSubscription(
     selectedMember?.id ?? '',
@@ -35,16 +37,21 @@ export function ChangePlanPage() {
   const changePlanMutation = useChangePlan();
 
   const currentPlanId = subscription?.planId ?? '';
+  const selectedPlan = plans.find((p) => p.id === selectedPlanId) ?? null;
   const hasSubscription = !!subscription;
   const canSubmit = selectedPlanId && selectedPlanId !== currentPlanId && selectedMember;
 
-  const handleSubmit = () => {
+  const handleConfirm = () => {
     if (!selectedMember || !selectedPlanId) return;
     changePlanMutation.mutate(
       { planId: selectedPlanId, userId: selectedMember.id },
       {
         onSuccess: () => {
+          setConfirmOpen(false);
           setSelectedPlanId('');
+        },
+        onError: () => {
+          setConfirmOpen(false);
         },
       },
     );
@@ -199,21 +206,23 @@ export function ChangePlanPage() {
 
               <div className="mt-6">
                 <Button
-                  onClick={handleSubmit}
-                  disabled={!canSubmit || changePlanMutation.isPending}
+                  onClick={() => setConfirmOpen(true)}
+                  disabled={!canSubmit}
                 >
-                  {changePlanMutation.isPending ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Changing Plan...
-                    </>
-                  ) : (
-                    'Change Plan'
-                  )}
+                  Change Plan
                 </Button>
               </div>
             </CardContent>
           </Card>
+
+          <ChangePlanDialog
+            open={confirmOpen}
+            onOpenChange={setConfirmOpen}
+            onConfirm={handleConfirm}
+            isPending={changePlanMutation.isPending}
+            currentPlan={subscription}
+            newPlan={selectedPlan}
+          />
         </>
       )}
     </>
