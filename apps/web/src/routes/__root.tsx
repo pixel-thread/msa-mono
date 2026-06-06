@@ -9,11 +9,10 @@ import { AppProviders } from '@src/shared/providers/AppProviders';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { env } from '@src/env';
 import { Suspense } from 'react';
-import '../app/globals.css';
 
 export const Route = createRootRoute({
   component: () => (
-    <Suspense>
+    <Suspense fallback={null}>
       <AppProviders>
         <Outlet />
         {env.NEXT_PUBLIC_NODE_ENV === 'development' && (
