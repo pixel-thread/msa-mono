@@ -1,4 +1,4 @@
-import { Request, NextFunction, Response } from 'express';
+import { Request, Response } from 'express';
 import type { RequestHandler } from 'express';
 import { validate } from '@src/shared/lib/validate';
 import { success } from '@src/shared/utils/responses';

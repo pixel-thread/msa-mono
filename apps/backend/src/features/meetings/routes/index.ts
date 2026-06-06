@@ -12,7 +12,7 @@ import { postAddAttendee } from './attendees/add-attendee.route';
 import { putBulkAssignAttendees } from './attendees/bulk-assign-put.route';
 import { postBulkAssignAttendees } from './attendees/bulk-assign.route';
 import { patchUpdateAttendee, deleteRemoveAttendee } from './attendees/remove-attendee.route';
-import { postRsvp } from './rsvp.route';
+import { postRsvp } from './rsvp/rsvp.route';
 import { getAgendaItems } from './agenda/list-agenda.route';
 import { postAddAgendaItem } from './agenda/add-agenda-item.route';
 import { patchProcessAgendaOperations } from './agenda/process-agenda.route';

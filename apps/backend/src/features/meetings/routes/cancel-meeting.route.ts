@@ -1,4 +1,4 @@
-import { Request, NextFunction, Response, RequestHandler } from 'express';
+import { RequestHandler } from 'express';
 import { success } from '@src/shared/utils/responses';
 import { UserRole, MeetingStatus } from '@prisma/client';
 import { updateMeeting } from '@src/features/meetings/services';
