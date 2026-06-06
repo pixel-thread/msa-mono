@@ -1,9 +1,4 @@
-// ---------------------------------------------------------------------------
-// External libs
-// ---------------------------------------------------------------------------
-import { Request, NextFunction, Response } from 'express';
 import type { RequestHandler } from 'express';
-import { z } from 'zod';
 
 // ---------------------------------------------------------------------------
 // Shared utilities
@@ -25,21 +20,17 @@ import { UserRole } from '@prisma/client';
 // Services
 // ---------------------------------------------------------------------------
 import { upgradeSubscription } from '@feature/subscriptions/services';
-
-// ---- Schemas -----------------------------------------------------------------
-
-/** Schema for subscription upgrade request. */
-const UpgradeSchema = z.object({
-  planId: z.uuid(),
-});
+import { UpgradeSubscriptionSchema } from '../validators';
+import { hasHighRoleAccess } from '@src/shared/utils';
 
 // ---- POST /api/subscriptions/upgrade -----------------------------------------
 /** @desc  Upgrade the current user's subscription to a new plan
  *  @role  MEMBER */
 export const postUpgrade: RequestHandler[] = [
-  validate({ body: UpgradeSchema }),
-  asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
+  validate({ body: UpgradeSubscriptionSchema }),
+  asyncHandler(async (req, res) => {
     const traceId = (req.traceId as string) || '';
+    let userId = req.user?.id;
 
     // Validate association membership
     const association = await getAssociation(req);
@@ -50,18 +41,27 @@ export const postUpgrade: RequestHandler[] = [
 
     // Authorize user — MEMBER is the minimum
     const user = await withRole(req, UserRole.MEMBER);
-    logger.info({ traceId, userId: user.id }, 'User authorized');
+
+    const isAdmin = hasHighRoleAccess(user.role);
+
+    if (req.body.userId && isAdmin) {
+      userId = req.body.userId;
+    }
+
+    logger.info({ traceId, userId: userId, actorId: user.id }, 'User authorized');
 
     if (!req.body) throw new ValidationError('Invalid request body');
+
+    if (!userId) throw new ValidationError('Invalid request body');
 
     // Upgrade subscription to the target plan version
     const updated = await upgradeSubscription({
       planId: req.body.planId,
-      userId: user.id,
+      userId: userId,
     });
 
     logger.info({ traceId, subscriptionId: updated.id }, 'Subscription upgraded');
 
-    return success(res, { data: updated });
+    return success(res, { data: updated, message: 'Subscription upgraded successfully' });
   }),
 ];

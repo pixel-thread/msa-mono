@@ -23,7 +23,6 @@ import {
   WaiveContributionSchema,
 } from '@src/features/contributions/validators';
 import {
-  generateMonthlyContributions,
   generateUserContributions,
   markOverdueContributions,
   waiveContribution,
@@ -183,15 +182,13 @@ export const generateContributionsHandler: RequestHandler[] = [
   // Step 2: Execute
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
+    const associationId = req.user?.associationId as string;
 
     // --- Log: request started ---
     logger.info(
-      { traceId, year: req.body.year, month: req.body.month },
+      { traceId, year: req.body.year, month: req.body.month, associationId },
       'POST /api/payments/contributions - Request started',
     );
-
-    // --- Auth: resolve association ---
-    const association = await getAssociation(req);
 
     // --- Auth: enforce FINANCE role ---
     await withRole(req, UserRole.FINANCE);
@@ -204,13 +201,9 @@ export const generateContributionsHandler: RequestHandler[] = [
       'POST /api/payments/contributions - Generating contributions',
     );
 
-    const count = await generateMonthlyContributions(
-      association.id,
-      req.body.year,
-      req.body.months,
-    );
+    const count = await generateUserContributions(associationId, req.body.year, req.body.months);
 
-    const overdueCount = await markOverdueContributions(association.id);
+    const overdueCount = await markOverdueContributions(associationId);
 
     // --- Log: success ---
     logger.info(

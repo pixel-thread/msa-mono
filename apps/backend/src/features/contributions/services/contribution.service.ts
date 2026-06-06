@@ -167,14 +167,14 @@ export async function allocatePaymentToContributions(
  * Intended to be called by a monthly cron job.
  */
 
-export async function generateUserContributions( //
+export async function generateUserContributions(
   userId: string,
   year: number,
-  numberOfMonth: number, // expected 1–12
+  numberOfMonth: number,
 ): Promise<number> {
   const monthsToGenerate = Math.min(Math.max(numberOfMonth, 1), 12);
 
-  let totalCreated = 0;
+  let totalProcessed = 0;
 
   for (let month = 1; month <= monthsToGenerate; month++) {
     const generateDate = new Date(year, month - 1, 1);
@@ -203,92 +203,9 @@ export async function generateUserContributions( //
 
     if (activeMembers.length === 0) continue;
 
-    const data = activeMembers
-      .filter((m) => m.subscription?.planVersion)
-      .map((member) => {
-        if (!member.dateOfJoiningAssociation) return null;
-
-        const memberJoinedMonth =
-          member.dateOfJoiningAssociation.getFullYear() * 12 +
-          member.dateOfJoiningAssociation.getMonth();
-
-        const targetMonth = year * 12 + (month - 1);
-
-        if (memberJoinedMonth > targetMonth) return null;
-
-        const expectedAmount = member.subscription!.planVersion.amount;
-
-        return {
-          associationId: member.associationId,
-          userId: member.id,
-          year,
-          month,
-          expectedAmount,
-          paidAmount: 0,
-          dueAmount: expectedAmount,
-          status: ContributionStatus.DUE,
-          dueDate,
-        };
-      })
-      .filter(Boolean);
-
-    if (data.length === 0) continue;
-
-    const result = await prisma.contributionPeriod.createMany({
-      data: data as any[],
-      skipDuplicates: true,
-    });
-
-    totalCreated += result.count;
-  }
-
-  return totalCreated;
-}
-
-export async function generateMonthlyContributions(
-  associationId: string,
-  year: number,
-  month: number,
-): Promise<number> {
-  const generateDate = new Date(year, month - 1, 1);
-
-  const activeMembers = await prisma.user.findMany({
-    where: {
-      associationId,
-
-      status: UserStatus.ACTIVE,
-
-      subscription: {
-        status: 'ACTIVE',
-      },
-
-      dateOfJoiningAssociation: {
-        lte: generateDate,
-      },
-    },
-
-    include: {
-      subscription: {
-        include: {
-          plan: true,
-          planVersion: true,
-        },
-      },
-    },
-  });
-
-  if (activeMembers.length === 0) {
-    return 0;
-  }
-
-  const dueDate = new Date(year, month, 0);
-
-  const data = activeMembers
-    .filter((m) => m.subscription?.planVersion)
-    .map((member) => {
-      if (!member.dateOfJoiningAssociation) {
-        return null;
-      }
+    for (const member of activeMembers) {
+      if (!member.subscription?.planVersion) continue;
+      if (!member.dateOfJoiningAssociation) continue;
 
       const memberJoinedMonth =
         member.dateOfJoiningAssociation.getFullYear() * 12 +
@@ -296,36 +213,65 @@ export async function generateMonthlyContributions(
 
       const targetMonth = year * 12 + (month - 1);
 
-      if (memberJoinedMonth > targetMonth) {
-        return null;
+      const subscriptionStartDate = member.subscription.planVersion.effectiveFrom;
+
+      const subscriptionMonth =
+        subscriptionStartDate.getFullYear() * 12 + subscriptionStartDate.getMonth();
+
+      if (targetMonth < subscriptionMonth) {
+        continue; // skip months before subscription started
       }
 
-      const expectedAmount = member.subscription!.planVersion.amount;
+      if (memberJoinedMonth > targetMonth) continue;
 
-      return {
-        associationId,
+      const expectedAmount = member.subscription.planVersion.amount;
+
+      const contributionData = {
+        associationId: member.associationId,
         userId: member.id,
-
         year,
         month,
-
         expectedAmount,
         paidAmount: 0,
         dueAmount: expectedAmount,
-
         status: ContributionStatus.DUE,
-
         dueDate,
       };
-    })
-    .filter(Boolean);
 
-  const result = await prisma.contributionPeriod.createMany({
-    data: data as any[],
-    skipDuplicates: true,
-  });
+      const existingContribution = await prisma.contributionPeriod.findUnique({
+        where: {
+          userId_year_month: {
+            userId: member.id,
+            year,
+            month,
+          },
+        },
+      });
 
-  return result.count;
+      if (existingContribution) {
+        await prisma.contributionPeriod.update({
+          where: {
+            id: existingContribution.id,
+          },
+          data: {
+            associationId: contributionData.associationId,
+            expectedAmount: contributionData.expectedAmount,
+            dueAmount: contributionData.dueAmount,
+            status: contributionData.status,
+            dueDate: contributionData.dueDate,
+          },
+        });
+      } else {
+        await prisma.contributionPeriod.create({
+          data: contributionData,
+        });
+      }
+
+      totalProcessed++;
+    }
+  }
+
+  return totalProcessed;
 }
 /**
  * Mark all DUE contributions whose dueDate has passed as OVERDUE.

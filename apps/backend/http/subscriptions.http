@@ -1,5 +1,6 @@
-@planId = REPLACE_WITH_PLAN_ID
+@planId =f2a3ccb1-5756-467b-8132-e35b87d09f9e 
 @subscriptionId = REPLACE_WITH_SUBSCRIPTION_ID
+@userId=485796ba-8257-40c8-8999-c2b48203f1c3
 
 ###
 # @name getSubscriptionPlans
@@ -14,13 +15,12 @@ Content-Type: application/json
 Authorization: Bearer {{TOKEN}}
 
 {
-  "name": "Full Access Plan",
+  "name": "Test",
   "description": "Full access to all association benefits",
   "amount": 3000,
   "currency": "INR",
-  "billingCycle": "YEARLY",
-  "memberTypeId":"05783cf9-5801-4ce7-845c-a4bad6a377e8",
-  "effectiveTo":"2023-12-31",
+  "billingCycle": "MONTHLY",
+  "effectiveTo":"2023-12-07",
   "features": {
     "events": true,
     "voting": true
@@ -61,7 +61,8 @@ Content-Type: application/json
 Authorization: Bearer {{TOKEN}}
 
 {
-  "planId": "{{planId}}"
+  "planId": "{{planId}}",
+  "userId":"{{userId}}"
 }
 
 ###

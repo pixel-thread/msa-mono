@@ -42,6 +42,7 @@ export const WaiveSubscriptionSchema = z.object({
 /** Schema for validating subscription upgrade requests. */
 export const UpgradeSubscriptionSchema = z.object({
   planId: z.uuid(),
+  userId: z.uuid().optional(),
 });
 
 /** Input type inferred from UpgradeSubscriptionSchema. */

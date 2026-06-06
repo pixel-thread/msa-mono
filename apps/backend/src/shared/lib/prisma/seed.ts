@@ -163,6 +163,8 @@ async function seedAssociation(data: (typeof ASSOCIATIONS)[number]) {
         versions: {
           create: {
             amount: new Prisma.Decimal(memberType.level * 100),
+            effectiveFrom: new Date(),
+            effectiveTo: null,
             currency: 'INR',
             billingCycle: 'MONTHLY',
             features: {
