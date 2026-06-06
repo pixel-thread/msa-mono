@@ -60,3 +60,34 @@ export const getMySubscriptionHandler: RequestHandler[] = [
     return success(res, result);
   }),
 ];
+
+export const getUserSubscriptionHandler: RequestHandler[] = [
+  validate({ query: MySubscriptionQuerySchema, params: z.object({ userId: z.string() }) }),
+  asyncHandler(async (req, res) => {
+    const traceId = (req.traceId as string) || '';
+    const associationId = req.user?.associationId as string;
+
+    const userId = req.params.userId as string;
+
+    // Validate association membership
+    logger.info(
+      { traceId, associationId: associationId },
+      'GET /api/subscriptions/my - Request started',
+    );
+
+    const page = (req.query?.page as string) || '1';
+
+    // Authorize user — MEMBER is the minimum
+    const actor = await withRole(req, UserRole.SECRETARY);
+    logger.info({ traceId, userId: userId, actorId: actor.id }, 'User authorized');
+
+    // Fetch the user's subscriptions with pagination
+    const result = await getMySubscription(userId, parseInt(page));
+
+    return success(res, {
+      data: result.data,
+      meta: result.meta,
+      message: 'Subscriptions fetched successfully',
+    });
+  }),
+];

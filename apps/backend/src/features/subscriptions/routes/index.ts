@@ -19,7 +19,7 @@ import {
   deletePlanHandler,
   getPlanDetailsHandler,
 } from './plans.route';
-import { getMySubscriptionHandler } from './my-subscription.route';
+import { getMySubscriptionHandler, getUserSubscriptionHandler } from './my-subscription.route';
 import { postSubscribe } from './subscribe.route';
 import { postUpgrade } from './upgrade.route';
 import { postDowngrade } from './downgrade.route';
@@ -42,6 +42,8 @@ router.get('/plans/:planId', getPlanDetailsHandler);
 router.patch('/plans/:planId', updatePlanHandler);
 router.delete('/plans/:planId', deletePlanHandler);
 
+// ---- User Plan ------------------------------------------------------------
+router.get('/user/:userId', getUserSubscriptionHandler);
 // ---- My subscription ---------------------------------------------------------
 
 router.get('/my', getMySubscriptionHandler);
