@@ -1,4 +1,5 @@
 import http from '@src/shared/utils/http';
+import { QUERY_KEYS } from '@repo/shared';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { membersEndpoints } from '../utils/constants/endpoints';
@@ -21,7 +22,7 @@ export function useRejectMember() {
       if (data.success) {
         toast.success(data.message);
         queryClient.invalidateQueries({
-          queryKey: ['membership-applications'],
+          queryKey: QUERY_KEYS.MEMBERSHIP_APPLICATIONS_KEYS.ALL(),
         });
         return;
       }

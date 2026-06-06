@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
+import { QUERY_KEYS } from '@repo/shared';
 import type { Announcement } from '../types';
 import { announcementEndpoints } from '../utils/constants/endpoints';
 
@@ -17,7 +18,7 @@ export interface AnnouncementDetail extends Announcement {
 
 export function useAnnouncement(announcementId: string) {
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['announcement', announcementId],
+    queryKey: QUERY_KEYS.ANNOUNCEMENTS_KEYS.DETAIL(announcementId),
     queryFn: async () => {
       const res = await http.get<AnnouncementDetail>(announcementEndpoints.byId(announcementId));
       if (!res.success || !res.data) {

@@ -1,5 +1,6 @@
 import http from '@src/shared/utils/http';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { QUERY_KEYS } from '@repo/shared';
 import { toast } from 'sonner';
 import { paymentEndpoints } from '../utils/constants/endpoints';
 
@@ -11,7 +12,7 @@ export function useActivatePaymentProvider() {
       if (data.success) {
         toast.success(data.message);
         queryClient.invalidateQueries({
-          queryKey: ['payment-providers'],
+          queryKey: QUERY_KEYS.PAYMENTS_KEYS.PROVIDERS(),
         });
         return data;
       }

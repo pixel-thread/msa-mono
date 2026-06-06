@@ -26,7 +26,7 @@ import { useMeetingAgenda } from '../hooks/useMeetingAgenda';
 import { useUpdateAttendeeRsvp } from '../hooks/use-update-attendee-rsvp';
 import { useAuthStore } from '@src/features/auth';
 import { useQueryClient } from '@tanstack/react-query';
-import { MeetingQueryKeys } from '../utils/constants/query-key';
+import { QUERY_KEYS } from '@repo/shared';
 import { MeetingInfoCard } from '../components/meeting-info-card';
 import { IconWithBadge } from '@src/shared/components/common';
 import { truncateText } from '@src/shared/utils';
@@ -61,7 +61,7 @@ export const MeetingDetailScreen = () => {
       { status: status },
       {
         onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: MeetingQueryKeys.attendees(id as string) });
+          queryClient.invalidateQueries({ queryKey: QUERY_KEYS.MEETINGS_KEYS.ATTENDEES(id as string) });
         },
       }
     );

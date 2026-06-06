@@ -1,30 +1,28 @@
+import { QUERY_KEYS } from '@repo/shared'
+
 export const trainingQueryKeys = {
   modules: {
-    all: (page?: number) => ['training-modules', page] as const,
-    list: (page?: number, isActive?: boolean) => ['training-modules', page, isActive] as const,
-    detail: (id: string | null) => ['training-module', id] as const,
+    all: (page?: number) => QUERY_KEYS.TRAINING_KEYS.MODULES_LIST(page),
+    list: (page?: number, isActive?: boolean) => QUERY_KEYS.TRAINING_KEYS.MODULES_LIST(page, isActive),
+    detail: (id: string) => QUERY_KEYS.TRAINING_KEYS.MODULE(id),
   },
   supplements: {
-    all: (moduleId: string | null, page?: number) =>
-      ['training-supplements', moduleId, page] as const,
+    all: (moduleId: string, page?: number) => QUERY_KEYS.TRAINING_KEYS.SUPPLEMENTS(moduleId, page),
   },
   assignments: {
-    all: (moduleId: string | null, page?: number) =>
-      ['training-assignments', moduleId, page] as const,
+    all: (moduleId: string, page?: number) => QUERY_KEYS.TRAINING_KEYS.ASSIGNMENTS(moduleId, page),
   },
   assignedUsers: {
-    all: (moduleId: string | null, page?: number) =>
-      ['module-assigned-users', moduleId, page] as const,
-    base: ['module-assigned-users'] as const,
+    all: (moduleId: string, page?: number) => QUERY_KEYS.TRAINING_KEYS.ASSIGNED_USERS(moduleId, page),
+    base: () => QUERY_KEYS.TRAINING_KEYS.ASSIGNED_USERS_BASE(),
   },
   completions: {
-    admin: ['admin-training-completions'] as const,
-    adminList: (page?: number) => ['admin-training-completions', page] as const,
-    my: ['my-training-completions'] as const,
-    byModule: (moduleId: string | null, page?: number) =>
-      ['training-completions', moduleId, page] as const,
+    admin: () => QUERY_KEYS.TRAINING_KEYS.COMPLETIONS_ADMIN(),
+    adminList: (page?: number) => QUERY_KEYS.TRAINING_KEYS.COMPLETIONS_ADMIN_LIST(page),
+    my: () => QUERY_KEYS.TRAINING_KEYS.COMPLETIONS_MY(),
+    byModule: (moduleId: string, page?: number) => QUERY_KEYS.TRAINING_KEYS.COMPLETIONS_BY_MODULE(moduleId, page),
   },
   certificates: {
-    all: (moduleId: string | null) => ['training-certificates', moduleId] as const,
+    all: (moduleId: string) => QUERY_KEYS.TRAINING_KEYS.CERTIFICATES(moduleId),
   },
-} as const;
+}

@@ -25,7 +25,7 @@ import { formatDate } from '@src/shared/utils/format';
 import http from '@src/shared/utils/http';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { ENDPOINTS } from '@repo/shared';
+import { ENDPOINTS, QUERY_KEYS } from '@repo/shared';
 
 interface PaymentSummaryBarProps {
   selectedPeriods: ContributionPeriod[];
@@ -75,7 +75,7 @@ const ConfirmSavingContributions = ({
         onSuccess: (data) => {
           if (data.success) {
             toast.success(data.message);
-            queryClient.invalidateQueries({ queryKey: ['all-contributions'] });
+            queryClient.invalidateQueries({ queryKey: QUERY_KEYS.CONTRIBUTIONS_KEYS.ALL() });
             onSuccess();
             return;
           }

@@ -13,6 +13,7 @@ import {
   DialogTitle,
 } from '@src/shared/components/ui/dialog';
 import { toast } from 'sonner';
+import { QUERY_KEYS } from '@repo/shared';
 import { useQueryClient } from '@tanstack/react-query';
 
 interface EditProviderDialogProps {
@@ -36,7 +37,7 @@ export function EditProviderDialog({ open, onOpenChange, providerId }: EditProvi
       onSuccess: (response) => {
         if (response.success) {
           toast.success(response.message || 'Provider updated successfully');
-          queryClient.invalidateQueries({ queryKey: ['payment-providers'] });
+          queryClient.invalidateQueries({ queryKey: QUERY_KEYS.PAYMENTS_KEYS.PROVIDERS() });
           onOpenChange(false);
         } else {
           toast.error(response.message || 'Failed to update provider');

@@ -14,6 +14,7 @@ import { DataTable } from '@components/data-table';
 import { useMeetingAttendeesColumns } from '@feature/meetings/hooks/useMeetingAttendeesColumns';
 import { Users, CheckCircle2, XCircle, Clock, UserPlus } from 'lucide-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { QUERY_KEYS } from '@repo/shared';
 import http from '@utils/http';
 import { toast } from 'sonner';
 
@@ -62,7 +63,7 @@ export function AssignMembersPage() {
     onSuccess: (res) => {
       if (res.success) {
         queryClient.invalidateQueries({
-          queryKey: ['meeting-attendees', meetingId],
+          queryKey: QUERY_KEYS.MEETINGS_KEYS.ATTENDEES(meetingId),
         });
         toast.success('Attendee updated successfully');
       } else {

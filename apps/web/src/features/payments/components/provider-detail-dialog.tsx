@@ -16,6 +16,7 @@ import {
 } from '@src/shared/components/ui/dialog';
 import { Button } from '@src/shared/components/ui/button';
 import { toast } from 'sonner';
+import { QUERY_KEYS } from '@repo/shared';
 import { useQueryClient } from '@tanstack/react-query';
 
 interface ProviderDetailDialogProps {
@@ -45,7 +46,7 @@ export function ProviderDetailDialog({
           toast.error(response.message || 'Failed to delete provider');
         }
         setDeleteDialogOpen(false);
-        queryClient.invalidateQueries({ queryKey: ['payment-providers'] });
+        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.PAYMENTS_KEYS.PROVIDERS() });
         onOpenChange(false);
       },
       onError: () => {

@@ -1,6 +1,7 @@
 import http from '@src/shared/utils/http';
 import { useQuery } from '@tanstack/react-query';
-import { SubscriptionEndpoints, SubscriptionQueryKeys } from '../utils/constants';
+import { SubscriptionEndpoints } from '../utils/constants';
+import { QUERY_KEYS } from '@repo/shared';
 import { SubscriptionPlan } from '../types';
 
 /**
@@ -54,7 +55,7 @@ import { SubscriptionPlan } from '../types';
  */
 export function useSubscriptionPlans() {
   return useQuery({
-    queryKey: SubscriptionQueryKeys.plans(),
+    queryKey: QUERY_KEYS.SUBSCRIPTIONS_KEYS.PLANS(),
     queryFn: () => http.get<SubscriptionPlan>(SubscriptionEndpoints.plans()),
     select: (data) => data.data,
   });

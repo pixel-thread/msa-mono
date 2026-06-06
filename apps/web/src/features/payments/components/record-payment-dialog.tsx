@@ -32,6 +32,7 @@ import {
 } from '@src/shared/components/ui/select';
 import { Textarea } from '@src/shared/components/ui/textarea';
 import { toast } from 'sonner';
+import { QUERY_KEYS } from '@repo/shared';
 import { RecordManualPaymentSchema } from '@src/features/payments/validators';
 
 type RecordManualPaymentInput = z.infer<typeof RecordManualPaymentSchema>;
@@ -60,7 +61,7 @@ export function RecordPaymentDialog({ open, onOpenChange }: RecordPaymentDialogP
     onSuccess: (response) => {
       if (response.success) {
         toast.success('Payment recorded successfully');
-        queryClient.invalidateQueries({ queryKey: ['all-payments'] });
+        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.PAYMENTS_KEYS.ALL() });
         form.reset();
         onOpenChange(false);
       } else {

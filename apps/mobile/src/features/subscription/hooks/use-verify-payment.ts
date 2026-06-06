@@ -1,6 +1,7 @@
 import http from '@src/shared/utils/http';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { SubscriptionEndpoints, SubscriptionQueryKeys } from '../utils/constants';
+import { SubscriptionEndpoints } from '../utils/constants';
+import { QUERY_KEYS } from '@repo/shared';
 import { toast } from 'sonner-native';
 
 type PaymentData = {
@@ -78,7 +79,7 @@ export function useVerifyPayment() {
     onSuccess: (data) => {
       if (data.success) {
         toast.success(data.message);
-        queryClient.invalidateQueries({ queryKey: SubscriptionQueryKeys.paymentHistory() });
+        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.SUBSCRIPTIONS_KEYS.PAYMENT_HISTORY() });
         return data;
       }
       toast.error(data.message);

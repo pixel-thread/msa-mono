@@ -28,6 +28,7 @@ import {
 } from '@src/shared/components/ui/select';
 import { Label } from '@src/shared/components/ui/label';
 import { Plus } from 'lucide-react';
+import { QUERY_KEYS } from '@repo/shared';
 import { toast } from 'sonner';
 
 export default function ContributionsPage() {
@@ -109,7 +110,7 @@ export default function ContributionsPage() {
     onSuccess: (response) => {
       if (response.success) {
         toast.success(response.message || 'Contributions generated successfully');
-        queryClient.invalidateQueries({ queryKey: ['all-contributions'] });
+        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.CONTRIBUTIONS_KEYS.ALL() });
         setGenerateDialogOpen(false);
       } else {
         toast.error(response.message || 'Failed to generate contributions');

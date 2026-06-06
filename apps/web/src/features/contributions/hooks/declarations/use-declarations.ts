@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
 import type { Declaration } from '../../types';
-import { buildUrlWithQuery, ENDPOINTS } from '@repo/shared';
+import { buildUrlWithQuery, ENDPOINTS, QUERY_KEYS } from '@repo/shared';
 
 interface UseDeclarationsOptions {
   page?: number;
@@ -19,7 +19,7 @@ export function useDeclarations(options: UseDeclarationsOptions = {}) {
   });
 
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['declarations', page, status, search],
+    queryKey: QUERY_KEYS.CONTRIBUTIONS_KEYS.DECLARATIONS(page, status, search),
     queryFn: () => http.get<Declaration[]>(url),
   });
 

@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
+import { QUERY_KEYS } from '@repo/shared';
 import type { ComplianceRecord } from '../types/compliance.types';
 import type { ApiResponse } from '@src/shared/utils/http';
 import type { PaginationMeta } from '@src/shared/types/api.types';
@@ -26,7 +27,7 @@ export function useComplianceChecks(options?: UseComplianceChecksOptions) {
   const qs = params.toString();
 
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['compliance-checks', options],
+    queryKey: QUERY_KEYS.COMPLIANCE_KEYS.CHECKS(options),
     queryFn: async () => http.get<ComplianceRecord[]>(`${complianceEndpoints.checks}${qs ? `?${qs}` : ''}`),
   });
 

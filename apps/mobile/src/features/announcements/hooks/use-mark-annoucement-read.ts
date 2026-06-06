@@ -1,7 +1,7 @@
 import http from '@src/shared/utils/http';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { announcementEndpoints } from '../utils/constants/endpoints';
-import { AnnouncementQueryKeys } from '../utils/constants/query-key';
+import { QUERY_KEYS } from '@repo/shared';
 
 export function useMarkAnnouncementRead() {
   const client = useQueryClient();
@@ -11,9 +11,9 @@ export function useMarkAnnouncementRead() {
     onSuccess: (data) => {
       if (data.success) {
         if (data?.data?.id) {
-          client.invalidateQueries({ queryKey: AnnouncementQueryKeys.detail(data?.data?.id) });
+          client.invalidateQueries({ queryKey: QUERY_KEYS.ANNOUNCEMENTS_KEYS.DETAIL(data?.data?.id) });
         }
-        client.invalidateQueries({ queryKey: AnnouncementQueryKeys.all() });
+        client.invalidateQueries({ queryKey: QUERY_KEYS.ANNOUNCEMENTS_KEYS.ALL() });
       }
     },
   });

@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { UpdateMeetingMinuteInput } from '../validators/minuites';
 import http from '@src/shared/utils/http';
 import { toast } from 'sonner-native';
+import { QUERY_KEYS } from '@repo/shared';
 
 type Props = {
   meetingId: string;
@@ -16,7 +17,7 @@ export function useUpdateMeetingMinuite({ meetingId, meetingMinuiteId }: Props) 
     onSuccess: (data) => {
       if (data.success) {
         toast.success(data.message);
-        queryClient.invalidateQueries({ queryKey: ['meeting', 'minuites', meetingId] });
+        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.MEETINGS_KEYS.MINUTES(meetingId) });
         return data;
       }
       toast.error(data.message);

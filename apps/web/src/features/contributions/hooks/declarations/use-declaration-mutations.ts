@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
 import { toast } from 'sonner';
 import { declarationEndpoints } from '../../utils/constants/endpoints';
-import { ENDPOINTS } from '@repo/shared';
+import { ENDPOINTS, QUERY_KEYS } from '@repo/shared';
 
 export function useApproveDeclaration() {
   const queryClient = useQueryClient();
@@ -12,7 +12,7 @@ export function useApproveDeclaration() {
       http.post(ENDPOINTS.CONTRIBUTION.APPROVE_DECLARATION(id), { remark }),
     onSuccess: () => {
       toast.success('Declaration approved successfully');
-      queryClient.invalidateQueries({ queryKey: ['declarations'] });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.CONTRIBUTIONS_KEYS.DECLARATIONS() });
     },
     onError: () => {
       toast.error('Failed to approve declaration');
@@ -28,7 +28,7 @@ export function useRejectDeclaration() {
       http.post(ENDPOINTS.CONTRIBUTION.REJECT_DECLARATION(id), { remark }),
     onSuccess: () => {
       toast.success('Declaration rejected');
-      queryClient.invalidateQueries({ queryKey: ['declarations'] });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.CONTRIBUTIONS_KEYS.DECLARATIONS() });
     },
     onError: () => {
       toast.error('Failed to reject declaration');

@@ -1,11 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
 import type { Declaration } from '../../types';
-import { ENDPOINTS } from '@repo/shared';
+import { ENDPOINTS, QUERY_KEYS } from '@repo/shared';
 
 export function useDeclarationDetail(id: string) {
   const { data, isLoading, error } = useQuery({
-    queryKey: ['declaration', id],
+    queryKey: QUERY_KEYS.CONTRIBUTIONS_KEYS.DECLARATION(id),
     queryFn: () => http.get<Declaration>(ENDPOINTS.CONTRIBUTION.DECLARATION(id)),
     enabled: !!id,
   });

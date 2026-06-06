@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
+import { QUERY_KEYS } from '@repo/shared';
 import { MembershipApplicationListItem } from '../types';
 import { membershipApplicationEndpoints } from '../utils/constants/endpoints';
 
@@ -26,7 +27,7 @@ export function useMembershipApplications(options: UseMembershipApplicationsOpti
   const url = `${membershipApplicationEndpoints.base}?${params.toString()}`;
 
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['membership-applications', page, status],
+    queryKey: QUERY_KEYS.MEMBERSHIP_APPLICATIONS_KEYS.LIST(page, status),
     queryFn: () => http.get<MembershipApplicationListItem[]>(url),
     refetchOnMount: true,
     networkMode: 'offlineFirst',

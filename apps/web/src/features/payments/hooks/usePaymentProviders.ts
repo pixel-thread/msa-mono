@@ -2,12 +2,13 @@
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
+import { QUERY_KEYS } from '@repo/shared';
 import { ProviderResponse } from '../types';
 import { paymentEndpoints } from '../utils/constants/endpoints';
 
 export function usePaymentProviders() {
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['payment-providers'],
+    queryKey: QUERY_KEYS.PAYMENTS_KEYS.PROVIDERS(),
     queryFn: () => http.get<ProviderResponse[]>(paymentEndpoints.providers),
   });
 
@@ -21,7 +22,7 @@ export function usePaymentProviders() {
 
 export function useProviderDetail(providerId: string | undefined) {
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['payment-provider', providerId],
+        queryKey: QUERY_KEYS.PAYMENTS_KEYS.PROVIDER(providerId),
     queryFn: () => http.get<ProviderResponse>(paymentEndpoints.providerById(providerId!)),
     enabled: !!providerId,
   });
@@ -46,7 +47,7 @@ export function useCreateProvider() {
       isActive?: boolean;
     }) => http.post(paymentEndpoints.providers, input),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['payment-providers'] });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.PAYMENTS_KEYS.PROVIDERS() });
     },
   });
 }
@@ -62,9 +63,9 @@ export function useUpdateProvider(providerId: string) {
       isActive?: boolean;
     }) => http.patch(paymentEndpoints.providerById(providerId), input),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['payment-providers'] });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.PAYMENTS_KEYS.PROVIDERS() });
       queryClient.invalidateQueries({
-        queryKey: ['payment-provider', providerId],
+    queryKey: QUERY_KEYS.PAYMENTS_KEYS.PROVIDER(providerId),
       });
     },
   });
@@ -76,7 +77,7 @@ export function useDeleteProvider() {
   return useMutation({
     mutationFn: (providerId: string) => http.delete(paymentEndpoints.providerById(providerId)),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['payment-providers'] });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.PAYMENTS_KEYS.PROVIDERS() });
     },
   });
 }

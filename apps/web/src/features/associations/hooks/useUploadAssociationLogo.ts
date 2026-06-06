@@ -2,6 +2,7 @@
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
+import { QUERY_KEYS } from '@repo/shared';
 import { toast } from 'sonner';
 import { associationsEndpoints } from '../utils/constants/endpoints';
 
@@ -17,8 +18,8 @@ export function useUploadAssociationLogo() {
     onSuccess: (data) => {
       if (data.success) {
         toast.success('Logo uploaded successfully');
-        queryClient.invalidateQueries({ queryKey: ['associations'] });
-        queryClient.invalidateQueries({ queryKey: ['associations-list'] });
+        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.ASSOCIATIONS_KEYS.ALL() });
+        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.ASSOCIATIONS_KEYS.LIST() });
         return;
       }
       toast.error(data.message);

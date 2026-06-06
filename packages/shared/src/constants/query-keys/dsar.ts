@@ -1,6 +1,6 @@
 export const DSAR_KEYS = {
   ALL:        () => ['dsar'] as const,
-  TICKETS:    (options?: Record<string, unknown>) => ['dsar-tickets', options] as const,
+  TICKETS:    (options?: unknown) => ['dsar-tickets', options] as const,
   TICKET:     (id: string) => ['dsar-ticket', id] as const,
   SLA:        () => ['dsar-sla'] as const,
   MY:         () => ['dsar', 'my'] as const,

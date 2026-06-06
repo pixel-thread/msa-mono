@@ -10,6 +10,7 @@ import {
   DialogTitle,
 } from '@src/shared/components/ui/dialog';
 import { toast } from 'sonner';
+import { QUERY_KEYS } from '@repo/shared';
 import { useQueryClient } from '@tanstack/react-query';
 
 interface CreateProviderDialogProps {
@@ -31,7 +32,7 @@ export function CreateProviderDialog({ open, onOpenChange }: CreateProviderDialo
       onSuccess: (response) => {
         if (response.success) {
           toast.success(response.message || 'Provider added successfully');
-          queryClient.invalidateQueries({ queryKey: ['payment-providers'] });
+          queryClient.invalidateQueries({ queryKey: QUERY_KEYS.PAYMENTS_KEYS.PROVIDERS() });
           onOpenChange(false);
         } else {
           toast.error(response.message || 'Failed to add provider');

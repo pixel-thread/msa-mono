@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
+import { QUERY_KEYS } from '@repo/shared';
 import { toast } from 'sonner';
 import type { RsvpForm } from '../types';
 import { meetingsEndpoints } from '../utils/constants/endpoints';
@@ -30,7 +31,7 @@ export function useRsvp() {
       }),
     onSuccess: (data) => {
       if (data.success) {
-        queryClient.invalidateQueries({ queryKey: ['meetings'] });
+        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.MEETINGS_KEYS.LISTS() });
         setRsvpDialogOpen(false);
         setRsvpForm({ status: 'ACCEPTED', note: '' });
         setSelectedMeetingId(null);

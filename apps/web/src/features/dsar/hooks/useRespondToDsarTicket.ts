@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
+import { QUERY_KEYS } from '@repo/shared';
 import { toast } from 'sonner';
 import { dsarEndpoints } from '../utils/constants/endpoints';
 
@@ -20,8 +21,8 @@ export function useRespondToDsarTicket() {
     onSuccess: (response) => {
       if ((response as { success: boolean }).success) {
         toast.success('DSAR ticket responded successfully');
-        queryClient.invalidateQueries({ queryKey: ['dsar-tickets'] });
-        queryClient.invalidateQueries({ queryKey: ['dsar-sla'] });
+        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.DSAR_KEYS.TICKETS() });
+        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.DSAR_KEYS.SLA() });
         return;
       }
       toast.error((response as { message: string }).message);

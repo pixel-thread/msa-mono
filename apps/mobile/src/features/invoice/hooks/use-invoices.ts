@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
 import { Invoice } from '../types/invoice.types';
 import { useAuthStore } from '@src/shared/store';
+import { QUERY_KEYS } from '@repo/shared';
 
 type UseInvoiceProps = {
   page?: number;
@@ -10,7 +11,7 @@ type UseInvoiceProps = {
 export function useInvoices({ page = 1 }: UseInvoiceProps = {}) {
   const { isAuthenticated } = useAuthStore();
   const query = useQuery({
-    queryKey: ['invoices', page],
+    queryKey: QUERY_KEYS.INVOICE_KEYS.LIST(page),
     queryFn: () => http.get<Invoice[]>('/user/invoices'),
     enabled: !isAuthenticated,
   });

@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
+import { QUERY_KEYS } from '@repo/shared';
 import { meetingsEndpoints } from '../utils/constants/endpoints';
 
 export interface Attendee {
@@ -41,7 +42,7 @@ export interface MeetingDetail {
 
 export function useMeetingDetail(meetingId: string) {
   const { data, isLoading, error } = useQuery<MeetingDetail>({
-    queryKey: ['meeting', meetingId],
+    queryKey: QUERY_KEYS.MEETINGS_KEYS.DETAIL(meetingId),
     queryFn: async () => {
       const res = await http.get<MeetingDetail>(meetingsEndpoints.byId(meetingId));
       if (!res.success || !res.data) {

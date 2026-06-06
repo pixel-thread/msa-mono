@@ -2,6 +2,7 @@
 
 import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
+import { QUERY_KEYS } from '@repo/shared';
 import { toast } from 'sonner';
 import { meetingsEndpoints } from '../utils/constants/endpoints';
 import type { Attendee } from '../types';
@@ -16,7 +17,7 @@ export function useMeetingAttendees(meetingId: string | null) {
   const queryClient = useQueryClient();
 
   const { data, isLoading, isFetching, refetch } = useQuery({
-    queryKey: ['meeting-attendees', meetingId],
+    queryKey: QUERY_KEYS.MEETINGS_KEYS.ATTENDEES(meetingId),
     enabled: !!meetingId,
     queryFn: async () =>
       http.get<Attendee[]>(meetingsEndpoints.attendees.base(meetingId as string)),
@@ -40,7 +41,7 @@ export function useMeetingAttendees(meetingId: string | null) {
     onSuccess: (data) => {
       if (data.success) {
         refetch();
-        queryClient.invalidateQueries({ queryKey: ['meetings'] });
+        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.MEETINGS_KEYS.LISTS() });
         toast.success('Attendee added successfully');
         return data;
       }
@@ -58,7 +59,7 @@ export function useMeetingAttendees(meetingId: string | null) {
     onSuccess: (data) => {
       if (data.success) {
         refetch();
-        queryClient.invalidateQueries({ queryKey: ['meetings'] });
+        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.MEETINGS_KEYS.LISTS() });
         toast.success('Attendee removed successfully');
         return data;
       }

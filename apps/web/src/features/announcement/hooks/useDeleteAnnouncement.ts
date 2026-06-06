@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
+import { QUERY_KEYS } from '@repo/shared';
 import { toast } from 'sonner';
 import { announcementEndpoints } from '../utils/constants/endpoints';
 
@@ -11,7 +12,7 @@ export function useDeleteAnnouncement() {
     onSuccess: (data) => {
       if (data.success) {
         toast.success('Announcement deleted successfully');
-        queryClient.invalidateQueries({ queryKey: ['announcements-list'] });
+        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.ANNOUNCEMENTS_KEYS.LISTS() });
         return;
       }
       toast.error(data.message);

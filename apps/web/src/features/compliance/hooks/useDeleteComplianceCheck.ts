@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
+import { QUERY_KEYS } from '@repo/shared';
 import { toast } from 'sonner';
 import { complianceEndpoints } from '../utils/constants/endpoints';
 
@@ -11,8 +12,8 @@ export function useDeleteComplianceCheck() {
     onSuccess: (response) => {
       if ((response as { success: boolean }).success) {
         toast.success('Compliance check deleted successfully');
-        queryClient.invalidateQueries({ queryKey: ['compliance-checks'] });
-        queryClient.invalidateQueries({ queryKey: ['compliance-evidence'] });
+        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.COMPLIANCE_KEYS.CHECKS() });
+        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.COMPLIANCE_KEYS.EVIDENCE() });
         return;
       }
       toast.error((response as { message: string }).message);

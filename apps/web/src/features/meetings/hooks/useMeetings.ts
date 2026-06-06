@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
+import { QUERY_KEYS } from '@repo/shared';
 import { toast } from 'sonner';
 import type { Meeting, Attendee } from '../types';
 import type { CreateMeetingInput } from '../validators';
@@ -15,7 +16,7 @@ export function useMeetings(options: UseMeetingsOptions = {}) {
   const queryClient = useQueryClient();
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ['meetings', page],
+    queryKey: QUERY_KEYS.MEETINGS_KEYS.LIST(page),
     queryFn: async () => http.get<Meeting[]>(meetingsEndpoints.list(page)),
   });
 
@@ -23,7 +24,7 @@ export function useMeetings(options: UseMeetingsOptions = {}) {
     mutationFn: (data: CreateMeetingInput) => http.post<Meeting>(meetingsEndpoints.base, data),
     onSuccess: (data) => {
       if (data.success) {
-        queryClient.invalidateQueries({ queryKey: ['meetings'] });
+        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.MEETINGS_KEYS.LISTS() });
         toast.success('Meeting created successfully');
         return data;
       }
@@ -39,8 +40,8 @@ export function useMeetings(options: UseMeetingsOptions = {}) {
       return res;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['meetings'] });
-      toast.success('Meeting deleted successfully');
+        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.MEETINGS_KEYS.LISTS() });
+        toast.success('Meeting deleted successfully');
     },
     onError: (err: Error) => {
       toast.error(err.message || 'Failed to delete meeting');
@@ -56,6 +57,6 @@ export function useMeetings(options: UseMeetingsOptions = {}) {
     deleteMeeting: deleteMeetingMutation.mutate,
     isCreating: createMeetingMutation.isPending,
     isDeleting: deleteMeetingMutation.isPending,
-    refetch: () => queryClient.invalidateQueries({ queryKey: ['meetings'] }),
+    refetch: () => queryClient.invalidateQueries({ queryKey: QUERY_KEYS.MEETINGS_KEYS.LISTS() }),
   };
 }

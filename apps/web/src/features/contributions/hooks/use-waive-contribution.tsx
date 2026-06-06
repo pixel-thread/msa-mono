@@ -1,4 +1,4 @@
-import { ENDPOINTS } from '@repo/shared';
+import { ENDPOINTS, QUERY_KEYS } from '@repo/shared';
 import http from '@src/shared/utils/http';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { WaiveContributionInput } from '../validators';
@@ -9,8 +9,8 @@ export const useWaiveContribution = () => {
     mutationFn: (data: WaiveContributionInput) => http.patch(ENDPOINTS.CONTRIBUTION.WAIVE, data),
     onSuccess: (data) => {
       if (data.success) {
-        queryClient.invalidateQueries({ queryKey: ['all-contributions'] });
-        queryClient.invalidateQueries({ queryKey: ['user-contributions'] });
+        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.CONTRIBUTIONS_KEYS.ALL() });
+        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.CONTRIBUTIONS_KEYS.USER_BASE() });
       }
     },
   });

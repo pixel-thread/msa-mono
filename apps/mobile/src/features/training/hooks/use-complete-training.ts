@@ -1,7 +1,8 @@
 import http from '@src/shared/utils/http';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { CompleteTrainingInput } from '../types';
-import { trainingEndpoints, TrainingQueryKeys } from '../utils/constants';
+import { trainingEndpoints } from '../utils/constants';
+import { QUERY_KEYS } from '@repo/shared';
 import { toast } from 'sonner-native';
 
 type Props = {
@@ -16,8 +17,8 @@ export const useCompleteTraining = ({ moduleId }: Props) => {
     onSuccess: (data) => {
       if (data.success) {
         toast.success(data.message);
-        queryClient.invalidateQueries({ queryKey: TrainingQueryKeys.myCompletions() });
-        queryClient.invalidateQueries({ queryKey: TrainingQueryKeys.allCompletions() });
+        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.TRAINING_KEYS.COMPLETIONS_MY() });
+        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.TRAINING_KEYS.COMPLETIONS_ADMIN_LIST() });
         return data;
       }
       toast.error(data.message);

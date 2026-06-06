@@ -1,5 +1,6 @@
 export const CONTRIBUTIONS_KEYS = {
   ALL:          () => ['all-contributions'] as const,
+  USER_BASE:    () => ['user-contributions'] as const,
   LIST:         (page?: number, status?: string, userId?: string, year?: number, month?: number) =>
     ['all-contributions', page, status, userId, year, month] as const,
   USER:         (userId: string, fromYear?: number, fromMonth?: number, toYear?: number, toMonth?: number, page?: number) =>

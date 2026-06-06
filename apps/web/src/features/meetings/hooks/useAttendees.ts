@@ -2,6 +2,7 @@
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
+import { QUERY_KEYS } from '@repo/shared';
 import { toast } from 'sonner';
 import { meetingsEndpoints } from '../utils/constants/endpoints';
 
@@ -18,8 +19,8 @@ export function useAssignAttendee(meetingId: string) {
       return res;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['meeting', meetingId] });
-      queryClient.invalidateQueries({ queryKey: ['meetings'] });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.MEETINGS_KEYS.DETAIL(meetingId) });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.MEETINGS_KEYS.LISTS() });
       toast.success('Attendee added successfully');
     },
     onError: (err: Error) => {
@@ -38,8 +39,8 @@ export function useRemoveAttendee(meetingId: string) {
       return res;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['meeting', meetingId] });
-      queryClient.invalidateQueries({ queryKey: ['meetings'] });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.MEETINGS_KEYS.DETAIL(meetingId) });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.MEETINGS_KEYS.LISTS() });
       toast.success('Attendee removed successfully');
     },
     onError: (err: Error) => {

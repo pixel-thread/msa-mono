@@ -1,12 +1,13 @@
 import { useQuery } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
+import { QUERY_KEYS } from '@repo/shared';
 import type { ConsentSummaryReport } from '../types/consent.types';
 import type { ApiResponse } from '@src/shared/utils/http';
 import { consentEndpoints } from '../utils/constants/endpoints';
 
 export function useConsentReport() {
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['consent-report'],
+    queryKey: QUERY_KEYS.CONSENT_KEYS.REPORT(),
     queryFn: async () => http.get<ConsentSummaryReport[]>(consentEndpoints.report),
   });
 

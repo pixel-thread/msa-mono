@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
+import { QUERY_KEYS } from '@repo/shared';
 import { PaymentTransaction } from '../types';
 import { paymentEndpoints } from '../utils/constants/endpoints';
 
@@ -28,7 +29,7 @@ export function usePayments(options: UsePaymentsOptions = {}) {
   if (endDate) params.set('endDate', endDate);
 
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['all-payments', params.toString()],
+    queryKey: QUERY_KEYS.PAYMENTS_KEYS.LIST(params.toString()),
     queryFn: () => http.get<PaymentTransaction[]>(`${paymentEndpoints.base}?${params.toString()}`),
   });
 

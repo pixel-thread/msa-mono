@@ -3,6 +3,7 @@
 import { useUrlFilters } from '@src/shared/hooks';
 import { useQuery } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
+import { QUERY_KEYS } from '@repo/shared';
 import { Card, CardContent } from '@src/shared/components/ui/card';
 import { SectionHeader } from '@src/shared/components/section-header';
 import { formattedAmount } from '@src/shared/utils';
@@ -63,7 +64,7 @@ export function MySubscriptionPage() {
   const { page, setPage } = useUrlFilters({ basePath: '/subscriptions/my' });
 
   const { data, isLoading } = useQuery({
-    queryKey: ['payment-history', page],
+    queryKey: QUERY_KEYS.SUBSCRIPTIONS_KEYS.PAYMENT_HISTORY(page),
     queryFn: () => http.get<PaymentHistoryResponse>(`/payments/history?page=${page}&pageSize=20`),
   });
 

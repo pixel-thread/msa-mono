@@ -30,6 +30,7 @@ import {
 } from '@src/shared/components/ui/form';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
+import { QUERY_KEYS } from '@repo/shared';
 import { toast } from 'sonner';
 import { UpdateMeetingSchema, type UpdateMeetingInput } from '../validators';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -88,8 +89,8 @@ export function EditMeetingDialog({ meeting, open, onOpenChange }: EditMeetingDi
     },
     onSuccess: (data) => {
       if (data.success) {
-        queryClient.invalidateQueries({ queryKey: ['meeting', meeting.id] });
-        queryClient.invalidateQueries({ queryKey: ['meetings'] });
+        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.MEETINGS_KEYS.DETAIL(meeting.id) });
+        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.MEETINGS_KEYS.LISTS() });
         toast.success('Meeting updated successfully');
         onOpenChange(false);
       } else {

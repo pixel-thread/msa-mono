@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
+import { QUERY_KEYS } from '@repo/shared';
 import { toast } from 'sonner';
 import type { CreateMeetingMinuteInput, UpdateMeetingMinuteInput } from '../validators';
 import { meetingsEndpoints } from '../utils/constants/endpoints';
@@ -42,7 +43,7 @@ export function useMeetingMinutes(meetingId: string | null) {
     onSuccess: (res) => {
       if (res.success) {
         queryClient.invalidateQueries({
-          queryKey: ['meeting-minutes', meetingId],
+          queryKey: QUERY_KEYS.MEETINGS_KEYS.MINUTES(meetingId),
         });
         toast.success('Minute added successfully');
       } else {
@@ -63,7 +64,7 @@ export function useMeetingMinutes(meetingId: string | null) {
     onSuccess: (res) => {
       if (res.success) {
         queryClient.invalidateQueries({
-          queryKey: ['meeting-minutes', meetingId],
+          queryKey: QUERY_KEYS.MEETINGS_KEYS.MINUTES(meetingId),
         });
         toast.success('Minute updated successfully');
       } else {
@@ -81,7 +82,7 @@ export function useMeetingMinutes(meetingId: string | null) {
     onSuccess: (res) => {
       if (res.success) {
         queryClient.invalidateQueries({
-          queryKey: ['meeting-minutes', meetingId],
+          queryKey: QUERY_KEYS.MEETINGS_KEYS.MINUTES(meetingId),
         });
         toast.success('Minute deleted successfully');
       } else {

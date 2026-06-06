@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
-import { dsarEndpoints, DSARQueryKeys } from '../utils/constants';
+import { dsarEndpoints } from '../utils/constants';
+import { QUERY_KEYS } from '@repo/shared';
 import { toast } from 'sonner-native';
 import { DSARRequest, DSARResponsePayload } from '../types/dsar.types';
 import { DSARSubmitFormData } from '../validators/dsar.validator';
@@ -17,7 +18,7 @@ export const useSubmitDSAR = () => {
       http.post<DSARRequest>(dsarEndpoints.submit, data),
     onSuccess: (data) => {
       if (data.success) {
-        queryClient.invalidateQueries({ queryKey: DSARQueryKeys.my() });
+        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.DSAR_KEYS.MY() });
         toast.success(data.message || 'Request submitted successfully');
         return data;
       }
@@ -42,7 +43,7 @@ export const useRespondToDSAR = () => {
       http.post<DSARRequest>(dsarEndpoints.respond(ticketId), payload),
     onSuccess: (data) => {
       if (data.success) {
-        queryClient.invalidateQueries({ queryKey: ['dsar'] });
+        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.DSAR_KEYS.ALL() });
         toast.success(data.message || 'Response sent successfully');
         return data;
       }
@@ -67,7 +68,7 @@ export const useAssignDSAR = () => {
       http.patch<DSARRequest>(dsarEndpoints.assign(ticketId), { assignedToId }),
     onSuccess: (data) => {
       if (data.success) {
-        queryClient.invalidateQueries({ queryKey: ['dsar'] });
+        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.DSAR_KEYS.ALL() });
         toast.success(data.message || 'Ticket assigned successfully');
         return data;
       }
@@ -92,8 +93,8 @@ export const useCancelDSAR = () => {
       http.post<DSARRequest>(dsarEndpoints.cancel(ticketId)),
     onSuccess: (data) => {
       if (data.success) {
-        queryClient.invalidateQueries({ queryKey: DSARQueryKeys.my() });
-        queryClient.invalidateQueries({ queryKey: ['dsar', 'my', 'detail'] });
+        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.DSAR_KEYS.MY() });
+        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.DSAR_KEYS.MY_DETAIL() });
         toast.success(data.message || 'Request cancelled successfully');
         return data;
       }

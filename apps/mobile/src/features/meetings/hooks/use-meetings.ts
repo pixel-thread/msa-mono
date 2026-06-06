@@ -3,7 +3,7 @@ import http from '@src/shared/utils/http';
 import type { Meeting } from '../types';
 import { useAuthStore } from '@src/shared/store';
 import { meetingEndpoints } from '../utils/constants';
-import { MeetingQueryKeys } from '../utils/constants/query-key';
+import { QUERY_KEYS } from '@repo/shared';
 
 type UseMeetingsParams = {
   type?: string;
@@ -15,7 +15,7 @@ export const useMeetings = (params?: UseMeetingsParams) => {
   const { isAuthenticated } = useAuthStore();
 
   return useInfiniteQuery({
-    queryKey: MeetingQueryKeys.all(),
+    queryKey: QUERY_KEYS.MEETINGS_KEYS.LIST(),
     initialPageParam: 1,
     enabled: isAuthenticated,
     queryFn: async ({ pageParam }) => {

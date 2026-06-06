@@ -13,7 +13,7 @@ import { useUrlFilters } from '@hooks/use-url-filters';
 import { Card } from '@components/ui/card';
 import { useUserContributions } from '../hooks';
 import { Loader2 } from 'lucide-react';
-import { ENDPOINTS } from '@repo/shared';
+import { ENDPOINTS, QUERY_KEYS } from '@repo/shared';
 import http from '@src/shared/utils/http';
 import { ContributionStatsPanel } from '../components/contribution-stats-panel';
 import { PaymentSummaryBar } from '../components/payment-summary-bar';
@@ -79,7 +79,7 @@ export const RecordContributionPage = () => {
     mutationFn: (id: string) => http.post(ENDPOINTS.CONTRIBUTION.USER(id), {}),
     onSuccess: (res) => {
       if (res.success) {
-        queryClient.invalidateQueries({ queryKey: ['all-contributions'] });
+        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.CONTRIBUTIONS_KEYS.ALL() });
         refetch();
         return;
       }
@@ -89,7 +89,7 @@ export const RecordContributionPage = () => {
   });
 
   const handleRecordingSuccess = () => {
-    queryClient.invalidateQueries({ queryKey: ['all-contributions'] });
+    queryClient.invalidateQueries({ queryKey: QUERY_KEYS.CONTRIBUTIONS_KEYS.ALL() });
     genContribution.mutate(userId);
     setSelectedPeriods([]);
   };

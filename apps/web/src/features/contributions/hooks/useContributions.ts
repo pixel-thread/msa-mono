@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
 import { ContributionPeriod } from '../types';
-import { buildUrlWithQuery, ENDPOINTS } from '@repo/shared';
+import { buildUrlWithQuery, ENDPOINTS, QUERY_KEYS } from '@repo/shared';
 
 interface UseContributionsOptions {
   page?: number;
@@ -22,7 +22,7 @@ export function useContributions(options: UseContributionsOptions = {}) {
   });
 
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['all-contributions', page, status, userId, year, month],
+    queryKey: QUERY_KEYS.CONTRIBUTIONS_KEYS.LIST(page, status, userId, year, month),
     queryFn: () => http.get<ContributionPeriod[]>(url),
   });
 

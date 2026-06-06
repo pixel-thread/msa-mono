@@ -1,6 +1,7 @@
 import http from '@src/shared/utils/http';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { trainingEndpoints, TrainingQueryKeys } from '../utils/constants';
+import { trainingEndpoints } from '../utils/constants';
+import { QUERY_KEYS } from '@repo/shared';
 import { toast } from 'sonner-native';
 
 type BulkAssignInput = {
@@ -19,7 +20,7 @@ export const useBulkAssignTraining = ({ moduleId }: Props) => {
     onSuccess: (data) => {
       if (data.success) {
         toast.success(data.message);
-        queryClient.invalidateQueries({ queryKey: TrainingQueryKeys.assignments(moduleId) });
+        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.TRAINING_KEYS.ASSIGNMENTS(moduleId) });
         return data;
       }
       toast.error(data.message);

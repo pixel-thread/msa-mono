@@ -1,5 +1,6 @@
 export const MEETINGS_KEYS = {
   ALL:       () => ['meetings'] as const,
+  LISTS:     () => ['meetings'] as const,
   LIST:      (page?: number) => ['meetings', page] as const,
   DETAIL:    (id: string) => ['meetings', id] as const,
   ATTENDEES: (meetingId: string) => ['meetings', meetingId, 'attendees'] as const,

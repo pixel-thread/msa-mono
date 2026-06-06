@@ -12,6 +12,7 @@ import { Button } from '@src/shared/components/ui/button';
 import { AlertTriangle } from 'lucide-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
+import { QUERY_KEYS } from '@repo/shared';
 import { toast } from 'sonner';
 
 interface DeleteMeetingDialogProps {
@@ -36,7 +37,7 @@ export function DeleteMeetingDialog({
       return res;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['meetings'] });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.MEETINGS_KEYS.LISTS() });
       toast.success('Meeting deleted successfully');
       onOpenChange(false);
       onSuccess?.();

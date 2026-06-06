@@ -1,7 +1,7 @@
 import http from '@src/shared/utils/http';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { meetingEndpoints } from '../utils/constants';
-import { MeetingQueryKeys } from '../utils/constants/query-key';
+import { QUERY_KEYS } from '@repo/shared';
 import { toast } from 'sonner-native';
 import { UpdateAttendeeRsvpInput } from '../validators/rsvp';
 
@@ -99,8 +99,8 @@ export function useUpdateAttendeeRsvp({ meetingId }: Props) {
     onSuccess: (data) => {
       if (data.success) {
         toast.success(data.message);
-        queryClient.invalidateQueries({ queryKey: MeetingQueryKeys.rsvps(meetingId) });
-        queryClient.invalidateQueries({ queryKey: MeetingQueryKeys.all() });
+        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.MEETINGS_KEYS.RSVPS(meetingId) });
+        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.MEETINGS_KEYS.LIST() });
         return data;
       }
       toast.error(data.message);

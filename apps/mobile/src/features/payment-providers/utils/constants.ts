@@ -7,7 +7,3 @@ export const paymentProviderEndpoints = {
   activate: (id: string) => `/payments/providers/${id}/activate`,
 };
 
-export const ProviderQueryKeys = {
-  all: () => ['payment-providers'] as const,
-  detail: (id: string) => ['payment-providers', id] as const,
-};

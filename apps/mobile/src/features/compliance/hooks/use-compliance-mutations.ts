@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
-import { complianceEndpoints, ComplianceQueryKeys } from '../utils/constants';
+import { complianceEndpoints } from '../utils/constants';
+import { QUERY_KEYS } from '@repo/shared';
 import { toast } from 'sonner-native';
 import { Compliance, SubmitCompliancePayload } from '../types/compliance.types';
 import { ComplianceSubmitFormData } from '../validators/compliance.validator';
@@ -12,7 +13,7 @@ export const useSubmitCompliance = () => {
       http.post<Compliance>(complianceEndpoints.submit, data as SubmitCompliancePayload),
     onSuccess: (data) => {
       if (data.success) {
-        queryClient.invalidateQueries({ queryKey: ComplianceQueryKeys.my() });
+        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.COMPLIANCE_KEYS.MY() });
         toast.success(data.message || 'Compliance submitted successfully');
         return data;
       }
@@ -32,8 +33,8 @@ export const useCancelCompliance = () => {
       http.post<Compliance>(complianceEndpoints.cancel(complianceId)),
     onSuccess: (data) => {
       if (data.success) {
-        queryClient.invalidateQueries({ queryKey: ComplianceQueryKeys.my() });
-        queryClient.invalidateQueries({ queryKey: ['compliance', 'my', 'detail'] });
+        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.COMPLIANCE_KEYS.MY() });
+        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.COMPLIANCE_KEYS.MY_DETAIL() });
         toast.success(data.message || 'Compliance cancelled successfully');
         return data;
       }

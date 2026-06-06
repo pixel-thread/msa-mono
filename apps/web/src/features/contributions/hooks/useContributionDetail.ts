@@ -3,11 +3,11 @@
 import { useQuery } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
 import { ContributionPeriod } from '../types';
-import { ENDPOINTS } from '@repo/shared';
+import { ENDPOINTS, QUERY_KEYS } from '@repo/shared';
 
 export function useContributionDetail(contributionId: string | undefined) {
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['contribution-detail', contributionId],
+    queryKey: QUERY_KEYS.CONTRIBUTIONS_KEYS.DETAIL(contributionId),
     queryFn: () =>
       http.get<ContributionPeriod>(ENDPOINTS.CONTRIBUTION.DETAIL(contributionId || '')),
     enabled: !!contributionId,

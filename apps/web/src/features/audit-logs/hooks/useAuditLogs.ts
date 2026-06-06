@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import { QUERY_KEYS } from '@repo/shared';
 import type { AuditLogEntry } from '../types';
 import http from '@src/shared/utils/http';
 
@@ -35,7 +36,7 @@ export function useAuditLogs(params: UseAuditLogsParams = {}) {
   if (toDate) queryParams.toDate = toDate;
 
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['audit-logs', params],
+    queryKey: QUERY_KEYS.AUDIT_LOGS_KEYS.LIST(params),
     queryFn: () =>
       http.get<AuditLogsApiResponse>('/audit-logs', {
         params: queryParams,

@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
+import { QUERY_KEYS } from '@repo/shared';
 import type { ConsentReceiptRecord } from '../types/consent.types';
 import type { PaginationMeta } from '@src/shared/types/api.types';
 import type { ApiResponse } from '@src/shared/utils/http';
@@ -24,7 +25,7 @@ export function useConsentRecords(options?: UseConsentRecordsOptions) {
   const qs = params.toString();
 
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['consent-records', options],
+    queryKey: QUERY_KEYS.CONSENT_KEYS.RECORDS(options),
     queryFn: async () => http.get<ConsentReceiptRecord[]>(`${consentEndpoints.all}${qs ? `?${qs}` : ''}`),
   });
 
