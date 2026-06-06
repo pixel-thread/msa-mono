@@ -19,7 +19,7 @@ import { UserRole } from '@prisma/client';
 // ---------------------------------------------------------------------------
 // Services
 // ---------------------------------------------------------------------------
-import { upgradeSubscription } from '@feature/subscriptions/services';
+import { changePlan } from '@feature/subscriptions/services';
 import { UpgradeSubscriptionSchema } from '../validators';
 import { hasHighRoleAccess } from '@src/shared/utils';
 
@@ -55,7 +55,7 @@ export const postUpgrade: RequestHandler[] = [
     if (!userId) throw new ValidationError('Invalid request body');
 
     // Upgrade subscription to the target plan version
-    const updated = await upgradeSubscription({
+    const updated = await changePlan({
       planId: req.body.planId,
       userId: userId,
     });
