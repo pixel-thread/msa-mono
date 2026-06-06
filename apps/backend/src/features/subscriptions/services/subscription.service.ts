@@ -6,11 +6,12 @@ import { NotFoundError, ConflictError, ForbiddenError } from '@src/shared/errors
 import { PAGE_SIZE } from '@src/shared/constants';
 import { buildPagination } from '@src/shared/utils/build-pagination';
 import { hasHighRoleAccess } from '@src/shared/utils';
+import { generateUserContributions } from '@src/features/contributions/services/contribution.service';
 
 // ---------------------------------------------------------------------------
 // Prisma
 // ---------------------------------------------------------------------------
-import { UserRole } from '@prisma/client';
+import { UserRole, ContributionStatus } from '@prisma/client';
 
 // ---- Interfaces --------------------------------------------------------------
 
@@ -21,8 +22,8 @@ interface SubscribeInput {
   associationId: string;
 }
 
-/** Parameters for upgrading a subscription. */
-interface UpgradeInput {
+/** Parameters for changing a user's subscription plan (upgrade or downgrade). */
+interface ChangePlanInput {
   planId: string;
   userId: string;
 }
@@ -129,15 +130,25 @@ export async function subscribe({ planId, userId, associationId }: SubscribeInpu
   return subscription;
 }
 
-// ---- upgradeSubscription -----------------------------------------------------
+// ---- changePlan --------------------------------------------------------------
 
 /**
- * Upgrade a user's subscription to a new plan.
+ * Change a user's subscription to a different plan (upgrade or downgrade).
  *
- * Ensures the current subscription is active, finds the latest plan version,
- * and creates a new billing-history record for the upgraded period.
+ * Contribution period handling:
+ *   - Months up to and including the current month keep the OLD plan's rate
+ *   - Months after the current month get the NEW plan's rate
+ *   - Only DUE/PENDING periods are updated; PAID/PARTIAL/WAIVED/OVERDUE are never touched
+ *
+ * Steps:
+ *  1. Validate subscription is active, find target plan version
+ *  2. Backfill: generate missing periods up to current month at OLD rate
+ *  3. Switch: update both planId and planVersionId
+ *  4. Rewrite: update existing future DUE/PENDING periods to NEW rate
+ *  5. Forward-fill: generate any missing future periods at NEW rate
+ *  6. Create billing history record
  */
-export async function upgradeSubscription({ planId, userId }: UpgradeInput) {
+export async function changePlan({ planId, userId }: ChangePlanInput) {
   const subscription = await prisma.subscription.findUnique({
     where: { userId },
     include: { planVersion: true },
@@ -167,6 +178,17 @@ export async function upgradeSubscription({ planId, userId }: UpgradeInput) {
     throw new ConflictError('Already on the latest version');
   }
 
+  // ── Step 2: Backfill at OLD rate ──────────────────────────────────────
+  // Generate any missing ContributionPeriods up to the current month.
+  // planVersionId still points to the old plan, so these get the old amount.
+  // Already-existing periods are skipped (Task 1 change).
+  const now = new Date();
+  const currentYear = now.getFullYear();
+  const currentMonth = now.getMonth() + 1; // 1-indexed
+
+  await generateUserContributions(userId, currentYear, currentMonth);
+
+  // ── Step 3: Switch plan ───────────────────────────────────────────────
   const startDate = new Date();
   const endDate = new Date();
   if (latestVersion.billingCycle === 'YEARLY') {
@@ -178,6 +200,7 @@ export async function upgradeSubscription({ planId, userId }: UpgradeInput) {
   const updated = await prisma.subscription.update({
     where: { id: subscription.id },
     data: {
+      planId,
       planVersionId: latestVersion.id,
       startDate,
       endDate,
@@ -188,6 +211,53 @@ export async function upgradeSubscription({ planId, userId }: UpgradeInput) {
     },
   });
 
+  // ── Step 4: Rewrite existing future periods to NEW rate ───────────────
+  // Find all ContributionPeriods from NEXT month onward that are still
+  // unpaid (DUE or PENDING) and update them to the new plan's amount.
+  // PAID, PARTIAL, WAIVED, and OVERDUE periods are never touched.
+  const newAmount = latestVersion.amount;
+
+  // Update future periods in the CURRENT year (months after currentMonth)
+  if (currentMonth < 12) {
+    await prisma.contributionPeriod.updateMany({
+      where: {
+        userId,
+        year: currentYear,
+        month: { gt: currentMonth },
+        status: { in: [ContributionStatus.DUE, ContributionStatus.PENDING] },
+      },
+      data: {
+        expectedAmount: newAmount,
+        dueAmount: newAmount,
+      },
+    });
+  }
+
+  // Update future periods in SUBSEQUENT years (all months)
+  await prisma.contributionPeriod.updateMany({
+    where: {
+      userId,
+      year: { gt: currentYear },
+      status: { in: [ContributionStatus.DUE, ContributionStatus.PENDING] },
+    },
+    data: {
+      expectedAmount: newAmount,
+      dueAmount: newAmount,
+    },
+  });
+
+  // ── Step 5: Forward-fill missing future periods at NEW rate ───────────
+  // Generate any future periods that don't exist yet. Now that
+  // planVersionId points to the new plan, generateUserContributions will
+  // create them at the new rate. Generate for the full remaining year.
+  await generateUserContributions(userId, currentYear, 12);
+
+  // If we're near year-end, also generate for next year's first month
+  if (currentMonth === 12) {
+    await generateUserContributions(userId, currentYear + 1, 1);
+  }
+
+  // ── Step 6: Billing history ───────────────────────────────────────────
   await prisma.subscriptionBillingHistory.create({
     data: {
       subscriptionId: subscription.id,
@@ -202,6 +272,9 @@ export async function upgradeSubscription({ planId, userId }: UpgradeInput) {
 
   return updated;
 }
+
+// Keep the old name as an alias for backward compatibility
+export const upgradeSubscription = changePlan;
 
 // ---- waiveSubscription -------------------------------------------------------
 
