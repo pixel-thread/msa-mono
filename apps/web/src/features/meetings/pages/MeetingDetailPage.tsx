@@ -1,6 +1,6 @@
 'use client';
 
-import { useParams, useRouter, useSearchParams } from 'next/navigation';
+import { useParams, useNavigate, useSearchParams } from '@tanstack/react-router';
 import { useState } from 'react';
 
 import {
@@ -30,7 +30,7 @@ import { DeleteMeetingDialog } from '@feature/meetings/components/DeleteMeetingD
 import { ManageAttendeesDialog } from '@feature/meetings/components/ManageAttendeesDialog';
 import type { AssignAttendeeInput } from '@feature/meetings/validators';
 import { useMembers } from '@feature/members/hooks/useMembers';
-import Link from 'next/link';
+import { Link } from '@tanstack/react-router';
 import {
   getTypeBadge,
   getStatusBadge,
@@ -43,8 +43,8 @@ import {
  */
 export function MeetingDetailPage() {
   const params = useParams();
-  const router = useRouter();
-  const searchParams = useSearchParams();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const meetingId = params.meetingId as string;
   const [editOpen, setEditOpen] = useState(searchParams.get('edit') === 'true');
   const [manageAttendeesOpen, setManageAttendeesOpen] = useState(false);
@@ -78,7 +78,7 @@ export function MeetingDetailPage() {
         <Button
           variant="outline"
           className="mt-4 h-11 border-hairline bg-canvas px-5 text-sm font-medium text-ink hover:bg-surface-strong"
-          onClick={() => router.back()}
+          onClick={() => window.history.back()}
         >
           Go back
         </Button>
@@ -279,7 +279,7 @@ export function MeetingDetailPage() {
         meeting={meeting}
         open={deleteOpen}
         onOpenChange={setDeleteOpen}
-        onSuccess={() => router.push('/meetings')}
+        onSuccess={() => navigate({ to: '/meetings' })}
       />
     </>
   );

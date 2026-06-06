@@ -1,6 +1,6 @@
 'use client';
 
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useNavigate } from '@tanstack/react-router';
 
 import { useMember } from '@src/features/members/hooks/useMember';
 import { SectionHeader } from '@src/shared/components/section-header';
@@ -14,7 +14,7 @@ import { AccountCard } from '@src/features/members/components/detail/account-car
 
 export function MemberDetailPage() {
   const params = useParams();
-  const router = useRouter();
+  const navigate = useNavigate();
   const memberId = params.memberId as string;
 
   const { member, isLoading, error } = useMember(memberId);
@@ -34,7 +34,7 @@ export function MemberDetailPage() {
         <Button
           variant="outline"
           className="mt-4 h-11 border-hairline bg-canvas px-5 text-sm font-medium text-ink hover:bg-surface-strong"
-          onClick={() => router.back()}
+          onClick={() => window.history.back()}
         >
           Go back
         </Button>

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useNavigate } from '@tanstack/react-router';
 import { ArrowLeft, Search, Plus, Trash2, X } from 'lucide-react';
 
 import { Button } from '@src/shared/components/ui/button';
@@ -27,7 +27,7 @@ interface UserDisplay {
 }
 
 export function TrainingAssignPage() {
-  const router = useRouter();
+  const navigate = useNavigate();
   const params = useParams();
   const moduleId = params.id as string;
   const { page, setPage } = useUrlFilters();

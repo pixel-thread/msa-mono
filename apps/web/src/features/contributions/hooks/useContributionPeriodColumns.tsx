@@ -1,6 +1,6 @@
 'use client';
 import { ColumnDef } from '@tanstack/react-table';
-import Link from 'next/link';
+import { Link } from '@tanstack/react-router';
 import { formattedAmount } from '@src/shared/utils';
 import { getMonthName } from '@src/shared/utils/helper/get-month-name';
 import { ContributionStatusBadge } from '../components/contribution-status-badge';

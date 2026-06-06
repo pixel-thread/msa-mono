@@ -1,6 +1,6 @@
 'use client';
 
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useNavigate } from '@tanstack/react-router';
 import { useDeclarationDetail } from '../hooks/declarations/use-declaration-detail';
 import { SectionHeader } from '@src/shared/components/section-header';
 import { Card, CardHeader, CardTitle, CardContent } from '@src/shared/components/ui/card';
@@ -18,7 +18,7 @@ const statusBadgeVariant: Record<string, 'default' | 'secondary' | 'destructive'
 
 export function DeclarationDetailPage() {
   const params = useParams();
-  const router = useRouter();
+  const navigate = useNavigate();
   const declarationId = params.declarationId as string;
 
   const { declaration, isLoading } = useDeclarationDetail(declarationId);
@@ -38,7 +38,7 @@ export function DeclarationDetailPage() {
         <Button
           variant="outline"
           className="mt-4 h-11 border-hairline bg-canvas px-5 text-sm font-medium text-ink hover:bg-surface-strong"
-          onClick={() => router.back()}
+          onClick={() => window.history.back()}
         >
           Go back
         </Button>
@@ -51,7 +51,7 @@ export function DeclarationDetailPage() {
       <SectionHeader
         title="Declaration Details"
         description={`ID: ${declaration.id.slice(0, 8)}...`}
-        onBackClick={() => router.back()}
+        onBackClick={() => window.history.back()}
       >
         <Badge variant={statusBadgeVariant[declaration.status] ?? 'outline'}>
           {declaration.status}

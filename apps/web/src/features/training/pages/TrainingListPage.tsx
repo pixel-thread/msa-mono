@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useNavigate } from '@tanstack/react-router';
 import { useUrlFilters } from '@src/shared/hooks';
 import { DataTable } from '@src/shared/components/data-table';
 import { SectionHeader } from '@src/shared/components/section-header';
@@ -14,7 +14,7 @@ import { CreateModuleDialog } from '../components';
 import { DataTablePagination } from '@src/shared/components/data-table-pagination';
 
 export function TrainingListPage() {
-  const router = useRouter();
+  const navigate = useNavigate();
 
   const { page, setPage, setFilters } = useUrlFilters({
     basePath: '/training',
@@ -28,7 +28,7 @@ export function TrainingListPage() {
 
   const { columns: moduleColumns } = useModuleTableColumns({
     onManage: (mod) => {
-      router.push(`/training/${mod.id}`);
+      navigate({ to: `/training/${mod.id}` });
     },
     onToggleActive: (mod) => {
       updateModule({
@@ -60,7 +60,7 @@ export function TrainingListPage() {
         <div className="flex items-center gap-2">
           <Button
             variant="outline"
-            onClick={() => router.push('/training/completions')}
+            onClick={() => navigate({ to: '/training/completions' })}
             className="h-11 border-hairline px-4 text-sm font-semibold"
           >
             <Award className="mr-2 h-4 w-4" />

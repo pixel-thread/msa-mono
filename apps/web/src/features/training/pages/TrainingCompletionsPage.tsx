@@ -1,6 +1,6 @@
 'use client';
 
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useNavigate } from '@tanstack/react-router';
 import { useUrlFilters } from '@src/shared/hooks';
 import { ArrowLeft, Award } from 'lucide-react';
 
@@ -13,7 +13,7 @@ import { useTrainingCompletions } from '../hooks/completions/useTrainingCompleti
 import { useTrainingCompletionsColumns } from '../hooks/completions/useTrainingCompletionsColumns';
 
 export function TrainingCompletionsPage() {
-  const router = useRouter();
+  const navigate = useNavigate();
   const params = useParams();
   const moduleId = params.id as string;
   const { page, setPage } = useUrlFilters({
@@ -41,7 +41,7 @@ export function TrainingCompletionsPage() {
         <p className="text-body mb-6">
           The training module you are trying to access does not exist or has been removed.
         </p>
-        <Button onClick={() => router.push('/training')} className="">
+        <Button onClick={() => navigate({ to: '/training' })} className="">
           Back to Portal
         </Button>
       </div>

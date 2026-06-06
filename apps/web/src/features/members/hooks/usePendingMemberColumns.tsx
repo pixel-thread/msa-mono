@@ -1,5 +1,5 @@
 import { ColumnDef } from '@tanstack/react-table';
-import Link from 'next/link';
+import { Link } from '@tanstack/react-router';
 import { Avatar, AvatarFallback } from '@components/ui/avatar';
 import { getInitials } from '../utils/helper/get-initials';
 import { PendingActionsCell } from '@src/features/members/components/cells/pending-actions-cell';

@@ -10,7 +10,7 @@ import { Card, CardContent } from '@src/shared/components/ui/card';
 import { Button } from '@src/shared/components/ui/button';
 import { SectionHeader } from '@src/shared/components/section-header';
 import { CreditCard, AlertCircle, Receipt, Clock, User } from 'lucide-react';
-import Link from 'next/link';
+import { Link } from '@tanstack/react-router';
 import { formattedAmount } from '@src/shared/utils';
 
 export function UserPaymentsLookupPage() {

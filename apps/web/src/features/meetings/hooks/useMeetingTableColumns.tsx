@@ -1,6 +1,6 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { formatDate } from '@src/shared/utils';
-import Link from 'next/link';
+import { Link } from '@tanstack/react-router';
 import {
   DropdownMenu,
   DropdownMenuContent,

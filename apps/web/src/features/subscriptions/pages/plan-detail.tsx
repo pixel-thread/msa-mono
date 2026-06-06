@@ -1,6 +1,6 @@
 'use client';
 
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useNavigate } from '@tanstack/react-router';
 
 import { usePlans } from '@src/features/subscriptions/hooks/usePlans';
 import { Button } from '@src/shared/components/ui/button';
@@ -14,7 +14,7 @@ import { usePlanVersionColumns } from '../hooks/usePlanVersionColumns';
 
 export function PlanDetailPage() {
   const params = useParams();
-  const router = useRouter();
+  const navigate = useNavigate();
   const planId = params.planId as string;
 
   const { plans, isLoading } = usePlans();
@@ -35,7 +35,7 @@ export function PlanDetailPage() {
         <Button
           variant="outline"
           className="mt-4 h-11 border-hairline bg-canvas px-5 text-sm font-medium text-ink hover:bg-surface-strong"
-          onClick={() => router.back()}
+          onClick={() => window.history.back()}
         >
           Go back
         </Button>

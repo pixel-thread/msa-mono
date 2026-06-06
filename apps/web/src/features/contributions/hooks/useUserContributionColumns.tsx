@@ -5,7 +5,7 @@ import { formatDate, formattedAmount } from '@src/shared/utils';
 import { getMonthName } from '@src/shared/utils/helper/get-month-name';
 import { ContributionStatusBadge } from '../components/contribution-status-badge';
 import type { ContributionPeriod } from '../types';
-import Link from 'next/link';
+import { Link } from '@tanstack/react-router';
 import { Checkbox } from '@components/ui/checkbox';
 import { WaivedContributionCell } from '../components/cells/waived-contribution-cell';
 

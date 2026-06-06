@@ -1,6 +1,6 @@
 'use client';
 
-import { useParams, useRouter, useSearchParams } from 'next/navigation';
+import { useParams, useNavigate, useSearchParams } from '@tanstack/react-router';
 import { useUserContributions } from '@src/features/contributions/hooks/useUserContributions';
 import { Card, CardHeader, CardTitle, CardContent } from '@src/shared/components/ui/card';
 import { Button } from '@src/shared/components/ui/button';
@@ -9,15 +9,15 @@ import { DataTable } from '@src/shared/components/data-table';
 import { DataTableFilters } from '@src/shared/components/data-table-filters';
 import { useUserContributionColumns } from '@src/features/contributions/hooks/useUserContributionColumns';
 import { CalendarDays, CreditCard, AlertCircle, Receipt } from 'lucide-react';
-import Link from 'next/link';
+import { Link } from '@tanstack/react-router';
 import { formattedAmount } from '@src/shared/utils';
 import { DataTablePagination } from '@src/shared/components/data-table-pagination';
 import { useUrlFilters } from '@hooks/use-url-filters';
 
 export function UserContributionsPage() {
   const params = useParams();
-  const search = useSearchParams();
-  const router = useRouter();
+  const [search] = useSearchParams();
+  const navigate = useNavigate();
   const userId = params.userId as string;
 
   const { setPage } = useUrlFilters({
@@ -63,7 +63,7 @@ export function UserContributionsPage() {
         <Button
           variant="outline"
           className="mt-4 h-11 border-hairline bg-canvas px-5 text-sm font-medium text-ink hover:bg-surface-strong"
-          onClick={() => router.back()}
+          onClick={() => window.history.back()}
         >
           Go back
         </Button>

@@ -3,7 +3,7 @@ import { Badge } from '@src/shared/components/ui/badge';
 import { Button } from '@src/shared/components/ui/button';
 import { formatDate } from '@src/shared/utils/format';
 import type { LedgerEntryResponse } from './useLedgerEntries';
-import Link from 'next/link';
+import { Link } from '@tanstack/react-router';
 
 interface UseLedgerEntriesColumnsOptions {
   onViewDetails?: (entry: LedgerEntryResponse) => void;

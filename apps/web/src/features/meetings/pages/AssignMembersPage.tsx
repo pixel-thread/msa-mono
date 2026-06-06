@@ -1,6 +1,6 @@
 'use client';
 
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
 import { useMeetingDetail } from '@feature/meetings/hooks/useMeetingDetail';
 import { useMeetingAttendees } from '@feature/meetings/hooks/useMeetingAttendees';
@@ -37,7 +37,7 @@ interface AttendeeRow {
  */
 export function AssignMembersPage() {
   const params = useParams();
-  const router = useRouter();
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const meetingId = params.meetingId as string;
   const [search, setSearch] = useState('');
@@ -119,7 +119,7 @@ export function AssignMembersPage() {
         <Button
           variant="outline"
           className="mt-4 h-11 border-hairline bg-canvas px-5 text-sm font-medium text-ink hover:bg-surface-strong"
-          onClick={() => router.back()}
+          onClick={() => window.history.back()}
         >
           Go back
         </Button>

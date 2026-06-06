@@ -1,6 +1,6 @@
 'use client';
 
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useNavigate } from '@tanstack/react-router';
 import { useLedgerAccount } from '../hooks/useLedgerAccount';
 import { useLedgerEntries } from '../hooks/useLedgerEntries';
 import { Card, CardContent, CardHeader, CardTitle } from '@src/shared/components/ui/card';
@@ -20,7 +20,7 @@ import { useLedgerEntriesColumns } from '../hooks/useLedgerEntriesColumns';
 
 export default function LedgerAccountDetailPage() {
   const params = useParams();
-  const router = useRouter();
+  const navigate = useNavigate();
   const accountId = params?.id as string;
 
   const { account, isLoading: accountLoading } = useLedgerAccount(accountId);
@@ -52,7 +52,7 @@ export default function LedgerAccountDetailPage() {
       <SectionHeader
         title={`${account.code} - ${account.name}`}
         description={account.description || `Account details and report for ${account.name}`}
-        onBackClick={() => router.push('/ledger/accounts')}
+        onBackClick={() => navigate({ to: '/ledger/accounts' })}
       />
 
       <div className="grid gap-4 md:grid-cols-3">

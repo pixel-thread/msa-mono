@@ -1,6 +1,6 @@
 'use client';
 
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
 
 import { useAnnouncement } from '@src/features/announcement/hooks/useAnnouncement';
@@ -32,7 +32,7 @@ const statusVariants: Record<string, 'default' | 'secondary' | 'outline'> = {
 
 export default function AnnouncementDetailPage() {
   const params = useParams();
-  const router = useRouter();
+  const navigate = useNavigate();
   const announcementId = params.announcementId as string;
   const [editOpen, setEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
@@ -43,7 +43,7 @@ export default function AnnouncementDetailPage() {
 
   const handleDeleteConfirm = () => {
     deleteAnnouncement.mutate(announcementId, {
-      onSuccess: () => router.push('/announcement'),
+      onSuccess: () => navigate({ to: '/announcement' }),
     });
   };
 
@@ -62,7 +62,7 @@ export default function AnnouncementDetailPage() {
         <Button
           variant="outline"
           className="mt-4 h-11 border-hairline bg-canvas px-5 text-sm font-medium text-ink hover:bg-surface-strong"
-          onClick={() => router.back()}
+          onClick={() => window.history.back()}
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
           Go back

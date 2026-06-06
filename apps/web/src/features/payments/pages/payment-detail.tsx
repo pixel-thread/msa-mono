@@ -1,19 +1,19 @@
 'use client';
 
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useNavigate } from '@tanstack/react-router';
 import { usePaymentDetail } from '@src/features/payments/hooks/usePaymentDetail';
 import { Button } from '@src/shared/components/ui/button';
 import { SectionHeader } from '@src/shared/components/section-header';
 import { Card, CardHeader, CardTitle, CardContent } from '@src/shared/components/ui/card';
 import { Separator } from '@src/shared/components/ui/separator';
 import { User, CreditCard } from 'lucide-react';
-import Link from 'next/link';
+import { Link } from '@tanstack/react-router';
 import { getStatusBadge } from '@src/shared/utils/helper/get-status-badge';
 import { formatDate, formattedAmount } from '@src/shared/utils';
 
 export function PaymentDetailPage() {
   const params = useParams();
-  const router = useRouter();
+  const navigate = useNavigate();
   const paymentId = params.paymentId as string;
 
   const { payment, isLoading } = usePaymentDetail(paymentId);
@@ -33,7 +33,7 @@ export function PaymentDetailPage() {
         <Button
           variant="outline"
           className="mt-4 h-11 border-hairline bg-canvas px-5 text-sm font-medium text-ink hover:bg-surface-strong"
-          onClick={() => router.back()}
+          onClick={() => window.history.back()}
         >
           Go back
         </Button>

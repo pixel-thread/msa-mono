@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useNavigate } from '@tanstack/react-router';
 import { useUrlFilters } from '@src/shared/hooks';
 import { Award, ArrowLeft } from 'lucide-react';
 
@@ -11,7 +11,7 @@ import { DataTableFilters } from '@src/shared/components/data-table-filters';
 import { useTrainingCompletionsColumns, useTrainingCompletions } from '../hooks';
 
 export function TrainingAllCompletionsPage() {
-  const router = useRouter();
+  const navigate = useNavigate();
   const { page, setPage } = useUrlFilters({
     basePath: '/training/completions',
   });
@@ -29,7 +29,7 @@ export function TrainingAllCompletionsPage() {
           variant="ghost"
           size="icon"
           className="h-9 w-9"
-          onClick={() => router.push('/training')}
+          onClick={() => navigate({ to: '/training' })}
         >
           <ArrowLeft className="h-5 w-5" />
         </Button>

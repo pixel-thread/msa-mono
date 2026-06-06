@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useNavigate } from '@tanstack/react-router';
 import {
   Clock,
   Users,
@@ -46,7 +46,7 @@ import { DataTablePagination } from '@src/shared/components/data-table-paginatio
 import { useUrlFilters } from '@hooks/use-url-filters';
 
 export function TrainingDetailPage() {
-  const router = useRouter();
+  const navigate = useNavigate();
   const params = useParams();
 
   const moduleId = (params.moduleId as string) || (params.id as string);
@@ -128,7 +128,7 @@ export function TrainingDetailPage() {
         <p className="text-body mb-6">
           The training module you are trying to access does not exist or has been removed.
         </p>
-        <Button onClick={() => router.push('/training')} className="">
+        <Button onClick={() => navigate({ to: '/training' })} className="">
           Back to Portal
         </Button>
       </div>
@@ -350,7 +350,7 @@ export function TrainingDetailPage() {
               {assignedUsers.length} user{assignedUsers.length !== 1 ? 's' : ''} assigned
             </div>
             <Button
-              onClick={() => router.push(`/training/${moduleId}/assign`)}
+              onClick={() => navigate({ to: `/training/${moduleId}/assign` })}
               variant="outline"
               className="h-10 border-hairline px-4 text-sm font-semibold flex items-center gap-2 hover:bg-canvas/50"
             >
@@ -403,7 +403,7 @@ export function TrainingDetailPage() {
             <Button
               variant="outline"
               className="h-10 border-hairline px-4 text-sm font-semibold flex items-center gap-2 hover:bg-canvas/50"
-              onClick={() => router.push(`/training/${moduleId}/completions`)}
+              onClick={() => navigate({ to: `/training/${moduleId}/completions`) })}
             >
               <Award className="mr-1.5 h-4 w-4" />
               View All

@@ -11,7 +11,7 @@ import {
 import { Button } from '@src/shared/components/ui/button';
 import { MoreHorizontal, Settings, ToggleLeft, ToggleRight } from 'lucide-react';
 import type { TrainingModuleListItem } from '../types';
-import Link from 'next/link';
+import { Link } from '@tanstack/react-router';
 
 export const useModuleTableColumns = (options: {
   onManage: (module: TrainingModuleListItem) => void;

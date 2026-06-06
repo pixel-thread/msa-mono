@@ -3,7 +3,7 @@ import type { Account } from '@src/shared/types';
 import { DeleteAccountCell } from '../components/account/cell/delete-cell';
 import { Button } from '@src/shared/components/ui/button';
 import { Edit2 } from 'lucide-react';
-import Link from 'next/link';
+import { Link } from '@tanstack/react-router';
 
 export function useLedgerAccountColumns(onEdit: (account: Account) => void) {
   const columns: ColumnDef<Account>[] = [

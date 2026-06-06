@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
+import { useNavigate } from '@tanstack/react-router';
 import { useUrlFilters } from '@src/shared/hooks';
 import { DataTable } from '@src/shared/components/data-table';
 import { Button } from '@src/shared/components/ui/button';
@@ -15,7 +15,7 @@ import { Plus } from 'lucide-react';
 import { DataTablePagination } from '@src/shared/components/data-table-pagination';
 
 export default function LedgerEntriesPage() {
-  const router = useRouter();
+  const navigate = useNavigate();
   const { page, setPage } = useUrlFilters({ basePath: '/ledger/entries' });
 
   const [createOpen, setCreateOpen] = useState(false);
@@ -34,9 +34,9 @@ export default function LedgerEntriesPage() {
 
   const handleViewDetails = useCallback(
     (entry: LedgerEntryResponse) => {
-      router.push(`/ledger/entries/${entry.id}`);
+      navigate({ to: `/ledger/entries/${entry.id}` });
     },
-    [router],
+    [navigate],
   );
 
   const handleApprove = useCallback((entry: LedgerEntryResponse) => {

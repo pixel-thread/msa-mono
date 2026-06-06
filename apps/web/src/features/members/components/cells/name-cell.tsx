@@ -1,7 +1,7 @@
 'use client';
 
 import { Avatar, AvatarFallback } from '@src/shared/components/ui/avatar';
-import Link from 'next/link';
+import { Link } from '@tanstack/react-router';
 import { getInitials } from '@src/features/members/utils/helper/get-initials';
 import type { User } from '@src/shared/types';
 

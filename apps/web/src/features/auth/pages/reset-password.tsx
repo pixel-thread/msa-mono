@@ -32,7 +32,7 @@ import { useResetPassword } from '@feature/auth/hooks';
  * Validates the new password using Zod and handles success/error states.
  */
 export function ResetPasswordPage() {
-  const searchParams = useSearchParams();
+  const [searchParams] = useSearchParams();
   const token = searchParams.get('token');
   const [isSuccess, setIsSuccess] = useState(false);
   const resetPasswordMutation = useResetPassword();

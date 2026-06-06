@@ -1,6 +1,6 @@
 'use client';
 
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
 import { useMeetingDetail } from '@feature/meetings/hooks/useMeetingDetail';
 import {
@@ -18,7 +18,7 @@ import { useMeetingMinutesColumns } from '@feature/meetings/hooks/useMeetingMinu
 import { Button } from '@components/ui/button';
 import { SectionHeader } from '@components/section-header';
 import { FileText, Plus } from 'lucide-react';
-import Link from 'next/link';
+import { Link } from '@tanstack/react-router';
 import type {
   CreateMeetingMinuteInput,
   UpdateMeetingMinuteInput,
@@ -30,7 +30,7 @@ import type {
  */
 export function MeetingMinutesPage() {
   const params = useParams();
-  const router = useRouter();
+  const navigate = useNavigate();
   const meetingId = params.meetingId as string;
 
   const [createOpen, setCreateOpen] = useState(false);
@@ -88,7 +88,7 @@ export function MeetingMinutesPage() {
         <Button
           variant="outline"
           className="mt-4 h-11 border-hairline bg-canvas px-5 text-sm font-medium text-ink hover:bg-surface-strong"
-          onClick={() => router.back()}
+          onClick={() => window.history.back()}
         >
           Go back
         </Button>

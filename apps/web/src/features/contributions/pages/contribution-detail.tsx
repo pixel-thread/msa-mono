@@ -1,6 +1,6 @@
 'use client';
 
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useNavigate } from '@tanstack/react-router';
 import { useContributionDetail } from '@src/features/contributions/hooks/useContributionDetail';
 import { Button } from '@src/shared/components/ui/button';
 import { SectionHeader } from '@src/shared/components/section-header';
@@ -9,7 +9,7 @@ import { ArrowLeft } from 'lucide-react';
 
 export function ContributionDetailPage() {
   const params = useParams();
-  const router = useRouter();
+  const navigate = useNavigate();
   const contributionId = params.contributionId as string;
 
   const { contribution, isLoading } = useContributionDetail(contributionId);
@@ -29,7 +29,7 @@ export function ContributionDetailPage() {
         <Button
           variant="outline"
           className="mt-4 h-11 border-hairline bg-canvas px-5 text-sm font-medium text-ink hover:bg-surface-strong"
-          onClick={() => router.back()}
+          onClick={() => window.history.back()}
         >
           Go back
         </Button>
@@ -50,7 +50,7 @@ export function ContributionDetailPage() {
       <ContributionDetail contribution={contribution} />
 
       <div className="mt-4">
-        <Button variant="outline" onClick={() => router.back()}>
+        <Button variant="outline" onClick={() => window.history.back()}>
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back
         </Button>

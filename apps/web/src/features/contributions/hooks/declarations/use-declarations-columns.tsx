@@ -5,7 +5,7 @@ import { Badge } from '@src/shared/components/ui/badge';
 import { Button } from '@src/shared/components/ui/button';
 import { formatDate } from '@src/shared/utils';
 import type { Declaration } from '../../types';
-import Link from 'next/link';
+import { Link } from '@tanstack/react-router';
 
 const statusBadgeVariant: Record<string, 'default' | 'secondary' | 'destructive' | 'outline'> = {
   APPROVED: 'default',

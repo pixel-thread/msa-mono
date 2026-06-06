@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useNavigate } from '@tanstack/react-router';
 import { useLedgerEntries } from '../hooks/useLedgerEntries';
 import { useLedgerAccounts } from '../hooks/useLedgerAccounts';
 import { useApproveEntry } from '../hooks/useApproveEntry';
@@ -19,7 +19,7 @@ import { Loading } from '@components/loading';
 
 export default function LedgerEntryDetailPage() {
   const params = useParams();
-  const router = useRouter();
+  const navigate = useNavigate();
   const entryId = params?.entryId as string;
 
   const { entries, isLoading: entriesLoading } = useLedgerEntries({
@@ -49,7 +49,7 @@ export default function LedgerEntryDetailPage() {
     return (
       <div className="flex flex-col items-center justify-center py-20 gap-4">
         <p className="text-lg text-muted-foreground">Entry not found</p>
-        <Button variant="outline" onClick={() => router.push('/ledger/entries')}>
+        <Button variant="outline" onClick={() => navigate({ to: '/ledger/entries' })}>
           <ArrowLeftIcon className="h-4 w-4 mr-2" />
           Back to Entries
         </Button>
@@ -85,7 +85,7 @@ export default function LedgerEntryDetailPage() {
       <SectionHeader
         title="Entry Details"
         description={entry.description}
-        onBackClick={() => router.push('/ledger/entries')}
+        onBackClick={() => navigate({ to: '/ledger/entries' })}
       >
         <Badge variant={statusVariant as 'default' | 'secondary' | 'destructive' | 'outline'}>
           {entry.approvalStatus}

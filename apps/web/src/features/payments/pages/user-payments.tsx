@@ -1,6 +1,6 @@
 'use client';
 
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useNavigate } from '@tanstack/react-router';
 import { useUrlFilters } from '@src/shared/hooks';
 import { useUserPayments } from '@src/features/payments/hooks/useUserPayments';
 import { DataTable } from '@src/shared/components/data-table';
@@ -13,11 +13,11 @@ import { Separator } from '@src/shared/components/ui/separator';
 import { Button } from '@src/shared/components/ui/button';
 import { SectionHeader } from '@src/shared/components/section-header';
 import { CreditCard, Clock, AlertCircle, Receipt } from 'lucide-react';
-import Link from 'next/link';
+import { Link } from '@tanstack/react-router';
 
 export function UserPaymentsPage() {
   const params = useParams();
-  const router = useRouter();
+  const navigate = useNavigate();
   const userId = params.userId as string;
   const { page, setPage } = useUrlFilters({
     basePath: `/payments/users/${userId}`,
@@ -53,7 +53,7 @@ export function UserPaymentsPage() {
         <Button
           variant="outline"
           className="mt-4 h-11 border-hairline bg-canvas px-5 text-sm font-medium text-ink hover:bg-surface-strong"
-          onClick={() => router.back()}
+          onClick={() => window.history.back()}
         >
           Go back
         </Button>

@@ -1,6 +1,6 @@
 'use client';
 import { ColumnDef } from '@tanstack/react-table';
-import Link from 'next/link';
+import { Link } from '@tanstack/react-router';
 import { Badge } from '@src/shared/components/ui/badge';
 import { formatDate, formattedAmount } from '@src/shared/utils';
 import { getMethodBadge } from '@src/shared/utils/helper/get-method-badge';
