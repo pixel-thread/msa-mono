@@ -249,23 +249,12 @@ export async function generateUserContributions(
       });
 
       if (existingContribution) {
-        await prisma.contributionPeriod.update({
-          where: {
-            id: existingContribution.id,
-          },
-          data: {
-            associationId: contributionData.associationId,
-            expectedAmount: contributionData.expectedAmount,
-            dueAmount: contributionData.dueAmount,
-            status: contributionData.status,
-            dueDate: contributionData.dueDate,
-          },
-        });
-      } else {
-        await prisma.contributionPeriod.create({
-          data: contributionData,
-        });
+        continue;
       }
+
+      await prisma.contributionPeriod.create({
+        data: contributionData,
+      });
 
       totalProcessed++;
     }
