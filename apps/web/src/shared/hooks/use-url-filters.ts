@@ -32,7 +32,7 @@ export function useUrlFilters(options: UseUrlFiltersOptions = {}): UseUrlFilters
   const doNavigate = useCallback(
     (params: URLSearchParams) => {
       const href = `${resolvedPath}?${params.toString()}`;
-      navigate({ to: href, replace: mode === 'replace' });
+      navigate({ to: href, replace: mode === 'replace', resetScroll: false });
     },
     [resolvedPath, navigate, mode],
   );
