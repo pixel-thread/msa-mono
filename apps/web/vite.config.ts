@@ -1,11 +1,42 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import { TanStackRouterVite } from '@tanstack/router-plugin/vite';
+import { tanstackRouter } from '@tanstack/router-plugin/vite';
 import path from 'path';
 
 export default defineConfig({
+  server: {
+    host: true,
+    port: 3000,
+    strictPort: true,
+  },
+  preview: {
+    host: true,
+    port: 4173,
+    strictPort: true,
+  },
+  build: {
+    reportCompressedSize: true,
+    target: 'es2022',
+    outDir: 'dist',
+    assetsDir: 'assets',
+    sourcemap: false,
+    minify: 'esbuild',
+    chunkSizeWarningLimit: 1000,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          react: ['react', 'react-dom'],
+
+          tanstack: ['@tanstack/react-query', '@tanstack/react-router'],
+        },
+      },
+    },
+  },
   plugins: [
-    TanStackRouterVite({ target: 'react', autoCodeSplitting: true }),
+    tanstackRouter({
+      target: 'react',
+      autoCodeSplitting: true,
+    }),
     react(),
   ],
   resolve: {
@@ -23,5 +54,5 @@ export default defineConfig({
       '@validator': path.resolve(__dirname, './src/shared/validators'),
     },
   },
-  envPrefix: ['NEXT_PUBLIC_', 'VITE_'],
+  envPrefix: ['VITE_', 'NEXT_PUBLIC_'],
 });
