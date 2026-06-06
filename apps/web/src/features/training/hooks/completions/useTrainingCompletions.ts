@@ -2,15 +2,16 @@
 
 import { useQuery } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
-import { trainingEndpoints, trainingQueryKeys } from '../../utils/constants';
+import { ENDPOINTS, buildUrlWithQuery } from '@repo/shared';
+import { trainingQueryKeys } from '../../utils/constants';
 import type { TrainingCompletionItem } from '../../types';
 
 export function useTrainingCompletions(moduleId: string | null, options: { page?: number } = {}) {
   const { page = 1 } = options;
 
   const url = !!moduleId
-    ? `${trainingEndpoints.completions.byId(moduleId)}?page=${page}`
-    : `${trainingEndpoints.completions.all()}?page=${page}`;
+    ? buildUrlWithQuery(ENDPOINTS.TRAINING.MODULE_COMPLETE(moduleId), { page })
+    : buildUrlWithQuery(ENDPOINTS.TRAINING.COMPLETIONS, { page });
 
   const queryKey = !!moduleId
     ? trainingQueryKeys.completions.byModule(moduleId, page)

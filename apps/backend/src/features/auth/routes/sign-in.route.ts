@@ -37,6 +37,15 @@ export const postSignIn: RequestHandler[] = [
     const traceId = (req.traceId as string) || '';
     logger.info({ traceId }, 'POST /api/auth/sign-in - Request started');
     const user = await getUserFirst({ where: { email: req.body?.email } });
+    // check origin
+    let isMobile = false;
+
+    const origin = req.headers.origin;
+    const deviceType = req.headers['x-device-type'];
+
+    if (deviceType === 'mobile' && !origin) {
+      isMobile = true;
+    }
 
     // ---- Handle invalid credentials ----
     if (!user) {
@@ -148,7 +157,7 @@ export const postSignIn: RequestHandler[] = [
       );
       return success(res, {
         message: 'MFA verification required',
-        data: { tempToken: mfaTempToken, mfaRequired: true },
+        data: isMobile ? null : { tempToken: mfaTempToken, mfaRequired: true },
       });
     }
 
@@ -186,7 +195,7 @@ export const postSignIn: RequestHandler[] = [
 
     return success(res, {
       message: 'Signed in successfully',
-      data: { access_token: accessToken, refresh_token: refreshToken },
+      data: isMobile ? null : { access_token: accessToken, refresh_token: refreshToken },
     });
   }),
 ];

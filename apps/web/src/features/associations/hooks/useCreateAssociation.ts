@@ -3,13 +3,13 @@ import http from '@src/shared/utils/http';
 import { QUERY_KEYS } from '@repo/shared';
 import { toast } from 'sonner';
 import type { CreateAssociationInput } from '../validators';
-import { associationsEndpoints } from '../utils/constants/endpoints';
+import { ENDPOINTS } from '@repo/shared';
 
 export function useCreateAssociation() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: CreateAssociationInput) => http.post(associationsEndpoints.base, data),
+    mutationFn: (data: CreateAssociationInput) => http.post(ENDPOINTS.ASSOCIATIONS.ROOT, data),
     onSuccess: (data) => {
       if (data.success) {
         toast.success('Association created successfully');

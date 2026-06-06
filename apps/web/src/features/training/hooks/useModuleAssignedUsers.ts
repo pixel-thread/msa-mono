@@ -1,7 +1,8 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
 import { toast } from 'sonner';
-import { trainingEndpoints, trainingQueryKeys } from '../utils/constants';
+import { ENDPOINTS, buildUrlWithQuery } from '@repo/shared';
+import { trainingQueryKeys } from '../utils/constants';
 import type { AssignedUserWithCompletion } from '../types';
 
 export function useModuleAssignedUsers(moduleId: string | null, page?: number) {
@@ -10,7 +11,7 @@ export function useModuleAssignedUsers(moduleId: string | null, page?: number) {
   const { data, isLoading, refetch } = useQuery({
     queryKey: trainingQueryKeys.assignedUsers.all(moduleId, page),
     queryFn: async () =>
-      http.get<AssignedUserWithCompletion[]>(trainingEndpoints.assignedUsers.list(moduleId!, page)),
+      http.get<AssignedUserWithCompletion[]>(buildUrlWithQuery(ENDPOINTS.TRAINING.MODULE_ASSIGNED_USERS(moduleId!), { page })),
     enabled: !!moduleId,
   });
 
@@ -35,10 +36,10 @@ export function useModuleAssignedUsers(moduleId: string | null, page?: number) {
         const formData = new FormData();
         formData.append('file', certificateFile);
         formData.append('metadata', JSON.stringify(metadata));
-        return http.post(trainingEndpoints.assignedUsers.complete(moduleId!, userId), formData);
+        return http.post(ENDPOINTS.TRAINING.MODULE_COMPLETE_USER(moduleId!, userId), formData);
       }
 
-      return http.post(trainingEndpoints.assignedUsers.complete(moduleId!, userId), metadata);
+      return http.post(ENDPOINTS.TRAINING.MODULE_COMPLETE_USER(moduleId!, userId), metadata);
     },
     onSuccess: (res) => {
       if (res.success) {

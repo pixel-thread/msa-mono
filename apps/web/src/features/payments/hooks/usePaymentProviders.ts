@@ -4,12 +4,12 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
 import { QUERY_KEYS } from '@repo/shared';
 import { ProviderResponse } from '../types';
-import { paymentEndpoints } from '../utils/constants/endpoints';
+import { ENDPOINTS } from '@repo/shared';
 
 export function usePaymentProviders() {
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: QUERY_KEYS.PAYMENTS_KEYS.PROVIDERS(),
-    queryFn: () => http.get<ProviderResponse[]>(paymentEndpoints.providers),
+    queryFn: () => http.get<ProviderResponse[]>(ENDPOINTS.PAYMENTS.PROVIDERS.LIST),
   });
 
   return {
@@ -23,7 +23,7 @@ export function usePaymentProviders() {
 export function useProviderDetail(providerId: string | undefined) {
   const { data, isLoading, error, refetch } = useQuery({
         queryKey: QUERY_KEYS.PAYMENTS_KEYS.PROVIDER(providerId),
-    queryFn: () => http.get<ProviderResponse>(paymentEndpoints.providerById(providerId!)),
+    queryFn: () => http.get<ProviderResponse>(ENDPOINTS.PAYMENTS.PROVIDERS.DETAIL(providerId!)),
     enabled: !!providerId,
   });
 
@@ -45,7 +45,7 @@ export function useCreateProvider() {
       keySecret: string;
       webhookSecret?: string;
       isActive?: boolean;
-    }) => http.post(paymentEndpoints.providers, input),
+    }) => http.post(ENDPOINTS.PAYMENTS.PROVIDERS.LIST, input),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.PAYMENTS_KEYS.PROVIDERS() });
     },
@@ -61,7 +61,7 @@ export function useUpdateProvider(providerId: string) {
       keySecret?: string;
       webhookSecret?: string;
       isActive?: boolean;
-    }) => http.patch(paymentEndpoints.providerById(providerId), input),
+    }) => http.patch(ENDPOINTS.PAYMENTS.PROVIDERS.DETAIL(providerId), input),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.PAYMENTS_KEYS.PROVIDERS() });
       queryClient.invalidateQueries({
@@ -75,7 +75,7 @@ export function useDeleteProvider() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (providerId: string) => http.delete(paymentEndpoints.providerById(providerId)),
+    mutationFn: (providerId: string) => http.delete(ENDPOINTS.PAYMENTS.PROVIDERS.DETAIL(providerId)),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.PAYMENTS_KEYS.PROVIDERS() });
     },

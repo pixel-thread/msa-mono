@@ -1,13 +1,12 @@
 import http from '@src/shared/utils/http';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { QUERY_KEYS } from '@repo/shared';
+import { ENDPOINTS, QUERY_KEYS } from '@repo/shared';
 import { toast } from 'sonner';
-import { paymentEndpoints } from '../utils/constants/endpoints';
 
 export function useActivatePaymentProvider() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (providerId: string) => http.post(paymentEndpoints.activateProvider(providerId), {}),
+    mutationFn: (providerId: string) => http.post(ENDPOINTS.PAYMENTS.PROVIDERS.ACTIVATE(providerId), {}),
     onSuccess: (data) => {
       if (data.success) {
         toast.success(data.message);

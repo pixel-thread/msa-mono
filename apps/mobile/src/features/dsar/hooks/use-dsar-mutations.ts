@@ -1,7 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
-import { dsarEndpoints } from '../utils/constants';
-import { QUERY_KEYS } from '@repo/shared';
+import { ENDPOINTS, QUERY_KEYS } from '@repo/shared';
 import { toast } from 'sonner-native';
 import { DSARRequest, DSARResponsePayload } from '../types/dsar.types';
 import { DSARSubmitFormData } from '../validators/dsar.validator';
@@ -15,7 +14,7 @@ export const useSubmitDSAR = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (data: DSARSubmitFormData) => 
-      http.post<DSARRequest>(dsarEndpoints.submit, data),
+      http.post<DSARRequest>(ENDPOINTS.DSAR.SUBMIT, data),
     onSuccess: (data) => {
       if (data.success) {
         queryClient.invalidateQueries({ queryKey: QUERY_KEYS.DSAR_KEYS.MY() });
@@ -40,7 +39,7 @@ export const useRespondToDSAR = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: ({ ticketId, payload }: { ticketId: string; payload: DSARResponsePayload }) =>
-      http.post<DSARRequest>(dsarEndpoints.respond(ticketId), payload),
+      http.post<DSARRequest>(ENDPOINTS.DSAR.RESPOND(ticketId), payload),
     onSuccess: (data) => {
       if (data.success) {
         queryClient.invalidateQueries({ queryKey: QUERY_KEYS.DSAR_KEYS.ALL() });
@@ -65,7 +64,7 @@ export const useAssignDSAR = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: ({ ticketId, assignedToId }: { ticketId: string; assignedToId: string }) =>
-      http.patch<DSARRequest>(dsarEndpoints.assign(ticketId), { assignedToId }),
+      http.patch<DSARRequest>(ENDPOINTS.DSAR.ASSIGN(ticketId), { assignedToId }),
     onSuccess: (data) => {
       if (data.success) {
         queryClient.invalidateQueries({ queryKey: QUERY_KEYS.DSAR_KEYS.ALL() });
@@ -90,7 +89,7 @@ export const useCancelDSAR = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (ticketId: string) =>
-      http.post<DSARRequest>(dsarEndpoints.cancel(ticketId)),
+      http.post<DSARRequest>(`/dsar/my/${ticketId}/cancel`),
     onSuccess: (data) => {
       if (data.success) {
         queryClient.invalidateQueries({ queryKey: QUERY_KEYS.DSAR_KEYS.MY() });

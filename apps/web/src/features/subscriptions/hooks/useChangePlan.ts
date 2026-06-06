@@ -1,8 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
-import { QUERY_KEYS } from '@repo/shared';
+import { ENDPOINTS, QUERY_KEYS } from '@repo/shared';
 import { toast } from 'sonner';
-import { subscriptionEndpoints } from '../utils/constants/endpoints';
 
 interface ChangePlanData {
   planId: string;
@@ -14,7 +13,7 @@ export function useChangePlan() {
 
   return useMutation({
     mutationFn: ({ planId, userId }: ChangePlanData) =>
-      http.post(subscriptionEndpoints.upgrade, { planId, userId }),
+      http.post(ENDPOINTS.SUBSCRIPTIONS.UPGRADE, { planId, userId }),
     onSuccess: (data, variables) => {
       const { userId } = variables;
       if (data.success) {

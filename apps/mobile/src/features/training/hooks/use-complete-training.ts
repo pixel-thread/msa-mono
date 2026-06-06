@@ -1,8 +1,7 @@
 import http from '@src/shared/utils/http';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { CompleteTrainingInput } from '../types';
-import { trainingEndpoints } from '../utils/constants';
-import { QUERY_KEYS } from '@repo/shared';
+import { QUERY_KEYS, ENDPOINTS } from '@repo/shared';
 import { toast } from 'sonner-native';
 
 type Props = {
@@ -13,7 +12,7 @@ export const useCompleteTraining = ({ moduleId }: Props) => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (data?: CompleteTrainingInput) =>
-      http.post(trainingEndpoints.complete(moduleId), data),
+      http.post(ENDPOINTS.TRAINING.MODULE_COMPLETE(moduleId), data),
     onSuccess: (data) => {
       if (data.success) {
         toast.success(data.message);

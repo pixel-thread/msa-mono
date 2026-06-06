@@ -1,15 +1,14 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
-import { QUERY_KEYS } from '@repo/shared';
+import { ENDPOINTS, QUERY_KEYS } from '@repo/shared';
 import { toast } from 'sonner';
-import { dsarEndpoints } from '../utils/constants/endpoints';
 
 export function useRejectDsarTicket() {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: ({ id, reason }: { id: string; reason: string }) =>
-      http.post(dsarEndpoints.reject(id), { reason }),
+      http.post(ENDPOINTS.DSAR.REJECT(id), { reason }),
     onSuccess: (response) => {
       if ((response as { success: boolean }).success) {
         toast.success('DSAR ticket rejected');

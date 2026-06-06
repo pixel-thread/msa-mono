@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
+import { ENDPOINTS, buildUrlWithQuery } from '@repo/shared';
 import { UserPaymentData } from '../types';
-import { paymentEndpoints } from '../utils/constants/endpoints';
 
 interface UseUserPaymentsOptions {
   userId: string;
@@ -13,7 +13,7 @@ export function useUserPayments(options: UseUserPaymentsOptions) {
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ['user-payments', userId, page],
-    queryFn: () => http.get<UserPaymentData>(paymentEndpoints.userPayments(userId, page)),
+    queryFn: () => http.get<UserPaymentData>(buildUrlWithQuery(ENDPOINTS.PAYMENTS.USERS.BY_ID(userId), { page })),
     enabled: !!userId,
   });
 

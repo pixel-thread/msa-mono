@@ -1,10 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
-import { QUERY_KEYS } from '@repo/shared';
+import { ENDPOINTS, QUERY_KEYS } from '@repo/shared';
 import type { DsarTicketRecord } from '../types';
 import type { ApiResponse } from '@src/shared/utils/http';
 import type { PaginationMeta } from '@src/shared/types/api.types';
-import { dsarEndpoints } from '../utils/constants/endpoints';
 
 interface UseDsarTicketsOptions {
   page?: number;
@@ -24,7 +23,7 @@ export function useDsarTickets(options?: UseDsarTicketsOptions) {
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: QUERY_KEYS.DSAR_KEYS.TICKETS(options),
-    queryFn: async () => http.get<DsarTicketRecord[]>(`${dsarEndpoints.base}${qs ? `?${qs}` : ''}`),
+    queryFn: async () => http.get<DsarTicketRecord[]>(`${ENDPOINTS.DSAR.LIST}${qs ? `?${qs}` : ''}`),
   });
 
   return {

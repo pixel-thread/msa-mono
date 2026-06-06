@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
 import { toast } from 'sonner-native';
-import { authEndpoints } from '../utils/constants/endpoints';
+import { ENDPOINTS } from '@repo/shared';
 
 /**
  * Resends the MFA verification code during sign-in authentication.
@@ -56,7 +56,7 @@ import { authEndpoints } from '../utils/constants/endpoints';
  */
 export const useResendSignInVerifyCode = () => {
   return useMutation({
-    mutationFn: () => http.post(authEndpoints.resendSignInVerifyCode),
+    mutationFn: () => http.post(ENDPOINTS.AUTH.SIGNIN_RESEND),
     onSuccess: (response) => {
       if (response.success) {
         toast.success(response.message);

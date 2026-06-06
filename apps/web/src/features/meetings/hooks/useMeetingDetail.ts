@@ -1,7 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
-import { QUERY_KEYS } from '@repo/shared';
-import { meetingsEndpoints } from '../utils/constants/endpoints';
+import { ENDPOINTS, QUERY_KEYS } from '@repo/shared';
 
 export interface Attendee {
   id: string;
@@ -44,7 +43,7 @@ export function useMeetingDetail(meetingId: string) {
   const { data, isLoading, error } = useQuery<MeetingDetail>({
     queryKey: QUERY_KEYS.MEETINGS_KEYS.DETAIL(meetingId),
     queryFn: async () => {
-      const res = await http.get<MeetingDetail>(meetingsEndpoints.byId(meetingId));
+      const res = await http.get<MeetingDetail>(ENDPOINTS.MEETINGS.DETAIL(meetingId));
       if (!res.success || !res.data) {
         throw new Error(res.message || 'Failed to fetch meeting');
       }

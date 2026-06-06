@@ -3,14 +3,14 @@ import http from '@src/shared/utils/http';
 import { QUERY_KEYS } from '@repo/shared';
 import { toast } from 'sonner';
 import type { UpdateAnnouncementInput } from '../validators';
-import { announcementEndpoints } from '../utils/constants/endpoints';
+import { ENDPOINTS } from '@repo/shared';
 
 export function useUpdateAnnouncement() {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: ({ id, data }: { id: string; data: UpdateAnnouncementInput }) =>
-      http.put(announcementEndpoints.byId(id), data),
+      http.put(ENDPOINTS.ANNOUNCEMENTS.DETAILS(id), data),
     onSuccess: (data) => {
       if (data.success) {
         toast.success('Announcement updated successfully');

@@ -1,7 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
-import { dsarEndpoints } from '../utils/constants';
-import { QUERY_KEYS } from '@repo/shared';
+import { ENDPOINTS, QUERY_KEYS } from '@repo/shared';
 import { DSARRequest, DSARRequestDetail, SLAReport } from '../types/dsar.types';
 
 /**
@@ -12,7 +11,7 @@ import { DSARRequest, DSARRequestDetail, SLAReport } from '../types/dsar.types';
 export const useMyDSARRequests = () => {
   return useQuery({
     queryKey: QUERY_KEYS.DSAR_KEYS.MY(),
-    queryFn: () => http.get<DSARRequest[]>(dsarEndpoints.my),
+    queryFn: () => http.get<DSARRequest[]>(ENDPOINTS.DSAR.MY_LIST),
     select: (data) => data.data,
   });
 };
@@ -26,7 +25,7 @@ export const useMyDSARRequests = () => {
 export const useAllDSARRequests = (params?: Record<string, any>) => {
   return useQuery({
     queryKey: QUERY_KEYS.DSAR_KEYS.TICKETS(params),
-    queryFn: () => http.get<DSARRequest[]>(dsarEndpoints.list, { params }),
+    queryFn: () => http.get<DSARRequest[]>(ENDPOINTS.DSAR.LIST, { params }),
     select: (data) => data.data,
   });
 };
@@ -40,7 +39,7 @@ export const useAllDSARRequests = (params?: Record<string, any>) => {
 export const useDSARDetail = (ticketId: string) => {
   return useQuery({
     queryKey: QUERY_KEYS.DSAR_KEYS.DETAIL(ticketId),
-    queryFn: () => http.get<DSARRequest>(dsarEndpoints.detail(ticketId)),
+    queryFn: () => http.get<DSARRequest>(ENDPOINTS.DSAR.DETAIL(ticketId)),
     select: (data) => data.data,
     enabled: !!ticketId,
   });
@@ -55,7 +54,7 @@ export const useDSARDetail = (ticketId: string) => {
 export const useMyDSARDetail = (ticketId: string) => {
   return useQuery({
     queryKey: QUERY_KEYS.DSAR_KEYS.MY_DETAIL(ticketId),
-    queryFn: () => http.get<DSARRequestDetail>(dsarEndpoints.myDetail(ticketId)),
+    queryFn: () => http.get<DSARRequestDetail>(ENDPOINTS.DSAR.MY_DETAIL(ticketId)),
     select: (data) => data.data,
     enabled: !!ticketId,
   });
@@ -69,7 +68,7 @@ export const useMyDSARDetail = (ticketId: string) => {
 export const useSlaReport = () => {
   return useQuery({
     queryKey: QUERY_KEYS.DSAR_KEYS.SLA_REPORT(),
-    queryFn: () => http.get<SLAReport>(dsarEndpoints.slaReport),
+    queryFn: () => http.get<SLAReport>(ENDPOINTS.DSAR.SLA_REPORT),
     select: (data) => data.data,
   });
 };

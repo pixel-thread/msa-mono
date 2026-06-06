@@ -4,14 +4,14 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
 import { QUERY_KEYS } from '@repo/shared';
 import { toast } from 'sonner';
-import { meetingsEndpoints } from '../utils/constants/endpoints';
+import { ENDPOINTS } from '@repo/shared';
 
 export function useAssignAttendee(meetingId: string) {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async ({ userId, attendeeRole }: { userId: string; attendeeRole: string }) => {
-      const res = await http.post(meetingsEndpoints.attendees.base(meetingId), {
+      const res = await http.post(ENDPOINTS.MEETINGS.ATTENDEES.LIST(meetingId), {
         userId,
         attendeeRole,
       });
@@ -34,7 +34,7 @@ export function useRemoveAttendee(meetingId: string) {
 
   return useMutation({
     mutationFn: async (userId: string) => {
-      const res = await http.delete(meetingsEndpoints.attendees.byId(meetingId, userId));
+      const res = await http.delete(ENDPOINTS.MEETINGS.ATTENDEES.DETAIL(meetingId, userId));
       if (!res.success) throw new Error(res.message);
       return res;
     },

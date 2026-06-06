@@ -1,14 +1,15 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
 import { toast } from 'sonner';
-import { trainingEndpoints, trainingQueryKeys } from '../../utils/constants';
+import { ENDPOINTS } from '@repo/shared';
+import { trainingQueryKeys } from '../../utils/constants';
 
 export function useDeleteTrainingSupplement(moduleId: string | null) {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (supplementId: string) =>
-      http.delete(trainingEndpoints.supplements.byId(moduleId!, supplementId)),
+      http.delete(ENDPOINTS.TRAINING.MODULE_SUPPLEMENT_DETAIL(moduleId!, supplementId)),
     onSuccess: (res) => {
       if (res.success) {
         queryClient.invalidateQueries({

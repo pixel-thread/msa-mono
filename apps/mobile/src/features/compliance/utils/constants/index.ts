@@ -1,1 +1,1 @@
-export { complianceEndpoints } from './endpoints';
+

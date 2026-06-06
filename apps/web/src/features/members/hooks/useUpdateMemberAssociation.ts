@@ -1,7 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
-import { QUERY_KEYS } from '@repo/shared';
-import { membersEndpoints } from '../utils/constants/endpoints';
+import { ENDPOINTS, QUERY_KEYS } from '@repo/shared';
 
 export function useUpdateMemberAssociation() {
   const queryClient = useQueryClient();
@@ -14,7 +13,7 @@ export function useUpdateMemberAssociation() {
       memberId: string;
       associationId: string;
     }) => {
-      return http.patch(membersEndpoints.byId(memberId), { associationId });
+      return http.patch(ENDPOINTS.MEMBERS.DETAILS(memberId), { associationId });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.MEMBERS_KEYS.ALL() });

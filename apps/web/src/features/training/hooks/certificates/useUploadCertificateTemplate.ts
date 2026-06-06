@@ -1,7 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
 import { toast } from 'sonner';
-import { trainingQueryKeys, trainingEndpoints } from '../../utils/constants';
+import { ENDPOINTS } from '@repo/shared';
+import { trainingQueryKeys } from '../../utils/constants';
 
 /**
  * Uploads a certificate template file and links it to the training module.
@@ -12,7 +13,7 @@ export function useUploadCertificateTemplate(moduleId: string | null) {
 
   return useMutation({
     mutationFn: (formData: FormData) =>
-      http.post(trainingEndpoints.certificates.template(moduleId!), formData),
+      http.post(ENDPOINTS.TRAINING.MODULE_CERTIFICATE_TEMPLATE(moduleId!), formData),
     onSuccess: (res) => {
       if (res.success) {
         queryClient.invalidateQueries({
@@ -35,7 +36,7 @@ export function useRemoveCertificateTemplate(moduleId: string | null) {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: () => http.delete(trainingEndpoints.certificates.template(moduleId!)),
+    mutationFn: () => http.delete(ENDPOINTS.TRAINING.MODULE_CERTIFICATE_TEMPLATE(moduleId!)),
     onSuccess: (res) => {
       if (res.success) {
         queryClient.invalidateQueries({

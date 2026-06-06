@@ -1,7 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
-import { QUERY_KEYS } from '@repo/shared';
-import { membersEndpoints } from '../utils/constants/endpoints';
+import { ENDPOINTS, QUERY_KEYS } from '@repo/shared';
 
 export function useUpdateMemberRole() {
   const queryClient = useQueryClient();
@@ -17,9 +16,9 @@ export function useUpdateMemberRole() {
       action: 'add' | 'remove';
     }) => {
       if (action === 'add') {
-        return http.post(membersEndpoints.role(memberId), { role });
+        return http.post(ENDPOINTS.MEMBERS.ROLE(memberId), { role });
       }
-      return http.put(membersEndpoints.role(memberId), { role });
+      return http.put(ENDPOINTS.MEMBERS.ROLE(memberId), { role });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.MEMBERS_KEYS.ALL() });

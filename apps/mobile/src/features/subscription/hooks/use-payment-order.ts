@@ -1,6 +1,6 @@
 import http from '@src/shared/utils/http';
 import { useMutation } from '@tanstack/react-query';
-import { SubscriptionEndpoints } from '../utils/constants';
+import { ENDPOINTS } from '@repo/shared';
 import { RazorpayOptions } from '../types/razorpay';
 import { logger } from '@src/shared/utils';
 import { toast } from 'sonner-native';
@@ -75,7 +75,7 @@ import { toast } from 'sonner-native';
  */
 export function usePaymentOption() {
   return useMutation({
-    mutationFn: () => http.post<RazorpayOptions>(SubscriptionEndpoints.paymentOrder(), {}),
+    mutationFn: () => http.post<RazorpayOptions>(ENDPOINTS.PAYMENTS.RAZORPAY.CREATE_ORDER, {}),
     onSuccess: (data) => {
       if (data.success) {
         return data.data;

@@ -1,7 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
-import { complianceEndpoints } from '../utils/constants';
-import { QUERY_KEYS } from '@repo/shared';
+import { ENDPOINTS, QUERY_KEYS } from '@repo/shared';
 import { toast } from 'sonner-native';
 import { Compliance, SubmitCompliancePayload } from '../types/compliance.types';
 import { ComplianceSubmitFormData } from '../validators/compliance.validator';
@@ -10,7 +9,7 @@ export const useSubmitCompliance = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (data: ComplianceSubmitFormData) =>
-      http.post<Compliance>(complianceEndpoints.submit, data as SubmitCompliancePayload),
+      http.post<Compliance>(ENDPOINTS.COMPLIANCE.CREATE, data as SubmitCompliancePayload),
     onSuccess: (data) => {
       if (data.success) {
         queryClient.invalidateQueries({ queryKey: QUERY_KEYS.COMPLIANCE_KEYS.MY() });
@@ -30,7 +29,7 @@ export const useCancelCompliance = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (complianceId: string) =>
-      http.post<Compliance>(complianceEndpoints.cancel(complianceId)),
+      http.post<Compliance>(`/compliance/my/${complianceId}/cancel`),
     onSuccess: (data) => {
       if (data.success) {
         queryClient.invalidateQueries({ queryKey: QUERY_KEYS.COMPLIANCE_KEYS.MY() });

@@ -1,14 +1,13 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
-import { QUERY_KEYS } from '@repo/shared';
+import { ENDPOINTS, QUERY_KEYS } from '@repo/shared';
 import { toast } from 'sonner';
-import { memberTypeEndpoints } from '../utils/constants/endpoints';
 
 export function useDeleteMemberType() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (id: string) => http.delete(memberTypeEndpoints.byId(id)),
+    mutationFn: (id: string) => http.delete(ENDPOINTS.MEMBER_TYPES.DETAIL(id)),
     onSuccess: (data) => {
       if (data.success) {
         toast.success('Member type deleted successfully');

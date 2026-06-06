@@ -1,15 +1,14 @@
 import http from '@src/shared/utils/http';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { CreateTrainingModuleInput } from '../types';
-import { trainingEndpoints } from '../utils/constants';
-import { QUERY_KEYS } from '@repo/shared';
+import { QUERY_KEYS, ENDPOINTS } from '@repo/shared';
 import { toast } from 'sonner-native';
 
 export const useCreateTrainingModule = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (data: CreateTrainingModuleInput) =>
-      http.post(trainingEndpoints.modules, data),
+      http.post(ENDPOINTS.TRAINING.MODULES, data),
     onSuccess: (data) => {
       if (data.success) {
         toast.success(data.message);

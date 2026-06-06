@@ -3,12 +3,12 @@ import http from '@src/shared/utils/http';
 import { QUERY_KEYS } from '@repo/shared';
 import type { ComplianceEvidence } from '../types/compliance.types';
 import type { ApiResponse } from '@src/shared/utils/http';
-import { complianceEndpoints } from '../utils/constants/endpoints';
+import { ENDPOINTS } from '@repo/shared';
 
 export function useComplianceEvidence() {
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: QUERY_KEYS.COMPLIANCE_KEYS.EVIDENCE(),
-    queryFn: async () => http.get<ComplianceEvidence>(complianceEndpoints.evidence),
+    queryFn: async () => http.get<ComplianceEvidence>(ENDPOINTS.COMPLIANCE.EVIDENCE),
   });
 
   return {

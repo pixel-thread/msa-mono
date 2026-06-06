@@ -3,7 +3,7 @@ import http from '@src/shared/utils/http';
 import { QUERY_KEYS } from '@repo/shared';
 import { toast } from 'sonner';
 import type { CreateMeetingMinuteInput, UpdateMeetingMinuteInput } from '../validators';
-import { meetingsEndpoints } from '../utils/constants/endpoints';
+import { ENDPOINTS } from '@repo/shared';
 
 export interface ActionItem {
   assigneeId?: string;
@@ -28,7 +28,7 @@ export function useMeetingMinutes(meetingId: string | null) {
     enabled: !!meetingId,
     queryFn: async () => {
       const res = await http.get<MeetingMinute[]>(
-        meetingsEndpoints.minutes.base(meetingId as string),
+        ENDPOINTS.MEETINGS.MINUTES.LIST(meetingId as string),
       );
       if (!res.success || !res.data) {
         throw new Error(res.message || 'Failed to fetch minutes');
@@ -39,7 +39,7 @@ export function useMeetingMinutes(meetingId: string | null) {
 
   const createMinuteMutation = useMutation({
     mutationFn: (minuteData: CreateMeetingMinuteInput) =>
-      http.post<MeetingMinute>(meetingsEndpoints.minutes.base(meetingId as string), minuteData),
+      http.post<MeetingMinute>(ENDPOINTS.MEETINGS.MINUTES.LIST(meetingId as string), minuteData),
     onSuccess: (res) => {
       if (res.success) {
         queryClient.invalidateQueries({
@@ -58,7 +58,7 @@ export function useMeetingMinutes(meetingId: string | null) {
   const updateMinuteMutation = useMutation({
     mutationFn: ({ minuteId, data }: { minuteId: string; data: UpdateMeetingMinuteInput }) =>
       http.patch<MeetingMinute>(
-        meetingsEndpoints.minutes.byId(meetingId as string, minuteId),
+        ENDPOINTS.MEETINGS.MINUTES.DETAIL(meetingId as string, minuteId),
         data,
       ),
     onSuccess: (res) => {
@@ -78,7 +78,7 @@ export function useMeetingMinutes(meetingId: string | null) {
 
   const deleteMinuteMutation = useMutation({
     mutationFn: (minuteId: string) =>
-      http.delete(meetingsEndpoints.minutes.byId(meetingId as string, minuteId)),
+      http.delete(ENDPOINTS.MEETINGS.MINUTES.DETAIL(meetingId as string, minuteId)),
     onSuccess: (res) => {
       if (res.success) {
         queryClient.invalidateQueries({

@@ -3,14 +3,14 @@ import http from '@src/shared/utils/http';
 import { QUERY_KEYS } from '@repo/shared';
 import { toast } from 'sonner';
 import type { UpdateConsentReceiptInput } from '../validators/consent.validators';
-import { consentEndpoints } from '../utils/constants/endpoints';
+import { ENDPOINTS } from '@repo/shared';
 
 export function useUpdateConsentReceipt() {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: ({ id, data }: { id: string; data: UpdateConsentReceiptInput }) =>
-      http.patch(consentEndpoints.byId(id), data),
+      http.patch(ENDPOINTS.CONSENT.RECEIPT(id), data),
     onSuccess: (response) => {
       if ((response as { success: boolean }).success) {
         toast.success('Consent receipt updated successfully');

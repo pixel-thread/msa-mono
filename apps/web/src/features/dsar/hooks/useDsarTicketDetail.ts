@@ -1,14 +1,13 @@
 import { useQuery } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
-import { QUERY_KEYS } from '@repo/shared';
+import { ENDPOINTS, QUERY_KEYS } from '@repo/shared';
 import type { DsarTicketRecord } from '../types';
 import type { ApiResponse } from '@src/shared/utils/http';
-import { dsarEndpoints } from '../utils/constants/endpoints';
 
 export function useDsarTicketDetail(id: string | null) {
   const { data, isLoading, error } = useQuery({
     queryKey: QUERY_KEYS.DSAR_KEYS.TICKET(id),
-    queryFn: async () => http.get<DsarTicketRecord>(dsarEndpoints.byId(id!)),
+    queryFn: async () => http.get<DsarTicketRecord>(ENDPOINTS.DSAR.DETAIL(id!)),
     enabled: !!id,
   });
 

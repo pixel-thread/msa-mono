@@ -5,7 +5,7 @@ import http from '@src/shared/utils/http';
 import { QUERY_KEYS } from '@repo/shared';
 import { toast } from 'sonner';
 import type { RsvpForm } from '../types';
-import { meetingsEndpoints } from '../utils/constants/endpoints';
+import { ENDPOINTS } from '@repo/shared';
 
 export function useRsvp() {
   const queryClient = useQueryClient();
@@ -25,7 +25,7 @@ export function useRsvp() {
       formData: RsvpForm;
       userId?: string;
     }) =>
-      http.patch(meetingsEndpoints.rsvp(meetingId), {
+      http.patch(ENDPOINTS.MEETINGS.RSVP(meetingId), {
         rsvpStatus: formData.status,
         rsvpNote: formData.note,
       }),

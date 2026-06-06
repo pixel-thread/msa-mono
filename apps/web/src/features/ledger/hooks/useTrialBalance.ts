@@ -1,6 +1,6 @@
+import { ENDPOINTS } from '@repo/shared';
 import { useQuery } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
-import { ledgerEndpoints } from '../utils/constants/endpoints';
 
 export type AccountType = 'ASSET' | 'LIABILITY' | 'EQUITY' | 'INCOME' | 'EXPENSE';
 
@@ -33,7 +33,7 @@ export type TrialBalanceLine = {
 export function useTrialBalance() {
   const { data, isLoading, error } = useQuery({
     queryKey: ['trial-balance'],
-    queryFn: () => http.get<TrialBalanceLine>(ledgerEndpoints.trialBalance),
+    queryFn: () => http.get<TrialBalanceLine>(ENDPOINTS.LEDGER.TRIAL_BALANCE),
   });
 
   return { data: data?.data, isLoading, error };

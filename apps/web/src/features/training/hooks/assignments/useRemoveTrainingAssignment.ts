@@ -1,14 +1,15 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
 import { toast } from 'sonner';
-import { trainingEndpoints, trainingQueryKeys } from '../../utils/constants';
+import { ENDPOINTS } from '@repo/shared';
+import { trainingQueryKeys } from '../../utils/constants';
 
 export function useRemoveTrainingAssignment(moduleId: string | null) {
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
     mutationFn: (userId: string) =>
-      http.delete(trainingEndpoints.assignments.base(moduleId!), {
+      http.delete(ENDPOINTS.TRAINING.MODULE_ASSIGN(moduleId!), {
         data: { userId },
       }),
     onSuccess: (res) => {

@@ -3,12 +3,12 @@ import http from '@src/shared/utils/http';
 import { QUERY_KEYS } from '@repo/shared';
 import type { ConsentReceiptRecord } from '../types/consent.types';
 import type { ApiResponse } from '@src/shared/utils/http';
-import { consentEndpoints } from '../utils/constants/endpoints';
+import { ENDPOINTS } from '@repo/shared';
 
 export function useUserConsentHistory(userId: string | null) {
   const { data, isLoading, error } = useQuery({
     queryKey: QUERY_KEYS.CONSENT_KEYS.HISTORY(userId),
-    queryFn: async () => http.get<ConsentReceiptRecord[]>(consentEndpoints.userHistory(userId!)),
+    queryFn: async () => http.get<ConsentReceiptRecord[]>(ENDPOINTS.CONSENT.USER_CONSENTS(userId!)),
     enabled: !!userId,
   });
 

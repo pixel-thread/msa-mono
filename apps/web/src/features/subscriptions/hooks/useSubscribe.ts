@@ -1,8 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
-import { QUERY_KEYS } from '@repo/shared';
+import { ENDPOINTS, QUERY_KEYS } from '@repo/shared';
 import { toast } from 'sonner';
-import { subscriptionEndpoints } from '../utils/constants/endpoints';
 
 interface SubscribeData {
   planId: string;
@@ -12,7 +11,7 @@ export function useSubscribe() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ planId }: SubscribeData) => http.post(subscriptionEndpoints.subscribe, { planId }),
+    mutationFn: ({ planId }: SubscribeData) => http.post(ENDPOINTS.SUBSCRIPTIONS.SUBSCRIBE, { planId }),
     onSuccess: (data) => {
       if (data.success) {
         toast.success('Subscribed successfully');

@@ -3,14 +3,14 @@ import http from '@src/shared/utils/http';
 import { QUERY_KEYS } from '@repo/shared';
 import { toast } from 'sonner';
 import type { UpdateAssociationInput } from '../validators';
-import { associationsEndpoints } from '../utils/constants/endpoints';
+import { ENDPOINTS } from '@repo/shared';
 
 export function useUpdateAssociation() {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: ({ id, data }: { id: string; data: UpdateAssociationInput }) =>
-      http.patch(associationsEndpoints.byId(id), data),
+      http.patch(ENDPOINTS.ASSOCIATIONS.DETAIL(id), data),
     onSuccess: (data) => {
       if (data.success) {
         toast.success('Association updated successfully');

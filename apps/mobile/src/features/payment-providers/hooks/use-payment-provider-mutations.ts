@@ -1,14 +1,13 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
-import { paymentProviderEndpoints } from '../utils/constants';
-import { QUERY_KEYS } from '@repo/shared';
+import { QUERY_KEYS, ENDPOINTS } from '@repo/shared';
 import { PaymentProviderPayload, PaymentProvider } from '../types';
 
 export const useAddProvider = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (payload: PaymentProviderPayload) => 
-      http.post<PaymentProvider>(paymentProviderEndpoints.add, payload),
+      http.post<PaymentProvider>(ENDPOINTS.PAYMENTS.PROVIDERS.CREATE, payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.PAYMENTS_KEYS.PROVIDERS() });
     },
@@ -19,7 +18,7 @@ export const useDeleteProvider = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (id: string) => 
-      http.delete(paymentProviderEndpoints.delete(id)),
+      http.delete(ENDPOINTS.PAYMENTS.PROVIDERS.DELETE(id)),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.PAYMENTS_KEYS.PROVIDERS() });
     },
@@ -30,7 +29,7 @@ export const useActivateProvider = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (id: string) => 
-      http.post<PaymentProvider>(paymentProviderEndpoints.activate(id)),
+      http.post<PaymentProvider>(ENDPOINTS.PAYMENTS.PROVIDERS.ACTIVATE(id)),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.PAYMENTS_KEYS.PROVIDERS() });
     },

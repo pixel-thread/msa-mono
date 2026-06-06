@@ -1,9 +1,8 @@
 'use client';
 import { useQuery } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
-import { QUERY_KEYS } from '@repo/shared';
+import { ENDPOINTS, QUERY_KEYS } from '@repo/shared';
 import type { User } from '@src/shared/types';
-import { membersEndpoints } from '../utils/constants/endpoints';
 
 export function useMember(memberId: string) {
   const {
@@ -13,7 +12,7 @@ export function useMember(memberId: string) {
     error,
   } = useQuery({
     queryKey: QUERY_KEYS.MEMBERS_KEYS.DETAIL(memberId),
-    queryFn: () => http.get<User>(membersEndpoints.byId(memberId)),
+    queryFn: () => http.get<User>(ENDPOINTS.MEMBERS.DETAILS(memberId)),
     enabled: !!memberId,
     select: (data) => data.data,
   });

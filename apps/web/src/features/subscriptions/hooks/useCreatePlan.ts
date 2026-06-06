@@ -1,15 +1,14 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
-import { QUERY_KEYS } from '@repo/shared';
+import { ENDPOINTS, QUERY_KEYS } from '@repo/shared';
 import { toast } from 'sonner';
 import type { CreateSubscriptionPlanInput } from '../validators';
-import { subscriptionEndpoints } from '../utils/constants/endpoints';
 
 export function useCreatePlan() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: CreateSubscriptionPlanInput) => http.post(subscriptionEndpoints.plans, data),
+    mutationFn: (data: CreateSubscriptionPlanInput) => http.post(ENDPOINTS.SUBSCRIPTIONS.PLANS, data),
     onSuccess: (data) => {
       if (data.success) {
         toast.success('Plan created successfully');

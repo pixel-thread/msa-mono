@@ -1,7 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
-import { meetingEndpoints } from '../utils/constants';
-import { QUERY_KEYS } from '@repo/shared';
+import { QUERY_KEYS, ENDPOINTS } from '@repo/shared';
 import { toast } from 'sonner-native';
 
 type Props = {
@@ -76,7 +75,7 @@ export function useDeleteMeetingMinute({ meetingId }: Props) {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (meetingMinuteId: string) =>
-      http.delete(meetingEndpoints.minute(meetingId, meetingMinuteId)),
+      http.delete(ENDPOINTS.MEETINGS.MINUTES.DETAIL(meetingId, meetingMinuteId)),
     onSuccess: (data) => {
       if (data.success) {
         toast.success(data.message || 'Minute deleted successfully');

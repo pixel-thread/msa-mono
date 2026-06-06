@@ -2,8 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
 import type { Meeting } from '../types';
 import { useAuthStore } from '@src/shared/store';
-import { meetingEndpoints } from '../utils/constants';
-import { QUERY_KEYS } from '@repo/shared';
+import { QUERY_KEYS, ENDPOINTS } from '@repo/shared';
 
 /**
  * Fetches a single meeting by its unique identifier.
@@ -54,7 +53,7 @@ export const useMeeting = (id: string) => {
   return useQuery({
     queryKey: QUERY_KEYS.MEETINGS_KEYS.DETAIL(id),
     select: (data) => data?.data,
-    queryFn: async () => http.get<Meeting>(meetingEndpoints.detail(id)),
+    queryFn: async () => http.get<Meeting>(ENDPOINTS.MEETINGS.DETAIL(id)),
     enabled: isAuthenticated && !!id,
   });
 };

@@ -2,13 +2,13 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
 import { QUERY_KEYS } from '@repo/shared';
 import { toast } from 'sonner';
-import { consentEndpoints } from '../utils/constants/endpoints';
+import { ENDPOINTS } from '@repo/shared';
 
 export function useDeleteConsentReceipt() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (id: string) => http.delete(consentEndpoints.byId(id)),
+    mutationFn: (id: string) => http.delete(ENDPOINTS.CONSENT.RECEIPT(id)),
     onSuccess: (response) => {
       if ((response as { success: boolean }).success) {
         toast.success('Consent receipt deleted successfully');

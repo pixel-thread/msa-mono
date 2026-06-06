@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
-import { trainingEndpoints, trainingQueryKeys } from '../utils/constants';
+import { ENDPOINTS, buildUrlWithQuery } from '@repo/shared';
+import { trainingQueryKeys } from '../utils/constants';
 import type { TrainingModuleListItem } from '../types';
 
 export function useTrainingModules(options: { page?: number; isActive?: boolean } = {}) {
@@ -9,10 +10,7 @@ export function useTrainingModules(options: { page?: number; isActive?: boolean 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: trainingQueryKeys.modules.list(page, isActive),
     queryFn: async () => {
-      let url = `${trainingEndpoints.base}?page=${page}`;
-      if (isActive !== undefined) {
-        url += `&isActive=${isActive}`;
-      }
+      const url = buildUrlWithQuery(ENDPOINTS.TRAINING.MODULES, { page, ...(isActive !== undefined && { isActive }) });
       return http.get<TrainingModuleListItem[]>(url);
     },
   });
@@ -29,7 +27,7 @@ export function useTrainingModules(options: { page?: number; isActive?: boolean 
 export function useTrainingModule(moduleId: string | null) {
   const { data, isLoading, error } = useQuery({
     queryKey: trainingQueryKeys.modules.detail(moduleId),
-    queryFn: async () => http.get<TrainingModuleListItem>(trainingEndpoints.byId(moduleId!)),
+    queryFn: async () => http.get<TrainingModuleListItem>(ENDPOINTS.TRAINING.MODULE_DETAIL(moduleId!)),
     enabled: !!moduleId,
     select: (res) => res.data,
   });

@@ -2,7 +2,7 @@ import { useRouter } from 'expo-router';
 import { useSecureTokenStore } from '../store';
 import { useMutation } from '@tanstack/react-query';
 import { SignInFormData } from '../validators';
-import { authEndpoints } from '../utils';
+import { ENDPOINTS } from '@repo/shared';
 
 /**
  * Handles user sign-in authentication with optional MFA support.
@@ -61,7 +61,7 @@ export const useSignIn = () => {
   const { setAccessToken, setRefreshToken } = useSecureTokenStore();
 
   return useMutation({
-    mutationFn: (data: SignInFormData) => http.post<SignInSuccessData>(authEndpoints.signIn, data),
+    mutationFn: (data: SignInFormData) => http.post<SignInSuccessData>(ENDPOINTS.AUTH.SIGNIN, data),
     onSuccess: (response) => {
       if (response.success) {
         toast.success(response.message);

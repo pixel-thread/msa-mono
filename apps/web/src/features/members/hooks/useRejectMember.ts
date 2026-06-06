@@ -1,8 +1,7 @@
 import http from '@src/shared/utils/http';
-import { QUERY_KEYS } from '@repo/shared';
+import { ENDPOINTS, QUERY_KEYS } from '@repo/shared';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { membersEndpoints } from '../utils/constants/endpoints';
 
 interface RejectMemberData {
   applicationId: string;
@@ -14,7 +13,7 @@ export function useRejectMember() {
 
   return useMutation({
     mutationFn: async ({ applicationId, rejectionReason }: RejectMemberData) => {
-      return http.post(membersEndpoints.applications.reject(applicationId), {
+      return http.post(ENDPOINTS.ADMIN.MEMBERSHIP_APPLICATION_REJECT(applicationId), {
         rejectionReason: rejectionReason || 'Application rejected by admin',
       });
     },

@@ -2,8 +2,7 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
 import type { Meeting } from '../types';
 import { useAuthStore } from '@src/shared/store';
-import { meetingEndpoints } from '../utils/constants';
-import { QUERY_KEYS } from '@repo/shared';
+import { QUERY_KEYS, ENDPOINTS, buildUrlWithQuery } from '@repo/shared';
 
 type UseMeetingsParams = {
   type?: string;
@@ -19,7 +18,7 @@ export const useMeetings = (params?: UseMeetingsParams) => {
     initialPageParam: 1,
     enabled: isAuthenticated,
     queryFn: async ({ pageParam }) => {
-      return http.get<Meeting[]>(meetingEndpoints.list(pageParam));
+      return http.get<Meeting[]>(buildUrlWithQuery(ENDPOINTS.MEETINGS.LIST, { page: pageParam }));
     },
 
     getNextPageParam: (lastPage) => {

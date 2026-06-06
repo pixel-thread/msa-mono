@@ -4,7 +4,7 @@ import { QUERY_KEYS } from '@repo/shared';
 import type { ConsentReceiptRecord } from '../types/consent.types';
 import type { PaginationMeta } from '@src/shared/types/api.types';
 import type { ApiResponse } from '@src/shared/utils/http';
-import { consentEndpoints } from '../utils/constants/endpoints';
+import { ENDPOINTS, buildUrlWithQuery } from '@repo/shared';
 
 interface UseConsentRecordsOptions {
   page?: number;
@@ -26,7 +26,7 @@ export function useConsentRecords(options?: UseConsentRecordsOptions) {
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: QUERY_KEYS.CONSENT_KEYS.RECORDS(options),
-    queryFn: async () => http.get<ConsentReceiptRecord[]>(`${consentEndpoints.all}${qs ? `?${qs}` : ''}`),
+    queryFn: async () => http.get<ConsentReceiptRecord[]>(qs ? buildUrlWithQuery(ENDPOINTS.CONSENT.ALL, Object.fromEntries(params)) : ENDPOINTS.CONSENT.ALL),
   });
 
   return {

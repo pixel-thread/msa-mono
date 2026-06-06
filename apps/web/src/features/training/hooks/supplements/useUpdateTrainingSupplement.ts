@@ -1,7 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
 import { toast } from 'sonner';
-import { trainingEndpoints, trainingQueryKeys } from '../../utils/constants';
+import { ENDPOINTS } from '@repo/shared';
+import { trainingQueryKeys } from '../../utils/constants';
 import type { UpdateSupplementInput } from '../../validators/training';
 
 export function useUpdateTrainingSupplement(moduleId: string | null) {
@@ -14,7 +15,7 @@ export function useUpdateTrainingSupplement(moduleId: string | null) {
     }: {
       supplementId: string;
       data: UpdateSupplementInput | FormData;
-    }) => http.patch(trainingEndpoints.supplements.byId(moduleId!, supplementId), data),
+    }) => http.patch(ENDPOINTS.TRAINING.MODULE_SUPPLEMENT_DETAIL(moduleId!, supplementId), data),
     onSuccess: (res) => {
       if (res.success) {
         queryClient.invalidateQueries({

@@ -1,7 +1,7 @@
 import http from '@src/shared/utils/http';
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner-native';
-import { authEndpoints } from '../utils';
+import { ENDPOINTS } from '@repo/shared';
 import { useRouter } from 'expo-router';
 import { ResetPasswordInput } from '../validators/reset-password';
 
@@ -10,7 +10,7 @@ export function useResetPassword() {
   return useMutation({
     mutationFn: async (data: ResetPasswordInput) => {
       const { token, password } = data;
-      return http.post(authEndpoints.resetPassword, { token, password });
+      return http.post(ENDPOINTS.AUTH.RESET_PASSWORD, { token, password });
     },
     onSuccess: (data) => {
       if (data.success) {

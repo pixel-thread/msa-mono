@@ -1,8 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
-import { QUERY_KEYS } from '@repo/shared';
+import { ENDPOINTS, QUERY_KEYS } from '@repo/shared';
 import { toast } from 'sonner';
-import { membersEndpoints } from '../utils/constants/endpoints';
 
 interface ApproveMemberData {
   applicationId: string;
@@ -16,7 +15,7 @@ export function useApproveMember() {
 
   return useMutation({
     mutationFn: (data: ApproveMemberData) =>
-      http.post(membersEndpoints.applications.approve(data.applicationId), {
+      http.post(ENDPOINTS.ADMIN.MEMBERSHIP_APPLICATION_APPROVE(data.applicationId), {
         memberTypeId: data.memberTypeId,
         role: data.role,
         dateOfJoiningGovt: data.dateOfJoiningGovt,

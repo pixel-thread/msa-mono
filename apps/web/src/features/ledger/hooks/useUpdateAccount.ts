@@ -1,6 +1,6 @@
+import { ENDPOINTS } from '@repo/shared';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
-import { ledgerEndpoints } from '../utils/constants/endpoints';
 import { toast } from 'sonner';
 
 interface UpdateAccountPayload {
@@ -14,7 +14,7 @@ export function useUpdateAccount() {
 
   return useMutation({
     mutationFn: async (payload: UpdateAccountPayload) => {
-      return http.put(ledgerEndpoints.updateAccount(payload.id), {
+      return http.put(ENDPOINTS.LEDGER.ACCOUNT_DETAIL(payload.id), {
         name: payload.name,
         description: payload.description,
       });

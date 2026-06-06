@@ -4,7 +4,7 @@ import type { SignInFormData } from '../validators';
 import http from '@src/shared/utils/http';
 import { toast } from 'sonner-native';
 import { useAuthStore, useSecureTokenStore } from '../store';
-import { authEndpoints } from '../utils/constants/endpoints';
+import { ENDPOINTS } from '@repo/shared';
 
 type SignInSuccessData = {
   mfaRequired?: boolean;
@@ -71,7 +71,7 @@ export const useSignIn = () => {
   const { fetchUser } = useAuthStore();
 
   return useMutation({
-    mutationFn: (data: SignInFormData) => http.post<SignInSuccessData>(authEndpoints.signIn, data),
+    mutationFn: (data: SignInFormData) => http.post<SignInSuccessData>(ENDPOINTS.AUTH.SIGNIN, data),
     onSuccess: (response) => {
       if (response.success) {
         if (response.data?.mfaRequired && response.data.tempToken) {

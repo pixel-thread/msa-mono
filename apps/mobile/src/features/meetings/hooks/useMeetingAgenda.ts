@@ -2,8 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
 import { useAuthStore } from '@src/shared/store';
 import { MeetingAgenda } from '../types/agenda';
-import { meetingEndpoints } from '../utils/constants';
-import { QUERY_KEYS } from '@repo/shared';
+import { QUERY_KEYS, ENDPOINTS } from '@repo/shared';
 
 /**
  * Hook to fetch a single meeting by ID.
@@ -16,7 +15,7 @@ export const useMeetingAgenda = (id: string) => {
   return useQuery({
     queryKey: QUERY_KEYS.MEETINGS_KEYS.AGENDAS(id),
     select: (data) => data?.data,
-    queryFn: () => http.get<MeetingAgenda[]>(meetingEndpoints.agenda(id)),
+    queryFn: () => http.get<MeetingAgenda[]>(ENDPOINTS.MEETINGS.AGENDA.LIST(id)),
     enabled: isAuthenticated && !!id,
   });
 };

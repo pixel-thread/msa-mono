@@ -1,7 +1,6 @@
 import http from '@src/shared/utils/http';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { trainingEndpoints } from '../utils/constants';
-import { QUERY_KEYS } from '@repo/shared';
+import { QUERY_KEYS, ENDPOINTS } from '@repo/shared';
 import { toast } from 'sonner-native';
 
 type BulkAssignInput = {
@@ -16,7 +15,7 @@ export const useBulkAssignTraining = ({ moduleId }: Props) => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (data: BulkAssignInput) =>
-      http.put(trainingEndpoints.assign(moduleId), data),
+      http.put(ENDPOINTS.TRAINING.MODULE_ASSIGN(moduleId), data),
     onSuccess: (data) => {
       if (data.success) {
         toast.success(data.message);

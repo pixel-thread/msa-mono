@@ -3,12 +3,12 @@ import http from '@src/shared/utils/http';
 import { QUERY_KEYS } from '@repo/shared';
 import type { ConsentSummaryReport } from '../types/consent.types';
 import type { ApiResponse } from '@src/shared/utils/http';
-import { consentEndpoints } from '../utils/constants/endpoints';
+import { ENDPOINTS } from '@repo/shared';
 
 export function useConsentReport() {
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: QUERY_KEYS.CONSENT_KEYS.REPORT(),
-    queryFn: async () => http.get<ConsentSummaryReport[]>(consentEndpoints.report),
+    queryFn: async () => http.get<ConsentSummaryReport[]>(ENDPOINTS.CONSENT.REPORT),
   });
 
   return {

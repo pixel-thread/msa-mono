@@ -1,14 +1,13 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
-import { QUERY_KEYS } from '@repo/shared';
+import { ENDPOINTS, QUERY_KEYS } from '@repo/shared';
 import { toast } from 'sonner';
-import { dsarEndpoints } from '../utils/constants/endpoints';
 
 export function useDeleteDsarTicket() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (id: string) => http.delete(dsarEndpoints.byId(id)),
+    mutationFn: (id: string) => http.delete(ENDPOINTS.DSAR.DETAIL(id)),
     onSuccess: (response) => {
       if ((response as { success: boolean }).success) {
         toast.success('DSAR ticket deleted successfully');

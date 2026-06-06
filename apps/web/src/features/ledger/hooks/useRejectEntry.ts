@@ -1,6 +1,6 @@
+import { ENDPOINTS } from '@repo/shared';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
-import { ledgerEndpoints } from '../utils/constants/endpoints';
 import { toast } from 'sonner';
 
 export function useRejectEntry() {
@@ -8,7 +8,7 @@ export function useRejectEntry() {
 
   return useMutation({
     mutationFn: async ({ id, reason }: { id: string; reason?: string }) => {
-      return http.post(ledgerEndpoints.rejectEntry(id), { reason });
+      return http.post(ENDPOINTS.LEDGER.REJECT_ENTRY(id), { reason });
     },
     onSuccess: () => {
       toast.success('Entry Rejected', { description: 'The ledger entry was rejected.' });

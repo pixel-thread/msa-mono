@@ -3,7 +3,7 @@ import { useRouter } from 'expo-router';
 import type { SignUpFormData } from '../validators';
 import http from '@src/shared/utils/http';
 import { toast } from 'sonner-native';
-import { authEndpoints } from '../utils/constants/endpoints';
+import { ENDPOINTS } from '@repo/shared';
 
 /**
  * Handles new user registration and account creation.
@@ -56,7 +56,7 @@ export const useSignUp = () => {
   const router = useRouter();
 
   return useMutation({
-    mutationFn: (data: SignUpFormData) => http.post(authEndpoints.signUp, data),
+    mutationFn: (data: SignUpFormData) => http.post(ENDPOINTS.AUTH.SIGNUP, data),
     onSuccess: (response) => {
       if (response.success) {
         toast.success(response.message);

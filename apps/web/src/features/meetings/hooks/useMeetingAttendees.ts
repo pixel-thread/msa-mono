@@ -4,7 +4,7 @@ import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
 import { QUERY_KEYS } from '@repo/shared';
 import { toast } from 'sonner';
-import { meetingsEndpoints } from '../utils/constants/endpoints';
+import { ENDPOINTS } from '@repo/shared';
 import type { Attendee } from '../types';
 
 /**
@@ -20,7 +20,7 @@ export function useMeetingAttendees(meetingId: string | null) {
     queryKey: QUERY_KEYS.MEETINGS_KEYS.ATTENDEES(meetingId),
     enabled: !!meetingId,
     queryFn: async () =>
-      http.get<Attendee[]>(meetingsEndpoints.attendees.base(meetingId as string)),
+      http.get<Attendee[]>(ENDPOINTS.MEETINGS.ATTENDEES.LIST(meetingId as string)),
     select: (data) => data.data,
   });
 
@@ -34,7 +34,7 @@ export function useMeetingAttendees(meetingId: string | null) {
       userId: string;
       attendeeRole: string;
     }) =>
-      http.post(meetingsEndpoints.attendees.base(meetingId), {
+      http.post(ENDPOINTS.MEETINGS.ATTENDEES.LIST(meetingId), {
         userId,
         attendeeRole,
       }),
@@ -55,7 +55,7 @@ export function useMeetingAttendees(meetingId: string | null) {
 
   const removeAttendeeMutation = useMutation({
     mutationFn: async ({ meetingId, userId }: { meetingId: string; userId: string }) =>
-      http.delete(meetingsEndpoints.attendees.byId(meetingId, userId)),
+      http.delete(ENDPOINTS.MEETINGS.ATTENDEES.DETAIL(meetingId, userId)),
     onSuccess: (data) => {
       if (data.success) {
         refetch();

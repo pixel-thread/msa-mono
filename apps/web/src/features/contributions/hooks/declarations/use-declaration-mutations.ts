@@ -1,7 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
 import { toast } from 'sonner';
-import { declarationEndpoints } from '../../utils/constants/endpoints';
 import { ENDPOINTS, QUERY_KEYS } from '@repo/shared';
 
 export function useApproveDeclaration() {

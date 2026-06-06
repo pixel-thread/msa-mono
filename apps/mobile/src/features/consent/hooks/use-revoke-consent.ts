@@ -1,8 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ConsentActionResponse, RevokeConsentRequest } from '../types';
 import http from '@src/shared/utils/http';
-import { consentEndpoints } from '../utils/constants';
-import { QUERY_KEYS } from '@repo/shared';
+import { ENDPOINTS, QUERY_KEYS } from '@repo/shared';
 import { toast } from 'sonner-native';
 
 export const useRevokeConsent = () => {
@@ -10,7 +9,7 @@ export const useRevokeConsent = () => {
 
   return useMutation({
     mutationFn: (data: RevokeConsentRequest) =>
-      http.post<ConsentActionResponse>(consentEndpoints.revoke, data),
+      http.post<ConsentActionResponse>(ENDPOINTS.CONSENT.REVOKE, data),
     onSuccess: (data) => {
       if (data.success) {
         queryClient.invalidateQueries({ queryKey: QUERY_KEYS.CONSENT_KEYS.MY() });

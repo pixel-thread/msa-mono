@@ -2,14 +2,14 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
 import { QUERY_KEYS } from '@repo/shared';
 import { toast } from 'sonner';
-import { complianceEndpoints } from '../utils/constants/endpoints';
+import { ENDPOINTS } from '@repo/shared';
 
 export function useTriggerComplianceCheck() {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (checkTypes?: string[]) =>
-      http.post(complianceEndpoints.checks, checkTypes ? { checkTypes } : {}),
+      http.post(ENDPOINTS.COMPLIANCE.CHECKS, checkTypes ? { checkTypes } : {}),
     onSuccess: (response) => {
       if (response.success) {
         toast.success('Compliance checks completed successfully');
