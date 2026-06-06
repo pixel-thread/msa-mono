@@ -15,7 +15,7 @@ import {
   ForbiddenError,
   BadRequestError,
   NotFoundError,
-} from '@src/shared/errors';
+} from '@errors';
 import { pageNumberValidation } from '@validator';
 import { getUniqueUser } from '@services/user/get-unique-user';
 import { logger } from '@src/shared/logger';

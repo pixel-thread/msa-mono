@@ -14,7 +14,7 @@ import { validate } from '@lib/validate';
 import { withRole } from '@utils/with-role';
 import { asyncHandler } from '@utils/async-handler';
 import { logger } from '@src/shared/logger';
-import { BadRequestError } from '@src/shared/errors';
+import { BadRequestError } from '@errors';
 
 // Prisma
 import { UserRole } from '@prisma/client';

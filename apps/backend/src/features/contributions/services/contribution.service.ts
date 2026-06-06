@@ -11,7 +11,7 @@ import {
 } from '@prisma/client';
 import { JournalLine, recordWaiver } from '@feature/ledger/services/accounting.service';
 import { ContributionSummary } from '@feature/contributions/types';
-import { BadRequestError, NotFoundError } from '@src/shared/errors';
+import { BadRequestError, NotFoundError } from '@errors';
 
 // ---------------------------------------------------------------------------
 // Service functions

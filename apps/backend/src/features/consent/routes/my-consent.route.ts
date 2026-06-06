@@ -7,7 +7,7 @@ import { Request, Response, RequestHandler } from 'express';
 
 // Shared utilities
 import { success } from '@utils/responses';
-import { UnauthorizedError, ForbiddenError } from '@src/shared/errors';
+import { UnauthorizedError, ForbiddenError } from '@errors';
 import { logger } from '@src/shared/logger';
 import { getUniqueUser } from '@services/user/get-unique-user';
 import { asyncHandler } from '@utils/async-handler';

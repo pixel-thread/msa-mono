@@ -20,7 +20,7 @@ import {
   RejectDeclarationSchema,
 } from '../validators';
 import { hasHighRoleAccess } from '@utils';
-import { NotFoundError } from '@src/shared/errors';
+import { NotFoundError } from '@errors';
 
 export const createUserDeclarationHandler: RequestHandler[] = [
   validate({ body: CreateUserDeclarations }),

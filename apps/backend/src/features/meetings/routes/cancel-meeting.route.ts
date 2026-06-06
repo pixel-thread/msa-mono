@@ -3,7 +3,7 @@ import { success } from '@utils/responses';
 import { UserRole, MeetingStatus } from '@prisma/client';
 import { updateMeeting } from '@feature/meetings/services';
 import { hasHighRoleAccess } from '@utils/has-high-role';
-import { ForbiddenError } from '@src/shared/errors';
+import { ForbiddenError } from '@errors';
 import { logger } from '@src/shared/logger';
 import { getAssociation } from '@services/association/get-association';
 import { withRole } from '@utils/with-role';

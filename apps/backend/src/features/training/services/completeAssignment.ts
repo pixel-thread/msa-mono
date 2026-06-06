@@ -4,7 +4,7 @@ import { AuditAction, Prisma, TrainingAssignmentStatus } from '@prisma/client';
 // ---- Shared utilities ----
 import { prisma } from '@lib/prisma';
 import { PAGE_SIZE } from '@src/shared/constants';
-import { BadRequestError } from '@src/shared/errors';
+import { BadRequestError } from '@errors';
 
 // ---- Interfaces ----
 

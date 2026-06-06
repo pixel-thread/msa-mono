@@ -3,7 +3,7 @@ import { differenceInCalendarMonths, addMonths, startOfMonth, endOfMonth } from 
 import { PAGE_SIZE } from '@src/shared/constants';
 import { prisma } from '@lib';
 import { buildPagination } from '@utils';
-import { BadRequestError, NotFoundError } from '@src/shared/errors';
+import { BadRequestError, NotFoundError } from '@errors';
 
 type Props = {
   where: Prisma.DeclarationsWhereInput;

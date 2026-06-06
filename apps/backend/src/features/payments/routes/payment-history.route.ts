@@ -13,7 +13,7 @@ import { prisma } from '@lib/prisma';
 import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
 import { logger } from '@src/shared/logger';
-import { UnauthorizedError, ForbiddenError } from '@src/shared/errors';
+import { UnauthorizedError, ForbiddenError } from '@errors';
 import { PaymentHistoryQuerySchema } from '@feature/payments/validators';
 import { getUserPaymentHistory } from '@feature/payments/services/payment.service';
 import { getUserContributionSummary } from '@feature/contributions/services/contribution.service';

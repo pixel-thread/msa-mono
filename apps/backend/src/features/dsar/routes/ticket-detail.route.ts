@@ -7,7 +7,7 @@ import {
   ForbiddenError,
   NotFoundError,
   BadRequestError,
-} from '@src/shared/errors';
+} from '@errors';
 import { prisma } from '@lib/prisma';
 import { UserRole, DsarStatus } from '@prisma/client';
 import { z } from 'zod';

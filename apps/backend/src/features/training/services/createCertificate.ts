@@ -6,7 +6,7 @@ import { prisma } from '@lib/prisma';
 
 // ---- Validators ----
 import { CreateTrainingCertificateInput } from '../validators/training';
-import { BadRequestError, NotFoundError } from '@src/shared/errors';
+import { BadRequestError, NotFoundError } from '@errors';
 
 // ---- Interfaces ----
 

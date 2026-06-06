@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { verifyAccessToken } from '@lib/jwt';
-import { UnauthorizedError } from '@src/shared/errors';
+import { UnauthorizedError } from '@errors';
 import { API_PUBLIC_ROUTES } from '@src/shared/constants';
 import { prisma } from '@lib';
 import { ContextStore } from '@lib/tracing/context';

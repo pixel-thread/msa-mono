@@ -12,7 +12,7 @@ import {
   hashToken,
 } from '@lib/password';
 
-import { UnauthorizedError, ValidationError } from '@src/shared/errors';
+import { UnauthorizedError, ValidationError } from '@errors';
 
 import { findFirstMember } from '@feature/members/services/findFirstMember';
 import { updateUser } from '@feature/user/services';

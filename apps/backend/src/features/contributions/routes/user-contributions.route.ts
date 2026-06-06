@@ -13,7 +13,7 @@ import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
 import { buildPagination } from '@utils/build-pagination';
 import { logger } from '@src/shared/logger';
-import { NotFoundError } from '@src/shared/errors';
+import { NotFoundError } from '@errors';
 import { z } from 'zod';
 import { UserContributionsParamsSchema } from '@feature/contributions/validators';
 import { findFirstMember } from '@feature/members/services/findFirstMember';

@@ -1,6 +1,6 @@
 import { RequestHandler } from 'express';
 import { success } from '@utils/responses';
-import { ForbiddenError } from '@src/shared/errors';
+import { ForbiddenError } from '@errors';
 import { UserRole } from '@prisma/client';
 import { deleteMeeting } from '@feature/meetings/services';
 import { hasHighRoleAccess } from '@utils/has-high-role';

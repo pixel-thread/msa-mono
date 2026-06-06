@@ -10,7 +10,7 @@ import { z } from 'zod';
 // ---------------------------------------------------------------------------
 import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
-import { ValidationError } from '@src/shared/errors';
+import { ValidationError } from '@errors';
 import { withRole } from '@utils/with-role';
 import { asyncHandler } from '@utils/async-handler';
 import { logger } from '@src/shared/logger';

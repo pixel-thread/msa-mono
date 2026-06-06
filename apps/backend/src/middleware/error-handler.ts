@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { AppError, normalizeUnknownError } from '@src/shared/errors';
+import { AppError, normalizeUnknownError } from '@errors';
 import { logger } from '@src/shared/logger';
 
 export function errorHandler(err: unknown, req: Request, res: Response, _next: NextFunction) {

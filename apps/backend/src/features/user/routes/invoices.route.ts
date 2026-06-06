@@ -8,7 +8,7 @@ import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
 import { validate } from '@lib/validate';
 import { prisma } from '@lib/prisma';
-import { ForbiddenError, UnauthorizedError } from '@src/shared/errors';
+import { ForbiddenError, UnauthorizedError } from '@errors';
 import { logger } from '@src/shared/logger';
 import { withRole } from '@utils/with-role';
 import { buildPagination } from '@utils/build-pagination';

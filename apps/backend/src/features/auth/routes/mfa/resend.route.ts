@@ -10,7 +10,7 @@ import { env } from '@src/env';
 import { generateOTP, hashToken } from '@lib/password';
 import { sendVerificationEmail } from '@lib/email';
 
-import { ForbiddenError, NotFoundError, UnauthorizedError } from '@src/shared/errors';
+import { ForbiddenError, NotFoundError, UnauthorizedError } from '@errors';
 
 import { findFirstMember } from '@feature/members/services/findFirstMember';
 

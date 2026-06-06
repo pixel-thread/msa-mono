@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { generateCsrfToken, verifyCsrfToken } from '@lib/csrf';
-import { ForbiddenError } from '@src/shared/errors';
+import { ForbiddenError } from '@errors';
 import { env } from '@src/env';
 import { logger } from '@src/shared/logger';
 import { getTraceId } from '@utils';

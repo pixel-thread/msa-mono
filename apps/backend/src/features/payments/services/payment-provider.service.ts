@@ -1,7 +1,7 @@
 import { prisma } from '@lib/prisma';
 import { encrypt } from '@lib/crypto';
 import { PaymentProviderType } from '@prisma/client';
-import { NotFoundError } from '@src/shared/errors';
+import { NotFoundError } from '@errors';
 import { env } from '@src/env';
 import { logger } from '@src/shared/logger';
 

@@ -6,7 +6,7 @@ import type { RequestHandler } from 'express';
 import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
 import { buildPagination } from '@utils/build-pagination';
-import { BadRequestError } from '@src/shared/errors';
+import { BadRequestError } from '@errors';
 import { logger } from '@src/shared/logger';
 import { getAssociation } from '@services/association/get-association';
 import { withRole } from '@utils/with-role';

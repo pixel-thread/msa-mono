@@ -7,7 +7,7 @@ import { z } from 'zod';
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
 import { validate } from '@lib/validate';
-import { UnauthorizedError, ValidationError, NotFoundError } from '@src/shared/errors';
+import { UnauthorizedError, ValidationError, NotFoundError } from '@errors';
 import { logger } from '@src/shared/logger';
 import { auth } from '@src/middleware/auth';
 import { withRole } from '@utils/with-role';

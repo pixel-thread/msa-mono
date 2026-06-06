@@ -8,7 +8,7 @@ import { verifyWebhookSignature } from './razorpay.service';
 import { markPaymentFailed } from './payment.service';
 import { getActiveProvider } from './payment-provider.service';
 import { decrypt } from '@lib/crypto';
-import { NotFoundError, WebhookSignatureError } from '@src/shared/errors';
+import { NotFoundError, WebhookSignatureError } from '@errors';
 import { logAction } from '@services';
 import { logger } from '@src/shared/logger';
 

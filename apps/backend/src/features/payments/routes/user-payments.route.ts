@@ -14,7 +14,7 @@ import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
 import { buildPagination } from '@utils/build-pagination';
 import { logger } from '@src/shared/logger';
-import { NotFoundError } from '@src/shared/errors';
+import { NotFoundError } from '@errors';
 import { z } from 'zod';
 import { findFirstMember } from '@feature/members/services/findFirstMember';
 import { getUserContributionSummary } from '@feature/contributions/services/contribution.service';

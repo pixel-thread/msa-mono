@@ -9,7 +9,7 @@ import { AuditAction, Prisma } from '@prisma/client';
 // Shared utilities
 // ---------------------------------------------------------------------------
 
-import { ConflictError } from '@src/shared/errors';
+import { ConflictError } from '@errors';
 
 // ---------------------------------------------------------------------------
 // Validators / Types

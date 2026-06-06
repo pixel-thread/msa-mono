@@ -8,7 +8,7 @@
 import { prisma } from '@lib/prisma';
 import { AnnouncementStatus, AnnouncementPriority, UserRole } from '@prisma/client';
 
-import { NotFoundError, ForbiddenError } from '@src/shared/errors';
+import { NotFoundError, ForbiddenError } from '@errors';
 
 import { sendAnnouncementNotifications } from './sendAnnouncementNotifications';
 

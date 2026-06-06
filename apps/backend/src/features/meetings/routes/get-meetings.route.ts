@@ -2,7 +2,7 @@ import { Request, NextFunction, Response } from 'express';
 import type { RequestHandler } from 'express';
 import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
-import { ForbiddenError } from '@src/shared/errors';
+import { ForbiddenError } from '@errors';
 import { UserRole, MeetingStatus } from '@prisma/client';
 import { findManyMeetings } from '@feature/meetings/services';
 import { MeetingQuerySchema } from '@feature/meetings/validators/meetings';

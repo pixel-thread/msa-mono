@@ -16,7 +16,7 @@ import { success } from '@utils/responses';
 import { logger } from '@src/shared/logger';
 import { UserRole } from '@prisma/client';
 import { withRole } from '@utils/with-role';
-import { UnauthorizedError, ForbiddenError, NotFoundError } from '@src/shared/errors';
+import { UnauthorizedError, ForbiddenError, NotFoundError } from '@errors';
 import { CreateOrderSchema } from '@feature/payments/validators';
 import { createPaymentOrder } from '@feature/payments/services/payment.service';
 import { findSubscriptionPlans } from '@feature/payments/services/find-subscription-plans';

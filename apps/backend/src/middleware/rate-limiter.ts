@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction, RequestHandler } from 'express';
 import { Ratelimit } from '@upstash/ratelimit';
 import type { Duration } from '@upstash/ratelimit';
-import { TooManyRequestsError } from '@src/shared/errors';
+import { TooManyRequestsError } from '@errors';
 import { logger } from '@src/shared/logger';
 import { redis } from '@lib/redis';
 import { env } from '@src/env';

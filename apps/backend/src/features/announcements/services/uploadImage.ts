@@ -8,7 +8,7 @@
 import { env } from '@src/env';
 import { prisma } from '@lib/prisma';
 
-import { NotFoundError } from '@src/shared/errors';
+import { NotFoundError } from '@errors';
 import { uploadToBucket } from '@lib/supabase/storage';
 
 /**

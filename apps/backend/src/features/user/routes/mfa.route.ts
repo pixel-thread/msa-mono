@@ -5,7 +5,7 @@ import type { RequestHandler } from 'express';
 // Shared utilities
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
-import { UnauthorizedError } from '@src/shared/errors';
+import { UnauthorizedError } from '@errors';
 import { logger } from '@src/shared/logger';
 
 // ---- Services

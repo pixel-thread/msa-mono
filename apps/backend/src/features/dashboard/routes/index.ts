@@ -3,7 +3,7 @@ import { Router } from 'express';
 import { prisma } from '@lib/prisma';
 import { success } from '@utils/responses';
 import { auth } from '@src/middleware/auth';
-import { ForbiddenError, UnauthorizedError } from '@src/shared/errors';
+import { ForbiddenError, UnauthorizedError } from '@errors';
 
 import { getDashboardOverview } from '@feature/dashboard/services/dashboard.service';
 

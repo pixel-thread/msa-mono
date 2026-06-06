@@ -11,7 +11,7 @@ import type { RequestHandler } from 'express';
 
 import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
-import { UnauthorizedError, ForbiddenError, NotFoundError } from '@src/shared/errors';
+import { UnauthorizedError, ForbiddenError, NotFoundError } from '@errors';
 import { prisma } from '@lib/prisma';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';

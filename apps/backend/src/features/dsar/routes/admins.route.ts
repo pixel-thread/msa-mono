@@ -9,7 +9,7 @@ import { Request, NextFunction, Response, RequestHandler } from 'express';
 // ---- Shared Utilities
 
 import { success } from '@utils/responses';
-import { UnauthorizedError, ForbiddenError } from '@src/shared/errors';
+import { UnauthorizedError, ForbiddenError } from '@errors';
 import { prisma } from '@lib/prisma';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';

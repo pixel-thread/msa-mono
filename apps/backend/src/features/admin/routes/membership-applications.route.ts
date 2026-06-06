@@ -11,7 +11,7 @@ import { UserRole } from '@prisma/client';
 
 import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
-import { NotFoundError } from '@src/shared/errors';
+import { NotFoundError } from '@errors';
 import { withRole } from '@utils/with-role';
 import { asyncHandler } from '@utils/async-handler';
 import { logger } from '@src/shared/logger';

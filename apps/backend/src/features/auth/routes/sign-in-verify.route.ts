@@ -18,7 +18,7 @@ import {
   BadRequestError,
   TooManyRequestsError,
   UnauthorizedError,
-} from '@src/shared/errors';
+} from '@errors';
 
 import { getUniqueUser } from '@services/user/get-unique-user';
 

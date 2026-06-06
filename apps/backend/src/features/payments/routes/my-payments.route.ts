@@ -15,7 +15,7 @@ import { buildPagination } from '@utils/build-pagination';
 import { logger } from '@src/shared/logger';
 import { UserRole } from '@prisma/client';
 import { withRole } from '@utils/with-role';
-import { UnauthorizedError, ForbiddenError } from '@src/shared/errors';
+import { UnauthorizedError, ForbiddenError } from '@errors';
 import { PaymentHistoryQuerySchema } from '@feature/payments/validators';
 import { findPaymentTransactions } from '@feature/payments/services/find-payment-transactions';
 import { asyncHandler } from '@utils/async-handler';

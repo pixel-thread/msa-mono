@@ -7,7 +7,7 @@
 
 import { prisma } from '@lib/prisma';
 
-import { NotFoundError, ForbiddenError } from '@src/shared/errors';
+import { NotFoundError, ForbiddenError } from '@errors';
 
 /**
  * Props for deleting an announcement.

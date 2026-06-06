@@ -14,7 +14,7 @@ import { getActiveProvider, getProviderById } from './payment-provider.service';
 import { decrypt } from '@lib/crypto';
 import { env } from '@src/env';
 import Razorpay from 'razorpay';
-import { BadRequestError, NotFoundError, PaymentError } from '@src/shared/errors';
+import { BadRequestError, NotFoundError, PaymentError } from '@errors';
 import { logAction } from '@services/audit-logs';
 import { PAGE_SIZE } from '@src/shared/constants';
 import { recordMemberPayment } from '@feature/ledger/services/accounting.service';

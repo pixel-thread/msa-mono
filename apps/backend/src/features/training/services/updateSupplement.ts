@@ -6,7 +6,7 @@ import { prisma } from '@lib/prisma';
 
 // ---- Validators ----
 import { UpdateSupplementInput } from '../validators/training';
-import { NotFoundError } from '@src/shared/errors';
+import { NotFoundError } from '@errors';
 
 // ---- Interfaces ----
 

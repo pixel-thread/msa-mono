@@ -7,7 +7,7 @@ import { asyncHandler } from '@utils/async-handler';
 import { logger } from '@src/shared/logger';
 import { env } from '@src/env';
 
-import { BadRequestError, ConflictError } from '@src/shared/errors';
+import { BadRequestError, ConflictError } from '@errors';
 
 import { findFirstAssociation } from '@feature/associations/services/findFirstAssociation';
 import { findFirstMember } from '@feature/members/services/findFirstMember';

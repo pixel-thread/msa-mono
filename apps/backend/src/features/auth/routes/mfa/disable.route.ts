@@ -10,7 +10,7 @@ import { logger } from '@src/shared/logger';
 
 import { verifyPassword } from '@lib/password';
 
-import { BadRequestError, UnauthorizedError } from '@src/shared/errors';
+import { BadRequestError, UnauthorizedError } from '@errors';
 
 import { findFirstMember } from '@feature/members/services/findFirstMember';
 import { updateMember } from '@feature/members/services/updateMember';

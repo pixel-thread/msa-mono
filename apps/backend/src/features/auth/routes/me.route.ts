@@ -5,7 +5,7 @@ import { asyncHandler } from '@utils/async-handler';
 import { logger } from '@src/shared/logger';
 import { env } from '@src/env';
 
-import { UnauthorizedError } from '@src/shared/errors';
+import { UnauthorizedError } from '@errors';
 
 import { getUniqueUser } from '@services/user/get-unique-user';
 

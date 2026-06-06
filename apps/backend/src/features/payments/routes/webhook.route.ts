@@ -13,7 +13,7 @@ import type { RequestHandler } from 'express';
 import { AuditAction } from '@prisma/client';
 import { logger } from '@src/shared/logger';
 import { processWebhookEvent } from '@feature/payments/services/webhook.service';
-import { WebhookSignatureError } from '@src/shared/errors';
+import { WebhookSignatureError } from '@errors';
 import { logAction } from '@services/audit-logs';
 import { asyncHandler } from '@utils/async-handler';
 

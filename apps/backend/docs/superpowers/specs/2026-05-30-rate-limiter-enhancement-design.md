@@ -22,7 +22,7 @@ The rate-limiting logic will be consolidated in `src/middleware/rate-limiter.ts`
 5. If failed: Throw `TooManyRequestsError`.
 
 ## Error Handling
-The middleware will use the existing `@src/shared/errors` to throw a `TooManyRequestsError` when limits are exceeded.
+The middleware will use the existing `@errors` to throw a `TooManyRequestsError` when limits are exceeded.
 
 ## Success Metrics
 - Successfully limit global traffic to 100 req/60s.

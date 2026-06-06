@@ -22,7 +22,7 @@ Write tests for the factory function, global middleware, and route-specific midd
 import { describe, it, expect, jest, beforeEach } from '@jest/globals';
 import { Request, Response } from 'express';
 import { rateLimiter, routeRateLimiter, createRateLimiter } from '@src/middleware/rate-limiter';
-import { TooManyRequestsError } from '@src/shared/errors';
+import { TooManyRequestsError } from '@errors';
 import { Ratelimit } from '@upstash/ratelimit';
 
 jest.mock('@upstash/ratelimit');
@@ -137,7 +137,7 @@ git commit -m "feat: implement createRateLimiter factory"
 - [ ] **Step 1: Refactor rateLimiter and Implement routeRateLimiter**
 ```typescript
 import { Request, Response, NextFunction } from 'express';
-import { TooManyRequestsError } from '@src/shared/errors';
+import { TooManyRequestsError } from '@errors';
 
 // Global rate limiter instance
 const globalLimiter = createRateLimiter(100, '60 s');

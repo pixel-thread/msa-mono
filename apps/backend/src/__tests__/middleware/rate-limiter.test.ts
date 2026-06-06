@@ -1,7 +1,7 @@
 import { describe, it, expect, jest, beforeEach } from '@jest/globals';
 import { Request, Response } from 'express';
 import { rateLimiter, routeRateLimiter, createRateLimiter, _resetRatelimiter } from '@src/middleware/rate-limiter';
-import { TooManyRequestsError } from '@src/shared/errors';
+import { TooManyRequestsError } from '@errors';
 import { Ratelimit } from '@upstash/ratelimit';
 
 // Correct mocking for Task 1

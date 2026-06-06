@@ -14,7 +14,7 @@ import { success } from '@utils/responses';
 import { logger } from '@src/shared/logger';
 import { UserRole } from '@prisma/client';
 import { withRole } from '@utils/with-role';
-import { UnauthorizedError, ForbiddenError, NotFoundError } from '@src/shared/errors';
+import { UnauthorizedError, ForbiddenError, NotFoundError } from '@errors';
 import { getTransactionById } from '@feature/payments/services/payment.service';
 import { validate } from '@lib/validate';
 import { z } from 'zod';

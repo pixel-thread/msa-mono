@@ -24,7 +24,7 @@ import { deleteFromBucket } from '@lib/supabase/storage';
 // Validators
 import { AnnouncementRouteParams } from '@feature/announcements/validators';
 import { uploadAnnouncementImage } from '@feature/announcements/services';
-import { BadRequestError } from '@src/shared/errors';
+import { BadRequestError } from '@errors';
 import { fileUpload } from '@middleware/file-upload';
 
 /**

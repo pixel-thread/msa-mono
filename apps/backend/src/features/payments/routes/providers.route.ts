@@ -11,7 +11,7 @@ import type { RequestHandler } from 'express';
 import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
 import { logger } from '@src/shared/logger';
-import { BadRequestError, NotFoundError } from '@src/shared/errors';
+import { BadRequestError, NotFoundError } from '@errors';
 import { UserRole } from '@prisma/client';
 import { withRole } from '@utils/with-role';
 import {

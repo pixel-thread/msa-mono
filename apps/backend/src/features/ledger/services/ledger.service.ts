@@ -9,7 +9,7 @@ import { prisma } from '@lib/prisma';
 // Shared utilities
 // ---------------------------------------------------------------------------
 
-import { ValidationError, NotFoundError } from '@src/shared/errors';
+import { ValidationError, NotFoundError } from '@errors';
 import { PAGE_SIZE } from '@src/shared/constants';
 import { logger } from '@src/shared/logger';
 import { ContextStore } from '@lib';

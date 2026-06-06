@@ -7,7 +7,7 @@ import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
 import { prisma } from '@lib/prisma';
 import { uploadToBucket, deleteFromBucket } from '@lib/supabase/storage';
-import { BadRequestError, NotFoundError } from '@src/shared/errors';
+import { BadRequestError, NotFoundError } from '@errors';
 import { env } from '@src/env';
 import { logger } from '@src/shared/logger';
 import { getAssociation } from '@services/association/get-association';

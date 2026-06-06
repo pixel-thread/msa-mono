@@ -12,7 +12,7 @@ import { UserRole } from '@prisma/client';
 import { validate } from '@lib/validate';
 import { prisma } from '@lib/prisma';
 import { success } from '@utils/responses';
-import { ConflictError, NotFoundError } from '@src/shared/errors';
+import { ConflictError, NotFoundError } from '@errors';
 import { withRole } from '@utils/with-role';
 import { asyncHandler } from '@utils/async-handler';
 import { logger } from '@src/shared/logger';

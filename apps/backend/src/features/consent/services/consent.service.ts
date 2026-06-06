@@ -3,7 +3,7 @@
 // ---- Each consent action is persisted as a receipt and audited via the audit-log trail.
 
 // Shared utilities
-import { NotFoundError, BadRequestError } from '@src/shared/errors';
+import { NotFoundError, BadRequestError } from '@errors';
 import { PAGE_SIZE } from '@src/shared/constants';
 import { buildPagination } from '@utils';
 

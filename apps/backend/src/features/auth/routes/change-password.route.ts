@@ -8,7 +8,7 @@ import { logger } from '@src/shared/logger';
 
 import { hashPassword, validatePasswordStrength, verifyPassword } from '@lib/password';
 
-import { BadRequestError, UnauthorizedError, ValidationError } from '@src/shared/errors';
+import { BadRequestError, UnauthorizedError, ValidationError } from '@errors';
 
 import { getUniqueUserNoFilter } from '@services/user/get-unique-user-no-filter';
 

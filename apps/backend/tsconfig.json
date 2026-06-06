@@ -18,13 +18,17 @@
     "paths": {
       "@src/*": ["./src/*"],
       "@middleware/*": ["./src/middleware/*"],
+      "@services": ["./src/shared/services"],
       "@services/*": ["./src/shared/services/*"],
       "@feature/*": ["./src/features/*"],
+      "@validator": ["./src/shared/validators"],
       "@validator/*": ["./src/shared/validators/*"],
+      "@lib": ["./src/shared/lib"],
       "@lib/*": ["./src/shared/lib/*"],
-      "@middleware/*": ["./src/middleware/*"],
+      "@utils": ["./src/shared/utils"],
       "@utils/*": ["./src/shared/utils/*"],
-      "@src/shared/errors/*": ["./src/shared/errors/*"],
+      "@errors": ["./src/shared/errors"],
+      "@errors/*": ["./src/shared/errors/*"],
       "@sharedType/*": ["./src/shared/types/*"]
     }
   },

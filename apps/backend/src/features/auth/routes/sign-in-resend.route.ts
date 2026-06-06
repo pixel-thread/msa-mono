@@ -13,7 +13,7 @@ import { generateOTP, hashToken } from '@lib/password';
 import { verifyMfaTempToken } from '@lib/jwt';
 import { sendVerificationEmail } from '@lib/email';
 
-import { BadRequestError, NotFoundError, TooManyRequestsError } from '@src/shared/errors';
+import { BadRequestError, NotFoundError, TooManyRequestsError } from '@errors';
 
 import { getUniqueUser } from '@services/user/get-unique-user';
 

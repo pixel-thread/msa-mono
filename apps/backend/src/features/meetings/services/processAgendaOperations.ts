@@ -1,5 +1,5 @@
 import { prisma } from '@lib/prisma';
-import { NotFoundError } from '@src/shared/errors';
+import { NotFoundError } from '@errors';
 import { AgendaOperationInput } from '../validators/agenda-items';
 
 /** Props for processing agenda operations. */

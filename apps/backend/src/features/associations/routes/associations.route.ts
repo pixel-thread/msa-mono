@@ -18,7 +18,7 @@ import {
   NotFoundError,
   UnauthorizedError,
   ValidationError,
-} from '@src/shared/errors';
+} from '@errors';
 import { withRole } from '@utils/with-role';
 import { asyncHandler } from '@utils/async-handler';
 import { logger } from '@src/shared/logger';

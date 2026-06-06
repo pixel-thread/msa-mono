@@ -10,7 +10,7 @@ import type { RequestHandler } from 'express';
 import { UserRole } from '@prisma/client';
 
 import { success } from '@utils/responses';
-import { ForbiddenError } from '@src/shared/errors';
+import { ForbiddenError } from '@errors';
 import { validate } from '@lib/validate';
 import { withRole } from '@utils/with-role';
 import { hasHighRoleAccess } from '@utils/has-high-role';

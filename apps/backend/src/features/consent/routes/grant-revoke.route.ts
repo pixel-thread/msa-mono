@@ -9,7 +9,7 @@ import type { RequestHandler } from 'express';
 // Shared utilities
 import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
-import { UnauthorizedError, ForbiddenError, BadRequestError } from '@src/shared/errors';
+import { UnauthorizedError, ForbiddenError, BadRequestError } from '@errors';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 

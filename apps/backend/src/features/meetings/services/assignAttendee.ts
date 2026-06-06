@@ -1,5 +1,5 @@
 import { prisma } from '@lib/prisma';
-import { NotFoundError, ConflictError, ForbiddenError } from '@src/shared/errors';
+import { NotFoundError, ConflictError, ForbiddenError } from '@errors';
 import { $Enums, AttendeeRole } from '@prisma/client';
 import { ExpoNotificationService } from '@lib/expo';
 import { logger } from '@src/shared/logger';

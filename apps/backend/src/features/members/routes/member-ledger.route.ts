@@ -10,7 +10,7 @@ import type { RequestHandler } from 'express';
 import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
 import { prisma } from '@lib/prisma';
-import { ForbiddenError, UnauthorizedError } from '@src/shared/errors';
+import { ForbiddenError, UnauthorizedError } from '@errors';
 import { withRole } from '@utils/with-role';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';

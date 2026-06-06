@@ -2,7 +2,7 @@
 // Shared utilities
 // ---------------------------------------------------------------------------
 import { prisma } from '@lib/prisma';
-import { NotFoundError, ConflictError, ForbiddenError } from '@src/shared/errors';
+import { NotFoundError, ConflictError, ForbiddenError } from '@errors';
 import { PAGE_SIZE } from '@src/shared/constants';
 import { buildPagination } from '@utils/build-pagination';
 import { hasHighRoleAccess } from '@utils';

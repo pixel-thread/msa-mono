@@ -10,7 +10,7 @@ import { env } from '@src/env';
 import { verifyRefreshToken, signAccessToken, signRefreshToken } from '@lib/jwt';
 import { hashToken } from '@lib/password';
 
-import { UnauthorizedError } from '@src/shared/errors';
+import { UnauthorizedError } from '@errors';
 
 import { cacheClient } from '@lib/cache';
 

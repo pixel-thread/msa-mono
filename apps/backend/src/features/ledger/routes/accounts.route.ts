@@ -37,7 +37,7 @@ import {
   updateAccount,
 } from '@feature/ledger/services/ledger.service';
 import { seedChartOfAccounts } from '@feature/ledger/services/seed-chart-of-accounts';
-import { NotFoundError } from '@src/shared/errors';
+import { NotFoundError } from '@errors';
 import { incomeStatement, trialBalance } from '../services/reports.service';
 
 // ---------------------------------------------------------------------------

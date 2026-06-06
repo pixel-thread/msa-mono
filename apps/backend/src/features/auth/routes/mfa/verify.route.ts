@@ -11,7 +11,7 @@ import { env } from '@src/env';
 
 import { hashToken } from '@lib/password';
 
-import { TooManyRequestsError, UnauthorizedError } from '@src/shared/errors';
+import { TooManyRequestsError, UnauthorizedError } from '@errors';
 
 import { updateMember } from '@feature/members/services/updateMember';
 

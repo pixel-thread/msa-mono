@@ -5,7 +5,7 @@ import type { RequestHandler } from 'express';
 // ---- Shared utilities ----
 import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
-import { NotFoundError } from '@src/shared/errors';
+import { NotFoundError } from '@errors';
 import { logger } from '@src/shared/logger';
 import { getAssociation } from '@services/association/get-association';
 import { withRole } from '@utils/with-role';

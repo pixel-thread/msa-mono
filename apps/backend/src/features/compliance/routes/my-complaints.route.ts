@@ -10,7 +10,7 @@ import type { RequestHandler } from 'express';
 import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
 import { buildPagination } from '@utils/build-pagination';
-import { UnauthorizedError, NotFoundError } from '@src/shared/errors';
+import { UnauthorizedError, NotFoundError } from '@errors';
 import { logger } from '@src/shared/logger';
 import { getAssociation } from '@services/association/get-association';
 import { asyncHandler } from '@utils/async-handler';

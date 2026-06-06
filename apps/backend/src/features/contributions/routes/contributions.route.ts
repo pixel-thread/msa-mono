@@ -13,7 +13,7 @@ import { success } from '@utils/responses';
 import { buildPagination } from '@utils/build-pagination';
 import { logger } from '@src/shared/logger';
 import { withRole } from '@utils/with-role';
-import { NotFoundError } from '@src/shared/errors';
+import { NotFoundError } from '@errors';
 import { UserRole, ContributionStatus } from '@prisma/client';
 import { z } from 'zod';
 import {

@@ -16,7 +16,7 @@ import { UserRole } from '@prisma/client';
 
 import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
-import { BadRequestError, ForbiddenError, NotFoundError } from '@src/shared/errors';
+import { BadRequestError, ForbiddenError, NotFoundError } from '@errors';
 import { getAssociation } from '@services/association/get-association';
 import { withRole } from '@utils/with-role';
 import { logger } from '@src/shared/logger';

@@ -12,7 +12,7 @@ import { prisma } from '@lib/prisma';
 import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
 import { logger } from '@src/shared/logger';
-import { UnauthorizedError, ForbiddenError } from '@src/shared/errors';
+import { UnauthorizedError, ForbiddenError } from '@errors';
 import { VerifyPaymentSchema } from '@feature/payments/validators';
 import { verifyAndCompletePayment } from '@feature/payments/services/payment.service';
 import { asyncHandler } from '@utils/async-handler';

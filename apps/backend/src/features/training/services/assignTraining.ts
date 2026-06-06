@@ -4,7 +4,7 @@ import { AuditAction, Prisma } from '@prisma/client';
 // ---- Shared utilities ----
 import { prisma } from '@lib/prisma';
 import { PAGE_SIZE } from '@src/shared/constants';
-import { BadRequestError, NotFoundError } from '@src/shared/errors';
+import { BadRequestError, NotFoundError } from '@errors';
 
 // ---- Interfaces ----
 

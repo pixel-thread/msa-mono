@@ -1,6 +1,6 @@
 import Razorpay from 'razorpay';
 import * as crypto from 'crypto';
-import { NotFoundError } from '@src/shared/errors';
+import { NotFoundError } from '@errors';
 import { env } from '@src/env';
 
 // ---------------------------------------------------------------------------

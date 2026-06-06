@@ -11,7 +11,7 @@ import { verifyPassword, hashToken, generateOTP } from '@lib/password';
 import { signAccessToken, signRefreshToken, signMfaTempToken } from '@lib/jwt';
 import { sendVerificationEmail } from '@lib/email';
 
-import { ForbiddenError, UnauthorizedError } from '@src/shared/errors';
+import { ForbiddenError, UnauthorizedError } from '@errors';
 
 import { getUserFirst } from '@services/user/get-user-first';
 import { updateUser } from '@feature/user/services';

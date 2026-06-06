@@ -6,7 +6,7 @@ import type { RequestHandler } from 'express';
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
 import { validate } from '@lib/validate';
-import { ValidationError } from '@src/shared/errors';
+import { ValidationError } from '@errors';
 
 // ---- Prisma
 

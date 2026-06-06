@@ -17,7 +17,7 @@ import {
   ConflictError,
   UnauthorizedError,
   ValidationError,
-} from '@src/shared/errors';
+} from '@errors';
 
 import { findFirstMember } from '@feature/members/services/findFirstMember';
 

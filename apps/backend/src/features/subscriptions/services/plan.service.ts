@@ -2,7 +2,7 @@
 // Shared utilities
 // ---------------------------------------------------------------------------
 import { prisma } from '@lib/prisma';
-import { BadRequestError, NotFoundError } from '@src/shared/errors';
+import { BadRequestError, NotFoundError } from '@errors';
 import { hasHighRoleAccess } from '@utils/has-high-role';
 
 // ---------------------------------------------------------------------------

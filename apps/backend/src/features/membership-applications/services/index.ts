@@ -10,7 +10,7 @@ import { ApplicationStatus, Prisma, UserRole } from '@prisma/client';
 
 import { prisma } from '@lib/prisma';
 import { generateRandomPassword, hashPassword } from '@lib/password';
-import { ConflictError, NotFoundError } from '@src/shared/errors';
+import { ConflictError, NotFoundError } from '@errors';
 import { buildPagination } from '@utils/build-pagination';
 import { PAGE_SIZE } from '@src/shared/constants';
 

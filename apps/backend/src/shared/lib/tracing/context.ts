@@ -1,4 +1,4 @@
-import { BadRequestError } from '@src/shared/errors';
+import { BadRequestError } from '@errors';
 import { AsyncLocalStorage } from 'node:async_hooks';
 
 /**

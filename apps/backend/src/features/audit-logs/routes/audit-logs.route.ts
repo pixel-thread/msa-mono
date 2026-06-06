@@ -8,7 +8,7 @@ import type { RequestHandler } from 'express';
 
 // Shared utilities
 import { success } from '@utils/responses';
-import { ForbiddenError } from '@src/shared/errors';
+import { ForbiddenError } from '@errors';
 import { hasHighRoleAccess } from '@utils/has-high-role';
 import { logger } from '@src/shared/logger';
 import { getAssociation } from '@services/association/get-association';

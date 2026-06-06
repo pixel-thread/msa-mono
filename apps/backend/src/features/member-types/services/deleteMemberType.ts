@@ -9,7 +9,7 @@ import { AuditAction, Prisma } from '@prisma/client';
 // Shared utilities
 // ---------------------------------------------------------------------------
 
-import { BadRequestError } from '@src/shared/errors';
+import { BadRequestError } from '@errors';
 
 // ---------------------------------------------------------------------------
 // Interface

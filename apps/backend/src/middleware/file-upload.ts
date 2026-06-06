@@ -1,5 +1,5 @@
 import multer, { FileFilterCallback } from 'multer';
-import { BadRequestError } from '@src/shared/errors';
+import { BadRequestError } from '@errors';
 import type { Request } from 'express';
 import path from 'node:path';
 import { MAX_IMAGE_SIZE, BLOCK_FILE_EXT } from '@src/shared/constants';
