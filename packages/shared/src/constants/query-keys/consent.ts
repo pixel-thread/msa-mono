@@ -1,9 +1,9 @@
 export const CONSENT_KEYS = {
-  ALL:     () => ['consent'] as const,
-  RECORDS: (options?: unknown) => ['consent-records', options] as const,
-  REPORT:  () => ['consent-report'] as const,
-  HISTORY: (userId?: string | null) => ['consent-history', userId] as const,
-  MY:      () => ['consent', 'my'] as const,
-  GRANT:   () => ['consent', 'grant'] as const,
-  REVOKE:  () => ['consent', 'revoke'] as const,
+  ALL:     () => ['consent'].filter(Boolean),
+  RECORDS: (options?: unknown) => ['consent-records', options].filter(Boolean),
+  REPORT:  () => ['consent-report'].filter(Boolean),
+  HISTORY: (userId?: string | null) => ['consent-history', userId].filter(Boolean),
+  MY:      () => ['consent', 'my'].filter(Boolean),
+  GRANT:   () => ['consent', 'grant'].filter(Boolean),
+  REVOKE:  () => ['consent', 'revoke'].filter(Boolean),
 }

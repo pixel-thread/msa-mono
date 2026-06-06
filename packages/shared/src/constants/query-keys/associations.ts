@@ -1,5 +1,5 @@
 export const ASSOCIATIONS_KEYS = {
-  ALL:     () => ['associations'] as const,
-  LIST:    () => ['associations-list'] as const,
-  CURRENT: () => ['associations', 'current'] as const,
+  ALL:     () => ['associations'].filter(Boolean),
+  LIST:    () => ['associations-list'].filter(Boolean),
+  CURRENT: () => ['associations', 'current'].filter(Boolean),
 }

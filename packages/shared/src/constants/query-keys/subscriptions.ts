@@ -1,8 +1,8 @@
 export const SUBSCRIPTIONS_KEYS = {
-  ALL:             () => ['subscriptions'] as const,
-  PLANS:           (page?: number) => ['subscription-plans', page] as const,
-  PLAN:            (id: string) => ['plan', id] as const,
-  MY:              (page?: number) => ['my-subscription', page] as const,
-  USER:            (userId: string) => ['user-subscription', userId] as const,
-  PAYMENT_HISTORY: (page?: number) => ['payment-history', page] as const,
+  ALL:             () => ['subscriptions'].filter(Boolean),
+  PLANS:           (page?: number) => ['subscription-plans', page].filter(Boolean),
+  PLAN:            (id: string) => ['plan', id].filter(Boolean),
+  MY:              (page?: number) => ['my-subscription', page].filter(Boolean),
+  USER:            (userId: string) => ['user-subscription', userId].filter(Boolean),
+  PAYMENT_HISTORY: (page?: number) => ['payment-history', page].filter(Boolean),
 }

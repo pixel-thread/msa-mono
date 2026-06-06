@@ -1,3 +1,3 @@
 export const AUTH_KEYS = {
-  ME: () => ['auth', 'me'] as const,
+  ME: () => ['auth', 'me'].filter(Boolean),
 }

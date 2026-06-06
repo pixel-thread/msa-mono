@@ -1,10 +1,10 @@
 export const DSAR_KEYS = {
-  ALL:        () => ['dsar'] as const,
-  TICKETS:    (options?: unknown) => ['dsar-tickets', options] as const,
-  TICKET:     (id: string) => ['dsar-ticket', id] as const,
-  SLA:        () => ['dsar-sla'] as const,
-  MY:         () => ['dsar', 'my'] as const,
-  MY_DETAIL:  (id: string) => ['dsar', 'my', 'detail', id] as const,
-  DETAIL:     (id: string) => ['dsar', 'detail', id] as const,
-  SLA_REPORT: () => ['dsar', 'sla-report'] as const,
+  ALL:        () => ['dsar'].filter(Boolean),
+  TICKETS:    (options?: unknown) => ['dsar-tickets', options].filter(Boolean),
+  TICKET:     (id: string) => ['dsar-ticket', id].filter(Boolean),
+  SLA:        () => ['dsar-sla'].filter(Boolean),
+  MY:         () => ['dsar', 'my'].filter(Boolean),
+  MY_DETAIL:  (id: string) => ['dsar', 'my', 'detail', id].filter(Boolean),
+  DETAIL:     (id: string) => ['dsar', 'detail', id].filter(Boolean),
+  SLA_REPORT: () => ['dsar', 'sla-report'].filter(Boolean),
 }
