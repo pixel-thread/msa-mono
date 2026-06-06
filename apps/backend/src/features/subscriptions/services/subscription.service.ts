@@ -186,7 +186,7 @@ export async function changePlan({ planId, userId }: ChangePlanInput) {
   const currentYear = now.getFullYear();
   const currentMonth = now.getMonth() + 1; // 1-indexed
 
-  await generateUserContributions(userId, currentYear, currentMonth);
+  await generateUserContributions(userId, currentYear, 12);
 
   // ── Step 3: Switch plan ───────────────────────────────────────────────
   const startDate = new Date();
