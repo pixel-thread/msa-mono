@@ -63,7 +63,7 @@ export function ForgotPasswordPage() {
           </CardHeader>
           <CardContent>
             <Link
-              href="/sign-in"
+              to="/sign-in"
               className="text-sm font-medium text-primary hover:text-primary-active"
             >
               Back to sign in
@@ -125,7 +125,7 @@ export function ForgotPasswordPage() {
 
               <div className="text-center">
                 <Link
-                  href="/sign-in"
+                  to="/sign-in"
                   className="text-sm font-medium text-primary hover:text-primary-active"
                 >
                   Back to sign in

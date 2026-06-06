@@ -16,7 +16,7 @@ export function useLedgerLineColumns(options: UseLedgerLineColumnsOptions) {
       header: 'Account',
       cell: ({ row }) => (
         <Link
-          href={`/accounts/${row.original.accountId}`}
+          to={`/accounts/${row.original.accountId}`}
           className="text-sm text-ink hover:underline"
         >
           {getAccountName(row.original.accountId)}

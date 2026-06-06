@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { ConsentPage } from '@src/features/consent/pages';
+import ConsentAdminPage from '@src/features/consent/pages/consent-admin';
 
-export const Route = createFileRoute('/_dashboard/consent')({
-  component: ConsentPage,
+export const Route = createFileRoute('/_dashboard/consent/')({
+  component: ConsentAdminPage,
 });

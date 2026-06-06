@@ -63,12 +63,13 @@
   --radius-md: 12px;
   --radius-lg: 16px;
   --radius-xl: 24px;
-  --font-sans: var(--font-sans);
-  --font-heading: var(--font-mono);
+  --font-sans: 'Roboto', sans-serif;
+  --font-heading: 'Roboto', sans-serif;
+  --font-mono: 'Roboto Mono', monospace;
+  --font-geist-mono: 'Roboto Mono', monospace;
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
-  --font-mono: var(--font-mono);
 }
 
 @layer base {

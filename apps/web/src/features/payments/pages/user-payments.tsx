@@ -16,7 +16,7 @@ import { CreditCard, Clock, AlertCircle, Receipt } from 'lucide-react';
 import { Link } from '@tanstack/react-router';
 
 export function UserPaymentsPage() {
-  const params = useParams();
+  const params = useParams({ strict: false });
   const navigate = useNavigate();
   const userId = params.userId as string;
   const { page, setPage } = useUrlFilters({
@@ -190,13 +190,13 @@ export function UserPaymentsPage() {
           <CardContent>
             <div className="space-y-2">
               <Link
-                href={`/payments/users/${userId}/contributions`}
+                to={`/payments/users/${userId}/contributions`}
                 className="block text-sm text-primary hover:underline"
               >
                 View Contributions →
               </Link>
               <Link
-                href={`/members/${userId}`}
+                to={`/members/${userId}`}
                 className="block text-sm text-primary hover:underline"
               >
                 View Member Profile →

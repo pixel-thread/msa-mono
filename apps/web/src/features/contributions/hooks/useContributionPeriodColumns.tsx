@@ -16,7 +16,7 @@ export function useContributionPeriodColumns() {
         return (
           <>
             <Link
-              href={`/payments/users/${cp.userId}`}
+              to={`/payments/users/${cp.userId}`}
               className="text-sm text-primary hover:underline"
             >
               {cp.user?.name || cp.userId.slice(0, 8)}
@@ -30,7 +30,7 @@ export function useContributionPeriodColumns() {
       id: 'period',
       header: 'Period',
       cell: ({ row }) => (
-        <Link href={`/payments/contributions/${row.original.id}`} className="text-sm font-medium">
+        <Link to={`/payments/contributions/${row.original.id}`} className="text-sm font-medium">
           {getMonthName(row.original.month)} {row.original.year}
         </Link>
       ),

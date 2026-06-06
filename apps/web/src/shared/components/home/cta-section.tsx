@@ -26,7 +26,7 @@ export function CtaSection() {
             size="lg"
             className="bg-white text-primary hover:bg-white/90"
           >
-            <Link href="/sign-up">
+            <Link to="/sign-up">
               Get Started Today
               <HugeiconsIcon icon={ArrowRight01Icon} />
             </Link>
@@ -37,7 +37,7 @@ export function CtaSection() {
             size="lg"
             className="text-primary-foreground hover:bg-white/10 hover:text-primary-foreground"
           >
-            <Link href="#contact">Contact Us</Link>
+            <a href="#contact">Contact Us</a>
           </Button>
         </div>
       </div>

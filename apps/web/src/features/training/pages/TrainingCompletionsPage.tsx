@@ -14,7 +14,7 @@ import { useTrainingCompletionsColumns } from '../hooks/completions/useTrainingC
 
 export function TrainingCompletionsPage() {
   const navigate = useNavigate();
-  const params = useParams();
+  const params = useParams({ strict: false }) as Record<string, string | undefined>;
   const moduleId = params.id as string;
   const { page, setPage } = useUrlFilters({
     basePath: `/training/${moduleId}/completions`,

@@ -18,7 +18,7 @@ import { toast } from 'sonner';
 import { Loading } from '@components/loading';
 
 export default function LedgerEntryDetailPage() {
-  const params = useParams();
+  const params = useParams({ strict: false });
   const navigate = useNavigate();
   const entryId = params?.entryId as string;
 

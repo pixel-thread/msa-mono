@@ -28,7 +28,7 @@ interface UserDisplay {
 
 export function TrainingAssignPage() {
   const navigate = useNavigate();
-  const params = useParams();
+  const params = useParams({ strict: false }) as Record<string, string | undefined>;
   const moduleId = params.id as string;
   const { page, setPage } = useUrlFilters();
 

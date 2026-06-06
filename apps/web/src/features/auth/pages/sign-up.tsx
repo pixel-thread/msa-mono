@@ -406,7 +406,7 @@ export function SignUpPage() {
                   <p className="text-center text-sm text-muted-foreground">
                     Already have an account?{' '}
                     <Link
-                      href="/sign-in"
+                      to="/sign-in"
                       className="text-xs font-semibold tracking-widest uppercase text-primary underline underline-offset-4 hover:text-primary/80"
                     >
                       Sign In

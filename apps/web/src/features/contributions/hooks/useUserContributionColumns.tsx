@@ -71,7 +71,7 @@ export function useUserContributionColumns({ onCheck, checkValues }: Props = {})
       id: 'period',
       header: 'Period',
       cell: ({ row }) => (
-        <Link href={`/contributions/${row.original.id}`} className="text-sm font-medium">
+        <Link to={`/contributions/${row.original.id}`} className="text-sm font-medium">
           {getMonthName(row.original.month)} {row.original.year}
         </Link>
       ),

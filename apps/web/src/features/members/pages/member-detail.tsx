@@ -13,7 +13,7 @@ import { ActivityCard } from '@src/features/members/components/detail/activity-c
 import { AccountCard } from '@src/features/members/components/detail/account-card';
 
 export function MemberDetailPage() {
-  const params = useParams();
+  const params = useParams({ strict: false });
   const navigate = useNavigate();
   const memberId = params.memberId as string;
 

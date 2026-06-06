@@ -1,6 +1,6 @@
 'use client';
 
-import { useParams, useNavigate, useSearchParams } from '@tanstack/react-router';
+import { useParams, useNavigate } from '@tanstack/react-router';
 import { useUserContributions } from '@src/features/contributions/hooks/useUserContributions';
 import { Card, CardHeader, CardTitle, CardContent } from '@src/shared/components/ui/card';
 import { Button } from '@src/shared/components/ui/button';
@@ -15,8 +15,7 @@ import { DataTablePagination } from '@src/shared/components/data-table-paginatio
 import { useUrlFilters } from '@hooks/use-url-filters';
 
 export function UserContributionsPage() {
-  const params = useParams();
-  const [search] = useSearchParams();
+  const params = useParams({ strict: false });
   const navigate = useNavigate();
   const userId = params.userId as string;
 
@@ -182,7 +181,7 @@ export function UserContributionsPage() {
       </Card>
 
       <div className="mt-4">
-        <Link href={`/payments/users/${userId}`} className="text-sm text-primary hover:underline">
+        <Link to={`/payments/users/${userId}`} className="text-sm text-primary hover:underline">
           ← Back to Payment History
         </Link>
       </div>

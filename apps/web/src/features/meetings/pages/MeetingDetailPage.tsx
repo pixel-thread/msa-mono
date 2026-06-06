@@ -1,6 +1,6 @@
 'use client';
 
-import { useParams, useNavigate, useSearchParams } from '@tanstack/react-router';
+import { useParams, useNavigate, useSearch } from '@tanstack/react-router';
 import { useState } from 'react';
 
 import {
@@ -42,11 +42,11 @@ import {
  * Displays comprehensive information about a specific meeting, including agenda and attendees.
  */
 export function MeetingDetailPage() {
-  const params = useParams();
+  const params = useParams({ strict: false });
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+  const searchParams = useSearch({ strict: false }) as Record<string, string | undefined>;
   const meetingId = params.meetingId as string;
-  const [editOpen, setEditOpen] = useState(searchParams.get('edit') === 'true');
+  const [editOpen, setEditOpen] = useState(searchParams.edit === 'true');
   const [manageAttendeesOpen, setManageAttendeesOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
 
@@ -93,7 +93,7 @@ export function MeetingDetailPage() {
         titleBadges={<>{getStatusBadge(meeting.status)}{getTypeBadge(meeting.type)}</>}
         description="Meeting details and agenda"
       >
-        <Link href={`/meetings/${meetingId}/minutes`}>
+        <Link to={`/meetings/${meetingId}/minutes`}>
           <Button
             variant="outline"
             className="h-11 border-hairline bg-canvas px-5 text-sm font-medium text-ink hover:bg-surface-strong"
@@ -102,7 +102,7 @@ export function MeetingDetailPage() {
             Minutes
           </Button>
         </Link>
-        <Link href={`/meetings/${meetingId}/assign`}>
+        <Link to={`/meetings/${meetingId}/assign`}>
           <Button
             variant="outline"
             className="h-11 border-hairline bg-canvas px-5 text-sm font-medium text-ink hover:bg-surface-strong"

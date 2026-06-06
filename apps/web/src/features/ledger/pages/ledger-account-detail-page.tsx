@@ -19,7 +19,7 @@ import { DataTable } from '@src/shared/components/data-table';
 import { useLedgerEntriesColumns } from '../hooks/useLedgerEntriesColumns';
 
 export default function LedgerAccountDetailPage() {
-  const params = useParams();
+  const params = useParams({ strict: false });
   const navigate = useNavigate();
   const accountId = params?.id as string;
 

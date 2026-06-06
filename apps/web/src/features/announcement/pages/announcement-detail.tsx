@@ -31,7 +31,7 @@ const statusVariants: Record<string, 'default' | 'secondary' | 'outline'> = {
 };
 
 export default function AnnouncementDetailPage() {
-  const params = useParams();
+  const params = useParams({ strict: false });
   const navigate = useNavigate();
   const announcementId = params.announcementId as string;
   const [editOpen, setEditOpen] = useState(false);

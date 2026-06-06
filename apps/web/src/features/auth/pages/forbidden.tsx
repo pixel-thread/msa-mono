@@ -44,14 +44,14 @@ export function ForbiddenPage() {
             variant="outline"
             className="h-11 border-hairline bg-surface-strong px-5 text-base font-semibold text-ink hover:bg-surface-strong/80"
           >
-            <Link href="/">Go back home</Link>
+            <Link to="/">Go back home</Link>
           </Button>
           {!isSignedIn && (
             <Button
               asChild
               className="h-11 bg-primary px-5 text-base font-semibold text-on-primary hover:bg-primary-active"
             >
-              <Link href="/sign-in">Sign in</Link>
+              <Link to="/sign-in">Sign in</Link>
             </Button>
           )}
         </CardFooter>

@@ -52,7 +52,7 @@ export function NavMain({
                   data-active={isActive}
                   className="data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground data-[active=true]:font-medium"
                 >
-                  <Link prefetch href={item.url}>
+                  <Link preload="intent" to={item.url}>
                     {item.icon}
                     <span>{item.title}</span>
                   </Link>
@@ -81,7 +81,7 @@ export function NavMain({
                     {item.items?.map((subItem) => (
                       <SidebarMenuSubItem key={subItem.title}>
                         <SidebarMenuSubButton asChild>
-                          <Link href={subItem.url}>
+                          <Link to={subItem.url}>
                             <span>{subItem.title}</span>
                           </Link>
                         </SidebarMenuSubButton>

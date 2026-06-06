@@ -31,7 +31,7 @@ export function PublicHeader() {
     <header className="fixed top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
         <Link
-          href="/"
+          to="/"
           className="font-heading text-lg font-bold tracking-wider text-primary uppercase"
         >
           {env.NEXT_PUBLIC_ASSOCIATION_SLUG.toUpperCase()}
@@ -56,7 +56,7 @@ export function PublicHeader() {
           {user ? (
             <div className="flex items-center gap-x-2">
               <Button asChild variant="default" size="sm">
-                <Link href="/dashboard">Dashboard</Link>
+                <Link to="/dashboard">Dashboard</Link>
               </Button>
               <Button
                 disabled={isAuthLoading || isLoading}
@@ -71,12 +71,12 @@ export function PublicHeader() {
             <>
               {!isSignIn && (
                 <Button asChild variant="ghost" size="sm">
-                  <Link href="/sign-in">Sign In</Link>
+                  <Link to="/sign-in">Sign In</Link>
                 </Button>
               )}
               {!isSignUp && (
                 <Button asChild variant="default" size="sm">
-                  <Link href="/sign-up">Join Now</Link>
+                  <Link to="/sign-up">Join Now</Link>
                 </Button>
               )}
             </>

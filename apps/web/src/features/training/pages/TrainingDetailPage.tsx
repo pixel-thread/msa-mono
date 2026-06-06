@@ -47,7 +47,7 @@ import { useUrlFilters } from '@hooks/use-url-filters';
 
 export function TrainingDetailPage() {
   const navigate = useNavigate();
-  const params = useParams();
+  const params = useParams({ strict: false }) as Record<string, string | undefined>;
 
   const moduleId = (params.moduleId as string) || (params.id as string);
 
@@ -403,7 +403,7 @@ export function TrainingDetailPage() {
             <Button
               variant="outline"
               className="h-10 border-hairline px-4 text-sm font-semibold flex items-center gap-2 hover:bg-canvas/50"
-              onClick={() => navigate({ to: `/training/${moduleId}/completions`) })}
+              onClick={() => navigate({ to: `/training/${moduleId}/completions` })}
             >
               <Award className="mr-1.5 h-4 w-4" />
               View All

@@ -29,7 +29,7 @@ export function useDeclarationsColumns({
       cell: ({ row }) => (
         <div className="flex flex-col">
           <Link
-            href={`/contributions/declarations/${row.original.id}`}
+            to={`/contributions/declarations/${row.original.id}`}
             className="text-sm font-medium text-primary hover:underline"
           >
             {row.original.member.name}

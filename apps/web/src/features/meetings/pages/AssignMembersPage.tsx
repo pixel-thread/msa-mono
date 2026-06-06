@@ -36,7 +36,7 @@ interface AttendeeRow {
  * Allows managing and assigning members to a specific meeting as attendees.
  */
 export function AssignMembersPage() {
-  const params = useParams();
+  const params = useParams({ strict: false });
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const meetingId = params.meetingId as string;

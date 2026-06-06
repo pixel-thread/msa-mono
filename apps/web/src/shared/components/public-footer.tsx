@@ -1,4 +1,3 @@
-import { Link } from '@tanstack/react-router';
 import { Separator } from '@src/shared/components/ui/separator';
 import { Text } from '@src/shared/components/ui/text';
 
@@ -32,12 +31,12 @@ export function PublicFooter() {
                 { label: 'How It Works', href: '/#how-it-works' },
               ].map((link) => (
                 <li key={link.label}>
-                  <Link
+                  <a
                     href={link.href}
                     className="text-sm text-muted-foreground transition-colors hover:text-foreground"
                   >
                     {link.label}
-                  </Link>
+                  </a>
                 </li>
               ))}
             </ul>
@@ -54,12 +53,12 @@ export function PublicFooter() {
                 { label: 'Terms of Service', href: '/terms-of-service' },
               ].map((link) => (
                 <li key={link.label}>
-                  <Link
+                  <a
                     href={link.href}
                     className="text-sm text-muted-foreground transition-colors hover:text-foreground"
                   >
                     {link.label}
-                  </Link>
+                  </a>
                 </li>
               ))}
             </ul>
@@ -76,12 +75,12 @@ export function PublicFooter() {
                 { label: 'Contact Support', href: '/#contact' },
               ].map((link) => (
                 <li key={link.label}>
-                  <Link
+                  <a
                     href={link.href}
                     className="text-sm text-muted-foreground transition-colors hover:text-foreground"
                   >
                     {link.label}
-                  </Link>
+                  </a>
                 </li>
               ))}
             </ul>
@@ -96,24 +95,24 @@ export function PublicFooter() {
             reserved.
           </Text>
           <div className="flex gap-4">
-            <Link
+            <a
               href="#"
               className="text-xs text-muted-foreground transition-colors hover:text-foreground"
             >
               Privacy
-            </Link>
-            <Link
+            </a>
+            <a
               href="#"
               className="text-xs text-muted-foreground transition-colors hover:text-foreground"
             >
               Terms
-            </Link>
-            <Link
+            </a>
+            <a
               href="#"
               className="text-xs text-muted-foreground transition-colors hover:text-foreground"
             >
               Cookies
-            </Link>
+            </a>
           </div>
         </div>
       </div>

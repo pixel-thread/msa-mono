@@ -1,6 +1,6 @@
 'use client';
 
-import { Link, useNavigate } from '@tanstack/react-router';
+import { useNavigate } from '@tanstack/react-router';
 
 import { Avatar, AvatarFallback } from '@src/shared/components/ui/avatar';
 import {
@@ -100,16 +100,16 @@ export function NavUser({
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem asChild>
-                <Link href="/dashboard/settings">
+                <a href="/dashboard/settings">
                   <BadgeCheckIcon />
                   Account
-                </Link>
+                </a>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link href="/change-password">
+                <a href="/change-password">
                   <CreditCardIcon />
                   Change Password
-                </Link>
+                </a>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />

@@ -17,7 +17,7 @@ export function useLedgerAccountColumns(onEdit: (account: Account) => void) {
       header: 'Name',
       cell: ({ row }) => (
         <Link
-          href={`/ledger/accounts/${row.original.id}`}
+          to={`/ledger/accounts/${row.original.id}`}
           className="text-sm text-ink hover:underline font-medium"
         >
           {row.original.name}

@@ -25,7 +25,7 @@ export function usePendingMemberColumns({
         return (
           <Link
             className="flex items-center gap-3 text-left hover:underline"
-            href={`/members/${member.id}`}
+            to={`/members/${member.id}`}
           >
             <Avatar className="h-8 w-8">
               <AvatarFallback className="text-xs bg-muted">

@@ -188,7 +188,7 @@ export function SignInPage() {
 
                 <div className="flex justify-end">
                   <Link
-                    href="/forgot-password"
+                    to="/forgot-password"
                     className="text-xs font-semibold tracking-widest uppercase text-primary underline underline-offset-4 hover:text-primary/80"
                   >
                     Forgot password?
@@ -208,7 +208,7 @@ export function SignInPage() {
                 <p className="text-center text-sm text-muted-foreground">
                   Don&apos;t have an account?{' '}
                   <Link
-                    href="/sign-up"
+                    to="/sign-up"
                     className="text-xs font-semibold tracking-widest uppercase text-primary underline underline-offset-4 hover:text-primary/80"
                   >
                     Sign Up

@@ -14,7 +14,7 @@ export function useAnnouncementColumns({ onEdit, onDelete }: UseAnnouncementColu
       accessorKey: 'title',
       header: 'Title',
       cell: ({ row }) => (
-        <Link href={`/announcement/${row.original.id}`} className="flex items-center gap-2">
+        <Link to={`/announcement/${row.original.id}`} className="flex items-center gap-2">
           {row.original.isPinned && (
             <span className="text-amber-500" title="Pinned">
               📌

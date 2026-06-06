@@ -117,7 +117,7 @@ export function UserPaymentsLookupPage() {
                   </h2>
                 </div>
                 <Button variant="outline" size="sm" asChild>
-                  <Link href={`/payments/users/${selectedMember.id}/contributions`}>
+                  <Link to={`/payments/users/${selectedMember.id}/contributions`}>
                     View Contributions
                   </Link>
                 </Button>

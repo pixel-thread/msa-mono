@@ -50,13 +50,13 @@ export function HeroSection() {
           </ul>
           <div className="flex flex-wrap items-center justify-center gap-4 lg:justify-start">
             <Button asChild variant="default" size="lg">
-              <Link href="/dashboard">
+              <Link to="/dashboard">
                 Get Started
                 <HugeiconsIcon icon={ArrowRight01Icon} />
               </Link>
             </Button>
             <Button asChild variant="outline" size="lg">
-              <Link href="#features">Explore Features</Link>
+              <a href="#features">Explore Features</a>
             </Button>
           </div>
         </div>

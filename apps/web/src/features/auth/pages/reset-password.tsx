@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useNavigate, useSearchParams, Link } from '@tanstack/react-router';
+import { useNavigate, useSearch, Link } from '@tanstack/react-router';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
@@ -32,8 +32,8 @@ import { useResetPassword } from '@feature/auth/hooks';
  * Validates the new password using Zod and handles success/error states.
  */
 export function ResetPasswordPage() {
-  const [searchParams] = useSearchParams();
-  const token = searchParams.get('token');
+  const searchParams = useSearch({ strict: false }) as Record<string, string | undefined>;
+  const token = searchParams.token;
   const [isSuccess, setIsSuccess] = useState(false);
   const resetPasswordMutation = useResetPassword();
 
@@ -66,7 +66,7 @@ export function ResetPasswordPage() {
           </CardHeader>
           <CardContent>
             <Link
-              href="/forgot-password"
+              to="/forgot-password"
               className="text-sm font-medium text-primary hover:text-primary-active"
             >
               Request new reset link
@@ -91,7 +91,7 @@ export function ResetPasswordPage() {
           </CardHeader>
           <CardContent>
             <Link
-              href="/sign-in"
+              to="/sign-in"
               className="text-sm font-medium text-primary hover:text-primary-active"
             >
               Go to sign in
@@ -161,7 +161,7 @@ export function ResetPasswordPage() {
 
               <div className="text-center">
                 <Link
-                  href="/sign-in"
+                  to="/sign-in"
                   className="text-sm font-medium text-primary hover:text-primary-active"
                 >
                   Back to sign in

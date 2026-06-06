@@ -17,7 +17,7 @@ const statusBadgeVariant: Record<string, 'default' | 'secondary' | 'destructive'
 };
 
 export function DeclarationDetailPage() {
-  const params = useParams();
+  const params = useParams({ strict: false });
   const navigate = useNavigate();
   const declarationId = params.declarationId as string;
 

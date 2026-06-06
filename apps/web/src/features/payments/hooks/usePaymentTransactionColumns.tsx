@@ -29,7 +29,7 @@ export function usePaymentTransactionColumns() {
         return (
           <>
             <Link
-              href={`/payments/users/${tx.userId}`}
+              to={`/payments/users/${tx.userId}`}
               className="text-sm text-primary hover:underline"
             >
               {tx.userId ? tx.user?.name : 'N/A'}
@@ -73,7 +73,7 @@ export function usePaymentTransactionColumns() {
       cell: ({ row }) => {
         const tx = row.original;
         return (
-          <Link href={`/payments/${tx.id}`} className="text-xs text-primary hover:underline">
+          <Link to={`/payments/${tx.id}`} className="text-xs text-primary hover:underline">
             {tx.referenceNumber || tx.receiptNumber || tx.razorpayPaymentId || tx.id.slice(0, 8)}
           </Link>
         );

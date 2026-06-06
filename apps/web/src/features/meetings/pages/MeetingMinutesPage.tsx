@@ -29,7 +29,7 @@ import type {
  * Allows viewing and managing minutes for a specific meeting.
  */
 export function MeetingMinutesPage() {
-  const params = useParams();
+  const params = useParams({ strict: false });
   const navigate = useNavigate();
   const meetingId = params.meetingId as string;
 
@@ -136,11 +136,11 @@ export function MeetingMinutesPage() {
       </div>
 
       <div className="mt-4 flex items-center gap-4">
-        <Link href={`/meetings/${meetingId}`} className="text-sm text-primary hover:underline">
+        <Link to={`/meetings/${meetingId}`} className="text-sm text-primary hover:underline">
           ← Back to Meeting Details
         </Link>
         <Link
-          href={`/meetings/${meetingId}/assign`}
+          to={`/meetings/${meetingId}/assign`}
           className="text-sm text-primary hover:underline"
         >
           Manage Attendees →

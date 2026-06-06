@@ -12,7 +12,7 @@ import { getStatusBadge } from '@src/shared/utils/helper/get-status-badge';
 import { formatDate, formattedAmount } from '@src/shared/utils';
 
 export function PaymentDetailPage() {
-  const params = useParams();
+  const params = useParams({ strict: false });
   const navigate = useNavigate();
   const paymentId = params.paymentId as string;
 
@@ -141,7 +141,7 @@ export function PaymentDetailPage() {
             <CardContent>
               <div className="space-y-3">
                 <Link
-                  href={`/payments/users/${payment.userId}`}
+                  to={`/payments/users/${payment.userId}`}
                   className="text-sm text-primary hover:underline"
                 >
                   {payment.user?.name || 'Unknown User'}

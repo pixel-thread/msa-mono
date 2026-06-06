@@ -13,7 +13,7 @@ import { formatDate } from '@src/shared/utils';
 import { usePlanVersionColumns } from '../hooks/usePlanVersionColumns';
 
 export function PlanDetailPage() {
-  const params = useParams();
+  const params = useParams({ strict: false });
   const navigate = useNavigate();
   const planId = params.planId as string;
 

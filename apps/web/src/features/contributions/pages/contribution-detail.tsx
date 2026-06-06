@@ -8,7 +8,7 @@ import { ContributionDetail } from '@src/features/contributions/components/contr
 import { ArrowLeft } from 'lucide-react';
 
 export function ContributionDetailPage() {
-  const params = useParams();
+  const params = useParams({ strict: false });
   const navigate = useNavigate();
   const contributionId = params.contributionId as string;
 

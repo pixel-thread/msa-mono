@@ -79,7 +79,7 @@ export function ContributionDetail({ contribution }: ContributionDetailProps) {
           <CardContent>
             <div className="space-y-3">
               <Link
-                href={`/payments/users/${contribution.userId}`}
+                to={`/payments/users/${contribution.userId}`}
                 className="text-sm text-primary hover:underline"
               >
                 {contribution.user?.name || 'Unknown'}
