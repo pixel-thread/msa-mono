@@ -17,7 +17,16 @@ import {
 } from '@src/shared/components/ui/select';
 import { formattedAmount } from '@src/shared/utils/format';
 import { ChangePlanDialog } from '@src/features/subscriptions/components/change-plan-dialog';
-import { User, CreditCard, ArrowRight, Calendar, BadgeCheck, XCircle, Loader2 } from 'lucide-react';
+import {
+  User,
+  CreditCard,
+  ArrowRight,
+  Calendar,
+  BadgeCheck,
+  XCircle,
+  Loader2,
+  Tag,
+} from 'lucide-react';
 
 interface SelectedMember {
   id: string;
@@ -125,7 +134,10 @@ export function ChangePlanPage() {
                     <p className="text-xs font-medium text-muted-foreground">Amount</p>
                     <p className="text-sm font-medium text-ink mt-1">
                       {subscription?.planVersion
-                        ? formattedAmount(subscription.planVersion.amount, subscription.planVersion.currency)
+                        ? formattedAmount(
+                            subscription.planVersion.amount,
+                            subscription.planVersion.currency,
+                          )
                         : '-'}
                       <span className="text-xs text-muted-foreground ml-1">
                         /{subscription?.planVersion?.billingCycle?.toLowerCase() ?? ''}
@@ -167,7 +179,8 @@ export function ChangePlanPage() {
                 <XCircle className="h-8 w-8 text-muted-foreground mb-2" />
                 <p className="text-sm font-medium text-ink">No Active Subscription</p>
                 <p className="text-xs text-muted-foreground mt-1">
-                  This member does not have an active subscription. Select a plan below to subscribe them.
+                  This member does not have an active subscription. Select a plan below to subscribe
+                  them.
                 </p>
               </CardContent>
             </Card>
@@ -182,33 +195,69 @@ export function ChangePlanPage() {
                 </h2>
               </div>
 
-              <div className="max-w-sm">
-                <Select value={selectedPlanId} onValueChange={setSelectedPlanId}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a plan..." />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {plans.map((plan) => (
-                      <SelectItem key={plan.id} value={plan.id}>
-                        {plan.name} — {formattedAmount(plan.activeVersion?.amount ?? 0)}/
-                        {plan.activeVersion?.billingCycle?.toLowerCase() ?? ''}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+              <div className="flex justify-end items-center">
+                <div className="max-w-sm">
+                  <Select value={selectedPlanId} onValueChange={setSelectedPlanId}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a plan..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {plans.map((plan) => (
+                        <SelectItem key={plan.id} value={plan.id}>
+                          {plan.name} — {formattedAmount(plan.activeVersion?.amount ?? 0)}/
+                          {plan.activeVersion?.billingCycle?.toLowerCase() ?? ''}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
 
-              {selectedPlanId && selectedPlanId === currentPlanId && (
+              {selectedPlanId === currentPlanId && (
                 <p className="text-xs text-amber-600 mt-2">
                   This is the member&apos;s current plan. Select a different plan to change.
                 </p>
               )}
 
-              <div className="mt-6">
-                <Button
-                  onClick={() => setConfirmOpen(true)}
-                  disabled={!canSubmit}
-                >
+              {selectedPlan && selectedPlanId !== currentPlanId && (
+                <div className="mt-4 grid gap-4 md:grid-cols-2 lg:grid-cols-3 rounded-none border border-hairline bg-surface-card p-4">
+                  <div>
+                    <p className="text-xs font-medium text-muted-foreground">Plan</p>
+                    <p className="text-sm font-medium text-ink mt-1">{selectedPlan.name}</p>
+                    {selectedPlan.description && (
+                      <p className="text-xs text-body mt-1">{selectedPlan.description}</p>
+                    )}
+                  </div>
+                  <div>
+                    <p className="text-xs font-medium text-muted-foreground">Amount</p>
+                    <p className="text-sm font-medium text-ink mt-1">
+                      {formattedAmount(
+                        selectedPlan.activeVersion?.amount ?? 0,
+                        selectedPlan.activeVersion?.currency,
+                      )}
+                      <span className="text-xs text-muted-foreground ml-1">
+                        /{selectedPlan.activeVersion?.billingCycle?.toLowerCase() ?? ''}
+                      </span>
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-xs font-medium text-muted-foreground">Member Type</p>
+                    <p className="text-sm font-medium text-ink mt-1">
+                      {selectedPlan.memberTypeId ? (
+                        <span className="inline-flex items-center gap-1">
+                          <Tag className="h-3.5 w-3.5 text-muted-foreground" />
+                          Level {selectedPlan.memberType.level}
+                        </span>
+                      ) : (
+                        '-'
+                      )}
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              <div className="mt-6 w-full flex flex-row justify-end items-center">
+                <Button onClick={() => setConfirmOpen(true)} disabled={!canSubmit}>
                   Change Plan
                 </Button>
               </div>

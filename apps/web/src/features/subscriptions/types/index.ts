@@ -23,6 +23,7 @@ export type SubscriptionPlan = {
   createdAt: string;
   updatedAt: string;
   memberTypeId: string | null;
+  memberType: { id: string; level: number };
   activeVersion: SubscriptionPlanVersion;
   versions: SubscriptionPlanVersion[];
 };

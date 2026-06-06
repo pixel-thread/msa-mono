@@ -45,6 +45,7 @@ export async function getPlans(
     const plans = await prisma.subscriptionPlan.findMany({
       where: { associationId },
       include: {
+        memberType: true,
         versions: {
           where: { effectiveTo: null },
           orderBy: { createdAt: 'desc' },
