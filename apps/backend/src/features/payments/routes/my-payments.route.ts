@@ -10,15 +10,15 @@ import type { RequestHandler } from 'express';
 
 import { prisma } from '@src/shared/lib/prisma';
 import { validate } from '@src/shared/lib/validate';
-import { success } from '@src/shared/utils/responses';
-import { buildPagination } from '@src/shared/utils/build-pagination';
+import { success } from '@utils/responses';
+import { buildPagination } from '@utils/build-pagination';
 import { logger } from '@src/shared/logger';
 import { UserRole } from '@prisma/client';
-import { withRole } from '@src/shared/utils/with-role';
+import { withRole } from '@utils/with-role';
 import { UnauthorizedError, ForbiddenError } from '@src/shared/errors';
 import { PaymentHistoryQuerySchema } from '@src/features/payments/validators';
 import { findPaymentTransactions } from '@src/features/payments/services/find-payment-transactions';
-import { asyncHandler } from '@src/shared/utils/async-handler';
+import { asyncHandler } from '@utils/async-handler';
 
 // ---- Helpers ----
 

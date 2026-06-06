@@ -7,13 +7,13 @@ import { Request, NextFunction, Response } from 'express';
 import type { RequestHandler } from 'express';
 
 // Shared utilities
-import { success } from '@src/shared/utils/responses';
+import { success } from '@utils/responses';
 import { ForbiddenError } from '@src/shared/errors';
-import { hasHighRoleAccess } from '@src/shared/utils/has-high-role';
+import { hasHighRoleAccess } from '@utils/has-high-role';
 import { logger } from '@src/shared/logger';
-import { getAssociation } from '@src/shared/services/association/get-association';
-import { withRole } from '@src/shared/utils/with-role';
-import { asyncHandler } from '@src/shared/utils/async-handler';
+import { getAssociation } from '@services/association/get-association';
+import { withRole } from '@utils/with-role';
+import { asyncHandler } from '@utils/async-handler';
 
 // Prisma
 import { UserRole } from '@prisma/client';

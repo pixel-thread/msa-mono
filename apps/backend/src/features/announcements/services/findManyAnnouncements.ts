@@ -9,7 +9,7 @@ import { prisma } from '@lib/prisma';
 import { AnnouncementStatus, AnnouncementPriority, Prisma } from '@prisma/client';
 
 import { PAGE_SIZE } from '@src/shared/constants';
-import { buildPagination } from '@src/shared/utils/build-pagination';
+import { buildPagination } from '@utils/build-pagination';
 
 /**
  * Props for finding announcements with filters and pagination.

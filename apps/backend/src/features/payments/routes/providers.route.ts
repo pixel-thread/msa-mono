@@ -8,18 +8,12 @@
 import { Request, NextFunction, Response } from 'express';
 import type { RequestHandler } from 'express';
 
-import { prisma } from '@src/shared/lib/prisma';
 import { validate } from '@src/shared/lib/validate';
-import { success } from '@src/shared/utils/responses';
+import { success } from '@utils/responses';
 import { logger } from '@src/shared/logger';
-import {
-  UnauthorizedError,
-  ForbiddenError,
-  BadRequestError,
-  NotFoundError,
-} from '@src/shared/errors';
+import { BadRequestError, NotFoundError } from '@src/shared/errors';
 import { UserRole } from '@prisma/client';
-import { withRole } from '@src/shared/utils/with-role';
+import { withRole } from '@utils/with-role';
 import {
   UpsertPaymentProviderSchema,
   UpdatePaymentProviderSchema,
@@ -39,8 +33,8 @@ import {
   createTestPaymentOrder,
   verifyTestPayment,
 } from '@src/features/payments/services/payment.service';
-import { asyncHandler } from '@src/shared/utils/async-handler';
-import { getAssociation } from '@src/shared/services/association/get-association';
+import { asyncHandler } from '@utils/async-handler';
+import { getAssociation } from '@services/association/get-association';
 
 // ===========================================================================
 // LIST GET /api/payments/providers

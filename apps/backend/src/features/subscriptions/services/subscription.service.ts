@@ -4,8 +4,8 @@
 import { prisma } from '@src/shared/lib/prisma';
 import { NotFoundError, ConflictError, ForbiddenError } from '@src/shared/errors';
 import { PAGE_SIZE } from '@src/shared/constants';
-import { buildPagination } from '@src/shared/utils/build-pagination';
-import { hasHighRoleAccess } from '@src/shared/utils';
+import { buildPagination } from '@utils/build-pagination';
+import { hasHighRoleAccess } from '@utils';
 import { generateUserContributions } from '@src/features/contributions/services/contribution.service';
 
 // ---------------------------------------------------------------------------

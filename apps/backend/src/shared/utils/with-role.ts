@@ -1,6 +1,6 @@
 import { UserRole } from '@prisma/client';
 import { Request } from 'express';
-import { getUniqueUser } from '@src/shared/services/user/get-unique-user';
+import { getUniqueUser } from '@services/user/get-unique-user';
 import { ForbiddenError, UnauthorizedError } from '../errors';
 
 const ROLE_HIERARCHY: Record<UserRole, number> = {

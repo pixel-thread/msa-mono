@@ -9,11 +9,11 @@ import { z } from 'zod';
 // Shared utilities
 // ---------------------------------------------------------------------------
 import { validate } from '@src/shared/lib/validate';
-import { success } from '@src/shared/utils/responses';
+import { success } from '@utils/responses';
 import { prisma } from '@src/shared/lib/prisma';
 import { ForbiddenError, UnauthorizedError, ValidationError } from '@src/shared/errors';
 import { logger } from '@src/shared/logger';
-import { asyncHandler } from '@src/shared/utils/async-handler';
+import { asyncHandler } from '@utils/async-handler';
 
 // ---------------------------------------------------------------------------
 // Services

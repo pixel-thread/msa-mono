@@ -12,18 +12,18 @@ import { UserRole } from '@prisma/client';
 
 import { prisma } from '@src/shared/lib/prisma';
 import { validate } from '@src/shared/lib/validate';
-import { success } from '@src/shared/utils/responses';
+import { success } from '@utils/responses';
 import {
   ConflictError,
   NotFoundError,
   UnauthorizedError,
   ValidationError,
 } from '@src/shared/errors';
-import { withRole } from '@src/shared/utils/with-role';
-import { asyncHandler } from '@src/shared/utils/async-handler';
+import { withRole } from '@utils/with-role';
+import { asyncHandler } from '@utils/async-handler';
 import { logger } from '@src/shared/logger';
 import { uploadToBucket } from '@src/shared/lib/supabase/storage';
-import { getAssociation } from '@src/shared/services/association/get-association';
+import { getAssociation } from '@services/association/get-association';
 
 import { createAssociation } from '@src/features/associations/services/createAssociation';
 import { findFirstAssociation } from '@src/features/associations/services/findFirstAssociation';

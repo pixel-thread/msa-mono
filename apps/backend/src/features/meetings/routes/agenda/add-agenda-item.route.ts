@@ -1,15 +1,15 @@
 import { Request, NextFunction, Response } from 'express';
 import type { RequestHandler } from 'express';
 import { validate } from '@src/shared/lib/validate';
-import { success } from '@src/shared/utils/responses';
+import { success } from '@utils/responses';
 import { UserRole } from '@prisma/client';
 import { createAgendaItem } from '@src/features/meetings/services/createAgendaItem';
 import { countAgendaItems } from '@src/features/meetings/services/countAgendaItems';
 import { CreateAgendaItemSchema } from '@src/features/meetings/validators/agenda-items';
 import { logger } from '@src/shared/logger';
 import { z } from 'zod';
-import { withRole } from '@src/shared/utils/with-role';
-import { asyncHandler } from '@src/shared/utils/async-handler';
+import { withRole } from '@utils/with-role';
+import { asyncHandler } from '@utils/async-handler';
 
 const ParamsSchema = z.object({ meetingId: z.string('Invalid meeting ID') });
 

@@ -3,8 +3,8 @@ import { Request, NextFunction, Response } from 'express';
 import type { RequestHandler } from 'express';
 
 // Shared utilities
-import { asyncHandler } from '@src/shared/utils/async-handler';
-import { success } from '@src/shared/utils/responses';
+import { asyncHandler } from '@utils/async-handler';
+import { success } from '@utils/responses';
 import { UnauthorizedError } from '@src/shared/errors';
 import { logger } from '@src/shared/logger';
 

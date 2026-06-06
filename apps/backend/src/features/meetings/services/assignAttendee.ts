@@ -4,7 +4,7 @@ import { $Enums, AttendeeRole } from '@prisma/client';
 import { ExpoNotificationService } from '@lib/expo';
 import { logger } from '@src/shared/logger';
 import { EXPO_ROUTES } from '@src/shared/constants/expo-route';
-import { createNotification } from '@src/shared/services/notification';
+import { createNotification } from '@services/notification';
 
 /** Props for assigning an attendee to a meeting. */
 interface AssignAttendeeProps {

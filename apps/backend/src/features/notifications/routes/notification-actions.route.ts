@@ -4,8 +4,8 @@ import type { RequestHandler } from 'express';
 import { z } from 'zod';
 
 // Shared utilities
-import { asyncHandler } from '@src/shared/utils/async-handler';
-import { success } from '@src/shared/utils/responses';
+import { asyncHandler } from '@utils/async-handler';
+import { success } from '@utils/responses';
 import { validate } from '@src/shared/lib/validate';
 import { UnauthorizedError, ValidationError, NotFoundError } from '@src/shared/errors';
 import { logger } from '@src/shared/logger';
@@ -22,7 +22,7 @@ import { upsertPushToken } from '@src/features/notifications/services/upsertPush
 import {
   findUniqueNotification,
   updateNotificationStatus,
-} from '@src/shared/services/notification';
+} from '@services/notification';
 
 // ---- Validators / Types
 

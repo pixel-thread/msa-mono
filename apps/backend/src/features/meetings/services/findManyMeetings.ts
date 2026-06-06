@@ -1,8 +1,8 @@
 import { prisma } from '@lib/prisma';
 import { MeetingType, MeetingStatus, Prisma, UserRole } from '@prisma/client';
 import { PAGE_SIZE } from '@src/shared/constants';
-import { buildPagination } from '@src/shared/utils/build-pagination';
-import { hasHighRoleAccess } from '@src/shared/utils/has-high-role';
+import { buildPagination } from '@utils/build-pagination';
+import { hasHighRoleAccess } from '@utils/has-high-role';
 
 /** Props for querying multiple meetings. */
 interface FindManyMeetingsProps {

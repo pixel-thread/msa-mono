@@ -8,12 +8,12 @@ import type { RequestHandler } from 'express';
 // Shared utilities
 // ---------------------------------------------------------------------------
 import { validate } from '@src/shared/lib/validate';
-import { success } from '@src/shared/utils/responses';
+import { success } from '@utils/responses';
 import { prisma } from '@src/shared/lib/prisma';
 import { ForbiddenError, UnauthorizedError } from '@src/shared/errors';
-import { withRole } from '@src/shared/utils/with-role';
+import { withRole } from '@utils/with-role';
 import { logger } from '@src/shared/logger';
-import { asyncHandler } from '@src/shared/utils/async-handler';
+import { asyncHandler } from '@utils/async-handler';
 
 // ---------------------------------------------------------------------------
 // Prisma

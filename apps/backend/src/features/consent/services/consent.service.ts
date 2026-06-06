@@ -5,7 +5,7 @@
 // Shared utilities
 import { NotFoundError, BadRequestError } from '@src/shared/errors';
 import { PAGE_SIZE } from '@src/shared/constants';
-import { buildPagination } from '@src/shared/utils';
+import { buildPagination } from '@utils';
 
 // Prisma
 import { prisma } from '@src/shared/lib/prisma';

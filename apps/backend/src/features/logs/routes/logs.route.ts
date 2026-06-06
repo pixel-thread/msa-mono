@@ -3,8 +3,8 @@ import { Request, NextFunction, Response } from 'express';
 import type { RequestHandler } from 'express';
 
 // Shared utilities
-import { asyncHandler } from '@src/shared/utils/async-handler';
-import { success } from '@src/shared/utils/responses';
+import { asyncHandler } from '@utils/async-handler';
+import { success } from '@utils/responses';
 import { validate } from '@src/shared/lib/validate';
 import { ValidationError } from '@src/shared/errors';
 
@@ -14,7 +14,7 @@ import { Prisma } from '@prisma/client';
 
 // ---- Services
 
-import { createLogs, createLogsBatch } from '@src/shared/services/logs';
+import { createLogs, createLogsBatch } from '@services/logs';
 
 // ---- Validators / Types
 

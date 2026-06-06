@@ -11,10 +11,10 @@ import { UserRole } from '@prisma/client';
 
 import { validate } from '@lib/validate';
 import { prisma } from '@src/shared/lib/prisma';
-import { success } from '@src/shared/utils/responses';
+import { success } from '@utils/responses';
 import { ConflictError, NotFoundError } from '@src/shared/errors';
-import { withRole } from '@src/shared/utils/with-role';
-import { asyncHandler } from '@src/shared/utils/async-handler';
+import { withRole } from '@utils/with-role';
+import { asyncHandler } from '@utils/async-handler';
 import { logger } from '@src/shared/logger';
 
 import { findManyAssociation } from '@src/features/associations/services/findManyAssociation';

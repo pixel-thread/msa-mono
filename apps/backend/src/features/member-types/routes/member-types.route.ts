@@ -15,12 +15,12 @@ import { UserRole } from '@prisma/client';
 // ---------------------------------------------------------------------------
 
 import { validate } from '@src/shared/lib/validate';
-import { success } from '@src/shared/utils/responses';
+import { success } from '@utils/responses';
 import { BadRequestError, ForbiddenError, NotFoundError } from '@src/shared/errors';
-import { getAssociation } from '@src/shared/services/association/get-association';
-import { withRole } from '@src/shared/utils/with-role';
+import { getAssociation } from '@services/association/get-association';
+import { withRole } from '@utils/with-role';
 import { logger } from '@src/shared/logger';
-import { asyncHandler } from '@src/shared/utils/async-handler';
+import { asyncHandler } from '@utils/async-handler';
 
 // ---------------------------------------------------------------------------
 // Services

@@ -10,13 +10,13 @@ import { Request, NextFunction, Response } from 'express';
 import type { RequestHandler } from 'express';
 
 import { prisma } from '@src/shared/lib/prisma';
-import { success } from '@src/shared/utils/responses';
+import { success } from '@utils/responses';
 import { logger } from '@src/shared/logger';
 import { UserRole } from '@prisma/client';
-import { withRole } from '@src/shared/utils/with-role';
+import { withRole } from '@utils/with-role';
 import { UnauthorizedError, ForbiddenError } from '@src/shared/errors';
 import { getFinancialStats } from '@src/features/payments/services/payment.service';
-import { asyncHandler } from '@src/shared/utils/async-handler';
+import { asyncHandler } from '@utils/async-handler';
 
 // ---- Helpers ----
 

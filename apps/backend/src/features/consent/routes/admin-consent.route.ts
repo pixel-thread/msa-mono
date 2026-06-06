@@ -9,13 +9,13 @@ import { z } from 'zod';
 
 // Shared utilities
 import { validate } from '@src/shared/lib/validate';
-import { success } from '@src/shared/utils/responses';
+import { success } from '@utils/responses';
 import { UnauthorizedError, ForbiddenError } from '@src/shared/errors';
-import { buildPagination } from '@src/shared/utils';
-import { getUniqueUser } from '@src/shared/services/user/get-unique-user';
+import { buildPagination } from '@utils';
+import { getUniqueUser } from '@services/user/get-unique-user';
 import { pageNumberValidation } from '@src/shared/validators';
 import { logger } from '@src/shared/logger';
-import { asyncHandler } from '@src/shared/utils/async-handler';
+import { asyncHandler } from '@utils/async-handler';
 
 // Prisma
 import { prisma } from '@src/shared/lib/prisma';

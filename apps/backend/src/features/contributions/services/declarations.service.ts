@@ -2,7 +2,7 @@ import { DeclarationStatus, Prisma } from '@prisma/client';
 import { differenceInCalendarMonths, addMonths, startOfMonth, endOfMonth } from 'date-fns';
 import { PAGE_SIZE } from '@src/shared/constants';
 import { prisma } from '@src/shared/lib';
-import { buildPagination } from '@src/shared/utils';
+import { buildPagination } from '@utils';
 import { BadRequestError, NotFoundError } from '@src/shared/errors';
 
 type Props = {

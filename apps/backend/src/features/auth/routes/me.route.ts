@@ -1,13 +1,13 @@
 import { Request, Response, RequestHandler } from 'express';
 
-import { success } from '@src/shared/utils/responses';
-import { asyncHandler } from '@src/shared/utils/async-handler';
+import { success } from '@utils/responses';
+import { asyncHandler } from '@utils/async-handler';
 import { logger } from '@src/shared/logger';
 import { env } from '@src/env';
 
 import { UnauthorizedError } from '@src/shared/errors';
 
-import { getUniqueUser } from '@src/shared/services/user/get-unique-user';
+import { getUniqueUser } from '@services/user/get-unique-user';
 
 import { getAuthCachedUser, cacheAuthUser } from '@src/features/auth/lib/cache';
 

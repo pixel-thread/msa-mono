@@ -2,15 +2,15 @@ import { Request, NextFunction, Response } from 'express';
 import type { RequestHandler } from 'express';
 
 import { validate } from '@src/shared/lib/validate';
-import { success } from '@src/shared/utils/responses';
-import { asyncHandler } from '@src/shared/utils/async-handler';
+import { success } from '@utils/responses';
+import { asyncHandler } from '@utils/async-handler';
 import { logger } from '@src/shared/logger';
 
 import { hashPassword, validatePasswordStrength, verifyPassword } from '@src/shared/lib/password';
 
 import { BadRequestError, UnauthorizedError, ValidationError } from '@src/shared/errors';
 
-import { getUniqueUserNoFilter } from '@src/shared/services/user/get-unique-user-no-filter';
+import { getUniqueUserNoFilter } from '@services/user/get-unique-user-no-filter';
 
 import { updateUser } from '@src/features/user/services';
 

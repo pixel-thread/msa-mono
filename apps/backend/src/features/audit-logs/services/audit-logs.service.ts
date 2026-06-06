@@ -1,7 +1,7 @@
 // ---- Audit-log service
 
 // Shared utilities
-import { buildPagination } from '@src/shared/utils/build-pagination';
+import { buildPagination } from '@utils/build-pagination';
 
 // Prisma
 import { prisma } from '@src/shared/lib/prisma';

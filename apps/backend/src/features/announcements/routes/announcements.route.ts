@@ -10,19 +10,19 @@ import { Request, NextFunction, Response } from 'express';
 import type { RequestHandler } from 'express';
 
 // Shared utilities
-import { success } from '@src/shared/utils/responses';
+import { success } from '@utils/responses';
 import { ForbiddenError } from '@src/shared/errors';
 import { validate } from '@src/shared/lib/validate';
-import { withRole } from '@src/shared/utils/with-role';
-import { hasHighRoleAccess } from '@src/shared/utils/has-high-role';
-import { asyncHandler } from '@src/shared/utils/async-handler';
+import { withRole } from '@utils/with-role';
+import { hasHighRoleAccess } from '@utils/has-high-role';
+import { asyncHandler } from '@utils/async-handler';
 import { logger } from '@src/shared/logger';
 
 // Prisma
 import { UserRole, AnnouncementStatus } from '@prisma/client';
 
 // Services
-import { getAssociation } from '@src/shared/services/association/get-association';
+import { getAssociation } from '@services/association/get-association';
 import { findManyAnnouncements, createAnnouncement } from '@feature/announcements/services';
 
 // Validators

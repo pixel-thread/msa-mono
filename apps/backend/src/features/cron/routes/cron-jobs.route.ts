@@ -3,7 +3,7 @@ import type { RequestHandler } from 'express';
 
 import { env } from '@src/env';
 import { logger } from '@src/shared/logger';
-import { asyncHandler } from '@src/shared/utils/async-handler';
+import { asyncHandler } from '@utils/async-handler';
 
 import {
   runSubscriptionExpiryCron,

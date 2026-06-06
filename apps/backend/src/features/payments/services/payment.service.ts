@@ -7,7 +7,7 @@ import {
   AuditAction,
   PaymentMethod,
 } from '@prisma/client';
-import { buildPagination } from '@src/shared/utils/build-pagination';
+import { buildPagination } from '@utils/build-pagination';
 
 import { verifyPaymentSignature } from './razorpay.service';
 import { getActiveProvider, getProviderById } from './payment-provider.service';
@@ -15,7 +15,7 @@ import { decrypt } from '@src/shared/lib/crypto';
 import { env } from '@src/env';
 import Razorpay from 'razorpay';
 import { BadRequestError, NotFoundError, PaymentError } from '@src/shared/errors';
-import { logAction } from '@src/shared/services/audit-logs';
+import { logAction } from '@services/audit-logs';
 import { PAGE_SIZE } from '@src/shared/constants';
 import { recordMemberPayment } from '@src/features/ledger/services/accounting.service';
 

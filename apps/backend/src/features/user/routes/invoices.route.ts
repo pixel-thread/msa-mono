@@ -4,14 +4,14 @@ import type { RequestHandler } from 'express';
 import z from 'zod';
 
 // Shared utilities
-import { asyncHandler } from '@src/shared/utils/async-handler';
-import { success } from '@src/shared/utils/responses';
+import { asyncHandler } from '@utils/async-handler';
+import { success } from '@utils/responses';
 import { validate } from '@src/shared/lib/validate';
 import { prisma } from '@src/shared/lib/prisma';
 import { ForbiddenError, UnauthorizedError } from '@src/shared/errors';
 import { logger } from '@src/shared/logger';
-import { withRole } from '@src/shared/utils/with-role';
-import { buildPagination } from '@src/shared/utils/build-pagination';
+import { withRole } from '@utils/with-role';
+import { buildPagination } from '@utils/build-pagination';
 
 // ---- Prisma
 

@@ -2,8 +2,8 @@ import { Request, NextFunction, Response } from 'express';
 import type { RequestHandler } from 'express';
 
 import { validate } from '@src/shared/lib/validate';
-import { success } from '@src/shared/utils/responses';
-import { asyncHandler } from '@src/shared/utils/async-handler';
+import { success } from '@utils/responses';
+import { asyncHandler } from '@utils/async-handler';
 import { logger } from '@src/shared/logger';
 import { env } from '@src/env';
 
@@ -20,7 +20,7 @@ import {
   UnauthorizedError,
 } from '@src/shared/errors';
 
-import { getUniqueUser } from '@src/shared/services/user/get-unique-user';
+import { getUniqueUser } from '@services/user/get-unique-user';
 
 import { getVerificationCodeFirst } from '@src/features/auth/services/get-verification-code-first';
 import { updateVerificationCode } from '@src/features/auth/services/update-verification-code';

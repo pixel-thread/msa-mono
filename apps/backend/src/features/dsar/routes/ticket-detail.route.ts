@@ -1,7 +1,7 @@
 import { Request, NextFunction, Response } from 'express';
 import type { RequestHandler } from 'express';
 import { validate } from '@src/shared/lib/validate';
-import { success } from '@src/shared/utils/responses';
+import { success } from '@utils/responses';
 import {
   UnauthorizedError,
   ForbiddenError,
@@ -18,10 +18,10 @@ import {
   assignDsarTicket,
 } from '@src/features/dsar/services';
 import { RespondDsarSchema } from '@src/features/dsar/validators';
-import { getUniqueUser } from '@src/shared/services/user/get-unique-user';
-import { hasHighRoleAccess } from '@src/shared/utils/has-high-role';
+import { getUniqueUser } from '@services/user/get-unique-user';
+import { hasHighRoleAccess } from '@utils/has-high-role';
 import { logger } from '@src/shared/logger';
-import { asyncHandler } from '@src/shared/utils/async-handler';
+import { asyncHandler } from '@utils/async-handler';
 
 /** Schema for ticket ID path parameter. */
 const ParamsSchema = z.object({ ticketId: z.string().uuid() });

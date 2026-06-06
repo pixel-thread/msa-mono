@@ -3,7 +3,7 @@ import { generateCsrfToken, verifyCsrfToken } from '@src/shared/lib/csrf';
 import { ForbiddenError } from '@src/shared/errors';
 import { env } from '@src/env';
 import { logger } from '@src/shared/logger';
-import { getTraceId } from '@src/shared/utils';
+import { getTraceId } from '@utils';
 import { API_PUBLIC_ROUTES } from '@src/shared/constants';
 
 export function csrf(req: Request, res: Response, next: NextFunction) {

@@ -18,6 +18,7 @@
     "paths": {
       "@src/*": ["./src/*"],
       "@middleware/*": ["./src/middleware/*"],
+      "@services/*": ["./src/shared/services/*"],
       "@feature/*": ["./src/features/*"],
       "@validator/*": ["./src/shared/validators/*"],
       "@lib/*": ["./src/shared/lib/*"],

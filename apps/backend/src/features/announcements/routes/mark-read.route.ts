@@ -21,7 +21,7 @@ import { UserRole } from '@prisma/client';
 
 // Services
 import { markAnnouncementRead } from '@feature/announcements/services';
-import { getAssociation } from '@src/shared/services/association/get-association';
+import { getAssociation } from '@services/association/get-association';
 
 // Validators
 import { AnnouncementRouteParams } from '@feature/announcements/validators';

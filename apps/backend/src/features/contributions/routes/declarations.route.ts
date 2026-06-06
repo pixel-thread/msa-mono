@@ -1,9 +1,9 @@
 import { DeclarationStatus, UserRole } from '@prisma/client';
 import { validate } from '@src/shared/lib/validate';
-import { asyncHandler } from '@src/shared/utils/async-handler';
-import { withRole } from '@src/shared/utils/with-role';
+import { asyncHandler } from '@utils/async-handler';
+import { withRole } from '@utils/with-role';
 import { RequestHandler } from 'express';
-import { success } from '@src/shared/utils/responses';
+import { success } from '@utils/responses';
 import z from 'zod';
 import {
   findDeclarations,
@@ -19,7 +19,7 @@ import {
   ListDeclarationsQuerySchema,
   RejectDeclarationSchema,
 } from '../validators';
-import { hasHighRoleAccess } from '@src/shared/utils';
+import { hasHighRoleAccess } from '@utils';
 import { NotFoundError } from '@src/shared/errors';
 
 export const createUserDeclarationHandler: RequestHandler[] = [

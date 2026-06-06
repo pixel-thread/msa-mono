@@ -7,7 +7,7 @@ import { prisma } from '@lib/prisma';
 import { Prisma } from '@prisma/client';
 
 import { PAGE_SIZE } from '@src/shared/constants';
-import { buildPagination } from '@src/shared/utils';
+import { buildPagination } from '@utils';
 
 /**
  * Parameters for paginated association lookup.

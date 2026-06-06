@@ -3,7 +3,7 @@
 // ---------------------------------------------------------------------------
 import { prisma } from '@src/shared/lib/prisma';
 import { BadRequestError, NotFoundError } from '@src/shared/errors';
-import { hasHighRoleAccess } from '@src/shared/utils/has-high-role';
+import { hasHighRoleAccess } from '@utils/has-high-role';
 
 // ---------------------------------------------------------------------------
 // Prisma

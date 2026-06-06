@@ -2,8 +2,8 @@ import { Request, NextFunction, Response } from 'express';
 import type { RequestHandler } from 'express';
 
 import { validate } from '@src/shared/lib/validate';
-import { success } from '@src/shared/utils/responses';
-import { asyncHandler } from '@src/shared/utils/async-handler';
+import { success } from '@utils/responses';
+import { asyncHandler } from '@utils/async-handler';
 import { logger } from '@src/shared/logger';
 
 import { hashToken } from '@src/shared/lib/password';

@@ -9,11 +9,11 @@ import { z } from 'zod';
 // Shared utilities
 // ---------------------------------------------------------------------------
 import { validate } from '@src/shared/lib/validate';
-import { success } from '@src/shared/utils/responses';
-import { withRole } from '@src/shared/utils/with-role';
-import { asyncHandler } from '@src/shared/utils/async-handler';
+import { success } from '@utils/responses';
+import { withRole } from '@utils/with-role';
+import { asyncHandler } from '@utils/async-handler';
 import { logger } from '@src/shared/logger';
-import { getAssociation } from '@src/shared/services/association/get-association';
+import { getAssociation } from '@services/association/get-association';
 import { pageNumberValidation } from '@src/shared/validators/common';
 
 // ---------------------------------------------------------------------------

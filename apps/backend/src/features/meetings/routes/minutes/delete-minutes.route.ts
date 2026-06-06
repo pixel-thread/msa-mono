@@ -1,11 +1,11 @@
 import { Request, NextFunction, Response, RequestHandler } from 'express';
-import { success } from '@src/shared/utils/responses';
+import { success } from '@utils/responses';
 import { UserRole } from '@prisma/client';
 import { deleteMeetingMinute } from '@src/features/meetings/services/minutes';
 import { logger } from '@src/shared/logger';
-import { getAssociation } from '@src/shared/services/association/get-association';
-import { withRole } from '@src/shared/utils/with-role';
-import { asyncHandler } from '@src/shared/utils/async-handler';
+import { getAssociation } from '@services/association/get-association';
+import { withRole } from '@utils/with-role';
+import { asyncHandler } from '@utils/async-handler';
 
 /** DELETE /api/meetings/[meetingId]/minutes/[minutesId] - Delete a meeting minute. */
 export const deleteMinute: RequestHandler[] = [

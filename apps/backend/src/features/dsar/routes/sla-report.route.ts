@@ -8,11 +8,11 @@ import { Request, NextFunction, Response, RequestHandler } from 'express';
 
 // ---- Shared Utilities
 
-import { success } from '@src/shared/utils/responses';
+import { success } from '@utils/responses';
 import { UnauthorizedError, ForbiddenError } from '@src/shared/errors';
 import { prisma } from '@src/shared/lib/prisma';
 import { logger } from '@src/shared/logger';
-import { asyncHandler } from '@src/shared/utils/async-handler';
+import { asyncHandler } from '@utils/async-handler';
 
 // ---- Prisma Types
 
@@ -24,7 +24,7 @@ import { getDsarSlaStatus } from '@src/features/dsar/services';
 
 // ---- Shared Services
 
-import { getUniqueUser } from '@src/shared/services/user/get-unique-user';
+import { getUniqueUser } from '@services/user/get-unique-user';
 
 // ---- Role Hierarchy
 

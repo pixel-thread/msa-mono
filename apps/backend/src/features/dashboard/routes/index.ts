@@ -1,7 +1,7 @@
 import { Router } from 'express';
 
 import { prisma } from '@src/shared/lib/prisma';
-import { success } from '@src/shared/utils/responses';
+import { success } from '@utils/responses';
 import { auth } from '@src/middleware/auth';
 import { ForbiddenError, UnauthorizedError } from '@src/shared/errors';
 

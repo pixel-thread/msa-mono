@@ -2,7 +2,7 @@ import type { RequestHandler } from 'express';
 import { UserRole } from '@prisma/client';
 
 import { ForbiddenError } from '@src/shared/errors';
-import { asyncHandler } from '@src/shared/utils/async-handler';
+import { asyncHandler } from '@utils/async-handler';
 
 export function rbac(...roles: UserRole[]): RequestHandler {
   return asyncHandler(async (req, _res, next) => {

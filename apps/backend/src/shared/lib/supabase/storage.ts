@@ -1,6 +1,6 @@
 import { supabase } from '@src/shared/lib/supabase/client';
 import { env } from '@src/env';
-import { getStorageProvider } from '@src/shared/services/storage';
+import { getStorageProvider } from '@services/storage';
 import { logger } from '@src/shared/logger';
 
 /** Result of a file upload containing key, URL, MIME type, and size. */

@@ -9,10 +9,10 @@ import { type Request, NextFunction, Response } from 'express';
 import type { RequestHandler } from 'express';
 
 import { validate } from '@src/shared/lib/validate';
-import { success } from '@src/shared/utils/responses';
-import { buildPagination } from '@src/shared/utils/build-pagination';
+import { success } from '@utils/responses';
+import { buildPagination } from '@utils/build-pagination';
 import { logger } from '@src/shared/logger';
-import { withRole } from '@src/shared/utils/with-role';
+import { withRole } from '@utils/with-role';
 import { NotFoundError } from '@src/shared/errors';
 import { UserRole, ContributionStatus } from '@prisma/client';
 import { z } from 'zod';
@@ -31,8 +31,8 @@ import { findContributionPeriods } from '@src/features/contributions/services/fi
 import { findUniqueContributionPeriod } from '@src/features/contributions/services/find-unique-contribution-period';
 import { pageNumberValidation } from '@src/shared/validators/common';
 import { PAGE_SIZE } from '@src/shared/constants';
-import { asyncHandler } from '@src/shared/utils/async-handler';
-import { getAssociation } from '@src/shared/services/association/get-association';
+import { asyncHandler } from '@utils/async-handler';
+import { getAssociation } from '@services/association/get-association';
 
 // ---- Validation schemas ----
 

@@ -1,16 +1,16 @@
 import { Request, NextFunction, Response } from 'express';
 import type { RequestHandler } from 'express';
 import { validate } from '@src/shared/lib/validate';
-import { success } from '@src/shared/utils/responses';
+import { success } from '@utils/responses';
 import { ForbiddenError } from '@src/shared/errors';
 import { UserRole, MeetingStatus } from '@prisma/client';
 import { findManyMeetings } from '@src/features/meetings/services';
 import { MeetingQuerySchema } from '@src/features/meetings/validators/meetings';
-import { hasHighRoleAccess } from '@src/shared/utils/has-high-role';
+import { hasHighRoleAccess } from '@utils/has-high-role';
 import { logger } from '@src/shared/logger';
-import { getAssociation } from '@src/shared/services/association/get-association';
-import { withRole } from '@src/shared/utils/with-role';
-import { asyncHandler } from '@src/shared/utils/async-handler';
+import { getAssociation } from '@services/association/get-association';
+import { withRole } from '@utils/with-role';
+import { asyncHandler } from '@utils/async-handler';
 
 /** GET /api/meetings - List all meetings for the association. */
 export const getMeetings: RequestHandler[] = [

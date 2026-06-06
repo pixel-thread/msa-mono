@@ -10,7 +10,7 @@ import { NotificationType, Prisma } from '@prisma/client';
 
 import { ExpoNotificationService } from '@lib/expo';
 import { EXPO_ROUTES } from '@src/shared/constants/expo-route';
-import { createNotification } from '@src/shared/services/notification';
+import { createNotification } from '@services/notification';
 import { logger } from '@src/shared/logger';
 
 /**

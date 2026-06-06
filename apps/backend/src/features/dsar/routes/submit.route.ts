@@ -10,11 +10,11 @@ import type { RequestHandler } from 'express';
 // ---- Shared Utilities
 
 import { validate } from '@src/shared/lib/validate';
-import { success } from '@src/shared/utils/responses';
+import { success } from '@utils/responses';
 import { UnauthorizedError, ForbiddenError } from '@src/shared/errors';
 import { prisma } from '@src/shared/lib/prisma';
 import { logger } from '@src/shared/logger';
-import { asyncHandler } from '@src/shared/utils/async-handler';
+import { asyncHandler } from '@utils/async-handler';
 
 // ---- DSAR Services
 

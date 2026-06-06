@@ -4,12 +4,12 @@ import type { RequestHandler } from 'express';
 // Shared utilities
 // ---------------------------------------------------------------------------
 import { validate } from '@src/shared/lib/validate';
-import { success } from '@src/shared/utils/responses';
+import { success } from '@utils/responses';
 import { ValidationError } from '@src/shared/errors';
-import { withRole } from '@src/shared/utils/with-role';
-import { asyncHandler } from '@src/shared/utils/async-handler';
+import { withRole } from '@utils/with-role';
+import { asyncHandler } from '@utils/async-handler';
 import { logger } from '@src/shared/logger';
-import { getAssociation } from '@src/shared/services/association/get-association';
+import { getAssociation } from '@services/association/get-association';
 
 // ---------------------------------------------------------------------------
 // Prisma
@@ -21,7 +21,7 @@ import { UserRole } from '@prisma/client';
 // ---------------------------------------------------------------------------
 import { changePlan } from '@feature/subscriptions/services';
 import { UpgradeSubscriptionSchema } from '../validators';
-import { hasHighRoleAccess } from '@src/shared/utils';
+import { hasHighRoleAccess } from '@utils';
 
 // ---- POST /api/subscriptions/upgrade -----------------------------------------
 /** @desc  Upgrade the current user's subscription to a new plan

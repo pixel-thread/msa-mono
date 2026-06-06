@@ -12,16 +12,16 @@ import type { RequestHandler } from 'express';
 
 import { prisma } from '@src/shared/lib/prisma';
 import { validate } from '@src/shared/lib/validate';
-import { success } from '@src/shared/utils/responses';
+import { success } from '@utils/responses';
 import { logger } from '@src/shared/logger';
 import { UserRole } from '@prisma/client';
-import { withRole } from '@src/shared/utils/with-role';
+import { withRole } from '@utils/with-role';
 import { UnauthorizedError, ForbiddenError, NotFoundError } from '@src/shared/errors';
 import { CreateOrderSchema } from '@src/features/payments/validators';
 import { createPaymentOrder } from '@src/features/payments/services/payment.service';
 import { findSubscriptionPlans } from '@src/features/payments/services/find-subscription-plans';
 import { getActiveProvider } from '@src/features/payments/services/payment-provider.service';
-import { asyncHandler } from '@src/shared/utils/async-handler';
+import { asyncHandler } from '@utils/async-handler';
 
 // ---- Helpers ----
 

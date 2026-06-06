@@ -10,10 +10,10 @@ import type { RequestHandler } from 'express';
 import { UserRole } from '@prisma/client';
 
 import { validate } from '@src/shared/lib/validate';
-import { success } from '@src/shared/utils/responses';
+import { success } from '@utils/responses';
 import { NotFoundError } from '@src/shared/errors';
-import { withRole } from '@src/shared/utils/with-role';
-import { asyncHandler } from '@src/shared/utils/async-handler';
+import { withRole } from '@utils/with-role';
+import { asyncHandler } from '@utils/async-handler';
 import { logger } from '@src/shared/logger';
 
 import {

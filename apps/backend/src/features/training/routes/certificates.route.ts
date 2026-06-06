@@ -4,15 +4,15 @@ import type { RequestHandler } from 'express';
 
 // ---- Shared utilities ----
 import { validate } from '@src/shared/lib/validate';
-import { success } from '@src/shared/utils/responses';
+import { success } from '@utils/responses';
 import { prisma } from '@src/shared/lib/prisma';
 import { uploadToBucket, deleteFromBucket } from '@src/shared/lib/supabase/storage';
 import { BadRequestError, NotFoundError } from '@src/shared/errors';
 import { env } from '@src/env';
 import { logger } from '@src/shared/logger';
-import { getAssociation } from '@src/shared/services/association/get-association';
-import { withRole } from '@src/shared/utils/with-role';
-import { asyncHandler } from '@src/shared/utils/async-handler';
+import { getAssociation } from '@services/association/get-association';
+import { withRole } from '@utils/with-role';
+import { asyncHandler } from '@utils/async-handler';
 
 // ---- Prisma ----
 import { UserRole } from '@prisma/client';
@@ -196,7 +196,7 @@ export const postCertificate: RequestHandler[] = [
 export const getCertificate: RequestHandler[] = [
   validate({ params: CertificateParamsSchema }),
 
-  asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+  asyncHandler(async (req: Request, res: Response) => {
     const traceId = (req.traceId as string) || '';
 
     // Resolve association
@@ -244,7 +244,7 @@ export const patchCertificate: RequestHandler[] = [
   fileUpload.single('file'),
   validate({ params: CertificateParamsSchema }),
 
-  asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+  asyncHandler(async (req: Request, res: Response) => {
     const traceId = (req.traceId as string) || '';
 
     // Resolve association
@@ -352,7 +352,7 @@ export const patchCertificate: RequestHandler[] = [
 export const deleteCertificateHandler: RequestHandler[] = [
   validate({ params: CertificateParamsSchema }),
 
-  asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+  asyncHandler(async (req: Request, res: Response) => {
     const traceId = (req.traceId as string) || '';
 
     // Resolve association
@@ -407,7 +407,7 @@ export const postCertificateTemplate: RequestHandler[] = [
   fileUpload.single('file'),
   validate({ params: ModuleParamsSchema }),
 
-  asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+  asyncHandler(async (req: Request, res: Response) => {
     const traceId = (req.traceId as string) || '';
 
     // Resolve association
@@ -486,7 +486,7 @@ export const postCertificateTemplate: RequestHandler[] = [
 export const deleteCertificateTemplateRoute: RequestHandler[] = [
   validate({ params: ModuleParamsSchema }),
 
-  asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+  asyncHandler(async (req: Request, res: Response) => {
     const traceId = (req.traceId as string) || '';
 
     // Resolve association

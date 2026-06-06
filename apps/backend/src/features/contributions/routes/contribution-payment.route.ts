@@ -1,9 +1,9 @@
 import { UserRole } from '@prisma/client';
 import { validate } from '@src/shared/lib/validate';
-import { asyncHandler } from '@src/shared/utils/async-handler';
-import { withRole } from '@src/shared/utils/with-role';
+import { asyncHandler } from '@utils/async-handler';
+import { withRole } from '@utils/with-role';
 import { RequestHandler } from 'express';
-import { success } from '@src/shared/utils/responses';
+import { success } from '@utils/responses';
 import { recordContributionPayment } from '../services';
 import { RecordContributionInput, RecordContributionSchema } from '../validators';
 

@@ -9,7 +9,7 @@ import { markPaymentFailed } from './payment.service';
 import { getActiveProvider } from './payment-provider.service';
 import { decrypt } from '@src/shared/lib/crypto';
 import { NotFoundError, WebhookSignatureError } from '@src/shared/errors';
-import { logAction } from '@src/shared/services';
+import { logAction } from '@services';
 import { logger } from '@src/shared/logger';
 
 // ---------------------------------------------------------------------------

@@ -4,7 +4,7 @@ import { AuditAction } from '@prisma/client';
 // ---- Shared utilities ----
 import { NotFoundError } from '@src/shared/errors';
 import { prisma } from '@src/shared/lib/prisma';
-import { logAction } from '@src/shared/services/audit-logs';
+import { logAction } from '@services/audit-logs';
 
 // ---- Service ----
 

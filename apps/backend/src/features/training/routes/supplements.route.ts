@@ -1,18 +1,18 @@
 // ---- External libs ----
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response } from 'express';
 import type { RequestHandler } from 'express';
 
 // ---- Shared utilities ----
 import { validate } from '@src/shared/lib/validate';
-import { success } from '@src/shared/utils/responses';
+import { success } from '@utils/responses';
 import { prisma } from '@src/shared/lib/prisma';
 import { uploadToBucket, deleteFromBucket } from '@src/shared/lib/supabase/storage';
 import { BadRequestError, NotFoundError } from '@src/shared/errors';
 import { env } from '@src/env';
 import { logger } from '@src/shared/logger';
-import { getAssociation } from '@src/shared/services/association/get-association';
-import { withRole } from '@src/shared/utils/with-role';
-import { asyncHandler } from '@src/shared/utils/async-handler';
+import { getAssociation } from '@services/association/get-association';
+import { withRole } from '@utils/with-role';
+import { asyncHandler } from '@utils/async-handler';
 
 // ---- Prisma ----
 import { UserRole } from '@prisma/client';
@@ -57,7 +57,7 @@ const SupplementParamsSchema = z.object({
 export const getSupplements: RequestHandler[] = [
   validate({ params: ModuleParamsSchema }),
 
-  asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+  asyncHandler(async (req: Request, res: Response) => {
     const traceId = (req.traceId as string) || '';
 
     const association = await getAssociation(req);
@@ -93,7 +93,7 @@ export const postSupplement: RequestHandler[] = [
   fileUpload.single('file'),
   validate({ params: ModuleParamsSchema }),
 
-  asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+  asyncHandler(async (req: Request, res: Response) => {
     const traceId = (req.traceId as string) || '';
 
     // Resolve association
@@ -185,7 +185,7 @@ export const postSupplement: RequestHandler[] = [
 export const getSupplement: RequestHandler[] = [
   validate({ params: SupplementParamsSchema }),
 
-  asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+  asyncHandler(async (req: Request, res: Response) => {
     const traceId = (req.traceId as string) || '';
 
     const association = await getAssociation(req);
@@ -230,7 +230,7 @@ export const getSupplement: RequestHandler[] = [
 export const updateSupplementHandler: RequestHandler[] = [
   fileUpload.single('file'),
   validate({ params: SupplementParamsSchema }),
-  asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+  asyncHandler(async (req: Request, res: Response) => {
     const traceId = (req.traceId as string) || '';
 
     const association = await getAssociation(req);
@@ -337,7 +337,7 @@ export const updateSupplementHandler: RequestHandler[] = [
 export const deleteSupplementHandler: RequestHandler[] = [
   validate({ params: SupplementParamsSchema }),
 
-  asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+  asyncHandler(async (req: Request, res: Response) => {
     const traceId = (req.traceId as string) || '';
 
     // Resolve association

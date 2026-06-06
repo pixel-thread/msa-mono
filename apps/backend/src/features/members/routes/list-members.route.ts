@@ -8,15 +8,15 @@ import z from 'zod';
 // Shared utilities
 // ---------------------------------------------------------------------------
 import { validate } from '@src/shared/lib/validate';
-import { success } from '@src/shared/utils/responses';
+import { success } from '@utils/responses';
 import { prisma } from '@src/shared/lib/prisma';
 import { ForbiddenError, UnauthorizedError } from '@src/shared/errors';
-import { hasHighRoleAccess } from '@src/shared/utils/has-high-role';
+import { hasHighRoleAccess } from '@utils/has-high-role';
 import { pageNumberValidation } from '@src/shared/validators/common';
 import { logger } from '@src/shared/logger';
 import { auth } from '@src/middleware/auth';
-import { withRole } from '@src/shared/utils/with-role';
-import { asyncHandler } from '@src/shared/utils/async-handler';
+import { withRole } from '@utils/with-role';
+import { asyncHandler } from '@utils/async-handler';
 
 // ---------------------------------------------------------------------------
 // Prisma

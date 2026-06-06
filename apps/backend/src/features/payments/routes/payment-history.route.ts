@@ -11,13 +11,13 @@ import type { RequestHandler } from 'express';
 
 import { prisma } from '@src/shared/lib/prisma';
 import { validate } from '@src/shared/lib/validate';
-import { success } from '@src/shared/utils/responses';
+import { success } from '@utils/responses';
 import { logger } from '@src/shared/logger';
 import { UnauthorizedError, ForbiddenError } from '@src/shared/errors';
 import { PaymentHistoryQuerySchema } from '@src/features/payments/validators';
 import { getUserPaymentHistory } from '@src/features/payments/services/payment.service';
 import { getUserContributionSummary } from '@src/features/contributions/services/contribution.service';
-import { asyncHandler } from '@src/shared/utils/async-handler';
+import { asyncHandler } from '@utils/async-handler';
 
 // ---- Helpers ----
 

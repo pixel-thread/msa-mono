@@ -10,14 +10,14 @@ import { Request, NextFunction, Response } from 'express';
 import type { RequestHandler } from 'express';
 
 import { validate } from '@src/shared/lib/validate';
-import { success } from '@src/shared/utils/responses';
+import { success } from '@utils/responses';
 import { logger } from '@src/shared/logger';
 import { UserRole } from '@prisma/client';
-import { withRole } from '@src/shared/utils/with-role';
+import { withRole } from '@utils/with-role';
 import { RecordManualPaymentSchema } from '@src/features/payments/validators';
 import { recordManualPayment } from '@src/features/payments/services/payment.service';
-import { asyncHandler } from '@src/shared/utils/async-handler';
-import { getAssociation } from '@src/shared/services/association/get-association';
+import { asyncHandler } from '@utils/async-handler';
+import { getAssociation } from '@services/association/get-association';
 
 export const recordPayment: RequestHandler[] = [
   // Step 1: Validate request body
