@@ -3,7 +3,7 @@ import { Request, NextFunction, Response } from 'express';
 import type { RequestHandler } from 'express';
 
 // ---- Shared utilities ----
-import { validate } from '@src/shared/lib/validate';
+import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
 import { buildPagination } from '@utils/build-pagination';
 import { BadRequestError } from '@src/shared/errors';
@@ -23,13 +23,13 @@ import {
   bulkRemoveTrainingAssignment,
   getTrainingAssignments,
   getAssignedUsers,
-} from '@src/features/training/services';
+} from '@feature/training/services';
 
 // ---- Validators ----
 import {
   AssignTrainingSchema,
   BulkAssignTrainingSchema,
-} from '@src/features/training/validators/training';
+} from '@feature/training/validators/training';
 
 // ---- External libs ----
 import { z } from 'zod';

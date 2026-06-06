@@ -1,11 +1,11 @@
 import { Router } from 'express';
 
-import { prisma } from '@src/shared/lib/prisma';
+import { prisma } from '@lib/prisma';
 import { success } from '@utils/responses';
 import { auth } from '@src/middleware/auth';
 import { ForbiddenError, UnauthorizedError } from '@src/shared/errors';
 
-import { getDashboardOverview } from '@src/features/dashboard/services/dashboard.service';
+import { getDashboardOverview } from '@feature/dashboard/services/dashboard.service';
 
 // ---- Routes -----------------------------------------------------------------
 // GET /api/dashboard/overview

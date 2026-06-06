@@ -4,8 +4,8 @@ import type { Express } from 'express';
 
 import { createAssociation, createUser, cleanupByPrefix } from '../helpers/factories';
 import { signAccessToken } from '../helpers/auth';
-import { prisma } from '@src/shared/lib';
-import { generateUserContributions } from '@src/features/contributions/services/contribution.service';
+import { prisma } from '@lib';
+import { generateUserContributions } from '@feature/contributions/services/contribution.service';
 import { ContributionStatus } from '@prisma/client';
 
 const PREFIX = `test-plan-change-${Date.now()}`;

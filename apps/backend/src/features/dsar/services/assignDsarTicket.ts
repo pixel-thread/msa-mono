@@ -1,4 +1,4 @@
-import { prisma } from '@src/shared/lib/prisma';
+import { prisma } from '@lib/prisma';
 import { AuditAction } from '@prisma/client';
 
 /** Parameters for assigning a DSAR ticket. */

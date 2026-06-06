@@ -1,7 +1,7 @@
 import { Request, NextFunction, Response } from 'express';
 import type { RequestHandler } from 'express';
 
-import { validate } from '@src/shared/lib/validate';
+import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
 import { asyncHandler } from '@utils/async-handler';
 import { logger } from '@src/shared/logger';
@@ -11,8 +11,8 @@ import {
   verifyMfaTempToken,
   signAccessToken,
   signRefreshToken,
-} from '@src/shared/lib/jwt';
-import { hashToken } from '@src/shared/lib/password';
+} from '@lib/jwt';
+import { hashToken } from '@lib/password';
 
 import {
   BadRequestError,
@@ -22,11 +22,11 @@ import {
 
 import { getUniqueUser } from '@services/user/get-unique-user';
 
-import { getVerificationCodeFirst } from '@src/features/auth/services/get-verification-code-first';
-import { updateVerificationCode } from '@src/features/auth/services/update-verification-code';
-import { createRefreshToken } from '@src/features/auth/services/create-refresh-token';
+import { getVerificationCodeFirst } from '@feature/auth/services/get-verification-code-first';
+import { updateVerificationCode } from '@feature/auth/services/update-verification-code';
+import { createRefreshToken } from '@feature/auth/services/create-refresh-token';
 
-import { VerifySignInInput, VerifySignInSchema } from '@src/features/auth/validators';
+import { VerifySignInInput, VerifySignInSchema } from '@feature/auth/validators';
 
 /**
  * POST /api/auth/sign-in/verify — Complete MFA sign-in by verifying the OTP code

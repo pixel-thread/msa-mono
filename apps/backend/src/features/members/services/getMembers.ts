@@ -6,7 +6,7 @@ import { Association, Prisma } from '@prisma/client';
 // ---------------------------------------------------------------------------
 // Shared utilities
 // ---------------------------------------------------------------------------
-import { prisma } from '@src/shared/lib/prisma';
+import { prisma } from '@lib/prisma';
 import { buildPagination } from '@utils/build-pagination';
 
 // ---------------------------------------------------------------------------

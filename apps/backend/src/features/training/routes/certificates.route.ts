@@ -3,10 +3,10 @@ import { Request, Response, NextFunction } from 'express';
 import type { RequestHandler } from 'express';
 
 // ---- Shared utilities ----
-import { validate } from '@src/shared/lib/validate';
+import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
-import { prisma } from '@src/shared/lib/prisma';
-import { uploadToBucket, deleteFromBucket } from '@src/shared/lib/supabase/storage';
+import { prisma } from '@lib/prisma';
+import { uploadToBucket, deleteFromBucket } from '@lib/supabase/storage';
 import { BadRequestError, NotFoundError } from '@src/shared/errors';
 import { env } from '@src/env';
 import { logger } from '@src/shared/logger';
@@ -25,13 +25,13 @@ import {
   deleteCertificate,
   createCertificateTemplate,
   deleteCertificateTemplate,
-} from '@src/features/training/services';
+} from '@feature/training/services';
 
 // ---- Validators ----
 import {
   CreateTrainingCertificateSchema,
   UpdateTrainingCertificateSchema,
-} from '@src/features/training/validators/training';
+} from '@feature/training/validators/training';
 
 // ---- External libs ----
 import { z } from 'zod';

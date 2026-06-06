@@ -1,25 +1,25 @@
 import { Request, NextFunction, Response } from 'express';
 import type { RequestHandler } from 'express';
 
-import { validate } from '@src/shared/lib/validate';
+import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
 import { asyncHandler } from '@utils/async-handler';
 import { logger } from '@src/shared/logger';
 import { env } from '@src/env';
 
-import { verifyRefreshToken, signAccessToken, signRefreshToken } from '@src/shared/lib/jwt';
-import { hashToken } from '@src/shared/lib/password';
+import { verifyRefreshToken, signAccessToken, signRefreshToken } from '@lib/jwt';
+import { hashToken } from '@lib/password';
 
 import { UnauthorizedError } from '@src/shared/errors';
 
-import { cacheClient } from '@src/shared/lib/cache';
+import { cacheClient } from '@lib/cache';
 
-import { getUniqueRefreshToken } from '@src/features/auth/services/get-unique-refresh-token';
-import { updateRefreshToken } from '@src/features/auth/services/update-refresh-token';
-import { createRefreshToken } from '@src/features/auth/services/create-refresh-token';
-import { revokedRefreshTokens } from '@src/features/auth/services/revoked-refresh-tokens';
+import { getUniqueRefreshToken } from '@feature/auth/services/get-unique-refresh-token';
+import { updateRefreshToken } from '@feature/auth/services/update-refresh-token';
+import { createRefreshToken } from '@feature/auth/services/create-refresh-token';
+import { revokedRefreshTokens } from '@feature/auth/services/revoked-refresh-tokens';
 
-import { RefreshTokenSchema } from '@src/features/auth/validators';
+import { RefreshTokenSchema } from '@feature/auth/validators';
 
 /**
  * POST /api/auth/refresh — Rotate access and refresh tokens

@@ -8,15 +8,15 @@
 import { Request, NextFunction, Response } from 'express';
 import type { RequestHandler } from 'express';
 
-import { prisma } from '@src/shared/lib/prisma';
-import { validate } from '@src/shared/lib/validate';
+import { prisma } from '@lib/prisma';
+import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
 import { logger } from '@src/shared/logger';
 import { UserRole } from '@prisma/client';
 import { withRole } from '@utils/with-role';
 import { UnauthorizedError, ForbiddenError } from '@src/shared/errors';
-import { GetTransactionsQuerySchema } from '@src/features/payments/validators';
-import { getAllTransactions } from '@src/features/payments/services/payment.service';
+import { GetTransactionsQuerySchema } from '@feature/payments/validators';
+import { getAllTransactions } from '@feature/payments/services/payment.service';
 import { asyncHandler } from '@utils/async-handler';
 
 // ---- Helpers ----

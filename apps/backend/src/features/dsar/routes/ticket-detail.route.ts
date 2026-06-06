@@ -1,6 +1,6 @@
 import { Request, NextFunction, Response } from 'express';
 import type { RequestHandler } from 'express';
-import { validate } from '@src/shared/lib/validate';
+import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
 import {
   UnauthorizedError,
@@ -8,7 +8,7 @@ import {
   NotFoundError,
   BadRequestError,
 } from '@src/shared/errors';
-import { prisma } from '@src/shared/lib/prisma';
+import { prisma } from '@lib/prisma';
 import { UserRole, DsarStatus } from '@prisma/client';
 import { z } from 'zod';
 import {
@@ -16,8 +16,8 @@ import {
   deleteDsarTicket,
   respondToDsarTicket,
   assignDsarTicket,
-} from '@src/features/dsar/services';
-import { RespondDsarSchema } from '@src/features/dsar/validators';
+} from '@feature/dsar/services';
+import { RespondDsarSchema } from '@feature/dsar/validators';
 import { getUniqueUser } from '@services/user/get-unique-user';
 import { hasHighRoleAccess } from '@utils/has-high-role';
 import { logger } from '@src/shared/logger';

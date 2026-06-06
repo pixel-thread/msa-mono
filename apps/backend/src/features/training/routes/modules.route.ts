@@ -3,7 +3,7 @@ import { Request, NextFunction, Response } from 'express';
 import type { RequestHandler } from 'express';
 
 // ---- Shared utilities ----
-import { validate } from '@src/shared/lib/validate';
+import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
 import { hasHighRoleAccess } from '@utils/has-high-role';
 import { logger } from '@src/shared/logger';
@@ -15,10 +15,10 @@ import { asyncHandler } from '@utils/async-handler';
 import { UserRole } from '@prisma/client';
 
 // ---- Services ----
-import { createModule, findManyModules } from '@src/features/training/services';
+import { createModule, findManyModules } from '@feature/training/services';
 
 // ---- Validators ----
-import { CreateTrainingModuleSchema } from '@src/features/training/validators/training';
+import { CreateTrainingModuleSchema } from '@feature/training/validators/training';
 
 // ---------------------------------------------------------------------------
 // GET /training/modules

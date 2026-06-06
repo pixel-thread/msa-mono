@@ -13,11 +13,11 @@ import { getUniqueUser } from '@services/user/get-unique-user';
 import { asyncHandler } from '@utils/async-handler';
 
 // Prisma
-import { prisma } from '@src/shared/lib/prisma';
+import { prisma } from '@lib/prisma';
 import { UserRole } from '@prisma/client';
 
 // Services
-import { ConsentService } from '@src/features/consent/services/consent.service';
+import { ConsentService } from '@feature/consent/services/consent.service';
 
 // ---- Helper: Role hierarchy for permission checks
 // Lower number = higher privilege. SUPER_ADMIN (0) is the highest.

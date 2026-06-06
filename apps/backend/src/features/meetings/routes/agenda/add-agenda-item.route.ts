@@ -1,11 +1,11 @@
 import { Request, NextFunction, Response } from 'express';
 import type { RequestHandler } from 'express';
-import { validate } from '@src/shared/lib/validate';
+import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
 import { UserRole } from '@prisma/client';
-import { createAgendaItem } from '@src/features/meetings/services/createAgendaItem';
-import { countAgendaItems } from '@src/features/meetings/services/countAgendaItems';
-import { CreateAgendaItemSchema } from '@src/features/meetings/validators/agenda-items';
+import { createAgendaItem } from '@feature/meetings/services/createAgendaItem';
+import { countAgendaItems } from '@feature/meetings/services/countAgendaItems';
+import { CreateAgendaItemSchema } from '@feature/meetings/validators/agenda-items';
 import { logger } from '@src/shared/logger';
 import { z } from 'zod';
 import { withRole } from '@utils/with-role';

@@ -1,13 +1,13 @@
-import { prisma } from '@src/shared/lib/prisma';
+import { prisma } from '@lib/prisma';
 import { AuditAction, PaymentGateway } from '@prisma/client';
 import {
   recordMemberPayment,
   recordRefund,
-} from '@src/features/ledger/services/accounting.service';
+} from '@feature/ledger/services/accounting.service';
 import { verifyWebhookSignature } from './razorpay.service';
 import { markPaymentFailed } from './payment.service';
 import { getActiveProvider } from './payment-provider.service';
-import { decrypt } from '@src/shared/lib/crypto';
+import { decrypt } from '@lib/crypto';
 import { NotFoundError, WebhookSignatureError } from '@src/shared/errors';
 import { logAction } from '@services';
 import { logger } from '@src/shared/logger';

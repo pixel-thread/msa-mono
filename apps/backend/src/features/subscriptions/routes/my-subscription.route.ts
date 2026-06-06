@@ -8,7 +8,7 @@ import { z } from 'zod';
 // ---------------------------------------------------------------------------
 // Shared utilities
 // ---------------------------------------------------------------------------
-import { validate } from '@src/shared/lib/validate';
+import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';
 import { asyncHandler } from '@utils/async-handler';

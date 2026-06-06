@@ -7,7 +7,7 @@
 import { describe, it, expect, jest, beforeEach } from '@jest/globals';
 import { Request, Response } from 'express';
 import { contextMiddleware } from '@src/middleware/context';
-import { ContextStore } from '@src/shared/lib/tracing/context';
+import { ContextStore } from '@lib/tracing/context';
 
 describe('Context Middleware', () => {
   let req: Partial<Request>;

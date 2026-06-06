@@ -8,8 +8,8 @@ import { ApplicationStatus, Prisma, UserRole } from '@prisma/client';
 
 // ---- Shared Utilities
 
-import { prisma } from '@src/shared/lib/prisma';
-import { generateRandomPassword, hashPassword } from '@src/shared/lib/password';
+import { prisma } from '@lib/prisma';
+import { generateRandomPassword, hashPassword } from '@lib/password';
 import { ConflictError, NotFoundError } from '@src/shared/errors';
 import { buildPagination } from '@utils/build-pagination';
 import { PAGE_SIZE } from '@src/shared/constants';

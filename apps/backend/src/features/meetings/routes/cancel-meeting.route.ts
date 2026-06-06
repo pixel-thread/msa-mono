@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express';
 import { success } from '@utils/responses';
 import { UserRole, MeetingStatus } from '@prisma/client';
-import { updateMeeting } from '@src/features/meetings/services';
+import { updateMeeting } from '@feature/meetings/services';
 import { hasHighRoleAccess } from '@utils/has-high-role';
 import { ForbiddenError } from '@src/shared/errors';
 import { logger } from '@src/shared/logger';

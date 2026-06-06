@@ -1,11 +1,11 @@
 import { Request, NextFunction, Response } from 'express';
 import type { RequestHandler } from 'express';
-import { validate } from '@src/shared/lib/validate';
+import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
 import { ForbiddenError } from '@src/shared/errors';
 import { UserRole, MeetingStatus } from '@prisma/client';
-import { findManyMeetings } from '@src/features/meetings/services';
-import { MeetingQuerySchema } from '@src/features/meetings/validators/meetings';
+import { findManyMeetings } from '@feature/meetings/services';
+import { MeetingQuerySchema } from '@feature/meetings/validators/meetings';
 import { hasHighRoleAccess } from '@utils/has-high-role';
 import { logger } from '@src/shared/logger';
 import { getAssociation } from '@services/association/get-association';

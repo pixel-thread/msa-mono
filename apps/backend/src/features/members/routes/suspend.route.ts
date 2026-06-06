@@ -8,9 +8,9 @@ import z from 'zod';
 // ---------------------------------------------------------------------------
 // Shared utilities
 // ---------------------------------------------------------------------------
-import { validate } from '@src/shared/lib/validate';
+import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
-import { prisma } from '@src/shared/lib/prisma';
+import { prisma } from '@lib/prisma';
 import {
   BadRequestError,
   ForbiddenError,
@@ -29,8 +29,8 @@ import { UserRole } from '@prisma/client';
 // ---------------------------------------------------------------------------
 // Services
 // ---------------------------------------------------------------------------
-import { findUniqueMember } from '@src/features/members/services/findUniqueMember';
-import { updateMember } from '@src/features/members/services/updateMember';
+import { findUniqueMember } from '@feature/members/services/findUniqueMember';
+import { updateMember } from '@feature/members/services/updateMember';
 
 // ---------------------------------------------------------------------------
 // Schema — route param identifying the member to suspend

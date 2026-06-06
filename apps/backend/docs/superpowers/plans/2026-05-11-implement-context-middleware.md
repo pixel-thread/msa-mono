@@ -21,7 +21,7 @@
 import { describe, it, expect, jest, beforeEach } from '@jest/globals';
 import { Request, Response, NextFunction } from 'express';
 import { contextMiddleware } from '@src/middleware/context';
-import { ContextStore } from '@src/shared/lib/tracing/context';
+import { ContextStore } from '@lib/tracing/context';
 
 describe('Context Middleware', () => {
   let req: Partial<Request>;
@@ -76,7 +76,7 @@ Expected: FAIL (Module not found or contextMiddleware is not a function)
 ```typescript
 import { randomUUID } from 'node:crypto';
 import { Request, Response, NextFunction } from 'express';
-import { ContextStore } from '@src/shared/lib/tracing/context';
+import { ContextStore } from '@lib/tracing/context';
 
 /**
  * Middleware to initialize the AsyncLocalStorage context for each request.

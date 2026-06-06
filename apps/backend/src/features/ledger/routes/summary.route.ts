@@ -24,7 +24,7 @@ import { asyncHandler } from '@utils/async-handler';
 // Services
 // ---------------------------------------------------------------------------
 
-import { getSummary } from '@src/features/ledger/services/ledger.service';
+import { getSummary } from '@feature/ledger/services/ledger.service';
 
 // ---------------------------------------------------------------------------
 // GET /api/ledger/summary  –  Retrieve ledger summary

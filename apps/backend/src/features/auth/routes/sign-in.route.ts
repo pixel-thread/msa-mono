@@ -1,25 +1,25 @@
 import { Request, NextFunction, Response } from 'express';
 import type { RequestHandler } from 'express';
 
-import { validate } from '@src/shared/lib/validate';
+import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
 import { asyncHandler } from '@utils/async-handler';
 import { logger } from '@src/shared/logger';
 import { env } from '@src/env';
 
-import { verifyPassword, hashToken, generateOTP } from '@src/shared/lib/password';
-import { signAccessToken, signRefreshToken, signMfaTempToken } from '@src/shared/lib/jwt';
-import { sendVerificationEmail } from '@src/shared/lib/email';
+import { verifyPassword, hashToken, generateOTP } from '@lib/password';
+import { signAccessToken, signRefreshToken, signMfaTempToken } from '@lib/jwt';
+import { sendVerificationEmail } from '@lib/email';
 
 import { ForbiddenError, UnauthorizedError } from '@src/shared/errors';
 
 import { getUserFirst } from '@services/user/get-user-first';
-import { updateUser } from '@src/features/user/services';
+import { updateUser } from '@feature/user/services';
 
-import { createRefreshToken } from '@src/features/auth/services/create-refresh-token';
-import { createVerificationCode } from '@src/features/auth/services/create-verification-code';
+import { createRefreshToken } from '@feature/auth/services/create-refresh-token';
+import { createVerificationCode } from '@feature/auth/services/create-verification-code';
 
-import { SignInSchema } from '@src/features/auth/validators';
+import { SignInSchema } from '@feature/auth/validators';
 import { mockAsyncVerification } from '../utils/mock-async-verification';
 
 /**

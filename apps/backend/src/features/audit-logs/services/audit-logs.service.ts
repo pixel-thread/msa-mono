@@ -4,7 +4,7 @@
 import { buildPagination } from '@utils/build-pagination';
 
 // Prisma
-import { prisma } from '@src/shared/lib/prisma';
+import { prisma } from '@lib/prisma';
 
 // Types
 import type { AuditLogEntry, AuditLogQuery } from '../types';

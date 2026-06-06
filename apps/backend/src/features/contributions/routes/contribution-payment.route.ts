@@ -1,5 +1,5 @@
 import { UserRole } from '@prisma/client';
-import { validate } from '@src/shared/lib/validate';
+import { validate } from '@lib/validate';
 import { asyncHandler } from '@utils/async-handler';
 import { withRole } from '@utils/with-role';
 import { RequestHandler } from 'express';

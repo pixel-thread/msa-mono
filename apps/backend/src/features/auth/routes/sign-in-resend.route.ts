@@ -3,22 +3,22 @@ import type { RequestHandler } from 'express';
 
 import z from 'zod';
 
-import { validate } from '@src/shared/lib/validate';
+import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
 import { asyncHandler } from '@utils/async-handler';
 import { logger } from '@src/shared/logger';
 import { env } from '@src/env';
 
-import { generateOTP, hashToken } from '@src/shared/lib/password';
-import { verifyMfaTempToken } from '@src/shared/lib/jwt';
-import { sendVerificationEmail } from '@src/shared/lib/email';
+import { generateOTP, hashToken } from '@lib/password';
+import { verifyMfaTempToken } from '@lib/jwt';
+import { sendVerificationEmail } from '@lib/email';
 
 import { BadRequestError, NotFoundError, TooManyRequestsError } from '@src/shared/errors';
 
 import { getUniqueUser } from '@services/user/get-unique-user';
 
-import { getVerificationCodeFirst } from '@src/features/auth/services/get-verification-code-first';
-import { createVerificationCode } from '@src/features/auth/services/create-verification-code';
+import { getVerificationCodeFirst } from '@feature/auth/services/get-verification-code-first';
+import { createVerificationCode } from '@feature/auth/services/create-verification-code';
 
 /** Schema for resending the sign-in MFA code — requires the temp session token. */
 const ResendSignInCodeSchema = z.object({ mfa_temp_token: z.string() });

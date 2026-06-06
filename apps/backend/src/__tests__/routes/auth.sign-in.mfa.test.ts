@@ -61,7 +61,7 @@ describe('POST /api/v1/auth/sign-in — MFA flow', () => {
   });
 
   it('should reset failedLoginAttempts even when MFA is pending', async () => {
-    const { prisma } = await import('@src/shared/lib');
+    const { prisma } = await import('@lib');
     await prisma.user.updateMany({
       where: { email: `${PREFIX}@test.com` },
       data: { failedLoginAttempts: 3 },

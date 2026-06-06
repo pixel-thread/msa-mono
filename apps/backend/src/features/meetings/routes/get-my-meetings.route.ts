@@ -1,9 +1,9 @@
 import { Request, NextFunction, Response } from 'express';
 import type { RequestHandler } from 'express';
-import { validate } from '@src/shared/lib/validate';
+import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
 import { UserRole } from '@prisma/client';
-import { findManyMeetings } from '@src/features/meetings/services';
+import { findManyMeetings } from '@feature/meetings/services';
 import { pageNumberValidation } from '@src/shared/validators/common';
 import { logger } from '@src/shared/logger';
 import { z } from 'zod';

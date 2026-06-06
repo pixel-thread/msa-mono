@@ -1,4 +1,4 @@
-import { prisma } from '@src/shared/lib/prisma';
+import { prisma } from '@lib/prisma';
 import { UserRole } from '@prisma/client';
 
 /** Find users with high-level roles (DPO, PRESIDENT, SUPER_ADMIN) in an association. */

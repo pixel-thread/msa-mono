@@ -9,7 +9,7 @@ import {
   runSubscriptionExpiryCron,
   runDsarSlaCron,
   runAnonymizeCron,
-} from '@src/features/cron/services';
+} from '@feature/cron/services';
 
 // ---- Helpers -----------------------------------------------------------------
 

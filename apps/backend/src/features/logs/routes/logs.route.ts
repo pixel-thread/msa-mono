@@ -5,7 +5,7 @@ import type { RequestHandler } from 'express';
 // Shared utilities
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
-import { validate } from '@src/shared/lib/validate';
+import { validate } from '@lib/validate';
 import { ValidationError } from '@src/shared/errors';
 
 // ---- Prisma

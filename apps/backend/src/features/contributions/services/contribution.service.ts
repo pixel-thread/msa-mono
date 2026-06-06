@@ -1,4 +1,4 @@
-import { prisma } from '@src/shared/lib/prisma';
+import { prisma } from '@lib/prisma';
 import {
   ContributionStatus,
   Prisma,
@@ -9,8 +9,8 @@ import {
   PaymentGateway,
   PaymentMethod,
 } from '@prisma/client';
-import { JournalLine, recordWaiver } from '@src/features/ledger/services/accounting.service';
-import { ContributionSummary } from '@src/features/contributions/types';
+import { JournalLine, recordWaiver } from '@feature/ledger/services/accounting.service';
+import { ContributionSummary } from '@feature/contributions/types';
 import { BadRequestError, NotFoundError } from '@src/shared/errors';
 
 // ---------------------------------------------------------------------------

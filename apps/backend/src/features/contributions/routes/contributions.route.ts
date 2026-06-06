@@ -8,7 +8,7 @@
 import { type Request, NextFunction, Response } from 'express';
 import type { RequestHandler } from 'express';
 
-import { validate } from '@src/shared/lib/validate';
+import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
 import { buildPagination } from '@utils/build-pagination';
 import { logger } from '@src/shared/logger';
@@ -21,14 +21,14 @@ import {
   GenerateUserContributionsSchema,
   UserContributionsParamsSchema,
   WaiveContributionSchema,
-} from '@src/features/contributions/validators';
+} from '@feature/contributions/validators';
 import {
   generateUserContributions,
   markOverdueContributions,
   waiveContribution,
-} from '@src/features/contributions/services/contribution.service';
-import { findContributionPeriods } from '@src/features/contributions/services/find-contribution-periods';
-import { findUniqueContributionPeriod } from '@src/features/contributions/services/find-unique-contribution-period';
+} from '@feature/contributions/services/contribution.service';
+import { findContributionPeriods } from '@feature/contributions/services/find-contribution-periods';
+import { findUniqueContributionPeriod } from '@feature/contributions/services/find-unique-contribution-period';
 import { pageNumberValidation } from '@src/shared/validators/common';
 import { PAGE_SIZE } from '@src/shared/constants';
 import { asyncHandler } from '@utils/async-handler';

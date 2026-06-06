@@ -3,10 +3,10 @@ import { Request, Response, NextFunction } from 'express';
 import type { RequestHandler } from 'express';
 
 // ---- Shared utilities ----
-import { validate } from '@src/shared/lib/validate';
+import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
-import { prisma } from '@src/shared/lib/prisma';
-import { uploadToBucket } from '@src/shared/lib/supabase/storage';
+import { prisma } from '@lib/prisma';
+import { uploadToBucket } from '@lib/supabase/storage';
 import { BadRequestError } from '@src/shared/errors';
 import { env } from '@src/env';
 import { logger } from '@src/shared/logger';
@@ -22,10 +22,10 @@ import {
   findManyCompletions,
   recordCompletion,
   completeAssignment,
-} from '@src/features/training/services';
+} from '@feature/training/services';
 
 // ---- Validators ----
-import { RecordCompletionSchema } from '@src/features/training/validators/training';
+import { RecordCompletionSchema } from '@feature/training/validators/training';
 
 // ---- External libs ----
 import { z } from 'zod';

@@ -3,7 +3,7 @@ import { Request, NextFunction, Response } from 'express';
 import type { RequestHandler } from 'express';
 
 // ---- Shared utilities ----
-import { validate } from '@src/shared/lib/validate';
+import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
 import { NotFoundError } from '@src/shared/errors';
 import { logger } from '@src/shared/logger';
@@ -15,10 +15,10 @@ import { asyncHandler } from '@utils/async-handler';
 import { UserRole } from '@prisma/client';
 
 // ---- Services ----
-import { findUniqueModule, updateModule, deleteModule } from '@src/features/training/services';
+import { findUniqueModule, updateModule, deleteModule } from '@feature/training/services';
 
 // ---- Validators ----
-import { UpdateTrainingModuleSchema } from '@src/features/training/validators/training';
+import { UpdateTrainingModuleSchema } from '@feature/training/validators/training';
 
 // ---- External libs ----
 import { z } from 'zod';

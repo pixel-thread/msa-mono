@@ -21,7 +21,7 @@ import { UserRole } from '@prisma/client';
 // ---------------------------------------------------------------------------
 // Services
 // ---------------------------------------------------------------------------
-import { generateComplianceEvidence } from '@src/features/compliance/services';
+import { generateComplianceEvidence } from '@feature/compliance/services';
 
 // ---------------------------------------------------------------------------
 // GET /compliance/evidence  —  Generate compliance evidence report

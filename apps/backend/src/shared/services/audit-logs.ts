@@ -1,4 +1,4 @@
-import { prisma } from '@src/shared/lib/prisma';
+import { prisma } from '@lib/prisma';
 import { AuditAction, Prisma } from '@prisma/client';
 import type { AuditLogEntry, AuditLogQuery } from '@src/shared/types/audit-logs';
 import { buildPagination } from '@utils/build-pagination';

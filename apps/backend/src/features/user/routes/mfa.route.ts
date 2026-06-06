@@ -10,7 +10,7 @@ import { logger } from '@src/shared/logger';
 
 // ---- Services
 
-import { getUser, updateUser } from '@src/features/user/services';
+import { getUser, updateUser } from '@feature/user/services';
 
 // ---------------------------------------------------------------------------
 // POST /api/user/mfa

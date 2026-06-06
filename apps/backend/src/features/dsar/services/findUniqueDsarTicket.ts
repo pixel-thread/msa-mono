@@ -1,4 +1,4 @@
-import { prisma } from '@src/shared/lib/prisma';
+import { prisma } from '@lib/prisma';
 
 /** Find a single DSAR ticket by ID and association ID, including member, assignee, and responses. */
 export async function findUniqueDsarTicket(id: string, associationId: string) {

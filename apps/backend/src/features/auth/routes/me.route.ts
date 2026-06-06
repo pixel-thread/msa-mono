@@ -9,7 +9,7 @@ import { UnauthorizedError } from '@src/shared/errors';
 
 import { getUniqueUser } from '@services/user/get-unique-user';
 
-import { getAuthCachedUser, cacheAuthUser } from '@src/features/auth/lib/cache';
+import { getAuthCachedUser, cacheAuthUser } from '@feature/auth/lib/cache';
 
 /**
  * GET /api/auth/me — Fetch the current authenticated user's profile

@@ -1,22 +1,22 @@
 import { Request, NextFunction, Response } from 'express';
 import type { RequestHandler } from 'express';
 
-import { validate } from '@src/shared/lib/validate';
+import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
 import { asyncHandler } from '@utils/async-handler';
 import { logger } from '@src/shared/logger';
 
-import { hashPassword, validatePasswordStrength, verifyPassword } from '@src/shared/lib/password';
+import { hashPassword, validatePasswordStrength, verifyPassword } from '@lib/password';
 
 import { BadRequestError, UnauthorizedError, ValidationError } from '@src/shared/errors';
 
 import { getUniqueUserNoFilter } from '@services/user/get-unique-user-no-filter';
 
-import { updateUser } from '@src/features/user/services';
+import { updateUser } from '@feature/user/services';
 
-import { deleteRefreshTokens } from '@src/features/auth/services/delete-refresh-tokens';
+import { deleteRefreshTokens } from '@feature/auth/services/delete-refresh-tokens';
 
-import { ChangePasswordInput, ChangePasswordSchema } from '@src/features/auth/validators';
+import { ChangePasswordInput, ChangePasswordSchema } from '@feature/auth/validators';
 
 /**
  * POST /api/auth/change-password — Change password for the authenticated user

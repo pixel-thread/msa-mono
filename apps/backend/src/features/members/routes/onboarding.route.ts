@@ -8,9 +8,9 @@ import { z } from 'zod';
 // ---------------------------------------------------------------------------
 // Shared utilities
 // ---------------------------------------------------------------------------
-import { validate } from '@src/shared/lib/validate';
+import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
-import { prisma } from '@src/shared/lib/prisma';
+import { prisma } from '@lib/prisma';
 import { ForbiddenError, UnauthorizedError, ValidationError } from '@src/shared/errors';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
@@ -18,7 +18,7 @@ import { asyncHandler } from '@utils/async-handler';
 // ---------------------------------------------------------------------------
 // Services
 // ---------------------------------------------------------------------------
-import { updateMember } from '@src/features/members/services/updateMember';
+import { updateMember } from '@feature/members/services/updateMember';
 
 // ---------------------------------------------------------------------------
 // Schema — validate the onboarding request body

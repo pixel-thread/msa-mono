@@ -1,7 +1,7 @@
 import { Request, NextFunction, Response } from 'express';
 import type { RequestHandler } from 'express';
 
-import { validate } from '@src/shared/lib/validate';
+import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
 import { asyncHandler } from '@utils/async-handler';
 import { logger } from '@src/shared/logger';
@@ -9,14 +9,14 @@ import { env } from '@src/env';
 
 import { BadRequestError, ConflictError } from '@src/shared/errors';
 
-import { findFirstAssociation } from '@src/features/associations/services/findFirstAssociation';
-import { findFirstMember } from '@src/features/members/services/findFirstMember';
-import { createMembershipApplication } from '@src/features/membership-applications/services';
+import { findFirstAssociation } from '@feature/associations/services/findFirstAssociation';
+import { findFirstMember } from '@feature/members/services/findFirstMember';
+import { createMembershipApplication } from '@feature/membership-applications/services';
 
 import {
   MembershipApplicationInput,
   MembershipApplicationSchema,
-} from '@src/features/membership-applications/validators';
+} from '@feature/membership-applications/validators';
 
 /**
  * POST /api/auth/sign-up — Submit a membership application for a new account

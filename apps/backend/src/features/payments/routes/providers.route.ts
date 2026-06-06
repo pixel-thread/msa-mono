@@ -8,7 +8,7 @@
 import { Request, NextFunction, Response } from 'express';
 import type { RequestHandler } from 'express';
 
-import { validate } from '@src/shared/lib/validate';
+import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
 import { logger } from '@src/shared/logger';
 import { BadRequestError, NotFoundError } from '@src/shared/errors';
@@ -19,7 +19,7 @@ import {
   UpdatePaymentProviderSchema,
   ProviderIdParamSchema,
   VerifyPaymentSchema,
-} from '@src/features/payments/validators';
+} from '@feature/payments/validators';
 import {
   getProvidersByAssociation,
   createProvider,
@@ -28,11 +28,11 @@ import {
   deleteProvider,
   setActiveProvider,
   getActiveProvider,
-} from '@src/features/payments/services/payment-provider.service';
+} from '@feature/payments/services/payment-provider.service';
 import {
   createTestPaymentOrder,
   verifyTestPayment,
-} from '@src/features/payments/services/payment.service';
+} from '@feature/payments/services/payment.service';
 import { asyncHandler } from '@utils/async-handler';
 import { getAssociation } from '@services/association/get-association';
 

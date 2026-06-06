@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import { Request, Response, NextFunction } from 'express';
-import { ContextStore } from '@src/shared/lib/tracing/context';
+import { ContextStore } from '@lib/tracing/context';
 
 /**
  * Middleware to initialize the AsyncLocalStorage context for each request.

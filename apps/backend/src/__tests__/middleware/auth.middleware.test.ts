@@ -1,12 +1,12 @@
 import { describe, it, expect, jest, beforeEach } from '@jest/globals';
 import { Request, Response, NextFunction } from 'express';
 import { auth } from '@src/middleware/auth';
-import { ContextStore } from '@src/shared/lib/tracing/context';
-import { prisma } from '@src/shared/lib';
-import { verifyAccessToken } from '@src/shared/lib/jwt';
+import { ContextStore } from '@lib/tracing/context';
+import { prisma } from '@lib';
+import { verifyAccessToken } from '@lib/jwt';
 
-jest.mock('@src/shared/lib/jwt');
-jest.mock('@src/shared/lib', () => ({
+jest.mock('@lib/jwt');
+jest.mock('@lib', () => ({
   prisma: {
     user: {
       findUnique: jest.fn(),

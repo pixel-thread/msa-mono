@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client';
-import { prisma } from '@src/shared/lib/prisma';
+import { prisma } from '@lib/prisma';
 import { PAGE_SIZE } from '@src/shared/constants';
 
 /** Props for fetching compliance checks with pagination. */

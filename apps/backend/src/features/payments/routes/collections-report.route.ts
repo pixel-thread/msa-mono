@@ -8,14 +8,14 @@
 import { Request, NextFunction, Response } from 'express';
 import type { RequestHandler } from 'express';
 
-import { validate } from '@src/shared/lib/validate';
+import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
 import { buildPagination } from '@utils/build-pagination';
 import { logger } from '@src/shared/logger';
 import { UserRole } from '@prisma/client';
 import { withRole } from '@utils/with-role';
-import { CollectionReportQuerySchema } from '@src/features/payments/validators';
-import { findContributionPeriods } from '@src/features/contributions/services/find-contribution-periods';
+import { CollectionReportQuerySchema } from '@feature/payments/validators';
+import { findContributionPeriods } from '@feature/contributions/services/find-contribution-periods';
 import { PAGE_SIZE } from '@src/shared/constants';
 import { asyncHandler } from '@utils/async-handler';
 import { getAssociation } from '@services/association/get-association';

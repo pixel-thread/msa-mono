@@ -1,9 +1,9 @@
 import { describe, it, expect, beforeAll, afterAll } from '@jest/globals';
 import request from 'supertest';
 import type { Express } from 'express';
-import { hashToken } from '@src/shared/lib/password';
-import { signPasswordResetToken } from '@src/shared/lib/jwt';
-import { updateUser } from '@src/features/user/services';
+import { hashToken } from '@lib/password';
+import { signPasswordResetToken } from '@lib/jwt';
+import { updateUser } from '@feature/user/services';
 
 import { createAssociation, createUser, cleanupByPrefix } from '../helpers/factories';
 

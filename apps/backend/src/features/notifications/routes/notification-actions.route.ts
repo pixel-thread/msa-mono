@@ -6,7 +6,7 @@ import { z } from 'zod';
 // Shared utilities
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
-import { validate } from '@src/shared/lib/validate';
+import { validate } from '@lib/validate';
 import { UnauthorizedError, ValidationError, NotFoundError } from '@src/shared/errors';
 import { logger } from '@src/shared/logger';
 import { auth } from '@src/middleware/auth';
@@ -18,7 +18,7 @@ import { UserRole } from '@prisma/client';
 
 // ---- Services
 
-import { upsertPushToken } from '@src/features/notifications/services/upsertPushToken';
+import { upsertPushToken } from '@feature/notifications/services/upsertPushToken';
 import {
   findUniqueNotification,
   updateNotificationStatus,

@@ -14,7 +14,7 @@ describe('POST /api/v1/auth/sign-up — business logic', () => {
     const mod = await import('@src/index');
     app = mod.default;
     // Slug must be one of ['mfsa', 'mpsa', 'mpsc'] per MembershipApplicationSchema
-    const { prisma: p } = await import('@src/shared/lib/prisma');
+    const { prisma: p } = await import('@lib/prisma');
     association = await p.association.upsert({
       where: { slug: 'mfsa' },
       update: { name: 'Test MFSA' },
@@ -31,7 +31,7 @@ describe('POST /api/v1/auth/sign-up — business logic', () => {
 
   afterAll(async () => {
     await cleanupByPrefix(PREFIX);
-    const { prisma: p } = await import('@src/shared/lib/prisma');
+    const { prisma: p } = await import('@lib/prisma');
     await p.membershipApplication.deleteMany({ where: { email: { startsWith: PREFIX } } });
     await p.user.deleteMany({ where: { email: { startsWith: PREFIX } } });
   });

@@ -4,7 +4,7 @@ import type { Express } from 'express';
 
 import { createAssociation, createUser, cleanupByPrefix } from '../helpers/factories';
 import { signRefreshToken } from '../helpers/auth';
-import { hashToken } from '@src/shared/lib/password';
+import { hashToken } from '@lib/password';
 
 const PREFIX = `test-refresh-${Date.now()}`;
 
@@ -26,7 +26,7 @@ describe('POST /api/v1/auth/refresh — success', () => {
     const hashedToken = hashToken(refreshToken);
     const expiresAt = new Date();
     expiresAt.setDate(expiresAt.getDate() + 7);
-    const { prisma } = await import('@src/shared/lib/prisma');
+    const { prisma } = await import('@lib/prisma');
     await prisma.refreshToken.create({
       data: {
         userId: user.id,

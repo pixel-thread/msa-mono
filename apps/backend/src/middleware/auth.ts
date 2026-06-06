@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
-import { verifyAccessToken } from '@src/shared/lib/jwt';
+import { verifyAccessToken } from '@lib/jwt';
 import { UnauthorizedError } from '@src/shared/errors';
 import { API_PUBLIC_ROUTES } from '@src/shared/constants';
-import { prisma } from '@src/shared/lib';
-import { ContextStore } from '@src/shared/lib/tracing/context';
+import { prisma } from '@lib';
+import { ContextStore } from '@lib/tracing/context';
 
 export async function auth(req: Request, _res: Response, next: NextFunction) {
   const path = req.path;

@@ -10,8 +10,8 @@ import { z } from 'zod';
 
 import { UserRole } from '@prisma/client';
 
-import { prisma } from '@src/shared/lib/prisma';
-import { validate } from '@src/shared/lib/validate';
+import { prisma } from '@lib/prisma';
+import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
 import {
   ConflictError,
@@ -22,19 +22,19 @@ import {
 import { withRole } from '@utils/with-role';
 import { asyncHandler } from '@utils/async-handler';
 import { logger } from '@src/shared/logger';
-import { uploadToBucket } from '@src/shared/lib/supabase/storage';
+import { uploadToBucket } from '@lib/supabase/storage';
 import { getAssociation } from '@services/association/get-association';
 
-import { createAssociation } from '@src/features/associations/services/createAssociation';
-import { findFirstAssociation } from '@src/features/associations/services/findFirstAssociation';
-import { findUniqueAssociation } from '@src/features/associations/services/findUniqueAssociation';
-import { updateAssociation } from '@src/features/associations/services/updateAssociation';
-import { findUniqueMember } from '@src/features/members/services/findUniqueMember';
-import { updateMember } from '@src/features/members/services/updateMember';
+import { createAssociation } from '@feature/associations/services/createAssociation';
+import { findFirstAssociation } from '@feature/associations/services/findFirstAssociation';
+import { findUniqueAssociation } from '@feature/associations/services/findUniqueAssociation';
+import { updateAssociation } from '@feature/associations/services/updateAssociation';
+import { findUniqueMember } from '@feature/members/services/findUniqueMember';
+import { updateMember } from '@feature/members/services/updateMember';
 import {
   CreateAssociationSchema,
   UpdateAssociationSchema,
-} from '@src/features/associations/validators';
+} from '@feature/associations/validators';
 import type { CreateAssociationInput } from '@validator/associations';
 
 /**

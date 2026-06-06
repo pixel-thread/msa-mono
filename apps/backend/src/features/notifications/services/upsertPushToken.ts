@@ -1,5 +1,5 @@
 // Shared utilities
-import { prisma } from '@src/shared/lib/prisma';
+import { prisma } from '@lib/prisma';
 
 // ---------------------------------------------------------------------------
 // upsertPushToken

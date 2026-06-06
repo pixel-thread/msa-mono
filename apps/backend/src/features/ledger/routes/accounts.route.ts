@@ -16,7 +16,7 @@ import { UserRole } from '@prisma/client';
 // Shared utilities
 // ---------------------------------------------------------------------------
 
-import { validate } from '@src/shared/lib/validate';
+import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
 import { buildPagination } from '@utils';
 import { pageNumberValidation } from '@src/shared/validators';
@@ -35,8 +35,8 @@ import {
   deleteAccount,
   getAccount,
   updateAccount,
-} from '@src/features/ledger/services/ledger.service';
-import { seedChartOfAccounts } from '@src/features/ledger/services/seed-chart-of-accounts';
+} from '@feature/ledger/services/ledger.service';
+import { seedChartOfAccounts } from '@feature/ledger/services/seed-chart-of-accounts';
 import { NotFoundError } from '@src/shared/errors';
 import { incomeStatement, trialBalance } from '../services/reports.service';
 

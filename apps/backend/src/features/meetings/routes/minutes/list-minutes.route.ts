@@ -1,9 +1,9 @@
 import { Request, NextFunction, Response } from 'express';
 import type { RequestHandler } from 'express';
-import { validate } from '@src/shared/lib/validate';
+import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
 import { UserRole } from '@prisma/client';
-import { getMeetingMinuites } from '@src/features/meetings/services/minutes';
+import { getMeetingMinuites } from '@feature/meetings/services/minutes';
 import { logger } from '@src/shared/logger';
 import { z } from 'zod';
 import { getAssociation } from '@services/association/get-association';

@@ -1,4 +1,4 @@
-import { supabase } from '@src/shared/lib/supabase/client';
+import { supabase } from '@lib/supabase/client';
 import { env } from '@src/env';
 import { getStorageProvider } from '@services/storage';
 import { logger } from '@src/shared/logger';

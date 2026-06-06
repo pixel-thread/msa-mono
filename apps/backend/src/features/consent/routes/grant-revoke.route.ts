@@ -7,21 +7,21 @@ import { Request, NextFunction, Response } from 'express';
 import type { RequestHandler } from 'express';
 
 // Shared utilities
-import { validate } from '@src/shared/lib/validate';
+import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
 import { UnauthorizedError, ForbiddenError, BadRequestError } from '@src/shared/errors';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 
 // Prisma
-import { prisma } from '@src/shared/lib/prisma';
+import { prisma } from '@lib/prisma';
 import { ConsentStatus } from '@prisma/client';
 
 // Services
-import { ConsentService } from '@src/features/consent/services/consent.service';
+import { ConsentService } from '@feature/consent/services/consent.service';
 
 // Validators
-import { ConsentUpdateSchema } from '@src/features/consent/validators/consent.validators';
+import { ConsentUpdateSchema } from '@feature/consent/validators/consent.validators';
 
 // ---- Helper: getAssociation
 // Resolves the user's association from the request context.

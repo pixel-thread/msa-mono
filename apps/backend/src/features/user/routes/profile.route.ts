@@ -6,8 +6,8 @@ import z from 'zod';
 // Shared utilities
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
-import { validate } from '@src/shared/lib/validate';
-import { prisma } from '@src/shared/lib/prisma';
+import { validate } from '@lib/validate';
+import { prisma } from '@lib/prisma';
 import { ForbiddenError, UnauthorizedError } from '@src/shared/errors';
 import { logger } from '@src/shared/logger';
 import { withRole } from '@utils/with-role';
@@ -18,11 +18,11 @@ import { UserRole } from '@prisma/client';
 
 // ---- Services
 
-import { getUser, updateUser } from '@src/features/user/services';
+import { getUser, updateUser } from '@feature/user/services';
 
 // ---- Validators / Types
 
-import { UpdateUserSchema } from '@src/features/user/validators';
+import { UpdateUserSchema } from '@feature/user/validators';
 
 // ---------------------------------------------------------------------------
 // GET /api/user

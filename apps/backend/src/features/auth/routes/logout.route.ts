@@ -1,16 +1,16 @@
 import { Request, NextFunction, Response } from 'express';
 import type { RequestHandler } from 'express';
 
-import { validate } from '@src/shared/lib/validate';
+import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
 import { asyncHandler } from '@utils/async-handler';
 import { logger } from '@src/shared/logger';
 
-import { hashToken } from '@src/shared/lib/password';
+import { hashToken } from '@lib/password';
 
-import { updateRefreshTokens } from '@src/features/auth/services/update-refresh-tokens';
+import { updateRefreshTokens } from '@feature/auth/services/update-refresh-tokens';
 
-import { SignOutSchema } from '@src/features/auth/validators';
+import { SignOutSchema } from '@feature/auth/validators';
 
 /**
  * POST /api/auth/logout — Revoke the current refresh token and clear auth cookies

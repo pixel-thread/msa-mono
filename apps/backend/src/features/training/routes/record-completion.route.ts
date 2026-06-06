@@ -3,7 +3,7 @@ import { Request, NextFunction, Response } from 'express';
 import type { RequestHandler } from 'express';
 
 // ---- Shared utilities ----
-import { validate } from '@src/shared/lib/validate';
+import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
 import { logger } from '@src/shared/logger';
 import { getAssociation } from '@services/association/get-association';
@@ -14,10 +14,10 @@ import { asyncHandler } from '@utils/async-handler';
 import { UserRole } from '@prisma/client';
 
 // ---- Services ----
-import { findManyCompletions, adminRecordCompletion } from '@src/features/training/services';
+import { findManyCompletions, adminRecordCompletion } from '@feature/training/services';
 
 // ---- Validators ----
-import { AdminRecordCompletionSchema } from '@src/features/training/validators/training';
+import { AdminRecordCompletionSchema } from '@feature/training/validators/training';
 
 // ---------------------------------------------------------------------------
 // GET /training/completions

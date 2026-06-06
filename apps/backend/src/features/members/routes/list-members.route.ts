@@ -7,9 +7,9 @@ import z from 'zod';
 // ---------------------------------------------------------------------------
 // Shared utilities
 // ---------------------------------------------------------------------------
-import { validate } from '@src/shared/lib/validate';
+import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
-import { prisma } from '@src/shared/lib/prisma';
+import { prisma } from '@lib/prisma';
 import { ForbiddenError, UnauthorizedError } from '@src/shared/errors';
 import { hasHighRoleAccess } from '@utils/has-high-role';
 import { pageNumberValidation } from '@src/shared/validators/common';
@@ -26,7 +26,7 @@ import { UserRole, UserStatus } from '@prisma/client';
 // ---------------------------------------------------------------------------
 // Services
 // ---------------------------------------------------------------------------
-import { getMembers } from '@src/features/members/services/getMembers';
+import { getMembers } from '@feature/members/services/getMembers';
 
 // ---------------------------------------------------------------------------
 // Schema — validate query parameters when listing members

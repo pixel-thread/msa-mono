@@ -7,7 +7,7 @@ import type { RequestHandler } from 'express';
 // ---------------------------------------------------------------------------
 // Shared utilities
 // ---------------------------------------------------------------------------
-import { validate } from '@src/shared/lib/validate';
+import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
 import { buildPagination } from '@utils/build-pagination';
 import { UnauthorizedError, NotFoundError } from '@src/shared/errors';
@@ -18,12 +18,12 @@ import { asyncHandler } from '@utils/async-handler';
 // ---------------------------------------------------------------------------
 // Services
 // ---------------------------------------------------------------------------
-import { findManyComplaints, findUniqueComplaint } from '@src/features/compliance/services';
+import { findManyComplaints, findUniqueComplaint } from '@feature/compliance/services';
 
 // ---------------------------------------------------------------------------
 // Validators / Types
 // ---------------------------------------------------------------------------
-import { ComplaintQuerySchema, ComplaintParamsSchema } from '@src/features/compliance/validators';
+import { ComplaintQuerySchema, ComplaintParamsSchema } from '@feature/compliance/validators';
 
 // ---------------------------------------------------------------------------
 // GET /compliance/my  —  List the current user's own complaints

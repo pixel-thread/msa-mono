@@ -3,17 +3,17 @@ import type { RequestHandler } from 'express';
 
 import { z } from 'zod';
 
-import { validate } from '@src/shared/lib/validate';
+import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
 import { asyncHandler } from '@utils/async-handler';
 import { logger } from '@src/shared/logger';
 
-import { verifyPassword } from '@src/shared/lib/password';
+import { verifyPassword } from '@lib/password';
 
 import { BadRequestError, UnauthorizedError } from '@src/shared/errors';
 
-import { findFirstMember } from '@src/features/members/services/findFirstMember';
-import { updateMember } from '@src/features/members/services/updateMember';
+import { findFirstMember } from '@feature/members/services/findFirstMember';
+import { updateMember } from '@feature/members/services/updateMember';
 
 /** Schema for disabling MFA — requires the user's current password. */
 const DisableMfaSchema = z.object({ password: z.string().min(1, 'Password is required') });

@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client';
-import { prisma } from '@src/shared/lib/prisma';
+import { prisma } from '@lib/prisma';
 
 type Props = {
   where: Prisma.UserWhereUniqueInput;

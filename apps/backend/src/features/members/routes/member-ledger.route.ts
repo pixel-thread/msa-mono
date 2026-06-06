@@ -7,9 +7,9 @@ import type { RequestHandler } from 'express';
 // ---------------------------------------------------------------------------
 // Shared utilities
 // ---------------------------------------------------------------------------
-import { validate } from '@src/shared/lib/validate';
+import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
-import { prisma } from '@src/shared/lib/prisma';
+import { prisma } from '@lib/prisma';
 import { ForbiddenError, UnauthorizedError } from '@src/shared/errors';
 import { withRole } from '@utils/with-role';
 import { logger } from '@src/shared/logger';
@@ -24,12 +24,12 @@ import { UserRole } from '@prisma/client';
 // External feature services
 // ---------------------------------------------------------------------------
 import { getUserPaymentHistory } from '@feature/payments/services/payment.service';
-import { getUserContributionSummary } from '@src/features/contributions/services/contribution.service';
+import { getUserContributionSummary } from '@feature/contributions/services/contribution.service';
 
 // ---------------------------------------------------------------------------
 // Validators / Types
 // ---------------------------------------------------------------------------
-import { LedgerQueryParams, LedgerRouteParams } from '@src/features/ledger/validators';
+import { LedgerQueryParams, LedgerRouteParams } from '@feature/ledger/validators';
 
 // ---------------------------------------------------------------------------
 // GET /api/members/:memberId/ledger  —  Payment ledger + contribution summary

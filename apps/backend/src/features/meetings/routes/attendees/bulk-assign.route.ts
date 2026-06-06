@@ -1,10 +1,10 @@
 import { Request, NextFunction, Response } from 'express';
 import type { RequestHandler } from 'express';
-import { validate } from '@src/shared/lib/validate';
+import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
 import { UserRole } from '@prisma/client';
-import { BulkAssignAttendeesSchema } from '@src/features/meetings/validators';
-import { bulkAssignAttendees } from '@src/features/meetings/services/bulkAssignAttendees';
+import { BulkAssignAttendeesSchema } from '@feature/meetings/validators';
+import { bulkAssignAttendees } from '@feature/meetings/services/bulkAssignAttendees';
 import { logger } from '@src/shared/logger';
 import { getAssociation } from '@services/association/get-association';
 import { withRole } from '@utils/with-role';

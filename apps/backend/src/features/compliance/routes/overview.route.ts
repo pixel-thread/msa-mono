@@ -7,7 +7,7 @@ import type { RequestHandler } from 'express';
 // ---------------------------------------------------------------------------
 // Shared utilities
 // ---------------------------------------------------------------------------
-import { validate } from '@src/shared/lib/validate';
+import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
 import { buildPagination } from '@utils/build-pagination';
 import { logger } from '@src/shared/logger';
@@ -23,12 +23,12 @@ import { UserRole } from '@prisma/client';
 // ---------------------------------------------------------------------------
 // Services
 // ---------------------------------------------------------------------------
-import { findManyComplaints, createComplaint } from '@src/features/compliance/services';
+import { findManyComplaints, createComplaint } from '@feature/compliance/services';
 
 // ---------------------------------------------------------------------------
 // Validators / Types
 // ---------------------------------------------------------------------------
-import { ComplaintQuerySchema, CreateComplaintSchema } from '@src/features/compliance/validators';
+import { ComplaintQuerySchema, CreateComplaintSchema } from '@feature/compliance/validators';
 
 // ---------------------------------------------------------------------------
 // GET /compliance  —  List all complaints with optional filters

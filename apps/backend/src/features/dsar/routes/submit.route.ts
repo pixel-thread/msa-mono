@@ -9,20 +9,20 @@ import type { RequestHandler } from 'express';
 
 // ---- Shared Utilities
 
-import { validate } from '@src/shared/lib/validate';
+import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
 import { UnauthorizedError, ForbiddenError } from '@src/shared/errors';
-import { prisma } from '@src/shared/lib/prisma';
+import { prisma } from '@lib/prisma';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 
 // ---- DSAR Services
 
-import { submitDsarTicket } from '@src/features/dsar/services';
+import { submitDsarTicket } from '@feature/dsar/services';
 
 // ---- DSAR Validators
 
-import { SubmitDsarSchema } from '@src/features/dsar/validators';
+import { SubmitDsarSchema } from '@feature/dsar/validators';
 
 // ---- Helpers
 

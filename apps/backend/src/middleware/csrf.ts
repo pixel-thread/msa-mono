@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { generateCsrfToken, verifyCsrfToken } from '@src/shared/lib/csrf';
+import { generateCsrfToken, verifyCsrfToken } from '@lib/csrf';
 import { ForbiddenError } from '@src/shared/errors';
 import { env } from '@src/env';
 import { logger } from '@src/shared/logger';

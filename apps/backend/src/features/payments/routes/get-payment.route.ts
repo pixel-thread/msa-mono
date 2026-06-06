@@ -9,14 +9,14 @@
 import { Request, NextFunction, Response } from 'express';
 import type { RequestHandler } from 'express';
 
-import { prisma } from '@src/shared/lib/prisma';
+import { prisma } from '@lib/prisma';
 import { success } from '@utils/responses';
 import { logger } from '@src/shared/logger';
 import { UserRole } from '@prisma/client';
 import { withRole } from '@utils/with-role';
 import { UnauthorizedError, ForbiddenError, NotFoundError } from '@src/shared/errors';
-import { getTransactionById } from '@src/features/payments/services/payment.service';
-import { validate } from '@src/shared/lib/validate';
+import { getTransactionById } from '@feature/payments/services/payment.service';
+import { validate } from '@lib/validate';
 import { z } from 'zod';
 import { asyncHandler } from '@utils/async-handler';
 

@@ -1,4 +1,4 @@
-import { prisma } from '@src/shared/lib/prisma';
+import { prisma } from '@lib/prisma';
 import { DsarStatus } from '@prisma/client';
 
 /** Retrieve DSAR SLA compliance counts (breached, at risk, on track) for an association. */

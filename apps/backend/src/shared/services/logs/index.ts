@@ -1,4 +1,4 @@
-import { prisma } from '@src/shared/lib/prisma';
+import { prisma } from '@lib/prisma';
 import { Prisma } from '@prisma/client';
 
 /** Input for creating a single log entry. */

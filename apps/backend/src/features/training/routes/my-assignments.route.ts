@@ -13,7 +13,7 @@ import { asyncHandler } from '@utils/async-handler';
 import { UserRole } from '@prisma/client';
 
 // ---- Services ----
-import { findUserAssignments, findUserCompletions } from '@src/features/training/services';
+import { findUserAssignments, findUserCompletions } from '@feature/training/services';
 
 // ---------------------------------------------------------------------------
 // GET /training/my-assignments

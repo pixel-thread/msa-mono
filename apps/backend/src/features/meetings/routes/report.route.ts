@@ -1,7 +1,7 @@
 import { Request, NextFunction, Response, RequestHandler } from 'express';
 import { success } from '@utils/responses';
 import { UserRole } from '@prisma/client';
-import { findUniqueMeeting } from '@src/features/meetings/services/findUniqueMeeting';
+import { findUniqueMeeting } from '@feature/meetings/services/findUniqueMeeting';
 import { logger } from '@src/shared/logger';
 import { getAssociation } from '@services/association/get-association';
 import { withRole } from '@utils/with-role';

@@ -2,7 +2,7 @@ import { RequestHandler } from 'express';
 import { success } from '@utils/responses';
 import { ForbiddenError } from '@src/shared/errors';
 import { UserRole } from '@prisma/client';
-import { deleteMeeting } from '@src/features/meetings/services';
+import { deleteMeeting } from '@feature/meetings/services';
 import { hasHighRoleAccess } from '@utils/has-high-role';
 import { logger } from '@src/shared/logger';
 import { getAssociation } from '@services/association/get-association';

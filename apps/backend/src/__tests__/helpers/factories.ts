@@ -1,5 +1,5 @@
 import bcrypt from 'bcryptjs';
-import { prisma } from '@src/shared/lib';
+import { prisma } from '@lib';
 
 type UserRole = 'SUPER_ADMIN' | 'PRESIDENT' | 'SECRETARY' | 'FINANCE' | 'DPO' | 'MEMBER';
 type UserStatus = 'ACTIVE' | 'INACTIVE' | 'SUSPENDED' | 'ANONYMIZED' | 'PENDING';

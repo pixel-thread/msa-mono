@@ -1,4 +1,4 @@
-import { prisma } from '@src/shared/lib';
+import { prisma } from '@lib';
 
 afterAll(async () => {
   await prisma.$disconnect();

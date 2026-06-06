@@ -1,4 +1,4 @@
-import { prisma } from '@src/shared/lib/prisma';
+import { prisma } from '@lib/prisma';
 import {
   Prisma,
   PaymentStatus,
@@ -11,13 +11,13 @@ import { buildPagination } from '@utils/build-pagination';
 
 import { verifyPaymentSignature } from './razorpay.service';
 import { getActiveProvider, getProviderById } from './payment-provider.service';
-import { decrypt } from '@src/shared/lib/crypto';
+import { decrypt } from '@lib/crypto';
 import { env } from '@src/env';
 import Razorpay from 'razorpay';
 import { BadRequestError, NotFoundError, PaymentError } from '@src/shared/errors';
 import { logAction } from '@services/audit-logs';
 import { PAGE_SIZE } from '@src/shared/constants';
-import { recordMemberPayment } from '@src/features/ledger/services/accounting.service';
+import { recordMemberPayment } from '@feature/ledger/services/accounting.service';
 
 // ---------------------------------------------------------------------------
 // Types

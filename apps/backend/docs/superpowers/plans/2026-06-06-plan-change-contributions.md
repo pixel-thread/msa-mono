@@ -181,7 +181,7 @@ Expected: Shows imports, interfaces, `subscribe` function, and the full `upgrade
 In `src/features/subscriptions/services/subscription.service.ts`, add these imports after line 8 (`import { hasHighRoleAccess } from '@utils';`):
 
 ```typescript
-import { generateUserContributions } from '@src/features/contributions/services/contribution.service';
+import { generateUserContributions } from '@feature/contributions/services/contribution.service';
 import { ContributionStatus } from '@prisma/client';
 ```
 
@@ -540,7 +540,7 @@ import type { RequestHandler } from 'express';
 // ---------------------------------------------------------------------------
 // Shared utilities
 // ---------------------------------------------------------------------------
-import { validate } from '@src/shared/lib/validate';
+import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
 import { ValidationError } from '@src/shared/errors';
 import { withRole } from '@utils/with-role';
@@ -710,8 +710,8 @@ import type { Express } from 'express';
 
 import { createAssociation, createUser, cleanupByPrefix } from '../helpers/factories';
 import { signAccessToken } from '../helpers/auth';
-import { prisma } from '@src/shared/lib';
-import { generateUserContributions } from '@src/features/contributions/services/contribution.service';
+import { prisma } from '@lib';
+import { generateUserContributions } from '@feature/contributions/services/contribution.service';
 import { ContributionStatus } from '@prisma/client';
 
 const PREFIX = `test-plan-change-${Date.now()}`;

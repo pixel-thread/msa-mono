@@ -9,10 +9,10 @@ import type { RequestHandler } from 'express';
 
 // ---- Shared Utilities
 
-import { validate } from '@src/shared/lib/validate';
+import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
 import { UnauthorizedError, ForbiddenError } from '@src/shared/errors';
-import { prisma } from '@src/shared/lib/prisma';
+import { prisma } from '@lib/prisma';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 
@@ -22,11 +22,11 @@ import { UserRole } from '@prisma/client';
 
 // ---- DSAR Services
 
-import { findDsarTickets } from '@src/features/dsar/services';
+import { findDsarTickets } from '@feature/dsar/services';
 
 // ---- DSAR Validators
 
-import { DsarQuerySchema } from '@src/features/dsar/validators';
+import { DsarQuerySchema } from '@feature/dsar/validators';
 
 // ---- Shared Services
 

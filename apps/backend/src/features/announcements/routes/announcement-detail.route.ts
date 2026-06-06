@@ -11,7 +11,7 @@ import { UserRole } from '@prisma/client';
 
 import { success } from '@utils/responses';
 import { ForbiddenError } from '@src/shared/errors';
-import { validate } from '@src/shared/lib/validate';
+import { validate } from '@lib/validate';
 import { withRole } from '@utils/with-role';
 import { hasHighRoleAccess } from '@utils/has-high-role';
 import { asyncHandler } from '@utils/async-handler';
@@ -22,7 +22,7 @@ import {
   AnnouncementRouteParams,
   UpdateAnnouncementSchema,
   PublishAnnouncementSchema,
-} from '@src/features/announcements/validators';
+} from '@feature/announcements/validators';
 import {
   findUniqueAnnouncement,
   updateAnnouncement,

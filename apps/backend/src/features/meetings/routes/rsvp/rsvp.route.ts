@@ -1,10 +1,10 @@
 import { Request, NextFunction, Response } from 'express';
 import type { RequestHandler } from 'express';
-import { validate } from '@src/shared/lib/validate';
+import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
 import { ForbiddenError } from '@src/shared/errors';
 import { UserRole } from '@prisma/client';
-import { updateAttendee } from '@src/features/meetings/services/updateAttendee';
+import { updateAttendee } from '@feature/meetings/services/updateAttendee';
 import { z } from 'zod';
 import { logger } from '@src/shared/logger';
 import { getAssociation } from '@services/association/get-association';

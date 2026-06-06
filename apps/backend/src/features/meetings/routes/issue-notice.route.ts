@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express';
 import { success } from '@utils/responses';
 import { UserRole, MeetingStatus } from '@prisma/client';
-import { updateMeeting } from '@src/features/meetings/services/updateMeeting';
+import { updateMeeting } from '@feature/meetings/services/updateMeeting';
 import { logger } from '@src/shared/logger';
 import { getAssociation } from '@services/association/get-association';
 import { withRole } from '@utils/with-role';

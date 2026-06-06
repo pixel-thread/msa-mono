@@ -10,15 +10,15 @@
 import { Request, NextFunction, Response } from 'express';
 import type { RequestHandler } from 'express';
 
-import { validate } from '@src/shared/lib/validate';
+import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
 import { buildPagination } from '@utils/build-pagination';
 import { logger } from '@src/shared/logger';
 import { NotFoundError } from '@src/shared/errors';
 import { z } from 'zod';
-import { findFirstMember } from '@src/features/members/services/findFirstMember';
-import { getUserContributionSummary } from '@src/features/contributions/services/contribution.service';
-import { findPaymentTransactions } from '@src/features/payments/services/find-payment-transactions';
+import { findFirstMember } from '@feature/members/services/findFirstMember';
+import { getUserContributionSummary } from '@feature/contributions/services/contribution.service';
+import { findPaymentTransactions } from '@feature/payments/services/find-payment-transactions';
 import { pageNumberValidation } from '@src/shared/validators/common';
 import { asyncHandler } from '@utils/async-handler';
 import { withRole } from '@utils/with-role';

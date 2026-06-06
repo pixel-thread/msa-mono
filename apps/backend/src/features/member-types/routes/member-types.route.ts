@@ -14,7 +14,7 @@ import { UserRole } from '@prisma/client';
 // Shared utilities
 // ---------------------------------------------------------------------------
 
-import { validate } from '@src/shared/lib/validate';
+import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
 import { BadRequestError, ForbiddenError, NotFoundError } from '@src/shared/errors';
 import { getAssociation } from '@services/association/get-association';

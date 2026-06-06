@@ -15,7 +15,7 @@ import { UserRole } from '@prisma/client';
 // Shared utilities
 // ---------------------------------------------------------------------------
 
-import { validate } from '@src/shared/lib/validate';
+import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
 import { buildPagination } from '@utils';
 import { logger } from '@src/shared/logger';
@@ -32,13 +32,13 @@ import {
   createManualEntry,
   approveEntry,
   rejectEntry,
-} from '@src/features/ledger/services/ledger.service';
+} from '@feature/ledger/services/ledger.service';
 
 // ---------------------------------------------------------------------------
 // Validators / Types
 // ---------------------------------------------------------------------------
 
-import { CreateLedgerEntrySchema, LedgerQueryParams } from '@src/features/ledger/validators';
+import { CreateLedgerEntrySchema, LedgerQueryParams } from '@feature/ledger/validators';
 
 // ---------------------------------------------------------------------------
 // GET /api/ledger/entries  –  List ledger entries

@@ -3,7 +3,7 @@
 // ---------------------------------------------------------------------------
 
 import { ApprovalStatus, Prisma } from '@prisma/client';
-import { prisma } from '@src/shared/lib/prisma';
+import { prisma } from '@lib/prisma';
 
 // ---------------------------------------------------------------------------
 // Shared utilities
@@ -12,7 +12,7 @@ import { prisma } from '@src/shared/lib/prisma';
 import { ValidationError, NotFoundError } from '@src/shared/errors';
 import { PAGE_SIZE } from '@src/shared/constants';
 import { logger } from '@src/shared/logger';
-import { ContextStore } from '@src/shared/lib';
+import { ContextStore } from '@lib';
 
 // ---------------------------------------------------------------------------
 // Interfaces

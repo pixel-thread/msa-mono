@@ -9,7 +9,7 @@ import type { RequestHandler } from 'express';
 
 import { UserRole } from '@prisma/client';
 
-import { validate } from '@src/shared/lib/validate';
+import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
 import { NotFoundError } from '@src/shared/errors';
 import { withRole } from '@utils/with-role';
@@ -20,13 +20,13 @@ import {
   getMembershipApplications,
   approveMembershipApplication,
   rejectMembershipApplication,
-} from '@src/features/membership-applications/services';
+} from '@feature/membership-applications/services';
 import {
   GetMembershipApplicationsQuerySchema,
   MembershipApplicationParamsSchema,
   ApproveApplicationSchema,
   RejectApplicationSchema,
-} from '@src/features/membership-applications/validators';
+} from '@feature/membership-applications/validators';
 
 /**
  * @description List membership applications with optional status filter and pagination.

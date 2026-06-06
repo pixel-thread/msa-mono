@@ -4,7 +4,7 @@ import type { Express } from 'express';
 import bcrypt from 'bcryptjs';
 
 import { createAssociation, createUser, cleanupByPrefix } from '../helpers/factories';
-import { prisma } from '@src/shared/lib';
+import { prisma } from '@lib';
 
 const PREFIX = `test-signin-bad-${Date.now()}`;
 

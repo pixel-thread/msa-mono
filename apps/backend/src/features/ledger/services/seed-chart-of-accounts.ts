@@ -1,4 +1,4 @@
-import { prisma } from '@src/shared/lib/prisma';
+import { prisma } from '@lib/prisma';
 
 export async function seedChartOfAccounts(associationId: string) {
   const accounts = [

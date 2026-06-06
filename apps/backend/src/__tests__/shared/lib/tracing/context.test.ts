@@ -1,4 +1,4 @@
-import { ContextStore } from '@src/shared/lib/tracing/context';
+import { ContextStore } from '@lib/tracing/context';
 
 describe('ContextStore', () => {
   it('should run a callback within a context and retrieve values', () => {

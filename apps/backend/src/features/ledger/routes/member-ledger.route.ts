@@ -16,7 +16,7 @@ import { UserRole } from '@prisma/client';
 // Shared utilities
 // ---------------------------------------------------------------------------
 
-import { validate } from '@src/shared/lib/validate';
+import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
 import { buildPagination } from '@utils';
 import { pageNumberValidation } from '@src/shared/validators';
@@ -29,7 +29,7 @@ import { asyncHandler } from '@utils/async-handler';
 // Services
 // ---------------------------------------------------------------------------
 
-import { getMemberEntries } from '@src/features/ledger/services/ledger.service';
+import { getMemberEntries } from '@feature/ledger/services/ledger.service';
 
 // ---------------------------------------------------------------------------
 // Local schemas

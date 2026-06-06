@@ -10,7 +10,7 @@ import { Request, NextFunction, Response, RequestHandler } from 'express';
 
 import { success } from '@utils/responses';
 import { UnauthorizedError, ForbiddenError } from '@src/shared/errors';
-import { prisma } from '@src/shared/lib/prisma';
+import { prisma } from '@lib/prisma';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 
@@ -20,7 +20,7 @@ import { UserRole } from '@prisma/client';
 
 // ---- DSAR Services
 
-import { findAssociationAdmins } from '@src/features/dsar/services';
+import { findAssociationAdmins } from '@feature/dsar/services';
 
 // ---- Shared Services
 

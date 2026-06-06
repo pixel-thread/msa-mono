@@ -1,4 +1,4 @@
-import { cacheClient } from '@src/shared/lib/cache';
+import { cacheClient } from '@lib/cache';
 
 import { AUTH_CACHE_KEY, AUTH_CACHE_TTL } from '../../utils/constants/cache';
 

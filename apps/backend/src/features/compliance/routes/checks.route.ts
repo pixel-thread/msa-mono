@@ -7,7 +7,7 @@ import type { RequestHandler } from 'express';
 // ---------------------------------------------------------------------------
 // Shared utilities
 // ---------------------------------------------------------------------------
-import { validate } from '@src/shared/lib/validate';
+import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
 import { buildPagination } from '@utils/build-pagination';
 import { NotFoundError } from '@src/shared/errors';
@@ -34,7 +34,7 @@ import {
   runComplianceCheck,
   createBulkComplianceChecks,
   deleteComplianceCheck,
-} from '@src/features/compliance/services';
+} from '@feature/compliance/services';
 
 // ---------------------------------------------------------------------------
 // Validators / Types
@@ -44,7 +44,7 @@ import {
   ComplianceCheckParamsSchema,
   TriggerComplianceCheckSchema,
   ALL_CHECK_TYPES,
-} from '@src/features/compliance/validators';
+} from '@feature/compliance/validators';
 
 // ---------------------------------------------------------------------------
 // GET /compliance/checks  —  List compliance checks

@@ -10,21 +10,21 @@ import type { RequestHandler } from 'express';
 import { UserRole } from '@prisma/client';
 
 import { validate } from '@lib/validate';
-import { prisma } from '@src/shared/lib/prisma';
+import { prisma } from '@lib/prisma';
 import { success } from '@utils/responses';
 import { ConflictError, NotFoundError } from '@src/shared/errors';
 import { withRole } from '@utils/with-role';
 import { asyncHandler } from '@utils/async-handler';
 import { logger } from '@src/shared/logger';
 
-import { findManyAssociation } from '@src/features/associations/services/findManyAssociation';
-import { findFirstAssociation } from '@src/features/associations/services/findFirstAssociation';
-import { findUniqueAssociation } from '@src/features/associations/services/findUniqueAssociation';
-import { createAssociation } from '@src/features/associations/services/createAssociation';
-import { updateAssociation } from '@src/features/associations/services/updateAssociation';
-import { deleteAssociation } from '@src/features/associations/services/deleteAssociation';
-import { CreateAssociationSchema } from '@src/features/associations/validators';
-import { AddAssociationMemberSchema } from '@src/features/associations/validators/associations';
+import { findManyAssociation } from '@feature/associations/services/findManyAssociation';
+import { findFirstAssociation } from '@feature/associations/services/findFirstAssociation';
+import { findUniqueAssociation } from '@feature/associations/services/findUniqueAssociation';
+import { createAssociation } from '@feature/associations/services/createAssociation';
+import { updateAssociation } from '@feature/associations/services/updateAssociation';
+import { deleteAssociation } from '@feature/associations/services/deleteAssociation';
+import { CreateAssociationSchema } from '@feature/associations/validators';
+import { AddAssociationMemberSchema } from '@feature/associations/validators/associations';
 import type { CreateAssociationInput } from '@validator/associations';
 
 /**

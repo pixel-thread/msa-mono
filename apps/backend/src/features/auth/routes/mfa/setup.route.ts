@@ -3,14 +3,14 @@ import type { RequestHandler } from 'express';
 
 import { z } from 'zod';
 
-import { validate } from '@src/shared/lib/validate';
+import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
 import { asyncHandler } from '@utils/async-handler';
 import { logger } from '@src/shared/logger';
 import { env } from '@src/env';
 
-import { verifyPassword, generateOTP, hashToken } from '@src/shared/lib/password';
-import { sendVerificationEmail } from '@src/shared/lib/email';
+import { verifyPassword, generateOTP, hashToken } from '@lib/password';
+import { sendVerificationEmail } from '@lib/email';
 
 import {
   BadRequestError,
@@ -19,9 +19,9 @@ import {
   ValidationError,
 } from '@src/shared/errors';
 
-import { findFirstMember } from '@src/features/members/services/findFirstMember';
+import { findFirstMember } from '@feature/members/services/findFirstMember';
 
-import { createVerificationCode } from '@src/features/auth/services/create-verification-code';
+import { createVerificationCode } from '@feature/auth/services/create-verification-code';
 
 /** Schema for setting up MFA — requires the user's current password. */
 const SetupMfaSchema = z.object({ password: z.string().min(1, 'Password is required') });

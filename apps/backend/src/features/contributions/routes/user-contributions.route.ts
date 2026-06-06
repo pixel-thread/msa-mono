@@ -9,20 +9,20 @@
 import { Request, NextFunction, Response } from 'express';
 import type { RequestHandler } from 'express';
 
-import { validate } from '@src/shared/lib/validate';
+import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
 import { buildPagination } from '@utils/build-pagination';
 import { logger } from '@src/shared/logger';
 import { NotFoundError } from '@src/shared/errors';
 import { z } from 'zod';
-import { UserContributionsParamsSchema } from '@src/features/contributions/validators';
-import { findFirstMember } from '@src/features/members/services/findFirstMember';
+import { UserContributionsParamsSchema } from '@feature/contributions/validators';
+import { findFirstMember } from '@feature/members/services/findFirstMember';
 import {
   generateUserContributions,
   getUserContributionSummary,
   markOverdueContributions,
-} from '@src/features/contributions/services/contribution.service';
-import { findContributionPeriods } from '@src/features/contributions/services/find-contribution-periods';
+} from '@feature/contributions/services/contribution.service';
+import { findContributionPeriods } from '@feature/contributions/services/find-contribution-periods';
 import { pageNumberValidation } from '@src/shared/validators/common';
 import { PAGE_SIZE } from '@src/shared/constants';
 import { asyncHandler } from '@utils/async-handler';

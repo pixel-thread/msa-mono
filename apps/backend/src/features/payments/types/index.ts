@@ -2,7 +2,7 @@
 // Payment Types — shared domain interfaces used across the payments feature
 // ---------------------------------------------------------------------------
 
-import { ContributionSummary } from '@src/features/contributions/types';
+import { ContributionSummary } from '@feature/contributions/types';
 
 export interface ProviderResponse {
   id: string;

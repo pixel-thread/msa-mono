@@ -145,7 +145,7 @@ export async function initiateRefund(razorpayPaymentId: string, amountInPaise?: 
 
 export async function getRazorpayClientForAssociation(associationId: string) {
   const { getActiveProvider } = await import('./payment-provider.service');
-  const { decrypt } = await import('@src/shared/lib/crypto');
+  const { decrypt } = await import('@lib/crypto');
 
   const provider = await getActiveProvider(associationId, 'RAZORPAY');
   if (!provider) {

@@ -2,15 +2,15 @@ import { Request, NextFunction, Response } from 'express';
 import type { RequestHandler } from 'express';
 import { UserRole } from '@prisma/client';
 
-import { validate } from '@src/shared/lib/validate';
+import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
 import { logger } from '@src/shared/logger';
 import { getAssociation } from '@services/association/get-association';
 import { withRole } from '@utils/with-role';
 import { asyncHandler } from '@utils/async-handler';
 
-import { trialBalance, incomeStatement } from '@src/features/ledger/services/reports.service';
-import { ReportQuerySchema } from '@src/features/ledger/validators';
+import { trialBalance, incomeStatement } from '@feature/ledger/services/reports.service';
+import { ReportQuerySchema } from '@feature/ledger/validators';
 
 export const getTrialBalanceHandler: RequestHandler[] = [
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {

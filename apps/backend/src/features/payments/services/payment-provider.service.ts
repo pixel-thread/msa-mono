@@ -1,5 +1,5 @@
-import { prisma } from '@src/shared/lib/prisma';
-import { encrypt } from '@src/shared/lib/crypto';
+import { prisma } from '@lib/prisma';
+import { encrypt } from '@lib/crypto';
 import { PaymentProviderType } from '@prisma/client';
 import { NotFoundError } from '@src/shared/errors';
 import { env } from '@src/env';

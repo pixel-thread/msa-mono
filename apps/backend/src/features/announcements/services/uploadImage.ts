@@ -9,7 +9,7 @@ import { env } from '@src/env';
 import { prisma } from '@lib/prisma';
 
 import { NotFoundError } from '@src/shared/errors';
-import { uploadToBucket } from '@src/shared/lib/supabase/storage';
+import { uploadToBucket } from '@lib/supabase/storage';
 
 /**
  * Props for uploading an image to an announcement.

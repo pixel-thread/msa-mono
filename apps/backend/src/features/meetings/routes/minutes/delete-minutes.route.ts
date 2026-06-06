@@ -1,7 +1,7 @@
 import { Request, NextFunction, Response, RequestHandler } from 'express';
 import { success } from '@utils/responses';
 import { UserRole } from '@prisma/client';
-import { deleteMeetingMinute } from '@src/features/meetings/services/minutes';
+import { deleteMeetingMinute } from '@feature/meetings/services/minutes';
 import { logger } from '@src/shared/logger';
 import { getAssociation } from '@services/association/get-association';
 import { withRole } from '@utils/with-role';

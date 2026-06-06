@@ -1,10 +1,10 @@
 import type { RequestHandler } from 'express';
-import { validate } from '@src/shared/lib/validate';
+import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
 import { ForbiddenError } from '@src/shared/errors';
 import { UserRole } from '@prisma/client';
-import { findUniqueMeeting } from '@src/features/meetings/services';
-import { MeetingQuerySchema } from '@src/features/meetings/validators';
+import { findUniqueMeeting } from '@feature/meetings/services';
+import { MeetingQuerySchema } from '@feature/meetings/validators';
 import { hasHighRoleAccess } from '@utils/has-high-role';
 import { logger } from '@src/shared/logger';
 import { z } from 'zod';
