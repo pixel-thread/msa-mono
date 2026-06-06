@@ -47,3 +47,14 @@ export const UpgradeSubscriptionSchema = z.object({
 
 /** Input type inferred from UpgradeSubscriptionSchema. */
 export type UpgradeSubscriptionInput = z.infer<typeof UpgradeSubscriptionSchema>;
+
+// ---- Downgrade subscription ---------------------------------------------------
+
+/** Schema for validating subscription downgrade requests. */
+export const DowngradeSubscriptionSchema = z.object({
+  planId: z.uuid(),
+  userId: z.uuid().optional(),
+});
+
+/** Input type inferred from DowngradeSubscriptionSchema. */
+export type DowngradeSubscriptionInput = z.infer<typeof DowngradeSubscriptionSchema>;
