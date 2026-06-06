@@ -10,18 +10,16 @@
 import { Request, NextFunction, Response } from 'express';
 import type { RequestHandler } from 'express';
 
-import { prisma } from '@src/shared/lib/prisma';
 import { validate } from '@src/shared/lib/validate';
 import { success } from '@src/shared/utils/responses';
 import { buildPagination } from '@src/shared/utils/build-pagination';
 import { logger } from '@src/shared/logger';
-import { UnauthorizedError, ForbiddenError, NotFoundError } from '@src/shared/errors';
+import { NotFoundError } from '@src/shared/errors';
 import { z } from 'zod';
 import { findFirstMember } from '@src/features/members/services/findFirstMember';
 import { getUserContributionSummary } from '@src/features/contributions/services/contribution.service';
 import { findPaymentTransactions } from '@src/features/payments/services/find-payment-transactions';
 import { pageNumberValidation } from '@src/shared/validators/common';
-import { PAGE_SIZE } from '@src/shared/constants';
 import { asyncHandler } from '@src/shared/utils/async-handler';
 import { withRole } from '@src/shared/utils/with-role';
 import { UserRole } from '@prisma/client';

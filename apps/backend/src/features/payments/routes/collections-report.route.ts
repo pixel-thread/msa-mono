@@ -8,42 +8,17 @@
 import { Request, NextFunction, Response } from 'express';
 import type { RequestHandler } from 'express';
 
-import { prisma } from '@src/shared/lib/prisma';
 import { validate } from '@src/shared/lib/validate';
 import { success } from '@src/shared/utils/responses';
 import { buildPagination } from '@src/shared/utils/build-pagination';
 import { logger } from '@src/shared/logger';
 import { UserRole } from '@prisma/client';
 import { withRole } from '@src/shared/utils/with-role';
-import { UnauthorizedError, ForbiddenError } from '@src/shared/errors';
 import { CollectionReportQuerySchema } from '@src/features/payments/validators';
 import { findContributionPeriods } from '@src/features/contributions/services/find-contribution-periods';
 import { PAGE_SIZE } from '@src/shared/constants';
 import { asyncHandler } from '@src/shared/utils/async-handler';
-
-// ---- Helpers ----
-
-/**
- * Resolve the authenticated user's association.
- *
- * Every payment route scopes data to the user's association for multi-tenant
- * isolation — users must never see data from associations they don't belong to.
- */
-async function getAssociation(req: Request) {
-  const userId = req.user?.id as string;
-  if (!userId) throw new UnauthorizedError('Unauthorized');
-
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-    include: { association: true },
-  });
-
-  if (!user || !user.associationId) throw new ForbiddenError('User association not found');
-
-  return { id: user.association.id, slug: user.association.slug, name: user.association.name };
-}
-
-// ---- Handler ----
+import { getAssociation } from '@src/shared/services/association/get-association';
 
 export const collectionsReport: RequestHandler[] = [
   // Step 1: Validate query params

@@ -165,29 +165,31 @@ export const getConsentHistory: RequestHandler[] = [
 // ---- Description: Generate a consent summary report across the association.
 // ---- Security: DPO role required
 
-export const getConsentReport = async (req: Request, res: Response, _next: NextFunction) => {
-  // ---- Extract tracing context
+export const getConsentReport: RequestHandler[] = [
+  asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
+    // ---- Extract tracing context
 
-  const traceId = (req.traceId as string) || '';
+    const traceId = (req.traceId as string) || '';
 
-  // ---- Auth: verify association membership
+    // ---- Auth: verify association membership
 
-  const association = await getAssociation(req);
-  logger.info(
-    { traceId, associationId: association.id },
-    'GET /api/consent/report - Request started',
-  );
+    const association = await getAssociation(req);
+    logger.info(
+      { traceId, associationId: association.id },
+      'GET /api/consent/report - Request started',
+    );
 
-  // ---- Auth: verify user has at least DPO role
+    // ---- Auth: verify user has at least DPO role
 
-  await withRole(req, UserRole.DPO);
+    await withRole(req, UserRole.DPO);
 
-  // ---- Fetch consent report
+    // ---- Fetch consent report
 
-  const report = await ConsentService.getConsentReport(association.id);
+    const report = await ConsentService.getConsentReport(association.id);
 
-  // ---- Log success and return response
+    // ---- Log success and return response
 
-  logger.info({ traceId }, 'GET /api/consent/report - Success');
-  return success(res, { data: report });
-};
+    logger.info({ traceId }, 'GET /api/consent/report - Success');
+    return success(res, { data: report });
+  }),
+];

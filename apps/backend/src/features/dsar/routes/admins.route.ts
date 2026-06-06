@@ -88,8 +88,8 @@ async function withRole(req: Request, role: UserRole) {
 // Security: Requires DPO role
 // ============================================================================
 
-export const listAdmins: RequestHandler = asyncHandler(
-  async (req: Request, res: Response, _next: NextFunction) => {
+export const listAdmins: RequestHandler[] = [
+  asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
 
     // ---- Auth: Resolve association
@@ -116,5 +116,5 @@ export const listAdmins: RequestHandler = asyncHandler(
     logger.info({ traceId, count: admins.length }, 'GET /api/dsar/admins - Success');
 
     return success(res, { data: admins });
-  },
-);
+  }),
+];

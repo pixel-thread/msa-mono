@@ -25,7 +25,7 @@ function verifyCronSecret(req: Request): boolean {
 // Security: Bearer token (CRON_SECRET)
 
 export const postSubscriptionExpiry: RequestHandler[] = [
-  asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+  asyncHandler(async (req: Request, res: Response) => {
     try {
       logger.info('POST /api/cron/subscription-expiry - Request started');
 

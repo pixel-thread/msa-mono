@@ -12,7 +12,12 @@ import { env } from '@src/env';
 import { verifyPassword, generateOTP, hashToken } from '@src/shared/lib/password';
 import { sendVerificationEmail } from '@src/shared/lib/email';
 
-import { BadRequestError, ConflictError, UnauthorizedError, ValidationError } from '@src/shared/errors';
+import {
+  BadRequestError,
+  ConflictError,
+  UnauthorizedError,
+  ValidationError,
+} from '@src/shared/errors';
 
 import { findFirstMember } from '@src/features/members/services/findFirstMember';
 
@@ -33,7 +38,6 @@ export const postMfaSetup: RequestHandler[] = [
   validate({ body: SetupMfaSchema }),
 
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
-    const traceId = (req.traceId as string) || '';
     const userId = req.user?.id as string;
     if (!userId) throw new UnauthorizedError('Unauthorized');
 

@@ -64,31 +64,36 @@ async function withRole(req: Request, role: UserRole) {
 
 // ---- Handler
 
-export const getMyConsent: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
-  // ---- Extract tracing context
+export const getMyConsent: RequestHandler[] = [
+  asyncHandler(async (req: Request, res: Response) => {
+    // ---- Extract tracing context
 
-  const traceId = (req.traceId as string) || '';
+    const traceId = (req.traceId as string) || '';
 
-  // ---- Auth: verify association membership
+    // ---- Auth: verify association membership
 
-  const association = await getAssociation(req);
-  logger.info({ traceId, associationId: association.id }, 'GET /api/consent/my - Request started');
+    const association = await getAssociation(req);
+    logger.info(
+      { traceId, associationId: association.id },
+      'GET /api/consent/my - Request started',
+    );
 
-  // ---- Auth: verify user has at least MEMBER role
+    // ---- Auth: verify user has at least MEMBER role
 
-  await withRole(req, UserRole.MEMBER);
+    await withRole(req, UserRole.MEMBER);
 
-  // ---- Resolve the requesting user ID
+    // ---- Resolve the requesting user ID
 
-  const userId = req.user?.id as string;
-  if (!userId) throw new UnauthorizedError('User ID not found');
+    const userId = req.user?.id as string;
+    if (!userId) throw new UnauthorizedError('User ID not found');
 
-  // ---- Fetch the user's current consent state
+    // ---- Fetch the user's current consent state
 
-  const consentState = await ConsentService.getUserConsentState(userId, association.id);
+    const consentState = await ConsentService.getUserConsentState(userId, association.id);
 
-  // ---- Log success and return response
+    // ---- Log success and return response
 
-  logger.info({ traceId }, 'GET /api/consent/my - Success');
-  return success(res, { data: consentState });
-});
+    logger.info({ traceId }, 'GET /api/consent/my - Success');
+    return success(res, { data: consentState });
+  }),
+];

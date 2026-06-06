@@ -37,14 +37,18 @@ import { updateMember } from '@src/features/members/services/updateMember';
 // ---------------------------------------------------------------------------
 
 /** Body: the role to add or remove. */
-const UpdateUserRoleSchema = z.object({
-  role: z.nativeEnum(UserRole),
-}).strict();
+const UpdateUserRoleSchema = z
+  .object({
+    role: z.enum(UserRole),
+  })
+  .strict();
 
 /** Route param: the member whose roles are being changed. */
-const UpdateUserRoleParamsSchema = z.object({
-  memberId: z.uuid(),
-}).strict();
+const UpdateUserRoleParamsSchema = z
+  .object({
+    memberId: z.uuid(),
+  })
+  .strict();
 
 // ---------------------------------------------------------------------------
 // POST /api/members/:memberId/role  —  Add a role to a member

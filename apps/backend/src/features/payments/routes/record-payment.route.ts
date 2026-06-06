@@ -9,37 +9,15 @@
 import { Request, NextFunction, Response } from 'express';
 import type { RequestHandler } from 'express';
 
-import { prisma } from '@src/shared/lib/prisma';
 import { validate } from '@src/shared/lib/validate';
 import { success } from '@src/shared/utils/responses';
 import { logger } from '@src/shared/logger';
 import { UserRole } from '@prisma/client';
 import { withRole } from '@src/shared/utils/with-role';
-import { UnauthorizedError, ForbiddenError } from '@src/shared/errors';
 import { RecordManualPaymentSchema } from '@src/features/payments/validators';
 import { recordManualPayment } from '@src/features/payments/services/payment.service';
 import { asyncHandler } from '@src/shared/utils/async-handler';
-
-// ---- Helpers ----
-
-/**
- * Resolve the authenticated user's association for multi-tenant scoping.
- */
-async function getAssociation(req: Request) {
-  const userId = req.user?.id as string;
-  if (!userId) throw new UnauthorizedError('Unauthorized');
-
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-    include: { association: true },
-  });
-
-  if (!user || !user.associationId) throw new ForbiddenError('User association not found');
-
-  return { id: user.association.id, slug: user.association.slug, name: user.association.name };
-}
-
-// ---- Handler ----
+import { getAssociation } from '@src/shared/services/association/get-association';
 
 export const recordPayment: RequestHandler[] = [
   // Step 1: Validate request body

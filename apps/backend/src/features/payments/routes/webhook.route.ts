@@ -7,7 +7,7 @@
 //            must use express.raw() or express.text() middleware upstream.
 // ---------------------------------------------------------------------------
 
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response } from 'express';
 import type { RequestHandler } from 'express';
 
 import { AuditAction } from '@prisma/client';
@@ -20,7 +20,7 @@ import { asyncHandler } from '@src/shared/utils/async-handler';
 // ---- Handler ----
 
 export const webhook: RequestHandler[] = [
-  asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+  asyncHandler(async (req: Request, res: Response) => {
     // --- Log: request started ---
     logger.info('POST /api/payments/webhook - Request started');
 

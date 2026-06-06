@@ -88,8 +88,8 @@ async function withRole(req: Request, role: UserRole) {
 // Security: Requires DPO role
 // ============================================================================
 
-export const getSlaReport: RequestHandler = asyncHandler(
-  async (req: Request, res: Response, _next: NextFunction) => {
+export const getSlaReport: RequestHandler[] = [
+  asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
 
     // ---- Auth: Resolve association
@@ -116,5 +116,5 @@ export const getSlaReport: RequestHandler = asyncHandler(
     logger.info({ traceId }, 'GET /api/dsar/sla-report - Success');
 
     return success(res, { data: report, message: '' });
-  },
-);
+  }),
+];

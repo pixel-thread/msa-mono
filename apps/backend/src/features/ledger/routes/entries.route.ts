@@ -118,52 +118,56 @@ export const createEntry: RequestHandler[] = [
 // Security: PRESIDENT role required (higher authority than FINANCE)
 // ---------------------------------------------------------------------------
 
-export const approveEntryHandler = async (req: Request, res: Response, _next: NextFunction) => {
-  const traceId = (req.traceId as string) || '';
+export const approveEntryHandler: RequestHandler[] = [
+  asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
+    const traceId = (req.traceId as string) || '';
 
-  // ---- Resolve association & log request ---------------------------------
+    // ---- Resolve association & log request ---------------------------------
 
-  const association = await getAssociation(req);
-  logger.info(
-    { traceId, associationId: association.id },
-    'POST /api/ledger/entries/[entryId]/approve - Request started',
-  );
+    const association = await getAssociation(req);
+    logger.info(
+      { traceId, associationId: association.id },
+      'POST /api/ledger/entries/[entryId]/approve - Request started',
+    );
 
-  // ---- Authorize (PRESIDENT role) ----------------------------------------
+    // ---- Authorize (PRESIDENT role) ----------------------------------------
 
-  await withRole(req, UserRole.PRESIDENT);
-  const userId = req.user?.id as string;
+    await withRole(req, UserRole.PRESIDENT);
+    const userId = req.user?.id as string;
 
-  // ---- Business logic ----------------------------------------------------
+    // ---- Business logic ----------------------------------------------------
 
-  const { entryId } = req.params;
-  const entry = await approveEntry(entryId as string, userId);
+    const { entryId } = req.params;
+    const entry = await approveEntry(entryId as string, userId);
 
-  // ---- Result ------------------------------------------------------------
+    // ---- Result ------------------------------------------------------------
 
-  logger.info({ traceId, entryId }, 'POST /api/ledger/entries/[entryId]/approve - Success');
-  return success(res, { data: entry });
-};
+    logger.info({ traceId, entryId }, 'POST /api/ledger/entries/[entryId]/approve - Success');
+    return success(res, { data: entry });
+  }),
+];
 
 // ---------------------------------------------------------------------------
 // POST /api/ledger/entries/:entryId/reject  –  Reject a ledger entry
 // Security: PRESIDENT role required
 // ---------------------------------------------------------------------------
 
-export const rejectEntryHandler = async (req: Request, res: Response, _next: NextFunction) => {
-  const traceId = (req.traceId as string) || '';
-  const association = await getAssociation(req);
-  
-  logger.info(
-    { traceId, associationId: association.id },
-    'POST /api/ledger/entries/[entryId]/reject - Request started',
-  );
+export const rejectEntryHandler: RequestHandler[] = [
+  asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
+    const traceId = (req.traceId as string) || '';
+    const association = await getAssociation(req);
 
-  await withRole(req, UserRole.PRESIDENT);
-  
-  const { entryId } = req.params;
-  const entry = await rejectEntry(entryId as string);
+    logger.info(
+      { traceId, associationId: association.id },
+      'POST /api/ledger/entries/[entryId]/reject - Request started',
+    );
 
-  logger.info({ traceId, entryId }, 'POST /api/ledger/entries/[entryId]/reject - Success');
-  return success(res, { data: entry });
-};
+    await withRole(req, UserRole.PRESIDENT);
+
+    const { entryId } = req.params;
+    const entry = await rejectEntry(entryId as string);
+
+    logger.info({ traceId, entryId }, 'POST /api/ledger/entries/[entryId]/reject - Success');
+    return success(res, { data: entry });
+  }),
+];

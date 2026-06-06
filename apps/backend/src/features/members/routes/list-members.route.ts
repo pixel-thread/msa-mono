@@ -31,11 +31,13 @@ import { getMembers } from '@src/features/members/services/getMembers';
 // ---------------------------------------------------------------------------
 // Schema — validate query parameters when listing members
 // ---------------------------------------------------------------------------
-const QuerySchema = z.object({
-  page: pageNumberValidation,
-  status: z.enum(UserStatus).optional(),
-  search: z.string().optional(),
-}).strict();
+const QuerySchema = z
+  .object({
+    page: pageNumberValidation,
+    status: z.enum(UserStatus).optional(),
+    search: z.string().optional(),
+  })
+  .strict();
 
 // ---------------------------------------------------------------------------
 // GET /api/members  —  Paginated / filtered / searched member list
@@ -44,7 +46,6 @@ const QuerySchema = z.object({
 //   association, optionally narrowed by status or a free-text search.
 // ---------------------------------------------------------------------------
 export const listMembers: RequestHandler[] = [
-  auth,
   validate({ query: QuerySchema }),
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';

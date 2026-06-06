@@ -40,25 +40,7 @@ import {
   verifyTestPayment,
 } from '@src/features/payments/services/payment.service';
 import { asyncHandler } from '@src/shared/utils/async-handler';
-
-// ---- Helpers ----
-
-/**
- * Resolve the authenticated user's association for multi-tenant scoping.
- */
-async function getAssociation(req: Request) {
-  const userId = req.user?.id as string;
-  if (!userId) throw new UnauthorizedError('Unauthorized');
-
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-    include: { association: true },
-  });
-
-  if (!user || !user.associationId) throw new ForbiddenError('User association not found');
-
-  return { id: user.association.id, slug: user.association.slug, name: user.association.name };
-}
+import { getAssociation } from '@src/shared/services/association/get-association';
 
 // ===========================================================================
 // LIST GET /api/payments/providers

@@ -31,8 +31,8 @@ import { getSummary } from '@src/features/ledger/services/ledger.service';
 // Security: FINANCE role required
 // ---------------------------------------------------------------------------
 
-export const getLedgerSummary: RequestHandler = asyncHandler(
-  async (req: Request, res: Response, _next: NextFunction) => {
+export const getLedgerSummary: RequestHandler[] = [
+  asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
 
     // ---- Resolve association -------------------------------------------------
@@ -55,5 +55,5 @@ export const getLedgerSummary: RequestHandler = asyncHandler(
 
     logger.info({ traceId, count: data.accounts.length }, 'GET /api/ledger/summary - Success');
     return success(res, { data });
-  },
-);
+  }),
+];
