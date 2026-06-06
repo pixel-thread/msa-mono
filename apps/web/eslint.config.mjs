@@ -10,6 +10,12 @@ const eslintConfig = defineConfig([
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
+      'no-restricted-imports': [
+        'warn',
+        {
+          patterns: ['../*', '../../*', '../../../*'],
+        },
+      ],
     },
   },
   globalIgnores([
