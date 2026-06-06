@@ -17,8 +17,8 @@ import { useUrlFilters } from '@src/shared/hooks';
 export default function ComplianceAdminPage() {
   const { page, setPage } = useUrlFilters();
 
-  const [checkTypeFilter, setCheckTypeFilter] = useState('');
-  const [statusFilter, setStatusFilter] = useState('');
+  const [checkTypeFilter] = useState('');
+  const [statusFilter] = useState('');
   const [detailRecord, setDetailRecord] = useState<ComplianceRecord | null>(null);
   const [deletingRecord, setDeletingRecord] = useState<ComplianceRecord | null>(null);
 

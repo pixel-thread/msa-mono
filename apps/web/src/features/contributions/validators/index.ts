@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { ContributionStatus } from '@sharedType/enums';
-import { pageNumberValidation, pageSizeValidation } from '@src/shared/validators/common';
+import { pageNumberValidation } from '@src/shared/validators/common';
 
 export const GenerateContributionsSchema = z.object({
   year: z.number().int().min(2020).max(2100),

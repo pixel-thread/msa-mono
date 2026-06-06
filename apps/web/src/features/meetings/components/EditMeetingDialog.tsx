@@ -34,6 +34,7 @@ import { QUERY_KEYS } from '@repo/shared';
 import { toast } from 'sonner';
 import { UpdateMeetingSchema, type UpdateMeetingInput } from '../validators';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { MeetingStatus, MeetingType } from '@src/shared/types';
 
 interface MeetingData {
   id: string;
@@ -64,10 +65,10 @@ export function EditMeetingDialog({ meeting, open, onOpenChange }: EditMeetingDi
     resolver: zodResolver(UpdateMeetingSchema),
     defaultValues: {
       title: meeting.title,
-      type: meeting.type as any,
+      type: meeting.type as MeetingType,
       scheduledAt: new Date(meeting.scheduledAt),
       venue: meeting.venue || '',
-      status: meeting.status as any,
+      status: meeting.status as MeetingStatus,
     },
   });
 
@@ -75,10 +76,10 @@ export function EditMeetingDialog({ meeting, open, onOpenChange }: EditMeetingDi
     if (open) {
       form.reset({
         title: meeting.title,
-        type: meeting.type as any,
+        type: meeting.type as MeetingType,
         scheduledAt: new Date(meeting.scheduledAt),
         venue: meeting.venue || '',
-        status: meeting.status as any,
+        status: meeting.status as MeetingStatus,
       });
     }
   }, [open, meeting, form]);
@@ -93,12 +94,15 @@ export function EditMeetingDialog({ meeting, open, onOpenChange }: EditMeetingDi
         queryClient.invalidateQueries({ queryKey: QUERY_KEYS.MEETINGS_KEYS.LISTS() });
         toast.success('Meeting updated successfully');
         onOpenChange(false);
+        return data;
       } else {
         toast.error(data.message);
+        return data;
       }
     },
     onError: (err: Error) => {
       toast.error(err.message || 'Failed to update meeting');
+      return;
     },
   });
 

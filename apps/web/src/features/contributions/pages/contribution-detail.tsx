@@ -1,6 +1,6 @@
 'use client';
 
-import { useParams, useNavigate } from '@tanstack/react-router';
+import { useParams } from '@tanstack/react-router';
 import { useContributionDetail } from '@src/features/contributions/hooks/useContributionDetail';
 import { Button } from '@src/shared/components/ui/button';
 import { SectionHeader } from '@src/shared/components/section-header';
@@ -9,7 +9,6 @@ import { ArrowLeft } from 'lucide-react';
 
 export function ContributionDetailPage() {
   const params = useParams({ strict: false });
-  const navigate = useNavigate();
   const contributionId = params.contributionId as string;
 
   const { contribution, isLoading } = useContributionDetail(contributionId);
@@ -41,7 +40,10 @@ export function ContributionDetailPage() {
     <>
       <SectionHeader
         title="Contribution Details"
-        description={`${contribution.user?.name || 'Member'} \u2014 ${new Date(contribution.year, contribution.month - 1).toLocaleDateString('en-IN', {
+        description={`${contribution.user?.name || 'Member'} \u2014 ${new Date(
+          contribution.year,
+          contribution.month - 1,
+        ).toLocaleDateString('en-IN', {
           month: 'long',
           year: 'numeric',
         })}`}

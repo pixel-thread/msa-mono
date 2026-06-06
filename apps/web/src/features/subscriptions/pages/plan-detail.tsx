@@ -1,6 +1,6 @@
 'use client';
 
-import { useParams, useNavigate } from '@tanstack/react-router';
+import { useParams } from '@tanstack/react-router';
 
 import { usePlans } from '@src/features/subscriptions/hooks/usePlans';
 import { Button } from '@src/shared/components/ui/button';
@@ -14,11 +14,23 @@ import { usePlanVersionColumns } from '../hooks/usePlanVersionColumns';
 
 export function PlanDetailPage() {
   const params = useParams({ strict: false });
-  const navigate = useNavigate();
+  const { columns } = usePlanVersionColumns();
   const planId = params.planId as string;
 
   const { plans, isLoading } = usePlans();
   const plan = plans.find((p) => p.id === planId);
+
+  const amount = plan?.activeVersion?.amount ?? 0;
+  const currency = plan?.activeVersion?.currency ?? 'INR';
+  const billingCycle = plan?.activeVersion?.billingCycle ?? 'MONTHLY';
+  const features = plan?.activeVersion?.features as Record<string, unknown> | undefined;
+  const effectiveFrom = plan?.activeVersion?.effectiveFrom ?? plan?.createdAt;
+
+  const formattedAmount = new Intl.NumberFormat('en-IN', {
+    style: 'currency',
+    currency,
+    maximumFractionDigits: 0,
+  }).format(amount);
 
   if (isLoading) {
     return (
@@ -42,25 +54,9 @@ export function PlanDetailPage() {
       </div>
     );
   }
-
-  const amount = plan.activeVersion?.amount ?? 0;
-  const currency = plan.activeVersion?.currency ?? 'INR';
-  const billingCycle = plan.activeVersion?.billingCycle ?? 'MONTHLY';
-  const features = plan.activeVersion?.features as Record<string, unknown> | undefined;
-  const effectiveFrom = plan.activeVersion?.effectiveFrom ?? plan.createdAt;
-
-  const formattedAmount = new Intl.NumberFormat('en-IN', {
-    style: 'currency',
-    currency,
-    maximumFractionDigits: 0,
-  }).format(amount);
-
   return (
     <>
-      <SectionHeader
-        title={plan.name}
-        description="Subscription plan details"
-      >
+      <SectionHeader title={plan.name} description="Subscription plan details">
         <Badge variant={plan.isActive ? 'default' : 'secondary'}>
           {plan.isActive ? 'Active' : 'Inactive'}
         </Badge>
@@ -156,7 +152,7 @@ export function PlanDetailPage() {
 
       <div className="mt-8">
         <h2 className="text-lg font-semibold text-ink mb-4">Version History</h2>
-        <DataTable data={plan.versions ?? []} columns={usePlanVersionColumns().columns} />
+        <DataTable data={plan.versions ?? []} columns={columns} />
       </div>
     </>
   );

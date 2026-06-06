@@ -24,7 +24,7 @@ export function sentLogsToServer() {
               : JSON.stringify(chunk);
 
         const parsed = JSON.parse(raw);
-        const { level, time, pid, hostname, msg, ...rest } = parsed;
+        const { level, msg, ...rest } = parsed;
 
         await http.post('/logs/batch', {
           logs: [

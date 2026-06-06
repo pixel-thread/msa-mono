@@ -1,6 +1,6 @@
 'use client';
 
-import { useParams, useNavigate } from '@tanstack/react-router';
+import { useParams } from '@tanstack/react-router';
 import { useUserContributions } from '@src/features/contributions/hooks/useUserContributions';
 import { Card, CardHeader, CardTitle, CardContent } from '@src/shared/components/ui/card';
 import { Button } from '@src/shared/components/ui/button';
@@ -16,7 +16,6 @@ import { useUrlFilters } from '@hooks/use-url-filters';
 
 export function UserContributionsPage() {
   const params = useParams({ strict: false });
-  const navigate = useNavigate();
   const userId = params.userId as string;
 
   const { setPage } = useUrlFilters({

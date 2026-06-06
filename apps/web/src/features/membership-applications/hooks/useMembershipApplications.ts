@@ -3,17 +3,6 @@ import http from '@src/shared/utils/http';
 import { ENDPOINTS, buildUrlWithQuery, QUERY_KEYS } from '@repo/shared';
 import { MembershipApplicationListItem } from '../types';
 
-interface ApplicationsResponse {
-  data: MembershipApplicationListItem[];
-  meta: {
-    total: number;
-    page: number;
-    pageSize: number;
-    totalPages: number;
-    hasMore: boolean;
-  };
-}
-
 interface UseMembershipApplicationsOptions {
   page?: number;
   status?: 'PENDING' | 'APPROVED' | 'REJECTED';

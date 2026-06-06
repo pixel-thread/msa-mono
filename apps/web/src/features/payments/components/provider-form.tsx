@@ -20,7 +20,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@src/shared/components/ui/select';
-import { Switch } from '@src/shared/components/ui/switch';
 import { ProviderResponse } from '../types';
 
 const PROVIDER_TYPES = ['RAZORPAY', 'STRIPE', 'PAYU', 'CASHFREE'] as const;

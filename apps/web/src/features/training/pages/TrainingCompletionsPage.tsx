@@ -2,7 +2,7 @@
 
 import { useParams, useNavigate } from '@tanstack/react-router';
 import { useUrlFilters } from '@src/shared/hooks';
-import { ArrowLeft, Award } from 'lucide-react';
+import { Award } from 'lucide-react';
 
 import { Button } from '@src/shared/components/ui/button';
 import { DataTablePagination } from '@src/shared/components/data-table-pagination';

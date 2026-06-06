@@ -9,15 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@src/shared/components/ui/dialog';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@src/shared/components/ui/select';
 import { Button } from '@src/shared/components/ui/button';
-import { Label } from '@src/shared/components/ui/label';
 import { useAssignDsarTicket } from '../hooks';
 import type { DsarTicketRecord } from '../types';
 import { MemberCombobox } from '@src/shared/components/members/member-combobox';

@@ -20,7 +20,7 @@ export function UserPaymentsLookupPage() {
     email: string;
   } | null>(null);
 
-  const { user, transactions, summary, meta, isLoading } = useUserPayments({
+  const { transactions, summary, meta, isLoading } = useUserPayments({
     userId: selectedMember?.id ?? '',
     page: 1,
   });

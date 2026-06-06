@@ -1,4 +1,3 @@
-import { Button } from '@src/shared/components/ui/button';
 import { Separator } from '@src/shared/components/ui/separator';
 import { SidebarTrigger } from '@src/shared/components/ui/sidebar';
 

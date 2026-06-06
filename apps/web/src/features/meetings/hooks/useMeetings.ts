@@ -2,7 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
 import { ENDPOINTS, buildUrlWithQuery, QUERY_KEYS } from '@repo/shared';
 import { toast } from 'sonner';
-import type { Meeting, Attendee } from '../types';
+import type { Meeting } from '../types';
 import type { CreateMeetingInput } from '../validators';
 import type { PaginationMeta } from '@src/shared/types/api.types';
 

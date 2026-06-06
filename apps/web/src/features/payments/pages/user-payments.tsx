@@ -1,6 +1,6 @@
 'use client';
 
-import { useParams, useNavigate } from '@tanstack/react-router';
+import { useParams } from '@tanstack/react-router';
 import { useUrlFilters } from '@src/shared/hooks';
 import { useUserPayments } from '@src/features/payments/hooks/useUserPayments';
 import { DataTable } from '@src/shared/components/data-table';
@@ -17,7 +17,6 @@ import { Link } from '@tanstack/react-router';
 
 export function UserPaymentsPage() {
   const params = useParams({ strict: false });
-  const navigate = useNavigate();
   const userId = params.userId as string;
   const { page, setPage } = useUrlFilters({
     basePath: `/payments/users/${userId}`,

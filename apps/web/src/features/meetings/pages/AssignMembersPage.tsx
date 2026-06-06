@@ -1,6 +1,6 @@
 'use client';
 
-import { useParams, useNavigate } from '@tanstack/react-router';
+import { useParams } from '@tanstack/react-router';
 import { useState } from 'react';
 import { useMeetingDetail } from '@feature/meetings/hooks/useMeetingDetail';
 import { useMeetingAttendees } from '@feature/meetings/hooks/useMeetingAttendees';
@@ -37,13 +37,12 @@ interface AttendeeRow {
  */
 export function AssignMembersPage() {
   const params = useParams({ strict: false });
-  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const meetingId = params.meetingId as string;
-  const [search, setSearch] = useState('');
+  const [search] = useState('');
   const [manageOpen, setManageOpen] = useState(false);
-  const [roleFilter, setRoleFilter] = useState<string>('all');
-  const [rsvpFilter, setRsvpFilter] = useState<string>('all');
+  const [roleFilter] = useState<string>('all');
+  const [rsvpFilter] = useState<string>('all');
 
   const { meeting, isLoading: meetingLoading } = useMeetingDetail(meetingId);
   const { members } = useMembers();

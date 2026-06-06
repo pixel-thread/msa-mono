@@ -15,9 +15,9 @@ import type { ConsentRecord } from '../types/consent.types';
 
 export default function ConsentAdminPage() {
   const [page, setPage] = useState(1);
-  const [purposeFilter, setPurposeFilter] = useState('');
-  const [statusFilter, setStatusFilter] = useState('');
-  const [search, setSearch] = useState('');
+  const [purposeFilter] = useState('');
+  const [statusFilter] = useState('');
+  const [search] = useState('');
   const [detailRecord, setDetailRecord] = useState<ConsentRecord | null>(null);
   const [editingRecord, setEditingRecord] = useState<ConsentRecord | null>(null);
   const [deletingRecord, setDeletingRecord] = useState<ConsentRecord | null>(null);

@@ -33,7 +33,6 @@ interface CreateMinuteDialogProps {
 }
 
 export function CreateMinuteDialog({
-  meetingId,
   open,
   onOpenChange,
   onSubmit,

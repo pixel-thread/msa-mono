@@ -26,8 +26,6 @@ const statuses = ['PENDING', 'IN_PROGRESS', 'COMPLETED', 'REJECTED'];
 
 export default function DsarAdminPage() {
   const [page, setPage] = useState(1);
-  const [statusFilter, setStatusFilter] = useState('');
-  const [requestTypeFilter, setRequestTypeFilter] = useState('');
 
   const [detailRecord, setDetailRecord] = useState<DsarTicketRecord | null>(null);
   const [respondRecord, setRespondRecord] = useState<DsarTicketRecord | null>(null);
@@ -38,8 +36,6 @@ export default function DsarAdminPage() {
   const { tickets, meta, isLoading } = useDsarTickets({
     page,
     limit: 10,
-    status: statusFilter || undefined,
-    requestType: requestTypeFilter || undefined,
   });
 
   const deleteDsarTicket = useDeleteDsarTicket();

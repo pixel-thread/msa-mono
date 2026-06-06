@@ -1,6 +1,6 @@
 'use client';
 
-import { useParams, useNavigate } from '@tanstack/react-router';
+import { useParams } from '@tanstack/react-router';
 import { usePaymentDetail } from '@src/features/payments/hooks/usePaymentDetail';
 import { Button } from '@src/shared/components/ui/button';
 import { SectionHeader } from '@src/shared/components/section-header';
@@ -13,7 +13,6 @@ import { formatDate, formattedAmount } from '@src/shared/utils';
 
 export function PaymentDetailPage() {
   const params = useParams({ strict: false });
-  const navigate = useNavigate();
   const paymentId = params.paymentId as string;
 
   const { payment, isLoading } = usePaymentDetail(paymentId);

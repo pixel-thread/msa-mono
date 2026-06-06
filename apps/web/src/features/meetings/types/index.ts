@@ -1,5 +1,3 @@
-import { HIGH_ROLE_USERS } from '@src/shared/constants';
-
 export interface Meeting {
   id: string;
   title: string;

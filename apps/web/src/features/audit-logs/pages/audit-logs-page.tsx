@@ -6,14 +6,12 @@ import { useUrlFilters } from '@src/shared/hooks';
 import { DataTable } from '@src/shared/components/data-table';
 import { SectionHeader } from '@src/shared/components/section-header';
 import { Card, CardContent } from '@src/shared/components/ui/card';
-import { Input } from '@src/shared/components/ui/input';
 import { DataTableFilters } from '@src/shared/components/data-table-filters';
 import { useAuditLogs } from '@src/features/audit-logs/hooks/useAuditLogs';
 import { useAuditLogColumns } from '@src/features/audit-logs/hooks/useAuditLogColumns';
 import { AuditLogDetailsDialog } from '@src/features/audit-logs/components/audit-log-details-dialog';
 import type { AuditLogEntry } from '@src/features/audit-logs/types';
 import { DataTablePagination } from '@src/shared/components/data-table-pagination';
-import { FilterIcon } from 'lucide-react';
 
 const AUDIT_ACTIONS = [
   'CREATE',
@@ -103,10 +101,7 @@ export default function AuditLogsPage() {
 
   return (
     <>
-      <SectionHeader
-        title="Audit Logs"
-        description="View activity logs and audit trail"
-      />
+      <SectionHeader title="Audit Logs" description="View activity logs and audit trail" />
 
       <div className="flex flex-cols md:flex-row gap-4">
         <Card className=" w-full border-hairline bg-surface-card">

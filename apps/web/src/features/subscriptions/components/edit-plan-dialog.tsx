@@ -56,7 +56,7 @@ interface EditPlanDialogProps {
 
 export function EditPlanDialog({ planId, open, onOpenChange }: EditPlanDialogProps) {
   const updatePlan = useUpdatePlan();
-  const { data: plan, isFetching } = usePlan({ planId: planId });
+  const { data: plan } = usePlan({ planId: planId });
   const { memberTypes } = useMemberTypes();
 
   const form = useForm<EditPlanForm>({

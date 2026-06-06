@@ -1,6 +1,6 @@
 'use client';
 
-import { useParams, useNavigate } from '@tanstack/react-router';
+import { useParams } from '@tanstack/react-router';
 import { useState } from 'react';
 import { useMeetingDetail } from '@feature/meetings/hooks/useMeetingDetail';
 import {
@@ -30,7 +30,6 @@ import type {
  */
 export function MeetingMinutesPage() {
   const params = useParams({ strict: false });
-  const navigate = useNavigate();
   const meetingId = params.meetingId as string;
 
   const [createOpen, setCreateOpen] = useState(false);

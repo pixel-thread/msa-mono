@@ -1,6 +1,5 @@
 'use client';
 
-import { useNavigate } from '@tanstack/react-router';
 import { CalendarIcon as Calendar } from '@phosphor-icons/react';
 
 import {
@@ -16,8 +15,7 @@ import { useMeetingTableColumns } from '../hooks/useMeetingTableColumns';
 import { useMeetings } from '../hooks';
 
 export function MeetingsTable() {
-  const navigate = useNavigate();
-  const { columns } = useMeetingTableColumns();
+  useMeetingTableColumns();
   const { meetings } = useMeetings();
 
   return (

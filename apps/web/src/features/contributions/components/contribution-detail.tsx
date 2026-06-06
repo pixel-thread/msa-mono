@@ -3,7 +3,7 @@
 import { Link } from '@tanstack/react-router';
 import { Card, CardHeader, CardTitle, CardContent } from '@src/shared/components/ui/card';
 import { Badge } from '@src/shared/components/ui/badge';
-import { User, CreditCard, CalendarDays } from 'lucide-react';
+import { User, CreditCard } from 'lucide-react';
 import { ContributionPeriod } from '../types';
 import { getMonthName } from '@src/shared/utils/helper/get-month-name';
 import { formattedAmount } from '@src/shared/utils';

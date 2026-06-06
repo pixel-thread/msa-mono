@@ -18,7 +18,6 @@ const statusBadgeVariant: Record<string, 'default' | 'secondary' | 'destructive'
 };
 
 export function useLedgerEntriesColumns({
-  onViewDetails,
   onApprove,
   onReject,
 }: UseLedgerEntriesColumnsOptions = {}) {

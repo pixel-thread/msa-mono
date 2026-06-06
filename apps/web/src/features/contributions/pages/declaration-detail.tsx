@@ -1,6 +1,6 @@
 'use client';
 
-import { useParams, useNavigate } from '@tanstack/react-router';
+import { useParams } from '@tanstack/react-router';
 import { useDeclarationDetail } from '../hooks/declarations/use-declaration-detail';
 import { SectionHeader } from '@src/shared/components/section-header';
 import { Card, CardHeader, CardTitle, CardContent } from '@src/shared/components/ui/card';
@@ -18,7 +18,6 @@ const statusBadgeVariant: Record<string, 'default' | 'secondary' | 'destructive'
 
 export function DeclarationDetailPage() {
   const params = useParams({ strict: false });
-  const navigate = useNavigate();
   const declarationId = params.declarationId as string;
 
   const { declaration, isLoading } = useDeclarationDetail(declarationId);

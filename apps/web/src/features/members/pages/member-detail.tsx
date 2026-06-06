@@ -1,6 +1,6 @@
 'use client';
 
-import { useParams, useNavigate } from '@tanstack/react-router';
+import { useParams } from '@tanstack/react-router';
 
 import { useMember } from '@src/features/members/hooks/useMember';
 import { SectionHeader } from '@src/shared/components/section-header';
@@ -14,7 +14,6 @@ import { AccountCard } from '@src/features/members/components/detail/account-car
 
 export function MemberDetailPage() {
   const params = useParams({ strict: false });
-  const navigate = useNavigate();
   const memberId = params.memberId as string;
 
   const { member, isLoading, error } = useMember(memberId);
