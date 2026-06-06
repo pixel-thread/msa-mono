@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useMemo } from 'react';
-import { useSearchParams, useRouter, usePathname } from 'next/navigation';
+import { useNavigate, useLocation } from '@tanstack/react-router';
 
 interface UseUrlFiltersOptions {
   basePath?: string;
@@ -23,17 +23,18 @@ interface UseUrlFiltersReturn {
 export function useUrlFilters(options: UseUrlFiltersOptions = {}): UseUrlFiltersReturn {
   const { basePath, pageKey = 'page', resetPageOnFilter = true, mode = 'replace' } = options;
 
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const pathname = location.pathname;
+  const searchParams = useMemo(() => new URLSearchParams(location.search), [location.search]);
   const resolvedPath = basePath ?? pathname;
 
-  const navigate = useCallback(
+  const doNavigate = useCallback(
     (params: URLSearchParams) => {
       const href = `${resolvedPath}?${params.toString()}`;
-      router[mode](href, { scroll: false });
+      navigate({ to: href, replace: mode === 'replace' });
     },
-    [resolvedPath, router, mode],
+    [resolvedPath, navigate, mode],
   );
 
   const page = useMemo(() => Number(searchParams.get(pageKey)) || 1, [searchParams, pageKey]);
@@ -50,9 +51,9 @@ export function useUrlFilters(options: UseUrlFiltersOptions = {}): UseUrlFilters
     (newPage: number) => {
       const params = new URLSearchParams(searchParams.toString());
       params.set(pageKey, String(newPage));
-      navigate(params);
+      doNavigate(params);
     },
-    [searchParams, navigate, pageKey],
+    [searchParams, doNavigate, pageKey],
   );
 
   const setFilter = useCallback(
@@ -64,9 +65,9 @@ export function useUrlFilters(options: UseUrlFiltersOptions = {}): UseUrlFilters
         params.delete(key);
       }
       if (resetPageOnFilter) params.set(pageKey, '1');
-      navigate(params);
+      doNavigate(params);
     },
-    [searchParams, navigate, resetPageOnFilter, pageKey],
+    [searchParams, doNavigate, resetPageOnFilter, pageKey],
   );
 
   const setFilters = useCallback(
@@ -80,9 +81,9 @@ export function useUrlFilters(options: UseUrlFiltersOptions = {}): UseUrlFilters
         }
       }
       if (resetPageOnFilter) params.set(pageKey, '1');
-      navigate(params);
+      doNavigate(params);
     },
-    [searchParams, navigate, resetPageOnFilter, pageKey],
+    [searchParams, doNavigate, resetPageOnFilter, pageKey],
   );
 
   const clearFilter = useCallback(
@@ -90,16 +91,16 @@ export function useUrlFilters(options: UseUrlFiltersOptions = {}): UseUrlFilters
       const params = new URLSearchParams(searchParams.toString());
       params.delete(key);
       if (resetPageOnFilter) params.set(pageKey, '1');
-      navigate(params);
+      doNavigate(params);
     },
-    [searchParams, navigate, resetPageOnFilter, pageKey],
+    [searchParams, doNavigate, resetPageOnFilter, pageKey],
   );
 
   const resetFilters = useCallback(() => {
     const params = new URLSearchParams();
     params.set(pageKey, '1');
-    navigate(params);
-  }, [navigate, pageKey]);
+    doNavigate(params);
+  }, [doNavigate, pageKey]);
 
   return {
     filters,
