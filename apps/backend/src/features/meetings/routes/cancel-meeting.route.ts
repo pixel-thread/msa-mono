@@ -10,8 +10,8 @@ import { withRole } from '@src/shared/utils/with-role';
 import { asyncHandler } from '@src/shared/utils/async-handler';
 
 /** POST /api/meetings/[meetingId]/cancel - Cancel a meeting. */
-export const postCancelMeeting: RequestHandler = asyncHandler(
-  async (req: Request, res: Response, _next: NextFunction) => {
+export const postCancelMeeting: RequestHandler[] = [
+  asyncHandler(async (req, res) => {
     const traceId = (req.traceId as string) || '';
     const association = await getAssociation(req);
     logger.info(
@@ -45,5 +45,5 @@ export const postCancelMeeting: RequestHandler = asyncHandler(
       'POST /api/meetings/[meetingId]/cancel - Success',
     );
     return success(res, { data: meeting });
-  },
-);
+  }),
+];

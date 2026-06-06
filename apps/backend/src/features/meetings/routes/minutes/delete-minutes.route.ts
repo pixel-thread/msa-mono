@@ -8,8 +8,8 @@ import { withRole } from '@src/shared/utils/with-role';
 import { asyncHandler } from '@src/shared/utils/async-handler';
 
 /** DELETE /api/meetings/[meetingId]/minutes/[minutesId] - Delete a meeting minute. */
-export const deleteMinute: RequestHandler = asyncHandler(
-  async (req: Request, res: Response, _next: NextFunction) => {
+export const deleteMinute: RequestHandler[] = [
+  asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
     const association = await getAssociation(req);
     const meetingId = req.params.meetingId as string;
@@ -38,5 +38,5 @@ export const deleteMinute: RequestHandler = asyncHandler(
       'DELETE /api/meetings/[meetingId]/minutes/[minutesId] - Success',
     );
     return success(res, { data: deletedMinute, message: 'Meeting minute deleted successfully' });
-  },
-);
+  }),
+];

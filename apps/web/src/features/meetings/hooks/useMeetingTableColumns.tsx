@@ -11,11 +11,11 @@ import {
 } from '@src/shared/components/ui/dropdown-menu';
 import { Button } from '@src/shared/components/ui/button';
 import { MoreHorizontal, Pencil, Trash2, Eye } from 'lucide-react';
-import { useMeetings } from '../hooks';
-import type { Meeting } from '../types';
-import { getTypeBadge } from '@src/shared/utils/helper/get-type-badge';
-import { getStatusBadge } from '@src/shared/utils/helper/get-status-badge';
-import { CancelMeetingCell } from '../components/cells/cancel-meeting';
+import { useMeetings } from '@feature/meetings/hooks';
+import type { Meeting } from '@feature/meetings/types';
+import { getTypeBadge } from '@utils/helper/get-type-badge';
+import { getStatusBadge } from '@utils/helper/get-status-badge';
+import { CancelMeetingCell } from '@feature/meetings/components/cells/cancel-meeting';
 
 export const useMeetingTableColumns = (): {
   columns: ColumnDef<Meeting>[];

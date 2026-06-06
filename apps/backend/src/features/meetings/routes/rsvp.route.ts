@@ -2,7 +2,7 @@ import { Request, NextFunction, Response } from 'express';
 import type { RequestHandler } from 'express';
 import { validate } from '@src/shared/lib/validate';
 import { success } from '@src/shared/utils/responses';
-import { ForbiddenError, ValidationError } from '@src/shared/errors';
+import { ForbiddenError } from '@src/shared/errors';
 import { UserRole } from '@prisma/client';
 import { updateAttendee } from '@src/features/meetings/services/updateAttendee';
 import { z } from 'zod';

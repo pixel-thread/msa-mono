@@ -1,4 +1,4 @@
-import { Request, NextFunction, Response, RequestHandler } from 'express';
+import { RequestHandler } from 'express';
 import { success } from '@src/shared/utils/responses';
 import { ForbiddenError } from '@src/shared/errors';
 import { UserRole } from '@prisma/client';
@@ -10,8 +10,8 @@ import { withRole } from '@src/shared/utils/with-role';
 import { asyncHandler } from '@src/shared/utils/async-handler';
 
 /** DELETE /api/meetings/[meetingId] - Delete a meeting. */
-export const deleteMeetingHandler: RequestHandler = asyncHandler(
-  async (req: Request, res: Response, _next: NextFunction) => {
+export const deleteMeetingHandler: RequestHandler[] = [
+  asyncHandler(async (req, res) => {
     const traceId = (req.traceId as string) || '';
     const association = await getAssociation(req);
     const meetingId = req.params.meetingId as string;
@@ -38,5 +38,5 @@ export const deleteMeetingHandler: RequestHandler = asyncHandler(
       'DELETE /api/meetings/[meetingId] - Success',
     );
     return success(res, { data: deletedMeeting, message: 'Meeting deleted successfully' });
-  },
-);
+  }),
+];

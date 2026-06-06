@@ -1,4 +1,3 @@
-import { Request, NextFunction, Response } from 'express';
 import type { RequestHandler } from 'express';
 import { validate } from '@src/shared/lib/validate';
 import { success } from '@src/shared/utils/responses';
@@ -20,7 +19,7 @@ const MeetingParamsSchema = z.object({
 /** GET /api/meetings/[meetingId]/attendees - List all attendees for a meeting. */
 export const getAttendees: RequestHandler[] = [
   validate({ params: MeetingParamsSchema, query: MeetingQuerySchema }),
-  asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
+  asyncHandler(async (req, res) => {
     const traceId = (req.traceId as string) || '';
     const association = await getAssociation(req);
     const meetingId = req.params.meetingId as string;

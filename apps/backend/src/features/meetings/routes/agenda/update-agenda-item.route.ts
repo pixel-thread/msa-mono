@@ -5,7 +5,6 @@ import { success } from '@src/shared/utils/responses';
 import { UserRole } from '@prisma/client';
 import { updateAgendaItem } from '@src/features/meetings/services/updateAgendaItem';
 import { z } from 'zod';
-import { ValidationError } from '@src/shared/errors';
 import { logger } from '@src/shared/logger';
 import { getAssociation } from '@src/shared/services/association/get-association';
 import { withRole } from '@src/shared/utils/with-role';

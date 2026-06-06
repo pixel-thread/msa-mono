@@ -3,7 +3,6 @@ import type { RequestHandler } from 'express';
 import { validate } from '@src/shared/lib/validate';
 import { success } from '@src/shared/utils/responses';
 import { UserRole } from '@prisma/client';
-import { ForbiddenError } from '@src/shared/errors';
 import { BulkAssignAttendeesSchema } from '@src/features/meetings/validators';
 import { bulkAssignAttendees } from '@src/features/meetings/services/bulkAssignAttendees';
 import { logger } from '@src/shared/logger';

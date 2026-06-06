@@ -1,4 +1,4 @@
-import { Request, NextFunction, Response, RequestHandler } from 'express';
+import { RequestHandler } from 'express';
 import { success } from '@src/shared/utils/responses';
 import { UserRole, MeetingStatus } from '@prisma/client';
 import { updateMeeting } from '@src/features/meetings/services/updateMeeting';
@@ -8,8 +8,8 @@ import { withRole } from '@src/shared/utils/with-role';
 import { asyncHandler } from '@src/shared/utils/async-handler';
 
 /** POST /api/meetings/[meetingId]/notice - Issue a notice for a meeting. */
-export const postIssueNotice: RequestHandler = asyncHandler(
-  async (req: Request, res: Response, _next: NextFunction) => {
+export const postIssueNotice: RequestHandler[] = [
+  asyncHandler(async (req, res) => {
     const traceId = (req.traceId as string) || '';
     const association = await getAssociation(req);
     logger.info(
@@ -40,5 +40,5 @@ export const postIssueNotice: RequestHandler = asyncHandler(
       'POST /api/meetings/[meetingId]/notice - Success',
     );
     return success(res, { data: meeting });
-  },
-);
+  }),
+];

@@ -68,35 +68,37 @@ export const patchUpdateAttendee: RequestHandler[] = [
 ];
 
 /** DELETE /api/meetings/[meetingId]/attendees/[userId] - Remove an attendee from a meeting. */
-export const deleteRemoveAttendee = async (req: Request, res: Response, _next: NextFunction) => {
-  const traceId = (req.traceId as string) || '';
-  const association = await getAssociation(req);
-  const meetingId = req.params.meetingId as string;
-  const targetUserId = req.params.userId as string;
-  logger.info(
-    { traceId, meetingId, targetUserId, associationId: association.id },
-    'DELETE /api/meetings/[meetingId]/attendees/[userId] - Request started',
-  );
+export const deleteRemoveAttendee: RequestHandler[] = [
+  asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
+    const traceId = (req.traceId as string) || '';
+    const association = await getAssociation(req);
+    const meetingId = req.params.meetingId as string;
+    const targetUserId = req.params.userId as string;
+    logger.info(
+      { traceId, meetingId, targetUserId, associationId: association.id },
+      'DELETE /api/meetings/[meetingId]/attendees/[userId] - Request started',
+    );
 
-  const user = await withRole(req, UserRole.SECRETARY);
-  if (!hasHighRoleAccess(user.role)) {
-    throw new ForbiddenError('Only secretary, president, or super admin can remove attendees');
-  }
+    const user = await withRole(req, UserRole.SECRETARY);
+    if (!hasHighRoleAccess(user.role)) {
+      throw new ForbiddenError('Only secretary, president, or super admin can remove attendees');
+    }
 
-  logger.info(
-    { traceId, userId: user.id, role: user.role, meetingId, targetUserId },
-    'DELETE /api/meetings/[meetingId]/attendees/[userId] - User authorized',
-  );
-  logger.info(
-    { traceId, meetingId, targetUserId },
-    'DELETE /api/meetings/[meetingId]/attendees/[userId] - Removing attendee',
-  );
+    logger.info(
+      { traceId, userId: user.id, role: user.role, meetingId, targetUserId },
+      'DELETE /api/meetings/[meetingId]/attendees/[userId] - User authorized',
+    );
+    logger.info(
+      { traceId, meetingId, targetUserId },
+      'DELETE /api/meetings/[meetingId]/attendees/[userId] - Removing attendee',
+    );
 
-  await removeAttendee({ meetingId, associationId: association.id, userId: targetUserId });
+    await removeAttendee({ meetingId, associationId: association.id, userId: targetUserId });
 
-  logger.info(
-    { traceId, meetingId, targetUserId },
-    'DELETE /api/meetings/[meetingId]/attendees/[userId] - Success',
-  );
-  return success(res, { data: { success: true }, message: 'Attendee removed successfully' });
-};
+    logger.info(
+      { traceId, meetingId, targetUserId },
+      'DELETE /api/meetings/[meetingId]/attendees/[userId] - Success',
+    );
+    return success(res, { data: { success: true }, message: 'Attendee removed successfully' });
+  }),
+];

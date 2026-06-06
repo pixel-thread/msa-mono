@@ -43,27 +43,27 @@ router.post('/:meetingId/cancel', postCancelMeeting);
 router.post('/:meetingId/notice', postIssueNotice);
 
 // Attendees
-router.get('/:meetingId/attendees', ...(getAttendees as any));
-router.post('/:meetingId/attendees', ...(postAddAttendee as any));
-router.put('/:meetingId/attendees', ...(putBulkAssignAttendees as any));
-router.post('/:meetingId/attendees/bulk', ...(postBulkAssignAttendees as any));
-router.patch('/:meetingId/attendees/:userId', ...(patchUpdateAttendee as any));
+router.get('/:meetingId/attendees', getAttendees);
+router.post('/:meetingId/attendees', postAddAttendee);
+router.put('/:meetingId/attendees', putBulkAssignAttendees);
+router.post('/:meetingId/attendees/bulk', postBulkAssignAttendees);
+router.patch('/:meetingId/attendees/:userId', patchUpdateAttendee);
 router.delete('/:meetingId/attendees/:userId', deleteRemoveAttendee);
 
 // RSVP
-router.post('/:meetingId/rsvp', ...(postRsvp as any));
+router.post('/:meetingId/rsvp', postRsvp);
 
 // Agenda
-router.get('/:meetingId/agenda', ...(getAgendaItems as any));
-router.post('/:meetingId/agenda', ...(postAddAgendaItem as any));
-router.patch('/:meetingId/agenda', ...(patchProcessAgendaOperations as any));
-router.patch('/:meetingId/agenda/:itemId', ...(patchUpdateAgendaItem as any));
+router.get('/:meetingId/agenda', getAgendaItems);
+router.post('/:meetingId/agenda', postAddAgendaItem);
+router.patch('/:meetingId/agenda', patchProcessAgendaOperations);
+router.patch('/:meetingId/agenda/:itemId', patchUpdateAgendaItem);
 router.delete('/:meetingId/agenda/:itemId', deleteAgendaItemHandler);
 
 // Minutes
-router.get('/:meetingId/minutes', ...(getMinutes as any));
-router.post('/:meetingId/minutes', ...(postCreateMinute as any));
-router.patch('/:meetingId/minutes/:minutesId', ...(patchUpdateMinute as any));
+router.get('/:meetingId/minutes', getMinutes);
+router.post('/:meetingId/minutes', postCreateMinute);
+router.patch('/:meetingId/minutes/:minutesId', patchUpdateMinute);
 router.delete('/:meetingId/minutes/:minutesId', deleteMinute);
 
 // Report
