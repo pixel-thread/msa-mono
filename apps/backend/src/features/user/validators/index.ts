@@ -7,7 +7,7 @@ import { $Enums, UserRole } from '@prisma/client';
 
 // ---- Shared utilities
 
-import { uuidValidiation } from '@src/shared/validators/common';
+import { uuidValidiation } from '@validator/common';
 
 // ---------------------------------------------------------------------------
 // User Validators

@@ -20,7 +20,7 @@ const jestConfig = {
     '^@lib/(.*)$': '<rootDir>/src/shared/lib/$1',
     '^@middleware/(.*)$': '<rootDir>/src/middleware/$1',
     '^@utils/(.*)$': '<rootDir>/src/shared/utils/$1',
-    '^@errors/(.*)$': '<rootDir>/src/shared/errors/$1',
+    '^@src/shared/errors/(.*)$': '<rootDir>/src/shared/errors/$1',
     '^@upstash/ratelimit$': '<rootDir>/src/__mocks__/ratelimit.ts',
     '^@upstash/redis$': '<rootDir>/src/__mocks__/redis.ts',
     '^expo-server-sdk$': '<rootDir>/src/__mocks__/expo-server-sdk.ts',

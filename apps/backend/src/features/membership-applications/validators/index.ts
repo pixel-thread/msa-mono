@@ -13,7 +13,7 @@ import {
   pageNumberValidation,
   pageSizeValidation,
   uuidValidiation,
-} from '@src/shared/validators/common';
+} from '@validator/common';
 
 // ---- Association Slug Constraint
 

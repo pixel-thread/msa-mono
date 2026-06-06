@@ -29,7 +29,7 @@ import {
 import {
   UpdateNotificationSchema,
   NotificationRouteParams,
-} from '@src/shared/validators/notification';
+} from '@validator/notification';
 
 // ---------------------------------------------------------------------------
 // Local validation schemas

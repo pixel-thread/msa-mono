@@ -19,7 +19,7 @@ import { z } from 'zod';
 import { findFirstMember } from '@feature/members/services/findFirstMember';
 import { getUserContributionSummary } from '@feature/contributions/services/contribution.service';
 import { findPaymentTransactions } from '@feature/payments/services/find-payment-transactions';
-import { pageNumberValidation } from '@src/shared/validators/common';
+import { pageNumberValidation } from '@validator/common';
 import { asyncHandler } from '@utils/async-handler';
 import { withRole } from '@utils/with-role';
 import { UserRole } from '@prisma/client';

@@ -24,7 +24,7 @@
       "@lib/*": ["./src/shared/lib/*"],
       "@middleware/*": ["./src/middleware/*"],
       "@utils/*": ["./src/shared/utils/*"],
-      "@errors/*": ["./src/shared/errors/*"],
+      "@src/shared/errors/*": ["./src/shared/errors/*"],
       "@sharedType/*": ["./src/shared/types/*"]
     }
   },

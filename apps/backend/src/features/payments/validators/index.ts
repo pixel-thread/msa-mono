@@ -3,7 +3,7 @@
 // ---------------------------------------------------------------------------
 import { z } from 'zod';
 import { PaymentMethod, ContributionStatus } from '@prisma/client';
-import { pageNumberValidation, pageSizeValidation } from '@src/shared/validators/common';
+import { pageNumberValidation, pageSizeValidation } from '@validator/common';
 
 // ---- Create Order (Razorpay) ----
 

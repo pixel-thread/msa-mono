@@ -14,7 +14,7 @@ import { withRole } from '@utils/with-role';
 import { asyncHandler } from '@utils/async-handler';
 import { logger } from '@src/shared/logger';
 import { getAssociation } from '@services/association/get-association';
-import { pageNumberValidation } from '@src/shared/validators/common';
+import { pageNumberValidation } from '@validator/common';
 
 // ---------------------------------------------------------------------------
 // Prisma

@@ -16,7 +16,7 @@ import {
   BadRequestError,
   NotFoundError,
 } from '@src/shared/errors';
-import { pageNumberValidation } from '@src/shared/validators';
+import { pageNumberValidation } from '@validator';
 import { getUniqueUser } from '@services/user/get-unique-user';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';

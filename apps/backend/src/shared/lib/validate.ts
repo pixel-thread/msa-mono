@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction, type RequestHandler } from 'express';
 import type { ZodType } from 'zod';
 import { ValidationError } from '@src/shared/errors';
-import { formatZodIssues } from '@src/shared/validators/format-zod-issues';
+import { formatZodIssues } from '@validator/format-zod-issues';
 
 /** Zod validation schemas for an Express request (body, query, params). */
 interface ValidationSchemas<TBody, TQuery, TParams> {

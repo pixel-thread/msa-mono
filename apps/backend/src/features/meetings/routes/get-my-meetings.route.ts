@@ -4,7 +4,7 @@ import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
 import { UserRole } from '@prisma/client';
 import { findManyMeetings } from '@feature/meetings/services';
-import { pageNumberValidation } from '@src/shared/validators/common';
+import { pageNumberValidation } from '@validator/common';
 import { logger } from '@src/shared/logger';
 import { z } from 'zod';
 import { getAssociation } from '@services/association/get-association';

@@ -12,7 +12,7 @@ import { DsarRequestType, DsarStatus } from '@prisma/client';
 
 // ---- Shared Validators
 
-import { pageNumberValidation } from '@src/shared/validators/common';
+import { pageNumberValidation } from '@validator/common';
 
 // ---- Submit DSAR Schema
 

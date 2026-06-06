@@ -18,7 +18,7 @@ import { createLogs, createLogsBatch } from '@services/logs';
 
 // ---- Validators / Types
 
-import { LogIngestSchema, LogBatchSchema } from '@src/shared/validators/logs';
+import { LogIngestSchema, LogBatchSchema } from '@validator/logs';
 
 // ---------------------------------------------------------------------------
 // POST /api/logs

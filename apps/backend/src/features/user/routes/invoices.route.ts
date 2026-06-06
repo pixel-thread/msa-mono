@@ -23,7 +23,7 @@ import { getUserInvoices, getUserInvoice } from '@feature/user/services';
 
 // ---- Validators / Types
 
-import { pageNumberValidation } from '@src/shared/validators';
+import { pageNumberValidation } from '@validator';
 
 // ---------------------------------------------------------------------------
 // Local validation schemas

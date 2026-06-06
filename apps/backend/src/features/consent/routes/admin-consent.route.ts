@@ -13,7 +13,7 @@ import { success } from '@utils/responses';
 import { UnauthorizedError, ForbiddenError } from '@src/shared/errors';
 import { buildPagination } from '@utils';
 import { getUniqueUser } from '@services/user/get-unique-user';
-import { pageNumberValidation } from '@src/shared/validators';
+import { pageNumberValidation } from '@validator';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 

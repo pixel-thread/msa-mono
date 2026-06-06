@@ -1,4 +1,4 @@
-import { pageNumberValidation } from '@src/shared/validators/common';
+import { pageNumberValidation } from '@validator/common';
 import { z } from 'zod';
 
 /** Enum schema for compliance check statuses. */

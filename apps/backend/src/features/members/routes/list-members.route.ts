@@ -12,7 +12,7 @@ import { success } from '@utils/responses';
 import { prisma } from '@lib/prisma';
 import { ForbiddenError, UnauthorizedError } from '@src/shared/errors';
 import { hasHighRoleAccess } from '@utils/has-high-role';
-import { pageNumberValidation } from '@src/shared/validators/common';
+import { pageNumberValidation } from '@validator/common';
 import { logger } from '@src/shared/logger';
 import { auth } from '@src/middleware/auth';
 import { withRole } from '@utils/with-role';

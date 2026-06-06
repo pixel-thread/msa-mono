@@ -1,4 +1,4 @@
-import { pageNumberValidation } from '@src/shared/validators/common';
+import { pageNumberValidation } from '@validator/common';
 import { ComplaintStatus } from '@prisma/client';
 import { z } from 'zod';
 

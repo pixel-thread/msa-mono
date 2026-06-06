@@ -23,7 +23,7 @@ import {
   markOverdueContributions,
 } from '@feature/contributions/services/contribution.service';
 import { findContributionPeriods } from '@feature/contributions/services/find-contribution-periods';
-import { pageNumberValidation } from '@src/shared/validators/common';
+import { pageNumberValidation } from '@validator/common';
 import { PAGE_SIZE } from '@src/shared/constants';
 import { asyncHandler } from '@utils/async-handler';
 import { withRole } from '@utils/with-role';

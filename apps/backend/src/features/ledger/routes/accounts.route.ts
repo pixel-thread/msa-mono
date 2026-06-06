@@ -19,7 +19,7 @@ import { UserRole } from '@prisma/client';
 import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
 import { buildPagination } from '@utils';
-import { pageNumberValidation } from '@src/shared/validators';
+import { pageNumberValidation } from '@validator';
 import { logger } from '@src/shared/logger';
 import { getAssociation } from '@services/association/get-association';
 import { withRole } from '@utils/with-role';

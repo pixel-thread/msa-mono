@@ -13,7 +13,7 @@ import {
 import {
   pageNumberValidation,
   pageSizeValidation,
-} from '@src/shared/validators/common';
+} from '@validator/common';
 
 import {
   MAX_IMAGE_SIZE,

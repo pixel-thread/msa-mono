@@ -2,7 +2,7 @@
 // Shared utilities
 // ---------------------------------------------------------------------------
 
-import { pageNumberValidation, uuidValidiation } from '@src/shared/validators/common';
+import { pageNumberValidation, uuidValidiation } from '@validator/common';
 
 // ---------------------------------------------------------------------------
 // External libs
