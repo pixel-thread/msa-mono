@@ -6,5 +6,7 @@ export const subscriptionEndpoints = {
   my: '/subscriptions/my' as const,
   myList: (page: number = 1) => `/subscriptions/my?page=${page}`,
   subscribe: '/subscriptions/subscribe' as const,
+  upgrade: '/subscriptions/upgrade' as const,
   waive: '/subscriptions/waive' as const,
+  userSubscription: (userId: string) => `/subscriptions/user/${userId}`,
 } as const;

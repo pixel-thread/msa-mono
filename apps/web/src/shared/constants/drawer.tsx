@@ -93,6 +93,10 @@ export const DRAWER_NAV_MAIN = [
         url: '/subscriptions/plans',
       },
       {
+        title: 'Change Plan',
+        url: '/subscriptions/change-plan',
+      },
+      {
         title: 'History',
         url: '/subscriptions/my',
       },

@@ -26,5 +26,6 @@ export const WaiveSubscriptionSchema = z.object({
 
 export const UpgradeSubscriptionSchema = z.object({
   planId: z.uuid(),
+  userId: z.string().optional(),
 });
 export type UpgradeSubscriptionInput = z.infer<typeof UpgradeSubscriptionSchema>;
