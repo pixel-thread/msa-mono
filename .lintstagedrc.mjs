@@ -33,12 +33,10 @@ export default {
 
     return Object.entries(groups).map(([key, files]) => {
       if (key === '__root__') {
-        return `npx --no-install eslint --fix --no-warn-ignored ${files.join(' ')}`;
+        return `npx --no-install eslint --fix --no-warn-ignored --max-warnings=0 ${files.join(' ')}`;
       }
       const prefix = key + '/';
-      const relativeFiles = files.map((f) =>
-        f.startsWith(prefix) ? f.slice(prefix.length) : f,
-      );
+      const relativeFiles = files.map((f) => (f.startsWith(prefix) ? f.slice(prefix.length) : f));
       return `cd ${key} && npx --no-install eslint --fix --no-warn-ignored ${relativeFiles.join(' ')}`;
     });
   },
