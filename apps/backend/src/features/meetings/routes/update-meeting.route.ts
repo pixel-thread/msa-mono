@@ -1,9 +1,6 @@
 import { ForbiddenError } from '@errors';
 import { updateMeeting } from '@feature/meetings/services';
-import {
-  UpdateMeetingParamsSchema,
-  UpdateMeetingSchema,
-} from '@feature/meetings/validators/meetings';
+import { MeetingParamsSchema, UpdateMeetingSchema } from '@feature/meetings/validators/meetings';
 import { validate } from '@lib/validate';
 import { UserRole } from '@prisma/client';
 import { logger } from '@src/shared/logger';
@@ -16,7 +13,7 @@ import type { NextFunction, Request, Response } from 'express';
 
 /** PATCH /api/meetings/[meetingId] - Update a meeting. */
 export const patchUpdateMeeting: RequestHandler[] = [
-  validate({ params: UpdateMeetingParamsSchema, body: UpdateMeetingSchema }),
+  validate({ params: MeetingParamsSchema, body: UpdateMeetingSchema }),
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
     const meetingId = req.params.meetingId as string;

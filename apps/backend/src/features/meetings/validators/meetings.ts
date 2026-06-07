@@ -70,6 +70,8 @@ export type AgendaItemInput = z.infer<typeof agendaItemSchema>;
 /** Schema for meeting route params. */
 export const MeetingParamsSchema = z.object({ meetingId: z.string('Invalid meeting ID') });
 
+export type MeetingParamsInput = z.infer<typeof MeetingParamsSchema>;
+
 /** Zod schema for RSVP submission. */
 export const RsvpSchema = z.object({
   status: z.enum(['ACCEPTED', 'DECLINED']),
@@ -79,10 +81,3 @@ export const RsvpSchema = z.object({
     .optional()
     .transform((v) => v?.trim()),
 });
-
-/** Schema for update-meeting route params. */
-export const UpdateMeetingParamsSchema = z.object({
-  meetingId: z.uuid('Invalid meeting ID'),
-});
-
-export type UpdateMeetingParamsInput = z.infer<typeof UpdateMeetingParamsSchema>;
