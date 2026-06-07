@@ -1,45 +1,78 @@
 /**
  * lint-staged configuration for pnpm monorepo
  *
- * ESLint (flat config): runs from within each workspace directory
- *   because flat config resolves from CWD, not from the file's location.
- *   Grouping files by workspace and cd-ing in ensures each file is
- *   linted with its workspace's eslint.config.*.
+ * ESLint:
+ * - Groups files by workspace.
+ * - Runs ESLint from inside each workspace so flat config resolves correctly.
+ * - Uses --fix and --cache.
+ * - Properly quotes filenames.
  *
- * Prettier: runs from root because Prettier resolves config by walking
- *   up from each file's directory. The root .prettierrc serves as
- *   fallback for packages/* that lack their own prettier config.
+ * Prettier:
+ * - Runs from repo root.
+ * - Uses root config as fallback.
  */
-const ROOT_PREFIX = process.cwd();
+
+const ROOT = process.cwd();
 
 function toRelative(file) {
-  return file.startsWith(ROOT_PREFIX) ? file.slice(ROOT_PREFIX.length + 1) : file;
+  return file.startsWith(ROOT + '/') ? file.slice(ROOT.length + 1) : file;
 }
 
-function getWorkspaceDir(file) {
+function getWorkspace(file) {
   const rel = toRelative(file);
+
   const match = rel.match(/^(apps\/[^/]+|packages\/[^/]+)/);
-  return match ? match[1] : null;
+
+  return match?.[1] ?? null;
+}
+
+function quote(file) {
+  return `"${file.replace(/"/g, '\\"')}"`;
 }
 
 export default {
-  '*.{ts,tsx,js,jsx,mjs,cjs}': (filenames) => {
-    const groups = {};
-    for (const f of filenames) {
-      const dir = getWorkspaceDir(f);
-      const key = dir ?? '__root__';
-      (groups[key] ??= []).push(toRelative(f));
+  '*.{js,jsx,ts,tsx,mjs,cjs}': (files) => {
+    const groups = new Map();
+
+    for (const file of files) {
+      const workspace = getWorkspace(file) ?? '__root__';
+
+      if (!groups.has(workspace)) {
+        groups.set(workspace, []);
+      }
+
+      groups.get(workspace).push(toRelative(file));
     }
 
-    return Object.entries(groups).map(([key, files]) => {
-      if (key === '__root__') {
-        return `npx --no-install eslint --fix --no-warn-ignored --max-warnings=0 ${files.join(' ')}`;
+    return [...groups.entries()].map(([workspace, workspaceFiles]) => {
+      if (workspace === '__root__') {
+        return [
+          'npx --no-install eslint',
+          '--cache',
+          '--fix',
+          '--no-warn-ignored',
+          '--max-warnings=0',
+          workspaceFiles.map(quote).join(' '),
+        ].join(' ');
       }
-      const prefix = key + '/';
-      const relativeFiles = files.map((f) => (f.startsWith(prefix) ? f.slice(prefix.length) : f));
-      return `cd ${key} && npx --no-install eslint --fix --no-warn-ignored ${relativeFiles.join(' ')}`;
+
+      const prefix = `${workspace}/`;
+
+      const relativeFiles = workspaceFiles.map((file) =>
+        file.startsWith(prefix) ? file.slice(prefix.length) : file,
+      );
+
+      return [
+        `cd "${workspace}" &&`,
+        'npx --no-install eslint',
+        '--cache',
+        '--fix',
+        '--no-warn-ignored',
+        '--max-warnings=0',
+        relativeFiles.map(quote).join(' '),
+      ].join(' ');
     });
   },
 
-  '*.{ts,tsx,js,jsx,json,md,css,yml,yaml,graphql}': ['prettier --write'],
+  '*.{js,jsx,ts,tsx,json,md,css,scss,yml,yaml,graphql}': ['prettier --write'],
 };
