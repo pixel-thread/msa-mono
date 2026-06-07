@@ -47,7 +47,7 @@ export async function uploadAnnouncementImage({
   uploadedById,
 }: UploadImageProps) {
   // 1. Verification: Ensure the announcement exists and fetch its current image (if any)
-  const announcement = await prisma.announcement.findFirst({
+  const announcement = await prisma.announcement.findUnique({
     where: {
       id: announcementId,
       associationId,
@@ -59,6 +59,9 @@ export async function uploadAnnouncementImage({
 
   if (!announcement) {
     throw new NotFoundError('Announcement');
+  }
+  if (announcement.authorId !== uploadedById) {
+    throw new NotFoundError('Image cannot be updated by another aurthor ');
   }
 
   const oldFileId = announcement.imageFileId;
