@@ -17,11 +17,8 @@ import { success } from '@utils/responses';
 import type { RequestHandler } from 'express';
 import type { NextFunction, Request, Response } from 'express';
 
-import { MemberOnboardingInput, MemberOnboardingSchema } from '../validators';
-
-// ---------------------------------------------------------------------------
-// Schema — validate the onboarding request body
-// ---------------------------------------------------------------------------
+import type { MemberOnboardingInput } from '../validators';
+import { MemberOnboardingSchema } from '../validators';
 
 // ---------------------------------------------------------------------------
 // POST /api/members/onboarding  —  Complete initial profile setup for the
