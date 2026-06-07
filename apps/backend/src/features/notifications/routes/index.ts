@@ -7,6 +7,7 @@ import {
   postLinkNotification,
   postRegisterPushToken,
 } from './notification-actions.route';
+import { auth } from '@src/middleware';
 
 // ---------------------------------------------------------------------------
 // Notifications router
@@ -16,6 +17,8 @@ import {
 // ---------------------------------------------------------------------------
 
 const router: Router = Router();
+
+router.use(auth);
 
 // ---- POST  /api/notifications/register                 — Register a push token
 

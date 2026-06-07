@@ -80,6 +80,7 @@ export const postLinkNotification: RequestHandler[] = [
 
     // Ensure the request has a userId set by the upstream auth middleware.
     const userId = req.user?.id;
+
     if (!userId) throw new UnauthorizedError('User ID is required');
 
     // ---- Validate token
@@ -93,7 +94,11 @@ export const postLinkNotification: RequestHandler[] = [
 
     // ---- Log success & respond
 
-    logger.info({ traceId, tokenId: pushToken.id }, 'POST /api/notifications/link - Success');
+    logger.info(
+      { traceId, tokenId: pushToken.id, userId },
+      'POST /api/notifications/link - Success',
+    );
+
     return success(res, { data: pushToken }, 201);
   }),
 ];
