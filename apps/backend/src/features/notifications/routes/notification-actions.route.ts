@@ -28,7 +28,7 @@ import type { NextFunction, Request, Response } from 'express';
 // Security: Public — no auth required.
 // ---------------------------------------------------------------------------
 
-export const postRegisterPushToken: RequestHandler[] = [
+export const postRegisterPushTokenHandler: RequestHandler[] = [
   // ---- Validate input
 
   validate({ body: NotificationRegisterPushTokenSchema }),
@@ -65,7 +65,7 @@ export const postRegisterPushToken: RequestHandler[] = [
 // Security: Relies on req.user?.id from upstream auth middleware.
 // ---------------------------------------------------------------------------
 
-export const postLinkNotification: RequestHandler[] = [
+export const postLinkNotificationHandler: RequestHandler[] = [
   // ---- Validate input
 
   validate({ body: NotificationLinkTokenSchema }),
@@ -109,7 +109,7 @@ export const postLinkNotification: RequestHandler[] = [
 // Security: auth + MEMBER role — user must own the notification.
 // ---------------------------------------------------------------------------
 
-export const patchNotificationStatus: RequestHandler[] = [
+export const patchNotificationStatusHandler: RequestHandler[] = [
   // ---- Authenticate
 
   auth,

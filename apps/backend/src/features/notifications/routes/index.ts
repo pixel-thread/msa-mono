@@ -1,12 +1,11 @@
 // External libs
-import { auth } from '@src/middleware';
 import { Router } from 'express';
 
 // ---- Route handlers
 import {
-  patchNotificationStatus,
-  postLinkNotification,
-  postRegisterPushToken,
+  patchNotificationStatusHandler,
+  postLinkNotificationHandler,
+  postRegisterPushTokenHandler,
 } from './notification-actions.route';
 
 // ---------------------------------------------------------------------------
@@ -18,18 +17,16 @@ import {
 
 const router: Router = Router();
 
-router.use(auth);
-
 // ---- POST  /api/notifications/register                 — Register a push token
 
-router.post('/register', postRegisterPushToken);
+router.post('/register', postRegisterPushTokenHandler);
 
 // ---- POST  /api/notifications/link                     — Link a push token to the current user
 
-router.post('/link', postLinkNotification);
+router.post('/link', postLinkNotificationHandler);
 
 // ---- PATCH /api/notifications/:notificationId/status   — Update read / received status
 
-router.patch('/:notificationId/status', patchNotificationStatus);
+router.patch('/:notificationId/status', patchNotificationStatusHandler);
 
 export default router;
