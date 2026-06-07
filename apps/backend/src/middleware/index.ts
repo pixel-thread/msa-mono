@@ -4,6 +4,6 @@ export * from './cors';
 export * from './csrf';
 export * from './error-handler';
 export * from './rate-limiter';
+export * from './rbac';
 export * from './security-headers';
 export * from './timeout';
-export * from './rbac';

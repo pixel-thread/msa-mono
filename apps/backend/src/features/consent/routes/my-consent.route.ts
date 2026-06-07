@@ -3,21 +3,18 @@
 // ---- Security: MEMBER role or higher
 
 // External libs
-import { Request, Response, RequestHandler } from 'express';
-
-// Shared utilities
-import { success } from '@utils/responses';
-import { UnauthorizedError, ForbiddenError } from '@errors';
-import { logger } from '@src/shared/logger';
-import { getUniqueUser } from '@services/user/get-unique-user';
-import { asyncHandler } from '@utils/async-handler';
-
+import { ForbiddenError,UnauthorizedError } from '@errors';
+// Services
+import { ConsentService } from '@feature/consent/services/consent.service';
 // Prisma
 import { prisma } from '@lib/prisma';
 import { UserRole } from '@prisma/client';
-
-// Services
-import { ConsentService } from '@feature/consent/services/consent.service';
+import { getUniqueUser } from '@services/user/get-unique-user';
+import { logger } from '@src/shared/logger';
+import { asyncHandler } from '@utils/async-handler';
+// Shared utilities
+import { success } from '@utils/responses';
+import { Request, RequestHandler,Response } from 'express';
 
 // ---- Helper: Role hierarchy for permission checks
 // Lower number = higher privilege. SUPER_ADMIN (0) is the highest.

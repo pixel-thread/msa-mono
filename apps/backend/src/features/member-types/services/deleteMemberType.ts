@@ -2,14 +2,12 @@
 // Prisma
 // ---------------------------------------------------------------------------
 
-import { prisma } from '@lib/prisma';
-import { AuditAction, Prisma } from '@prisma/client';
-
 // ---------------------------------------------------------------------------
 // Shared utilities
 // ---------------------------------------------------------------------------
-
 import { BadRequestError } from '@errors';
+import { prisma } from '@lib/prisma';
+import { AuditAction, Prisma } from '@prisma/client';
 
 // ---------------------------------------------------------------------------
 // Interface

@@ -1,22 +1,18 @@
-import { Request, NextFunction, Response } from 'express';
-import type { RequestHandler } from 'express';
-
-import { validate } from '@lib/validate';
-import { success } from '@utils/responses';
-import { asyncHandler } from '@utils/async-handler';
-import { logger } from '@src/shared/logger';
-import { env } from '@src/env';
-
 import { BadRequestError, ConflictError } from '@errors';
-
 import { findFirstAssociation } from '@feature/associations/services/findFirstAssociation';
 import { findFirstMember } from '@feature/members/services/findFirstMember';
 import { createMembershipApplication } from '@feature/membership-applications/services';
-
 import {
   MembershipApplicationInput,
   MembershipApplicationSchema,
 } from '@feature/membership-applications/validators';
+import { validate } from '@lib/validate';
+import { env } from '@src/env';
+import { logger } from '@src/shared/logger';
+import { asyncHandler } from '@utils/async-handler';
+import { success } from '@utils/responses';
+import type { RequestHandler } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
 /**
  * POST /api/auth/sign-up — Submit a membership application for a new account

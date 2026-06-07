@@ -1,11 +1,11 @@
-import { Request, NextFunction, Response, RequestHandler } from 'express';
-import { success } from '@utils/responses';
-import { UserRole } from '@prisma/client';
 import { findUniqueMeeting } from '@feature/meetings/services/findUniqueMeeting';
-import { logger } from '@src/shared/logger';
+import { UserRole } from '@prisma/client';
 import { getAssociation } from '@services/association/get-association';
-import { withRole } from '@utils/with-role';
+import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
+import { success } from '@utils/responses';
+import { withRole } from '@utils/with-role';
+import { NextFunction, Request, RequestHandler,Response } from 'express';
 
 /** GET /api/meetings/[meetingId]/report - Generate a meeting report. */
 export const getMeetingReport: RequestHandler[] = [

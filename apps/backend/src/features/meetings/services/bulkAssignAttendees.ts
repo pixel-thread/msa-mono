@@ -1,7 +1,7 @@
-import { prisma } from '@lib/prisma';
-import { NotFoundError, ForbiddenError } from '@errors';
-import { $Enums, AttendeeRole } from '@prisma/client';
+import { ForbiddenError,NotFoundError } from '@errors';
 import { ExpoNotificationService } from '@lib/expo';
+import { prisma } from '@lib/prisma';
+import { $Enums, AttendeeRole } from '@prisma/client';
 import { EXPO_ROUTES } from '@src/shared/constants/expo-route';
 import { logger } from '@src/shared/logger';
 

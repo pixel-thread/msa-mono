@@ -1,6 +1,6 @@
+import { NotFoundError } from '@errors';
 import { prisma } from '@lib/prisma';
 import { Prisma } from '@prisma/client';
-import { NotFoundError } from '@errors';
 
 export async function trialBalance(associationId: string, accountId?: string) {
   const accounts = await prisma.account.findMany({

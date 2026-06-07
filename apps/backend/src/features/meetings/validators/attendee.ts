@@ -1,5 +1,5 @@
-import z from 'zod';
 import { AttendeeRole, RsvpStatus } from '@prisma/client';
+import z from 'zod';
 
 /** Zod schema for assigning a single attendee. */
 export const AssignAttendeeSchema = z

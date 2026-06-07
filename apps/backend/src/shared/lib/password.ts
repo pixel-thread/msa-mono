@@ -1,8 +1,8 @@
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
 
-export { generateSecureToken, hashToken } from './token';
 export { generateOTP, hashOTP } from './otp';
+export { generateSecureToken, hashToken } from './token';
 
 /** Hashes a plaintext password using bcrypt (cost factor 12). */
 export async function hashPassword(password: string): Promise<string> {

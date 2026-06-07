@@ -1,5 +1,5 @@
-import { prisma } from '@lib/prisma';
 import { NotFoundError } from '@errors';
+import { prisma } from '@lib/prisma';
 import { MeetingStatus } from '@prisma/client';
 
 /** Props for updating a meeting. */

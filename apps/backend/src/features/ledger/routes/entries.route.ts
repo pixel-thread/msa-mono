@@ -2,43 +2,35 @@
 // External libs
 // ---------------------------------------------------------------------------
 
-import { Request, NextFunction, Response } from 'express';
-import type { RequestHandler } from 'express';
-
-// ---------------------------------------------------------------------------
-// Prisma
-// ---------------------------------------------------------------------------
-
-import { UserRole } from '@prisma/client';
-
-// ---------------------------------------------------------------------------
-// Shared utilities
-// ---------------------------------------------------------------------------
-
-import { validate } from '@lib/validate';
-import { success } from '@utils/responses';
-import { buildPagination } from '@utils';
-import { logger } from '@src/shared/logger';
-import { getAssociation } from '@services/association/get-association';
-import { withRole } from '@utils/with-role';
-import { asyncHandler } from '@utils/async-handler';
-
 // ---------------------------------------------------------------------------
 // Services
 // ---------------------------------------------------------------------------
-
 import {
-  getEntries,
-  createManualEntry,
   approveEntry,
+  createManualEntry,
+  getEntries,
   rejectEntry,
 } from '@feature/ledger/services/ledger.service';
-
 // ---------------------------------------------------------------------------
 // Validators / Types
 // ---------------------------------------------------------------------------
-
 import { CreateLedgerEntrySchema, LedgerQueryParams } from '@feature/ledger/validators';
+// ---------------------------------------------------------------------------
+// Shared utilities
+// ---------------------------------------------------------------------------
+import { validate } from '@lib/validate';
+// ---------------------------------------------------------------------------
+// Prisma
+// ---------------------------------------------------------------------------
+import { UserRole } from '@prisma/client';
+import { getAssociation } from '@services/association/get-association';
+import { logger } from '@src/shared/logger';
+import { buildPagination } from '@utils';
+import { asyncHandler } from '@utils/async-handler';
+import { success } from '@utils/responses';
+import { withRole } from '@utils/with-role';
+import type { RequestHandler } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
 // ---------------------------------------------------------------------------
 // GET /api/ledger/entries  –  List ledger entries

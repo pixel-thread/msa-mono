@@ -5,27 +5,23 @@
  * @module features/announcements/routes
  */
 
-import { Request, NextFunction, Response } from 'express';
-import type { RequestHandler } from 'express';
-
-// Shared utilities
-import { success } from '@utils/responses';
-import { validate } from '@lib/validate';
-import { withRole } from '@utils/with-role';
-import { asyncHandler } from '@utils/async-handler';
-import { logger } from '@src/shared/logger';
-
-// Prisma
-import { UserRole } from '@prisma/client';
-
-// Storage
-import { deleteFromBucket } from '@lib/supabase/storage';
-
+import { BadRequestError } from '@errors';
+import { uploadAnnouncementImage } from '@feature/announcements/services';
 // Validators
 import { AnnouncementRouteParams } from '@feature/announcements/validators';
-import { uploadAnnouncementImage } from '@feature/announcements/services';
-import { BadRequestError } from '@errors';
+// Storage
+import { deleteFromBucket } from '@lib/supabase/storage';
+import { validate } from '@lib/validate';
 import { fileUpload } from '@middleware/file-upload';
+// Prisma
+import { UserRole } from '@prisma/client';
+import { logger } from '@src/shared/logger';
+import { asyncHandler } from '@utils/async-handler';
+// Shared utilities
+import { success } from '@utils/responses';
+import { withRole } from '@utils/with-role';
+import type { RequestHandler } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
 /**
  * POST /api/announcements/:announcementId/upload

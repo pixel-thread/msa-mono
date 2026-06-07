@@ -1,20 +1,16 @@
-import { Request, NextFunction, Response } from 'express';
-import type { RequestHandler } from 'express';
-
-import { validate } from '@lib/validate';
-import { success } from '@utils/responses';
-import { asyncHandler } from '@utils/async-handler';
-import { logger } from '@src/shared/logger';
-import { env } from '@src/env';
-
-import { hashToken } from '@lib/password';
-import { signPasswordResetToken } from '@lib/jwt';
-import { sendPasswordResetEmail } from '@lib/email';
-
-import { getUserFirst } from '@services/user/get-user-first';
-import { updateUser } from '@feature/user/services';
-
 import { ForgotPasswordInput, ForgotPasswordSchema } from '@feature/auth/validators';
+import { updateUser } from '@feature/user/services';
+import { sendPasswordResetEmail } from '@lib/email';
+import { signPasswordResetToken } from '@lib/jwt';
+import { hashToken } from '@lib/password';
+import { validate } from '@lib/validate';
+import { getUserFirst } from '@services/user/get-user-first';
+import { env } from '@src/env';
+import { logger } from '@src/shared/logger';
+import { asyncHandler } from '@utils/async-handler';
+import { success } from '@utils/responses';
+import type { RequestHandler } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
 /**
  * POST /api/auth/forgot-password — Request a password reset email

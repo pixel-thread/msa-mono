@@ -1,38 +1,37 @@
 // ---- External libs ----
-import { Router } from 'express';
-
 // ---- Shared utilities ----
 import { auth } from '@src/middleware/auth';
+import { Router } from 'express';
 
-// ---- Route handlers ----
-import { getModules, postModules } from './modules.route';
-import { getModule, updateModuleHandler, deleteModuleHandler } from './module-detail.route';
 import {
+  deleteAssignment,
+  getAssignedUsersHandler,
   getAssignments,
+  patchBulkRemove,
   postAssign,
   putBulkAssign,
-  deleteAssignment,
-  patchBulkRemove,
-  getAssignedUsersHandler,
 } from './assign-users.route';
+import {
+  deleteCertificateHandler,
+  deleteCertificateTemplateRoute,
+  getCertificate,
+  getCertificates,
+  patchCertificate,
+  postCertificate,
+  postCertificateTemplate,
+} from './certificates.route';
+import { getModuleCompletions, postAdminComplete,postModuleComplete } from './completions.route';
+import { deleteModuleHandler,getModule, updateModuleHandler } from './module-detail.route';
+// ---- Route handlers ----
+import { getModules, postModules } from './modules.route';
 import { getMyAssignments, getMyCompletions } from './my-assignments.route';
 import { getCompletions, postCompletion } from './record-completion.route';
-import { getModuleCompletions, postModuleComplete, postAdminComplete } from './completions.route';
 import {
-  getCertificates,
-  postCertificate,
-  getCertificate,
-  patchCertificate,
-  deleteCertificateHandler,
-  postCertificateTemplate,
-  deleteCertificateTemplateRoute,
-} from './certificates.route';
-import {
+  deleteSupplementHandler,
+  getSupplement,
   getSupplements,
   postSupplement,
-  getSupplement,
   updateSupplementHandler,
-  deleteSupplementHandler,
 } from './supplements.route';
 
 // ---- Router ----

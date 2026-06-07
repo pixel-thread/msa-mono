@@ -4,29 +4,26 @@
  * It provides functionality for listing, approving, and rejecting applications.
  */
 
-import { Request, NextFunction, Response } from 'express';
-import type { RequestHandler } from 'express';
-
-import { UserRole } from '@prisma/client';
-
-import { validate } from '@lib/validate';
-import { success } from '@utils/responses';
 import { NotFoundError } from '@errors';
-import { withRole } from '@utils/with-role';
-import { asyncHandler } from '@utils/async-handler';
-import { logger } from '@src/shared/logger';
-
 import {
-  getMembershipApplications,
   approveMembershipApplication,
+  getMembershipApplications,
   rejectMembershipApplication,
 } from '@feature/membership-applications/services';
 import {
+  ApproveApplicationSchema,
   GetMembershipApplicationsQuerySchema,
   MembershipApplicationParamsSchema,
-  ApproveApplicationSchema,
   RejectApplicationSchema,
 } from '@feature/membership-applications/validators';
+import { validate } from '@lib/validate';
+import { UserRole } from '@prisma/client';
+import { logger } from '@src/shared/logger';
+import { asyncHandler } from '@utils/async-handler';
+import { success } from '@utils/responses';
+import { withRole } from '@utils/with-role';
+import type { RequestHandler } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
 /**
  * @description List membership applications with optional status filter and pagination.

@@ -1,16 +1,19 @@
-import { DeclarationStatus, UserRole } from '@prisma/client';
+import { NotFoundError } from '@errors';
 import { validate } from '@lib/validate';
+import { DeclarationStatus, UserRole } from '@prisma/client';
+import { hasHighRoleAccess } from '@utils';
 import { asyncHandler } from '@utils/async-handler';
+import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';
 import { RequestHandler } from 'express';
-import { success } from '@utils/responses';
 import z from 'zod';
+
 import {
+  approveDeclaration,
   findDeclarations,
   findUniqueDeclaration,
-  submitDeclaration,
-  approveDeclaration,
   rejectDeclaration,
+  submitDeclaration,
 } from '../services/declarations.service';
 import {
   ApproveDeclarationSchema,
@@ -19,8 +22,6 @@ import {
   ListDeclarationsQuerySchema,
   RejectDeclarationSchema,
 } from '../validators';
-import { hasHighRoleAccess } from '@utils';
-import { NotFoundError } from '@errors';
 
 export const createUserDeclarationHandler: RequestHandler[] = [
   validate({ body: CreateUserDeclarations }),

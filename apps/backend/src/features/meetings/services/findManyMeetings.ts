@@ -1,5 +1,5 @@
 import { prisma } from '@lib/prisma';
-import { MeetingType, MeetingStatus, Prisma, UserRole } from '@prisma/client';
+import { MeetingStatus, MeetingType, Prisma, UserRole } from '@prisma/client';
 import { PAGE_SIZE } from '@src/shared/constants';
 import { buildPagination } from '@src/shared/utils/helper/build-pagination';
 import { hasHighRoleAccess } from '@utils/has-high-role';

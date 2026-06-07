@@ -3,31 +3,27 @@
 // ---- Security: DPO role required (except no role requirement for viewing own data)
 
 // External libs
-import { Request, NextFunction, Response } from 'express';
-import type { RequestHandler } from 'express';
-import { z } from 'zod';
-
-// Shared utilities
-import { validate } from '@lib/validate';
-import { success } from '@utils/responses';
-import { UnauthorizedError, ForbiddenError, BadRequestError, NotFoundError } from '@errors';
-import { pageNumberValidation } from '@validator';
-import { getUniqueUser } from '@services/user/get-unique-user';
-import { logger } from '@src/shared/logger';
-import { asyncHandler } from '@utils/async-handler';
-
-// Prisma
-import { prisma } from '@lib/prisma';
-import { UserRole } from '@prisma/client';
-
+import { BadRequestError, ForbiddenError, NotFoundError,UnauthorizedError } from '@errors';
 // Services
 import { ConsentService } from '@feature/consent/services/consent.service';
-
 // Validators
 import {
   ConsentReceiptParamsSchema,
   UpdateConsentReceiptSchema,
 } from '@feature/consent/validators/consent.validators';
+// Prisma
+import { prisma } from '@lib/prisma';
+// Shared utilities
+import { validate } from '@lib/validate';
+import { UserRole } from '@prisma/client';
+import { getUniqueUser } from '@services/user/get-unique-user';
+import { logger } from '@src/shared/logger';
+import { asyncHandler } from '@utils/async-handler';
+import { success } from '@utils/responses';
+import { pageNumberValidation } from '@validator';
+import type { RequestHandler } from 'express';
+import { NextFunction, Request, Response } from 'express';
+import { z } from 'zod';
 
 // ---- Declarations
 

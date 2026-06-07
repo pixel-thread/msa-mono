@@ -1,15 +1,15 @@
-import { Request, NextFunction, Response } from 'express';
-import type { RequestHandler } from 'express';
-import { validate } from '@lib/validate';
-import { success } from '@utils/responses';
 import { ForbiddenError } from '@errors';
-import { UserRole } from '@prisma/client';
 import { updateAttendee } from '@feature/meetings/services/updateAttendee';
-import { z } from 'zod';
-import { logger } from '@src/shared/logger';
+import { validate } from '@lib/validate';
+import { UserRole } from '@prisma/client';
 import { getAssociation } from '@services/association/get-association';
-import { withRole } from '@utils/with-role';
+import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
+import { success } from '@utils/responses';
+import { withRole } from '@utils/with-role';
+import type { RequestHandler } from 'express';
+import { NextFunction, Request, Response } from 'express';
+import { z } from 'zod';
 
 const RsvpSchema = z.object({
   status: z.enum(['ACCEPTED', 'DECLINED']),

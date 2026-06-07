@@ -1,5 +1,5 @@
-import { Prisma, PaymentMethod, ApprovalStatus } from '@prisma/client';
 import { BadRequestError, NotFoundError } from '@errors';
+import { ApprovalStatus,PaymentMethod, Prisma } from '@prisma/client';
 
 export interface JournalLine {
   accountCode: string;

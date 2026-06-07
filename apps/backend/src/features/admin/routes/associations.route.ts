@@ -4,28 +4,25 @@
  * It provides CRUD operations and member assignment for associations.
  */
 
-import { Request, NextFunction, Response } from 'express';
-import type { RequestHandler } from 'express';
-
-import { UserRole } from '@prisma/client';
-
-import { validate } from '@lib/validate';
-import { prisma } from '@lib/prisma';
-import { success } from '@utils/responses';
 import { ConflictError, NotFoundError } from '@errors';
-import { withRole } from '@utils/with-role';
-import { asyncHandler } from '@utils/async-handler';
-import { logger } from '@src/shared/logger';
-
-import { findManyAssociation } from '@feature/associations/services/findManyAssociation';
-import { findFirstAssociation } from '@feature/associations/services/findFirstAssociation';
-import { findUniqueAssociation } from '@feature/associations/services/findUniqueAssociation';
 import { createAssociation } from '@feature/associations/services/createAssociation';
-import { updateAssociation } from '@feature/associations/services/updateAssociation';
 import { deleteAssociation } from '@feature/associations/services/deleteAssociation';
+import { findFirstAssociation } from '@feature/associations/services/findFirstAssociation';
+import { findManyAssociation } from '@feature/associations/services/findManyAssociation';
+import { findUniqueAssociation } from '@feature/associations/services/findUniqueAssociation';
+import { updateAssociation } from '@feature/associations/services/updateAssociation';
 import { CreateAssociationSchema } from '@feature/associations/validators';
 import { AddAssociationMemberSchema } from '@feature/associations/validators/associations';
+import { prisma } from '@lib/prisma';
+import { validate } from '@lib/validate';
+import { UserRole } from '@prisma/client';
+import { logger } from '@src/shared/logger';
+import { asyncHandler } from '@utils/async-handler';
+import { success } from '@utils/responses';
+import { withRole } from '@utils/with-role';
 import type { CreateAssociationInput } from '@validator/associations';
+import type { RequestHandler } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
 /**
  * @description Retrieve all active associations, newest first.

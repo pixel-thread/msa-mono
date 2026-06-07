@@ -1,6 +1,6 @@
-import { z } from 'zod';
-import { MeetingType, MeetingStatus } from '@prisma/client';
+import { MeetingStatus,MeetingType } from '@prisma/client';
 import { pageNumberValidation } from '@validator/common';
+import { z } from 'zod';
 
 /** Zod schema for an agenda item within a meeting. */
 export const agendaItemSchema = z

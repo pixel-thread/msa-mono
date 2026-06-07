@@ -1,5 +1,5 @@
-import { Prisma } from '@prisma/client';
 import { prisma } from '@lib/prisma';
+import { Prisma } from '@prisma/client';
 import { buildPaginationParams } from '@utils/helper';
 
 type Props = {

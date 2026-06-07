@@ -1,6 +1,7 @@
+import { NotFoundError } from '@errors';
 import { prisma } from '@lib/prisma';
 import { Prisma } from '@prisma/client';
-import { NotFoundError } from '@errors';
+
 import { CreateMeetingMinuteInput, UpdateMeetingMinuteInput } from '../validators/minutes';
 
 /** Props for creating a meeting minute. */

@@ -1,30 +1,29 @@
 // ---------------------------------------------------------------------------
 // External libs
 // ---------------------------------------------------------------------------
-import { Router } from 'express';
-
 // ---------------------------------------------------------------------------
 // Middleware
 // ---------------------------------------------------------------------------
 import { auth } from '@src/middleware/auth';
+import { Router } from 'express';
 
+import { postDowngrade } from './downgrade.route';
+import { getMySubscriptionHandler, getUserSubscriptionHandler } from './my-subscription.route';
 // ---------------------------------------------------------------------------
 // Route handlers
 // ---------------------------------------------------------------------------
 import {
-  getPlansHandler,
   createPlanHandler,
-  setDefaultPlanHandler,
-  updatePlanHandler,
   deletePlanHandler,
   getPlanDetailsHandler,
+  getPlansHandler,
+  setDefaultPlanHandler,
+  updatePlanHandler,
 } from './plans.route';
-import { getMySubscriptionHandler, getUserSubscriptionHandler } from './my-subscription.route';
 import { postSubscribe } from './subscribe.route';
-import { postUpgrade } from './upgrade.route';
-import { postDowngrade } from './downgrade.route';
-import { postWaive } from './waive.route';
 import { getSubscriptionPaymentsHandler } from './subscription-payments.route';
+import { postUpgrade } from './upgrade.route';
+import { postWaive } from './waive.route';
 
 // ---- Router setup ------------------------------------------------------------
 

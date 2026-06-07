@@ -1,5 +1,5 @@
+import { ForbiddenError,NotFoundError } from '@errors';
 import { prisma } from '@lib/prisma';
-import { NotFoundError, ForbiddenError } from '@errors';
 import { AttendeeRole, RsvpStatus } from '@prisma/client';
 import { logger } from '@src/shared/logger';
 

@@ -4,27 +4,19 @@
 
 // ---- External Libraries
 
-import { Request, NextFunction, Response, RequestHandler } from 'express';
-
-// ---- Shared Utilities
-
-import { success } from '@utils/responses';
-import { UnauthorizedError, ForbiddenError } from '@errors';
+import { ForbiddenError,UnauthorizedError } from '@errors';
+// ---- DSAR Services
+import { findAssociationAdmins } from '@feature/dsar/services';
 import { prisma } from '@lib/prisma';
+// ---- Prisma Types
+import { UserRole } from '@prisma/client';
+// ---- Shared Services
+import { getUniqueUser } from '@services/user/get-unique-user';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
-
-// ---- Prisma Types
-
-import { UserRole } from '@prisma/client';
-
-// ---- DSAR Services
-
-import { findAssociationAdmins } from '@feature/dsar/services';
-
-// ---- Shared Services
-
-import { getUniqueUser } from '@services/user/get-unique-user';
+// ---- Shared Utilities
+import { success } from '@utils/responses';
+import { NextFunction, Request, RequestHandler,Response } from 'express';
 
 // ---- Role Hierarchy
 

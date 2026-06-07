@@ -1,10 +1,9 @@
 // ---- Routes: Audit-log index
 
 // External libs
-import { Router } from 'express';
-
 // Middleware
 import { auth } from '@src/middleware/auth';
+import { Router } from 'express';
 
 // Route handlers
 import { getAuditLogs } from './audit-logs.route';

@@ -5,20 +5,19 @@
 //            optionally filtered by year, month, and status.
 // ---------------------------------------------------------------------------
 
-import { Request, NextFunction, Response } from 'express';
-import type { RequestHandler } from 'express';
-
-import { validate } from '@lib/validate';
-import { success } from '@utils/responses';
-import { buildPagination } from '@src/shared/utils/helper/build-pagination';
-import { logger } from '@src/shared/logger';
-import { UserRole } from '@prisma/client';
-import { withRole } from '@utils/with-role';
-import { CollectionReportQuerySchema } from '@feature/payments/validators';
 import { findContributionPeriods } from '@feature/contributions/services/find-contribution-periods';
-import { PAGE_SIZE } from '@src/shared/constants';
-import { asyncHandler } from '@utils/async-handler';
+import { CollectionReportQuerySchema } from '@feature/payments/validators';
+import { validate } from '@lib/validate';
+import { UserRole } from '@prisma/client';
 import { getAssociation } from '@services/association/get-association';
+import { PAGE_SIZE } from '@src/shared/constants';
+import { logger } from '@src/shared/logger';
+import { buildPagination } from '@src/shared/utils/helper/build-pagination';
+import { asyncHandler } from '@utils/async-handler';
+import { success } from '@utils/responses';
+import { withRole } from '@utils/with-role';
+import type { RequestHandler } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
 export const collectionsReport: RequestHandler[] = [
   // Step 1: Validate query params

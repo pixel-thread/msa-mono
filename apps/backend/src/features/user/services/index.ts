@@ -1,10 +1,8 @@
 // Shared utilities
 import { prisma } from '@lib/prisma';
-import { PAGE_SIZE } from '@src/shared/constants';
-
 // ---- Prisma
-
 import { Prisma } from '@prisma/client';
+import { PAGE_SIZE } from '@src/shared/constants';
 
 // ---------------------------------------------------------------------------
 // User Service — Data Access Layer

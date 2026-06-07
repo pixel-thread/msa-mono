@@ -1,29 +1,26 @@
 // ---------------------------------------------------------------------------
 // External libs
 // ---------------------------------------------------------------------------
-import { Request, NextFunction, Response } from 'express';
-import type { RequestHandler } from 'express';
-
-// ---------------------------------------------------------------------------
-// Shared utilities
-// ---------------------------------------------------------------------------
-import { validate } from '@lib/validate';
-import { success } from '@utils/responses';
-import { buildPagination } from '@src/shared/utils/helper/build-pagination';
-import { UnauthorizedError, NotFoundError } from '@errors';
-import { logger } from '@src/shared/logger';
-import { getAssociation } from '@services/association/get-association';
-import { asyncHandler } from '@utils/async-handler';
-
+import { NotFoundError,UnauthorizedError } from '@errors';
 // ---------------------------------------------------------------------------
 // Services
 // ---------------------------------------------------------------------------
 import { findManyComplaints, findUniqueComplaint } from '@feature/compliance/services';
-
 // ---------------------------------------------------------------------------
 // Validators / Types
 // ---------------------------------------------------------------------------
-import { ComplaintQuerySchema, ComplaintParamsSchema } from '@feature/compliance/validators';
+import { ComplaintParamsSchema,ComplaintQuerySchema } from '@feature/compliance/validators';
+// ---------------------------------------------------------------------------
+// Shared utilities
+// ---------------------------------------------------------------------------
+import { validate } from '@lib/validate';
+import { getAssociation } from '@services/association/get-association';
+import { logger } from '@src/shared/logger';
+import { buildPagination } from '@src/shared/utils/helper/build-pagination';
+import { asyncHandler } from '@utils/async-handler';
+import { success } from '@utils/responses';
+import type { RequestHandler } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
 // ---------------------------------------------------------------------------
 // GET /compliance/my  —  List the current user's own complaints

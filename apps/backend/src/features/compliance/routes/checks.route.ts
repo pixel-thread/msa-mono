@@ -1,50 +1,46 @@
 // ---------------------------------------------------------------------------
 // External libs
 // ---------------------------------------------------------------------------
-import { Request, NextFunction, Response } from 'express';
-import type { RequestHandler } from 'express';
-
-// ---------------------------------------------------------------------------
-// Shared utilities
-// ---------------------------------------------------------------------------
-import { validate } from '@lib/validate';
-import { success } from '@utils/responses';
-import { buildPagination } from '@src/shared/utils/helper/build-pagination';
 import { NotFoundError } from '@errors';
-import { logger } from '@src/shared/logger';
-import { getAssociation } from '@services/association/get-association';
-import { withRole } from '@utils/with-role';
-import { asyncHandler } from '@utils/async-handler';
-
-// ---------------------------------------------------------------------------
-// Prisma
-// ---------------------------------------------------------------------------
-import {
-  UserRole,
-  ComplianceCheckStatus as PrismaComplianceCheckStatus,
-  Prisma,
-} from '@prisma/client';
-
 // ---------------------------------------------------------------------------
 // Services
 // ---------------------------------------------------------------------------
 import {
+  createBulkComplianceChecks,
+  deleteComplianceCheck,
   findManyComplianceChecks,
   findUniqueComplianceCheck,
   runComplianceCheck,
-  createBulkComplianceChecks,
-  deleteComplianceCheck,
 } from '@feature/compliance/services';
-
 // ---------------------------------------------------------------------------
 // Validators / Types
 // ---------------------------------------------------------------------------
 import {
-  ComplianceCheckQuerySchema,
-  ComplianceCheckParamsSchema,
-  TriggerComplianceCheckSchema,
   ALL_CHECK_TYPES,
+  ComplianceCheckParamsSchema,
+  ComplianceCheckQuerySchema,
+  TriggerComplianceCheckSchema,
 } from '@feature/compliance/validators';
+// ---------------------------------------------------------------------------
+// Shared utilities
+// ---------------------------------------------------------------------------
+import { validate } from '@lib/validate';
+// ---------------------------------------------------------------------------
+// Prisma
+// ---------------------------------------------------------------------------
+import {
+  ComplianceCheckStatus as PrismaComplianceCheckStatus,
+  Prisma,
+  UserRole,
+} from '@prisma/client';
+import { getAssociation } from '@services/association/get-association';
+import { logger } from '@src/shared/logger';
+import { buildPagination } from '@src/shared/utils/helper/build-pagination';
+import { asyncHandler } from '@utils/async-handler';
+import { success } from '@utils/responses';
+import { withRole } from '@utils/with-role';
+import type { RequestHandler } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
 // ---------------------------------------------------------------------------
 // GET /compliance/checks  —  List compliance checks

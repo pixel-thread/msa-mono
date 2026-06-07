@@ -2,24 +2,21 @@
 // External libs
 // ---------------------------------------------------------------------------
 
-import { Router } from 'express';
-
 // ---------------------------------------------------------------------------
 // Shared utilities
 // ---------------------------------------------------------------------------
-
 import { auth } from '@src/middleware/auth';
+import { Router } from 'express';
 
 // ---------------------------------------------------------------------------
 // Route handlers
 // ---------------------------------------------------------------------------
-
 import {
-  getMemberTypes,
-  postMemberType,
-  getMemberTypeById,
-  patchMemberType,
   deleteMemberType,
+  getMemberTypeById,
+  getMemberTypes,
+  patchMemberType,
+  postMemberType,
 } from './member-types.route';
 
 // ---------------------------------------------------------------------------

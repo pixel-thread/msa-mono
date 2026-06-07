@@ -1,19 +1,17 @@
 // ---------------------------------------------------------------------------
 // Shared utilities
 // ---------------------------------------------------------------------------
-import { prisma } from '@lib/prisma';
 import { BadRequestError, NotFoundError } from '@errors';
-import { hasHighRoleAccess } from '@utils/has-high-role';
-
-// ---------------------------------------------------------------------------
-// Prisma
-// ---------------------------------------------------------------------------
-import { Prisma, UserRole } from '@prisma/client';
-
 // ---------------------------------------------------------------------------
 // Validators / Types
 // ---------------------------------------------------------------------------
 import type { CreateSubscriptionPlanInput } from '@feature/subscriptions/validators';
+import { prisma } from '@lib/prisma';
+// ---------------------------------------------------------------------------
+// Prisma
+// ---------------------------------------------------------------------------
+import { Prisma, UserRole } from '@prisma/client';
+import { hasHighRoleAccess } from '@utils/has-high-role';
 
 // ---- Interfaces --------------------------------------------------------------
 

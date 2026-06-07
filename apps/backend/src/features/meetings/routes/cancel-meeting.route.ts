@@ -1,13 +1,13 @@
-import { RequestHandler } from 'express';
-import { success } from '@utils/responses';
-import { UserRole, MeetingStatus } from '@prisma/client';
-import { updateMeeting } from '@feature/meetings/services';
-import { hasHighRoleAccess } from '@utils/has-high-role';
 import { ForbiddenError } from '@errors';
-import { logger } from '@src/shared/logger';
+import { updateMeeting } from '@feature/meetings/services';
+import { MeetingStatus,UserRole } from '@prisma/client';
 import { getAssociation } from '@services/association/get-association';
-import { withRole } from '@utils/with-role';
+import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
+import { hasHighRoleAccess } from '@utils/has-high-role';
+import { success } from '@utils/responses';
+import { withRole } from '@utils/with-role';
+import { RequestHandler } from 'express';
 
 /** @@ POST /api/meetings/[meetingId]/cancel - Cancel a meeting. */
 export const postCancelMeeting: RequestHandler[] = [

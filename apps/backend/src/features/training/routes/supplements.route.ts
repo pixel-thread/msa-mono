@@ -1,39 +1,34 @@
 // ---- External libs ----
-import { Request, Response } from 'express';
-import type { RequestHandler } from 'express';
-
-// ---- Shared utilities ----
-import { validate } from '@lib/validate';
-import { success } from '@utils/responses';
-import { prisma } from '@lib/prisma';
-import { uploadToBucket, deleteFromBucket } from '@lib/supabase/storage';
 import { BadRequestError, NotFoundError } from '@errors';
-import { env } from '@src/env';
-import { logger } from '@src/shared/logger';
-import { getAssociation } from '@services/association/get-association';
-import { withRole } from '@utils/with-role';
-import { asyncHandler } from '@utils/async-handler';
-
-// ---- Prisma ----
-import { UserRole } from '@prisma/client';
-
 // ---- Services ----
 import {
-  findManySupplements,
   createSupplement,
-  updateSupplement,
   deleteSupplement,
+  findManySupplements,
+  updateSupplement,
 } from '@feature/training/services';
-
 // ---- Validators ----
 import {
   CreateSupplementSchema,
   UpdateSupplementSchema,
 } from '@feature/training/validators/training';
-
+import { prisma } from '@lib/prisma';
+import { deleteFromBucket,uploadToBucket } from '@lib/supabase/storage';
+// ---- Shared utilities ----
+import { validate } from '@lib/validate';
+// ---- Prisma ----
+import { UserRole } from '@prisma/client';
+import { getAssociation } from '@services/association/get-association';
+import { env } from '@src/env';
+import { fileUpload } from '@src/middleware/file-upload';
+import { logger } from '@src/shared/logger';
+import { asyncHandler } from '@utils/async-handler';
+import { success } from '@utils/responses';
+import { withRole } from '@utils/with-role';
+import type { RequestHandler } from 'express';
+import { Request, Response } from 'express';
 // ---- External libs ----
 import { z } from 'zod';
-import { fileUpload } from '@src/middleware/file-upload';
 
 // ---- Schemas ----
 

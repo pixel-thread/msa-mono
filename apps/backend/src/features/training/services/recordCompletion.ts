@@ -1,11 +1,10 @@
 // ---- External libs ----
-import { AuditAction, Prisma } from '@prisma/client';
-
 // ---- Shared utilities ----
 import { prisma } from '@lib/prisma';
+import { AuditAction, Prisma } from '@prisma/client';
 
 // ---- Validators ----
-import { RecordCompletionInput, AdminRecordCompletionInput } from '../validators/training';
+import { AdminRecordCompletionInput,RecordCompletionInput } from '../validators/training';
 
 // ---- Interfaces ----
 

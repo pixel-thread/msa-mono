@@ -1,18 +1,3 @@
-import express from 'express';
-import cookieParser from 'cookie-parser';
-
-import { env } from '@src/env';
-
-import { csrf } from '@middleware/csrf';
-import { cors } from '@middleware/cors';
-import { contextMiddleware } from '@middleware/context';
-import { securityHeaders } from '@middleware/security-headers';
-import { rateLimiter } from '@middleware/rate-limiter';
-import { errorHandler } from '@middleware/error-handler';
-import { timeout } from '@middleware/timeout';
-
-import { logger } from './shared/logger';
-
 import adminRouter from '@feature/admin/routes/index';
 import announcementsRouter from '@feature/announcements/routes/index';
 import associationsRouter from '@feature/associations/routes/index';
@@ -20,6 +5,7 @@ import auditLogsRouter from '@feature/audit-logs/routes/index';
 import authRouter from '@feature/auth/routes/index';
 import complianceRouter from '@feature/compliance/routes/index';
 import consentRouter from '@feature/consent/routes/index';
+import contributions from '@feature/contributions/routes/index';
 import cronRouter from '@feature/cron/routes/index';
 import dashboardRouter from '@feature/dashboard/routes/index';
 import dsarRouter from '@feature/dsar/routes/index';
@@ -35,7 +21,18 @@ import paymentsRouter from '@feature/payments/routes/index';
 import subscriptionsRouter from '@feature/subscriptions/routes/index';
 import trainingRouter from '@feature/training/routes/index';
 import userRouter from '@feature/user/routes/index';
-import contributions from '@feature/contributions/routes/index';
+import { contextMiddleware } from '@middleware/context';
+import { cors } from '@middleware/cors';
+import { csrf } from '@middleware/csrf';
+import { errorHandler } from '@middleware/error-handler';
+import { rateLimiter } from '@middleware/rate-limiter';
+import { securityHeaders } from '@middleware/security-headers';
+import { timeout } from '@middleware/timeout';
+import { env } from '@src/env';
+import cookieParser from 'cookie-parser';
+import express from 'express';
+
+import { logger } from './shared/logger';
 
 export function createApp(): express.Express {
   const app = express();

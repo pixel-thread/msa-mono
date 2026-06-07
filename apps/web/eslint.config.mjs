@@ -1,8 +1,10 @@
 import { defineConfig, globalIgnores } from 'eslint/config';
 import tseslint from 'typescript-eslint';
 import reactHooks from 'eslint-plugin-react-hooks';
+import tanstackRouter from '@tanstack/eslint-plugin-router';
 
 const eslintConfig = defineConfig([
+  ...tanstackRouter.configs['flat/recommended'],
   ...tseslint.configs.recommended,
   {
     plugins: {

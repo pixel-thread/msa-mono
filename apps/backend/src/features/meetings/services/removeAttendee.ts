@@ -1,5 +1,5 @@
+import { ForbiddenError,NotFoundError } from '@errors';
 import { prisma } from '@lib/prisma';
-import { NotFoundError, ForbiddenError } from '@errors';
 
 /** Props for removing an attendee from a meeting. */
 interface RemoveAttendeeProps {

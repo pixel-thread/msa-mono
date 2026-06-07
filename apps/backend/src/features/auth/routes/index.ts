@@ -1,25 +1,21 @@
-import { Router } from 'express';
-
 import { auth } from '@middleware/auth';
 import { routeRateLimiter } from '@middleware/rate-limiter';
+import { Router } from 'express';
 
-import { postSignUp } from './sign-up.route';
-import { postSignIn } from './sign-in.route';
-import { postSignInVerify } from './sign-in-verify.route';
-import { postSignInResend } from './sign-in-resend.route';
-import { postLogout } from './logout.route';
-
-import { postChangePassword } from './change-password.route';
-import { postForgotPassword } from './forgot-password.route';
-import { postResetPassword } from './reset-password.route';
-
-import { getMe } from './me.route';
-import { postRefresh } from './refresh.route';
-
+import { postMfaDisable } from './mfa/disable.route';
+import { postMfaResend } from './mfa/resend.route';
 import { postMfaSetup } from './mfa/setup.route';
 import { postMfaVerify } from './mfa/verify.route';
-import { postMfaResend } from './mfa/resend.route';
-import { postMfaDisable } from './mfa/disable.route';
+import { postChangePassword } from './change-password.route';
+import { postForgotPassword } from './forgot-password.route';
+import { postLogout } from './logout.route';
+import { getMe } from './me.route';
+import { postRefresh } from './refresh.route';
+import { postResetPassword } from './reset-password.route';
+import { postSignIn } from './sign-in.route';
+import { postSignInResend } from './sign-in-resend.route';
+import { postSignInVerify } from './sign-in-verify.route';
+import { postSignUp } from './sign-up.route';
 
 // ---- Auth Router ----
 

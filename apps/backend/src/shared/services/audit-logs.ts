@@ -2,6 +2,7 @@ import { prisma } from '@lib/prisma';
 import { AuditAction, Prisma } from '@prisma/client';
 import type { AuditLogEntry, AuditLogQuery } from '@src/shared/types/audit-logs';
 import { buildPagination } from '@src/shared/utils/helper/build-pagination';
+
 import { PAGE_SIZE } from '../constants';
 
 /** Parameters for creating an audit log entry. */

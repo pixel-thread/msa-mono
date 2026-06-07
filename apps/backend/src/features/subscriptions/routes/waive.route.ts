@@ -1,34 +1,30 @@
 // ---------------------------------------------------------------------------
 // External libs
 // ---------------------------------------------------------------------------
-import { Request, NextFunction, Response } from 'express';
-import type { RequestHandler } from 'express';
-
-// ---------------------------------------------------------------------------
-// Shared utilities
-// ---------------------------------------------------------------------------
-import { validate } from '@lib/validate';
-import { success } from '@utils/responses';
 import { ValidationError } from '@errors';
-import { withRole } from '@utils/with-role';
-import { asyncHandler } from '@utils/async-handler';
-import { logger } from '@src/shared/logger';
-import { getAssociation } from '@services/association/get-association';
-
-// ---------------------------------------------------------------------------
-// Prisma
-// ---------------------------------------------------------------------------
-import { UserRole } from '@prisma/client';
-
-// ---------------------------------------------------------------------------
-// Validators / Types
-// ---------------------------------------------------------------------------
-import { WaiveSubscriptionSchema } from '@feature/subscriptions/validators';
-
 // ---------------------------------------------------------------------------
 // Services
 // ---------------------------------------------------------------------------
 import { waiveSubscription } from '@feature/subscriptions/services';
+// ---------------------------------------------------------------------------
+// Validators / Types
+// ---------------------------------------------------------------------------
+import { WaiveSubscriptionSchema } from '@feature/subscriptions/validators';
+// ---------------------------------------------------------------------------
+// Shared utilities
+// ---------------------------------------------------------------------------
+import { validate } from '@lib/validate';
+// ---------------------------------------------------------------------------
+// Prisma
+// ---------------------------------------------------------------------------
+import { UserRole } from '@prisma/client';
+import { getAssociation } from '@services/association/get-association';
+import { logger } from '@src/shared/logger';
+import { asyncHandler } from '@utils/async-handler';
+import { success } from '@utils/responses';
+import { withRole } from '@utils/with-role';
+import type { RequestHandler } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
 // ---- POST /api/subscriptions/waive -------------------------------------------
 /** @desc  Waive a subscription (mark as WAIVED with a reason)

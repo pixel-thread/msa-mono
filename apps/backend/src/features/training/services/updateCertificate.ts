@@ -1,12 +1,11 @@
 // ---- External libs ----
-import { AuditAction, Prisma } from '@prisma/client';
-
+import { NotFoundError } from '@errors';
 // ---- Shared utilities ----
 import { prisma } from '@lib/prisma';
+import { AuditAction, Prisma } from '@prisma/client';
 
 // ---- Validators ----
 import { UpdateTrainingCertificateInput } from '../validators/training';
-import { NotFoundError } from '@errors';
 
 // ---- Interfaces ----
 

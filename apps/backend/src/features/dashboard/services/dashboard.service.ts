@@ -1,6 +1,5 @@
-import { PaymentStatus, ContributionStatus, Prisma } from '@prisma/client';
-
 import { prisma } from '@lib/prisma';
+import { ContributionStatus, PaymentStatus, Prisma } from '@prisma/client';
 
 // ---- Interfaces -------------------------------------------------------------
 

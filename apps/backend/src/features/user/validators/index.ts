@@ -1,13 +1,9 @@
 // External libs
-import z from 'zod';
-
 // ---- Prisma
-
 import { $Enums, UserRole } from '@prisma/client';
-
 // ---- Shared utilities
-
 import { uuidValidiation } from '@validator/common';
+import z from 'zod';
 
 // ---------------------------------------------------------------------------
 // User Validators

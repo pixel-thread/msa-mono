@@ -1,5 +1,5 @@
-import { prisma } from '@lib/prisma';
 import { NotFoundError } from '@errors';
+import { prisma } from '@lib/prisma';
 
 /** Props for finding a unique meeting. */
 interface FindUniqueMeetingProps {

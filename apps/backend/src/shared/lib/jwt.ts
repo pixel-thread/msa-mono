@@ -1,6 +1,6 @@
-import { SignJWT, jwtVerify, JWTPayload, decodeJwt } from 'jose';
-
 import { env } from '@src/env';
+import { decodeJwt,JWTPayload, jwtVerify, SignJWT } from 'jose';
+
 import { UnauthorizedError } from '../errors';
 
 /** Payload carried by an access JWT. */

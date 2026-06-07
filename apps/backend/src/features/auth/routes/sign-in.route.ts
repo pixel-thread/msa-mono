@@ -1,25 +1,20 @@
-import { Request, NextFunction, Response } from 'express';
-import type { RequestHandler } from 'express';
-
-import { validate } from '@lib/validate';
-import { success } from '@utils/responses';
-import { asyncHandler } from '@utils/async-handler';
-import { logger } from '@src/shared/logger';
-import { env } from '@src/env';
-
-import { verifyPassword, hashToken, generateOTP } from '@lib/password';
-import { signAccessToken, signRefreshToken, signMfaTempToken } from '@lib/jwt';
-import { sendVerificationEmail } from '@lib/email';
-
 import { ForbiddenError, UnauthorizedError } from '@errors';
-
-import { getUserFirst } from '@services/user/get-user-first';
-import { updateUser } from '@feature/user/services';
-
 import { createRefreshToken } from '@feature/auth/services/create-refresh-token';
 import { createVerificationCode } from '@feature/auth/services/create-verification-code';
-
 import { SignInSchema } from '@feature/auth/validators';
+import { updateUser } from '@feature/user/services';
+import { sendVerificationEmail } from '@lib/email';
+import { signAccessToken, signMfaTempToken,signRefreshToken } from '@lib/jwt';
+import { generateOTP,hashToken, verifyPassword } from '@lib/password';
+import { validate } from '@lib/validate';
+import { getUserFirst } from '@services/user/get-user-first';
+import { env } from '@src/env';
+import { logger } from '@src/shared/logger';
+import { asyncHandler } from '@utils/async-handler';
+import { success } from '@utils/responses';
+import type { RequestHandler } from 'express';
+import { NextFunction, Request, Response } from 'express';
+
 import { mockAsyncVerification } from '../utils/mock-async-verification';
 
 /**

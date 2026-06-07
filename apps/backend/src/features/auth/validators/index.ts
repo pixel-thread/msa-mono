@@ -1,5 +1,5 @@
-import { passwordValidation } from '@validator/auth';
 import { ALLOW_REGEX } from '@src/shared/constants';
+import { passwordValidation } from '@validator/auth';
 import z from 'zod';
 
 // ---- Sign Up ----

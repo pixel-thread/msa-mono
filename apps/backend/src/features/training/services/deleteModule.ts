@@ -1,9 +1,8 @@
 // ---- External libs ----
-import { AuditAction } from '@prisma/client';
-
 // ---- Shared utilities ----
 import { NotFoundError } from '@errors';
 import { prisma } from '@lib/prisma';
+import { AuditAction } from '@prisma/client';
 import { logAction } from '@services/audit-logs';
 
 // ---- Service ----

@@ -1,25 +1,19 @@
-import { Request, NextFunction, Response } from 'express';
-import type { RequestHandler } from 'express';
-
-import { validate } from '@lib/validate';
-import { success } from '@utils/responses';
-import { asyncHandler } from '@utils/async-handler';
-import { logger } from '@src/shared/logger';
-import { env } from '@src/env';
-
-import { verifyRefreshToken, signAccessToken, signRefreshToken } from '@lib/jwt';
-import { hashToken } from '@lib/password';
-
 import { UnauthorizedError } from '@errors';
-
-import { cacheClient } from '@lib/cache';
-
-import { getUniqueRefreshToken } from '@feature/auth/services/get-unique-refresh-token';
-import { updateRefreshToken } from '@feature/auth/services/update-refresh-token';
 import { createRefreshToken } from '@feature/auth/services/create-refresh-token';
+import { getUniqueRefreshToken } from '@feature/auth/services/get-unique-refresh-token';
 import { revokedRefreshTokens } from '@feature/auth/services/revoked-refresh-tokens';
-
+import { updateRefreshToken } from '@feature/auth/services/update-refresh-token';
 import { RefreshTokenSchema } from '@feature/auth/validators';
+import { cacheClient } from '@lib/cache';
+import { signAccessToken, signRefreshToken,verifyRefreshToken } from '@lib/jwt';
+import { hashToken } from '@lib/password';
+import { validate } from '@lib/validate';
+import { env } from '@src/env';
+import { logger } from '@src/shared/logger';
+import { asyncHandler } from '@utils/async-handler';
+import { success } from '@utils/responses';
+import type { RequestHandler } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
 /**
  * POST /api/auth/refresh — Rotate access and refresh tokens

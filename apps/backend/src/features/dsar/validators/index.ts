@@ -4,15 +4,11 @@
 
 // ---- External Libraries
 
-import { z } from 'zod';
-
 // ---- Prisma Types
-
 import { DsarRequestType, DsarStatus } from '@prisma/client';
-
 // ---- Shared Validators
-
 import { pageNumberValidation } from '@validator/common';
+import { z } from 'zod';
 
 // ---- Submit DSAR Schema
 

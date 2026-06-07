@@ -1,42 +1,38 @@
 // ---------------------------------------------------------------------------
 // External libs
 // ---------------------------------------------------------------------------
-import { Request, NextFunction, Response } from 'express';
-import type { RequestHandler } from 'express';
-import { z } from 'zod';
-
-// ---------------------------------------------------------------------------
-// Shared utilities
-// ---------------------------------------------------------------------------
-import { validate } from '@lib/validate';
-import { success } from '@utils/responses';
 import { ValidationError } from '@errors';
-import { withRole } from '@utils/with-role';
-import { asyncHandler } from '@utils/async-handler';
-import { logger } from '@src/shared/logger';
-import { getAssociation } from '@services/association/get-association';
-
-// ---------------------------------------------------------------------------
-// Prisma
-// ---------------------------------------------------------------------------
-import { UserRole } from '@prisma/client';
-
 // ---------------------------------------------------------------------------
 // Services
 // ---------------------------------------------------------------------------
 import {
   createPlan,
-  setDefaultPlan,
-  updatePlan,
-  softDeletePlan,
   getPlan,
   getPlans,
+  setDefaultPlan,
+  softDeletePlan,
+  updatePlan,
 } from '@feature/subscriptions/services';
-
 // ---------------------------------------------------------------------------
 // Validators / Types
 // ---------------------------------------------------------------------------
 import { CreateSubscriptionPlanSchema } from '@feature/subscriptions/validators';
+// ---------------------------------------------------------------------------
+// Shared utilities
+// ---------------------------------------------------------------------------
+import { validate } from '@lib/validate';
+// ---------------------------------------------------------------------------
+// Prisma
+// ---------------------------------------------------------------------------
+import { UserRole } from '@prisma/client';
+import { getAssociation } from '@services/association/get-association';
+import { logger } from '@src/shared/logger';
+import { asyncHandler } from '@utils/async-handler';
+import { success } from '@utils/responses';
+import { withRole } from '@utils/with-role';
+import type { RequestHandler } from 'express';
+import { NextFunction, Request, Response } from 'express';
+import { z } from 'zod';
 
 // ---- Schemas ----------------------------------------------------------------
 

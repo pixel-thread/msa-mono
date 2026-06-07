@@ -1,4 +1,5 @@
 import { Writable } from 'stream';
+
 import { createLogs } from '../services';
 
 const PINO_LEVELS: Record<number, string> = {

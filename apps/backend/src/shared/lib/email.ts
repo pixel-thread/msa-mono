@@ -1,7 +1,6 @@
-import { Resend } from 'resend';
-
 import { env } from '@src/env';
 import { logger } from '@src/shared/logger';
+import { Resend } from 'resend';
 
 const resend = env.RESEND_API_KEY ? new Resend(env.RESEND_API_KEY) : null;
 

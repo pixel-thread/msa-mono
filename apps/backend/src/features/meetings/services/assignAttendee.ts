@@ -1,10 +1,10 @@
-import { prisma } from '@lib/prisma';
-import { NotFoundError, ConflictError, ForbiddenError } from '@errors';
-import { $Enums, AttendeeRole } from '@prisma/client';
+import { ConflictError, ForbiddenError,NotFoundError } from '@errors';
 import { ExpoNotificationService } from '@lib/expo';
-import { logger } from '@src/shared/logger';
-import { EXPO_ROUTES } from '@src/shared/constants/expo-route';
+import { prisma } from '@lib/prisma';
+import { $Enums, AttendeeRole } from '@prisma/client';
 import { createNotification } from '@services/notification';
+import { EXPO_ROUTES } from '@src/shared/constants/expo-route';
+import { logger } from '@src/shared/logger';
 
 /** Props for assigning an attendee to a meeting. */
 interface AssignAttendeeProps {

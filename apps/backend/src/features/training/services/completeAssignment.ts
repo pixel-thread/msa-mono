@@ -1,10 +1,9 @@
 // ---- External libs ----
-import { AuditAction, Prisma, TrainingAssignmentStatus } from '@prisma/client';
-
+import { BadRequestError } from '@errors';
 // ---- Shared utilities ----
 import { prisma } from '@lib/prisma';
+import { AuditAction, Prisma, TrainingAssignmentStatus } from '@prisma/client';
 import { PAGE_SIZE } from '@src/shared/constants';
-import { BadRequestError } from '@errors';
 
 // ---- Interfaces ----
 

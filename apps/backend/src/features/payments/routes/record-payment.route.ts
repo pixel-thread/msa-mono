@@ -6,18 +6,17 @@
 //            outstanding contribution periods (FIFO) and creates ledger entries.
 // ---------------------------------------------------------------------------
 
-import { Request, NextFunction, Response } from 'express';
-import type { RequestHandler } from 'express';
-
-import { validate } from '@lib/validate';
-import { success } from '@utils/responses';
-import { logger } from '@src/shared/logger';
-import { UserRole } from '@prisma/client';
-import { withRole } from '@utils/with-role';
-import { RecordManualPaymentSchema } from '@feature/payments/validators';
 import { recordManualPayment } from '@feature/payments/services/payment.service';
-import { asyncHandler } from '@utils/async-handler';
+import { RecordManualPaymentSchema } from '@feature/payments/validators';
+import { validate } from '@lib/validate';
+import { UserRole } from '@prisma/client';
 import { getAssociation } from '@services/association/get-association';
+import { logger } from '@src/shared/logger';
+import { asyncHandler } from '@utils/async-handler';
+import { success } from '@utils/responses';
+import { withRole } from '@utils/with-role';
+import type { RequestHandler } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
 export const recordPayment: RequestHandler[] = [
   // Step 1: Validate request body

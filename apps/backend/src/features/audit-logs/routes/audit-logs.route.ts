@@ -3,23 +3,20 @@
 // ---- Security: Requires SECRETARY role or higher (DPO, PRESIDENT, SUPER_ADMIN)
 
 // External libs
-import { Request, NextFunction, Response } from 'express';
-import type { RequestHandler } from 'express';
-
-// Shared utilities
-import { success } from '@utils/responses';
 import { ForbiddenError } from '@errors';
-import { hasHighRoleAccess } from '@utils/has-high-role';
-import { logger } from '@src/shared/logger';
-import { getAssociation } from '@services/association/get-association';
-import { withRole } from '@utils/with-role';
-import { asyncHandler } from '@utils/async-handler';
-
-// Prisma
-import { UserRole } from '@prisma/client';
-
 // Services
 import { findAuditLogs, getAuditLogStats } from '@feature/audit-logs/services';
+// Prisma
+import { UserRole } from '@prisma/client';
+import { getAssociation } from '@services/association/get-association';
+import { logger } from '@src/shared/logger';
+import { asyncHandler } from '@utils/async-handler';
+import { hasHighRoleAccess } from '@utils/has-high-role';
+// Shared utilities
+import { success } from '@utils/responses';
+import { withRole } from '@utils/with-role';
+import type { RequestHandler } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
 // Types
 import { AuditLogQuery } from '../types';

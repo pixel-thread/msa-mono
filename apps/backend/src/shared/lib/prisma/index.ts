@@ -1,8 +1,7 @@
 import { PrismaPg } from '@prisma/adapter-pg';
 import { PrismaClient } from '@prisma/client';
-import { Pool } from 'pg';
-
 import { env } from '@src/env';
+import { Pool } from 'pg';
 
 /** Creates a new Prisma client instance wired to a pg-pool adapter. */
 const createPrisma = () => {

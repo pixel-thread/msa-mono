@@ -5,12 +5,11 @@
  * @module features/announcements/services
  */
 
+import { ExpoNotificationService } from '@lib/expo';
 import { prisma } from '@lib/prisma';
 import { NotificationType, Prisma } from '@prisma/client';
-
-import { ExpoNotificationService } from '@lib/expo';
-import { EXPO_ROUTES } from '@src/shared/constants/expo-route';
 import { createNotification } from '@services/notification';
+import { EXPO_ROUTES } from '@src/shared/constants/expo-route';
 import { logger } from '@src/shared/logger';
 
 /**

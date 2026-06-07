@@ -1,19 +1,14 @@
-import { Request, NextFunction, Response } from 'express';
-import type { RequestHandler } from 'express';
-
-import { z } from 'zod';
-
-import { validate } from '@lib/validate';
-import { success } from '@utils/responses';
-import { asyncHandler } from '@utils/async-handler';
-import { logger } from '@src/shared/logger';
-
-import { verifyPassword } from '@lib/password';
-
 import { BadRequestError, UnauthorizedError } from '@errors';
-
 import { findFirstMember } from '@feature/members/services/findFirstMember';
 import { updateMember } from '@feature/members/services/updateMember';
+import { verifyPassword } from '@lib/password';
+import { validate } from '@lib/validate';
+import { logger } from '@src/shared/logger';
+import { asyncHandler } from '@utils/async-handler';
+import { success } from '@utils/responses';
+import type { RequestHandler } from 'express';
+import { NextFunction, Request, Response } from 'express';
+import { z } from 'zod';
 
 /** Schema for disabling MFA — requires the user's current password. */
 const DisableMfaSchema = z.object({ password: z.string().min(1, 'Password is required') });

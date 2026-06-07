@@ -1,13 +1,13 @@
-import { RequestHandler } from 'express';
-import { success } from '@utils/responses';
 import { ForbiddenError } from '@errors';
-import { UserRole } from '@prisma/client';
 import { deleteMeeting } from '@feature/meetings/services';
-import { hasHighRoleAccess } from '@utils/has-high-role';
-import { logger } from '@src/shared/logger';
+import { UserRole } from '@prisma/client';
 import { getAssociation } from '@services/association/get-association';
-import { withRole } from '@utils/with-role';
+import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
+import { hasHighRoleAccess } from '@utils/has-high-role';
+import { success } from '@utils/responses';
+import { withRole } from '@utils/with-role';
+import { RequestHandler } from 'express';
 
 /** DELETE /api/meetings/[meetingId] - Delete a meeting. */
 export const deleteMeetingHandler: RequestHandler[] = [

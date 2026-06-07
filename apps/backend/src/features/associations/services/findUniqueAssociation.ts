@@ -3,8 +3,8 @@
  * @description This service retrieves a single association by its unique identifier.
  */
 
-import { Prisma } from '@prisma/client';
 import { prisma } from '@lib/prisma';
+import { Prisma } from '@prisma/client';
 
 /**
  * Parameters for finding a unique association.

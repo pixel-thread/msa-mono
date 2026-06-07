@@ -1,15 +1,12 @@
 // External libs
+// ---- Shared middleware
+import { auth } from '@src/middleware/auth';
 import { Router } from 'express';
 
-// ---- Shared middleware
-
-import { auth } from '@src/middleware/auth';
-
-// ---- Route handlers
-
-import { getProfile, updateProfile } from './profile.route';
+import { getInvoice,listInvoices } from './invoices.route';
 import { toggleMfa } from './mfa.route';
-import { listInvoices, getInvoice } from './invoices.route';
+// ---- Route handlers
+import { getProfile, updateProfile } from './profile.route';
 
 // ---------------------------------------------------------------------------
 // User router

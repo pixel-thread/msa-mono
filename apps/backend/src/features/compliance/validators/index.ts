@@ -1,3 +1,3 @@
 /** Compliance validators barrel export. */
-export * from './compliance';
 export * from './complaints';
+export * from './compliance';

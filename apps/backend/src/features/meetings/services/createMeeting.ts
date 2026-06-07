@@ -1,5 +1,5 @@
 import { prisma } from '@lib/prisma';
-import { MeetingType, MeetingStatus } from '@prisma/client';
+import { MeetingStatus,MeetingType } from '@prisma/client';
 
 /** Agenda item data for meeting creation. */
 interface AgendaItemData {

@@ -1,24 +1,17 @@
 // External libs
-import { Request, NextFunction, Response } from 'express';
-import type { RequestHandler } from 'express';
-
+import { ValidationError } from '@errors';
+import { validate } from '@lib/validate';
+// ---- Prisma
+import { Prisma } from '@prisma/client';
+// ---- Services
+import { createLogs, createLogsBatch } from '@services/logs';
 // Shared utilities
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
-import { validate } from '@lib/validate';
-import { ValidationError } from '@errors';
-
-// ---- Prisma
-
-import { Prisma } from '@prisma/client';
-
-// ---- Services
-
-import { createLogs, createLogsBatch } from '@services/logs';
-
 // ---- Validators / Types
-
-import { LogIngestSchema, LogBatchSchema } from '@validator/logs';
+import { LogBatchSchema,LogIngestSchema } from '@validator/logs';
+import type { RequestHandler } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
 // ---------------------------------------------------------------------------
 // POST /api/logs

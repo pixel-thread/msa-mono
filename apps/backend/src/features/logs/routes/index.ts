@@ -2,7 +2,6 @@
 import { Router } from 'express';
 
 // ---- Route handlers
-
 import { postLog, postLogBatch } from './logs.route';
 
 // ---------------------------------------------------------------------------

@@ -1,25 +1,24 @@
 // ---------------------------------------------------------------------------
 // External libs
 // ---------------------------------------------------------------------------
-import { Router } from 'express';
-
 // ---------------------------------------------------------------------------
 // Middleware
 // ---------------------------------------------------------------------------
 import { auth } from '@src/middleware/auth';
+import { Router } from 'express';
 
+import { addRole, removeRole } from './change-role.route';
+import { deleteMember } from './delete-member.route';
+import { getMember } from './get-member.route';
 // ---------------------------------------------------------------------------
 // Route handlers — Members
 // ---------------------------------------------------------------------------
 import { listMembers } from './list-members.route';
-import { getMember } from './get-member.route';
-import { updateMemberRoute } from './update-member.route';
-import { deleteMember } from './delete-member.route';
-import { updateStatus } from './update-status.route';
-import { suspendMember } from './suspend.route';
-import { addRole, removeRole } from './change-role.route';
 import { getMemberLedger } from './member-ledger.route';
 import { onboarding } from './onboarding.route';
+import { suspendMember } from './suspend.route';
+import { updateMemberRoute } from './update-member.route';
+import { updateStatus } from './update-status.route';
 
 // ---------------------------------------------------------------------------
 // Router — /api/members

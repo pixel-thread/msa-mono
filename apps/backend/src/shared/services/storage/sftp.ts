@@ -1,8 +1,8 @@
 import { env } from '@src/env';
 import { logger } from '@src/shared/logger';
 import { StorageProvider, UploadParams, UploadResult } from '@src/shared/types/storage';
-import SftpClient from 'ssh2-sftp-client';
 import path from 'node:path';
+import SftpClient from 'ssh2-sftp-client';
 
 /** Returns the SFTP connection config from env vars. */
 function getSftpConfig() {

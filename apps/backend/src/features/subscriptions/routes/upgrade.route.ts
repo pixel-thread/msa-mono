@@ -1,27 +1,25 @@
-import type { RequestHandler } from 'express';
-
-// ---------------------------------------------------------------------------
-// Shared utilities
-// ---------------------------------------------------------------------------
-import { validate } from '@lib/validate';
-import { success } from '@utils/responses';
 import { ValidationError } from '@errors';
-import { withRole } from '@utils/with-role';
-import { asyncHandler } from '@utils/async-handler';
-import { logger } from '@src/shared/logger';
-import { getAssociation } from '@services/association/get-association';
-
-// ---------------------------------------------------------------------------
-// Prisma
-// ---------------------------------------------------------------------------
-import { UserRole } from '@prisma/client';
-
 // ---------------------------------------------------------------------------
 // Services
 // ---------------------------------------------------------------------------
 import { changePlan } from '@feature/subscriptions/services';
-import { UpgradeSubscriptionSchema } from '../validators';
+// ---------------------------------------------------------------------------
+// Shared utilities
+// ---------------------------------------------------------------------------
+import { validate } from '@lib/validate';
+// ---------------------------------------------------------------------------
+// Prisma
+// ---------------------------------------------------------------------------
+import { UserRole } from '@prisma/client';
+import { getAssociation } from '@services/association/get-association';
+import { logger } from '@src/shared/logger';
 import { hasHighRoleAccess } from '@utils';
+import { asyncHandler } from '@utils/async-handler';
+import { success } from '@utils/responses';
+import { withRole } from '@utils/with-role';
+import type { RequestHandler } from 'express';
+
+import { UpgradeSubscriptionSchema } from '../validators';
 
 // ---- POST /api/subscriptions/upgrade -----------------------------------------
 /** @desc  Upgrade the current user's subscription to a new plan

@@ -1,23 +1,19 @@
 // ---- External libs ----
-import { Request, NextFunction, Response } from 'express';
-import type { RequestHandler } from 'express';
-
-// ---- Shared utilities ----
-import { validate } from '@lib/validate';
-import { success } from '@utils/responses';
-import { logger } from '@src/shared/logger';
-import { getAssociation } from '@services/association/get-association';
-import { withRole } from '@utils/with-role';
-import { asyncHandler } from '@utils/async-handler';
-
-// ---- Prisma ----
-import { UserRole } from '@prisma/client';
-
 // ---- Services ----
-import { findManyCompletions, adminRecordCompletion } from '@feature/training/services';
-
+import { adminRecordCompletion,findManyCompletions } from '@feature/training/services';
 // ---- Validators ----
 import { AdminRecordCompletionSchema } from '@feature/training/validators/training';
+// ---- Shared utilities ----
+import { validate } from '@lib/validate';
+// ---- Prisma ----
+import { UserRole } from '@prisma/client';
+import { getAssociation } from '@services/association/get-association';
+import { logger } from '@src/shared/logger';
+import { asyncHandler } from '@utils/async-handler';
+import { success } from '@utils/responses';
+import { withRole } from '@utils/with-role';
+import type { RequestHandler } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
 // ---------------------------------------------------------------------------
 // GET /training/completions

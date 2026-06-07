@@ -4,26 +4,23 @@
 
 // ---- External Libraries
 
+// ---- Middleware
+import { auth } from '@src/middleware/auth';
 import { Router } from 'express';
 
-// ---- Middleware
-
-import { auth } from '@src/middleware/auth';
-
-// ---- Route Handlers
-
-import { listTickets } from './list-tickets.route';
-import { submitDsar } from './submit.route';
-import { listMyTickets, getMyTicket } from './my-tickets.route';
-import {
-  getTicket,
-  deleteTicket,
-  respondToTicket,
-  assignTicket,
-  rejectTicket,
-} from './ticket-detail.route';
 import { listAdmins } from './admins.route';
+// ---- Route Handlers
+import { listTickets } from './list-tickets.route';
+import { getMyTicket,listMyTickets } from './my-tickets.route';
 import { getSlaReport } from './sla-report.route';
+import { submitDsar } from './submit.route';
+import {
+  assignTicket,
+  deleteTicket,
+  getTicket,
+  rejectTicket,
+  respondToTicket,
+} from './ticket-detail.route';
 
 // ---- Router Setup
 

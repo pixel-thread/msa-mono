@@ -5,9 +5,8 @@
  * @module features/announcements/services
  */
 
-import { prisma } from '@lib/prisma';
-
 import { NotFoundError } from '@errors';
+import { prisma } from '@lib/prisma';
 
 /**
  * Props for marking an announcement as read.

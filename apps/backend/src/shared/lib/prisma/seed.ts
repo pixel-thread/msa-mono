@@ -1,32 +1,31 @@
-import * as crypto from 'crypto';
+import { PrismaPg } from '@prisma/adapter-pg';
 import {
-  PrismaClient,
-  Prisma,
-  UserRole,
-  UserStatus,
-  MeetingType,
-  MeetingStatus,
-  AttendeeRole,
-  RsvpStatus,
-  DsarRequestType,
-  DsarStatus,
-  ConsentPurpose,
-  ConsentStatus,
-  PaymentStatus,
-  PaymentGateway,
-  PaymentMethod,
-  AnnouncementStatus,
   AnnouncementPriority,
-  NotificationType,
+  AnnouncementStatus,
+  AttendeeRole,
   ComplaintCategory,
   ComplaintStatus,
   ComplianceCheckStatus,
+  ConsentPurpose,
+  ConsentStatus,
+  DsarRequestType,
+  DsarStatus,
+  MeetingStatus,
+  MeetingType,
+  NotificationType,
+  PaymentGateway,
+  PaymentMethod,
+  PaymentStatus,
+  Prisma,
+  PrismaClient,
+  RsvpStatus,
   TrainingAssignmentStatus,
+  UserRole,
+  UserStatus,
 } from '@prisma/client';
-
-import { PrismaPg } from '@prisma/adapter-pg';
-import { Pool } from 'pg';
 import bcrypt from 'bcryptjs';
+import * as crypto from 'crypto';
+import { Pool } from 'pg';
 
 // -----------------------------------------------------------------------------
 // PRISMA

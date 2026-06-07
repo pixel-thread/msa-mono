@@ -1,8 +1,8 @@
-import multer, { FileFilterCallback } from 'multer';
 import { BadRequestError } from '@errors';
+import { BLOCK_FILE_EXT,MAX_IMAGE_SIZE } from '@src/shared/constants';
 import type { Request } from 'express';
+import multer, { FileFilterCallback } from 'multer';
 import path from 'node:path';
-import { MAX_IMAGE_SIZE, BLOCK_FILE_EXT } from '@src/shared/constants';
 
 /**
  * Multer middleware for handling file uploads.

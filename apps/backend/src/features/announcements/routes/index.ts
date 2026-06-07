@@ -6,28 +6,24 @@
  * @module features/announcements/routes
  */
 
-import { Router } from 'express';
-
-// Middleware
-import { auth } from '@middleware/auth';
-
+// Route handlers — single announcement operations
+import {
+  deleteAnnouncement,
+  getAnnouncement,
+  patchAnnouncement,
+  putAnnouncement,
+} from '@feature/announcements/routes/announcement-detail.route';
 // Route handlers — announcements CRUD
 import {
   getAnnouncements,
   postAnnouncement,
 } from '@feature/announcements/routes/announcements.route';
-
-// Route handlers — single announcement operations
-import {
-  getAnnouncement,
-  putAnnouncement,
-  deleteAnnouncement,
-  patchAnnouncement,
-} from '@feature/announcements/routes/announcement-detail.route';
-
 // Route handlers — read receipts & image uploads
 import { postMarkRead } from '@feature/announcements/routes/mark-read.route';
 import { postUploadImage } from '@feature/announcements/routes/upload-image.route';
+// Middleware
+import { auth } from '@middleware/auth';
+import { Router } from 'express';
 
 /**
  * Express router for announcements.

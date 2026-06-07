@@ -1,24 +1,21 @@
-import { Router } from 'express';
 import { auth } from '@src/middleware';
+import { Router } from 'express';
 
+import { recordContributionHandler } from './contribution-payment.route';
+import {
+  generateContributionsHandler,
+  generateUserContributionsHandler,
+  getContributionHandler,
+  listContributionsHandler,
+  waiveContributionHandler,
+} from './contributions.route';
 import {
   approveDeclarationsHandler,
   createUserDeclarationHandler,
-  listDeclarationsHandler,
   getDeclarationHandler,
+  listDeclarationsHandler,
   rejectDeclarationsHandler,
 } from './declarations.route';
-
-import { recordContributionHandler } from './contribution-payment.route';
-
-import {
-  listContributionsHandler,
-  generateContributionsHandler,
-  waiveContributionHandler,
-  getContributionHandler,
-  generateUserContributionsHandler,
-} from './contributions.route';
-
 import { listUserContributionsHandler } from './user-contributions.route';
 
 const router: Router = Router();

@@ -2,11 +2,10 @@
 import { Router } from 'express';
 
 // ---- Route handlers
-
 import {
-  postRegisterPushToken,
-  postLinkNotification,
   patchNotificationStatus,
+  postLinkNotification,
+  postRegisterPushToken,
 } from './notification-actions.route';
 
 // ---------------------------------------------------------------------------

@@ -1,28 +1,21 @@
 // External libs
-import { Request, NextFunction, Response } from 'express';
-import type { RequestHandler } from 'express';
-import z from 'zod';
-
+import { ForbiddenError, UnauthorizedError } from '@errors';
+// ---- Services
+import { getUser, updateUser } from '@feature/user/services';
+// ---- Validators / Types
+import { UpdateUserSchema } from '@feature/user/validators';
+import { prisma } from '@lib/prisma';
+import { validate } from '@lib/validate';
+// ---- Prisma
+import { UserRole } from '@prisma/client';
+import { logger } from '@src/shared/logger';
 // Shared utilities
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
-import { validate } from '@lib/validate';
-import { prisma } from '@lib/prisma';
-import { ForbiddenError, UnauthorizedError } from '@errors';
-import { logger } from '@src/shared/logger';
 import { withRole } from '@utils/with-role';
-
-// ---- Prisma
-
-import { UserRole } from '@prisma/client';
-
-// ---- Services
-
-import { getUser, updateUser } from '@feature/user/services';
-
-// ---- Validators / Types
-
-import { UpdateUserSchema } from '@feature/user/validators';
+import type { RequestHandler } from 'express';
+import { NextFunction, Request, Response } from 'express';
+import z from 'zod';
 
 // ---------------------------------------------------------------------------
 // GET /api/user

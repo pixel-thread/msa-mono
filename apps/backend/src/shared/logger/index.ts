@@ -1,5 +1,6 @@
-import pino from 'pino';
 import { env } from '@src/env';
+import pino from 'pino';
+
 import { createPostgresTransport } from './postgres-transport';
 
 const isProduction = env.NODE_ENV === 'production';

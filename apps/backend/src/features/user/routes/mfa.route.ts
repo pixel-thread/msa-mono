@@ -1,16 +1,13 @@
 // External libs
-import { Request, NextFunction, Response } from 'express';
-import type { RequestHandler } from 'express';
-
+import { UnauthorizedError } from '@errors';
+// ---- Services
+import { getUser, updateUser } from '@feature/user/services';
+import { logger } from '@src/shared/logger';
 // Shared utilities
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
-import { UnauthorizedError } from '@errors';
-import { logger } from '@src/shared/logger';
-
-// ---- Services
-
-import { getUser, updateUser } from '@feature/user/services';
+import type { RequestHandler } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
 // ---------------------------------------------------------------------------
 // POST /api/user/mfa

@@ -1,22 +1,22 @@
-import { Request, NextFunction, Response } from 'express';
-import type { RequestHandler } from 'express';
-import { validate } from '@lib/validate';
-import { success } from '@utils/responses';
-import { UnauthorizedError, ForbiddenError, NotFoundError, BadRequestError } from '@errors';
-import { prisma } from '@lib/prisma';
-import { UserRole, DsarStatus } from '@prisma/client';
-import { z } from 'zod';
+import { BadRequestError,ForbiddenError, NotFoundError, UnauthorizedError } from '@errors';
 import {
-  findUniqueDsarTicket,
-  deleteDsarTicket,
-  respondToDsarTicket,
   assignDsarTicket,
+  deleteDsarTicket,
+  findUniqueDsarTicket,
+  respondToDsarTicket,
 } from '@feature/dsar/services';
 import { RespondDsarSchema } from '@feature/dsar/validators';
+import { prisma } from '@lib/prisma';
+import { validate } from '@lib/validate';
+import { DsarStatus,UserRole } from '@prisma/client';
 import { getUniqueUser } from '@services/user/get-unique-user';
-import { hasHighRoleAccess } from '@utils/has-high-role';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
+import { hasHighRoleAccess } from '@utils/has-high-role';
+import { success } from '@utils/responses';
+import type { RequestHandler } from 'express';
+import { NextFunction, Request, Response } from 'express';
+import { z } from 'zod';
 
 /** Schema for ticket ID path parameter. */
 const ParamsSchema = z.object({ ticketId: z.string().uuid() });

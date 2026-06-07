@@ -1,21 +1,15 @@
-import { Request, NextFunction, Response } from 'express';
-import type { RequestHandler } from 'express';
-
-import { validate } from '@lib/validate';
-import { success } from '@utils/responses';
-import { asyncHandler } from '@utils/async-handler';
-import { logger } from '@src/shared/logger';
-
-import { hashPassword, validatePasswordStrength, hashToken } from '@lib/password';
-
 import { UnauthorizedError, ValidationError } from '@errors';
-
+import { deleteRefreshTokens } from '@feature/auth/services/delete-refresh-tokens';
+import { ResetPasswordInput, ResetPasswordSchema } from '@feature/auth/validators';
 import { findFirstMember } from '@feature/members/services/findFirstMember';
 import { updateUser } from '@feature/user/services';
-
-import { deleteRefreshTokens } from '@feature/auth/services/delete-refresh-tokens';
-
-import { ResetPasswordInput, ResetPasswordSchema } from '@feature/auth/validators';
+import { hashPassword, hashToken,validatePasswordStrength } from '@lib/password';
+import { validate } from '@lib/validate';
+import { logger } from '@src/shared/logger';
+import { asyncHandler } from '@utils/async-handler';
+import { success } from '@utils/responses';
+import type { RequestHandler } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
 /**
  * POST /api/auth/reset-password — Complete password reset with token

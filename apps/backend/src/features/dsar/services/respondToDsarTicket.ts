@@ -1,5 +1,5 @@
 import { prisma } from '@lib/prisma';
-import { DsarStatus, AuditAction } from '@prisma/client';
+import { AuditAction,DsarStatus } from '@prisma/client';
 
 /** Parameters for responding to a DSAR ticket. */
 interface RespondToDsarTicketProps {

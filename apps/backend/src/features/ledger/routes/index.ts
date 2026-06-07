@@ -2,30 +2,27 @@
 // External libs
 // ---------------------------------------------------------------------------
 
-import { Router } from 'express';
-
 // ---------------------------------------------------------------------------
 // Shared utilities
 // ---------------------------------------------------------------------------
-
 import { auth } from '@middleware/auth';
+import { Router } from 'express';
 
 // ---------------------------------------------------------------------------
 // Route handlers
 // ---------------------------------------------------------------------------
-
 import {
-  listAccounts,
   createAccountHandler,
   deleteAccountHandler,
-  updateAccountHandler,
-  seedAccountsHandler,
   getAccountHandler,
+  listAccounts,
+  seedAccountsHandler,
+  updateAccountHandler,
 } from './accounts.route';
-import { listEntries, createEntry, approveEntryHandler, rejectEntryHandler } from './entries.route';
-import { getLedgerSummary } from './summary.route';
+import { approveEntryHandler, createEntry, listEntries, rejectEntryHandler } from './entries.route';
 import { getMemberLedger } from './member-ledger.route';
-import { getTrialBalanceHandler, getIncomeStatementHandler } from './reports.route';
+import { getIncomeStatementHandler,getTrialBalanceHandler } from './reports.route';
+import { getLedgerSummary } from './summary.route';
 
 // ---------------------------------------------------------------------------
 // Router setup – all routes require authentication

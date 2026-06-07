@@ -1,6 +1,7 @@
 import js from '@eslint/js';
-import tseslint from 'typescript-eslint';
+import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import globals from 'globals';
+import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
   {
@@ -10,6 +11,17 @@ export default tseslint.config(
   js.configs.recommended,
 
   ...tseslint.configs.recommended,
+
+  {
+    plugins: {
+      'simple-import-sort': simpleImportSort,
+    },
+
+    rules: {
+      'simple-import-sort/imports': 'error',
+      'simple-import-sort/exports': 'error',
+    },
+  },
 
   {
     languageOptions: {
@@ -25,6 +37,19 @@ export default tseslint.config(
         'warn',
         {
           argsIgnorePattern: '^_',
+        },
+      ],
+
+      'simple-import-sort/imports': [
+        'error',
+        {
+          groups: [
+            ['^react$', '^@?\\w'], // packages
+            ['^@/'], // aliases
+            ['^\\.\\.(?!/?$)', '^\\.\\./?$'], // parent imports
+            ['^\\./(?=.*/)(?!/?$)', '^\\.(?!/?$)', '^\\./?$'], // sibling imports
+            ['^.+\\.?(css)$'], // styles
+          ],
         },
       ],
 

@@ -1,6 +1,6 @@
 // ---- External libs ----
-import { z } from 'zod';
 import { UserRole } from '@prisma/client';
+import { z } from 'zod';
 
 // ---- Module schemas ----
 

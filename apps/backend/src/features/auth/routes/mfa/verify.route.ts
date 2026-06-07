@@ -1,22 +1,16 @@
-import { Request, NextFunction, Response } from 'express';
-import type { RequestHandler } from 'express';
-
-import { z } from 'zod';
-
-import { validate } from '@lib/validate';
-import { success } from '@utils/responses';
-import { asyncHandler } from '@utils/async-handler';
-import { logger } from '@src/shared/logger';
-import { env } from '@src/env';
-
-import { hashToken } from '@lib/password';
-
 import { TooManyRequestsError, UnauthorizedError } from '@errors';
-
-import { updateMember } from '@feature/members/services/updateMember';
-
 import { getVerificationCodeFirst } from '@feature/auth/services/get-verification-code-first';
 import { updateVerificationCode } from '@feature/auth/services/update-verification-code';
+import { updateMember } from '@feature/members/services/updateMember';
+import { hashToken } from '@lib/password';
+import { validate } from '@lib/validate';
+import { env } from '@src/env';
+import { logger } from '@src/shared/logger';
+import { asyncHandler } from '@utils/async-handler';
+import { success } from '@utils/responses';
+import type { RequestHandler } from 'express';
+import { NextFunction, Request, Response } from 'express';
+import { z } from 'zod';
 
 /** Schema for verifying MFA — expects a 6-digit code. */
 const VerifyMfaSchema = z.object({ code: z.string().length(6, 'Code must be 6 digits') });

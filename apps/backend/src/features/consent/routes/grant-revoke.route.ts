@@ -3,25 +3,21 @@
 // ---- Security: Authenticated user (any role)
 
 // External libs
-import { Request, NextFunction, Response } from 'express';
-import type { RequestHandler } from 'express';
-
-// Shared utilities
-import { validate } from '@lib/validate';
-import { success } from '@utils/responses';
-import { UnauthorizedError, ForbiddenError, BadRequestError } from '@errors';
-import { logger } from '@src/shared/logger';
-import { asyncHandler } from '@utils/async-handler';
-
-// Prisma
-import { prisma } from '@lib/prisma';
-import { ConsentStatus } from '@prisma/client';
-
+import { BadRequestError,ForbiddenError, UnauthorizedError } from '@errors';
 // Services
 import { ConsentService } from '@feature/consent/services/consent.service';
-
 // Validators
 import { ConsentUpdateSchema } from '@feature/consent/validators/consent.validators';
+// Prisma
+import { prisma } from '@lib/prisma';
+// Shared utilities
+import { validate } from '@lib/validate';
+import { ConsentStatus } from '@prisma/client';
+import { logger } from '@src/shared/logger';
+import { asyncHandler } from '@utils/async-handler';
+import { success } from '@utils/responses';
+import type { RequestHandler } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
 // ---- Helper: getAssociation
 // Resolves the user's association from the request context.

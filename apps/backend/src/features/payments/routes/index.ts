@@ -5,41 +5,37 @@
 // and providers' :providerId routes before generic :paymentId routes.
 // ---------------------------------------------------------------------------
 
-import { Router } from 'express';
 import { auth } from '@middleware/auth';
+import { Router } from 'express';
 
+// ---- Reports ----
+import { collectionsReport } from './collections-report.route';
+// ---- Razorpay Flow ----
+import { createOrder } from './create-order.route';
+import { getPayment } from './get-payment.route';
+import { getReceipt } from './get-receipt.route';
 // ---- Payments ----
 import { listPayments } from './list-payments.route';
 import { myPayments } from './my-payments.route';
 import { paymentHistory } from './payment-history.route';
 import { paymentStats } from './payment-stats.route';
-import { getPayment } from './get-payment.route';
-import { getReceipt } from './get-receipt.route';
-
-// ---- Razorpay Flow ----
-import { createOrder } from './create-order.route';
-import { verifyPayment } from './verify-payment.route';
-import { webhook } from './webhook.route';
-import { recordPayment } from './record-payment.route';
-
-// ---- User-Specific ----
-import { userPayments } from './user-payments.route';
-
-// ---- Reports ----
-import { collectionsReport } from './collections-report.route';
-
 // ---- Providers ----
 import {
-  listProviders,
-  createProviderHandler,
-  providerStatus,
-  getProvider,
-  updateProviderHandler,
-  deleteProviderHandler,
   activateProvider,
+  createProviderHandler,
+  deleteProviderHandler,
+  getProvider,
+  listProviders,
+  providerStatus,
   testProvider,
+  updateProviderHandler,
   verifyTestProvider,
 } from './providers.route';
+import { recordPayment } from './record-payment.route';
+// ---- User-Specific ----
+import { userPayments } from './user-payments.route';
+import { verifyPayment } from './verify-payment.route';
+import { webhook } from './webhook.route';
 
 const router: Router = Router();
 

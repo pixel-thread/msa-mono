@@ -1,5 +1,10 @@
-import { ZodError } from 'zod';
+import { Prisma } from '@prisma/client';
 import { env } from '@src/env';
+import { errors } from 'jose';
+import { ZodError } from 'zod';
+
+import { logger } from '../logger';
+
 import { AppError } from './classes/base';
 import {
   BadRequestError,
@@ -8,9 +13,6 @@ import {
   UnauthorizedError,
   ValidationError,
 } from './classes/http-errors';
-import { Prisma } from '@prisma/client';
-import { errors } from 'jose';
-import { logger } from '../logger';
 
 /** Type guard to check if an error is a Prisma-specific error. */
 const isPrismaError = (

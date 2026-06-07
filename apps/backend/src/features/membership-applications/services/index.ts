@@ -4,15 +4,13 @@
 
 // ---- External Libraries
 
-import { ApplicationStatus, Prisma, UserRole } from '@prisma/client';
-
-// ---- Shared Utilities
-
-import { prisma } from '@lib/prisma';
-import { generateRandomPassword, hashPassword } from '@lib/password';
 import { ConflictError, NotFoundError } from '@errors';
-import { buildPagination } from '@src/shared/utils/helper/build-pagination';
+import { generateRandomPassword, hashPassword } from '@lib/password';
+// ---- Shared Utilities
+import { prisma } from '@lib/prisma';
+import { ApplicationStatus, Prisma, UserRole } from '@prisma/client';
 import { PAGE_SIZE } from '@src/shared/constants';
+import { buildPagination } from '@src/shared/utils/helper/build-pagination';
 
 // ---- Types (Private)
 

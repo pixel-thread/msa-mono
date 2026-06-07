@@ -1,5 +1,5 @@
-import { Prisma } from '@prisma/client';
 import { prisma } from '@lib/prisma';
+import { Prisma } from '@prisma/client';
 
 /** Props for fetching a single compliance check. */
 type Props = {

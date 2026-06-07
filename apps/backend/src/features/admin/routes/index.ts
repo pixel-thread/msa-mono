@@ -4,17 +4,16 @@
  * It ensures all admin routes are protected by the authentication middleware.
  */
 
+import { auth } from '@src/middleware/auth';
 import { Router } from 'express';
 
-import { auth } from '@src/middleware/auth';
-
 import {
+  deleteAssociationById,
+  getAssociationById,
   getAssociations,
   postAssociation,
-  getAssociationById,
-  putAssociation,
-  deleteAssociationById,
   postAssociationMember,
+  putAssociation,
 } from './associations.route';
 import {
   getMembershipApplicationsHandler,

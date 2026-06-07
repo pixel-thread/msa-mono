@@ -5,23 +5,7 @@
 //            waive individual periods, and view a single period by ID.
 // ---------------------------------------------------------------------------
 
-import { type Request, NextFunction, Response } from 'express';
-import type { RequestHandler } from 'express';
-
-import { validate } from '@lib/validate';
-import { success } from '@utils/responses';
-import { buildPagination } from '@src/shared/utils/helper/build-pagination';
-import { logger } from '@src/shared/logger';
-import { withRole } from '@utils/with-role';
 import { NotFoundError } from '@errors';
-import { UserRole, ContributionStatus } from '@prisma/client';
-import { z } from 'zod';
-import {
-  GenerateContributionsSchema,
-  GenerateUserContributionsSchema,
-  UserContributionsParamsSchema,
-  WaiveContributionSchema,
-} from '@feature/contributions/validators';
 import {
   generateUserContributions,
   markOverdueContributions,
@@ -29,10 +13,25 @@ import {
 } from '@feature/contributions/services/contribution.service';
 import { findContributionPeriods } from '@feature/contributions/services/find-contribution-periods';
 import { findUniqueContributionPeriod } from '@feature/contributions/services/find-unique-contribution-period';
-import { pageNumberValidation } from '@validator/common';
-import { PAGE_SIZE } from '@src/shared/constants';
-import { asyncHandler } from '@utils/async-handler';
+import {
+  GenerateContributionsSchema,
+  GenerateUserContributionsSchema,
+  UserContributionsParamsSchema,
+  WaiveContributionSchema,
+} from '@feature/contributions/validators';
+import { validate } from '@lib/validate';
+import { ContributionStatus,UserRole } from '@prisma/client';
 import { getAssociation } from '@services/association/get-association';
+import { PAGE_SIZE } from '@src/shared/constants';
+import { logger } from '@src/shared/logger';
+import { buildPagination } from '@src/shared/utils/helper/build-pagination';
+import { asyncHandler } from '@utils/async-handler';
+import { success } from '@utils/responses';
+import { withRole } from '@utils/with-role';
+import { pageNumberValidation } from '@validator/common';
+import type { RequestHandler } from 'express';
+import { NextFunction, type Request, Response } from 'express';
+import { z } from 'zod';
 
 // ---- Validation schemas ----
 

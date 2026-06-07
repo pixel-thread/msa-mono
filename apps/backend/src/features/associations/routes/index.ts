@@ -3,19 +3,18 @@
  * @description This file aggregates all association sub-routes behind authentication.
  */
 
-import { Router, type Router as ExpressRouter } from 'express';
-
 import { auth } from '@src/middleware/auth';
+import { type Router as ExpressRouter,Router } from 'express';
 
 import {
   getAssociationByUser,
-  postAssociationCreate,
-  getCurrentAssociation,
   getAssociationDetail,
+  getCurrentAssociation,
   patchAssociationDetail,
+  postAddMember,
+  postAssociationCreate,
   postDeactivateAssociation,
   postUploadLogo,
-  postAddMember,
 } from './associations.route';
 
 /**

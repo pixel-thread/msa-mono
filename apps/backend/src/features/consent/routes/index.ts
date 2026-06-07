@@ -1,16 +1,15 @@
 // ---- Routes: Consent index
 
 // External libs
-import { Router } from 'express';
-
 // Middleware
 import { auth } from '@src/middleware/auth';
+import { Router } from 'express';
 
+import { getAllConsentRecords, getConsentHistory, getConsentReport } from './admin-consent.route';
+import { grantConsent, revokeConsent } from './grant-revoke.route';
 // Route handlers
 import { getMyConsent } from './my-consent.route';
-import { grantConsent, revokeConsent } from './grant-revoke.route';
-import { getAllConsentRecords, getConsentHistory, getConsentReport } from './admin-consent.route';
-import { getReceipt, updateReceipt, deleteReceipt, getUserConsents } from './user-consent.route';
+import { deleteReceipt, getReceipt, getUserConsents,updateReceipt } from './user-consent.route';
 
 // ---- Route definitions
 

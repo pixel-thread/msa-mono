@@ -5,11 +5,9 @@
 // ---- External Libraries
 
 import { $Enums, UserRole } from '@prisma/client';
-import z from 'zod';
-
 // ---- Shared Validators
-
 import { pageNumberValidation, pageSizeValidation, uuidValidiation } from '@validator/common';
+import z from 'zod';
 
 // ---- Association Slug Constraint
 

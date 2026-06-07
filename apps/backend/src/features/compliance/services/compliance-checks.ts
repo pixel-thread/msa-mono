@@ -1,12 +1,13 @@
 import { prisma } from '@lib/prisma';
 import {
-  ConsentStatus,
-  ConsentPurpose,
-  DsarStatus,
-  UserStatus,
-  PaymentStatus,
   ComplianceCheckStatus,
+  ConsentPurpose,
+  ConsentStatus,
+  DsarStatus,
+  PaymentStatus,
+  UserStatus,
 } from '@prisma/client';
+
 import type { ComplianceCheckResult, ComplianceEvidence } from '../types';
 
 /**

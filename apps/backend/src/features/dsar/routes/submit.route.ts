@@ -4,25 +4,19 @@
 
 // ---- External Libraries
 
-import { Request, NextFunction, Response } from 'express';
-import type { RequestHandler } from 'express';
-
-// ---- Shared Utilities
-
-import { validate } from '@lib/validate';
-import { success } from '@utils/responses';
-import { UnauthorizedError, ForbiddenError } from '@errors';
+import { ForbiddenError,UnauthorizedError } from '@errors';
+// ---- DSAR Services
+import { submitDsarTicket } from '@feature/dsar/services';
+// ---- DSAR Validators
+import { SubmitDsarSchema } from '@feature/dsar/validators';
 import { prisma } from '@lib/prisma';
+// ---- Shared Utilities
+import { validate } from '@lib/validate';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
-
-// ---- DSAR Services
-
-import { submitDsarTicket } from '@feature/dsar/services';
-
-// ---- DSAR Validators
-
-import { SubmitDsarSchema } from '@feature/dsar/validators';
+import { success } from '@utils/responses';
+import type { RequestHandler } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
 // ---- Helpers
 

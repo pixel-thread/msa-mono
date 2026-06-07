@@ -1,8 +1,7 @@
 // ---- External libs ----
-import { AuditAction, Prisma } from '@prisma/client';
-
 // ---- Shared utilities ----
 import { prisma } from '@lib/prisma';
+import { AuditAction, Prisma } from '@prisma/client';
 
 // ---- Validators ----
 import { UpdateTrainingModuleInput } from '../validators/training';

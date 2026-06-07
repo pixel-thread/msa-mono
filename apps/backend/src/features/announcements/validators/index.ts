@@ -3,12 +3,10 @@
  * @description Zod schemas for validating announcement-related requests.
  */
 
-import z from 'zod';
-import { AnnouncementStatus, AnnouncementPriority, UserRole } from '@prisma/client';
-
+import { AnnouncementPriority, AnnouncementStatus, UserRole } from '@prisma/client';
+import { ALLOWED_IMAGE_FORMATS, ALLOWED_MIME_TYPES,MAX_IMAGE_SIZE } from '@src/shared/constants';
 import { pageNumberValidation, pageSizeValidation } from '@validator/common';
-
-import { MAX_IMAGE_SIZE, ALLOWED_IMAGE_FORMATS, ALLOWED_MIME_TYPES } from '@src/shared/constants';
+import z from 'zod';
 
 // -- Create Announcement Schema ---------------------------------------------
 

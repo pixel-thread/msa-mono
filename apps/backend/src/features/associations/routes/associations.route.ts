@@ -4,30 +4,27 @@
  * It provides operations for viewing, creating, updating, and managing associations.
  */
 
-import { Request, Response, NextFunction } from 'express';
-import type { RequestHandler } from 'express';
-import { z } from 'zod';
-
-import { UserRole } from '@prisma/client';
-
-import { prisma } from '@lib/prisma';
-import { validate } from '@lib/validate';
-import { success } from '@utils/responses';
 import { ConflictError, NotFoundError, UnauthorizedError, ValidationError } from '@errors';
-import { withRole } from '@utils/with-role';
-import { asyncHandler } from '@utils/async-handler';
-import { logger } from '@src/shared/logger';
-import { uploadToBucket } from '@lib/supabase/storage';
-import { getAssociation } from '@services/association/get-association';
-
 import { createAssociation } from '@feature/associations/services/createAssociation';
 import { findFirstAssociation } from '@feature/associations/services/findFirstAssociation';
 import { findUniqueAssociation } from '@feature/associations/services/findUniqueAssociation';
 import { updateAssociation } from '@feature/associations/services/updateAssociation';
+import { CreateAssociationSchema, UpdateAssociationSchema } from '@feature/associations/validators';
 import { findUniqueMember } from '@feature/members/services/findUniqueMember';
 import { updateMember } from '@feature/members/services/updateMember';
-import { CreateAssociationSchema, UpdateAssociationSchema } from '@feature/associations/validators';
+import { prisma } from '@lib/prisma';
+import { uploadToBucket } from '@lib/supabase/storage';
+import { validate } from '@lib/validate';
+import { UserRole } from '@prisma/client';
+import { getAssociation } from '@services/association/get-association';
+import { logger } from '@src/shared/logger';
+import { asyncHandler } from '@utils/async-handler';
+import { success } from '@utils/responses';
+import { withRole } from '@utils/with-role';
 import type { CreateAssociationInput } from '@validator/associations';
+import type { RequestHandler } from 'express';
+import { NextFunction,Request, Response } from 'express';
+import { z } from 'zod';
 
 /**
  * Local schema for adding a member to an association.

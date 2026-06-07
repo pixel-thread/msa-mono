@@ -5,7 +5,6 @@
 
 import { prisma } from '@lib/prisma';
 import { Prisma } from '@prisma/client';
-
 import { PAGE_SIZE } from '@src/shared/constants';
 import { buildPagination } from '@utils';
 

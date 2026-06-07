@@ -5,36 +5,35 @@
 //            delete, activate/deactivate, and test connectivity.
 // ---------------------------------------------------------------------------
 
-import { Request, NextFunction, Response } from 'express';
-import type { RequestHandler } from 'express';
-
-import { validate } from '@lib/validate';
-import { success } from '@utils/responses';
-import { logger } from '@src/shared/logger';
 import { BadRequestError, NotFoundError } from '@errors';
-import { UserRole } from '@prisma/client';
-import { withRole } from '@utils/with-role';
-import {
-  UpsertPaymentProviderSchema,
-  UpdatePaymentProviderSchema,
-  ProviderIdParamSchema,
-  VerifyPaymentSchema,
-} from '@feature/payments/validators';
-import {
-  getProvidersByAssociation,
-  createProvider,
-  getProviderById,
-  updateProvider,
-  deleteProvider,
-  setActiveProvider,
-  getActiveProvider,
-} from '@feature/payments/services/payment-provider.service';
 import {
   createTestPaymentOrder,
   verifyTestPayment,
 } from '@feature/payments/services/payment.service';
-import { asyncHandler } from '@utils/async-handler';
+import {
+  createProvider,
+  deleteProvider,
+  getActiveProvider,
+  getProviderById,
+  getProvidersByAssociation,
+  setActiveProvider,
+  updateProvider,
+} from '@feature/payments/services/payment-provider.service';
+import {
+  ProviderIdParamSchema,
+  UpdatePaymentProviderSchema,
+  UpsertPaymentProviderSchema,
+  VerifyPaymentSchema,
+} from '@feature/payments/validators';
+import { validate } from '@lib/validate';
+import { UserRole } from '@prisma/client';
 import { getAssociation } from '@services/association/get-association';
+import { logger } from '@src/shared/logger';
+import { asyncHandler } from '@utils/async-handler';
+import { success } from '@utils/responses';
+import { withRole } from '@utils/with-role';
+import type { RequestHandler } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
 // ===========================================================================
 // LIST GET /api/payments/providers

@@ -4,29 +4,27 @@
  * It provides functionality for fetching, updating, deleting, and status patching.
  */
 
-import { Request, NextFunction, Response } from 'express';
-import type { RequestHandler } from 'express';
-
-import { UserRole } from '@prisma/client';
-
-import { success } from '@utils/responses';
 import { ForbiddenError } from '@errors';
-import { validate } from '@lib/validate';
-import { withRole } from '@utils/with-role';
-import { hasHighRoleAccess } from '@utils/has-high-role';
-import { asyncHandler } from '@utils/async-handler';
-import { logger } from '@src/shared/logger';
-import { getAssociation } from '@services/association/get-association';
-
 import {
   AnnouncementRouteParams,
-  UpdateAnnouncementSchema,
   PublishAnnouncementSchema,
+  UpdateAnnouncementSchema,
 } from '@feature/announcements/validators';
+import { validate } from '@lib/validate';
+import { UserRole } from '@prisma/client';
+import { getAssociation } from '@services/association/get-association';
+import { logger } from '@src/shared/logger';
+import { asyncHandler } from '@utils/async-handler';
+import { hasHighRoleAccess } from '@utils/has-high-role';
+import { success } from '@utils/responses';
+import { withRole } from '@utils/with-role';
+import type { RequestHandler } from 'express';
+import { NextFunction, Request, Response } from 'express';
+
 import {
+  deleteAnnouncement as deleteAnnouncementData,
   findUniqueAnnouncement,
   updateAnnouncement,
-  deleteAnnouncement as deleteAnnouncementData,
 } from '../services';
 
 /**

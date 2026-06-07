@@ -1,21 +1,16 @@
-import { Request, NextFunction, Response } from 'express';
-import type { RequestHandler } from 'express';
-
-import { validate } from '@lib/validate';
-import { success } from '@utils/responses';
-import { asyncHandler } from '@utils/async-handler';
-import { logger } from '@src/shared/logger';
-import { env } from '@src/env';
-
-import { generateOTP, hashToken } from '@lib/password';
-import { sendVerificationEmail } from '@lib/email';
-
 import { ForbiddenError, NotFoundError, UnauthorizedError } from '@errors';
-
-import { findFirstMember } from '@feature/members/services/findFirstMember';
-
-import { getVerificationCodeFirst } from '@feature/auth/services/get-verification-code-first';
 import { createVerificationCode } from '@feature/auth/services/create-verification-code';
+import { getVerificationCodeFirst } from '@feature/auth/services/get-verification-code-first';
+import { findFirstMember } from '@feature/members/services/findFirstMember';
+import { sendVerificationEmail } from '@lib/email';
+import { generateOTP, hashToken } from '@lib/password';
+import { validate } from '@lib/validate';
+import { env } from '@src/env';
+import { logger } from '@src/shared/logger';
+import { asyncHandler } from '@utils/async-handler';
+import { success } from '@utils/responses';
+import type { RequestHandler } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
 /**
  * POST /api/auth/mfa/resend — Resend the MFA setup verification code

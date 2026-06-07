@@ -1,10 +1,9 @@
 // ---- Consent validators
 
 // External libs
-import { z } from 'zod';
-
 // Prisma
 import { ConsentPurpose, ConsentStatus } from '@prisma/client';
+import { z } from 'zod';
 
 /** Validator for granting or revoking consent. */
 export const ConsentUpdateSchema = z.object({

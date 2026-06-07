@@ -1,4 +1,5 @@
 import crypto from 'crypto';
+
 import { hashToken } from './token';
 
 /** Generates a cryptographically random numeric OTP of the given length. */

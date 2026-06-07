@@ -1,5 +1,5 @@
-import { pageNumberValidation } from '@validator/common';
 import { ComplaintStatus } from '@prisma/client';
+import { pageNumberValidation } from '@validator/common';
 import { z } from 'zod';
 
 /** Query schema for listing complaints with filters and pagination. */

@@ -1,4 +1,5 @@
 import { logger } from '@src/shared/logger';
+
 import { redis } from './redis';
 
 /** Interface for a key-value cache client. */

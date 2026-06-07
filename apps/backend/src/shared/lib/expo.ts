@@ -1,7 +1,8 @@
-import { Expo, ExpoPushMessage, ExpoPushTicket } from 'expo-server-sdk';
-import { prisma } from './prisma';
-import { logger } from '@src/shared/logger';
 import { NotificationDataT } from '@sharedType/notification';
+import { logger } from '@src/shared/logger';
+import { Expo, ExpoPushMessage, ExpoPushTicket } from 'expo-server-sdk';
+
+import { prisma } from './prisma';
 
 /** Singleton Expo SDK client for push notification delivery. */
 const expo = new Expo();

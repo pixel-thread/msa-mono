@@ -5,26 +5,22 @@
  * @module features/announcements/routes
  */
 
-import { Request, NextFunction, Response } from 'express';
-import type { RequestHandler } from 'express';
-
-// Shared utilities
-import { success } from '@utils/responses';
-import { validate } from '@lib/validate';
-import { withRole } from '@utils/with-role';
-import { asyncHandler } from '@utils/async-handler';
-import { logger } from '@src/shared/logger';
 import { BadRequestError } from '@errors';
-
-// Prisma
-import { UserRole } from '@prisma/client';
-
 // Services
 import { markAnnouncementRead } from '@feature/announcements/services';
-import { getAssociation } from '@services/association/get-association';
-
 // Validators
 import { AnnouncementRouteParams } from '@feature/announcements/validators';
+import { validate } from '@lib/validate';
+// Prisma
+import { UserRole } from '@prisma/client';
+import { getAssociation } from '@services/association/get-association';
+import { logger } from '@src/shared/logger';
+import { asyncHandler } from '@utils/async-handler';
+// Shared utilities
+import { success } from '@utils/responses';
+import { withRole } from '@utils/with-role';
+import type { RequestHandler } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
 /**
  * POST /api/announcements/:announcementId/read

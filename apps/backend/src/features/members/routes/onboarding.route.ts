@@ -1,24 +1,22 @@
 // ---------------------------------------------------------------------------
 // External libs
 // ---------------------------------------------------------------------------
-import { Request, NextFunction, Response } from 'express';
-import type { RequestHandler } from 'express';
-import { z } from 'zod';
-
-// ---------------------------------------------------------------------------
-// Shared utilities
-// ---------------------------------------------------------------------------
-import { validate } from '@lib/validate';
-import { success } from '@utils/responses';
-import { prisma } from '@lib/prisma';
 import { ForbiddenError, UnauthorizedError, ValidationError } from '@errors';
-import { logger } from '@src/shared/logger';
-import { asyncHandler } from '@utils/async-handler';
-
 // ---------------------------------------------------------------------------
 // Services
 // ---------------------------------------------------------------------------
 import { updateMember } from '@feature/members/services/updateMember';
+import { prisma } from '@lib/prisma';
+// ---------------------------------------------------------------------------
+// Shared utilities
+// ---------------------------------------------------------------------------
+import { validate } from '@lib/validate';
+import { logger } from '@src/shared/logger';
+import { asyncHandler } from '@utils/async-handler';
+import { success } from '@utils/responses';
+import type { RequestHandler } from 'express';
+import { NextFunction, Request, Response } from 'express';
+import { z } from 'zod';
 
 // ---------------------------------------------------------------------------
 // Schema — validate the onboarding request body

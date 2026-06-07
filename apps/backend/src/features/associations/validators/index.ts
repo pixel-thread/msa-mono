@@ -6,8 +6,8 @@
 import { z } from 'zod';
 
 // Re-export from shared validators for convenience
-export { CreateAssociationSchema } from '@validator/associations';
 export type { CreateAssociationInput } from '@validator/associations';
+export { CreateAssociationSchema } from '@validator/associations';
 
 /**
  * Schema for validating association update requests.

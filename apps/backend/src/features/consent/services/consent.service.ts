@@ -3,27 +3,25 @@
 // ---- Each consent action is persisted as a receipt and audited via the audit-log trail.
 
 // Shared utilities
-import { NotFoundError, BadRequestError } from '@errors';
-import { PAGE_SIZE } from '@src/shared/constants';
-import { buildPagination } from '@utils';
-
+import { BadRequestError,NotFoundError } from '@errors';
 // Prisma
 import { prisma } from '@lib/prisma';
 import { AuditAction, ConsentPurpose, ConsentStatus, Prisma } from '@prisma/client';
+import { PAGE_SIZE } from '@src/shared/constants';
+import { PaginationMeta } from '@src/shared/types';
+import { buildPagination } from '@utils';
 
 // Types
 import {
-  UserConsentState,
   ConsentReceiptRecord,
   ConsentSummaryReport,
+  UserConsentState,
 } from '../types/consent.types';
-import { PaginationMeta } from '@src/shared/types';
-
 // Validators
 import {
+  AllConsentRecordsQueryInput,
   ConsentUpdateInput,
   UpdateConsentReceiptInput,
-  AllConsentRecordsQueryInput,
 } from '../validators/consent.validators';
 
 // ---- Service class
