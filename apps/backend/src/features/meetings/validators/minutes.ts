@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { MeetingParamsSchema } from './meetings';
 
 /** Zod schema for creating a meeting minute. */
 export const CreateMeetingMinuteSchema = z
@@ -20,8 +21,7 @@ export const CreateMeetingMinuteSchema = z
   .strict();
 
 /** Schema for minute route params. */
-export const MinuteParamsSchema = z.object({
-  meetingId: z.string('Invalid meeting ID'),
+export const MinuteParamsSchema = MeetingParamsSchema.extend({
   minutesId: z.string('Invalid minute ID'),
 });
 
