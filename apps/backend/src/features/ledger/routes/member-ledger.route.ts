@@ -19,19 +19,9 @@ import { buildPagination } from '@utils';
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';
-import { pageNumberValidation } from '@validator';
+import { MemberLedgerQuerySchema } from '@feature/ledger/validators';
 import type { RequestHandler } from 'express';
 import type { NextFunction, Request, Response } from 'express';
-import { z } from 'zod';
-
-// ---------------------------------------------------------------------------
-// Local schemas
-// ---------------------------------------------------------------------------
-
-/** Schema for paginated member ledger query. */
-const QuerySchema = z.object({
-  page: pageNumberValidation,
-});
 
 // ---------------------------------------------------------------------------
 // GET /api/ledger/member/:memberId  –  Retrieve ledger entries for a member
@@ -39,7 +29,7 @@ const QuerySchema = z.object({
 // ---------------------------------------------------------------------------
 
 export const getMemberLedger: RequestHandler[] = [
-  validate({ query: QuerySchema }),
+  validate({ query: MemberLedgerQuerySchema }),
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
 

@@ -85,3 +85,9 @@ export const ProviderIdParamSchema = z.object({
 export const UserPaymentsParamsSchema = z.object({
   userId: z.uuid('Invalid user ID'),
 });
+
+export const PaymentIdParamSchema = z.object({ paymentId: z.uuid() });
+
+export const UserPaymentsQuerySchema = z.object({
+  page: pageNumberValidation,
+});

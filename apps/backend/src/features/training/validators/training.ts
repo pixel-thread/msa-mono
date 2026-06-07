@@ -49,6 +49,22 @@ export type AssignTrainingInput = z.infer<typeof AssignTrainingSchema>;
 /** Validated type for bulk-assigning training. */
 export type BulkAssignTrainingInput = z.infer<typeof BulkAssignTrainingSchema>;
 
+/** Schema for removing a single user assignment. */
+export const RemoveAssignSchema = z.object({
+  userId: z.uuid('Invalid user ID'),
+});
+
+/** Schema for bulk removing user assignments. */
+export const BulkRemoveAssignSchema = z.object({
+  userIds: z.array(z.uuid('Invalid user ID')).min(1, 'At least one user is required'),
+});
+
+/** Validated type for removing an assignment. */
+export type RemoveAssignInput = z.infer<typeof RemoveAssignSchema>;
+
+/** Validated type for bulk-removing assignments. */
+export type BulkRemoveAssignInput = z.infer<typeof BulkRemoveAssignSchema>;
+
 // ---- Completion schemas ----
 
 /** Schema for recording a completion (no body fields). */

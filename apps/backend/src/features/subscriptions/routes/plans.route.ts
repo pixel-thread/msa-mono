@@ -16,7 +16,12 @@ import {
 // ---------------------------------------------------------------------------
 // Validators / Types
 // ---------------------------------------------------------------------------
-import { CreateSubscriptionPlanSchema } from '@feature/subscriptions/validators';
+import {
+  CreateSubscriptionPlanSchema,
+  UpdatePlanSchema,
+  SetDefaultPlanSchema,
+  PlanParamsSchema,
+} from '@feature/subscriptions/validators';
 // ---------------------------------------------------------------------------
 // Shared utilities
 // ---------------------------------------------------------------------------
@@ -32,29 +37,7 @@ import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';
 import type { RequestHandler } from 'express';
 import type { NextFunction, Request, Response } from 'express';
-import { z } from 'zod';
-
 // ---- Schemas ----------------------------------------------------------------
-
-/** Schema for updating a subscription plan (all fields optional). */
-const UpdatePlanSchema = z.object({
-  name: z.string().min(1).optional(),
-  description: z.string().optional(),
-  amount: z.number().nonnegative().optional(),
-  currency: z.string().optional(),
-  billingCycle: z.enum(['MONTHLY', 'YEARLY']).optional(),
-  features: z.record(z.string(), z.any()).optional(),
-  isActive: z.boolean().optional(),
-  memberTypeId: z.uuid().optional().nullable(),
-});
-
-/** Schema for setting a default plan. */
-const SetDefaultPlanSchema = z.object({
-  planId: z.uuid(),
-});
-
-/** Schema for plan ID path parameter. */
-const PlanParamsSchema = z.object({ planId: z.uuid() });
 
 // ---- GET /api/subscriptions/plans -------------------------------------------
 /** @desc  List subscription plans for the association

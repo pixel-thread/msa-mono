@@ -131,3 +131,19 @@ export const ChangePasswordSchema = z
   .strict();
 
 export type ChangePasswordInput = z.infer<typeof ChangePasswordSchema>;
+
+// ---- MFA Verify ----
+
+export const VerifyMfaSchema = z.object({ code: z.string().length(6, 'Code must be 6 digits') });
+
+// ---- MFA Setup ----
+
+export const SetupMfaSchema = z.object({ password: z.string().min(1, 'Password is required') });
+
+// ---- MFA Disable ----
+
+export const DisableMfaSchema = z.object({ password: z.string().min(1, 'Password is required') });
+
+// ---- Sign In Resend ----
+
+export const ResendSignInCodeSchema = z.object({ mfa_temp_token: z.string() });

@@ -56,3 +56,12 @@ export const DsarQuerySchema = z
     userId: z.string().optional(),
   })
   .strict();
+
+/** Schema for ticket ID path parameter. */
+export const DsarTicketParamsSchema = z.object({ ticketId: z.string().uuid() });
+
+/** Schema for assigning a ticket to a user. */
+export const AssignDsarSchema = z.object({ assignedToId: z.string().uuid() });
+
+/** Schema for rejecting a ticket with a reason. */
+export const RejectDsarSchema = z.object({ reason: z.string().min(1).max(500) });

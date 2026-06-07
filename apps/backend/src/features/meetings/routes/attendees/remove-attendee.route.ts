@@ -5,17 +5,12 @@ import { validate } from '@lib/validate';
 import { UserRole } from '@prisma/client';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
+import { AttendeeParamsSchema } from '@feature/meetings/validators';
 import { hasHighRoleAccess } from '@utils/has-high-role';
 import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';
 import type { RequestHandler } from 'express';
 import type { NextFunction, Request, Response } from 'express';
-import { z } from 'zod';
-
-const AttendeeParamsSchema = z.object({
-  meetingId: z.string('Invalid meeting ID'),
-  userId: z.string('Invalid user ID'),
-});
 
 /** PATCH /api/meetings/[meetingId]/attendees/[userId] - Update an attendee's role or RSVP. */
 export const patchUpdateAttendee: RequestHandler[] = [

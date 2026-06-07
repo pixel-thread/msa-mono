@@ -41,6 +41,11 @@ export const RejectEntrySchema = z.object({
   reason: z.string().optional(),
 });
 
+/** Schema for paginated member ledger query. */
+export const MemberLedgerQuerySchema = z.object({
+  page: pageNumberValidation,
+});
+
 /** Schema for report queries with optional dates. */
 export const ReportQuerySchema = z.object({
   fromDate: z.string().optional(),

@@ -3,7 +3,10 @@ import { NotFoundError } from '@errors';
 // ---- Services ----
 import { deleteModule, findUniqueModule, updateModule } from '@feature/training/services';
 // ---- Validators ----
-import { UpdateTrainingModuleSchema } from '@feature/training/validators/training';
+import {
+  TrainingModuleParamsSchema,
+  UpdateTrainingModuleSchema,
+} from '@feature/training/validators/training';
 // ---- Shared utilities ----
 import { validate } from '@lib/validate';
 // ---- Prisma ----
@@ -14,15 +17,6 @@ import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';
 import type { RequestHandler } from 'express';
 import type { NextFunction, Request, Response } from 'express';
-// ---- External libs ----
-import { z } from 'zod';
-
-// ---- Schema ----
-
-/** Schema for training module ID path parameter. */
-const TrainingParamsSchema = z.object({
-  moduleId: z.uuid('Invalid module ID'),
-});
 
 // ---------------------------------------------------------------------------
 // GET /training/modules/:moduleId
@@ -31,7 +25,7 @@ const TrainingParamsSchema = z.object({
 // ---------------------------------------------------------------------------
 
 export const getModule: RequestHandler[] = [
-  validate({ params: TrainingParamsSchema }),
+  validate({ params: TrainingModuleParamsSchema }),
 
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     // Resolve association
@@ -70,7 +64,7 @@ export const getModule: RequestHandler[] = [
 // ---------------------------------------------------------------------------
 
 export const updateModuleHandler: RequestHandler[] = [
-  validate({ params: TrainingParamsSchema, body: UpdateTrainingModuleSchema }),
+  validate({ params: TrainingModuleParamsSchema, body: UpdateTrainingModuleSchema }),
 
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     // Resolve association
@@ -112,7 +106,7 @@ export const updateModuleHandler: RequestHandler[] = [
 // ---------------------------------------------------------------------------
 
 export const deleteModuleHandler: RequestHandler[] = [
-  validate({ params: TrainingParamsSchema }),
+  validate({ params: TrainingModuleParamsSchema }),
 
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     // Resolve association

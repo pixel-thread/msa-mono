@@ -5,7 +5,12 @@ import {
   findUniqueDsarTicket,
   respondToDsarTicket,
 } from '@feature/dsar/services';
-import { RespondDsarSchema } from '@feature/dsar/validators';
+import {
+  AssignDsarSchema,
+  DsarTicketParamsSchema,
+  RejectDsarSchema,
+  RespondDsarSchema,
+} from '@feature/dsar/validators';
 import { prisma } from '@lib/prisma';
 import { validate } from '@lib/validate';
 import { DsarStatus, UserRole } from '@prisma/client';
@@ -16,16 +21,6 @@ import { hasHighRoleAccess } from '@utils/has-high-role';
 import { success } from '@utils/responses';
 import type { RequestHandler } from 'express';
 import type { NextFunction, Request, Response } from 'express';
-import { z } from 'zod';
-
-/** Schema for ticket ID path parameter. */
-const ParamsSchema = z.object({ ticketId: z.string().uuid() });
-
-/** Schema for assigning a ticket to a user. */
-const AssignSchema = z.object({ assignedToId: z.string().uuid() });
-
-/** Schema for rejecting a ticket with a reason. */
-const RejectSchema = z.object({ reason: z.string().min(1).max(500) });
 
 const ROLE_HIERARCHY: Record<UserRole, number> = {
   SUPER_ADMIN: 0,
@@ -52,7 +47,7 @@ async function withRole(req: Request, role: UserRole) {
 
 /** GET /api/dsar/:ticketId - Retrieve a single DSAR ticket (owner or DPO role required). */
 export const getTicket: RequestHandler[] = [
-  validate({ params: ParamsSchema }),
+  validate({ params: DsarTicketParamsSchema }),
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
     const userId = req.user?.id as string;
@@ -78,7 +73,7 @@ export const getTicket: RequestHandler[] = [
 
 /** DELETE /api/dsar/:ticketId - Delete a DSAR ticket (DPO role required). */
 export const deleteTicket: RequestHandler[] = [
-  validate({ params: ParamsSchema }),
+  validate({ params: DsarTicketParamsSchema }),
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
     const actorId = req.user?.id as string;
@@ -103,7 +98,7 @@ export const deleteTicket: RequestHandler[] = [
 
 /** POST /api/dsar/:ticketId/respond - Respond to a DSAR ticket (DPO role required). */
 export const respondToTicket: RequestHandler[] = [
-  validate({ params: ParamsSchema, body: RespondDsarSchema }),
+  validate({ params: DsarTicketParamsSchema, body: RespondDsarSchema }),
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
     const ticketId = req.params.ticketId as string;
@@ -130,7 +125,7 @@ export const respondToTicket: RequestHandler[] = [
 
 /** PATCH /api/dsar/:ticketId/assign - Assign a DSAR ticket to an admin user (DPO role required). */
 export const assignTicket: RequestHandler[] = [
-  validate({ params: ParamsSchema, body: AssignSchema }),
+  validate({ params: DsarTicketParamsSchema, body: AssignDsarSchema }),
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
     const ticketId = req.params.ticketId as string;
@@ -162,7 +157,7 @@ export const assignTicket: RequestHandler[] = [
 
 /** POST /api/dsar/:ticketId/reject - Reject a DSAR ticket with a reason (DPO role required). */
 export const rejectTicket: RequestHandler[] = [
-  validate({ params: ParamsSchema, body: RejectSchema }),
+  validate({ params: DsarTicketParamsSchema, body: RejectDsarSchema }),
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
     const ticketId = req.params.ticketId as string;

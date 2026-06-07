@@ -10,10 +10,7 @@ import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
 import type { RequestHandler } from 'express';
 import type { NextFunction, Request, Response } from 'express';
-import { z } from 'zod';
-
-/** Schema for setting up MFA — requires the user's current password. */
-const SetupMfaSchema = z.object({ password: z.string().min(1, 'Password is required') });
+import { SetupMfaSchema } from '@feature/auth/validators';
 
 /**
  * POST /api/auth/mfa/setup — Initiate MFA setup by sending a verification code

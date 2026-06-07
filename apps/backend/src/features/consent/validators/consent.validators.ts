@@ -3,6 +3,8 @@
 // External libs
 // Prisma
 import { ConsentPurpose, ConsentStatus } from '@prisma/client';
+// Shared utilities
+import { pageNumberValidation } from '@validator/common';
 import { z } from 'zod';
 
 /** Validator for granting or revoking consent. */
@@ -53,3 +55,18 @@ export const AllConsentRecordsQuerySchema = z.object({
 
 /** Type derived from AllConsentRecordsQuerySchema. */
 export type AllConsentRecordsQueryInput = z.infer<typeof AllConsentRecordsQuerySchema>;
+
+/** Schema for user ID path parameter. */
+export const UserParamsSchema = z.object({
+  userId: z.string().uuid('Invalid user ID'),
+});
+
+/** Schema for paginated user consent query. */
+export const UserQuerySchema = z.object({
+  page: pageNumberValidation,
+});
+
+/** Schema for paginated history query. */
+export const HistoryQuerySchema = z.object({
+  page: pageNumberValidation,
+});

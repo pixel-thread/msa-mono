@@ -10,10 +10,7 @@ import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
 import type { RequestHandler } from 'express';
 import type { NextFunction, Request, Response } from 'express';
-import { z } from 'zod';
-
-/** Schema for verifying MFA — expects a 6-digit code. */
-const VerifyMfaSchema = z.object({ code: z.string().length(6, 'Code must be 6 digits') });
+import { VerifyMfaSchema } from '@feature/auth/validators';
 
 /**
  * POST /api/auth/mfa/verify — Confirm MFA setup by submitting the verification code

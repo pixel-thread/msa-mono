@@ -39,6 +39,12 @@ export const UpdateAttendeeSchema = z
   })
   .strict();
 
+/** Schema for attendee route params. */
+export const AttendeeParamsSchema = z.object({
+  meetingId: z.string('Invalid meeting ID'),
+  userId: z.string('Invalid user ID'),
+});
+
 /** Inferred type for assigning an attendee. */
 export type AssignAttendeeInput = z.infer<typeof AssignAttendeeSchema>;
 /** Inferred type for bulk-assigning attendees. */

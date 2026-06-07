@@ -3,20 +3,15 @@ import { validate } from '@lib/validate';
 import { UserRole } from '@prisma/client';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
+import { MeetingQuerySchema } from '@feature/meetings/validators';
 import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';
-import { pageNumberValidation } from '@validator/common';
 import type { RequestHandler } from 'express';
 import type { NextFunction, Request, Response } from 'express';
-import { z } from 'zod';
-
-const QuerySchema = z.object({
-  page: pageNumberValidation,
-});
 
 /** GET /api/meetings/my - Get meetings assigned to the current user. */
 export const getMyMeetings: RequestHandler[] = [
-  validate({ query: QuerySchema }),
+  validate({ query: MeetingQuerySchema }),
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
     logger.info(

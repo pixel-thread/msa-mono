@@ -12,10 +12,7 @@ import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
 import type { RequestHandler } from 'express';
 import type { NextFunction, Request, Response } from 'express';
-import z from 'zod';
-
-/** Schema for resending the sign-in MFA code — requires the temp session token. */
-const ResendSignInCodeSchema = z.object({ mfa_temp_token: z.string() });
+import { ResendSignInCodeSchema } from '@feature/auth/validators';
 
 /**
  * POST /api/auth/sign-in/resend — Resend the MFA code during sign-in

@@ -2,6 +2,7 @@
 // External libs
 // ---------------------------------------------------------------------------
 import { z } from 'zod';
+import { pageNumberValidation } from '@validator/common';
 
 // ---- Create subscription plan ------------------------------------------------
 
@@ -58,3 +59,44 @@ export const DowngradeSubscriptionSchema = z.object({
 
 /** Input type inferred from DowngradeSubscriptionSchema. */
 export type DowngradeSubscriptionInput = z.infer<typeof DowngradeSubscriptionSchema>;
+
+// ---- Update plan ------------------------------------------------------------
+
+/** Schema for updating a subscription plan (all fields optional). */
+export const UpdatePlanSchema = z.object({
+  name: z.string().min(1).optional(),
+  description: z.string().optional(),
+  amount: z.number().nonnegative().optional(),
+  currency: z.string().optional(),
+  billingCycle: z.enum(['MONTHLY', 'YEARLY']).optional(),
+  features: z.record(z.string(), z.any()).optional(),
+  isActive: z.boolean().optional(),
+  memberTypeId: z.uuid().optional().nullable(),
+});
+
+/** Schema for setting a default plan. */
+export const SetDefaultPlanSchema = z.object({
+  planId: z.uuid(),
+});
+
+/** Schema for plan ID path parameter. */
+export const PlanParamsSchema = z.object({ planId: z.uuid() });
+
+// ---- My subscription --------------------------------------------------------
+
+/** Schema for paginated my-subscription query. */
+export const MySubscriptionQuerySchema = z.object({
+  page: pageNumberValidation,
+});
+
+// ---- Subscription payments --------------------------------------------------
+
+/** Schema for subscription ID path parameter. */
+export const SubscriptionParamsSchema = z.object({
+  subscriptionId: z.uuid('Invalid subscription ID'),
+});
+
+/** Schema for paginated subscription payments query. */
+export const SubscriptionQuerySchema = z.object({
+  page: pageNumberValidation,
+});

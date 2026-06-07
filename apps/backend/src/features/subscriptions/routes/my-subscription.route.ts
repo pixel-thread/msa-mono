@@ -18,17 +18,12 @@ import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';
-import { pageNumberValidation } from '@validator/common';
+import { MySubscriptionQuerySchema } from '@feature/subscriptions/validators';
 import type { RequestHandler } from 'express';
 import type { NextFunction, Request, Response } from 'express';
 import { z } from 'zod';
 
 // ---- Schemas -----------------------------------------------------------------
-
-/** Schema for paginated my-subscription query. */
-const MySubscriptionQuerySchema = z.object({
-  page: pageNumberValidation,
-});
 
 // ---- GET /api/subscriptions/my -----------------------------------------------
 /** @desc  Retrieve the current user's own subscriptions (paginated)

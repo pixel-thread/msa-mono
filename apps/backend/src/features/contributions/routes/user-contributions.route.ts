@@ -13,7 +13,10 @@ import {
   markOverdueContributions,
 } from '@feature/contributions/services/contribution.service';
 import { findContributionPeriods } from '@feature/contributions/services/find-contribution-periods';
-import { UserContributionsParamsSchema } from '@feature/contributions/validators';
+import {
+  UserContributionsParamsSchema,
+  UserContributionsQuerySchema,
+} from '@feature/contributions/validators';
 import { findFirstMember } from '@feature/members/services/findFirstMember';
 import { validate } from '@lib/validate';
 import { UserRole } from '@prisma/client';
@@ -24,20 +27,8 @@ import { buildPagination } from '@src/shared/utils/helper/build-pagination';
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';
-import { pageNumberValidation } from '@validator/common';
 import type { RequestHandler } from 'express';
 import type { NextFunction, Request, Response } from 'express';
-import { z } from 'zod';
-
-// ---- Validation schemas ----
-
-const UserContributionsQuerySchema = z.object({
-  page: pageNumberValidation,
-  fromYear: z.coerce.number().int().min(2020).max(2100).optional(),
-  fromMonth: z.coerce.number().int().min(1).max(12).optional(),
-  toYear: z.coerce.number().int().min(2020).max(2100).optional(),
-  toMonth: z.coerce.number().int().min(1).max(12).optional(),
-});
 
 // ===========================================================================
 // GET /api/contributions/users/:userId

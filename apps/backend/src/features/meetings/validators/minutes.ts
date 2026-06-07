@@ -19,6 +19,12 @@ export const CreateMeetingMinuteSchema = z
   })
   .strict();
 
+/** Schema for minute route params. */
+export const MinuteParamsSchema = z.object({
+  meetingId: z.string('Invalid meeting ID'),
+  minutesId: z.string('Invalid minute ID'),
+});
+
 /** Inferred type for creating a meeting minute. */
 export type CreateMeetingMinuteInput = z.infer<typeof CreateMeetingMinuteSchema>;
 

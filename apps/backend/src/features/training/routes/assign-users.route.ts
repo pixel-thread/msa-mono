@@ -13,6 +13,9 @@ import {
 import {
   AssignTrainingSchema,
   BulkAssignTrainingSchema,
+  BulkRemoveAssignSchema,
+  RemoveAssignSchema,
+  TrainingModuleParamsSchema,
 } from '@feature/training/validators/training';
 // ---- Shared utilities ----
 import { validate } from '@lib/validate';
@@ -25,25 +28,6 @@ import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';
 import type { RequestHandler } from 'express';
 import type { NextFunction, Request, Response } from 'express';
-// ---- External libs ----
-import { z } from 'zod';
-
-// ---- Schemas ----
-
-/** Schema for module ID path parameter. */
-const ParamsSchema = z.object({
-  moduleId: z.uuid('Invalid module ID'),
-});
-
-/** Schema for removing a single user assignment. */
-const RemoveAssignSchema = z.object({
-  userId: z.uuid('Invalid user ID'),
-});
-
-/** Schema for bulk removing user assignments. */
-const BulkRemoveAssignSchema = z.object({
-  userIds: z.array(z.uuid('Invalid user ID')).min(1, 'At least one user is required'),
-});
 
 // ---------------------------------------------------------------------------
 // GET /training/modules/:moduleId/assign
@@ -52,7 +36,7 @@ const BulkRemoveAssignSchema = z.object({
 // ---------------------------------------------------------------------------
 
 export const getAssignments: RequestHandler[] = [
-  validate({ params: ParamsSchema }),
+  validate({ params: TrainingModuleParamsSchema }),
 
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     // Resolve association
@@ -88,7 +72,7 @@ export const getAssignments: RequestHandler[] = [
 // ---------------------------------------------------------------------------
 
 export const postAssign: RequestHandler[] = [
-  validate({ params: ParamsSchema, body: AssignTrainingSchema }),
+  validate({ params: TrainingModuleParamsSchema, body: AssignTrainingSchema }),
 
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     // Resolve association
@@ -135,7 +119,7 @@ export const postAssign: RequestHandler[] = [
 // ---------------------------------------------------------------------------
 
 export const putBulkAssign: RequestHandler[] = [
-  validate({ params: ParamsSchema, body: BulkAssignTrainingSchema }),
+  validate({ params: TrainingModuleParamsSchema, body: BulkAssignTrainingSchema }),
 
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     // Resolve association
@@ -182,7 +166,7 @@ export const putBulkAssign: RequestHandler[] = [
 // ---------------------------------------------------------------------------
 
 export const deleteAssignment: RequestHandler[] = [
-  validate({ params: ParamsSchema, body: RemoveAssignSchema }),
+  validate({ params: TrainingModuleParamsSchema, body: RemoveAssignSchema }),
 
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     // Resolve association
@@ -229,7 +213,7 @@ export const deleteAssignment: RequestHandler[] = [
 // ---------------------------------------------------------------------------
 
 export const patchBulkRemove: RequestHandler[] = [
-  validate({ params: ParamsSchema, body: BulkRemoveAssignSchema }),
+  validate({ params: TrainingModuleParamsSchema, body: BulkRemoveAssignSchema }),
 
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     // Resolve association
@@ -276,7 +260,7 @@ export const patchBulkRemove: RequestHandler[] = [
 // ---------------------------------------------------------------------------
 
 export const getAssignedUsersHandler: RequestHandler[] = [
-  validate({ params: ParamsSchema }),
+  validate({ params: TrainingModuleParamsSchema }),
 
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     // Resolve association

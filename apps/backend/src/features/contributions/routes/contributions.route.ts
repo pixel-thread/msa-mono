@@ -14,13 +14,15 @@ import {
 import { findContributionPeriods } from '@feature/contributions/services/find-contribution-periods';
 import { findUniqueContributionPeriod } from '@feature/contributions/services/find-unique-contribution-period';
 import {
+  ContributionIdParamsSchema,
+  ContributionsQuerySchema,
   GenerateContributionsSchema,
   GenerateUserContributionsSchema,
   UserContributionsParamsSchema,
   WaiveContributionSchema,
 } from '@feature/contributions/validators';
 import { validate } from '@lib/validate';
-import { ContributionStatus, UserRole } from '@prisma/client';
+import { UserRole } from '@prisma/client';
 
 import { PAGE_SIZE } from '@src/shared/constants';
 import { logger } from '@src/shared/logger';
@@ -28,24 +30,8 @@ import { buildPagination } from '@src/shared/utils/helper/build-pagination';
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';
-import { pageNumberValidation } from '@validator/common';
 import type { NextFunction, RequestHandler, Response } from 'express';
 import { type Request } from 'express';
-import { z } from 'zod';
-
-// ---- Validation schemas ----
-
-const ContributionsQuerySchema = z.object({
-  page: pageNumberValidation,
-  status: z.enum(Object.values(ContributionStatus) as [string, ...string[]]).optional(),
-  userId: z.uuid().optional(),
-  year: z.coerce.number().int().min(2020).max(2100).optional(),
-  month: z.coerce.number().int().min(1).max(12).optional(),
-});
-
-const ContributionIdParamsSchema = z.object({
-  contributionId: z.uuid('Invalid contribution ID'),
-});
 
 // ---- Helpers ----
 

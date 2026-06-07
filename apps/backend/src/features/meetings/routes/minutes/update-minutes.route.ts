@@ -4,20 +4,15 @@ import { validate } from '@lib/validate';
 import { UserRole } from '@prisma/client';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
+import { MinuteParamsSchema } from '@feature/meetings/validators';
 import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';
 import type { RequestHandler } from 'express';
 import type { NextFunction, Request, Response } from 'express';
-import { z } from 'zod';
-
-const ParamsSchema = z.object({
-  meetingId: z.string('Invalid meeting ID'),
-  minutesId: z.string('Invalid minute ID'),
-});
 
 /** PATCH /api/meetings/[meetingId]/minutes/[minutesId] - Update a meeting minute. */
 export const patchUpdateMinute: RequestHandler[] = [
-  validate({ params: ParamsSchema, body: UpdateMeetingMinuteSchema }),
+  validate({ params: MinuteParamsSchema, body: UpdateMeetingMinuteSchema }),
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
     const meetingId = req.params.meetingId as string;

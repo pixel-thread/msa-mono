@@ -3,17 +3,11 @@ import { validate } from '@lib/validate';
 import { UserRole } from '@prisma/client';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
+import { UpdateAgendaItemSchema } from '@feature/meetings/validators/agenda-items';
 import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';
 import type { RequestHandler } from 'express';
 import type { NextFunction, Request, Response } from 'express';
-import { z } from 'zod';
-
-const UpdateAgendaItemSchema = z.object({
-  title: z.string().min(1).optional(),
-  description: z.string().optional(),
-  order: z.number().int().optional(),
-});
 
 /** PATCH /api/meetings/[meetingId]/agenda/[itemId] - Update an agenda item. */
 export const patchUpdateAgendaItem: RequestHandler[] = [

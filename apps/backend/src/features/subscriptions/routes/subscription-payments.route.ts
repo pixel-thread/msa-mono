@@ -18,22 +18,14 @@ import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';
-import { pageNumberValidation } from '@validator/common';
+import {
+  SubscriptionParamsSchema,
+  SubscriptionQuerySchema,
+} from '@feature/subscriptions/validators';
 import type { RequestHandler } from 'express';
 import type { NextFunction, Request, Response } from 'express';
-import { z } from 'zod';
 
 // ---- Schemas -----------------------------------------------------------------
-
-/** Schema for subscription ID path parameter. */
-const SubscriptionParamsSchema = z.object({
-  subscriptionId: z.uuid('Invalid subscription ID'),
-});
-
-/** Schema for paginated subscription payments query. */
-const SubscriptionQuerySchema = z.object({
-  page: pageNumberValidation,
-});
 
 // ---- GET /api/subscriptions/:subscriptionId/payments --------------------------
 /** @desc  Retrieve paginated payments for a given subscription

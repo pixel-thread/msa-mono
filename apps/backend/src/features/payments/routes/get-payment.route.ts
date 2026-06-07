@@ -16,11 +16,7 @@ import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';
 import type { RequestHandler } from 'express';
 import type { NextFunction, Request, Response } from 'express';
-import { z } from 'zod';
-
-// ---- Validation schemas ----
-
-const PaymentIdParamSchema = z.object({ paymentId: z.uuid() });
+import { PaymentIdParamSchema } from '@feature/payments/validators';
 
 // ---- Handler ----
 

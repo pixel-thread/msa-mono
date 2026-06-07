@@ -1,5 +1,6 @@
-import { PaymentMethod } from '@prisma/client';
+import { ContributionStatus, PaymentMethod } from '@prisma/client';
 import { z } from 'zod';
+import { pageNumberValidation } from '@validator/common';
 
 // ---- Generate Monthly Contributions ----
 
@@ -54,6 +55,26 @@ export const RecordContributionSchema = z.object({
   referenceNumber: z.string().optional().nullable(),
   paidAt: z.coerce.date('Cash recieve date is required'),
   remarks: z.string().optional().nullable(),
+});
+
+export const ContributionsQuerySchema = z.object({
+  page: pageNumberValidation,
+  status: z.enum(Object.values(ContributionStatus) as [string, ...string[]]).optional(),
+  userId: z.uuid().optional(),
+  year: z.coerce.number().int().min(2020).max(2100).optional(),
+  month: z.coerce.number().int().min(1).max(12).optional(),
+});
+
+export const ContributionIdParamsSchema = z.object({
+  contributionId: z.uuid('Invalid contribution ID'),
+});
+
+export const UserContributionsQuerySchema = z.object({
+  page: pageNumberValidation,
+  fromYear: z.coerce.number().int().min(2020).max(2100).optional(),
+  fromMonth: z.coerce.number().int().min(1).max(12).optional(),
+  toYear: z.coerce.number().int().min(2020).max(2100).optional(),
+  toMonth: z.coerce.number().int().min(1).max(12).optional(),
 });
 
 export type RecordContributionInput = z.infer<typeof RecordContributionSchema>;

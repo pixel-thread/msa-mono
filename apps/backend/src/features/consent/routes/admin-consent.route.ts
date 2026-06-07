@@ -8,7 +8,10 @@ import { ForbiddenError, UnauthorizedError } from '@errors';
 import { ConsentService } from '@feature/consent/services/consent.service';
 // Validators
 import type { AllConsentRecordsQueryInput } from '@feature/consent/validators/consent.validators';
-import { AllConsentRecordsQuerySchema } from '@feature/consent/validators/consent.validators';
+import {
+  AllConsentRecordsQuerySchema,
+  HistoryQuerySchema,
+} from '@feature/consent/validators/consent.validators';
 // Prisma
 import { prisma } from '@lib/prisma';
 // Shared utilities
@@ -19,17 +22,8 @@ import { logger } from '@src/shared/logger';
 import { buildPagination } from '@utils';
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
-import { pageNumberValidation } from '@validator';
 import type { RequestHandler } from 'express';
 import type { NextFunction, Request, Response } from 'express';
-import { z } from 'zod';
-
-// ---- Declarations
-
-/** Schema for paginated history query. */
-const HistoryQuerySchema = z.object({
-  page: pageNumberValidation,
-});
 
 // ---- Helper: Role hierarchy for permission checks
 // Lower number = higher privilege. SUPER_ADMIN (0) is the highest.

@@ -6,14 +6,10 @@ import { UserRole } from '@prisma/client';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 import { hasHighRoleAccess } from '@utils/has-high-role';
+import { MeetingParamsSchema } from '@feature/meetings/validators';
 import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';
 import type { RequestHandler } from 'express';
-import { z } from 'zod';
-
-const MeetingParamsSchema = z.object({
-  meetingId: z.string('Invalid meeting ID'),
-});
 
 /** GET /api/meetings/[meetingId]/attendees - List all attendees for a meeting. */
 export const getAttendees: RequestHandler[] = [

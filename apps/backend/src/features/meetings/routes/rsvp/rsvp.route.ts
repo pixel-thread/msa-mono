@@ -4,20 +4,11 @@ import { validate } from '@lib/validate';
 import { UserRole } from '@prisma/client';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
+import { RsvpSchema } from '@feature/meetings/validators';
 import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';
 import type { RequestHandler } from 'express';
 import type { NextFunction, Request, Response } from 'express';
-import { z } from 'zod';
-
-const RsvpSchema = z.object({
-  status: z.enum(['ACCEPTED', 'DECLINED']),
-  note: z
-    .string()
-    .max(300)
-    .optional()
-    .transform((v) => v?.trim()),
-});
 
 /** POST /api/meetings/[meetingId]/rsvp - Submit an RSVP for a meeting. */
 export const postRsvp: RequestHandler[] = [

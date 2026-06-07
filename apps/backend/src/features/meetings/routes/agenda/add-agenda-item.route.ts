@@ -5,17 +5,15 @@ import { validate } from '@lib/validate';
 import { UserRole } from '@prisma/client';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
+import { MeetingParamsSchema } from '@feature/meetings/validators';
 import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';
 import type { RequestHandler } from 'express';
 import type { NextFunction, Request, Response } from 'express';
-import { z } from 'zod';
-
-const ParamsSchema = z.object({ meetingId: z.string('Invalid meeting ID') });
 
 /** POST /api/meetings/[meetingId]/agenda - Create a new agenda item for a meeting. */
 export const postAddAgendaItem: RequestHandler[] = [
-  validate({ params: ParamsSchema, body: CreateAgendaItemSchema }),
+  validate({ params: MeetingParamsSchema, body: CreateAgendaItemSchema }),
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
     const meetingId = req.params.meetingId as string;

@@ -26,6 +26,8 @@ export const CreateUserDeclarations = z.object({
 
 export type CreateUserDeclarationsInput = z.infer<typeof CreateUserDeclarations>;
 
+export const DeclarationParamsSchema = z.object({ id: z.string() });
+
 export const ListDeclarationsQuerySchema = z.object({
   page: pageNumberValidation,
   status: z.enum(DeclarationStatus).optional(),

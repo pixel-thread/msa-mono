@@ -6,7 +6,6 @@ import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';
 import type { RequestHandler } from 'express';
-import z from 'zod';
 
 import {
   approveDeclaration,
@@ -19,6 +18,7 @@ import type { CreateUserDeclarationsInput } from '../validators';
 import {
   ApproveDeclarationSchema,
   CreateUserDeclarations,
+  DeclarationParamsSchema,
   ListDeclarationsQuerySchema,
   RejectDeclarationSchema,
 } from '../validators';
@@ -47,7 +47,7 @@ export const createUserDeclarationHandler: RequestHandler[] = [
 ];
 
 export const getDeclarationHandler: RequestHandler[] = [
-  validate({ params: z.object({ id: z.string() }) }),
+  validate({ params: DeclarationParamsSchema }),
   asyncHandler(async (req, res) => {
     const associationId = req.user?.associationId;
     const declarationId = req.params.id as string;
@@ -115,7 +115,7 @@ export const listDeclarationsHandler: RequestHandler[] = [
 ];
 
 export const approveDeclarationsHandler: RequestHandler[] = [
-  validate({ params: z.object({ id: z.string() }), body: ApproveDeclarationSchema }),
+  validate({ params: DeclarationParamsSchema, body: ApproveDeclarationSchema }),
   asyncHandler(async (req, res) => {
     const declarationId = req.params.id as string;
     const associationId = req.user?.associationId;
@@ -144,7 +144,7 @@ export const approveDeclarationsHandler: RequestHandler[] = [
 ];
 
 export const rejectDeclarationsHandler: RequestHandler[] = [
-  validate({ params: z.object({ id: z.string() }), body: RejectDeclarationSchema }),
+  validate({ params: DeclarationParamsSchema, body: RejectDeclarationSchema }),
   asyncHandler(async (req, res) => {
     const declarationId = req.params.id as string;
     const associationId = req.user?.associationId;
