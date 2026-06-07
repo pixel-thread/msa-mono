@@ -23,7 +23,7 @@ import { withRole } from '@utils/with-role';
 import type { RequestHandler } from 'express';
 import type { NextFunction, Request, Response } from 'express';
 
-import type { MembersParamInput} from '../validators';
+import type { MembersParamInput } from '../validators';
 import { MembersParamSchema } from '../validators';
 
 // ---------------------------------------------------------------------------

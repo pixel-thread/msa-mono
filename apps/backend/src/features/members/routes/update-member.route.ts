@@ -22,13 +22,8 @@ import { withRole } from '@utils/with-role';
 import type { RequestHandler } from 'express';
 import type { NextFunction, Request, Response } from 'express';
 
-import type {
-  MemberAdminOnboardingInput,
-  MembersParamInput} from '../validators';
-import {
-  MemberAdminOnboardingSchema,
-  MembersParamSchema,
-} from '../validators';
+import type { MemberAdminOnboardingInput, MembersParamInput } from '../validators';
+import { MemberAdminOnboardingSchema, MembersParamSchema } from '../validators';
 
 /** Request body: fields an admin / secretary may change on a member profile. */
 // ---------------------------------------------------------------------------

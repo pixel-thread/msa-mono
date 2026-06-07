@@ -19,5 +19,7 @@ export const NotificationLinkTokenSchema = z.object({
   token: z.string().min(1, 'Token is required'),
 });
 
-export type NotificationRegisterPushTokenInput = z.infer<typeof NotificationRegisterPushTokenSchema>;
+export type NotificationRegisterPushTokenInput = z.infer<
+  typeof NotificationRegisterPushTokenSchema
+>;
 export type NotificationLinkTokenInput = z.infer<typeof NotificationLinkTokenSchema>;
