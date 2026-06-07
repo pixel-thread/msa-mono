@@ -62,7 +62,7 @@ export const listAccounts: RequestHandler[] = [
 
     // ---- Business logic ----------------------------------------------------
 
-    const page = (req.query as any).page || 1;
+    const page = parseInt(req.query.page as string) || 1;
     const { accounts, total } = await getAccounts(association.id, page);
 
     // ---- Result ------------------------------------------------------------
