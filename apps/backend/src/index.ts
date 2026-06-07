@@ -88,10 +88,11 @@ export function createApp(): express.Express {
    * -------------------------------------------------------
    * Serves uploaded files from {SFTP_ROOT}/{STORAGE_BUCKET}
    * so URLs like {PUBLIC_BASE_URL}/announcements/... resolve
-   * to the correct filesystem path.
+   * to the correct filesystem path. Mounted at /assets so
+   * a frontend proxy at /assets/ → backend /assets/ works.
    */
   const storageRoot = path.posix.join('/', env.SFTP_ROOT, env.STORAGE_BUCKET);
-  app.use(express.static(storageRoot, { dotfiles: 'deny', maxAge: '1d', index: false }));
+  app.use('/assets', express.static(storageRoot, { dotfiles: 'deny', maxAge: '1d', index: false }));
 
   app.get('/', (_, res) => {
     return res.redirect(`${env.BASE_URL}`);
