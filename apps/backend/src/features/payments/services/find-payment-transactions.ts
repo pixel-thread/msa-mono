@@ -9,8 +9,8 @@ type Props = {
   include?: Prisma.PaymentTransactionInclude;
 };
 
-export async function findPaymentTransactions({ where, page = 1, pageSize = 20, include }: Props) {
-  const { skip, take } = buildPaginationParams(page, pageSize);
+export async function findPaymentTransactions({ where, page = 1, include }: Props) {
+  const { skip, take } = buildPaginationParams(page);
   const [transactions, total] = await Promise.all([
     prisma.paymentTransaction.findMany({
       where,
