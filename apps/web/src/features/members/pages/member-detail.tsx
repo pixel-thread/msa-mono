@@ -43,10 +43,7 @@ export function MemberDetailPage() {
 
   return (
     <>
-      <SectionHeader
-        title={member.name}
-        description="Member details and activity"
-      />
+      <SectionHeader title={member.name} description="Member details and activity" />
 
       <div className="grid gap-6 md:grid-cols-3">
         <PersonalInfoCard member={member} />

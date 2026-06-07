@@ -10,12 +10,7 @@ import {
   BookOpen01Icon,
 } from '@hugeicons/core-free-icons';
 import { Badge } from '@src/shared/components/ui/badge';
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from '@src/shared/components/ui/card';
+import { Card, CardHeader, CardTitle, CardDescription } from '@src/shared/components/ui/card';
 import { Text } from '@src/shared/components/ui/text';
 
 const FEATURES = [
@@ -78,11 +73,7 @@ export function FeaturesSection() {
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {FEATURES.map((feature) => (
-            <Card
-              key={feature.title}
-              size="sm"
-              className="group transition-shadow hover:shadow-md"
-            >
+            <Card key={feature.title} size="sm" className="group transition-shadow hover:shadow-md">
               <CardHeader>
                 <div className="mb-2 flex size-10 items-center justify-center bg-primary/10 text-primary">
                   <HugeiconsIcon icon={feature.icon} className="size-5" />

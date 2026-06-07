@@ -6,7 +6,8 @@ import { toast } from 'sonner';
 export function useActivatePaymentProvider() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (providerId: string) => http.post(ENDPOINTS.PAYMENTS.PROVIDERS.ACTIVATE(providerId), {}),
+    mutationFn: (providerId: string) =>
+      http.post(ENDPOINTS.PAYMENTS.PROVIDERS.ACTIVATE(providerId), {}),
     onSuccess: (data) => {
       if (data.success) {
         toast.success(data.message);

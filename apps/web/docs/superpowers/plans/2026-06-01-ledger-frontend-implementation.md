@@ -13,6 +13,7 @@
 ### Task 1: Update API Endpoints & Summary Types
 
 **Files:**
+
 - Modify: `src/features/ledger/utils/constants/endpoints.ts`
 - Modify: `src/features/ledger/hooks/useLedgerSummary.ts`
 
@@ -80,6 +81,7 @@ git commit -m "feat(ledger): update endpoints and summary hook types"
 ### Task 2: Chart of Accounts Seeding
 
 **Files:**
+
 - Create: `src/features/ledger/hooks/useSeedAccounts.ts`
 - Modify: `src/features/ledger/pages/ledger-accounts-page.tsx`
 
@@ -155,6 +157,7 @@ git commit -m "feat(ledger): add chart of accounts seeding functionality"
 ### Task 3: Account Editing
 
 **Files:**
+
 - Create: `src/features/ledger/hooks/useUpdateAccount.ts`
 - Create: `src/features/ledger/components/update-account-dialog.tsx`
 - Modify: `src/features/ledger/hooks/useLedgerAccountColumns.tsx`
@@ -210,7 +213,13 @@ export function useUpdateAccount() {
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@src/shared/components/ui/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from '@src/shared/components/ui/dialog';
 import { Button } from '@src/shared/components/ui/button';
 import { Input } from '@src/shared/components/ui/input';
 import { Label } from '@src/shared/components/ui/label';
@@ -238,12 +247,15 @@ export function UpdateAccountDialog({ account, open, onOpenChange }: UpdateAccou
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!account) return;
-    
-    updateAccount({ id: account.id, name, description }, {
-      onSuccess: () => {
-        onOpenChange(false);
-      }
-    });
+
+    updateAccount(
+      { id: account.id, name, description },
+      {
+        onSuccess: () => {
+          onOpenChange(false);
+        },
+      },
+    );
   };
 
   return (
@@ -259,11 +271,19 @@ export function UpdateAccountDialog({ account, open, onOpenChange }: UpdateAccou
           </div>
           <div className="space-y-2">
             <Label htmlFor="description">Description</Label>
-            <Input id="description" value={description} onChange={(e) => setDescription(e.target.value)} />
+            <Input
+              id="description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
           </div>
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
-            <Button type="submit" disabled={isPending}>Save Changes</Button>
+            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+              Cancel
+            </Button>
+            <Button type="submit" disabled={isPending}>
+              Save Changes
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>
@@ -303,7 +323,7 @@ export function useLedgerAccountColumns(onEdit: (account: Account) => void) {
       cell: ({ row }) => {
         const type = row.original.type;
         return (
-           <span className="inline-flex items-center px-2.5 py-0.5 text-xs font-medium bg-gray-50 text-gray-700">
+          <span className="inline-flex items-center px-2.5 py-0.5 text-xs font-medium bg-gray-50 text-gray-700">
             {type}
           </span>
         );
@@ -344,6 +364,7 @@ git commit -m "feat(ledger): add account editing functionality"
 ### Task 4: Ledger Entry Rejection
 
 **Files:**
+
 - Create: `src/features/ledger/hooks/useRejectEntry.ts`
 - Create: `src/features/ledger/components/reject-entry-dialog.tsx`
 - Modify: `src/features/ledger/hooks/useLedgerEntriesColumns.tsx`
@@ -385,7 +406,14 @@ export function useRejectEntry() {
 'use client';
 
 import { useState } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from '@src/shared/components/ui/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+  DialogDescription,
+} from '@src/shared/components/ui/dialog';
 import { Button } from '@src/shared/components/ui/button';
 import { Input } from '@src/shared/components/ui/input';
 import { Label } from '@src/shared/components/ui/label';
@@ -398,17 +426,27 @@ interface RejectEntryDialogProps {
   onOpenChange: (open: boolean) => void;
 }
 
-export function RejectEntryDialog({ entryId, entryDescription, open, onOpenChange }: RejectEntryDialogProps) {
+export function RejectEntryDialog({
+  entryId,
+  entryDescription,
+  open,
+  onOpenChange,
+}: RejectEntryDialogProps) {
   const [reason, setReason] = useState('');
   const { mutate: rejectEntry, isPending } = useRejectEntry();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!entryId) return;
-    rejectEntry({ id: entryId, reason }, { onSuccess: () => {
-      onOpenChange(false);
-      setReason('');
-    }});
+    rejectEntry(
+      { id: entryId, reason },
+      {
+        onSuccess: () => {
+          onOpenChange(false);
+          setReason('');
+        },
+      },
+    );
   };
 
   return (
@@ -423,11 +461,20 @@ export function RejectEntryDialog({ entryId, entryDescription, open, onOpenChang
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="reason">Reason (Optional)</Label>
-            <Input id="reason" value={reason} onChange={(e) => setReason(e.target.value)} placeholder="e.g. Incorrect allocation" />
+            <Input
+              id="reason"
+              value={reason}
+              onChange={(e) => setReason(e.target.value)}
+              placeholder="e.g. Incorrect allocation"
+            />
           </div>
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
-            <Button type="submit" variant="destructive" disabled={isPending}>Reject Entry</Button>
+            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+              Cancel
+            </Button>
+            <Button type="submit" variant="destructive" disabled={isPending}>
+              Reject Entry
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>
@@ -450,6 +497,7 @@ git commit -m "feat(ledger): add ledger entry rejection workflow"
 ### Task 5: Dashboard Overview Updates
 
 **Files:**
+
 - Modify: `src/features/ledger/pages/ledger-dashboard-page.tsx`
 
 - [ ] **Step 1: Update the Dashboard Page to show actual metrics**
@@ -487,8 +535,12 @@ export default function LedgerDashboardPage() {
             <Scale className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-blue-600">{formatCurrency(summary.totalAssets)}</div>
-            <p className="text-xs text-muted-foreground mt-1">Balanced: {summary.isBalanced ? 'Yes' : 'No'}</p>
+            <div className="text-2xl font-bold text-blue-600">
+              {formatCurrency(summary.totalAssets)}
+            </div>
+            <p className="text-xs text-muted-foreground mt-1">
+              Balanced: {summary.isBalanced ? 'Yes' : 'No'}
+            </p>
           </CardContent>
         </Card>
 
@@ -498,7 +550,9 @@ export default function LedgerDashboardPage() {
             <Scale className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-orange-600">{formatCurrency(summary.totalLiabilities)}</div>
+            <div className="text-2xl font-bold text-orange-600">
+              {formatCurrency(summary.totalLiabilities)}
+            </div>
           </CardContent>
         </Card>
 
@@ -508,7 +562,9 @@ export default function LedgerDashboardPage() {
             <ArrowUpRight className="h-4 w-4 text-green-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">{formatCurrency(summary.totalIncome)}</div>
+            <div className="text-2xl font-bold text-green-600">
+              {formatCurrency(summary.totalIncome)}
+            </div>
           </CardContent>
         </Card>
 
@@ -518,7 +574,9 @@ export default function LedgerDashboardPage() {
             <ArrowDownRight className="h-4 w-4 text-red-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-red-600">{formatCurrency(summary.totalExpenses)}</div>
+            <div className="text-2xl font-bold text-red-600">
+              {formatCurrency(summary.totalExpenses)}
+            </div>
           </CardContent>
         </Card>
       </div>
@@ -526,7 +584,9 @@ export default function LedgerDashboardPage() {
       <div className="grid gap-4 md:grid-cols-2">
         <Card>
           <CardHeader>
-             <CardTitle className="text-lg flex items-center"><Clock className="mr-2 h-5 w-5" /> Pending Entries</CardTitle>
+            <CardTitle className="text-lg flex items-center">
+              <Clock className="mr-2 h-5 w-5" /> Pending Entries
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold">{summary.pendingCount}</div>
@@ -535,7 +595,9 @@ export default function LedgerDashboardPage() {
         </Card>
         <Card>
           <CardHeader>
-             <CardTitle className="text-lg flex items-center"><Scale className="mr-2 h-5 w-5" /> Approved Entries</CardTitle>
+            <CardTitle className="text-lg flex items-center">
+              <Scale className="mr-2 h-5 w-5" /> Approved Entries
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold">{summary.approvedCount}</div>
@@ -558,6 +620,7 @@ git commit -m "feat(ledger): implement dashboard summary metrics"
 ### Task 6: Financial Reports Hooks
 
 **Files:**
+
 - Create: `src/features/ledger/hooks/useTrialBalance.ts`
 - Create: `src/features/ledger/hooks/useIncomeStatement.ts`
 
@@ -624,7 +687,10 @@ export function useIncomeStatement(startDate?: string, endDate?: string) {
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['income-statement', startDate, endDate],
-    queryFn: () => http.get<IncomeStatementResponse>(`${ledgerEndpoints.incomeStatement}?${queryParams.toString()}`),
+    queryFn: () =>
+      http.get<IncomeStatementResponse>(
+        `${ledgerEndpoints.incomeStatement}?${queryParams.toString()}`,
+      ),
   });
 
   return { data: data?.data, isLoading, error };
@@ -641,6 +707,7 @@ git commit -m "feat(ledger): add trial balance and income statement hooks"
 ### Task 7: Reports Page Component
 
 **Files:**
+
 - Create: `src/features/ledger/pages/ledger-reports-page.tsx`
 - Modify: `src/features/ledger/pages/index.ts`
 - Create: `src/app/(dashboard)/ledger/reports/page.tsx`
@@ -655,7 +722,14 @@ import { useTrialBalance } from '../hooks/useTrialBalance';
 import { useIncomeStatement } from '../hooks/useIncomeStatement';
 import { SectionHeader } from '@src/shared/components/section-header';
 import { Card, CardContent, CardHeader, CardTitle } from '@src/shared/components/ui/card';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@src/shared/components/ui/table';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@src/shared/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@src/shared/components/ui/tabs';
 
 function formatCurrency(amount: number) {
@@ -668,42 +742,61 @@ export function LedgerReportsPage() {
 
   return (
     <div className="space-y-6">
-      <SectionHeader title="Financial Reports" description="Trial Balance and Income Statement views." />
+      <SectionHeader
+        title="Financial Reports"
+        description="Trial Balance and Income Statement views."
+      />
 
       <Tabs defaultValue="trial-balance">
         <TabsList>
           <TabsTrigger value="trial-balance">Trial Balance</TabsTrigger>
           <TabsTrigger value="income-statement">Income Statement</TabsTrigger>
         </TabsList>
-        
+
         <TabsContent value="trial-balance" className="mt-4">
           <Card>
-            <CardHeader><CardTitle>Trial Balance</CardTitle></CardHeader>
+            <CardHeader>
+              <CardTitle>Trial Balance</CardTitle>
+            </CardHeader>
             <CardContent>
-              {trialLoading ? <div>Loading...</div> : trialData && (
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Account</TableHead>
-                      <TableHead className="text-right">Debit</TableHead>
-                      <TableHead className="text-right">Credit</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {trialData.lines.map((line) => (
-                      <TableRow key={line.accountId}>
-                        <TableCell>{line.accountCode} - {line.accountName}</TableCell>
-                        <TableCell className="text-right">{line.debit > 0 ? formatCurrency(line.debit) : '-'}</TableCell>
-                        <TableCell className="text-right">{line.credit > 0 ? formatCurrency(line.credit) : '-'}</TableCell>
+              {trialLoading ? (
+                <div>Loading...</div>
+              ) : (
+                trialData && (
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Account</TableHead>
+                        <TableHead className="text-right">Debit</TableHead>
+                        <TableHead className="text-right">Credit</TableHead>
                       </TableRow>
-                    ))}
-                    <TableRow className="font-bold border-t-2">
-                      <TableCell>Totals</TableCell>
-                      <TableCell className="text-right">{formatCurrency(trialData.totalDebits)}</TableCell>
-                      <TableCell className="text-right">{formatCurrency(trialData.totalCredits)}</TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
+                    </TableHeader>
+                    <TableBody>
+                      {trialData.lines.map((line) => (
+                        <TableRow key={line.accountId}>
+                          <TableCell>
+                            {line.accountCode} - {line.accountName}
+                          </TableCell>
+                          <TableCell className="text-right">
+                            {line.debit > 0 ? formatCurrency(line.debit) : '-'}
+                          </TableCell>
+                          <TableCell className="text-right">
+                            {line.credit > 0 ? formatCurrency(line.credit) : '-'}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                      <TableRow className="font-bold border-t-2">
+                        <TableCell>Totals</TableCell>
+                        <TableCell className="text-right">
+                          {formatCurrency(trialData.totalDebits)}
+                        </TableCell>
+                        <TableCell className="text-right">
+                          {formatCurrency(trialData.totalCredits)}
+                        </TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </Table>
+                )
               )}
             </CardContent>
           </Card>
@@ -711,51 +804,71 @@ export function LedgerReportsPage() {
 
         <TabsContent value="income-statement" className="mt-4">
           <Card>
-            <CardHeader><CardTitle>Income Statement</CardTitle></CardHeader>
+            <CardHeader>
+              <CardTitle>Income Statement</CardTitle>
+            </CardHeader>
             <CardContent>
-              {incomeLoading ? <div>Loading...</div> : incomeData && (
-                <div className="space-y-6">
-                  <div>
-                    <h3 className="font-semibold mb-2">Income</h3>
-                    <Table>
-                      <TableBody>
-                        {incomeData.income.map((line) => (
-                          <TableRow key={line.accountId}>
-                            <TableCell>{line.accountCode} - {line.accountName}</TableCell>
-                            <TableCell className="text-right">{formatCurrency(line.amount)}</TableCell>
+              {incomeLoading ? (
+                <div>Loading...</div>
+              ) : (
+                incomeData && (
+                  <div className="space-y-6">
+                    <div>
+                      <h3 className="font-semibold mb-2">Income</h3>
+                      <Table>
+                        <TableBody>
+                          {incomeData.income.map((line) => (
+                            <TableRow key={line.accountId}>
+                              <TableCell>
+                                {line.accountCode} - {line.accountName}
+                              </TableCell>
+                              <TableCell className="text-right">
+                                {formatCurrency(line.amount)}
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                          <TableRow className="font-bold">
+                            <TableCell>Total Income</TableCell>
+                            <TableCell className="text-right">
+                              {formatCurrency(incomeData.totalIncome)}
+                            </TableCell>
                           </TableRow>
-                        ))}
-                        <TableRow className="font-bold">
-                          <TableCell>Total Income</TableCell>
-                          <TableCell className="text-right">{formatCurrency(incomeData.totalIncome)}</TableCell>
-                        </TableRow>
-                      </TableBody>
-                    </Table>
-                  </div>
-                  <div>
-                    <h3 className="font-semibold mb-2">Expenses</h3>
-                    <Table>
-                      <TableBody>
-                        {incomeData.expenses.map((line) => (
-                          <TableRow key={line.accountId}>
-                            <TableCell>{line.accountCode} - {line.accountName}</TableCell>
-                            <TableCell className="text-right">{formatCurrency(line.amount)}</TableCell>
+                        </TableBody>
+                      </Table>
+                    </div>
+                    <div>
+                      <h3 className="font-semibold mb-2">Expenses</h3>
+                      <Table>
+                        <TableBody>
+                          {incomeData.expenses.map((line) => (
+                            <TableRow key={line.accountId}>
+                              <TableCell>
+                                {line.accountCode} - {line.accountName}
+                              </TableCell>
+                              <TableCell className="text-right">
+                                {formatCurrency(line.amount)}
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                          <TableRow className="font-bold">
+                            <TableCell>Total Expenses</TableCell>
+                            <TableCell className="text-right">
+                              {formatCurrency(incomeData.totalExpenses)}
+                            </TableCell>
                           </TableRow>
-                        ))}
-                        <TableRow className="font-bold">
-                          <TableCell>Total Expenses</TableCell>
-                          <TableCell className="text-right">{formatCurrency(incomeData.totalExpenses)}</TableCell>
-                        </TableRow>
-                      </TableBody>
-                    </Table>
+                        </TableBody>
+                      </Table>
+                    </div>
+                    <div className="flex justify-between items-center p-4 bg-muted rounded-lg font-bold text-lg">
+                      <span>Net Income</span>
+                      <span
+                        className={incomeData.netIncome >= 0 ? 'text-green-600' : 'text-red-600'}
+                      >
+                        {formatCurrency(incomeData.netIncome)}
+                      </span>
+                    </div>
                   </div>
-                  <div className="flex justify-between items-center p-4 bg-muted rounded-lg font-bold text-lg">
-                    <span>Net Income</span>
-                    <span className={incomeData.netIncome >= 0 ? 'text-green-600' : 'text-red-600'}>
-                      {formatCurrency(incomeData.netIncome)}
-                    </span>
-                  </div>
-                </div>
+                )
               )}
             </CardContent>
           </Card>

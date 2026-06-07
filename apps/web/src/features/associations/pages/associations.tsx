@@ -34,10 +34,7 @@ export default function AssociationsPage() {
 
   return (
     <>
-      <SectionHeader
-        title="Associations"
-        description="Manage associations and their settings"
-      >
+      <SectionHeader title="Associations" description="Manage associations and their settings">
         <CreateAssociationDialog />
       </SectionHeader>
 

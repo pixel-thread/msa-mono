@@ -23,7 +23,8 @@ export function useDsarTickets(options?: UseDsarTicketsOptions) {
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: QUERY_KEYS.DSAR_KEYS.TICKETS(options),
-    queryFn: async () => http.get<DsarTicketRecord[]>(`${ENDPOINTS.DSAR.LIST}${qs ? `?${qs}` : ''}`),
+    queryFn: async () =>
+      http.get<DsarTicketRecord[]>(`${ENDPOINTS.DSAR.LIST}${qs ? `?${qs}` : ''}`),
   });
 
   return {

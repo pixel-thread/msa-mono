@@ -10,12 +10,7 @@ import {
   BookOpen01Icon,
 } from '@hugeicons/core-free-icons';
 import { Badge } from '@src/shared/components/ui/badge';
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from '@src/shared/components/ui/card';
+import { Card, CardHeader, CardTitle, CardDescription } from '@src/shared/components/ui/card';
 import { Text } from '@src/shared/components/ui/text';
 
 const SECURITY_ITEMS = [

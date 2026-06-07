@@ -13,6 +13,7 @@
 ## File Structure
 
 ### New files to create:
+
 - `src/features/contributions/hooks/declarations/use-declarations.ts` — hook for list query
 - `src/features/contributions/hooks/declarations/use-declaration-detail.ts` — hook for single declaration query
 - `src/features/contributions/hooks/declarations/use-declaration-mutations.ts` — approve/reject mutations
@@ -23,6 +24,7 @@
 - `src/features/contributions/pages/declaration-detail.tsx` — detail page component
 
 ### Files to modify:
+
 - `src/features/contributions/types/index.ts` — add `Declaration` type
 - `src/features/contributions/utils/constants/endpoints.ts` — add declaration endpoints
 - `src/features/contributions/hooks/index.ts` — re-export declaration hooks
@@ -35,6 +37,7 @@
 ### Task 1: Add Declaration type
 
 **Files:**
+
 - Modify: `src/features/contributions/types/index.ts`
 
 - [x] **Step: Add DeclarationResponse type**
@@ -69,6 +72,7 @@ export interface Declaration {
 ### Task 2: Add declaration endpoints
 
 **Files:**
+
 - Modify: `src/features/contributions/utils/constants/endpoints.ts`
 
 - [x] **Step: Append declaration endpoints**
@@ -89,6 +93,7 @@ export const declarationEndpoints = {
 ### Task 3: Create useDeclarations hook (list query)
 
 **Files:**
+
 - Write: `src/features/contributions/hooks/declarations/use-declarations.ts`
 
 - [x] **Step: Write the hook**
@@ -133,6 +138,7 @@ export function useDeclarations(options: UseDeclarationsOptions = {}) {
 ### Task 4: Create useDeclarationDetail hook
 
 **Files:**
+
 - Write: `src/features/contributions/hooks/declarations/use-declaration-detail.ts`
 
 - [x] **Step: Write the hook**
@@ -163,6 +169,7 @@ export function useDeclarationDetail(id: string) {
 ### Task 5: Create approve/reject mutation hooks
 
 **Files:**
+
 - Write: `src/features/contributions/hooks/declarations/use-declaration-mutations.ts`
 
 - [x] **Step: Write the mutations**
@@ -211,6 +218,7 @@ export function useRejectDeclaration() {
 ### Task 6: Create table columns with approve/reject action buttons
 
 **Files:**
+
 - Write: `src/features/contributions/hooks/declarations/use-declarations-columns.tsx`
 
 - [x] **Step: Write the columns hook**
@@ -328,6 +336,7 @@ export function useDeclarationsColumns({
 ### Task 7: Create Approve dialog with remark field
 
 **Files:**
+
 - Create directory: `src/features/contributions/components/declarations/`
 - Write: `src/features/contributions/components/declarations/approve-dialog.tsx`
 
@@ -435,6 +444,7 @@ export function ApproveDialog({ declaration, open, onOpenChange }: ApproveDialog
 ### Task 8: Create Reject dialog with remark field
 
 **Files:**
+
 - Write: `src/features/contributions/components/declarations/reject-dialog.tsx`
 
 - [x] **Step: Write the RejectDialog component**
@@ -542,6 +552,7 @@ export function RejectDialog({ declaration, open, onOpenChange }: RejectDialogPr
 ### Task 9: Create Declarations list page
 
 **Files:**
+
 - Write: `src/features/contributions/pages/declarations.tsx`
 
 - [x] **Step: Write the list page component**
@@ -636,6 +647,7 @@ export default function DeclarationsPage() {
 ### Task 10: Create Declaration detail page
 
 **Files:**
+
 - Write: `src/features/contributions/pages/declaration-detail.tsx`
 
 - [x] **Step: Write the detail page component**
@@ -828,6 +840,7 @@ export function DeclarationDetailPage() {
 ### Task 11: Wire up the route files and exports
 
 **Files:**
+
 - Modify: `src/features/contributions/hooks/index.ts` — add declarations re-exports
 - Modify: `src/features/contributions/pages/index.ts` — add declarations pages
 - Modify: `src/app/(dashboard)/contributions/declarations/page.tsx` — wire list page
@@ -905,6 +918,7 @@ If there are import errors, verify barrel exports are correctly configured and t
 ## Self-Review
 
 **1. Spec coverage:**
+
 - ✅ Declarations list page with table — Task 9
 - ✅ Search and status filters — Task 9 (DataTableFilters with search + status select)
 - ✅ Approve/Reject action buttons in table — Task 6 (actions column in useDeclarationsColumns)
@@ -915,6 +929,7 @@ If there are import errors, verify barrel exports are correctly configured and t
 **2. Placeholder scan:** No TBD, TODO, or incomplete stubs found. All code blocks contain complete implementations.
 
 **3. Type consistency:**
+
 - `Declaration` type defined in Task 1 is used in Tasks 3, 4, 5, 6, 7, 8, 9, 10 — consistent.
 - `useDeclarations` returns `{ declarations, meta, isLoading, error, refetch }` — matches `usePayments` pattern.
 - `useDeclarationDetail` returns `{ declaration, isLoading, error }` — matches `usePaymentDetail` pattern.

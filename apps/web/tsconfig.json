@@ -26,12 +26,6 @@
       "@feature/*": ["./src/features/*"]
     }
   },
-  "include": [
-    "**/*.ts",
-    "**/*.tsx",
-    "**/*.mts",
-    "src/**/*.ts",
-    "src/**/*.tsx"
-  ],
+  "include": ["**/*.ts", "**/*.tsx", "**/*.mts", "src/**/*.ts", "src/**/*.tsx"],
   "exclude": ["node_modules", "express"]
 }

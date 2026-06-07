@@ -12,7 +12,8 @@ export function usePlans(options: UsePlansOptions = {}) {
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: QUERY_KEYS.SUBSCRIPTIONS_KEYS.PLANS(page),
-    queryFn: () => http.get<SubscriptionPlan[]>(buildUrlWithQuery(ENDPOINTS.SUBSCRIPTIONS.PLANS, { page })),
+    queryFn: () =>
+      http.get<SubscriptionPlan[]>(buildUrlWithQuery(ENDPOINTS.SUBSCRIPTIONS.PLANS, { page })),
   });
 
   return {

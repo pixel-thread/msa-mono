@@ -80,11 +80,7 @@ export function ApproveDialog({ declaration, open, onOpenChange }: ApproveDialog
           <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
             Cancel
           </Button>
-          <Button
-            type="button"
-            onClick={handleApprove}
-            disabled={approveDeclaration.isPending}
-          >
+          <Button type="button" onClick={handleApprove} disabled={approveDeclaration.isPending}>
             {approveDeclaration.isPending ? 'Approving...' : 'Approve'}
           </Button>
         </DialogFooter>

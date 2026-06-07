@@ -29,8 +29,12 @@ export default function LedgerDashboardPage() {
             <Scale className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-blue-600">{formatCurrency(summary.totalAssets)}</div>
-            <p className="text-xs text-muted-foreground mt-1">Balanced: {summary.isBalanced ? 'Yes' : 'No'}</p>
+            <div className="text-2xl font-bold text-blue-600">
+              {formatCurrency(summary.totalAssets)}
+            </div>
+            <p className="text-xs text-muted-foreground mt-1">
+              Balanced: {summary.isBalanced ? 'Yes' : 'No'}
+            </p>
           </CardContent>
         </Card>
 
@@ -40,7 +44,9 @@ export default function LedgerDashboardPage() {
             <Scale className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-orange-600">{formatCurrency(summary.totalLiabilities)}</div>
+            <div className="text-2xl font-bold text-orange-600">
+              {formatCurrency(summary.totalLiabilities)}
+            </div>
           </CardContent>
         </Card>
 
@@ -50,7 +56,9 @@ export default function LedgerDashboardPage() {
             <ArrowUpRight className="h-4 w-4 text-green-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">{formatCurrency(summary.totalIncome)}</div>
+            <div className="text-2xl font-bold text-green-600">
+              {formatCurrency(summary.totalIncome)}
+            </div>
           </CardContent>
         </Card>
 
@@ -60,7 +68,9 @@ export default function LedgerDashboardPage() {
             <ArrowDownRight className="h-4 w-4 text-red-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-red-600">{formatCurrency(summary.totalExpenses)}</div>
+            <div className="text-2xl font-bold text-red-600">
+              {formatCurrency(summary.totalExpenses)}
+            </div>
           </CardContent>
         </Card>
       </div>
@@ -68,7 +78,9 @@ export default function LedgerDashboardPage() {
       <div className="grid gap-4 md:grid-cols-2">
         <Card>
           <CardHeader>
-             <CardTitle className="text-lg flex items-center"><Clock className="mr-2 h-5 w-5" /> Pending Entries</CardTitle>
+            <CardTitle className="text-lg flex items-center">
+              <Clock className="mr-2 h-5 w-5" /> Pending Entries
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold">{summary.pendingCount}</div>
@@ -77,7 +89,9 @@ export default function LedgerDashboardPage() {
         </Card>
         <Card>
           <CardHeader>
-             <CardTitle className="text-lg flex items-center"><Scale className="mr-2 h-5 w-5" /> Approved Entries</CardTitle>
+            <CardTitle className="text-lg flex items-center">
+              <Scale className="mr-2 h-5 w-5" /> Approved Entries
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold">{summary.approvedCount}</div>

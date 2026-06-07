@@ -28,7 +28,8 @@ export function usePayments(options: UsePaymentsOptions = {}) {
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: QUERY_KEYS.PAYMENTS_KEYS.LIST(JSON.stringify(queryParams)),
-    queryFn: () => http.get<PaymentTransaction[]>(buildUrlWithQuery(ENDPOINTS.PAYMENTS.LIST, queryParams)),
+    queryFn: () =>
+      http.get<PaymentTransaction[]>(buildUrlWithQuery(ENDPOINTS.PAYMENTS.LIST, queryParams)),
   });
 
   return {

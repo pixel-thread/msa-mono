@@ -36,7 +36,8 @@ export function useLedgerEntries(params: UseLedgerEntriesParams = {}) {
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ['ledger-entries', page],
-    queryFn: () => http.get<LedgerEntryResponse[]>(`${ENDPOINTS.LEDGER.ENTRIES}?${queryParams.toString()}`),
+    queryFn: () =>
+      http.get<LedgerEntryResponse[]>(`${ENDPOINTS.LEDGER.ENTRIES}?${queryParams.toString()}`),
   });
 
   return {

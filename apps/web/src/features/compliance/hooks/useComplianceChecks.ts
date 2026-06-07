@@ -28,7 +28,12 @@ export function useComplianceChecks(options?: UseComplianceChecksOptions) {
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: QUERY_KEYS.COMPLIANCE_KEYS.CHECKS(options),
-    queryFn: async () => http.get<ComplianceRecord[]>(qs ? buildUrlWithQuery(ENDPOINTS.COMPLIANCE.CHECKS, Object.fromEntries(params)) : ENDPOINTS.COMPLIANCE.CHECKS),
+    queryFn: async () =>
+      http.get<ComplianceRecord[]>(
+        qs
+          ? buildUrlWithQuery(ENDPOINTS.COMPLIANCE.CHECKS, Object.fromEntries(params))
+          : ENDPOINTS.COMPLIANCE.CHECKS,
+      ),
   });
 
   return {

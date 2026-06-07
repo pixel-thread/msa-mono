@@ -10,7 +10,10 @@ export function useTrainingModules(options: { page?: number; isActive?: boolean 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: trainingQueryKeys.modules.list(page, isActive),
     queryFn: async () => {
-      const url = buildUrlWithQuery(ENDPOINTS.TRAINING.MODULES, { page, ...(isActive !== undefined && { isActive }) });
+      const url = buildUrlWithQuery(ENDPOINTS.TRAINING.MODULES, {
+        page,
+        ...(isActive !== undefined && { isActive }),
+      });
       return http.get<TrainingModuleListItem[]>(url);
     },
   });
@@ -27,7 +30,8 @@ export function useTrainingModules(options: { page?: number; isActive?: boolean 
 export function useTrainingModule(moduleId: string | null) {
   const { data, isLoading, error } = useQuery({
     queryKey: trainingQueryKeys.modules.detail(moduleId),
-    queryFn: async () => http.get<TrainingModuleListItem>(ENDPOINTS.TRAINING.MODULE_DETAIL(moduleId!)),
+    queryFn: async () =>
+      http.get<TrainingModuleListItem>(ENDPOINTS.TRAINING.MODULE_DETAIL(moduleId!)),
     enabled: !!moduleId,
     select: (res) => res.data,
   });

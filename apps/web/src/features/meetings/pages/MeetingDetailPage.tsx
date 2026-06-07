@@ -41,11 +41,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@components/ui/dropdown-menu';
-import {
-  getTypeBadge,
-  getStatusBadge,
-  getRsvpBadge,
-} from '@utils/helper';
+import { getTypeBadge, getStatusBadge, getRsvpBadge } from '@utils/helper';
 
 /**
  * Meeting Detail Page component.
@@ -101,7 +97,12 @@ export function MeetingDetailPage() {
     <>
       <SectionHeader
         title={meeting.title}
-        titleBadges={<>{getStatusBadge(meeting.status)}{getTypeBadge(meeting.type)}</>}
+        titleBadges={
+          <>
+            {getStatusBadge(meeting.status)}
+            {getTypeBadge(meeting.type)}
+          </>
+        }
         description="Meeting details and agenda"
       >
         <Button
@@ -121,7 +122,11 @@ export function MeetingDetailPage() {
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => navigate({ to: '/meetings/$meetingId/minutes', params: { meetingId } })}>
+            <DropdownMenuItem
+              onClick={() =>
+                navigate({ to: '/meetings/$meetingId/minutes', params: { meetingId } })
+              }
+            >
               <ClipboardList className="mr-2 h-4 w-4" />
               Minutes
             </DropdownMenuItem>

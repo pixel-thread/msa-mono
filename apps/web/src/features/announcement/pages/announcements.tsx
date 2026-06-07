@@ -46,10 +46,7 @@ export default function AnnouncementsPage({ status }: AnnouncementsPageProps) {
 
   return (
     <>
-      <SectionHeader
-        title="Announcements"
-        description="Manage announcements for your association"
-      >
+      <SectionHeader title="Announcements" description="Manage announcements for your association">
         <CreateAnnouncementDialog />
       </SectionHeader>
 

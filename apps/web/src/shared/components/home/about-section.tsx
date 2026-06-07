@@ -3,10 +3,7 @@
 import { HugeiconsIcon } from '@hugeicons/react';
 import { CheckmarkCircle02Icon } from '@hugeicons/core-free-icons';
 import { Badge } from '@src/shared/components/ui/badge';
-import {
-  Card,
-  CardContent,
-} from '@src/shared/components/ui/card';
+import { Card, CardContent } from '@src/shared/components/ui/card';
 import { Text } from '@src/shared/components/ui/text';
 
 export function AboutSection() {
@@ -24,8 +21,8 @@ export function AboutSection() {
             <Text variant="body-md" color="body" asChild>
               <p className="mb-4 leading-relaxed">
                 The Meghalaya Finance Service Association (MFSA) is a government-affiliated body
-                representing finance service professionals across the state of Meghalaya,
-                North-East India.
+                representing finance service professionals across the state of Meghalaya, North-East
+                India.
               </p>
             </Text>
             <Text variant="body-md" color="body" asChild>

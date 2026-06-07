@@ -20,7 +20,9 @@ export function useAnnouncement(announcementId: string) {
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: QUERY_KEYS.ANNOUNCEMENTS_KEYS.DETAIL(announcementId),
     queryFn: async () => {
-      const res = await http.get<AnnouncementDetail>(ENDPOINTS.ANNOUNCEMENTS.DETAILS(announcementId));
+      const res = await http.get<AnnouncementDetail>(
+        ENDPOINTS.ANNOUNCEMENTS.DETAILS(announcementId),
+      );
       if (!res.success || !res.data) {
         throw new Error(res.message || 'Failed to fetch announcement');
       }

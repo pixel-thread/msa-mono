@@ -11,7 +11,9 @@ export function useModuleAssignedUsers(moduleId: string | null, page?: number) {
   const { data, isLoading, refetch } = useQuery({
     queryKey: trainingQueryKeys.assignedUsers.all(moduleId, page),
     queryFn: async () =>
-      http.get<AssignedUserWithCompletion[]>(buildUrlWithQuery(ENDPOINTS.TRAINING.MODULE_ASSIGNED_USERS(moduleId!), { page })),
+      http.get<AssignedUserWithCompletion[]>(
+        buildUrlWithQuery(ENDPOINTS.TRAINING.MODULE_ASSIGNED_USERS(moduleId!), { page }),
+      ),
     enabled: !!moduleId,
   });
 

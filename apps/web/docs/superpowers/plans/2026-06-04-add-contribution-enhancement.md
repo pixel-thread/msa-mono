@@ -14,27 +14,28 @@
 
 ### New Files
 
-| File | Responsibility |
-|------|---------------|
+| File                                                                  | Responsibility                                                                                                                |
+| --------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
 | `src/features/contributions/components/contribution-status-badge.tsx` | Renders a `<Badge>` with contribution-specific color mapping (PAID→green, PARTIAL→blue, DUE→yellow, OVERDUE→red, WAIVED→gray) |
-| `src/features/contributions/components/member-profile-card.tsx` | Collapsible card showing member name, email, membership#, and 3 stat mini-cards (periods count, total paid, compliance rate) |
-| `src/features/contributions/components/contribution-stats-panel.tsx` | Collapsible panel with summary stat cards, status breakdown badges, compliance progress bar, and recent period list |
-| `src/features/contributions/components/payment-summary-bar.tsx` | Extracted from page, enhanced with itemized list of selected periods below the stat cards |
+| `src/features/contributions/components/member-profile-card.tsx`       | Collapsible card showing member name, email, membership#, and 3 stat mini-cards (periods count, total paid, compliance rate)  |
+| `src/features/contributions/components/contribution-stats-panel.tsx`  | Collapsible panel with summary stat cards, status breakdown badges, compliance progress bar, and recent period list           |
+| `src/features/contributions/components/payment-summary-bar.tsx`       | Extracted from page, enhanced with itemized list of selected periods below the stat cards                                     |
 
 ### Modified Files
 
-| File | Change |
-|------|--------|
-| `src/features/contributions/hooks/useUserContributionColumns.tsx` | Replace `getStatusBadge` with `ContributionStatusBadge` component |
-| `src/features/contributions/hooks/useContributionPeriodColumns.tsx` | Replace `getStatusBadge` with `ContributionStatusBadge` component |
-| `src/features/contributions/pages/add-contribution.tsx` | Import and wire new components; replace inline summary bar section |
-| `src/features/contributions/components/index.ts` | Add exports for 4 new components |
+| File                                                                | Change                                                             |
+| ------------------------------------------------------------------- | ------------------------------------------------------------------ |
+| `src/features/contributions/hooks/useUserContributionColumns.tsx`   | Replace `getStatusBadge` with `ContributionStatusBadge` component  |
+| `src/features/contributions/hooks/useContributionPeriodColumns.tsx` | Replace `getStatusBadge` with `ContributionStatusBadge` component  |
+| `src/features/contributions/pages/add-contribution.tsx`             | Import and wire new components; replace inline summary bar section |
+| `src/features/contributions/components/index.ts`                    | Add exports for 4 new components                                   |
 
 ---
 
 ### Task 1: Contribution Status Badge Component
 
 **Files:**
+
 - Create: `src/features/contributions/components/contribution-status-badge.tsx`
 
 - [ ] **Write the ContributionStatusBadge component**
@@ -61,7 +62,10 @@ export function ContributionStatusBadge({ status }: ContributionStatusBadgeProps
   const config = statusConfig[status] ?? { label: status, className: 'text-muted-foreground' };
 
   return (
-    <Badge variant="outline" className={cn('rounded px-1.5 py-0.5 border text-[10px]', config.className)}>
+    <Badge
+      variant="outline"
+      className={cn('rounded px-1.5 py-0.5 border text-[10px]', config.className)}
+    >
       {config.label}
     </Badge>
   );
@@ -73,6 +77,7 @@ export function ContributionStatusBadge({ status }: ContributionStatusBadgeProps
 ### Task 2: Member Profile Card Component
 
 **Files:**
+
 - Create: `src/features/contributions/components/member-profile-card.tsx`
 
 - [ ] **Write the MemberProfileCard component**
@@ -139,8 +144,7 @@ export function MemberProfileCard({
                   </div>
                   {membershipNumber && (
                     <Badge variant="secondary" className="text-[10px]">
-                      <Fingerprint className="h-3 w-3 mr-0.5" />
-                      #{membershipNumber}
+                      <Fingerprint className="h-3 w-3 mr-0.5" />#{membershipNumber}
                     </Badge>
                   )}
                   <span className="text-[10px] text-muted-foreground font-mono">
@@ -151,17 +155,23 @@ export function MemberProfileCard({
 
               <div className="grid grid-cols-3 gap-3">
                 <div className="rounded border border-hairline bg-canvas p-3">
-                  <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">Periods</p>
+                  <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">
+                    Periods
+                  </p>
                   <p className="text-xl font-bold text-ink mt-0.5">{totalPeriods}</p>
                 </div>
                 <div className="rounded border border-hairline bg-canvas p-3">
-                  <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">Total Paid</p>
+                  <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">
+                    Total Paid
+                  </p>
                   <p className="text-xl font-bold text-green-600 mt-0.5">
                     {formattedAmount(summary?.totalPaid ?? 0)}
                   </p>
                 </div>
                 <div className="rounded border border-hairline bg-canvas p-3">
-                  <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">Compliance</p>
+                  <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">
+                    Compliance
+                  </p>
                   <p className="text-xl font-bold text-ink mt-0.5">{complianceRate}%</p>
                 </div>
               </div>
@@ -179,6 +189,7 @@ export function MemberProfileCard({
 ### Task 3: Contribution Statistics Panel Component
 
 **Files:**
+
 - Create: `src/features/contributions/components/contribution-stats-panel.tsx`
 
 - [ ] **Write the ContributionStatsPanel component**
@@ -235,35 +246,64 @@ export function ContributionStatsPanel({ summary, contributions }: ContributionS
           <CardContent className="pt-0 pb-4 px-4 space-y-5">
             <div className="grid grid-cols-3 gap-3">
               <div className="rounded border border-hairline bg-canvas p-3">
-                <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">Total Expected</p>
-                <p className="text-xl font-bold text-ink mt-0.5">{formattedAmount(summary.totalExpected)}</p>
+                <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">
+                  Total Expected
+                </p>
+                <p className="text-xl font-bold text-ink mt-0.5">
+                  {formattedAmount(summary.totalExpected)}
+                </p>
               </div>
               <div className="rounded border border-hairline bg-canvas p-3">
-                <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">Total Paid</p>
-                <p className="text-xl font-bold text-green-600 mt-0.5">{formattedAmount(summary.totalPaid)}</p>
+                <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">
+                  Total Paid
+                </p>
+                <p className="text-xl font-bold text-green-600 mt-0.5">
+                  {formattedAmount(summary.totalPaid)}
+                </p>
               </div>
               <div className="rounded border border-hairline bg-canvas p-3">
-                <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">Total Due</p>
-                <p className="text-xl font-bold text-red-600 mt-0.5">{formattedAmount(summary.totalDue)}</p>
+                <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">
+                  Total Due
+                </p>
+                <p className="text-xl font-bold text-red-600 mt-0.5">
+                  {formattedAmount(summary.totalDue)}
+                </p>
               </div>
             </div>
 
             <div>
-              <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold mb-2">Status Breakdown</p>
+              <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold mb-2">
+                Status Breakdown
+              </p>
               <div className="flex flex-wrap gap-2">
-                <Badge variant="outline" className="rounded px-2 py-1 text-green-600 bg-green-50 border-green-200">
+                <Badge
+                  variant="outline"
+                  className="rounded px-2 py-1 text-green-600 bg-green-50 border-green-200"
+                >
                   Paid {paidMonths}
                 </Badge>
-                <Badge variant="outline" className="rounded px-2 py-1 text-blue-600 bg-blue-50 border-blue-200">
+                <Badge
+                  variant="outline"
+                  className="rounded px-2 py-1 text-blue-600 bg-blue-50 border-blue-200"
+                >
                   Partial {partialMonths}
                 </Badge>
-                <Badge variant="outline" className="rounded px-2 py-1 text-yellow-600 bg-yellow-50 border-yellow-200">
+                <Badge
+                  variant="outline"
+                  className="rounded px-2 py-1 text-yellow-600 bg-yellow-50 border-yellow-200"
+                >
                   Due {contributions.filter((c) => c.status === 'DUE').length}
                 </Badge>
-                <Badge variant="outline" className="rounded px-2 py-1 text-red-600 bg-red-50 border-red-200">
+                <Badge
+                  variant="outline"
+                  className="rounded px-2 py-1 text-red-600 bg-red-50 border-red-200"
+                >
                   Overdue {overdueMonths}
                 </Badge>
-                <Badge variant="outline" className="rounded px-2 py-1 text-gray-500 bg-gray-50 border-gray-200">
+                <Badge
+                  variant="outline"
+                  className="rounded px-2 py-1 text-gray-500 bg-gray-50 border-gray-200"
+                >
                   Waived {waivedMonths}
                 </Badge>
               </div>
@@ -271,7 +311,9 @@ export function ContributionStatsPanel({ summary, contributions }: ContributionS
 
             <div>
               <div className="flex items-center justify-between mb-1.5">
-                <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">Payment Compliance</p>
+                <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">
+                  Payment Compliance
+                </p>
                 <span className="text-xs font-semibold">{complianceRate}%</span>
               </div>
               <Progress value={complianceRate} className="h-2" />
@@ -279,10 +321,15 @@ export function ContributionStatsPanel({ summary, contributions }: ContributionS
 
             {recentPeriods.length > 0 && (
               <div>
-                <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold mb-2">Recent Periods</p>
+                <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold mb-2">
+                  Recent Periods
+                </p>
                 <div className="space-y-1">
                   {recentPeriods.map((period) => (
-                    <div key={period.id} className="flex items-center justify-between py-1 px-2 rounded hover:bg-muted/50">
+                    <div
+                      key={period.id}
+                      className="flex items-center justify-between py-1 px-2 rounded hover:bg-muted/50"
+                    >
                       <span className="text-sm text-ink">
                         {getMonthName(period.month)} {period.year}
                       </span>
@@ -305,6 +352,7 @@ export function ContributionStatsPanel({ summary, contributions }: ContributionS
 ### Task 4: Payment Summary Bar Component
 
 **Files:**
+
 - Create: `src/features/contributions/components/payment-summary-bar.tsx`
 
 - [ ] **Write the PaymentSummaryBar component**
@@ -365,7 +413,10 @@ export function PaymentSummaryBar({
           </p>
           <div className="space-y-1">
             {selectedPeriods.map((period) => (
-              <div key={period.id} className="flex items-center justify-between py-1 px-2 rounded hover:bg-muted/50">
+              <div
+                key={period.id}
+                className="flex items-center justify-between py-1 px-2 rounded hover:bg-muted/50"
+              >
                 <div className="flex items-center gap-2">
                   <span className="text-sm text-ink">
                     {getMonthName(period.month)} {period.year}
@@ -397,6 +448,7 @@ export function PaymentSummaryBar({
 ### Task 5: Wire Components into the Page
 
 **Files:**
+
 - Modify: `src/features/contributions/pages/add-contribution.tsx`
 
 - [ ] **Update imports and integrate components**
@@ -465,7 +517,13 @@ export const AddContributionPage = () => {
     basePath: '/contributions/add-contribution',
   });
 
-  const { contributions = [], meta, summary, refetch, user } = useUserContributions({ page, userId });
+  const {
+    contributions = [],
+    meta,
+    summary,
+    refetch,
+    user,
+  } = useUserContributions({ page, userId });
 
   const { mutate: addUserContribution, isPending: isAdding } = useMutation({
     mutationFn: (data: AddMemberContributionInput) =>
@@ -533,9 +591,7 @@ export const AddContributionPage = () => {
         />
       )}
 
-      {summary && (
-        <ContributionStatsPanel summary={summary} contributions={contributions} />
-      )}
+      {summary && <ContributionStatsPanel summary={summary} contributions={contributions} />}
 
       <PaymentSummaryBar
         selectedPeriods={selectedPeriods}
@@ -570,6 +626,7 @@ export const AddContributionPage = () => {
 ### Task 6: Update Data Table Status Badges
 
 **Files:**
+
 - Modify: `src/features/contributions/hooks/useUserContributionColumns.tsx`
 - Modify: `src/features/contributions/hooks/useContributionPeriodColumns.tsx`
 
@@ -578,15 +635,19 @@ Both column hooks currently render status via `getStatusBadge(row.original.statu
 - [ ] **Update `useUserContributionColumns.tsx`**
 
 Replace the import:
+
 ```tsx
 import { getStatusBadge } from '@src/shared/utils/helper/get-status-badge';
 ```
+
 with:
+
 ```tsx
 import { ContributionStatusBadge } from '../components/contribution-status-badge';
 ```
 
 And in the `columns` array, replace the status cell:
+
 ```tsx
 {
   accessorKey: 'status',
@@ -594,7 +655,9 @@ And in the `columns` array, replace the status cell:
   cell: ({ row }) => getStatusBadge(row.original.status),
 },
 ```
+
 with:
+
 ```tsx
 {
   accessorKey: 'status',
@@ -606,15 +669,19 @@ with:
 - [ ] **Update `useContributionPeriodColumns.tsx`**
 
 Replace the import:
+
 ```tsx
 import { getStatusBadge } from '@src/shared/utils/helper/get-status-badge';
 ```
+
 with:
+
 ```tsx
 import { ContributionStatusBadge } from '../components/contribution-status-badge';
 ```
 
 Replace the status cell:
+
 ```tsx
 {
   accessorKey: 'status',
@@ -622,7 +689,9 @@ Replace the status cell:
   cell: ({ row }) => getStatusBadge(row.original.status),
 },
 ```
+
 with:
+
 ```tsx
 {
   accessorKey: 'status',
@@ -636,6 +705,7 @@ with:
 ### Task 7: Update Barrel Exports
 
 **Files:**
+
 - Modify: `src/features/contributions/components/index.ts`
 
 - [ ] **Add new component exports**
@@ -658,6 +728,7 @@ export * from './payment-summary-bar';
 ```bash
 npx tsc --noEmit
 ```
+
 Expected: No errors.
 
 - [ ] **Run Next.js build**
@@ -665,4 +736,5 @@ Expected: No errors.
 ```bash
 npx next build
 ```
+
 Expected: Build succeeds, all routes compile.

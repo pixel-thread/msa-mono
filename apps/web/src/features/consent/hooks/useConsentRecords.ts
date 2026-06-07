@@ -26,7 +26,12 @@ export function useConsentRecords(options?: UseConsentRecordsOptions) {
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: QUERY_KEYS.CONSENT_KEYS.RECORDS(options),
-    queryFn: async () => http.get<ConsentReceiptRecord[]>(qs ? buildUrlWithQuery(ENDPOINTS.CONSENT.ALL, Object.fromEntries(params)) : ENDPOINTS.CONSENT.ALL),
+    queryFn: async () =>
+      http.get<ConsentReceiptRecord[]>(
+        qs
+          ? buildUrlWithQuery(ENDPOINTS.CONSENT.ALL, Object.fromEntries(params))
+          : ENDPOINTS.CONSENT.ALL,
+      ),
   });
 
   return {

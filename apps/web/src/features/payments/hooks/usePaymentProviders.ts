@@ -22,7 +22,7 @@ export function usePaymentProviders() {
 
 export function useProviderDetail(providerId: string | undefined) {
   const { data, isLoading, error, refetch } = useQuery({
-        queryKey: QUERY_KEYS.PAYMENTS_KEYS.PROVIDER(providerId),
+    queryKey: QUERY_KEYS.PAYMENTS_KEYS.PROVIDER(providerId),
     queryFn: () => http.get<ProviderResponse>(ENDPOINTS.PAYMENTS.PROVIDERS.DETAIL(providerId!)),
     enabled: !!providerId,
   });
@@ -65,7 +65,7 @@ export function useUpdateProvider(providerId: string) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.PAYMENTS_KEYS.PROVIDERS() });
       queryClient.invalidateQueries({
-    queryKey: QUERY_KEYS.PAYMENTS_KEYS.PROVIDER(providerId),
+        queryKey: QUERY_KEYS.PAYMENTS_KEYS.PROVIDER(providerId),
       });
     },
   });
@@ -75,7 +75,8 @@ export function useDeleteProvider() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (providerId: string) => http.delete(ENDPOINTS.PAYMENTS.PROVIDERS.DETAIL(providerId)),
+    mutationFn: (providerId: string) =>
+      http.delete(ENDPOINTS.PAYMENTS.PROVIDERS.DETAIL(providerId)),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.PAYMENTS_KEYS.PROVIDERS() });
     },

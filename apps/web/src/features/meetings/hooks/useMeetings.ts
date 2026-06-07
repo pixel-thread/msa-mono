@@ -39,8 +39,8 @@ export function useMeetings(options: UseMeetingsOptions = {}) {
       return res;
     },
     onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.MEETINGS_KEYS.LISTS() });
-        toast.success('Meeting deleted successfully');
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.MEETINGS_KEYS.LISTS() });
+      toast.success('Meeting deleted successfully');
     },
     onError: (err: Error) => {
       toast.error(err.message || 'Failed to delete meeting');

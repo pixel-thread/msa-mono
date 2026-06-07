@@ -8,7 +8,8 @@ export function useCreatePlan() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: CreateSubscriptionPlanInput) => http.post(ENDPOINTS.SUBSCRIPTIONS.PLANS, data),
+    mutationFn: (data: CreateSubscriptionPlanInput) =>
+      http.post(ENDPOINTS.SUBSCRIPTIONS.PLANS, data),
     onSuccess: (data) => {
       if (data.success) {
         toast.success('Plan created successfully');

@@ -27,10 +27,7 @@ export default function AllPaymentsPage() {
 
   return (
     <>
-      <SectionHeader
-        title="All Payments"
-        description="View and manage all payment transactions"
-      >
+      <SectionHeader title="All Payments" description="View and manage all payment transactions">
         <Button onClick={() => setRecordDialogOpen(true)} className="h-10">
           <Plus className="mr-2 h-4 w-4" />
           Record Payment

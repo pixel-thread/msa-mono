@@ -13,7 +13,10 @@ export function useUserPayments(options: UseUserPaymentsOptions) {
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ['user-payments', userId, page],
-    queryFn: () => http.get<UserPaymentData>(buildUrlWithQuery(ENDPOINTS.PAYMENTS.USERS.BY_ID(userId), { page })),
+    queryFn: () =>
+      http.get<UserPaymentData>(
+        buildUrlWithQuery(ENDPOINTS.PAYMENTS.USERS.BY_ID(userId), { page }),
+      ),
     enabled: !!userId,
   });
 

@@ -38,7 +38,11 @@ export default function LedgerAccountsPage() {
         description="Manage the Chart of Accounts for your association"
       >
         <div className="flex items-center gap-2">
-          <Button variant="outline" onClick={() => seedAccounts()} disabled={isSeeding || accounts.length > 0}>
+          <Button
+            variant="outline"
+            onClick={() => seedAccounts()}
+            disabled={isSeeding || accounts.length > 0}
+          >
             <Sprout className="h-4 w-4 mr-2" />
             Seed Accounts
           </Button>
@@ -82,7 +86,11 @@ export default function LedgerAccountsPage() {
       <DataTablePagination meta={meta} onPageChange={setPage} />
 
       <CreateAccountDialog open={createOpen} onOpenChange={setCreateOpen} />
-      <UpdateAccountDialog account={accountToUpdate} open={updateOpen} onOpenChange={setUpdateOpen} />
+      <UpdateAccountDialog
+        account={accountToUpdate}
+        open={updateOpen}
+        onOpenChange={setUpdateOpen}
+      />
     </>
   );
 }

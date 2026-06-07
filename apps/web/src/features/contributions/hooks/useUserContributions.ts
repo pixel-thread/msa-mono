@@ -26,7 +26,14 @@ export function useUserContributions(options: UseUserContributionsOptions) {
   });
 
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: QUERY_KEYS.CONTRIBUTIONS_KEYS.USER(userId, fromYear, fromMonth, toYear, toMonth, page),
+    queryKey: QUERY_KEYS.CONTRIBUTIONS_KEYS.USER(
+      userId,
+      fromYear,
+      fromMonth,
+      toYear,
+      toMonth,
+      page,
+    ),
     queryFn: () =>
       http.get<{
         contributions: ContributionPeriod[];

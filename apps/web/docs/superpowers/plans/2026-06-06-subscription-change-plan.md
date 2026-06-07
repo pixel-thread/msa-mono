@@ -14,26 +14,27 @@
 
 **Create (4 files):**
 
-| File | Responsibility |
-|---|---|
-| `src/app/(dashboard)/subscriptions/change-plan/page.tsx` | Route wrapper — renders `ChangePlanPage` |
-| `src/features/subscriptions/pages/change-plan.tsx` | Main page — member search, current plan display, plan selector, submit |
-| `src/features/subscriptions/hooks/useUserSubscription.ts` | Query hook — fetches a user's subscription by userId |
-| `src/features/subscriptions/hooks/useChangePlan.ts` | Mutation hook — changes a user's plan via upgrade endpoint |
+| File                                                      | Responsibility                                                         |
+| --------------------------------------------------------- | ---------------------------------------------------------------------- |
+| `src/app/(dashboard)/subscriptions/change-plan/page.tsx`  | Route wrapper — renders `ChangePlanPage`                               |
+| `src/features/subscriptions/pages/change-plan.tsx`        | Main page — member search, current plan display, plan selector, submit |
+| `src/features/subscriptions/hooks/useUserSubscription.ts` | Query hook — fetches a user's subscription by userId                   |
+| `src/features/subscriptions/hooks/useChangePlan.ts`       | Mutation hook — changes a user's plan via upgrade endpoint             |
 
 **Modify (3 files):**
 
-| File | Change |
-|---|---|
-| `src/features/subscriptions/utils/constants/endpoints.ts` | Add `userSubscription(userId)` and `upgrade` endpoint constants |
-| `src/features/subscriptions/validators/index.ts` | Add optional `userId` to `UpgradeSubscriptionSchema` + export type |
-| `src/features/subscriptions/pages/index.ts` | Export `ChangePlanPage` |
+| File                                                      | Change                                                             |
+| --------------------------------------------------------- | ------------------------------------------------------------------ |
+| `src/features/subscriptions/utils/constants/endpoints.ts` | Add `userSubscription(userId)` and `upgrade` endpoint constants    |
+| `src/features/subscriptions/validators/index.ts`          | Add optional `userId` to `UpgradeSubscriptionSchema` + export type |
+| `src/features/subscriptions/pages/index.ts`               | Export `ChangePlanPage`                                            |
 
 ---
 
 ### Task 1: Add endpoint constants
 
 **Files:**
+
 - Modify: `src/features/subscriptions/utils/constants/endpoints.ts`
 
 - [ ] **Step 1: Add userSubscription and upgrade constants**
@@ -67,6 +68,7 @@ git commit -m "feat: add upgrade and userSubscription endpoint constants"
 ### Task 2: Update upgrade validator to support userId
 
 **Files:**
+
 - Modify: `src/features/subscriptions/validators/index.ts`
 
 - [ ] **Step 1: Add optional userId to UpgradeSubscriptionSchema**
@@ -93,6 +95,7 @@ git commit -m "feat: add optional userId to upgrade subscription schema"
 ### Task 3: Create useUserSubscription query hook
 
 **Files:**
+
 - Create: `src/features/subscriptions/hooks/useUserSubscription.ts`
 
 - [ ] **Step 1: Create the hook**
@@ -133,6 +136,7 @@ git commit -m "feat: add useUserSubscription query hook"
 ### Task 4: Create useChangePlan mutation hook
 
 **Files:**
+
 - Create: `src/features/subscriptions/hooks/useChangePlan.ts`
 
 - [ ] **Step 1: Create the hook**
@@ -184,6 +188,7 @@ git commit -m "feat: add useChangePlan mutation hook"
 ### Task 5: Create the ChangePlanPage component
 
 **Files:**
+
 - Create: `src/features/subscriptions/pages/change-plan.tsx`
 
 - [ ] **Step 1: Create the page component**
@@ -209,7 +214,7 @@ import {
   SelectValue,
 } from '@src/shared/components/ui/select';
 import { formattedAmount } from '@src/shared/utils/format';
-import { User, CreditCard, ArrowRight,Loader2, Calendar, BadgeCheck, XCircle } from 'lucide-react';
+import { User, CreditCard, ArrowRight, Loader2, Calendar, BadgeCheck, XCircle } from 'lucide-react';
 
 interface SelectedMember {
   id: string;
@@ -311,7 +316,10 @@ export function ChangePlanPage() {
                     <p className="text-xs font-medium text-muted-foreground">Amount</p>
                     <p className="text-sm font-medium text-ink mt-1">
                       {subscription?.planVersion
-                        ? formattedAmount(subscription.planVersion.amount, subscription.planVersion.currency)
+                        ? formattedAmount(
+                            subscription.planVersion.amount,
+                            subscription.planVersion.currency,
+                          )
                         : '-'}
                       <span className="text-xs text-muted-foreground ml-1">
                         /{subscription?.planVersion?.billingCycle?.toLowerCase() ?? ''}
@@ -353,7 +361,8 @@ export function ChangePlanPage() {
                 <XCircle className="h-8 w-8 text-muted-foreground mb-2" />
                 <p className="text-sm font-medium text-ink">No Active Subscription</p>
                 <p className="text-xs text-muted-foreground mt-1">
-                  This member does not have an active subscription. Select a plan below to subscribe them.
+                  This member does not have an active subscription. Select a plan below to subscribe
+                  them.
                 </p>
               </CardContent>
             </Card>
@@ -426,6 +435,7 @@ git commit -m "feat: add ChangePlanPage component"
 ### Task 6: Create route wrapper page
 
 **Files:**
+
 - Create: `src/app/(dashboard)/subscriptions/change-plan/page.tsx`
 
 - [ ] **Step 1: Create route wrapper**
@@ -452,6 +462,7 @@ git commit -m "feat: add change-plan route page"
 ### Task 7: Export ChangePlanPage from the subscriptions pages barrel
 
 **Files:**
+
 - Modify: `src/features/subscriptions/pages/index.ts`
 
 - [ ] **Step 1: Add export**
@@ -477,6 +488,7 @@ git commit -m "feat: export ChangePlanPage from pages barrel"
 ## Self-Review
 
 **Spec coverage:**
+
 - Task 3 covers the `useUserSubscription` query hook that will call the future backend endpoint
 - Task 4 covers the mutation to call the existing upgrade endpoint with `userId`
 - Task 5 covers the full page with member search, current plan display, plan selector, and submit

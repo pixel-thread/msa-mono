@@ -18,6 +18,7 @@ Single-page enhancement — no new routes, no new API endpoints. All data is alr
 **Trigger:** Appears when a member is selected from `MemberCombobox` (i.e., `userId` is set + `user` data has loaded from `useUserContributions`).
 
 **Content:**
+
 - Member name (large text)
 - Email
 - Membership number as a `Badge` (formatted `#M-{number}`)
@@ -34,6 +35,7 @@ Single-page enhancement — no new routes, no new API endpoints. All data is alr
 **Trigger:** Appears when contribution data has loaded.
 
 **Content:**
+
 - Three summary stat cards in a row:
   - **Total Expected** — `formattedAmount(summary.totalExpected)`
   - **Total Paid** — `formattedAmount(summary.totalPaid)` (green)
@@ -54,6 +56,7 @@ Single-page enhancement — no new routes, no new API endpoints. All data is alr
 **Trigger:** Appears when contribution periods are selected via checkboxes.
 
 **Current behavior preserved + enhanced:**
+
 - Keep the 3 stat cards: Selected Periods count, Total Due (All), Paying Today
 - **Add:** An itemized list of selected periods below the stat cards, each showing:
   - Month/Year (e.g., "Jan 2026")
@@ -68,6 +71,7 @@ Single-page enhancement — no new routes, no new API endpoints. All data is alr
 ## Data Flow
 
 No changes to data fetching. The existing `useUserContributions` hook already returns all required data:
+
 - `user` → used in Member Profile card
 - `summary` → used in Statistics panel
 - `contributions` → used in Statistics panel (recent periods) and data table
@@ -76,12 +80,12 @@ Derived values computed client-side: compliance rate, total period count, filter
 
 ## Files Changed
 
-| File | Change |
-|------|--------|
-| `src/features/contributions/pages/add-contribution.tsx` | Add Member Profile, Statistics, enhanced summary sections |
-| `src/features/contributions/components/member-profile-card.tsx` | **Create** — Member profile card component |
-| `src/features/contributions/components/contribution-stats-panel.tsx` | **Create** — Statistics panel component |
-| `src/features/contributions/components/payment-summary-bar.tsx` | **Create** — Enhanced payment summary bar component |
+| File                                                                  | Change                                                    |
+| --------------------------------------------------------------------- | --------------------------------------------------------- |
+| `src/features/contributions/pages/add-contribution.tsx`               | Add Member Profile, Statistics, enhanced summary sections |
+| `src/features/contributions/components/member-profile-card.tsx`       | **Create** — Member profile card component                |
+| `src/features/contributions/components/contribution-stats-panel.tsx`  | **Create** — Statistics panel component                   |
+| `src/features/contributions/components/payment-summary-bar.tsx`       | **Create** — Enhanced payment summary bar component       |
 | `src/features/contributions/components/contribution-status-badge.tsx` | **Create** — Contribution-specific status badge component |
 
 ## Out of Scope

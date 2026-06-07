@@ -23,10 +23,7 @@ export default function MembersPage() {
 
   return (
     <>
-      <SectionHeader
-        title="Members"
-        description="Manage and view all association members"
-      />
+      <SectionHeader title="Members" description="Manage and view all association members" />
 
       <DataTableFilters
         fields={[

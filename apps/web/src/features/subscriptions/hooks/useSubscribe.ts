@@ -11,7 +11,8 @@ export function useSubscribe() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ planId }: SubscribeData) => http.post(ENDPOINTS.SUBSCRIPTIONS.SUBSCRIBE, { planId }),
+    mutationFn: ({ planId }: SubscribeData) =>
+      http.post(ENDPOINTS.SUBSCRIPTIONS.SUBSCRIBE, { planId }),
     onSuccess: (data) => {
       if (data.success) {
         toast.success('Subscribed successfully');

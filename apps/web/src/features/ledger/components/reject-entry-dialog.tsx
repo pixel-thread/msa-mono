@@ -1,7 +1,14 @@
 'use client';
 
 import { useState } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from '@src/shared/components/ui/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+  DialogDescription,
+} from '@src/shared/components/ui/dialog';
 import { Button } from '@src/shared/components/ui/button';
 import { Input } from '@src/shared/components/ui/input';
 import { Label } from '@src/shared/components/ui/label';
@@ -14,17 +21,27 @@ interface RejectEntryDialogProps {
   onOpenChange: (open: boolean) => void;
 }
 
-export function RejectEntryDialog({ entryId, entryDescription, open, onOpenChange }: RejectEntryDialogProps) {
+export function RejectEntryDialog({
+  entryId,
+  entryDescription,
+  open,
+  onOpenChange,
+}: RejectEntryDialogProps) {
   const [reason, setReason] = useState('');
   const { mutate: rejectEntry, isPending } = useRejectEntry();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!entryId) return;
-    rejectEntry({ id: entryId, reason }, { onSuccess: () => {
-      onOpenChange(false);
-      setReason('');
-    }});
+    rejectEntry(
+      { id: entryId, reason },
+      {
+        onSuccess: () => {
+          onOpenChange(false);
+          setReason('');
+        },
+      },
+    );
   };
 
   return (
@@ -39,11 +56,20 @@ export function RejectEntryDialog({ entryId, entryDescription, open, onOpenChang
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="reason">Reason (Optional)</Label>
-            <Input id="reason" value={reason} onChange={(e) => setReason(e.target.value)} placeholder="e.g. Incorrect allocation" />
+            <Input
+              id="reason"
+              value={reason}
+              onChange={(e) => setReason(e.target.value)}
+              placeholder="e.g. Incorrect allocation"
+            />
           </div>
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
-            <Button type="submit" variant="destructive" disabled={isPending}>Reject Entry</Button>
+            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+              Cancel
+            </Button>
+            <Button type="submit" variant="destructive" disabled={isPending}>
+              Reject Entry
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>

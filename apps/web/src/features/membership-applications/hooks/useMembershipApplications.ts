@@ -10,7 +10,10 @@ interface UseMembershipApplicationsOptions {
 
 export function useMembershipApplications(options: UseMembershipApplicationsOptions = {}) {
   const { page = 1, status } = options;
-  const url = buildUrlWithQuery(ENDPOINTS.ADMIN.MEMBERSHIP_APPLICATIONS, { page, ...(status && { status }) });
+  const url = buildUrlWithQuery(ENDPOINTS.ADMIN.MEMBERSHIP_APPLICATIONS, {
+    page,
+    ...(status && { status }),
+  });
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: QUERY_KEYS.MEMBERSHIP_APPLICATIONS_KEYS.LIST(page, status),

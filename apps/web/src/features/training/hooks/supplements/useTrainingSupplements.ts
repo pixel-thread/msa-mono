@@ -9,7 +9,9 @@ export function useTrainingSupplements(moduleId: string, page?: number) {
   const query = useQuery({
     queryKey: trainingQueryKeys.supplements.all(moduleId, pageNo),
     queryFn: async () =>
-      http.get<TrainingSupplementItem[]>(buildUrlWithQuery(ENDPOINTS.TRAINING.MODULE_SUPPLEMENTS(moduleId), { page: pageNo })),
+      http.get<TrainingSupplementItem[]>(
+        buildUrlWithQuery(ENDPOINTS.TRAINING.MODULE_SUPPLEMENTS(moduleId), { page: pageNo }),
+      ),
   });
 
   const data = query?.data?.data;

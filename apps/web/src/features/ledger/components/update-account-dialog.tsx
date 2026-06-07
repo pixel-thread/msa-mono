@@ -1,7 +1,13 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@src/shared/components/ui/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from '@src/shared/components/ui/dialog';
 import { Button } from '@src/shared/components/ui/button';
 import { Input } from '@src/shared/components/ui/input';
 import { Label } from '@src/shared/components/ui/label';
@@ -29,12 +35,15 @@ export function UpdateAccountDialog({ account, open, onOpenChange }: UpdateAccou
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!account) return;
-    
-    updateAccount({ id: account.id, name, description }, {
-      onSuccess: () => {
-        onOpenChange(false);
-      }
-    });
+
+    updateAccount(
+      { id: account.id, name, description },
+      {
+        onSuccess: () => {
+          onOpenChange(false);
+        },
+      },
+    );
   };
 
   return (
@@ -50,11 +59,19 @@ export function UpdateAccountDialog({ account, open, onOpenChange }: UpdateAccou
           </div>
           <div className="space-y-2">
             <Label htmlFor="description">Description</Label>
-            <Input id="description" value={description} onChange={(e) => setDescription(e.target.value)} />
+            <Input
+              id="description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
           </div>
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
-            <Button type="submit" disabled={isPending}>Save Changes</Button>
+            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+              Cancel
+            </Button>
+            <Button type="submit" disabled={isPending}>
+              Save Changes
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>

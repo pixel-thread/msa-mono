@@ -13,6 +13,7 @@
 ### Task 1: Create Dashboard Feature Page
 
 **Files:**
+
 - Create: `src/features/dashboard/pages/DashboardPage.tsx`
 
 - [ ] **Step 1: Create the DashboardPage component with JSDoc**
@@ -41,10 +42,7 @@ export function DashboardPage() {
   if (isLoading) {
     return (
       <div className="space-y-6">
-        <SectionHeader
-          title="Dashboard"
-          description="Association analytics and overview"
-        />
+        <SectionHeader title="Dashboard" description="Association analytics and overview" />
         <DashboardSkeleton />
       </div>
     );
@@ -71,10 +69,7 @@ export function DashboardPage() {
 
   return (
     <div className="space-y-6">
-      <SectionHeader
-        title="Dashboard"
-        description="Association analytics and overview"
-      />
+      <SectionHeader title="Dashboard" description="Association analytics and overview" />
 
       <StatsCards stats={data.stats} />
 
@@ -109,6 +104,7 @@ git commit -m "feat(dashboard): move dashboard logic to feature page"
 ### Task 2: Create Barrel Export
 
 **Files:**
+
 - Create: `src/features/dashboard/pages/index.ts`
 
 - [ ] **Step 1: Export DashboardPage from index**
@@ -127,6 +123,7 @@ git commit -m "feat(dashboard): add barrel export for dashboard pages"
 ### Task 3: Refactor App Route
 
 **Files:**
+
 - Modify: `src/app/(dashboard)/dashboard/page.tsx`
 
 - [ ] **Step 1: Replace content with thin wrapper**

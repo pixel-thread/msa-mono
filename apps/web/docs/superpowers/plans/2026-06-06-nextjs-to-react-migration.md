@@ -44,6 +44,7 @@ src/
 ### Task 1: Scaffold Vite + install dependencies
 
 **Files:**
+
 - Create: `index.html`
 - Create: `vite.config.ts`
 - Modify: `package.json`
@@ -78,10 +79,7 @@ import { TanStackRouterVite } from '@tanstack/router-plugin/vite';
 import path from 'path';
 
 export default defineConfig({
-  plugins: [
-    TanStackRouterVite({ target: 'react', autoCodeSplitting: true }),
-    react(),
-  ],
+  plugins: [TanStackRouterVite({ target: 'react', autoCodeSplitting: true }), react()],
   resolve: {
     alias: {
       '@src': path.resolve(__dirname, './src'),
@@ -106,6 +104,7 @@ export default defineConfig({
 Edit `package.json`:
 
 Replace scripts:
+
 ```json
 "scripts": {
   "dev": "vite",
@@ -117,15 +116,18 @@ Replace scripts:
 ```
 
 Remove from `dependencies`:
+
 - `next`
 - `next-swagger-doc`
 - `next-themes`
 - `@t3-oss/env-nextjs`
 
 Remove from `devDependencies`:
+
 - `eslint-config-next`
 
 Add to `devDependencies`:
+
 ```json
 "devDependencies": {
   "@tanstack/router-plugin": "^1.114.35",
@@ -139,6 +141,7 @@ Add to `devDependencies`:
 ```
 
 Add to `dependencies`:
+
 ```json
 "dependencies": {
   "@tanstack/react-router": "^1.114.35",
@@ -182,12 +185,7 @@ Add `"src/**/*.ts", "src/**/*.tsx"` to `include` if needed.
       "@feature/*": ["./src/features/*"]
     }
   },
-  "include": [
-    "next-env.d.ts",
-    "src/**/*.ts",
-    "src/**/*.tsx",
-    "**/*.mts"
-  ],
+  "include": ["next-env.d.ts", "src/**/*.ts", "src/**/*.tsx", "**/*.mts"],
   "exclude": ["node_modules", "express"]
 }
 ```
@@ -208,6 +206,7 @@ git commit -m "feat: scaffold Vite + TanStack Router config"
 ### Task 2: Create root entry + env migration
 
 **Files:**
+
 - Create: `src/main.tsx`
 - Create: `src/routes/__root.tsx`
 - Modify: `src/env.ts`
@@ -321,6 +320,7 @@ git commit -m "feat: add Vite entry point, root route, env rewrite"
 ### Task 3: Update Redirect component for TanStack Router
 
 **Files:**
+
 - Modify: `src/shared/components/Redirect.tsx`
 
 Replace `usePathname`, `useRouter`, `useSearchParams` from `next/navigation` with TanStack Router equivalents.
@@ -545,6 +545,7 @@ git commit -m "refactor: migrate Redirect and use-url-filters to TanStack Router
 ### Task 4: Create auth layout and auth route files
 
 **Files:**
+
 - Create: `src/routes/_auth/index.tsx`
 - Create: `src/routes/_auth/sign-in/index.tsx`
 - Create: `src/routes/_auth/sign-up/index.tsx`
@@ -645,6 +646,7 @@ git commit -m "feat: add auth route layout and pages"
 ### Task 5: Create dashboard layout route
 
 **Files:**
+
 - Create: `src/routes/_dashboard/index.tsx`
 
 ```tsx
@@ -676,6 +678,7 @@ git commit -m "feat: add dashboard layout route"
 ### Task 6: Create home route + announcements routes
 
 **Files:**
+
 - Create: `src/routes/index/index.tsx`
 - Create: `src/routes/_dashboard/announcement/index.tsx`
 - Create: `src/routes/_dashboard/announcement/archived/index.tsx`
@@ -741,6 +744,7 @@ git commit -m "feat: add home and announcement routes"
 ### Task 7: Create associations + audit-logs + compliance + consent routes
 
 **Files:**
+
 - Create: `src/routes/_dashboard/associations/index.tsx`
 - Create: `src/routes/_dashboard/associations/current/index.tsx`
 - Create: `src/routes/_dashboard/audit-logs/index.tsx`
@@ -819,6 +823,7 @@ git commit -m "feat: add associations, audit-logs, compliance, consent, dashboar
 ### Task 8: Create contributions + ledger routes
 
 **Files:**
+
 - Create: `src/routes/_dashboard/contributions/index.tsx`
 - Create: `src/routes/_dashboard/contributions/declarations/index.tsx`
 - Create: `src/routes/_dashboard/contributions/declarations/$declarationId/index.tsx`
@@ -933,6 +938,7 @@ git commit -m "feat: add contributions and ledger routes"
 ### Task 9: Create meetings + member-types + members routes
 
 **Files:**
+
 - Create: `src/routes/_dashboard/meetings/index.tsx`
 - Create: `src/routes/_dashboard/meetings/$meetingId/index.tsx`
 - Create: `src/routes/_dashboard/meetings/$meetingId/assign/index.tsx`
@@ -1020,6 +1026,7 @@ git commit -m "feat: add meetings, member-types, members routes"
 ### Task 10: Create payments + subscriptions routes
 
 **Files:**
+
 - Create: `src/routes/_dashboard/payments/index.tsx`
 - Create: `src/routes/_dashboard/payments/providers/index.tsx`
 - Create: `src/routes/_dashboard/payments/users/index.tsx`
@@ -1134,6 +1141,7 @@ git commit -m "feat: add payments and subscriptions routes"
 ### Task 11: Create training routes
 
 **Files:**
+
 - Create: `src/routes/_dashboard/training/index.tsx`
 - Create: `src/routes/_dashboard/training/completions/index.tsx`
 - Create: `src/routes/_dashboard/training/$id/index.tsx`
@@ -1194,6 +1202,7 @@ git commit -m "feat: add training routes"
 ### Task 12: Migrate shared components — nav-main, nav-user, public-header, public-footer
 
 **Files:**
+
 - Modify: `src/shared/components/nav-main.tsx`
 - Modify: `src/shared/components/nav-user.tsx`
 - Modify: `src/shared/components/public-header.tsx`
@@ -1204,11 +1213,14 @@ These components use `next/link` and `usePathname`/`useRouter`. Replace with Tan
 - [ ] **Step 1: Update `src/shared/components/nav-main.tsx`**
 
 Replace:
+
 ```tsx
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 ```
+
 With:
+
 ```tsx
 import { Link, useLocation } from '@tanstack/react-router';
 ```
@@ -1218,11 +1230,14 @@ Replace `const pathname = usePathname();` with `const pathname = useLocation().p
 - [ ] **Step 2: Update `src/shared/components/nav-user.tsx`**
 
 Replace:
+
 ```tsx
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 ```
+
 With:
+
 ```tsx
 import { Link, useNavigate } from '@tanstack/react-router';
 ```
@@ -1234,11 +1249,14 @@ Replace `router.replace('/sign-in')` with `navigate({ to: '/sign-in', replace: t
 - [ ] **Step 3: Update `src/shared/components/public-header.tsx`**
 
 Replace:
+
 ```tsx
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 ```
+
 With:
+
 ```tsx
 import { Link, useLocation } from '@tanstack/react-router';
 ```
@@ -1248,10 +1266,13 @@ Replace `const pathname = usePathname();` with `const pathname = useLocation().p
 - [ ] **Step 4: Update `src/shared/components/public-footer.tsx`**
 
 Replace:
+
 ```tsx
 import Link from 'next/link';
 ```
+
 With:
+
 ```tsx
 import { Link } from '@tanstack/react-router';
 ```
@@ -1268,6 +1289,7 @@ git commit -m "refactor: migrate shared nav components to TanStack Router Link/h
 ### Task 13: Migrate auth feature pages — sign-in, sign-up, forgot-password, reset-password, change-password, forbidden
 
 **Files:**
+
 - Modify: `src/features/auth/pages/sign-in.tsx`
 - Modify: `src/features/auth/pages/sign-up.tsx`
 - Modify: `src/features/auth/pages/forgot-password.tsx`
@@ -1281,11 +1303,14 @@ These files use `useRouter` from `next/navigation` and `Link` from `next/link`.
 - [ ] **Step 1: Update `sign-in.tsx`**
 
 Replace:
+
 ```tsx
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 ```
+
 With:
+
 ```tsx
 import { useNavigate, Link } from '@tanstack/react-router';
 ```
@@ -1305,11 +1330,14 @@ Replace `import Link from 'next/link';` with `import { Link } from '@tanstack/re
 - [ ] **Step 4: Update `reset-password.tsx`**
 
 Replace:
+
 ```tsx
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 ```
+
 With:
+
 ```tsx
 import { useNavigate, useSearchParams, Link } from '@tanstack/react-router';
 ```
@@ -1358,6 +1386,7 @@ git commit -m "refactor: migrate auth pages and hooks to TanStack Router"
 These files use `next/link` inside table column definitions (rendering links in table cells). Replace with `Link` from `@tanstack/react-router`.
 
 **Files:**
+
 - `src/features/announcement/hooks/useAnnouncementColumns.tsx`
 - `src/features/contributions/hooks/useUserContributionColumns.tsx`
 - `src/features/contributions/hooks/useContributionPeriodColumns.tsx`
@@ -1379,7 +1408,9 @@ These files use `next/link` inside table column definitions (rendering links in 
 ```tsx
 import Link from 'next/link';
 ```
+
 With:
+
 ```tsx
 import { Link } from '@tanstack/react-router';
 ```
@@ -1398,6 +1429,7 @@ git commit -m "refactor: migrate table column links to TanStack Router Link"
 ### Task 15: Migrate feature pages with `useRouter` – announcements, contributions, meetings, members, subscriptions
 
 **Files:**
+
 - `src/features/announcement/pages/announcement-detail.tsx`
 - `src/features/contributions/pages/contribution-detail.tsx`
 - `src/features/contributions/pages/declaration-detail.tsx`
@@ -1419,7 +1451,9 @@ git commit -m "refactor: migrate table column links to TanStack Router Link"
 ```tsx
 import { useRouter } from 'next/navigation';
 ```
+
 With:
+
 ```tsx
 import { useNavigate } from '@tanstack/react-router';
 ```
@@ -1441,6 +1475,7 @@ git commit -m "refactor: migrate useRouter to useNavigate in feature pages"
 ### Task 16: Migrate feature pages with `useParams` — announcement, contributions, ledger, meetings, members, training, payments
 
 **Files:**
+
 - `src/features/announcement/pages/announcement-detail.tsx`
 - `src/features/contributions/pages/contribution-detail.tsx`
 - `src/features/contributions/pages/declaration-detail.tsx`
@@ -1463,7 +1498,9 @@ git commit -m "refactor: migrate useRouter to useNavigate in feature pages"
 ```tsx
 import { useParams } from 'next/navigation';
 ```
+
 With:
+
 ```tsx
 import { useParams } from '@tanstack/react-router';
 ```
@@ -1496,6 +1533,7 @@ git commit -m "refactor: migrate useParams to TanStack Router useParams"
 - [ ] **Step 1: Check each remaining file**
 
 Files using `useSearchParams` from `next/navigation`:
+
 - `src/features/meetings/pages/MeetingDetailPage.tsx`
 - `src/features/auth/pages/reset-password.tsx` (already done in Task 13)
 - `src/features/contributions/pages/user-contributions.tsx`
@@ -1524,6 +1562,7 @@ git commit -m "refactor: migrate useSearchParams to TanStack Router"
 ### Task 18: Update ESLint config
 
 **Files:**
+
 - Modify: `eslint.config.mjs`
 
 Replace Next.js-specific ESLint config with React + TypeScript config:
@@ -1595,6 +1634,7 @@ git commit -m "chore: replace Next.js ESLint config with React/TypeScript config
 ### Task 19: Clean up — remove old Next.js files and swagger feature
 
 **Remove these files/directories:**
+
 - `src/app/` (entire directory)
 - `src/features/swagger/` (entire directory)
 - `next.config.ts`
@@ -1669,6 +1709,7 @@ git commit -m "chore: fix build issues and cleanup"
 ## Self-Review
 
 **Spec coverage:**
+
 - ✅ Scaffold Vite + deps (Task 1)
 - ✅ Entry point + root route (Task 2)
 - ✅ Auth routes (Task 4)

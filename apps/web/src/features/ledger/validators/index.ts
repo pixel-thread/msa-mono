@@ -22,4 +22,3 @@ export const CreateLedgerEntrySchema = z.object({
   paymentId: z.string().uuid().optional().nullable(),
   lines: z.array(CreateLedgerLineSchema).min(2),
 });
-

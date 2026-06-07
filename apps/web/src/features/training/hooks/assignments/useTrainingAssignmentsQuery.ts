@@ -12,7 +12,9 @@ export function useTrainingAssignmentsQuery({ page = 1, moduleId }: Props) {
   const { data, isLoading, refetch } = useQuery({
     queryKey: trainingQueryKeys.assignments.all(moduleId, page),
     queryFn: async () =>
-      http.get<TrainingAssignment[]>(buildUrlWithQuery(ENDPOINTS.TRAINING.MODULE_ASSIGN(moduleId!), { page })),
+      http.get<TrainingAssignment[]>(
+        buildUrlWithQuery(ENDPOINTS.TRAINING.MODULE_ASSIGN(moduleId!), { page }),
+      ),
     enabled: !!moduleId,
   });
 

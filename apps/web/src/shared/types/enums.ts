@@ -232,7 +232,8 @@ export const ComplianceCheckStatus = {
   SKIPPED: 'SKIPPED',
 } as const;
 
-export type ComplianceCheckStatus = (typeof ComplianceCheckStatus)[keyof typeof ComplianceCheckStatus];
+export type ComplianceCheckStatus =
+  (typeof ComplianceCheckStatus)[keyof typeof ComplianceCheckStatus];
 
 export const TrainingAssignmentStatus = {
   ASSIGNED: 'ASSIGNED',
@@ -242,7 +243,8 @@ export const TrainingAssignmentStatus = {
   EXEMPT: 'EXEMPT',
 } as const;
 
-export type TrainingAssignmentStatus = (typeof TrainingAssignmentStatus)[keyof typeof TrainingAssignmentStatus];
+export type TrainingAssignmentStatus =
+  (typeof TrainingAssignmentStatus)[keyof typeof TrainingAssignmentStatus];
 
 export const ApplicationStatus = {
   PENDING: 'PENDING',

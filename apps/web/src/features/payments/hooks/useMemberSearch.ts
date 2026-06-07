@@ -23,7 +23,10 @@ export function useMemberSearch(query: string) {
 
   const { data, isLoading } = useQuery({
     queryKey: QUERY_KEYS.PAYMENTS_KEYS.MEMBER_SEARCH(debouncedQuery),
-    queryFn: () => http.get<MemberSearchResult[]>(buildUrlWithQuery(ENDPOINTS.MEMBERS.ROOT, { search: debouncedQuery })),
+    queryFn: () =>
+      http.get<MemberSearchResult[]>(
+        buildUrlWithQuery(ENDPOINTS.MEMBERS.ROOT, { search: debouncedQuery }),
+      ),
     enabled: debouncedQuery.length >= 2,
   });
 

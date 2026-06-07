@@ -33,7 +33,9 @@ export function useIncomeStatement(startDate?: string, endDate?: string) {
   const { data, isLoading, error } = useQuery({
     queryKey: ['income-statement', startDate, endDate],
     queryFn: () =>
-      http.get<IncomeStatementLine>(`${ENDPOINTS.LEDGER.INCOME_STATEMENT}?${queryParams.toString()}`),
+      http.get<IncomeStatementLine>(
+        `${ENDPOINTS.LEDGER.INCOME_STATEMENT}?${queryParams.toString()}`,
+      ),
   });
 
   return { data: data?.data, isLoading, error };

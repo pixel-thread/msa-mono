@@ -138,10 +138,7 @@ export function MeetingMinutesPage() {
         <Link to={`/meetings/${meetingId}`} className="text-sm text-primary hover:underline">
           ← Back to Meeting Details
         </Link>
-        <Link
-          to={`/meetings/${meetingId}/assign`}
-          className="text-sm text-primary hover:underline"
-        >
+        <Link to={`/meetings/${meetingId}/assign`} className="text-sm text-primary hover:underline">
           Manage Attendees →
         </Link>
       </div>

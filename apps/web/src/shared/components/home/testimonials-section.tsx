@@ -3,10 +3,7 @@
 import { HugeiconsIcon } from '@hugeicons/react';
 import { StarIcon } from '@hugeicons/core-free-icons';
 import { Badge } from '@src/shared/components/ui/badge';
-import {
-  Card,
-  CardContent,
-} from '@src/shared/components/ui/card';
+import { Card, CardContent } from '@src/shared/components/ui/card';
 import { Text } from '@src/shared/components/ui/text';
 import {
   Carousel,

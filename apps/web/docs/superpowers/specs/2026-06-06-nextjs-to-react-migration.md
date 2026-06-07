@@ -9,26 +9,29 @@ Migrate the `apps/web` Next.js 16 App Router project to a pure React SPA using V
 
 ## Decisions
 
-| Decision | Choice |
-|---|---|
-| Build tool | Vite with `@vitejs/plugin-react` + `@tanstack/router-plugin/vite` |
-| Routing | `@tanstack/react-router` — file-based, folder-per-route (`routes/<name>/index.tsx`) |
-| Fonts | `@fontsource/roboto`, `@fontsource/roboto-mono`, `@fontsource/jetbrains-mono` |
-| Theme | `next-themes` (works without Next.js) |
-| Swagger docs | Removed entirely |
-| Hosting | Vercel (static SPA, remove cron jobs from `vercel.json`) |
-| Env vars | Keep `NEXT_PUBLIC_*` prefix — Vite supports custom `envPrefix` |
+| Decision     | Choice                                                                              |
+| ------------ | ----------------------------------------------------------------------------------- |
+| Build tool   | Vite with `@vitejs/plugin-react` + `@tanstack/router-plugin/vite`                   |
+| Routing      | `@tanstack/react-router` — file-based, folder-per-route (`routes/<name>/index.tsx`) |
+| Fonts        | `@fontsource/roboto`, `@fontsource/roboto-mono`, `@fontsource/jetbrains-mono`       |
+| Theme        | `next-themes` (works without Next.js)                                               |
+| Swagger docs | Removed entirely                                                                    |
+| Hosting      | Vercel (static SPA, remove cron jobs from `vercel.json`)                            |
+| Env vars     | Keep `NEXT_PUBLIC_*` prefix — Vite supports custom `envPrefix`                      |
 
 ## Files to Create
 
 ### Root config files
+
 - `index.html` — Vite entry HTML
 - `vite.config.ts` — Vite config with plugins
 
 ### Entry points
+
 - `src/main.tsx` — App entry, renders `<RouterProvider>`, applies global CSS
 
 ### Route tree
+
 - `src/routes/__root.tsx` — Root route layout (providers: AppProviders, Theme, Query, Auth)
 - `src/routes/index/index.tsx` — Home page (`/`)
 - `src/routes/_auth/index.tsx` — Auth layout (no sidebar)
@@ -98,12 +101,14 @@ Migrate the `apps/web` Next.js 16 App Router project to a pure React SPA using V
 ## Files to Modify
 
 ### Config files
+
 - `package.json` — Replace Next.js scripts with Vite scripts, update dependencies
 - `tsconfig.json` — Remove `"plugins": [{"name": "next"}]`, remove Next.js-specific include paths
 - `.env` / `.env.production` — Ensure `VITE_*` prefix or set `envPrefix: ['NEXT_PUBLIC_', 'VITE_']` in vite config
 - `eslint.config.mjs` — Replace `eslint-config-next` with appropriate React/Vite plugins
 
 ### All files importing from `next/*` (~40 files, listed in exploration)
+
 - `next/link` → `Link` from `@tanstack/react-router`
 - `useRouter` from `next/navigation` → `useNavigate` from `@tanstack/react-router`
 - `useParams` from `next/navigation` → `useParams` from `@tanstack/react-router`
@@ -111,6 +116,7 @@ Migrate the `apps/web` Next.js 16 App Router project to a pure React SPA using V
 - `usePathname` from `next/navigation` → `useLocation` from `@tanstack/react-router`
 
 ### Feature pages (currently in `src/features/*/pages/*.tsx`)
+
 These are thin page components imported by Next.js route pages. They remain unchanged in `src/features/` but will now be imported by TanStack Router route files instead of Next.js `page.tsx` files.
 
 ## Architecture

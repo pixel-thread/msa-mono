@@ -58,7 +58,9 @@ export default function LedgerAccountDetailPage() {
       <div className="grid gap-4 md:grid-cols-3">
         <Card className=" border-hairline bg-surface-card">
           <CardContent className="p-4">
-            <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Type</p>
+            <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+              Type
+            </p>
             <p className="mt-1 text-lg font-semibold text-ink">{account.type}</p>
           </CardContent>
         </Card>

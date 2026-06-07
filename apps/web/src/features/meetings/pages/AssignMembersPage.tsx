@@ -128,10 +128,7 @@ export function AssignMembersPage() {
 
   return (
     <>
-      <SectionHeader
-        title={meeting.title}
-        description="Manage meeting attendees and assignments"
-      />
+      <SectionHeader title={meeting.title} description="Manage meeting attendees and assignments" />
 
       <div className="grid gap-4 md:grid-cols-4">
         <Card className=" border-hairline bg-surface-card">
