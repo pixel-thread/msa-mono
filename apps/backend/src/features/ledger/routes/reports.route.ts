@@ -1,4 +1,4 @@
-import { incomeStatement,trialBalance } from '@feature/ledger/services/reports.service';
+import { incomeStatement, trialBalance } from '@feature/ledger/services/reports.service';
 import { ReportQuerySchema } from '@feature/ledger/validators';
 import { validate } from '@lib/validate';
 import { UserRole } from '@prisma/client';

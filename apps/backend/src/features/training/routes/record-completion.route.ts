@@ -1,6 +1,6 @@
 // ---- External libs ----
 // ---- Services ----
-import { adminRecordCompletion,findManyCompletions } from '@feature/training/services';
+import { adminRecordCompletion, findManyCompletions } from '@feature/training/services';
 // ---- Validators ----
 import { AdminRecordCompletionSchema } from '@feature/training/validators/training';
 // ---- Shared utilities ----

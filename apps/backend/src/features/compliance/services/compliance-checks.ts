@@ -1,6 +1,5 @@
 import { prisma } from '@lib/prisma';
-import type {
-  ComplianceCheckStatus} from '@prisma/client';
+import type { ComplianceCheckStatus } from '@prisma/client';
 import {
   ConsentPurpose,
   ConsentStatus,

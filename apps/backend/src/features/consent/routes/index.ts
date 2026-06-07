@@ -9,7 +9,7 @@ import { getAllConsentRecords, getConsentHistory, getConsentReport } from './adm
 import { grantConsent, revokeConsent } from './grant-revoke.route';
 // Route handlers
 import { getMyConsent } from './my-consent.route';
-import { deleteReceipt, getReceipt, getUserConsents,updateReceipt } from './user-consent.route';
+import { deleteReceipt, getReceipt, getUserConsents, updateReceipt } from './user-consent.route';
 
 // ---- Route definitions
 

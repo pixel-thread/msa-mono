@@ -5,7 +5,7 @@
 //            pagination. Self-service — no finance role required.
 // ---------------------------------------------------------------------------
 
-import { ForbiddenError,UnauthorizedError } from '@errors';
+import { ForbiddenError, UnauthorizedError } from '@errors';
 import { findPaymentTransactions } from '@feature/payments/services/find-payment-transactions';
 import { PaymentHistoryQuerySchema } from '@feature/payments/validators';
 import { prisma } from '@lib/prisma';

@@ -1,7 +1,7 @@
 // ---- External libs ----
 import { NotFoundError } from '@errors';
 // ---- Services ----
-import { deleteModule,findUniqueModule, updateModule } from '@feature/training/services';
+import { deleteModule, findUniqueModule, updateModule } from '@feature/training/services';
 // ---- Validators ----
 import { UpdateTrainingModuleSchema } from '@feature/training/validators/training';
 // ---- Shared utilities ----

@@ -9,7 +9,7 @@ import { createLogs, createLogsBatch } from '@services/logs';
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
 // ---- Validators / Types
-import { LogBatchSchema,LogIngestSchema } from '@validator/logs';
+import { LogBatchSchema, LogIngestSchema } from '@validator/logs';
 import type { RequestHandler } from 'express';
 import type { NextFunction, Request, Response } from 'express';
 

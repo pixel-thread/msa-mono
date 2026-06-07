@@ -5,7 +5,7 @@
 //            filtering (status, method, gateway, date range, search).
 // ---------------------------------------------------------------------------
 
-import { ForbiddenError,UnauthorizedError } from '@errors';
+import { ForbiddenError, UnauthorizedError } from '@errors';
 import { getAllTransactions } from '@feature/payments/services/payment.service';
 import { GetTransactionsQuerySchema } from '@feature/payments/validators';
 import { prisma } from '@lib/prisma';

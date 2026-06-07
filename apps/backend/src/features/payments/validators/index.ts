@@ -1,7 +1,7 @@
 // ---------------------------------------------------------------------------
 // Shared imports
 // ---------------------------------------------------------------------------
-import { ContributionStatus,PaymentMethod } from '@prisma/client';
+import { ContributionStatus, PaymentMethod } from '@prisma/client';
 import { pageNumberValidation, pageSizeValidation } from '@validator/common';
 import { z } from 'zod';
 

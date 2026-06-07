@@ -20,7 +20,7 @@ import {
   WaiveContributionSchema,
 } from '@feature/contributions/validators';
 import { validate } from '@lib/validate';
-import { ContributionStatus,UserRole } from '@prisma/client';
+import { ContributionStatus, UserRole } from '@prisma/client';
 import { getAssociation } from '@services/association/get-association';
 import { PAGE_SIZE } from '@src/shared/constants';
 import { logger } from '@src/shared/logger';
@@ -29,7 +29,7 @@ import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';
 import { pageNumberValidation } from '@validator/common';
-import type { NextFunction, RequestHandler , Response } from 'express';
+import type { NextFunction, RequestHandler, Response } from 'express';
 import { type Request } from 'express';
 import { z } from 'zod';
 

@@ -1,10 +1,10 @@
 import { auth } from '@src/middleware/auth';
 import { Router } from 'express';
 
-import { deleteCheck,getCheck, listChecks, runChecks } from './checks.route';
+import { deleteCheck, getCheck, listChecks, runChecks } from './checks.route';
 import { getEvidence } from './evidence.route';
-import { getMyComplaint,listMyComplaints } from './my-complaints.route';
-import { createComplaintHandler,listComplaints } from './overview.route';
+import { getMyComplaint, listMyComplaints } from './my-complaints.route';
+import { createComplaintHandler, listComplaints } from './overview.route';
 
 /** Compliance router — aggregates all compliance-related route handlers. */
 const router: Router = Router();

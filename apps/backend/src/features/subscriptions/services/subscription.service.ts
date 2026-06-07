@@ -1,13 +1,13 @@
 // ---------------------------------------------------------------------------
 // Shared utilities
 // ---------------------------------------------------------------------------
-import { ConflictError, ForbiddenError,NotFoundError } from '@errors';
+import { ConflictError, ForbiddenError, NotFoundError } from '@errors';
 import { generateUserContributions } from '@feature/contributions/services/contribution.service';
 import { prisma } from '@lib/prisma';
 // ---------------------------------------------------------------------------
 // Prisma
 // ---------------------------------------------------------------------------
-import type {UserRole } from '@prisma/client';
+import type { UserRole } from '@prisma/client';
 import { ContributionStatus } from '@prisma/client';
 import { PAGE_SIZE } from '@src/shared/constants';
 import { buildPagination } from '@src/shared/utils/helper/build-pagination';

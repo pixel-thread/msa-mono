@@ -28,12 +28,8 @@ import { validate } from '@lib/validate';
 // ---------------------------------------------------------------------------
 // Prisma
 // ---------------------------------------------------------------------------
-import type {
-  ComplianceCheckStatus as PrismaComplianceCheckStatus,
-  Prisma} from '@prisma/client';
-import {
-  UserRole,
-} from '@prisma/client';
+import type { ComplianceCheckStatus as PrismaComplianceCheckStatus, Prisma } from '@prisma/client';
+import { UserRole } from '@prisma/client';
 import { getAssociation } from '@services/association/get-association';
 import { logger } from '@src/shared/logger';
 import { buildPagination } from '@src/shared/utils/helper/build-pagination';

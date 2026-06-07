@@ -7,7 +7,7 @@ import { env } from '@src/env';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 import type { RequestHandler } from 'express';
-import type { NextFunction,Request, Response } from 'express';
+import type { NextFunction, Request, Response } from 'express';
 
 // ---- Helpers -----------------------------------------------------------------
 

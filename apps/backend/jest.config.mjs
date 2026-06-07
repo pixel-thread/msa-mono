@@ -1,5 +1,5 @@
 import { config } from 'dotenv';
-import { dirname,resolve } from 'path';
+import { dirname, resolve } from 'path';
 import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);

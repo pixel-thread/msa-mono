@@ -3,7 +3,7 @@
 // ---- Each consent action is persisted as a receipt and audited via the audit-log trail.
 
 // Shared utilities
-import { BadRequestError,NotFoundError } from '@errors';
+import { BadRequestError, NotFoundError } from '@errors';
 // Prisma
 import { prisma } from '@lib/prisma';
 import type { Prisma } from '@prisma/client';

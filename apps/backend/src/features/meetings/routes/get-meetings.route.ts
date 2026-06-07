@@ -2,7 +2,7 @@ import { ForbiddenError } from '@errors';
 import { findManyMeetings } from '@feature/meetings/services';
 import { MeetingQuerySchema } from '@feature/meetings/validators/meetings';
 import { validate } from '@lib/validate';
-import { MeetingStatus,UserRole } from '@prisma/client';
+import { MeetingStatus, UserRole } from '@prisma/client';
 import { getAssociation } from '@services/association/get-association';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';

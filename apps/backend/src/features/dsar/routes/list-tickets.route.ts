@@ -4,7 +4,7 @@
 
 // ---- External Libraries
 
-import { ForbiddenError,UnauthorizedError } from '@errors';
+import { ForbiddenError, UnauthorizedError } from '@errors';
 // ---- DSAR Services
 import { findDsarTickets } from '@feature/dsar/services';
 // ---- DSAR Validators

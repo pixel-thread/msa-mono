@@ -1,4 +1,4 @@
-import { ForbiddenError,NotFoundError } from '@errors';
+import { ForbiddenError, NotFoundError } from '@errors';
 import { ExpoNotificationService } from '@lib/expo';
 import { prisma } from '@lib/prisma';
 import { $Enums, AttendeeRole } from '@prisma/client';

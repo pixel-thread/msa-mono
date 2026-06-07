@@ -1,6 +1,6 @@
 import { Router } from 'express';
 
-import { postAnonymize,postDsarSla, postSubscriptionExpiry } from './cron-jobs.route';
+import { postAnonymize, postDsarSla, postSubscriptionExpiry } from './cron-jobs.route';
 
 // ---- Routes -----------------------------------------------------------------
 

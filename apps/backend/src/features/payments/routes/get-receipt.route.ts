@@ -6,7 +6,7 @@
 //            with member info, association info, and allocation breakdown.
 // ---------------------------------------------------------------------------
 
-import { ForbiddenError, NotFoundError,UnauthorizedError } from '@errors';
+import { ForbiddenError, NotFoundError, UnauthorizedError } from '@errors';
 import { getTransactionById } from '@feature/payments/services/payment.service';
 import { prisma } from '@lib/prisma';
 import { validate } from '@lib/validate';

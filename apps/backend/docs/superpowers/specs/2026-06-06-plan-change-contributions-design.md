@@ -37,8 +37,8 @@ User on ₹500 plan, upgrades to ₹1000 plan on Feb 15:
 
 ## Files Changed
 
-| File | Change |
-|------|--------|
+| File                                                          | Change                                               |
+| ------------------------------------------------------------- | ---------------------------------------------------- |
 | `src/features/contributions/services/contribution.service.ts` | Skip existing periods in `generateUserContributions` |
-| `src/features/subscriptions/services/subscription.service.ts` | Backfill missing periods before plan switch |
-| `src/__tests__/routes/subscriptions.upgrade.test.ts` | New — integration tests |
+| `src/features/subscriptions/services/subscription.service.ts` | Backfill missing periods before plan switch          |
+| `src/__tests__/routes/subscriptions.upgrade.test.ts`          | New — integration tests                              |

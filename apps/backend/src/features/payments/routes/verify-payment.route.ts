@@ -5,7 +5,7 @@
 //            client-side checkout and complete the transaction.
 // ---------------------------------------------------------------------------
 
-import { ForbiddenError,UnauthorizedError } from '@errors';
+import { ForbiddenError, UnauthorizedError } from '@errors';
 import { verifyAndCompletePayment } from '@feature/payments/services/payment.service';
 import { VerifyPaymentSchema } from '@feature/payments/validators';
 import { prisma } from '@lib/prisma';

@@ -1,10 +1,10 @@
 import { UnauthorizedError, ValidationError } from '@errors';
 import { deleteRefreshTokens } from '@feature/auth/services/delete-refresh-tokens';
-import type { ResetPasswordInput} from '@feature/auth/validators';
+import type { ResetPasswordInput } from '@feature/auth/validators';
 import { ResetPasswordSchema } from '@feature/auth/validators';
 import { findFirstMember } from '@feature/members/services/findFirstMember';
 import { updateUser } from '@feature/user/services';
-import { hashPassword, hashToken,validatePasswordStrength } from '@lib/password';
+import { hashPassword, hashToken, validatePasswordStrength } from '@lib/password';
 import { validate } from '@lib/validate';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';

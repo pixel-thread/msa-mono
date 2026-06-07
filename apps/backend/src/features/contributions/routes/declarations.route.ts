@@ -15,8 +15,7 @@ import {
   rejectDeclaration,
   submitDeclaration,
 } from '../services/declarations.service';
-import type {
-  CreateUserDeclarationsInput} from '../validators';
+import type { CreateUserDeclarationsInput } from '../validators';
 import {
   ApproveDeclarationSchema,
   CreateUserDeclarations,

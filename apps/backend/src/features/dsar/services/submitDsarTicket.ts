@@ -1,5 +1,5 @@
 import { prisma } from '@lib/prisma';
-import type {DsarRequestType} from '@prisma/client';
+import type { DsarRequestType } from '@prisma/client';
 import { AuditAction, DsarStatus } from '@prisma/client';
 
 /** Parameters for submitting a DSAR ticket. */

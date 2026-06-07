@@ -13,6 +13,7 @@
 ### Task 1: Migrate Contribution Services
 
 **Files:**
+
 - Create: `src/features/contributions/services/contribution.service.ts`
 - Create: `src/features/contributions/services/find-contribution-periods.ts`
 - Create: `src/features/contributions/services/find-unique-contribution-period.ts`
@@ -30,6 +31,7 @@
 ### Task 2: Migrate Contribution Validators and Types
 
 **Files:**
+
 - Create: `src/features/contributions/validators/contribution.validator.ts`
 - Create: `src/features/contributions/validators/index.ts`
 - Create: `src/features/contributions/types/index.ts`
@@ -47,6 +49,7 @@
 ### Task 3: Migrate and Refactor Routes
 
 **Files:**
+
 - Create: `src/features/contributions/routes/contributions.route.ts`
 - Create: `src/features/contributions/routes/user-contributions.route.ts`
 - Modify: `src/features/contributions/routes/index.ts`
@@ -64,6 +67,7 @@
 ### Task 4: Global Import Fix and Cleanup
 
 **Files:**
+
 - Modify: Multiple files across the codebase
 
 - [x] **Step 1: Search for all remaining imports**

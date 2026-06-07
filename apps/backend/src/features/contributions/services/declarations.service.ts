@@ -2,8 +2,8 @@ import { BadRequestError, NotFoundError } from '@errors';
 import { prisma } from '@lib';
 import type { Prisma } from '@prisma/client';
 import { DeclarationStatus } from '@prisma/client';
-import { buildPagination,buildPaginationParams } from '@utils';
-import { addMonths, differenceInCalendarMonths, endOfMonth,startOfMonth } from 'date-fns';
+import { buildPagination, buildPaginationParams } from '@utils';
+import { addMonths, differenceInCalendarMonths, endOfMonth, startOfMonth } from 'date-fns';
 
 type Props = {
   where: Prisma.DeclarationsWhereInput;

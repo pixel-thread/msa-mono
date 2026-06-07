@@ -3,7 +3,7 @@ import { prisma } from '@lib';
 import { verifyAccessToken } from '@lib/jwt';
 import { ContextStore } from '@lib/tracing/context';
 import { API_PUBLIC_ROUTES } from '@src/shared/constants';
-import type { NextFunction,Request, Response } from 'express';
+import type { NextFunction, Request, Response } from 'express';
 
 export async function auth(req: Request, _res: Response, next: NextFunction) {
   const path = req.path;

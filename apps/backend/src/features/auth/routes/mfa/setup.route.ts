@@ -2,7 +2,7 @@ import { BadRequestError, ConflictError, UnauthorizedError, ValidationError } fr
 import { createVerificationCode } from '@feature/auth/services/create-verification-code';
 import { findFirstMember } from '@feature/members/services/findFirstMember';
 import { sendVerificationEmail } from '@lib/email';
-import { generateOTP, hashToken,verifyPassword } from '@lib/password';
+import { generateOTP, hashToken, verifyPassword } from '@lib/password';
 import { validate } from '@lib/validate';
 import { env } from '@src/env';
 import { logger } from '@src/shared/logger';

@@ -3,7 +3,7 @@
 import { auth } from '@src/middleware/auth';
 import { Router } from 'express';
 
-import { getInvoice,listInvoices } from './invoices.route';
+import { getInvoice, listInvoices } from './invoices.route';
 import { toggleMfa } from './mfa.route';
 // ---- Route handlers
 import { getProfile, updateProfile } from './profile.route';

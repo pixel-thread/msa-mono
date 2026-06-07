@@ -5,7 +5,7 @@ import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';
-import type { NextFunction, Request, RequestHandler,Response } from 'express';
+import type { NextFunction, Request, RequestHandler, Response } from 'express';
 
 /** DELETE /api/meetings/[meetingId]/minutes/[minutesId] - Delete a meeting minute. */
 export const deleteMinute: RequestHandler[] = [

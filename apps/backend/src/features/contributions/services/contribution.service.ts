@@ -1,11 +1,9 @@
 import { BadRequestError, NotFoundError } from '@errors';
 import type { ContributionSummary } from '@feature/contributions/types';
-import type { JournalLine} from '@feature/ledger/services/accounting.service';
+import type { JournalLine } from '@feature/ledger/services/accounting.service';
 import { recordWaiver } from '@feature/ledger/services/accounting.service';
 import { prisma } from '@lib/prisma';
-import type {
-  PaymentMethod,
-  Prisma} from '@prisma/client';
+import type { PaymentMethod, Prisma } from '@prisma/client';
 import {
   ApprovalStatus,
   ContributionStatus,

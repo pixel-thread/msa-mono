@@ -6,7 +6,7 @@
 //            and the count of members with outstanding dues.
 // ---------------------------------------------------------------------------
 
-import { ForbiddenError,UnauthorizedError } from '@errors';
+import { ForbiddenError, UnauthorizedError } from '@errors';
 import { getFinancialStats } from '@feature/payments/services/payment.service';
 import { prisma } from '@lib/prisma';
 import { UserRole } from '@prisma/client';

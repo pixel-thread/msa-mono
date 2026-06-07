@@ -7,7 +7,7 @@
 //            Falls back to the default plan if no member-type plan is found.
 // ---------------------------------------------------------------------------
 
-import { ForbiddenError, NotFoundError,UnauthorizedError } from '@errors';
+import { ForbiddenError, NotFoundError, UnauthorizedError } from '@errors';
 import { findSubscriptionPlans } from '@feature/payments/services/find-subscription-plans';
 import { createPaymentOrder } from '@feature/payments/services/payment.service';
 import { getActiveProvider } from '@feature/payments/services/payment-provider.service';

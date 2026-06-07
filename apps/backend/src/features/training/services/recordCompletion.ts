@@ -5,7 +5,7 @@ import type { Prisma } from '@prisma/client';
 import { AuditAction } from '@prisma/client';
 
 // ---- Validators ----
-import type { AdminRecordCompletionInput,RecordCompletionInput } from '../validators/training';
+import type { AdminRecordCompletionInput, RecordCompletionInput } from '../validators/training';
 
 // ---- Interfaces ----
 

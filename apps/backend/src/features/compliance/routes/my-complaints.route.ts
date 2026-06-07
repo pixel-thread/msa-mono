@@ -1,7 +1,7 @@
 // ---------------------------------------------------------------------------
 // External libs
 // ---------------------------------------------------------------------------
-import { NotFoundError,UnauthorizedError } from '@errors';
+import { NotFoundError, UnauthorizedError } from '@errors';
 // ---------------------------------------------------------------------------
 // Services
 // ---------------------------------------------------------------------------
@@ -9,7 +9,7 @@ import { findManyComplaints, findUniqueComplaint } from '@feature/compliance/ser
 // ---------------------------------------------------------------------------
 // Validators / Types
 // ---------------------------------------------------------------------------
-import { ComplaintParamsSchema,ComplaintQuerySchema } from '@feature/compliance/validators';
+import { ComplaintParamsSchema, ComplaintQuerySchema } from '@feature/compliance/validators';
 // ---------------------------------------------------------------------------
 // Shared utilities
 // ---------------------------------------------------------------------------

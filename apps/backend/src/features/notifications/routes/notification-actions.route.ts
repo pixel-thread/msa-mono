@@ -1,5 +1,5 @@
 // External libs
-import { NotFoundError,UnauthorizedError, ValidationError } from '@errors';
+import { NotFoundError, UnauthorizedError, ValidationError } from '@errors';
 // ---- Services
 import { upsertPushToken } from '@feature/notifications/services/upsertPushToken';
 import { validate } from '@lib/validate';
@@ -13,7 +13,7 @@ import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';
 // ---- Validators / Types
-import { NotificationRouteParams,UpdateNotificationSchema } from '@validator/notification';
+import { NotificationRouteParams, UpdateNotificationSchema } from '@validator/notification';
 import type { RequestHandler } from 'express';
 import type { NextFunction, Request, Response } from 'express';
 import { z } from 'zod';

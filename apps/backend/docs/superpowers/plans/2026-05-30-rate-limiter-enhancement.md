@@ -13,10 +13,11 @@
 ### Task 1: Create Unit Tests for Rate Limiter Middleware
 
 **Files:**
+
 - Create: `src/__tests__/middleware/rate-limiter.test.ts`
 
 - [x] **Step 1: Write the failing tests**
-Write tests for the factory function, global middleware, and route-specific middleware. Mock `@upstash/ratelimit` to return success/failure on demand.
+      Write tests for the factory function, global middleware, and route-specific middleware. Mock `@upstash/ratelimit` to return success/failure on demand.
 
 ```typescript
 import { describe, it, expect, jest, beforeEach } from '@jest/globals';
@@ -85,10 +86,11 @@ describe('Rate Limiter Middleware', () => {
 ```
 
 - [x] **Step 2: Run test to verify it fails**
-Run: `npm test src/__tests__/middleware/rate-limiter.test.ts`
-Expected: FAIL (functions not exported yet or failing assertions)
+      Run: `npm test src/__tests__/middleware/rate-limiter.test.ts`
+      Expected: FAIL (functions not exported yet or failing assertions)
 
 - [x] **Step 3: Commit**
+
 ```bash
 git add src/__tests__/middleware/rate-limiter.test.ts
 git commit -m "test: add rate limiter middleware unit tests"
@@ -97,9 +99,11 @@ git commit -m "test: add rate limiter middleware unit tests"
 ### Task 2: Implement createRateLimiter Factory
 
 **Files:**
+
 - Modify: `src/middleware/rate-limiter.ts`
 
 - [x] **Step 1: Implement createRateLimiter**
+
 ```typescript
 import { Ratelimit } from '@upstash/ratelimit';
 import { Redis } from '@upstash/redis';
@@ -120,10 +124,11 @@ export function createRateLimiter(limit: number, window: any) {
 ```
 
 - [x] **Step 2: Run tests**
-Run: `npm test src/__tests__/middleware/rate-limiter.test.ts`
-Expected: `createRateLimiter` tests PASS.
+      Run: `npm test src/__tests__/middleware/rate-limiter.test.ts`
+      Expected: `createRateLimiter` tests PASS.
 
 - [x] **Step 3: Commit**
+
 ```bash
 git add src/middleware/rate-limiter.ts
 git commit -m "feat: implement createRateLimiter factory"
@@ -132,9 +137,11 @@ git commit -m "feat: implement createRateLimiter factory"
 ### Task 3: Refactor Global rateLimiter and Implement routeRateLimiter
 
 **Files:**
+
 - Modify: `src/middleware/rate-limiter.ts`
 
 - [ ] **Step 1: Refactor rateLimiter and Implement routeRateLimiter**
+
 ```typescript
 import { Request, Response, NextFunction } from 'express';
 import { TooManyRequestsError } from '@errors';
@@ -142,22 +149,13 @@ import { TooManyRequestsError } from '@errors';
 // Global rate limiter instance
 const globalLimiter = createRateLimiter(100, '60 s');
 
-export async function rateLimiter(
-  req: Request,
-  _res: Response,
-  next: NextFunction,
-) {
-  const identifier =
-    req.ip ||
-    (req.headers['x-forwarded-for'] as string) ||
-    'anonymous';
+export async function rateLimiter(req: Request, _res: Response, next: NextFunction) {
+  const identifier = req.ip || (req.headers['x-forwarded-for'] as string) || 'anonymous';
 
   const result = await globalLimiter.limit(identifier);
 
   if (!result.success) {
-    return next(
-      new TooManyRequestsError('Too many requests. Please try again later.'),
-    );
+    return next(new TooManyRequestsError('Too many requests. Please try again later.'));
   }
 
   next();
@@ -167,19 +165,12 @@ export function routeRateLimiter(limit: number, window: any) {
   const limiter = createRateLimiter(limit, window);
 
   return async (req: Request, _res: Response, next: NextFunction) => {
-    const identifier =
-      req.ip ||
-      (req.headers['x-forwarded-for'] as string) ||
-      'anonymous';
+    const identifier = req.ip || (req.headers['x-forwarded-for'] as string) || 'anonymous';
 
     const result = await limiter.limit(identifier);
 
     if (!result.success) {
-      return next(
-        new TooManyRequestsError(
-          `Rate limit exceeded for this endpoint`,
-        ),
-      );
+      return next(new TooManyRequestsError(`Rate limit exceeded for this endpoint`));
     }
 
     next();
@@ -188,10 +179,11 @@ export function routeRateLimiter(limit: number, window: any) {
 ```
 
 - [ ] **Step 2: Run tests**
-Run: `npm test src/__tests__/middleware/rate-limiter.test.ts`
-Expected: ALL tests in `rate-limiter.test.ts` PASS.
+      Run: `npm test src/__tests__/middleware/rate-limiter.test.ts`
+      Expected: ALL tests in `rate-limiter.test.ts` PASS.
 
 - [ ] **Step 3: Commit**
+
 ```bash
 git add src/middleware/rate-limiter.ts
 git commit -m "feat: enhance rate limiter with global and route-specific options"
@@ -200,8 +192,8 @@ git commit -m "feat: enhance rate limiter with global and route-specific options
 ### Task 4: Final Verification and Cleanup
 
 - [ ] **Step 1: Run all tests to ensure no regressions**
-Run: `npm test`
-Expected: ALL tests pass.
+      Run: `npm test`
+      Expected: ALL tests pass.
 
 - [ ] **Step 2: Remove the temporary test file if desired (optional)**
-I'll keep it as it's a good practice.
+      I'll keep it as it's a good practice.

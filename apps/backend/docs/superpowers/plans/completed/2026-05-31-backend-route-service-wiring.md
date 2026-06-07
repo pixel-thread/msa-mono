@@ -13,6 +13,7 @@
 ### Task 1: Wire up Announcement Creation
 
 **Files:**
+
 - Modify: `src/features/announcements/routes/announcements.route.ts`
 
 - [ ] **Step 1: Update imports and wire service**
@@ -27,27 +28,27 @@ import { createAnnouncement } from '../services';
 
 // ... inside postAnnouncement handler ...
 
-    const isPublishing = req.body.status === AnnouncementStatus.PUBLISHED;
+const isPublishing = req.body.status === AnnouncementStatus.PUBLISHED;
 
-    logger.info(
-      {
-        traceId,
-        associationId: association.id,
-        title: req.body.title,
-        status: req.body.status,
-        isPublishing,
-      },
-      'POST /api/announcements - Creating announcement',
-    );
+logger.info(
+  {
+    traceId,
+    associationId: association.id,
+    title: req.body.title,
+    status: req.body.status,
+    isPublishing,
+  },
+  'POST /api/announcements - Creating announcement',
+);
 
-    const announcement = await createAnnouncement({
-      associationId: association.id,
-      authorId: user.id,
-      data: req.body,
-      sendNotification: isPublishing, // Assuming notifications only on publish
-    });
+const announcement = await createAnnouncement({
+  associationId: association.id,
+  authorId: user.id,
+  data: req.body,
+  sendNotification: isPublishing, // Assuming notifications only on publish
+});
 
-    logger.info({ traceId, announcementId: announcement.id }, 'POST /api/announcements - Success');
+logger.info({ traceId, announcementId: announcement.id }, 'POST /api/announcements - Success');
 ```
 
 - [ ] **Step 2: Run verification**
@@ -67,6 +68,7 @@ git commit -m "feat(announcements): wire up createAnnouncement service"
 ### Task 2: Wire up Mark Announcement as Read
 
 **Files:**
+
 - Modify: `src/features/announcements/routes/mark-read.route.ts`
 
 - [ ] **Step 1: Import service and wire call**
@@ -79,14 +81,15 @@ import { markAnnouncementRead } from '../services';
 
 // ... inside postMarkRead handler ...
 
-    // Wire up actual markAnnouncementRead service call
-    const readReceipt = await markAnnouncementRead({
-      announcementId,
-      userId,
-      associationId: (req as any).associationId || '', // Need to ensure associationId is available or resolve it
-    });
+// Wire up actual markAnnouncementRead service call
+const readReceipt = await markAnnouncementRead({
+  announcementId,
+  userId,
+  associationId: (req as any).associationId || '', // Need to ensure associationId is available or resolve it
+});
 ```
-*Wait, I need to check how associationId is resolved in mark-read.route.ts.*
+
+_Wait, I need to check how associationId is resolved in mark-read.route.ts._
 
 - [ ] **Step 2: Resolve Association and wire call**
 
@@ -94,13 +97,13 @@ import { markAnnouncementRead } from '../services';
 // src/features/announcements/routes/mark-read.route.ts
 
 // ... inside postMarkRead handler ...
-    const associationId = (req as any).associationId; // Resolved by middleware or getAssociation helper
-    
-    const readReceipt = await markAnnouncementRead({
-      announcementId,
-      userId,
-      associationId,
-    });
+const associationId = (req as any).associationId; // Resolved by middleware or getAssociation helper
+
+const readReceipt = await markAnnouncementRead({
+  announcementId,
+  userId,
+  associationId,
+});
 ```
 
 - [ ] **Step 3: Commit**
@@ -115,6 +118,7 @@ git commit -m "feat(announcements): wire up markAnnouncementRead service"
 ### Task 3: Wire up Audit Logs Retrieval
 
 **Files:**
+
 - Modify: `src/features/audit-logs/routes/audit-logs.route.ts`
 
 - [ ] **Step 1: Remove `as any` and wire service calls**
@@ -124,13 +128,13 @@ git commit -m "feat(announcements): wire up markAnnouncementRead service"
 
 // ... inside getAuditLogs handler ...
 
-    const query: AuditLogQuery = { page, action, resourceType, actorId, fromDate, toDate, limit: 10 };
+const query: AuditLogQuery = { page, action, resourceType, actorId, fromDate, toDate, limit: 10 };
 
-    // Fetch audit logs and stats concurrently
-    const [logsResult, stats] = await Promise.all([
-      findAuditLogs(association.id, query),
-      getAuditLogStats(association.id),
-    ]);
+// Fetch audit logs and stats concurrently
+const [logsResult, stats] = await Promise.all([
+  findAuditLogs(association.id, query),
+  getAuditLogStats(association.id),
+]);
 ```
 
 - [ ] **Step 2: Commit**
@@ -145,6 +149,7 @@ git commit -m "feat(audit-logs): wire up typed findAuditLogs and getAuditLogStat
 ### Task 4: Wire up Admin Consent Records
 
 **Files:**
+
 - Modify: `src/features/consent/routes/admin-consent.route.ts`
 
 - [ ] **Step 1: Wire typed service call**
@@ -154,10 +159,10 @@ git commit -m "feat(audit-logs): wire up typed findAuditLogs and getAuditLogStat
 
 // ... inside getAllConsentRecords handler ...
 
-    const { records, total } = await ConsentService.getAllConsentRecords(
-      association.id,
-      req.query as AllConsentRecordsQueryInput,
-    );
+const { records, total } = await ConsentService.getAllConsentRecords(
+  association.id,
+  req.query as AllConsentRecordsQueryInput,
+);
 ```
 
 - [ ] **Step 2: Commit**
@@ -172,6 +177,7 @@ git commit -m "feat(consent): wire up typed getAllConsentRecords service call"
 ### Task 5: Clean up Member Types Route
 
 **Files:**
+
 - Modify: `src/features/member-types/routes/member-types.route.ts`
 
 - [ ] **Step 1: Remove stubs and TODOs**

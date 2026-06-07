@@ -150,17 +150,17 @@ Export: export const CreateModuleSchema = z.object({...})
 
 ### Summary Table
 
-| Item                        | Convention             | Example                        |
-| --------------------------- | ---------------------- | ------------------------------ |
-| Folders                     | `kebab-case`           | `membership-applications/`     |
-| Files                       | `kebab-case`           | `create-module.ts`             |
-| Service functions           | `camelCase`            | `createModule()`               |
-| Zod schemas                 | `PascalCase`           | `CreateModuleSchema`           |
-| TypeScript types/interfaces | `PascalCase`           | `TrainingModule`               |
-| Constants                   | `SCREAMING_SNAKE_CASE` | `ADMIN_ROUTES`                 |
-| Route segments              | `kebab-case`           | `/api/v1/training-modules`     |
-| Prisma model names          | `PascalCase`           | `User`                         |
-| Prisma field names          | `camelCase`            | `createdAt`, `associationId`   |
+| Item                        | Convention             | Example                      |
+| --------------------------- | ---------------------- | ---------------------------- |
+| Folders                     | `kebab-case`           | `membership-applications/`   |
+| Files                       | `kebab-case`           | `create-module.ts`           |
+| Service functions           | `camelCase`            | `createModule()`             |
+| Zod schemas                 | `PascalCase`           | `CreateModuleSchema`         |
+| TypeScript types/interfaces | `PascalCase`           | `TrainingModule`             |
+| Constants                   | `SCREAMING_SNAKE_CASE` | `ADMIN_ROUTES`               |
+| Route segments              | `kebab-case`           | `/api/v1/training-modules`   |
+| Prisma model names          | `PascalCase`           | `User`                       |
+| Prisma field names          | `camelCase`            | `createdAt`, `associationId` |
 
 ---
 
@@ -235,9 +235,9 @@ export const postCreateModule: RequestHandler[] = [
   validate({ body: CreateModuleSchema }),
   asyncHandler(async (req: Request, res: Response) => {
     const user = await withRole(req, UserRole.DPO);
-    const result = await createModule({ 
-      associationId: user.associationId, 
-      body: req.body 
+    const result = await createModule({
+      associationId: user.associationId,
+      body: req.body,
     });
     return success(res, { data: result }, 201);
   }),
@@ -245,6 +245,7 @@ export const postCreateModule: RequestHandler[] = [
 ```
 
 **Pattern:**
+
 1. Use `validate()` middleware for Zod validation.
 2. Use `asyncHandler()` to wrap async logic.
 3. Check roles via `withRole()` or middleware.
@@ -258,6 +259,7 @@ export const postCreateModule: RequestHandler[] = [
 Registered in `src/index.ts`.
 
 **Order:**
+
 1. `cors`
 2. `contextMiddleware`
 3. `securityHeaders`

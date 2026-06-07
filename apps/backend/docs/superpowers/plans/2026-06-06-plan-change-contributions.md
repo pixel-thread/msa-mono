@@ -2,9 +2,10 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Ensure ContributionPeriods correctly reflect the right plan amount based on *when* the plan change happened. Months up to and including the change month keep the old rate; months after the change get the new rate — even if those future months were already generated at the old rate.
+**Goal:** Ensure ContributionPeriods correctly reflect the right plan amount based on _when_ the plan change happened. Months up to and including the change month keep the old rate; months after the change get the new rate — even if those future months were already generated at the old rate.
 
 **Architecture:** Five coordinated changes:
+
 1. Make `generateUserContributions` idempotent — skip existing periods instead of blindly overwriting them (prevents cron re-runs from corrupting data).
 2. Refactor `upgradeSubscription` into a general `changePlan` service that handles both upgrades and downgrades: fix the `planId` bug, backfill current month at the old rate, switch the plan, then **update all existing future periods** to the new rate and generate any missing ones.
 3. Add a `/downgrade` route that calls the same `changePlan` service.
@@ -42,15 +43,15 @@ AFTER upgrade:
 
 ## File Structure
 
-| File | Action | Responsibility |
-|------|--------|----------------|
-| `src/features/contributions/services/contribution.service.ts` | Modify | Skip existing periods in `generateUserContributions` (lines 251-268) |
+| File                                                          | Action | Responsibility                                                                                                                        |
+| ------------------------------------------------------------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------- |
+| `src/features/contributions/services/contribution.service.ts` | Modify | Skip existing periods in `generateUserContributions` (lines 251-268)                                                                  |
 | `src/features/subscriptions/services/subscription.service.ts` | Modify | Refactor `upgradeSubscription` → `changePlan`: fix `planId` bug, backfill at old rate, switch plan, update future periods to new rate |
-| `src/features/subscriptions/routes/upgrade.route.ts` | Modify | Call `changePlan` instead of `upgradeSubscription` |
-| `src/features/subscriptions/routes/downgrade.route.ts` | Create | New route handler calling `changePlan` for downgrades |
-| `src/features/subscriptions/routes/index.ts` | Modify | Register `/downgrade` route |
-| `src/features/subscriptions/validators/index.ts` | Modify | Add `DowngradeSubscriptionSchema` |
-| `src/__tests__/integration/subscriptions.plan-change.test.ts` | Create | Full integration tests |
+| `src/features/subscriptions/routes/upgrade.route.ts`          | Modify | Call `changePlan` instead of `upgradeSubscription`                                                                                    |
+| `src/features/subscriptions/routes/downgrade.route.ts`        | Create | New route handler calling `changePlan` for downgrades                                                                                 |
+| `src/features/subscriptions/routes/index.ts`                  | Modify | Register `/downgrade` route                                                                                                           |
+| `src/features/subscriptions/validators/index.ts`              | Modify | Add `DowngradeSubscriptionSchema`                                                                                                     |
+| `src/__tests__/integration/subscriptions.plan-change.test.ts` | Create | Full integration tests                                                                                                                |
 
 ---
 
@@ -65,9 +66,11 @@ AFTER upgrade:
 ### Task 1: Stop overwriting existing ContributionPeriods in `generateUserContributions`
 
 **Files:**
+
 - Modify: `src/features/contributions/services/contribution.service.ts:251-268`
 
 **Context:** `generateUserContributions` iterates months 1..N for a given year. For each month, it creates or updates a `ContributionPeriod`. Currently, when a period already exists, it **updates** it — overwriting `expectedAmount`, `dueAmount`, and resetting `status` to `DUE`. This is wrong because:
+
 - PAID or PARTIAL periods get their status reset (data corruption)
 - Re-running after a plan change overwrites old periods with the new amount
 - The cron job becomes non-idempotent
@@ -77,6 +80,7 @@ AFTER upgrade:
 - [ ] **Step 1: Read the current code to confirm the exact lines**
 
 Run:
+
 ```bash
 cd /Users/harrison/Downloads/msa-mono/apps/backend
 sed -n '240,275p' src/features/contributions/services/contribution.service.ts
@@ -89,44 +93,45 @@ Expected: Shows the `existingContribution` check (line 241), the `update` block 
 In `src/features/contributions/services/contribution.service.ts`, change lines 251-268 from:
 
 ```typescript
-      if (existingContribution) {
-        await prisma.contributionPeriod.update({
-          where: {
-            id: existingContribution.id,
-          },
-          data: {
-            associationId: contributionData.associationId,
-            expectedAmount: contributionData.expectedAmount,
-            dueAmount: contributionData.dueAmount,
-            status: contributionData.status,
-            dueDate: contributionData.dueDate,
-          },
-        });
-      } else {
-        await prisma.contributionPeriod.create({
-          data: contributionData,
-        });
-      }
+if (existingContribution) {
+  await prisma.contributionPeriod.update({
+    where: {
+      id: existingContribution.id,
+    },
+    data: {
+      associationId: contributionData.associationId,
+      expectedAmount: contributionData.expectedAmount,
+      dueAmount: contributionData.dueAmount,
+      status: contributionData.status,
+      dueDate: contributionData.dueDate,
+    },
+  });
+} else {
+  await prisma.contributionPeriod.create({
+    data: contributionData,
+  });
+}
 ```
 
 to:
 
 ```typescript
-      if (existingContribution) {
-        // Period already exists — skip it. Amounts are locked at creation
-        // time by default. When a plan change occurs, the changePlan
-        // service handles updating future periods explicitly.
-        continue;
-      }
+if (existingContribution) {
+  // Period already exists — skip it. Amounts are locked at creation
+  // time by default. When a plan change occurs, the changePlan
+  // service handles updating future periods explicitly.
+  continue;
+}
 
-      await prisma.contributionPeriod.create({
-        data: contributionData,
-      });
+await prisma.contributionPeriod.create({
+  data: contributionData,
+});
 ```
 
 - [ ] **Step 3: Verify the change compiles**
 
 Run:
+
 ```bash
 cd /Users/harrison/Downloads/msa-mono/apps/backend && npx tsc --noEmit --pretty 2>&1 | head -30
 ```
@@ -152,14 +157,17 @@ handled by the changePlan service instead."
 ### Task 2: Refactor `upgradeSubscription` into `changePlan` with backfill + future-period update logic
 
 **Files:**
+
 - Modify: `src/features/subscriptions/services/subscription.service.ts:1-204`
 
 **Context:** The current `upgradeSubscription` function has three problems:
+
 1. Only updates `planVersionId` but not `planId` (stale reference)
 2. Doesn't consider ContributionPeriods at all
 3. Doesn't update already-generated future periods to the new rate
 
 **Change:** Rename to `changePlan`. The new flow:
+
 1. Validate subscription is active, find the target plan version
 2. **Backfill:** generate any missing ContributionPeriods up to the current month at the OLD rate (before switching)
 3. **Switch:** update both `planId` and `planVersionId` to the new plan
@@ -169,6 +177,7 @@ handled by the changePlan service instead."
 - [ ] **Step 1: Read the current function and imports**
 
 Run:
+
 ```bash
 cd /Users/harrison/Downloads/msa-mono/apps/backend
 sed -n '1,204p' src/features/subscriptions/services/subscription.service.ts
@@ -374,6 +383,7 @@ export const upgradeSubscription = changePlan;
 - [ ] **Step 5: Verify the change compiles**
 
 Run:
+
 ```bash
 cd /Users/harrison/Downloads/msa-mono/apps/backend && npx tsc --noEmit --pretty 2>&1 | head -30
 ```
@@ -402,6 +412,7 @@ Key changes:
 ### Task 3: Update the upgrade route to call `changePlan`
 
 **Files:**
+
 - Modify: `src/features/subscriptions/routes/upgrade.route.ts:22,58`
 
 **Context:** The upgrade route currently imports `upgradeSubscription`. The alias ensures it still works, but for clarity update the import and call to use `changePlan` directly.
@@ -409,6 +420,7 @@ Key changes:
 - [ ] **Step 1: Read the current file**
 
 Run:
+
 ```bash
 cd /Users/harrison/Downloads/msa-mono/apps/backend
 cat src/features/subscriptions/routes/upgrade.route.ts
@@ -447,6 +459,7 @@ to:
 - [ ] **Step 3: Verify compilation**
 
 Run:
+
 ```bash
 cd /Users/harrison/Downloads/msa-mono/apps/backend && npx tsc --noEmit --pretty 2>&1 | head -30
 ```
@@ -469,6 +482,7 @@ Functionally identical — same params, same behavior."
 ### Task 4: Add the downgrade validator schema
 
 **Files:**
+
 - Modify: `src/features/subscriptions/validators/index.ts:40-49`
 
 **Context:** The downgrade endpoint needs the same validation as upgrade — a `planId` (required) and an optional `userId` for admin-on-behalf-of-user operations.
@@ -476,6 +490,7 @@ Functionally identical — same params, same behavior."
 - [ ] **Step 1: Read the current file**
 
 Run:
+
 ```bash
 cd /Users/harrison/Downloads/msa-mono/apps/backend
 cat src/features/subscriptions/validators/index.ts
@@ -488,7 +503,6 @@ Expected: Shows schemas ending at line 49 with `UpgradeSubscriptionInput`.
 In `src/features/subscriptions/validators/index.ts`, add after line 49 (after the `UpgradeSubscriptionInput` type):
 
 ```typescript
-
 // ---- Downgrade subscription ---------------------------------------------------
 
 /** Schema for validating subscription downgrade requests. */
@@ -504,6 +518,7 @@ export type DowngradeSubscriptionInput = z.infer<typeof DowngradeSubscriptionSch
 - [ ] **Step 3: Verify compilation**
 
 Run:
+
 ```bash
 cd /Users/harrison/Downloads/msa-mono/apps/backend && npx tsc --noEmit --pretty 2>&1 | head -30
 ```
@@ -526,6 +541,7 @@ Same shape as UpgradeSubscriptionSchema — planId (required) + userId
 ### Task 5: Create the downgrade route handler
 
 **Files:**
+
 - Create: `src/features/subscriptions/routes/downgrade.route.ts`
 
 **Context:** The downgrade route mirrors the upgrade route exactly — it calls the same `changePlan` service. The separate route provides API clarity: consumers call `/downgrade` when switching to a cheaper plan. The service doesn't care about direction.
@@ -608,6 +624,7 @@ export const postDowngrade: RequestHandler[] = [
 - [ ] **Step 2: Verify compilation**
 
 Run:
+
 ```bash
 cd /Users/harrison/Downloads/msa-mono/apps/backend && npx tsc --noEmit --pretty 2>&1 | head -30
 ```
@@ -630,6 +647,7 @@ API clarity when switching to a cheaper plan."
 ### Task 6: Register the downgrade route
 
 **Files:**
+
 - Modify: `src/features/subscriptions/routes/index.ts:24,51`
 
 **Context:** Add the import for `postDowngrade` and register the route at `POST /downgrade` alongside `/upgrade`.
@@ -637,6 +655,7 @@ API clarity when switching to a cheaper plan."
 - [ ] **Step 1: Read the current file**
 
 Run:
+
 ```bash
 cd /Users/harrison/Downloads/msa-mono/apps/backend
 cat src/features/subscriptions/routes/index.ts
@@ -663,6 +682,7 @@ router.post('/downgrade', postDowngrade);
 - [ ] **Step 4: Verify compilation**
 
 Run:
+
 ```bash
 cd /Users/harrison/Downloads/msa-mono/apps/backend && npx tsc --noEmit --pretty 2>&1 | head -30
 ```
@@ -684,6 +704,7 @@ Added alongside /upgrade in the subscriptions router."
 ### Task 7: Write integration tests for plan change + contribution handling
 
 **Files:**
+
 - Create: `src/__tests__/integration/subscriptions.plan-change.test.ts`
 
 **Context:** Tests use the existing integration pattern: real PostgreSQL via Prisma, supertest for HTTP, JWT auth via test helpers, factory-based test data with `PREFIX`-based cleanup. The test file covers:
@@ -1111,13 +1132,17 @@ describe('Plan change (upgrade/downgrade) → ContributionPeriod handling', () =
         .expect(200);
 
       // Current month at ₹500, future months at ₹1000
-      expect(Number((await getContribution(user.id, currentYear, currentMonth))!.expectedAmount)).toBe(500);
+      expect(
+        Number((await getContribution(user.id, currentYear, currentMonth))!.expectedAmount),
+      ).toBe(500);
 
       // Re-run generation for full year (simulating cron job)
       await generateUserContributions(user.id, currentYear, 12);
 
       // Current month STILL ₹500 — not overwritten
-      expect(Number((await getContribution(user.id, currentYear, currentMonth))!.expectedAmount)).toBe(500);
+      expect(
+        Number((await getContribution(user.id, currentYear, currentMonth))!.expectedAmount),
+      ).toBe(500);
 
       // Future months STILL ₹1000 — not overwritten
       for (let m = currentMonth + 1; m <= 12; m++) {
@@ -1133,6 +1158,7 @@ describe('Plan change (upgrade/downgrade) → ContributionPeriod handling', () =
 - [ ] **Step 2: Run the tests**
 
 Run:
+
 ```bash
 cd /Users/harrison/Downloads/msa-mono/apps/backend && NODE_OPTIONS='--experimental-vm-modules' npx jest --runInBand --forceExit src/__tests__/integration/subscriptions.plan-change.test.ts -v 2>&1
 ```
@@ -1179,15 +1205,15 @@ git commit -m "test: add integration tests for plan change + contribution handli
 
 ### Spec Coverage
 
-| Spec Requirement | Task |
-|---|---|
-| Stop overwriting existing periods | Task 1 |
-| Plan changes take effect at start of next calendar month | Task 2 (backfill current month at old rate; rewrite future periods to new rate) |
-| Upgrade vs downgrade treated equally — same rule applies | Task 2 (`changePlan` handles both), Task 5 (downgrade route calls same function) |
-| Existing unpaid periods left unchanged for current/past months | Task 1 (skip existing) + Task 2 (backfill only generates, never updates) |
-| Future periods updated to new rate | Task 2 (Step 4: `updateMany` on `DUE`/`PENDING` periods with `month > currentMonth`) |
-| PAID/PARTIAL/WAIVED/OVERDUE periods never touched | Task 2 (status filter: `{ in: [DUE, PENDING] }`), Task 7 (explicit PAID safety test) |
-| No schema changes | ✅ Confirmed — no migration tasks needed |
+| Spec Requirement                                               | Task                                                                                 |
+| -------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
+| Stop overwriting existing periods                              | Task 1                                                                               |
+| Plan changes take effect at start of next calendar month       | Task 2 (backfill current month at old rate; rewrite future periods to new rate)      |
+| Upgrade vs downgrade treated equally — same rule applies       | Task 2 (`changePlan` handles both), Task 5 (downgrade route calls same function)     |
+| Existing unpaid periods left unchanged for current/past months | Task 1 (skip existing) + Task 2 (backfill only generates, never updates)             |
+| Future periods updated to new rate                             | Task 2 (Step 4: `updateMany` on `DUE`/`PENDING` periods with `month > currentMonth`) |
+| PAID/PARTIAL/WAIVED/OVERDUE periods never touched              | Task 2 (status filter: `{ in: [DUE, PENDING] }`), Task 7 (explicit PAID safety test) |
+| No schema changes                                              | ✅ Confirmed — no migration tasks needed                                             |
 
 ### Placeholder Scan
 

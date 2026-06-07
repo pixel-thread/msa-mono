@@ -3,7 +3,7 @@
 // ---- Security: DPO role required (except no role requirement for viewing own data)
 
 // External libs
-import { BadRequestError, ForbiddenError, NotFoundError,UnauthorizedError } from '@errors';
+import { BadRequestError, ForbiddenError, NotFoundError, UnauthorizedError } from '@errors';
 // Services
 import { ConsentService } from '@feature/consent/services/consent.service';
 // Validators

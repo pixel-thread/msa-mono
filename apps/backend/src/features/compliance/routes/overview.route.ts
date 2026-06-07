@@ -4,7 +4,7 @@
 // ---------------------------------------------------------------------------
 // Services
 // ---------------------------------------------------------------------------
-import { createComplaint,findManyComplaints } from '@feature/compliance/services';
+import { createComplaint, findManyComplaints } from '@feature/compliance/services';
 // ---------------------------------------------------------------------------
 // Validators / Types
 // ---------------------------------------------------------------------------

@@ -10,7 +10,7 @@ import { postAddAttendee } from './attendees/add-attendee.route';
 import { postBulkAssignAttendees } from './attendees/bulk-assign.route';
 import { putBulkAssignAttendees } from './attendees/bulk-assign-put.route';
 import { getAttendees } from './attendees/list-attendees.route';
-import { deleteRemoveAttendee,patchUpdateAttendee } from './attendees/remove-attendee.route';
+import { deleteRemoveAttendee, patchUpdateAttendee } from './attendees/remove-attendee.route';
 import { postCreateMinute } from './minutes/add-minutes.route';
 import { deleteMinute } from './minutes/delete-minutes.route';
 import { getMinutes } from './minutes/list-minutes.route';

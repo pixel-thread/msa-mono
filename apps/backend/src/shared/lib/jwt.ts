@@ -1,5 +1,5 @@
 import { env } from '@src/env';
-import type {JWTPayload} from 'jose';
+import type { JWTPayload } from 'jose';
 import { decodeJwt, jwtVerify, SignJWT } from 'jose';
 
 import { UnauthorizedError } from '../errors';

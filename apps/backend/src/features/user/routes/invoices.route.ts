@@ -1,7 +1,7 @@
 // External libs
 import { ForbiddenError, UnauthorizedError } from '@errors';
 // ---- Services
-import { getUserInvoice,getUserInvoices } from '@feature/user/services';
+import { getUserInvoice, getUserInvoices } from '@feature/user/services';
 import { prisma } from '@lib/prisma';
 import { validate } from '@lib/validate';
 // ---- Prisma

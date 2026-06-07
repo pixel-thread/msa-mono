@@ -28,11 +28,11 @@ Your MFSA system is a **multi-tenant membership billing + payment + accounting p
 
 The system does three distinct jobs:
 
-| Job | What it answers |
-|-----|----------------|
-| **Membership Billing** | Who owes what, and when? |
-| **Payment Processing** | Did we receive money, how, and from whom? |
-| **Accounting** | What is our financial position? Is our bookkeeping balanced? |
+| Job                    | What it answers                                              |
+| ---------------------- | ------------------------------------------------------------ |
+| **Membership Billing** | Who owes what, and when?                                     |
+| **Payment Processing** | Did we receive money, how, and from whom?                    |
+| **Accounting**         | What is our financial position? Is our bookkeeping balanced? |
 
 These jobs are **separate concerns** with separate tables. This document explains how they connect.
 
@@ -75,12 +75,12 @@ Total Debits = Total Credits (ALWAYS)
 ### Debit vs Credit — Plain English
 
 | Account Type | Debit Effect | Credit Effect |
-|-------------|-------------|--------------|
-| ASSET | Increases ↑ | Decreases ↓ |
-| LIABILITY | Decreases ↓ | Increases ↑ |
-| INCOME | Decreases ↓ | Increases ↑ |
-| EXPENSE | Increases ↑ | Decreases ↓ |
-| EQUITY | Decreases ↓ | Increases ↑ |
+| ------------ | ------------ | ------------- |
+| ASSET        | Increases ↑  | Decreases ↓   |
+| LIABILITY    | Decreases ↓  | Increases ↑   |
+| INCOME       | Decreases ↓  | Increases ↑   |
+| EXPENSE      | Increases ↑  | Decreases ↓   |
+| EQUITY       | Decreases ↓  | Increases ↑   |
 
 ### Simplest Example
 
@@ -106,21 +106,21 @@ The Chart of Accounts is the master list of every financial bucket in your syste
 
 ### Recommended Starting COA for MFSA
 
-| Code | Name | Type | Purpose |
-|------|------|------|---------|
-| 1000 | Bank Account | ASSET | Cash in the bank |
-| 1100 | Accounts Receivable | ASSET | Dues owed but not yet paid |
-| 1200 | Cash on Hand | ASSET | Physical cash |
-| 2000 | Unearned Revenue | LIABILITY | Advance payments received |
-| 2100 | Member Deposits | LIABILITY | Deposits held for members |
-| 3000 | Retained Earnings | EQUITY | Accumulated surplus |
-| 4000 | Subscription Income | INCOME | Monthly membership dues |
-| 4100 | Event Fee Income | INCOME | Revenue from events |
-| 4200 | Donation Income | INCOME | Donations received |
-| 4300 | Bank Interest | INCOME | Interest earned |
-| 5000 | Office Expense | EXPENSE | General office costs |
-| 5100 | Waiver Expense | EXPENSE | Dues waived for members |
-| 5200 | Refund Expense | EXPENSE | Refunds issued |
+| Code | Name                | Type      | Purpose                    |
+| ---- | ------------------- | --------- | -------------------------- |
+| 1000 | Bank Account        | ASSET     | Cash in the bank           |
+| 1100 | Accounts Receivable | ASSET     | Dues owed but not yet paid |
+| 1200 | Cash on Hand        | ASSET     | Physical cash              |
+| 2000 | Unearned Revenue    | LIABILITY | Advance payments received  |
+| 2100 | Member Deposits     | LIABILITY | Deposits held for members  |
+| 3000 | Retained Earnings   | EQUITY    | Accumulated surplus        |
+| 4000 | Subscription Income | INCOME    | Monthly membership dues    |
+| 4100 | Event Fee Income    | INCOME    | Revenue from events        |
+| 4200 | Donation Income     | INCOME    | Donations received         |
+| 4300 | Bank Interest       | INCOME    | Interest earned            |
+| 5000 | Office Expense      | EXPENSE   | General office costs       |
+| 5100 | Waiver Expense      | EXPENSE   | Dues waived for members    |
+| 5200 | Refund Expense      | EXPENSE   | Refunds issued             |
 
 ### How to Seed COA in Code
 
@@ -128,21 +128,21 @@ The Chart of Accounts is the master list of every financial bucket in your syste
 // Run once per new Association
 async function seedChartOfAccounts(associationId: string) {
   const accounts = [
-    { code: '1000', name: 'Bank Account',        type: 'ASSET' },
+    { code: '1000', name: 'Bank Account', type: 'ASSET' },
     { code: '1100', name: 'Accounts Receivable', type: 'ASSET' },
-    { code: '1200', name: 'Cash on Hand',        type: 'ASSET' },
-    { code: '2000', name: 'Unearned Revenue',    type: 'LIABILITY' },
-    { code: '3000', name: 'Retained Earnings',   type: 'EQUITY' },
+    { code: '1200', name: 'Cash on Hand', type: 'ASSET' },
+    { code: '2000', name: 'Unearned Revenue', type: 'LIABILITY' },
+    { code: '3000', name: 'Retained Earnings', type: 'EQUITY' },
     { code: '4000', name: 'Subscription Income', type: 'INCOME' },
-    { code: '4100', name: 'Event Fee Income',    type: 'INCOME' },
-    { code: '4200', name: 'Donation Income',     type: 'INCOME' },
-    { code: '4300', name: 'Bank Interest',       type: 'INCOME' },
-    { code: '5000', name: 'Office Expense',      type: 'EXPENSE' },
-    { code: '5100', name: 'Waiver Expense',      type: 'EXPENSE' },
+    { code: '4100', name: 'Event Fee Income', type: 'INCOME' },
+    { code: '4200', name: 'Donation Income', type: 'INCOME' },
+    { code: '4300', name: 'Bank Interest', type: 'INCOME' },
+    { code: '5000', name: 'Office Expense', type: 'EXPENSE' },
+    { code: '5100', name: 'Waiver Expense', type: 'EXPENSE' },
   ];
 
   await prisma.account.createMany({
-    data: accounts.map(a => ({ ...a, associationId })),
+    data: accounts.map((a) => ({ ...a, associationId })),
     skipDuplicates: true,
   });
 }
@@ -270,16 +270,16 @@ This section answers the single most important implementation question.
 
 ### Decision Table
 
-| Event | Create Ledger Entry? | When? |
-|-------|---------------------|-------|
-| `ContributionPeriod` generated (cron) | ❌ No | — |
-| `PaymentTransaction` created (PENDING) | ❌ No | — |
-| `PaymentTransaction` → COMPLETED | ✅ Yes | Immediately after status update |
-| `PaymentTransaction` → FAILED | ❌ No | — |
-| `PaymentTransaction` → REFUNDED | ✅ Yes | Reversal entry |
-| `ContributionPeriod` → WAIVED | ✅ Yes | Optional but recommended |
-| Manual expense recorded by FINANCE officer | ✅ Yes | Created in PENDING status |
-| Manual income recorded | ✅ Yes | Created in PENDING status |
+| Event                                      | Create Ledger Entry? | When?                           |
+| ------------------------------------------ | -------------------- | ------------------------------- |
+| `ContributionPeriod` generated (cron)      | ❌ No                | —                               |
+| `PaymentTransaction` created (PENDING)     | ❌ No                | —                               |
+| `PaymentTransaction` → COMPLETED           | ✅ Yes               | Immediately after status update |
+| `PaymentTransaction` → FAILED              | ❌ No                | —                               |
+| `PaymentTransaction` → REFUNDED            | ✅ Yes               | Reversal entry                  |
+| `ContributionPeriod` → WAIVED              | ✅ Yes               | Optional but recommended        |
+| Manual expense recorded by FINANCE officer | ✅ Yes               | Created in PENDING status       |
+| Manual income recorded                     | ✅ Yes               | Created in PENDING status       |
 
 ### The Simple Rule
 
@@ -329,7 +329,6 @@ No ledger entry yet.
 ```typescript
 async function handlePaymentCompleted(paymentTransactionId: string) {
   await prisma.$transaction(async (tx) => {
-
     // 1. Update payment status
     await tx.paymentTransaction.update({
       where: { id: paymentTransactionId },
@@ -337,7 +336,7 @@ async function handlePaymentCompleted(paymentTransactionId: string) {
         status: 'COMPLETED',
         razorpayPaymentId: 'pay_XYZ789',
         paidAt: new Date(),
-      }
+      },
     });
 
     // 2. Allocate payment to oldest due ContributionPeriod (FIFO)
@@ -356,18 +355,18 @@ async function handlePaymentCompleted(paymentTransactionId: string) {
           paymentTransactionId,
           contributionPeriodId: period.id,
           allocatedAmount: allocate,
-        }
+        },
       });
 
       const newPaid = Number(period.paidAmount) + allocate;
-      const newDue  = Number(period.expectedAmount) - newPaid;
+      const newDue = Number(period.expectedAmount) - newPaid;
       await tx.contributionPeriod.update({
         where: { id: period.id },
         data: {
           paidAmount: newPaid,
           dueAmount: newDue,
           status: newDue <= 0 ? 'PAID' : 'PARTIAL',
-        }
+        },
       });
 
       remaining -= allocate;
@@ -375,10 +374,10 @@ async function handlePaymentCompleted(paymentTransactionId: string) {
 
     // 3. Create Ledger Entry
     const bankAccount = await tx.account.findFirst({
-      where: { associationId: 'assoc-id', code: '1000' }
+      where: { associationId: 'assoc-id', code: '1000' },
     });
     const incomeAccount = await tx.account.findFirst({
-      where: { associationId: 'assoc-id', code: '4000' }
+      where: { associationId: 'assoc-id', code: '4000' },
     });
 
     await tx.ledgerEntry.create({
@@ -389,11 +388,11 @@ async function handlePaymentCompleted(paymentTransactionId: string) {
         createdById: 'system',
         lines: {
           create: [
-            { accountId: bankAccount.id, isDebit: true,  amount: 500 },
+            { accountId: bankAccount.id, isDebit: true, amount: 500 },
             { accountId: incomeAccount.id, isDebit: false, amount: 500 },
-          ]
-        }
-      }
+          ],
+        },
+      },
     });
   });
 }
@@ -401,12 +400,12 @@ async function handlePaymentCompleted(paymentTransactionId: string) {
 
 **Final state:**
 
-| Table | Record | Status |
-|-------|--------|--------|
-| ContributionPeriod | June 2026 | PAID |
-| PaymentTransaction | ₹500 | COMPLETED |
-| PaymentAllocation | June ← ₹500 | Created |
-| LedgerEntry | DR Bank ₹500, CR Income ₹500 | APPROVED |
+| Table              | Record                       | Status    |
+| ------------------ | ---------------------------- | --------- |
+| ContributionPeriod | June 2026                    | PAID      |
+| PaymentTransaction | ₹500                         | COMPLETED |
+| PaymentAllocation  | June ← ₹500                  | Created   |
+| LedgerEntry        | DR Bank ₹500, CR Income ₹500 | APPROVED  |
 
 ---
 
@@ -466,11 +465,11 @@ await prisma.ledgerEntry.create({
     lines: {
       create: [
         // Reverse the original: swap debit/credit
-        { accountId: incomeAccount.id, isDebit: true,  amount: 500 }, // DR Income
-        { accountId: bankAccount.id,   isDebit: false, amount: 500 }, // CR Bank
-      ]
-    }
-  }
+        { accountId: incomeAccount.id, isDebit: true, amount: 500 }, // DR Income
+        { accountId: bankAccount.id, isDebit: false, amount: 500 }, // CR Bank
+      ],
+    },
+  },
 });
 ```
 
@@ -487,17 +486,17 @@ This is NOT connected to a PaymentTransaction (which is for member payments).
 ```typescript
 await prisma.ledgerEntry.create({
   data: {
-    paymentTransactionId: null,  // No member payment linked
+    paymentTransactionId: null, // No member payment linked
     description: 'Office printer purchase - May 2026',
-    approvalStatus: 'PENDING',   // Requires PRESIDENT approval
+    approvalStatus: 'PENDING', // Requires PRESIDENT approval
     createdById: financeUserId,
     lines: {
       create: [
-        { accountId: equipmentAccount.id, isDebit: true,  amount: 10000 }, // DR Expense
-        { accountId: bankAccount.id,      isDebit: false, amount: 10000 }, // CR Bank
-      ]
-    }
-  }
+        { accountId: equipmentAccount.id, isDebit: true, amount: 10000 }, // DR Expense
+        { accountId: bankAccount.id, isDebit: false, amount: 10000 }, // CR Bank
+      ],
+    },
+  },
 });
 ```
 
@@ -509,7 +508,7 @@ await prisma.ledgerEntry.update({
   data: {
     approvalStatus: 'APPROVED',
     approvedById: presidentUserId,
-  }
+  },
 });
 ```
 
@@ -527,7 +526,7 @@ await prisma.contributionPeriod.update({
     status: 'WAIVED',
     waivedAt: new Date(),
     waivedReason: 'Hardship - approved by President',
-  }
+  },
 });
 
 // Create Ledger Entry (optional but recommended for clean accounting)
@@ -539,11 +538,11 @@ await prisma.ledgerEntry.create({
     approvedById: presidentUserId,
     lines: {
       create: [
-        { accountId: waiverExpenseAccount.id,    isDebit: true,  amount: 500 }, // DR Waiver Expense
+        { accountId: waiverExpenseAccount.id, isDebit: true, amount: 500 }, // DR Waiver Expense
         { accountId: accountsReceivableAccount.id, isDebit: false, amount: 500 }, // CR A/R
-      ]
-    }
-  }
+      ],
+    },
+  },
 });
 ```
 
@@ -598,7 +597,7 @@ interface CreateEntryOptions {
   paymentTransactionId?: string;
   description: string;
   createdById: string;
-  autoApprove?: boolean;      // true for system events (gateway payments)
+  autoApprove?: boolean; // true for system events (gateway payments)
   approvedById?: string;
   lines: JournalLine[];
 }
@@ -607,19 +606,17 @@ interface CreateEntryOptions {
 
 async function getAccountByCode(associationId: string, code: string) {
   const account = await prisma.account.findFirst({
-    where: { associationId, code, isActive: true }
+    where: { associationId, code, isActive: true },
   });
   if (!account) throw new Error(`Account not found: ${code}`);
   return account;
 }
 
 function validateBalance(lines: { amount: number; isDebit: boolean }[]) {
-  const totalDebits  = lines.filter(l => l.isDebit).reduce((s, l) => s + l.amount, 0);
-  const totalCredits = lines.filter(l => !l.isDebit).reduce((s, l) => s + l.amount, 0);
+  const totalDebits = lines.filter((l) => l.isDebit).reduce((s, l) => s + l.amount, 0);
+  const totalCredits = lines.filter((l) => !l.isDebit).reduce((s, l) => s + l.amount, 0);
   if (Math.abs(totalDebits - totalCredits) > 0.001) {
-    throw new Error(
-      `Unbalanced entry: debits=${totalDebits}, credits=${totalCredits}`
-    );
+    throw new Error(`Unbalanced entry: debits=${totalDebits}, credits=${totalCredits}`);
   }
 }
 
@@ -641,7 +638,7 @@ export async function createLedgerEntry(options: CreateEntryOptions) {
     lines.map(async (line) => {
       const account = await getAccountByCode(associationId, line.accountCode);
       return { accountId: account.id, isDebit: line.isDebit, amount: line.amount };
-    })
+    }),
   );
 
   // 2. Validate balance
@@ -657,9 +654,9 @@ export async function createLedgerEntry(options: CreateEntryOptions) {
       approvedById: autoApprove ? (approvedById ?? 'system') : null,
       lines: {
         create: resolvedLines,
-      }
+      },
     },
-    include: { lines: true }
+    include: { lines: true },
   });
 }
 
@@ -677,7 +674,7 @@ export async function recordMemberPayment({
   paymentTransactionId: string;
   amount: number;
   memberId: string;
-  period: string;   // e.g. "June 2026"
+  period: string; // e.g. "June 2026"
   createdById: string;
 }) {
   return createLedgerEntry({
@@ -687,9 +684,9 @@ export async function recordMemberPayment({
     createdById,
     autoApprove: true,
     lines: [
-      { accountCode: '1000', isDebit: true,  amount },   // DR Bank
-      { accountCode: '4000', isDebit: false, amount },   // CR Subscription Income
-    ]
+      { accountCode: '1000', isDebit: true, amount }, // DR Bank
+      { accountCode: '4000', isDebit: false, amount }, // CR Subscription Income
+    ],
   });
 }
 
@@ -713,9 +710,9 @@ export async function recordRefund({
     createdById,
     autoApprove: true,
     lines: [
-      { accountCode: '4000', isDebit: true,  amount },   // DR Income (reverse)
-      { accountCode: '1000', isDebit: false, amount },   // CR Bank (reverse)
-    ]
+      { accountCode: '4000', isDebit: true, amount }, // DR Income (reverse)
+      { accountCode: '1000', isDebit: false, amount }, // CR Bank (reverse)
+    ],
   });
 }
 
@@ -729,7 +726,7 @@ export async function recordExpense({
   associationId: string;
   amount: number;
   description: string;
-  expenseAccountCode: string;  // e.g. '5000'
+  expenseAccountCode: string; // e.g. '5000'
   createdById: string;
 }) {
   // Manual expenses start as PENDING (require approval)
@@ -739,9 +736,9 @@ export async function recordExpense({
     createdById,
     autoApprove: false,
     lines: [
-      { accountCode: expenseAccountCode, isDebit: true,  amount }, // DR Expense
-      { accountCode: '1000',             isDebit: false, amount }, // CR Bank
-    ]
+      { accountCode: expenseAccountCode, isDebit: true, amount }, // DR Expense
+      { accountCode: '1000', isDebit: false, amount }, // CR Bank
+    ],
   });
 }
 
@@ -765,9 +762,9 @@ export async function recordWaiver({
     autoApprove: true,
     approvedById,
     lines: [
-      { accountCode: '5100', isDebit: true,  amount },  // DR Waiver Expense
-      { accountCode: '1100', isDebit: false, amount },  // CR Accounts Receivable
-    ]
+      { accountCode: '5100', isDebit: true, amount }, // DR Waiver Expense
+      { accountCode: '1100', isDebit: false, amount }, // CR Accounts Receivable
+    ],
   });
 }
 ```
@@ -782,8 +779,8 @@ These are non-negotiable. Enforce them in your service layer.
 
 ```typescript
 // Always validate before inserting
-const debits  = lines.filter(l => l.isDebit).reduce((s, l) => s + l.amount, 0);
-const credits = lines.filter(l => !l.isDebit).reduce((s, l) => s + l.amount, 0);
+const debits = lines.filter((l) => l.isDebit).reduce((s, l) => s + l.amount, 0);
+const credits = lines.filter((l) => !l.isDebit).reduce((s, l) => s + l.amount, 0);
 if (debits !== credits) throw new Error('Unbalanced journal entry');
 ```
 
@@ -821,7 +818,7 @@ Razorpay may send the same webhook multiple times. Always check before creating 
 
 ```typescript
 const existing = await prisma.ledgerEntry.findFirst({
-  where: { paymentTransactionId }
+  where: { paymentTransactionId },
 });
 if (existing) return; // Already processed, skip
 ```
@@ -841,10 +838,10 @@ async function trialBalance(associationId: string) {
     where: {
       ledgerEntry: {
         approvalStatus: 'APPROVED',
-        paymentTransaction: { associationId }
-      }
+        paymentTransaction: { associationId },
+      },
     },
-    include: { ledgerEntry: true, account: true }
+    include: { ledgerEntry: true, account: true },
     // Note: scope to associationId via account or paymentTransaction
   });
 
@@ -852,8 +849,8 @@ async function trialBalance(associationId: string) {
   for (const line of lines) {
     const key = line.accountId;
     if (!result[key]) result[key] = { account: line.account.name, debit: 0, credit: 0 };
-    if (line.isDebit) result[key].debit  += Number(line.amount);
-    else              result[key].credit += Number(line.amount);
+    if (line.isDebit) result[key].debit += Number(line.amount);
+    else result[key].credit += Number(line.amount);
   }
   return result;
 }
@@ -884,10 +881,10 @@ async function agingReport(associationId: string) {
     where: {
       associationId,
       status: { in: ['DUE', 'PARTIAL', 'OVERDUE'] },
-      dueDate: { lt: today }
+      dueDate: { lt: today },
     },
     include: { user: { select: { name: true, membershipNumber: true } } },
-    orderBy: { dueDate: 'asc' }
+    orderBy: { dueDate: 'asc' },
   });
   return overdue;
 }
@@ -927,25 +924,25 @@ Payment completion involves: updating PaymentTransaction + creating PaymentAlloc
 
 ### When does each model get created?
 
-| Model | Created When |
-|-------|-------------|
-| `ContributionPeriod` | Monthly cron job, once per active subscription per member |
-| `PaymentTransaction` (PENDING) | User initiates payment / Razorpay order created |
-| `PaymentTransaction` (COMPLETED) | Webhook verified / manual payment confirmed |
-| `PaymentAllocation` | Immediately after payment COMPLETED |
-| `LedgerEntry` | Immediately after payment COMPLETED (or on approved manual entry) |
+| Model                            | Created When                                                      |
+| -------------------------------- | ----------------------------------------------------------------- |
+| `ContributionPeriod`             | Monthly cron job, once per active subscription per member         |
+| `PaymentTransaction` (PENDING)   | User initiates payment / Razorpay order created                   |
+| `PaymentTransaction` (COMPLETED) | Webhook verified / manual payment confirmed                       |
+| `PaymentAllocation`              | Immediately after payment COMPLETED                               |
+| `LedgerEntry`                    | Immediately after payment COMPLETED (or on approved manual entry) |
 
 ### Which accounts are used in each scenario?
 
-| Scenario | Debit | Credit |
-|----------|-------|--------|
-| Member pays online | 1000 Bank | 4000 Subscription Income |
-| Member pays cash | 1200 Cash | 4000 Subscription Income |
-| Refund issued | 4000 Subscription Income | 1000 Bank |
-| Expense paid | 5000+ Expense | 1000 Bank |
-| Dues waived | 5100 Waiver Expense | 1100 Accounts Receivable |
-| Advance payment (unearned) | 1000 Bank | 2000 Unearned Revenue |
-| Converting advance to income | 2000 Unearned Revenue | 4000 Subscription Income |
+| Scenario                     | Debit                    | Credit                   |
+| ---------------------------- | ------------------------ | ------------------------ |
+| Member pays online           | 1000 Bank                | 4000 Subscription Income |
+| Member pays cash             | 1200 Cash                | 4000 Subscription Income |
+| Refund issued                | 4000 Subscription Income | 1000 Bank                |
+| Expense paid                 | 5000+ Expense            | 1000 Bank                |
+| Dues waived                  | 5100 Waiver Expense      | 1100 Accounts Receivable |
+| Advance payment (unearned)   | 1000 Bank                | 2000 Unearned Revenue    |
+| Converting advance to income | 2000 Unearned Revenue    | 4000 Subscription Income |
 
 ### Status transitions
 
@@ -967,4 +964,4 @@ LedgerEntry:
 
 ---
 
-*Documentation version: 1.0 — Generated for MFSA Accounting System based on schema.prisma and architecture documentation.*
+_Documentation version: 1.0 — Generated for MFSA Accounting System based on schema.prisma and architecture documentation._

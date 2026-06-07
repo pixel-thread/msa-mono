@@ -1,4 +1,4 @@
-import { MeetingStatus,MeetingType } from '@prisma/client';
+import { MeetingStatus, MeetingType } from '@prisma/client';
 import { pageNumberValidation } from '@validator/common';
 import { z } from 'zod';
 

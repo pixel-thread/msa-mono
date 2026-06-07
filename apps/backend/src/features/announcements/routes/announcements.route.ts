@@ -7,7 +7,7 @@
  */
 
 import { ForbiddenError } from '@errors';
-import { createAnnouncement,findManyAnnouncements } from '@feature/announcements/services';
+import { createAnnouncement, findManyAnnouncements } from '@feature/announcements/services';
 // Validators
 import {
   AnnouncementQuerySchema,
@@ -15,7 +15,7 @@ import {
 } from '@feature/announcements/validators';
 import { validate } from '@lib/validate';
 // Prisma
-import { AnnouncementStatus,UserRole } from '@prisma/client';
+import { AnnouncementStatus, UserRole } from '@prisma/client';
 // Services
 import { getAssociation } from '@services/association/get-association';
 import { logger } from '@src/shared/logger';

@@ -3,15 +3,12 @@
 // ---- Security: DPO role required (except getConsentHistory which is for the current user)
 
 // External libs
-import { ForbiddenError,UnauthorizedError } from '@errors';
+import { ForbiddenError, UnauthorizedError } from '@errors';
 // Services
 import { ConsentService } from '@feature/consent/services/consent.service';
 // Validators
-import type {
-  AllConsentRecordsQueryInput} from '@feature/consent/validators/consent.validators';
-import {
-  AllConsentRecordsQuerySchema,
-} from '@feature/consent/validators/consent.validators';
+import type { AllConsentRecordsQueryInput } from '@feature/consent/validators/consent.validators';
+import { AllConsentRecordsQuerySchema } from '@feature/consent/validators/consent.validators';
 // Prisma
 import { prisma } from '@lib/prisma';
 // Shared utilities

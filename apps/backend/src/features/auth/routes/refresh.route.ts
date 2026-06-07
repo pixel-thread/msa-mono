@@ -5,7 +5,7 @@ import { revokedRefreshTokens } from '@feature/auth/services/revoked-refresh-tok
 import { updateRefreshToken } from '@feature/auth/services/update-refresh-token';
 import { RefreshTokenSchema } from '@feature/auth/validators';
 import { cacheClient } from '@lib/cache';
-import { signAccessToken, signRefreshToken,verifyRefreshToken } from '@lib/jwt';
+import { signAccessToken, signRefreshToken, verifyRefreshToken } from '@lib/jwt';
 import { hashToken } from '@lib/password';
 import { validate } from '@lib/validate';
 import { env } from '@src/env';

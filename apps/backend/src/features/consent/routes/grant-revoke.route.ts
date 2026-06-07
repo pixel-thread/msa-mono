@@ -3,7 +3,7 @@
 // ---- Security: Authenticated user (any role)
 
 // External libs
-import { BadRequestError,ForbiddenError, UnauthorizedError } from '@errors';
+import { BadRequestError, ForbiddenError, UnauthorizedError } from '@errors';
 // Services
 import { ConsentService } from '@feature/consent/services/consent.service';
 // Validators

@@ -1,6 +1,6 @@
 import { ForbiddenError } from '@errors';
 import { updateMeeting } from '@feature/meetings/services';
-import { MeetingStatus,UserRole } from '@prisma/client';
+import { MeetingStatus, UserRole } from '@prisma/client';
 import { getAssociation } from '@services/association/get-association';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';

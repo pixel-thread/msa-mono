@@ -1,5 +1,5 @@
 import { ForbiddenError } from '@errors';
-import { removeAttendee,updateAttendee } from '@feature/meetings/services';
+import { removeAttendee, updateAttendee } from '@feature/meetings/services';
 import { UpdateAttendeeSchema } from '@feature/meetings/validators';
 import { validate } from '@lib/validate';
 import { UserRole } from '@prisma/client';

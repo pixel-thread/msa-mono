@@ -1,4 +1,4 @@
-import { ForbiddenError,UnauthorizedError } from '@errors';
+import { ForbiddenError, UnauthorizedError } from '@errors';
 import { prisma } from '@lib/prisma';
 import type { Request } from 'express';
 

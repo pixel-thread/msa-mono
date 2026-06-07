@@ -20,8 +20,8 @@ import {
   postCertificate,
   postCertificateTemplate,
 } from './certificates.route';
-import { getModuleCompletions, postAdminComplete,postModuleComplete } from './completions.route';
-import { deleteModuleHandler,getModule, updateModuleHandler } from './module-detail.route';
+import { getModuleCompletions, postAdminComplete, postModuleComplete } from './completions.route';
+import { deleteModuleHandler, getModule, updateModuleHandler } from './module-detail.route';
 // ---- Route handlers ----
 import { getModules, postModules } from './modules.route';
 import { getMyAssignments, getMyCompletions } from './my-assignments.route';

@@ -4,7 +4,7 @@
  */
 
 import { auth } from '@src/middleware/auth';
-import { type Router as ExpressRouter,Router } from 'express';
+import { type Router as ExpressRouter, Router } from 'express';
 
 import {
   getAssociationByUser,

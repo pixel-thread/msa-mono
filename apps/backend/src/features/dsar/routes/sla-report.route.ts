@@ -4,7 +4,7 @@
 
 // ---- External Libraries
 
-import { ForbiddenError,UnauthorizedError } from '@errors';
+import { ForbiddenError, UnauthorizedError } from '@errors';
 // ---- DSAR Services
 import { getDsarSlaStatus } from '@feature/dsar/services';
 import { prisma } from '@lib/prisma';
@@ -16,7 +16,7 @@ import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 // ---- Shared Utilities
 import { success } from '@utils/responses';
-import type { NextFunction, Request, RequestHandler,Response } from 'express';
+import type { NextFunction, Request, RequestHandler, Response } from 'express';
 
 // ---- Role Hierarchy
 

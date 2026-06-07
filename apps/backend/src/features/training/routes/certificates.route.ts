@@ -15,7 +15,7 @@ import {
   UpdateTrainingCertificateSchema,
 } from '@feature/training/validators/training';
 import { prisma } from '@lib/prisma';
-import { deleteFromBucket,uploadToBucket } from '@lib/supabase/storage';
+import { deleteFromBucket, uploadToBucket } from '@lib/supabase/storage';
 // ---- Shared utilities ----
 import { validate } from '@lib/validate';
 // ---- Prisma ----
@@ -28,7 +28,7 @@ import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';
 import type { RequestHandler } from 'express';
-import type { NextFunction,Request, Response } from 'express';
+import type { NextFunction, Request, Response } from 'express';
 // ---- External libs ----
 import { z } from 'zod';
 

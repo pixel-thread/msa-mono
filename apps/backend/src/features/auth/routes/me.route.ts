@@ -1,11 +1,11 @@
 import { UnauthorizedError } from '@errors';
-import { cacheAuthUser,getAuthCachedUser } from '@feature/auth/lib/cache';
+import { cacheAuthUser, getAuthCachedUser } from '@feature/auth/lib/cache';
 import { getUniqueUser } from '@services/user/get-unique-user';
 import { env } from '@src/env';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
-import type { Request, RequestHandler,Response } from 'express';
+import type { Request, RequestHandler, Response } from 'express';
 
 /**
  * GET /api/auth/me — Fetch the current authenticated user's profile

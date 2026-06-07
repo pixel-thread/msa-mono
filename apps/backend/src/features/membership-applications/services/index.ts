@@ -8,7 +8,7 @@ import { ConflictError, NotFoundError } from '@errors';
 import { generateRandomPassword, hashPassword } from '@lib/password';
 // ---- Shared Utilities
 import { prisma } from '@lib/prisma';
-import type { Prisma} from '@prisma/client';
+import type { Prisma } from '@prisma/client';
 import { ApplicationStatus, UserRole } from '@prisma/client';
 import { PAGE_SIZE } from '@src/shared/constants';
 import { buildPagination } from '@src/shared/utils/helper/build-pagination';

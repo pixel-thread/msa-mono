@@ -21,7 +21,7 @@ import {
 } from './accounts.route';
 import { approveEntryHandler, createEntry, listEntries, rejectEntryHandler } from './entries.route';
 import { getMemberLedger } from './member-ledger.route';
-import { getIncomeStatementHandler,getTrialBalanceHandler } from './reports.route';
+import { getIncomeStatementHandler, getTrialBalanceHandler } from './reports.route';
 import { getLedgerSummary } from './summary.route';
 
 // ---------------------------------------------------------------------------

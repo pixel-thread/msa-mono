@@ -1,7 +1,7 @@
 // ---- External libs ----
 // ---- Shared utilities ----
 import { prisma } from '@lib/prisma';
-import type { Prisma} from '@prisma/client';
+import type { Prisma } from '@prisma/client';
 import { AuditAction, UserRole } from '@prisma/client';
 
 // ---- Validators ----

@@ -4,8 +4,8 @@ import { createVerificationCode } from '@feature/auth/services/create-verificati
 import { SignInSchema } from '@feature/auth/validators';
 import { updateUser } from '@feature/user/services';
 import { sendVerificationEmail } from '@lib/email';
-import { signAccessToken, signMfaTempToken,signRefreshToken } from '@lib/jwt';
-import { generateOTP,hashToken, verifyPassword } from '@lib/password';
+import { signAccessToken, signMfaTempToken, signRefreshToken } from '@lib/jwt';
+import { generateOTP, hashToken, verifyPassword } from '@lib/password';
 import { validate } from '@lib/validate';
 import { getUserFirst } from '@services/user/get-user-first';
 import { env } from '@src/env';

@@ -13,26 +13,29 @@
 ## File Structure
 
 ### Files to Create
-| File | Responsibility |
-|---|---|
-| `src/shared/lib/prisma/helpers.ts` | Export `buildPaginationParams()` shared utility |
+
+| File                                            | Responsibility                                             |
+| ----------------------------------------------- | ---------------------------------------------------------- |
+| `src/shared/lib/prisma/helpers.ts`              | Export `buildPaginationParams()` shared utility            |
 | `src/shared/services/allocate-contributions.ts` | Export `createAllocations()` shared FIFO allocation engine |
 
 ### Files to Modify
-| File | Change |
-|---|---|
-| `src/features/payments/services/find-payment-transactions.ts` | Rewrite to use `buildPaginationParams` helper |
-| `src/features/contributions/services/find-contribution-periods.ts` | Rewrite to use `buildPaginationParams` helper |
-| `src/features/contributions/services/declarations.service.ts` | Replace inline `findDeclarations` pagination with `buildPaginationParams` |
-| `src/features/ledger/services/ledger.service.ts` | Replace 3 inline pagination blocks (`getEntries`, `getAccounts`, `getMemberEntries`) with `buildPaginationParams` |
-| `src/features/contributions/services/contribution.service.ts` | Extract `createAllocations()` from `allocatePaymentToContributions`; export it |
-| `src/features/payments/services/payment.service.ts` | Replace inline FIFO allocation loop in `verifyAndCompletePayment` with `createAllocations` |
-| `src/features/payments/services/webhook.service.ts` | Replace inline FIFO allocation loop in `verifyAndCompletePaymentFromWebhook` with `createAllocations` |
+
+| File                                                               | Change                                                                                                            |
+| ------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------- |
+| `src/features/payments/services/find-payment-transactions.ts`      | Rewrite to use `buildPaginationParams` helper                                                                     |
+| `src/features/contributions/services/find-contribution-periods.ts` | Rewrite to use `buildPaginationParams` helper                                                                     |
+| `src/features/contributions/services/declarations.service.ts`      | Replace inline `findDeclarations` pagination with `buildPaginationParams`                                         |
+| `src/features/ledger/services/ledger.service.ts`                   | Replace 3 inline pagination blocks (`getEntries`, `getAccounts`, `getMemberEntries`) with `buildPaginationParams` |
+| `src/features/contributions/services/contribution.service.ts`      | Extract `createAllocations()` from `allocatePaymentToContributions`; export it                                    |
+| `src/features/payments/services/payment.service.ts`                | Replace inline FIFO allocation loop in `verifyAndCompletePayment` with `createAllocations`                        |
+| `src/features/payments/services/webhook.service.ts`                | Replace inline FIFO allocation loop in `verifyAndCompletePaymentFromWebhook` with `createAllocations`             |
 
 ### Not Modified (but considered)
-| File | Reason Skipped |
-|---|---|
-| `src/features/payments/services/find-subscription-plans.ts` | Not paginated (no page/skip/take) |
+
+| File                                                                     | Reason Skipped                        |
+| ------------------------------------------------------------------------ | ------------------------------------- |
+| `src/features/payments/services/find-subscription-plans.ts`              | Not paginated (no page/skip/take)     |
 | `src/features/contributions/services/find-unique-contribution-period.ts` | Not paginated (singleton `findFirst`) |
 
 ---
@@ -42,6 +45,7 @@
 ### Task 1.1: Create the buildPaginationParams helper
 
 **Files:**
+
 - Create: `src/shared/lib/prisma/helpers.ts`
 
 - [ ] **Step 1.1.1: Create buildPaginationParams implementation**
@@ -58,7 +62,10 @@ export interface PaginationParams {
   pageSize: number;
 }
 
-export function buildPaginationParams(page: number = 1, pageSize: number = PAGE_SIZE): PaginationParams {
+export function buildPaginationParams(
+  page: number = 1,
+  pageSize: number = PAGE_SIZE,
+): PaginationParams {
   const p = Math.max(1, page);
   return {
     skip: (p - 1) * pageSize,
@@ -87,6 +94,7 @@ git commit -m "feat: add buildPaginationParams helper"
 ### Task 1.2: Refactor payments/find-payment-transactions
 
 **Files:**
+
 - Modify: `src/features/payments/services/find-payment-transactions.ts`
 
 - [ ] **Step 1.2.1: Replace body with buildPaginationParams**
@@ -139,6 +147,7 @@ git commit -m "refactor: use buildPaginationParams in find-payment-transactions"
 ### Task 1.3: Refactor contributions/find-contribution-periods
 
 **Files:**
+
 - Modify: `src/features/contributions/services/find-contribution-periods.ts`
 
 - [ ] **Step 1.3.1: Replace body with buildPaginationParams**
@@ -197,11 +206,13 @@ git commit -m "refactor: use buildPaginationParams in find-contribution-periods"
 ### Task 1.4: Refactor contributions/declarations.service pagination
 
 **Files:**
+
 - Modify: `src/features/contributions/services/declarations.service.ts`
 
 - [ ] **Step 1.4.1: Replace inline pagination in findDeclarations**
 
 Add import at the top of `src/features/contributions/services/declarations.service.ts`:
+
 ```typescript
 import { buildPaginationParams } from '@lib/prisma/helpers';
 ```
@@ -238,11 +249,13 @@ git commit -m "refactor: use buildPaginationParams in findDeclarations"
 ### Task 1.5: Refactor ledger/ledger.service.ts inline pagination
 
 **Files:**
+
 - Modify: `src/features/ledger/services/ledger.service.ts`
 
 - [ ] **Step 1.5.1: Add import**
 
 At the top of `src/features/ledger/services/ledger.service.ts`, add:
+
 ```typescript
 import { buildPaginationParams } from '@lib/prisma/helpers';
 ```
@@ -352,6 +365,7 @@ git commit -m "refactor: use buildPaginationParams in ledger service"
 ### Task 2.1: Extract createAllocations into shared service
 
 **Files:**
+
 - Create: `src/shared/services/allocate-contributions.ts`
 - Modify: `src/features/contributions/services/contribution.service.ts`
 
@@ -387,11 +401,7 @@ export async function createAllocations(
     where: {
       userId,
       status: {
-        in: [
-          ContributionStatus.DUE,
-          ContributionStatus.PARTIAL,
-          ContributionStatus.OVERDUE,
-        ],
+        in: [ContributionStatus.DUE, ContributionStatus.PARTIAL, ContributionStatus.OVERDUE],
       },
     },
     orderBy: [{ year: 'asc' }, { month: 'asc' }],
@@ -421,10 +431,7 @@ export async function createAllocations(
       data: {
         paidAmount: newPaidAmount,
         dueAmount: Math.max(newDueAmount, 0),
-        status:
-          newDueAmount <= 0
-            ? ContributionStatus.PAID
-            : ContributionStatus.PARTIAL,
+        status: newDueAmount <= 0 ? ContributionStatus.PAID : ContributionStatus.PARTIAL,
       },
     });
 
@@ -441,6 +448,7 @@ export async function createAllocations(
 In `src/features/contributions/services/contribution.service.ts`:
 
 Add import:
+
 ```typescript
 import { createAllocations } from '@services/allocate-contributions';
 ```
@@ -482,7 +490,12 @@ export async function allocatePaymentToContributions(
   }
 
   // Use the shared allocation engine
-  const { allocatedAmount } = await createAllocations(tx, paymentTransactionId, userId, totalAmount);
+  const { allocatedAmount } = await createAllocations(
+    tx,
+    paymentTransactionId,
+    userId,
+    totalAmount,
+  );
 
   // Update payment transaction
   await tx.paymentTransaction.update({
@@ -569,11 +582,13 @@ git commit -m "refactor: extract createAllocations into shared service"
 ### Task 2.2: Refactor payment.service.ts to use createAllocations
 
 **Files:**
+
 - Modify: `src/features/payments/services/payment.service.ts`
 
 - [ ] **Step 2.2.1: Replace inline FIFO loop in verifyAndCompletePayment**
 
 Add import at the top of `src/features/payments/services/payment.service.ts`:
+
 ```typescript
 import { createAllocations } from '@services/allocate-contributions';
 ```
@@ -581,52 +596,52 @@ import { createAllocations } from '@services/allocate-contributions';
 Replace the section from `return prisma.$transaction(async (tx) => {` to the end of the function. The old code had an inline loop (lines ~397-440). Replace that entire block:
 
 ```typescript
-  return prisma.$transaction(async (tx) => {
-    const now = new Date();
+return prisma.$transaction(async (tx) => {
+  const now = new Date();
 
-    const updatedTransaction = await tx.paymentTransaction.update({
-      where: { id: transaction.id },
-      data: {
-        status: PaymentStatus.COMPLETED,
-        razorpayPaymentId: input.razorpayPaymentId,
-        razorpaySignature: input.razorpaySignature,
-        paidAt: now,
-        method: 'ONLINE' as PaymentMethod,
-      },
-    });
-
-    await recordMemberPayment(tx, {
-      associationId: transaction.associationId,
-      paymentTransactionId: transaction.id,
-      amount: Number(transaction.amount),
-      description: 'Online payment via Razorpay',
-      createdById: transaction.userId || '',
-      method: 'ONLINE',
-    });
-
-    // Allocate to outstanding contribution periods (FIFO - oldest first)
-    if (!transaction.userId) {
-      throw new NotFoundError('User not found on transaction');
-    }
-
-    await createAllocations(tx, transaction.id, transaction.userId, Number(transaction.amount));
-
-    await tx.auditLog.create({
-      data: {
-        associationId: transaction.associationId,
-        actorId: transaction.userId,
-        action: AuditAction.PAYMENT_COMPLETED,
-        resourceType: 'PaymentTransaction',
-        resourceId: transaction.id,
-        newValues: {
-          razorpayPaymentId: input.razorpayPaymentId,
-          amount: Number(transaction.amount),
-        },
-      },
-    });
-
-    return updatedTransaction;
+  const updatedTransaction = await tx.paymentTransaction.update({
+    where: { id: transaction.id },
+    data: {
+      status: PaymentStatus.COMPLETED,
+      razorpayPaymentId: input.razorpayPaymentId,
+      razorpaySignature: input.razorpaySignature,
+      paidAt: now,
+      method: 'ONLINE' as PaymentMethod,
+    },
   });
+
+  await recordMemberPayment(tx, {
+    associationId: transaction.associationId,
+    paymentTransactionId: transaction.id,
+    amount: Number(transaction.amount),
+    description: 'Online payment via Razorpay',
+    createdById: transaction.userId || '',
+    method: 'ONLINE',
+  });
+
+  // Allocate to outstanding contribution periods (FIFO - oldest first)
+  if (!transaction.userId) {
+    throw new NotFoundError('User not found on transaction');
+  }
+
+  await createAllocations(tx, transaction.id, transaction.userId, Number(transaction.amount));
+
+  await tx.auditLog.create({
+    data: {
+      associationId: transaction.associationId,
+      actorId: transaction.userId,
+      action: AuditAction.PAYMENT_COMPLETED,
+      resourceType: 'PaymentTransaction',
+      resourceId: transaction.id,
+      newValues: {
+        razorpayPaymentId: input.razorpayPaymentId,
+        amount: Number(transaction.amount),
+      },
+    },
+  });
+
+  return updatedTransaction;
+});
 ```
 
 - [ ] **Step 2.2.2: Verify it compiles**
@@ -647,11 +662,13 @@ git commit -m "refactor: use createAllocations in verifyAndCompletePayment"
 ### Task 2.3: Refactor webhook.service.ts to use createAllocations
 
 **Files:**
+
 - Modify: `src/features/payments/services/webhook.service.ts`
 
 - [ ] **Step 2.3.1: Replace inline FIFO loop in verifyAndCompletePaymentFromWebhook**
 
 Add import at the top of `src/features/payments/services/webhook.service.ts`:
+
 ```typescript
 import { createAllocations } from '@services/allocate-contributions';
 ```

@@ -34,7 +34,7 @@ import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';
-import type { NextFunction, Request,Response } from 'express';
+import type { NextFunction, Request, Response } from 'express';
 import { type RequestHandler } from 'express';
 
 // ---------------------------------------------------------------------------

@@ -13,7 +13,7 @@ import {
   UpdateSupplementSchema,
 } from '@feature/training/validators/training';
 import { prisma } from '@lib/prisma';
-import { deleteFromBucket,uploadToBucket } from '@lib/supabase/storage';
+import { deleteFromBucket, uploadToBucket } from '@lib/supabase/storage';
 // ---- Shared utilities ----
 import { validate } from '@lib/validate';
 // ---- Prisma ----

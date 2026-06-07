@@ -1,5 +1,5 @@
 import { prisma } from '@lib/prisma';
-import { AuditAction,UserStatus } from '@prisma/client';
+import { AuditAction, UserStatus } from '@prisma/client';
 import { logAction } from '@services/audit-logs';
 
 // ---- Interfaces -------------------------------------------------------------

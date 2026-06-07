@@ -13,6 +13,7 @@
 ### Task 1: Update GEMINI.md
 
 **Files:**
+
 - Modify: `.agents/GEMINI.md`
 
 - [ ] **Step 1: Replace Next.js rules with Express patterns**
@@ -25,9 +26,9 @@ export const postCreateModule: RequestHandler[] = [
   validate({ body: CreateModuleSchema }),
   asyncHandler(async (req: Request, res: Response) => {
     const user = await withRole(req, UserRole.DPO);
-    const result = await createModule({ 
-      associationId: user.associationId, 
-      body: req.body 
+    const result = await createModule({
+      associationId: user.associationId,
+      body: req.body,
     });
     return success(res, { data: result }, 201);
   }),
@@ -57,6 +58,7 @@ git commit -m "docs: align GEMINI.md with Express backend architecture"
 ### Task 2: Update Core PRD
 
 **Files:**
+
 - Modify: `.agents/prd/core_prd.md`
 
 - [ ] **Step 1: Update stack and version**
@@ -77,6 +79,7 @@ git commit -m "docs: update core PRD to version 3.0.0 (Express/Custom Auth)"
 ### Task 3: Align Rules and Skills
 
 **Files:**
+
 - Modify: `.agents/rules/backend/index.md`
 - Modify: `.agents/rules/frontend/index.md`
 

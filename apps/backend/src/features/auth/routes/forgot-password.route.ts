@@ -1,4 +1,4 @@
-import type { ForgotPasswordInput} from '@feature/auth/validators';
+import type { ForgotPasswordInput } from '@feature/auth/validators';
 import { ForgotPasswordSchema } from '@feature/auth/validators';
 import { updateUser } from '@feature/user/services';
 import { sendPasswordResetEmail } from '@lib/email';

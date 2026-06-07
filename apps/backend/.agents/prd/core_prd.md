@@ -20,15 +20,15 @@
 
 MFSA Connect is a finance-sector member platform for government-affiliated bodies in North-East India. The same backend serves multiple independent associations (MFSA, MPSA, …) with full data isolation. The platform must satisfy the **Digital Personal Data Protection (DPDP) Act 2023** and handle financial ledger operations with zero tolerance for security compromise.
 
-| Core Objective                  | Stack Solution                                                                                                                                |
-| ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| Core Objective                  | Stack Solution                                                                                                                                             |
+| ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Multi-Association Isolation** | Every table carries `associationId`; ContextStore auto-injects it on every query via feature services; Multi-tenant scoping enforced at the service layer. |
-| **DPDP Consent Management**     | Consent receipts tracked in DB scoped to association; every action is immutable and timestamped.                                              |
-| **Data Subject Rights (DSAR)**  | `DsarTicket` table with auto-computed `responseDeadline` (created + 21 days) and association scope.                                            |
-| **Enterprise-Grade Security**   | Custom middleware chain enforces JWT verification, security headers, and rate limiting before route handlers run.                             |
-| **Role-Based Access Control**   | Granular RBAC (`SUPER_ADMIN`, `PRESIDENT`, `SECRETARY`, `FINANCE`, `DPO`, `MEMBER`) enforced via `withRole()` utility.                        |
-| **Audit Trail**                 | Services intercept mutations and write to `AuditLog` table — scoped to the association — in the same transaction.                              |
-| **Data Retention (7 years)**    | `dataRetentionUntil` tracked on user; Cron jobs handle anonymization of expired data.                                                        |
+| **DPDP Consent Management**     | Consent receipts tracked in DB scoped to association; every action is immutable and timestamped.                                                           |
+| **Data Subject Rights (DSAR)**  | `DsarTicket` table with auto-computed `responseDeadline` (created + 21 days) and association scope.                                                        |
+| **Enterprise-Grade Security**   | Custom middleware chain enforces JWT verification, security headers, and rate limiting before route handlers run.                                          |
+| **Role-Based Access Control**   | Granular RBAC (`SUPER_ADMIN`, `PRESIDENT`, `SECRETARY`, `FINANCE`, `DPO`, `MEMBER`) enforced via `withRole()` utility.                                     |
+| **Audit Trail**                 | Services intercept mutations and write to `AuditLog` table — scoped to the association — in the same transaction.                                          |
+| **Data Retention (7 years)**    | `dataRetentionUntil` tracked on user; Cron jobs handle anonymization of expired data.                                                                      |
 
 ### 1.2 Key Architectural Decisions
 

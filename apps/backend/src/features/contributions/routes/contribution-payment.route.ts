@@ -6,7 +6,7 @@ import { withRole } from '@utils/with-role';
 import type { RequestHandler } from 'express';
 
 import { recordContributionPayment } from '../services';
-import type { RecordContributionInput} from '../validators';
+import type { RecordContributionInput } from '../validators';
 import { RecordContributionSchema } from '../validators';
 
 export const recordContributionHandler: RequestHandler[] = [

@@ -11,7 +11,7 @@ import { Router } from 'express';
 import { listAdmins } from './admins.route';
 // ---- Route Handlers
 import { listTickets } from './list-tickets.route';
-import { getMyTicket,listMyTickets } from './my-tickets.route';
+import { getMyTicket, listMyTickets } from './my-tickets.route';
 import { getSlaReport } from './sla-report.route';
 import { submitDsar } from './submit.route';
 import {

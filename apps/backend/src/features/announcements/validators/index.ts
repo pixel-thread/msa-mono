@@ -4,7 +4,7 @@
  */
 
 import { AnnouncementPriority, AnnouncementStatus, UserRole } from '@prisma/client';
-import { ALLOWED_IMAGE_FORMATS, ALLOWED_MIME_TYPES,MAX_IMAGE_SIZE } from '@src/shared/constants';
+import { ALLOWED_IMAGE_FORMATS, ALLOWED_MIME_TYPES, MAX_IMAGE_SIZE } from '@src/shared/constants';
 import { pageNumberValidation, pageSizeValidation } from '@validator/common';
 import z from 'zod';
 

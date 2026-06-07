@@ -13,6 +13,7 @@
 ### Task 1: Setup Test for Context Middleware
 
 **Files:**
+
 - Create: `src/__tests__/middleware/context.test.ts`
 
 - [ ] **Step 1: Write the failing test**
@@ -37,7 +38,7 @@ describe('Context Middleware', () => {
 
   it('should initialize context with a requestId from headers if present', () => {
     req.headers = { 'x-request-id': 'test-request-id' };
-    
+
     contextMiddleware(req as Request, res as Response, () => {
       const context = ContextStore.get();
       expect(context?.requestId).toBe('test-request-id');
@@ -69,6 +70,7 @@ Expected: FAIL (Module not found or contextMiddleware is not a function)
 ### Task 2: Implement Context Middleware
 
 **Files:**
+
 - Create: `src/middleware/context.ts`
 
 - [ ] **Step 1: Write implementation**
@@ -82,13 +84,9 @@ import { ContextStore } from '@lib/tracing/context';
  * Middleware to initialize the AsyncLocalStorage context for each request.
  * Sets a unique requestId by default.
  */
-export function contextMiddleware(
-  req: Request,
-  _res: Response,
-  next: NextFunction,
-) {
+export function contextMiddleware(req: Request, _res: Response, next: NextFunction) {
   const requestId = (req.headers['x-request-id'] as string) || randomUUID();
-  
+
   // Also attach to request object for compatibility with existing trace-id middleware if needed
   req.traceId = requestId;
 
@@ -123,5 +121,5 @@ Run: `pnpm build`
 Expected: SUCCESS
 
 - [ ] **Step 2: Self-review**
-Confirm it follows GEMINI.md standards (naming, kebab-case, exports).
-Confirm it matches the requested Task 2 description.
+      Confirm it follows GEMINI.md standards (naming, kebab-case, exports).
+      Confirm it matches the requested Task 2 description.

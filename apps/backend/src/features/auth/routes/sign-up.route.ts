@@ -2,11 +2,8 @@ import { BadRequestError, ConflictError } from '@errors';
 import { findFirstAssociation } from '@feature/associations/services/findFirstAssociation';
 import { findFirstMember } from '@feature/members/services/findFirstMember';
 import { createMembershipApplication } from '@feature/membership-applications/services';
-import type {
-  MembershipApplicationInput} from '@feature/membership-applications/validators';
-import {
-  MembershipApplicationSchema,
-} from '@feature/membership-applications/validators';
+import type { MembershipApplicationInput } from '@feature/membership-applications/validators';
+import { MembershipApplicationSchema } from '@feature/membership-applications/validators';
 import { validate } from '@lib/validate';
 import { env } from '@src/env';
 import { logger } from '@src/shared/logger';

@@ -6,7 +6,7 @@
 //            Convenience endpoint returning both in one call.
 // ---------------------------------------------------------------------------
 
-import { ForbiddenError,UnauthorizedError } from '@errors';
+import { ForbiddenError, UnauthorizedError } from '@errors';
 import { getUserContributionSummary } from '@feature/contributions/services/contribution.service';
 import { getUserPaymentHistory } from '@feature/payments/services/payment.service';
 import { PaymentHistoryQuerySchema } from '@feature/payments/validators';

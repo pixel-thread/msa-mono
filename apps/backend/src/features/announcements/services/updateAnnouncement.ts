@@ -5,7 +5,7 @@
  * @module features/announcements/services
  */
 
-import { ForbiddenError,NotFoundError } from '@errors';
+import { ForbiddenError, NotFoundError } from '@errors';
 import { prisma } from '@lib/prisma';
 import type { AnnouncementPriority, UserRole } from '@prisma/client';
 import { AnnouncementStatus } from '@prisma/client';

@@ -1,6 +1,6 @@
 import { BadRequestError, UnauthorizedError, ValidationError } from '@errors';
 import { deleteRefreshTokens } from '@feature/auth/services/delete-refresh-tokens';
-import type { ChangePasswordInput} from '@feature/auth/validators';
+import type { ChangePasswordInput } from '@feature/auth/validators';
 import { ChangePasswordSchema } from '@feature/auth/validators';
 import { updateUser } from '@feature/user/services';
 import { hashPassword, validatePasswordStrength, verifyPassword } from '@lib/password';

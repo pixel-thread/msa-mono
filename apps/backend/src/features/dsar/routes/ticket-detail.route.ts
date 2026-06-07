@@ -1,4 +1,4 @@
-import { BadRequestError,ForbiddenError, NotFoundError, UnauthorizedError } from '@errors';
+import { BadRequestError, ForbiddenError, NotFoundError, UnauthorizedError } from '@errors';
 import {
   assignDsarTicket,
   deleteDsarTicket,
@@ -8,7 +8,7 @@ import {
 import { RespondDsarSchema } from '@feature/dsar/validators';
 import { prisma } from '@lib/prisma';
 import { validate } from '@lib/validate';
-import { DsarStatus,UserRole } from '@prisma/client';
+import { DsarStatus, UserRole } from '@prisma/client';
 import { getUniqueUser } from '@services/user/get-unique-user';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
