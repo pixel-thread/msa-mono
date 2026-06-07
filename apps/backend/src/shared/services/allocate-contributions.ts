@@ -5,18 +5,24 @@ export async function createAllocations(
   paymentTransactionId: string,
   userId: string,
   amount: number,
+  periodIds?: string[],
 ): Promise<{ allocatedAmount: number; remainingAmount: number }> {
-  const outstanding = await tx.contributionPeriod.findMany({
-    where: {
-      userId,
-      status: {
-        in: [
-          ContributionStatus.DUE,
-          ContributionStatus.PARTIAL,
-          ContributionStatus.OVERDUE,
-        ],
-      },
+  const where: Prisma.ContributionPeriodWhereInput = {
+    userId,
+    status: {
+      in: [
+        ContributionStatus.DUE,
+        ContributionStatus.PARTIAL,
+        ContributionStatus.OVERDUE,
+      ],
     },
+  };
+  if (periodIds && periodIds.length > 0) {
+    where.id = { in: periodIds };
+  }
+
+  const outstanding = await tx.contributionPeriod.findMany({
+    where,
     orderBy: [{ year: 'asc' }, { month: 'asc' }],
   });
 
