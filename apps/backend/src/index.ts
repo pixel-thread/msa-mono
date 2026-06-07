@@ -32,6 +32,7 @@ import { env } from '@src/env';
 import { logger } from '@src/shared/logger';
 import cookieParser from 'cookie-parser';
 import express from 'express';
+import path from 'node:path';
 
 export function createApp(): express.Express {
   const app = express();
@@ -80,6 +81,17 @@ export function createApp(): express.Express {
   app.use('/api/v1/subscriptions', subscriptionsRouter);
   app.use('/api/v1/training', trainingRouter);
   app.use('/api/v1/user', userRouter);
+
+  /**
+   * -------------------------------------------------------
+   * Static Files (uploaded images, etc.)
+   * -------------------------------------------------------
+   * Serves uploaded files from {SFTP_ROOT}/{STORAGE_BUCKET}
+   * so URLs like {PUBLIC_BASE_URL}/announcements/... resolve
+   * to the correct filesystem path.
+   */
+  const storageRoot = path.posix.join('/', env.SFTP_ROOT, env.STORAGE_BUCKET);
+  app.use(express.static(storageRoot, { dotfiles: 'deny', maxAge: '1d', index: false }));
 
   app.get('/', (_, res) => {
     return res.redirect(`${env.BASE_URL}`);

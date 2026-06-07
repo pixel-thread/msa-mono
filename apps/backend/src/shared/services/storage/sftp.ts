@@ -1,8 +1,8 @@
+import { env } from '@src/env';
+import { logger } from '@src/shared/logger';
 import type { StorageProvider, UploadParams, UploadResult } from '@src/shared/types/storage';
 import path from 'node:path';
 import SftpClient from 'ssh2-sftp-client';
-import { env } from '@src/env';
-import { logger } from '@src/shared/logger';
 
 /** Returns the SFTP connection config from env vars. */
 function getSftpConfig() {
@@ -42,7 +42,7 @@ export class SftpStorageProvider implements StorageProvider {
     }
 
     const key = `${params.folder}/${Date.now()}-${params.fileName}`;
-    const remotePath = `/${env.SFTP_ROOT}/${env.STORAGE_BUCKET}/${key}`;
+    const remotePath = path.posix.join('/', env.SFTP_ROOT, env.STORAGE_BUCKET, key);
     const remoteDir = path.posix.dirname(remotePath);
 
     try {
@@ -73,7 +73,7 @@ export class SftpStorageProvider implements StorageProvider {
 
     try {
       await sftp.connect(getSftpConfig());
-      await sftp.delete(`/${env.STORAGE_BUCKET}/${fileKey}`);
+      await sftp.delete(path.posix.join('/', env.SFTP_ROOT, env.STORAGE_BUCKET, fileKey));
     } finally {
       await sftp.end().catch(() => {});
     }
@@ -81,6 +81,6 @@ export class SftpStorageProvider implements StorageProvider {
 
   /** Returns the public CDN URL for a stored file. */
   async getPublicUrl(fileKey: string) {
-    return `${env.SFTP_HOST}/${env.SFTP_ROOT}/${fileKey}`;
+    return `${env.SFTP_HOST}${path.posix.join('/', env.SFTP_ROOT, env.STORAGE_BUCKET, fileKey)}`;
   }
 }

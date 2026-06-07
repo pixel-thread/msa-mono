@@ -3,7 +3,6 @@
  * @description This file contains the request handlers for individual announcement operations.
  * It provides functionality for fetching, updating, deleting, and status patching.
  */
-import express from 'express';
 import { ForbiddenError } from '@errors';
 import {
   AnnouncementRouteParams,
@@ -26,7 +25,6 @@ import {
   findUniqueAnnouncement,
   updateAnnouncement,
 } from '../services';
-import { env } from '@src/env';
 
 /**
  * @description Fetch a single announcement by ID.
@@ -35,7 +33,6 @@ import { env } from '@src/env';
  */
 export const getAnnouncement: RequestHandler[] = [
   validate({ params: AnnouncementRouteParams }),
-  express.static(env.SFTP_ROOT, { dotfiles: 'deny', maxAge: '1d', index: false }),
 
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
