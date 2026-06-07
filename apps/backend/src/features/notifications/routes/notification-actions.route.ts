@@ -122,7 +122,11 @@ export const patchNotificationStatusHandler: RequestHandler[] = [
     // ---- Setup
 
     const traceId = (req.traceId as string) || '';
-    logger.info({ traceId }, 'PATCH /api/notifications/[notificationId]/status - Request started');
+
+    logger.info(
+      { traceId, userId: req.user?.id as string },
+      'PATCH /api/notifications/[notificationId]/status - Request started',
+    );
 
     // ---- Authorize — require MEMBER role or higher
 
@@ -141,6 +145,7 @@ export const patchNotificationStatusHandler: RequestHandler[] = [
     // ---- Validate ownership
 
     const userId = req.user?.id as string;
+
     if (!userId) throw new UnauthorizedError('Unauthorized');
 
     // Confirm the notification exists and belongs to this user so that
@@ -148,6 +153,7 @@ export const patchNotificationStatusHandler: RequestHandler[] = [
     const isNotificaitonExist = await findUniqueNotification({
       where: { id: req.params.notificationId as string, userId },
     });
+
     if (!isNotificaitonExist) throw new NotFoundError('Notification not found.');
 
     // ---- Build update payload
@@ -172,9 +178,10 @@ export const patchNotificationStatusHandler: RequestHandler[] = [
     // ---- Log success & respond
 
     logger.info(
-      { traceId, notificationId: req.params.notificationId },
+      { traceId, notificationId: req.params.notificationId, userId },
       'PATCH /api/notifications/[notificationId]/status - Success',
     );
+
     return success(res, {
       data: notification,
       message: 'Successfully updated notification status',
