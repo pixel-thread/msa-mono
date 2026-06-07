@@ -18,26 +18,6 @@ import { success } from '@utils/responses';
 import type { RequestHandler } from 'express';
 import type { NextFunction, Request, Response } from 'express';
 
-// ---- Helpers
-
-/**
- * Resolve the association context from the authenticated user's request.
- * Business logic: Every DSAR ticket is scoped to the user's association.
- */
-async function getAssociation(req: Request) {
-  const userId = req.user?.id as string;
-  if (!userId) throw new UnauthorizedError('Unauthorized');
-
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-    include: { association: true },
-  });
-
-  if (!user || !user.associationId) throw new ForbiddenError('User association not found');
-
-  return { id: user.association.id, slug: user.association.slug, name: user.association.name };
-}
-
 // ---- Handlers
 
 // ============================================================================
@@ -54,12 +34,10 @@ export const submitDsar: RequestHandler[] = [
 
     // ---- Auth: Resolve association
 
-    const association = await getAssociation(req);
-
     // ---- Auth log
 
     logger.info(
-      { traceId, associationId: association.id },
+      { traceId, associationId: req.user!.associationId },
       'POST /api/dsar/submit - Request started',
     );
 
@@ -68,7 +46,7 @@ export const submitDsar: RequestHandler[] = [
     const userId = req.user?.id as string;
 
     const ticket = await submitDsarTicket({
-      associationId: association.id,
+      associationId: req.user!.associationId,
       userId,
       data: req.body,
     });

@@ -19,20 +19,6 @@ import { success } from '@utils/responses';
 import type { RequestHandler } from 'express';
 import type { NextFunction, Request, Response } from 'express';
 
-// ---- Helper: getAssociation
-// Resolves the user's association from the request context.
-
-async function getAssociation(req: Request) {
-  const userId = req.user?.id as string;
-  if (!userId) throw new UnauthorizedError('Unauthorized');
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-    include: { association: true },
-  });
-  if (!user || !user.associationId) throw new ForbiddenError('User association not found');
-  return { id: user.association.id, slug: user.association.slug, name: user.association.name };
-}
-
 // ---- POST /api/consent/grant - Grant consent
 
 export const grantConsent: RequestHandler[] = [
@@ -44,9 +30,8 @@ export const grantConsent: RequestHandler[] = [
 
     // ---- Auth: verify association membership
 
-    const association = await getAssociation(req);
     logger.info(
-      { traceId, associationId: association.id },
+      { traceId, associationId: req.user!.associationId },
       'POST /api/consent/grant - Request started',
     );
 
@@ -65,7 +50,7 @@ export const grantConsent: RequestHandler[] = [
 
     const receipts = await ConsentService.updateConsent(
       userId,
-      association.id,
+      req.user!.associationId,
       { ...req.body, action: ConsentStatus.GRANTED },
       ipAddress,
       userAgent,
@@ -89,9 +74,8 @@ export const revokeConsent: RequestHandler[] = [
 
     // ---- Auth: verify association membership
 
-    const association = await getAssociation(req);
     logger.info(
-      { traceId, associationId: association.id },
+      { traceId, associationId: req.user!.associationId },
       'POST /api/consent/revoke - Request started',
     );
 
@@ -110,7 +94,7 @@ export const revokeConsent: RequestHandler[] = [
 
     const receipts = await ConsentService.updateConsent(
       userId,
-      association.id,
+      req.user!.associationId,
       { ...req.body, action: ConsentStatus.WITHDRAWN },
       ipAddress,
       userAgent,

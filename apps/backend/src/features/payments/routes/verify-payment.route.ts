@@ -5,35 +5,14 @@
 //            client-side checkout and complete the transaction.
 // ---------------------------------------------------------------------------
 
-import { ForbiddenError, UnauthorizedError } from '@errors';
 import { verifyAndCompletePayment } from '@feature/payments/services/payment.service';
 import { VerifyPaymentSchema } from '@feature/payments/validators';
-import { prisma } from '@lib/prisma';
 import { validate } from '@lib/validate';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
 import type { RequestHandler } from 'express';
 import type { NextFunction, Request, Response } from 'express';
-
-// ---- Helpers ----
-
-/**
- * Resolve the authenticated user's association for multi-tenant scoping.
- */
-async function getAssociation(req: Request) {
-  const userId = req.user?.id as string;
-  if (!userId) throw new UnauthorizedError('Unauthorized');
-
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-    include: { association: true },
-  });
-
-  if (!user || !user.associationId) throw new ForbiddenError('User association not found');
-
-  return { id: user.association.id, slug: user.association.slug, name: user.association.name };
-}
 
 // ---- Handler ----
 
@@ -50,9 +29,6 @@ export const verifyPayment: RequestHandler[] = [
       { traceId, razorpayOrderId: req.body.razorpayOrderId },
       'POST /api/payments/verify - Request started',
     );
-
-    // --- Auth: ensure user belongs to an association (scoping) ---
-    await getAssociation(req);
 
     // --- Business logic: verify signature & complete payment ---
     logger.info(

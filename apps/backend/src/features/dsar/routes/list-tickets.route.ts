@@ -34,26 +34,6 @@ const ROLE_HIERARCHY: Record<UserRole, number> = {
   MEMBER: 5,
 };
 
-// ---- Helpers
-
-/**
- * Resolve the association context from the authenticated user's request.
- * Business logic: Every DSAR ticket is scoped to the user's association.
- */
-async function getAssociation(req: Request) {
-  const userId = req.user?.id as string;
-  if (!userId) throw new UnauthorizedError('Unauthorized');
-
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-    include: { association: true },
-  });
-
-  if (!user || !user.associationId) throw new ForbiddenError('User association not found');
-
-  return { id: user.association.id, slug: user.association.slug, name: user.association.name };
-}
-
 /**
  * Verify the requesting user has at minimum the given role.
  * Business logic: Uses a numeric hierarchy where lower values = higher privilege.
@@ -92,11 +72,12 @@ export const listTickets: RequestHandler[] = [
 
     // ---- Auth: Resolve association
 
-    const association = await getAssociation(req);
-
     // ---- Auth log
 
-    logger.info({ traceId, associationId: association.id }, 'GET /api/dsar - Request started');
+    logger.info(
+      { traceId, associationId: req.user!.associationId },
+      'GET /api/dsar - Request started',
+    );
 
     // ---- Auth: Verify role
 
@@ -105,7 +86,7 @@ export const listTickets: RequestHandler[] = [
     // ---- Business logic: Fetch paginated tickets
 
     const result = await findDsarTickets({
-      associationId: association.id,
+      associationId: req.user!.associationId,
       userId: req.query.userId as string | undefined,
       filters: {
         status: (req.query as any).status,

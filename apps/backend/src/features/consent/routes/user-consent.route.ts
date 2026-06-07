@@ -49,20 +49,6 @@ const ROLE_HIERARCHY: Record<UserRole, number> = {
   MEMBER: 5,
 };
 
-// ---- Helper: getAssociation
-// Resolves the user's association from the request context.
-
-async function getAssociation(req: Request) {
-  const userId = req.user?.id as string;
-  if (!userId) throw new UnauthorizedError('Unauthorized');
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-    include: { association: true },
-  });
-  if (!user || !user.associationId) throw new ForbiddenError('User association not found');
-  return { id: user.association.id, slug: user.association.slug, name: user.association.name };
-}
-
 // ---- Helper: withRole
 // Ensures the authenticated user meets the minimum role requirement.
 
@@ -93,11 +79,10 @@ export const getReceipt: RequestHandler[] = [
 
     // ---- Auth: verify association membership
 
-    const association = await getAssociation(req);
     const receiptId = req.params.receiptId as string;
 
     logger.info(
-      { traceId, associationId: association.id, receiptId },
+      { traceId, associationId: req.user!.associationId, receiptId },
       'GET /api/consent/[receiptId] - Request started',
     );
 
@@ -107,7 +92,10 @@ export const getReceipt: RequestHandler[] = [
 
     // ---- Fetch the consent receipt
 
-    const receipt = await ConsentService.findUniqueConsentReceipt(association.id, receiptId);
+    const receipt = await ConsentService.findUniqueConsentReceipt(
+      req.user!.associationId,
+      receiptId,
+    );
     if (!receipt) throw new NotFoundError('Consent receipt not found');
 
     // ---- Log success and return response
@@ -130,11 +118,10 @@ export const updateReceipt: RequestHandler[] = [
 
     // ---- Auth: verify association membership
 
-    const association = await getAssociation(req);
     const receiptId = req.params.receiptId as string;
 
     logger.info(
-      { traceId, associationId: association.id, receiptId },
+      { traceId, associationId: req.user!.associationId, receiptId },
       'PATCH /api/consent/[receiptId] - Request started',
     );
 
@@ -149,7 +136,7 @@ export const updateReceipt: RequestHandler[] = [
     // ---- Update the consent receipt
 
     const receipt = await ConsentService.updateConsentReceipt(
-      association.id,
+      req.user!.associationId,
       receiptId,
       req.user?.id as string,
       req.body,
@@ -175,11 +162,10 @@ export const deleteReceipt: RequestHandler[] = [
 
     // ---- Auth: verify association membership
 
-    const association = await getAssociation(req);
     const receiptId = req.params.receiptId as string;
 
     logger.info(
-      { traceId, associationId: association.id, receiptId },
+      { traceId, associationId: req.user!.associationId, receiptId },
       'DELETE /api/consent/[receiptId] - Request started',
     );
 
@@ -189,7 +175,11 @@ export const deleteReceipt: RequestHandler[] = [
 
     // ---- Delete the consent receipt
 
-    await ConsentService.deleteConsentReceipt(association.id, receiptId, req.user?.id as string);
+    await ConsentService.deleteConsentReceipt(
+      req.user!.associationId,
+      receiptId,
+      req.user?.id as string,
+    );
 
     // ---- Log success and return response
 
@@ -211,11 +201,10 @@ export const getUserConsents: RequestHandler[] = [
 
     // ---- Auth: verify association membership
 
-    const association = await getAssociation(req);
     const targetUserId = req.params.userId as string;
 
     logger.info(
-      { traceId, associationId: association.id, targetUserId },
+      { traceId, associationId: req.user!.associationId, targetUserId },
       'GET /api/consent/users/[userId] - Request started',
     );
 
@@ -229,7 +218,11 @@ export const getUserConsents: RequestHandler[] = [
 
     // ---- Fetch consent history for the target user
 
-    const data = await ConsentService.getUserConsentHistoryById(targetUserId, association.id, page);
+    const data = await ConsentService.getUserConsentHistoryById(
+      targetUserId,
+      req.user!.associationId,
+      page,
+    );
 
     // Return 404 if no records found, so the caller knows the user has no consent history
 

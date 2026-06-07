@@ -6,9 +6,8 @@
 //            with member info, association info, and allocation breakdown.
 // ---------------------------------------------------------------------------
 
-import { ForbiddenError, NotFoundError, UnauthorizedError } from '@errors';
+import { ForbiddenError, NotFoundError } from '@errors';
 import { getTransactionById } from '@feature/payments/services/payment.service';
-import { prisma } from '@lib/prisma';
 import { validate } from '@lib/validate';
 import { UserRole } from '@prisma/client';
 import { logger } from '@src/shared/logger';
@@ -23,25 +22,6 @@ import { z } from 'zod';
 
 const PaymentIdParamSchema = z.object({ paymentId: z.uuid() });
 
-// ---- Helpers ----
-
-/**
- * Resolve the authenticated user's association for multi-tenant scoping.
- */
-async function getAssociation(req: Request) {
-  const userId = req.user?.id as string;
-  if (!userId) throw new UnauthorizedError('Unauthorized');
-
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-    include: { association: true },
-  });
-
-  if (!user || !user.associationId) throw new ForbiddenError('User association not found');
-
-  return { id: user.association.id, slug: user.association.slug, name: user.association.name };
-}
-
 // ---- Handler ----
 
 export const getReceipt: RequestHandler[] = [
@@ -55,9 +35,6 @@ export const getReceipt: RequestHandler[] = [
     // --- Log: request started ---
     logger.info({ traceId }, 'GET /api/payments/[id]/receipt - Request started');
 
-    // --- Auth: resolve association ---
-    const association = await getAssociation(req);
-
     // --- Auth: enforce MEMBER role ---
     const paymentId = req.params.paymentId;
     if (!paymentId) throw new NotFoundError('Payment ID');
@@ -68,7 +45,7 @@ export const getReceipt: RequestHandler[] = [
     );
 
     // --- Business logic: fetch transaction ---
-    const transaction = await getTransactionById(paymentId as string, association.id);
+    const transaction = await getTransactionById(paymentId as string, req.user!.associationId);
 
     if (!transaction) throw new NotFoundError('Transaction');
 
@@ -92,7 +69,7 @@ export const getReceipt: RequestHandler[] = [
         name: (transaction as any).user?.name,
         membershipNumber: (transaction as any).user?.membershipNumber,
       },
-      associationInfo: { name: association.name },
+      associationInfo: { name: req.user!.associationName },
       amount: transaction.amount,
       method: transaction.method,
       appliedTo: (transaction as any).allocations?.map((a: any) => ({

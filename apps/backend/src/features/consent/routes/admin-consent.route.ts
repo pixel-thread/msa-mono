@@ -43,20 +43,6 @@ const ROLE_HIERARCHY: Record<UserRole, number> = {
   MEMBER: 5,
 };
 
-// ---- Helper: getAssociation
-// Resolves the user's association from the request context.
-
-async function getAssociation(req: Request) {
-  const userId = req.user?.id as string;
-  if (!userId) throw new UnauthorizedError('Unauthorized');
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-    include: { association: true },
-  });
-  if (!user || !user.associationId) throw new ForbiddenError('User association not found');
-  return { id: user.association.id, slug: user.association.slug, name: user.association.name };
-}
-
 // ---- Helper: withRole
 // Ensures the authenticated user meets the minimum role requirement.
 
@@ -87,9 +73,8 @@ export const getAllConsentRecords: RequestHandler[] = [
 
     // ---- Auth: verify association membership
 
-    const association = await getAssociation(req);
     logger.info(
-      { traceId, associationId: association.id },
+      { traceId, associationId: req.user!.associationId },
       'GET /api/consent/all - Request started',
     );
 
@@ -105,7 +90,7 @@ export const getAllConsentRecords: RequestHandler[] = [
     // Wire up actual typed service call
 
     const { records, total } = await ConsentService.getAllConsentRecords(
-      association.id,
+      req.user!.associationId,
       req.query as AllConsentRecordsQueryInput,
     );
 
@@ -129,9 +114,8 @@ export const getConsentHistory: RequestHandler[] = [
 
     // ---- Auth: verify association membership
 
-    const association = await getAssociation(req);
     logger.info(
-      { traceId, associationId: association.id },
+      { traceId, associationId: req.user!.associationId },
       'GET /api/consent/history - Request started',
     );
 
@@ -146,7 +130,7 @@ export const getConsentHistory: RequestHandler[] = [
 
     // ---- Fetch consent history
 
-    const data = await ConsentService.getConsentHistory(userId, association.id, page);
+    const data = await ConsentService.getConsentHistory(userId, req.user!.associationId, page);
 
     // ---- Log success and return response
 
@@ -167,9 +151,8 @@ export const getConsentReport: RequestHandler[] = [
 
     // ---- Auth: verify association membership
 
-    const association = await getAssociation(req);
     logger.info(
-      { traceId, associationId: association.id },
+      { traceId, associationId: req.user!.associationId },
       'GET /api/consent/report - Request started',
     );
 
@@ -179,7 +162,7 @@ export const getConsentReport: RequestHandler[] = [
 
     // ---- Fetch consent report
 
-    const report = await ConsentService.getConsentReport(association.id);
+    const report = await ConsentService.getConsentReport(req.user!.associationId);
 
     // ---- Log success and return response
 

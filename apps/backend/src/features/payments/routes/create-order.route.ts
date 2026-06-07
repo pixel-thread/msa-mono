@@ -7,12 +7,11 @@
 //            Falls back to the default plan if no member-type plan is found.
 // ---------------------------------------------------------------------------
 
-import { ForbiddenError, NotFoundError, UnauthorizedError } from '@errors';
+import { NotFoundError } from '@errors';
 import { findSubscriptionPlans } from '@feature/payments/services/find-subscription-plans';
 import { createPaymentOrder } from '@feature/payments/services/payment.service';
 import { getActiveProvider } from '@feature/payments/services/payment-provider.service';
 import { CreateOrderSchema } from '@feature/payments/validators';
-import { prisma } from '@lib/prisma';
 import { validate } from '@lib/validate';
 import { UserRole } from '@prisma/client';
 import { logger } from '@src/shared/logger';
@@ -21,25 +20,6 @@ import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';
 import type { RequestHandler } from 'express';
 import type { NextFunction, Request, Response } from 'express';
-
-// ---- Helpers ----
-
-/**
- * Resolve the authenticated user's association for multi-tenant scoping.
- */
-async function getAssociation(req: Request) {
-  const userId = req.user?.id as string;
-  if (!userId) throw new UnauthorizedError('Unauthorized');
-
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-    include: { association: true },
-  });
-
-  if (!user || !user.associationId) throw new ForbiddenError('User association not found');
-
-  return { id: user.association.id, slug: user.association.slug, name: user.association.name };
-}
 
 // ---- Handler ----
 
@@ -54,23 +34,23 @@ export const createOrder: RequestHandler[] = [
     // --- Log: request started ---
     logger.info({ traceId }, 'POST /api/payments/order - Request started');
 
-    // --- Auth: resolve association ---
-    const association = await getAssociation(req);
-
     // --- Auth: enforce MEMBER role & get user info ---
     const user = await withRole(req, UserRole.MEMBER);
     logger.info({ traceId, userId: user.id }, 'POST /api/payments/order - User authorized');
 
     // --- Business logic: determine the correct subscription plan ---
     // Step A: Check if the association has an active payment provider
-    const associationActivePaymentProvider = await getActiveProvider(association.id);
+    const associationActivePaymentProvider = await getActiveProvider(req.user!.associationId);
     if (!associationActivePaymentProvider) {
       throw new NotFoundError('No payment provider set up for this association.');
     }
 
     // Step B: Find the subscription plan matching the member's type
     const typeId = user?.memberTypeId;
-    const whereClause: Record<string, unknown> = { associationId: association.id, isActive: true };
+    const whereClause: Record<string, unknown> = {
+      associationId: req.user!.associationId,
+      isActive: true,
+    };
     if (typeId) {
       whereClause.memberTypeId = typeId;
     } else {
@@ -92,7 +72,7 @@ export const createOrder: RequestHandler[] = [
     // Step C: Fallback to default plan if no member-type-specific plan exists
     if (plans.length === 0) {
       plansRaw = await findSubscriptionPlans({
-        where: { associationId: association.id, isDefault: true, isActive: true },
+        where: { associationId: req.user!.associationId, isDefault: true, isActive: true },
         include: plansInclude,
       });
       plans = plansRaw as unknown as typeof plans;
@@ -116,7 +96,7 @@ export const createOrder: RequestHandler[] = [
       'POST /api/payments/order - Creating payment order',
     );
     const orderDetails = await createPaymentOrder({
-      associationId: association.id,
+      associationId: req.user!.associationId,
       userId: user.id,
       amount: parseInt(activeVersion.amount.toFixed(2)),
       notes: req.body?.notes,

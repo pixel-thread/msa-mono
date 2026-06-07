@@ -28,20 +28,6 @@ const ROLE_HIERARCHY: Record<UserRole, number> = {
   MEMBER: 5,
 };
 
-// ---- Helper: getAssociation
-// Resolves the user's association from the request context.
-
-async function getAssociation(req: Request) {
-  const userId = req.user?.id as string;
-  if (!userId) throw new UnauthorizedError('Unauthorized');
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-    include: { association: true },
-  });
-  if (!user || !user.associationId) throw new ForbiddenError('User association not found');
-  return { id: user.association.id, slug: user.association.slug, name: user.association.name };
-}
-
 // ---- Helper: withRole
 // Ensures the authenticated user meets the minimum role requirement.
 
@@ -69,9 +55,8 @@ export const getMyConsent: RequestHandler[] = [
 
     // ---- Auth: verify association membership
 
-    const association = await getAssociation(req);
     logger.info(
-      { traceId, associationId: association.id },
+      { traceId, associationId: req.user!.associationId },
       'GET /api/consent/my - Request started',
     );
 
@@ -86,7 +71,7 @@ export const getMyConsent: RequestHandler[] = [
 
     // ---- Fetch the user's current consent state
 
-    const consentState = await ConsentService.getUserConsentState(userId, association.id);
+    const consentState = await ConsentService.getUserConsentState(userId, req.user!.associationId);
 
     // ---- Log success and return response
 
