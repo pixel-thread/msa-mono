@@ -2,6 +2,7 @@ import { DeclarationStatus, Prisma } from '@prisma/client';
 import { differenceInCalendarMonths, addMonths, startOfMonth, endOfMonth } from 'date-fns';
 import { PAGE_SIZE } from '@src/shared/constants';
 import { prisma } from '@lib';
+import { buildPaginationParams } from '@lib/prisma/helpers';
 import { buildPagination } from '@utils';
 import { BadRequestError, NotFoundError } from '@errors';
 
@@ -12,9 +13,9 @@ type Props = {
 };
 
 export async function findDeclarations({ where, include, page = 1 }: Props) {
-  const skip = (page - 1) * 10;
+  const { skip, take } = buildPaginationParams(page);
   return await prisma.$transaction(async (tx) => {
-    const declaration = await tx.declarations.findMany({ where, include, take: PAGE_SIZE, skip });
+    const declaration = await tx.declarations.findMany({ where, include, take, skip });
     const total = await tx.declarations.count({ where });
     const pagination = buildPagination(total, page);
     return { declaration, pagination };
