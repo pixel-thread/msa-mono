@@ -1,6 +1,8 @@
 import { AttendeeRole, RsvpStatus } from '@prisma/client';
 import z from 'zod';
 
+import { MeetingParamsSchema } from './meetings';
+
 /** Zod schema for assigning a single attendee. */
 export const AssignAttendeeSchema = z
   .object({
@@ -40,8 +42,7 @@ export const UpdateAttendeeSchema = z
   .strict();
 
 /** Schema for attendee route params. */
-export const AttendeeParamsSchema = z.object({
-  meetingId: z.string('Invalid meeting ID'),
+export const AttendeeParamsSchema = MeetingParamsSchema.extend({
   userId: z.string('Invalid user ID'),
 });
 

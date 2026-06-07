@@ -1,8 +1,5 @@
 import { processAgendaOperations } from '@feature/meetings/services/processAgendaOperations';
-import {
-  AgendaOperationSchema,
-  ProcessingAgendaParamsSchema,
-} from '@feature/meetings/validators/agenda-items';
+import { AgendaOperationSchema } from '@feature/meetings/validators/agenda-items';
 import { validate } from '@lib/validate';
 import { UserRole } from '@prisma/client';
 import { logger } from '@src/shared/logger';
@@ -12,9 +9,11 @@ import { withRole } from '@utils/with-role';
 import type { RequestHandler } from 'express';
 import type { NextFunction, Request, Response } from 'express';
 
+import { MeetingParamsSchema } from '../../validators';
+
 /** PATCH /api/meetings/[meetingId]/agenda - Process bulk agenda operations (create/update/delete/reorder). */
 export const patchProcessAgendaOperations: RequestHandler[] = [
-  validate({ params: ProcessingAgendaParamsSchema, body: AgendaOperationSchema }),
+  validate({ params: MeetingParamsSchema, body: AgendaOperationSchema }),
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
     const meetingId = req.params.meetingId as string;

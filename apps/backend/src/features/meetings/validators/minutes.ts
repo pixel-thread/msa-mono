@@ -1,4 +1,5 @@
 import { z } from 'zod';
+
 import { MeetingParamsSchema } from './meetings';
 
 /** Zod schema for creating a meeting minute. */
