@@ -1,6 +1,11 @@
 import { describe, it, expect, jest, beforeEach } from '@jest/globals';
 import { Request, Response } from 'express';
-import { rateLimiter, routeRateLimiter, createRateLimiter, _resetRatelimiter } from '@src/middleware/rate-limiter';
+import {
+  rateLimiter,
+  routeRateLimiter,
+  createRateLimiter,
+  _resetRatelimiter,
+} from '@src/middleware/rate-limiter';
 import { TooManyRequestsError } from '@errors';
 import { Ratelimit } from '@upstash/ratelimit';
 
@@ -38,7 +43,7 @@ describe('Rate Limiter Middleware', () => {
         success: true,
         limit: 100,
         remaining: 99,
-        reset: Date.now()
+        reset: Date.now(),
       });
 
       await rateLimiter(req as Request, res as Response, next);
@@ -50,7 +55,7 @@ describe('Rate Limiter Middleware', () => {
         success: false,
         limit: 100,
         remaining: 0,
-        reset: Date.now()
+        reset: Date.now(),
       });
 
       await rateLimiter(req as Request, res as Response, next);
@@ -88,12 +93,12 @@ describe('Rate Limiter Middleware', () => {
   describe('routeRateLimiter', () => {
     it('should return a functional rate limiter middleware', async () => {
       const specificLimiter = routeRateLimiter(5, '1 m');
-      
+
       mockLimit.mockResolvedValue({
         success: false,
         limit: 5,
         remaining: 0,
-        reset: Date.now()
+        reset: Date.now(),
       });
 
       await specificLimiter(req as Request, res as Response, next);

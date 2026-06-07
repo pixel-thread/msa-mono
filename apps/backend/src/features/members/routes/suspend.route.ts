@@ -11,12 +11,7 @@ import z from 'zod';
 import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
 import { prisma } from '@lib/prisma';
-import {
-  BadRequestError,
-  ForbiddenError,
-  NotFoundError,
-  UnauthorizedError,
-} from '@errors';
+import { BadRequestError, ForbiddenError, NotFoundError, UnauthorizedError } from '@errors';
 import { withRole } from '@utils/with-role';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
@@ -35,9 +30,11 @@ import { updateMember } from '@feature/members/services/updateMember';
 // ---------------------------------------------------------------------------
 // Schema — route param identifying the member to suspend
 // ---------------------------------------------------------------------------
-const SuspenseUserRouteParams = z.object({
-  memberId: z.uuid(),
-}).strict();
+const SuspenseUserRouteParams = z
+  .object({
+    memberId: z.uuid(),
+  })
+  .strict();
 
 // ---------------------------------------------------------------------------
 // POST /api/members/:memberId/suspend  —  Suspend a member's account

@@ -11,9 +11,7 @@ describe('POST /api/v1/payments/webhook', () => {
   });
 
   it('should return 400 missing signature header', async () => {
-    const res = await request(app)
-      .post('/api/v1/payments/webhook')
-      .send({ event: 'test' });
+    const res = await request(app).post('/api/v1/payments/webhook').send({ event: 'test' });
     expect(res.status).toBe(400);
   });
 

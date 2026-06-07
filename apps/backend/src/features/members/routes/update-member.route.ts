@@ -34,20 +34,22 @@ import { updateMember } from '@feature/members/services/updateMember';
 const ParamSchema = z.object({ memberId: z.uuid() }).strict();
 
 /** Request body: fields an admin / secretary may change on a member profile. */
-const AdminOnboardingSchema = z.object({
-  name: z.string().min(1, 'Name is required').optional(),
-  mobile: z
-    .string()
-    .min(10, 'Mobile must be 10 digits')
-    .max(10, 'Mobile must be 10 digits')
-    .regex(/^[0-9]+$/, 'Mobile should contain only numbers')
-    .optional(),
-  designation: z.string().optional(),
-  dateOfJoiningGovt: z.coerce.date().optional(),
-  dateOfJoiningAssociation: z.coerce.date().optional(),
-  membershipNumber: z.string().optional(),
-  associationId: z.uuid(),
-}).strict();
+const AdminOnboardingSchema = z
+  .object({
+    name: z.string().min(1, 'Name is required').optional(),
+    mobile: z
+      .string()
+      .min(10, 'Mobile must be 10 digits')
+      .max(10, 'Mobile must be 10 digits')
+      .regex(/^[0-9]+$/, 'Mobile should contain only numbers')
+      .optional(),
+    designation: z.string().optional(),
+    dateOfJoiningGovt: z.coerce.date().optional(),
+    dateOfJoiningAssociation: z.coerce.date().optional(),
+    membershipNumber: z.string().optional(),
+    associationId: z.uuid(),
+  })
+  .strict();
 
 // ---------------------------------------------------------------------------
 // PATCH /api/members/:memberId  —  Update a member's profile fields

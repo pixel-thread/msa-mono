@@ -6,11 +6,7 @@ import { success } from '@utils/responses';
 import { asyncHandler } from '@utils/async-handler';
 import { logger } from '@src/shared/logger';
 
-import {
-  hashPassword,
-  validatePasswordStrength,
-  hashToken,
-} from '@lib/password';
+import { hashPassword, validatePasswordStrength, hashToken } from '@lib/password';
 
 import { UnauthorizedError, ValidationError } from '@errors';
 

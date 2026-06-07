@@ -16,9 +16,7 @@ describe('POST /api/v1/auth/refresh — input validation', () => {
   });
 
   it('should return 401 with invalid token format', async () => {
-    const res = await request(app)
-      .post('/api/v1/auth/refresh')
-      .send({ token: 'not-a-valid-jwt' });
+    const res = await request(app).post('/api/v1/auth/refresh').send({ token: 'not-a-valid-jwt' });
     expect(res.status).toBe(401);
   });
 });

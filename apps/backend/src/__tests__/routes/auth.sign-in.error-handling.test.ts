@@ -55,9 +55,7 @@ describe('POST /api/v1/auth/sign-in — error handling', () => {
       password: 'ValidPass1!',
       extra: 'x'.repeat(100000),
     };
-    const res = await request(app)
-      .post('/api/v1/auth/sign-in')
-      .send(largePayload);
+    const res = await request(app).post('/api/v1/auth/sign-in').send(largePayload);
     expect(res.status).toBeGreaterThanOrEqual(400);
   }, 10000);
 

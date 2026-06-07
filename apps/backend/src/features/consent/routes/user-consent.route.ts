@@ -10,12 +10,7 @@ import { z } from 'zod';
 // Shared utilities
 import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
-import {
-  UnauthorizedError,
-  ForbiddenError,
-  BadRequestError,
-  NotFoundError,
-} from '@errors';
+import { UnauthorizedError, ForbiddenError, BadRequestError, NotFoundError } from '@errors';
 import { pageNumberValidation } from '@validator';
 import { getUniqueUser } from '@services/user/get-unique-user';
 import { logger } from '@src/shared/logger';

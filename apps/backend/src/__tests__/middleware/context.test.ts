@@ -25,7 +25,7 @@ describe('Context Middleware', () => {
 
   it('should initialize context with a requestId from x-request-id header if present', () => {
     req.headers = { 'x-request-id': 'test-request-id' };
-    
+
     contextMiddleware(req as Request, res as Response, () => {
       const context = ContextStore.get();
       expect(context?.requestId).toBe('test-request-id');
@@ -36,7 +36,7 @@ describe('Context Middleware', () => {
 
   it('should initialize context with a requestId from x-trace-id header if present', () => {
     req.headers = { 'x-trace-id': 'test-trace-id' };
-    
+
     contextMiddleware(req as Request, res as Response, () => {
       const context = ContextStore.get();
       expect(context?.requestId).toBe('test-trace-id');

@@ -26,12 +26,16 @@ describe('Member Types Routes — auth', () => {
   });
 
   it('should not succeed on PATCH /api/v1/member-types/:id without token', async () => {
-    const res = await request(app).patch('/api/v1/member-types/00000000-0000-0000-0000-000000000000').send({ name: 'Updated' });
+    const res = await request(app)
+      .patch('/api/v1/member-types/00000000-0000-0000-0000-000000000000')
+      .send({ name: 'Updated' });
     expect(res.status).toBe(401);
   });
 
   it('should not succeed on DELETE /api/v1/member-types/:id without token', async () => {
-    const res = await request(app).delete('/api/v1/member-types/00000000-0000-0000-0000-000000000000');
+    const res = await request(app).delete(
+      '/api/v1/member-types/00000000-0000-0000-0000-000000000000',
+    );
     expect(res.status).toBe(401);
   });
 });

@@ -65,7 +65,15 @@ export const getAuditLogs: RequestHandler[] = [
     const actorId = req.query.actorId as string | undefined;
     const fromDate = req.query.fromDate ? new Date(req.query.fromDate as string) : undefined;
     const toDate = req.query.toDate ? new Date(req.query.toDate as string) : undefined;
-    const query: AuditLogQuery = { page, action, resourceType, actorId, fromDate, toDate, limit: 10 };
+    const query: AuditLogQuery = {
+      page,
+      action,
+      resourceType,
+      actorId,
+      fromDate,
+      toDate,
+      limit: 10,
+    };
 
     // ---- Fetch audit logs and stats concurrently
     // Wire up actual typed service call

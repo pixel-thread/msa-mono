@@ -27,11 +27,7 @@ type FindManyProps = {
  * @param props - The search and pagination properties.
  * @returns An object containing the association records and pagination metadata.
  */
-export async function findManyAssociation({
-  page = 1,
-  where,
-  orderBy,
-}: FindManyProps) {
+export async function findManyAssociation({ page = 1, where, orderBy }: FindManyProps) {
   const skip = (page - 1) * PAGE_SIZE;
 
   // Fetch matching records and total count in a single transaction

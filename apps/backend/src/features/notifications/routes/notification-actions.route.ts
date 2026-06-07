@@ -19,17 +19,11 @@ import { UserRole } from '@prisma/client';
 // ---- Services
 
 import { upsertPushToken } from '@feature/notifications/services/upsertPushToken';
-import {
-  findUniqueNotification,
-  updateNotificationStatus,
-} from '@services/notification';
+import { findUniqueNotification, updateNotificationStatus } from '@services/notification';
 
 // ---- Validators / Types
 
-import {
-  UpdateNotificationSchema,
-  NotificationRouteParams,
-} from '@validator/notification';
+import { UpdateNotificationSchema, NotificationRouteParams } from '@validator/notification';
 
 // ---------------------------------------------------------------------------
 // Local validation schemas
@@ -141,10 +135,7 @@ export const patchNotificationStatus: RequestHandler[] = [
     // ---- Setup
 
     const traceId = (req.traceId as string) || '';
-    logger.info(
-      { traceId },
-      'PATCH /api/notifications/[notificationId]/status - Request started',
-    );
+    logger.info({ traceId }, 'PATCH /api/notifications/[notificationId]/status - Request started');
 
     // ---- Authorize — require MEMBER role or higher
 

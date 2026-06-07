@@ -308,7 +308,12 @@ export const getAccountHandler: RequestHandler[] = [
       'GET /api/ledger/accounts/:id - Success',
     );
     const trailBalance = await trialBalance(association.id, accountId as string);
-    const incomeStatementReport = await incomeStatement(association.id, undefined, undefined, accountId as string);
+    const incomeStatementReport = await incomeStatement(
+      association.id,
+      undefined,
+      undefined,
+      accountId as string,
+    );
 
     const dataWithReport = {
       ...existingAccount,

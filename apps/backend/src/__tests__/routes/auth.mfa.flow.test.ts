@@ -75,9 +75,7 @@ describe('POST /api/v1/auth/mfa/verify', () => {
   });
 
   it('should return 401 without token', async () => {
-    const res = await request(app)
-      .post('/api/v1/auth/mfa/verify')
-      .send({ code: '123456' });
+    const res = await request(app).post('/api/v1/auth/mfa/verify').send({ code: '123456' });
     expect(res.status).toBe(401);
   });
 
@@ -149,9 +147,7 @@ describe('POST /api/v1/auth/mfa/disable', () => {
   });
 
   it('should return 401 without token', async () => {
-    const res = await request(app)
-      .post('/api/v1/auth/mfa/disable')
-      .send({ password });
+    const res = await request(app).post('/api/v1/auth/mfa/disable').send({ password });
     expect(res.status).toBe(401);
   });
 });

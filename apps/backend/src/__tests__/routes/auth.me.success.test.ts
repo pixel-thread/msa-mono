@@ -30,18 +30,14 @@ describe('GET /api/v1/auth/me — success', () => {
   });
 
   it('should return 200 with user data for valid token', async () => {
-    const res = await request(app)
-      .get('/api/v1/auth/me')
-      .set('Authorization', `Bearer ${token}`);
+    const res = await request(app).get('/api/v1/auth/me').set('Authorization', `Bearer ${token}`);
     expect(res.status).toBe(200);
     expect(res.body.success).toBe(true);
     expect(res.body.data).toBeDefined();
   });
 
   it('should not expose password hash in response', async () => {
-    const res = await request(app)
-      .get('/api/v1/auth/me')
-      .set('Authorization', `Bearer ${token}`);
+    const res = await request(app).get('/api/v1/auth/me').set('Authorization', `Bearer ${token}`);
     const bodyStr = JSON.stringify(res.body);
     expect(bodyStr).not.toContain('$2a$');
     expect(bodyStr).not.toContain('password');

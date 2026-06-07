@@ -22,21 +22,24 @@ describe('Security Headers Middleware', () => {
     (securityHeaders as any)(req as Request, res as Response, next);
 
     // Helmet v8+ may use specific case for headers
-    
+
     // X-Content-Type-Options
     expect(res.setHeader).toHaveBeenCalledWith('X-Content-Type-Options', 'nosniff');
-    
+
     // X-Frame-Options (configured with action: 'deny')
     expect(res.setHeader).toHaveBeenCalledWith('X-Frame-Options', 'DENY');
 
     // Verify CSP
     expect(res.setHeader).toHaveBeenCalledWith(
       'Content-Security-Policy',
-      expect.stringContaining("default-src 'self'")
+      expect.stringContaining("default-src 'self'"),
     );
 
     // Referrer-Policy
-    expect(res.setHeader).toHaveBeenCalledWith('Referrer-Policy', 'strict-origin-when-cross-origin');
+    expect(res.setHeader).toHaveBeenCalledWith(
+      'Referrer-Policy',
+      'strict-origin-when-cross-origin',
+    );
 
     expect(next).toHaveBeenCalled();
   });

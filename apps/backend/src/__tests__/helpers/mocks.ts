@@ -17,7 +17,9 @@ export function setupModuleMocks() {
 
   jest.unstable_mockModule('razorpay', () => ({
     default: jest.fn().mockImplementation(() => ({
-      orders: { create: jest.fn().mockResolvedValue({ id: 'order_mock', amount: 100, currency: 'INR' }) },
+      orders: {
+        create: jest.fn().mockResolvedValue({ id: 'order_mock', amount: 100, currency: 'INR' }),
+      },
       payments: { fetch: jest.fn().mockResolvedValue({ id: 'pay_mock', status: 'captured' }) },
     })),
   }));

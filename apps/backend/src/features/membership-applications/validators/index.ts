@@ -9,11 +9,7 @@ import z from 'zod';
 
 // ---- Shared Validators
 
-import {
-  pageNumberValidation,
-  pageSizeValidation,
-  uuidValidiation,
-} from '@validator/common';
+import { pageNumberValidation, pageSizeValidation, uuidValidiation } from '@validator/common';
 
 // ---- Association Slug Constraint
 

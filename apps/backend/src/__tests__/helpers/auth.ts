@@ -2,7 +2,9 @@ import { SignJWT } from 'jose';
 import { env } from '@src/env';
 
 const accessTokenSecret = new TextEncoder().encode(env.JWT_SECRET);
-const wrongSecret = new TextEncoder().encode('this-is-a-completely-different-secret-that-is-at-least-32-chars!!');
+const wrongSecret = new TextEncoder().encode(
+  'this-is-a-completely-different-secret-that-is-at-least-32-chars!!',
+);
 
 export async function signToken(payload: Record<string, unknown>): Promise<string> {
   return new SignJWT(payload as unknown as Record<string, string>)

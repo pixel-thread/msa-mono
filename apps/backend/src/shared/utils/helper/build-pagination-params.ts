@@ -7,7 +7,10 @@ export interface PaginationParams {
   pageSize: number;
 }
 
-export function buildPaginationParams(page: number = 1, pageSize: number = PAGE_SIZE): PaginationParams {
+export function buildPaginationParams(
+  page: number = 1,
+  pageSize: number = PAGE_SIZE,
+): PaginationParams {
   const p = Math.max(1, page);
   return {
     skip: (p - 1) * pageSize,

@@ -7,18 +7,10 @@ import { asyncHandler } from '@utils/async-handler';
 import { logger } from '@src/shared/logger';
 import { env } from '@src/env';
 
-import {
-  verifyMfaTempToken,
-  signAccessToken,
-  signRefreshToken,
-} from '@lib/jwt';
+import { verifyMfaTempToken, signAccessToken, signRefreshToken } from '@lib/jwt';
 import { hashToken } from '@lib/password';
 
-import {
-  BadRequestError,
-  TooManyRequestsError,
-  UnauthorizedError,
-} from '@errors';
+import { BadRequestError, TooManyRequestsError, UnauthorizedError } from '@errors';
 
 import { getUniqueUser } from '@services/user/get-unique-user';
 

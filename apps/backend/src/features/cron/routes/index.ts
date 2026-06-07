@@ -1,14 +1,10 @@
 import { Router } from 'express';
 
-import {
-  postSubscriptionExpiry,
-  postDsarSla,
-  postAnonymize,
-} from './cron-jobs.route';
+import { postSubscriptionExpiry, postDsarSla, postAnonymize } from './cron-jobs.route';
 
 // ---- Routes -----------------------------------------------------------------
 
-const router:Router= Router();
+const router: Router = Router();
 
 // Subscription expiry trigger
 router.post('/subscription-expiry', postSubscriptionExpiry);

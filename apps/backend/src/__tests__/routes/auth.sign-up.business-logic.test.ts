@@ -48,9 +48,7 @@ describe('POST /api/v1/auth/sign-up — business logic', () => {
   };
 
   it('should return 201 for valid sign-up', async () => {
-    const res = await request(app)
-      .post('/api/v1/auth/sign-up')
-      .send(validPayload);
+    const res = await request(app).post('/api/v1/auth/sign-up').send(validPayload);
     expect(res.status).toBe(201);
     expect(res.body.success).toBe(true);
     expect(res.body.data.id).toBeDefined();

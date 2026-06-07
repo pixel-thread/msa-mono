@@ -14,16 +14,11 @@ import { Router } from 'express';
  */
 const router: Router = Router();
 
-router.use(
-  (
-    _req,
-    res,
-  ) => {
-    res.status(501).json({
-      success: false,
-      message: 'Not implemented yet',
-    });
-  },
-);
+router.use((_req, res) => {
+  res.status(501).json({
+    success: false,
+    message: 'Not implemented yet',
+  });
+});
 
 export default router;

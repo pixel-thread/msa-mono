@@ -1,17 +1,19 @@
 import { z } from 'zod';
 
 /** Zod schema for creating an agenda item. */
-export const CreateAgendaItemSchema = z.object({
-  order: z
-    .number({ message: 'Order must be a number' })
-    .int({ message: 'Order must be an integer' })
-    .positive({ message: 'Order must be a positive number' }),
-  title: z.string({ message: 'Title is required' }).min(1, 'Agenda item title is required'),
-  description: z
-    .string({ message: 'Description must be a string' })
-    .max(1000, 'Description cannot exceed 1000 characters')
-    .optional(),
-}).strict();
+export const CreateAgendaItemSchema = z
+  .object({
+    order: z
+      .number({ message: 'Order must be a number' })
+      .int({ message: 'Order must be an integer' })
+      .positive({ message: 'Order must be a positive number' }),
+    title: z.string({ message: 'Title is required' }).min(1, 'Agenda item title is required'),
+    description: z
+      .string({ message: 'Description must be a string' })
+      .max(1000, 'Description cannot exceed 1000 characters')
+      .optional(),
+  })
+  .strict();
 
 /** Inferred type for creating an agenda item. */
 export type CreateAgendaItemInput = z.infer<typeof CreateAgendaItemSchema>;
@@ -22,36 +24,50 @@ export const UpdateAgendaItemSchema = CreateAgendaItemSchema.partial();
 export type UpdateAgendaItemInput = z.infer<typeof UpdateAgendaItemSchema>;
 
 /** Zod schema for bulk agenda operations (CREATE, UPDATE, DELETE, REORDER). */
-export const AgendaOperationSchema = z.object({
-  operations: z.array(
-    z.discriminatedUnion('type', [
-      z.object({
-        type: z.literal('CREATE'),
-        data: CreateAgendaItemSchema,
-      }).strict(),
-      z.object({
-        type: z.literal('UPDATE'),
-        id: z.uuid('Invalid ID format'),
-        data: UpdateAgendaItemSchema,
-      }).strict(),
-      z.object({
-        type: z.literal('DELETE'),
-        id: z.uuid('Invalid ID format'),
-      }).strict(),
-      z.object({
-        type: z.literal('REORDER'),
-        mappings: z.array(
-          z.object({
+export const AgendaOperationSchema = z
+  .object({
+    operations: z.array(
+      z.discriminatedUnion('type', [
+        z
+          .object({
+            type: z.literal('CREATE'),
+            data: CreateAgendaItemSchema,
+          })
+          .strict(),
+        z
+          .object({
+            type: z.literal('UPDATE'),
             id: z.uuid('Invalid ID format'),
-            order: z.number().int().positive(),
-          }).strict(),
-        ),
-      }).strict(),
-    ]),
-  ),
-}).strict();
+            data: UpdateAgendaItemSchema,
+          })
+          .strict(),
+        z
+          .object({
+            type: z.literal('DELETE'),
+            id: z.uuid('Invalid ID format'),
+          })
+          .strict(),
+        z
+          .object({
+            type: z.literal('REORDER'),
+            mappings: z.array(
+              z
+                .object({
+                  id: z.uuid('Invalid ID format'),
+                  order: z.number().int().positive(),
+                })
+                .strict(),
+            ),
+          })
+          .strict(),
+      ]),
+    ),
+  })
+  .strict();
 
 /** Inferred type for agenda operations input. */
 export type AgendaOperationInput = z.infer<typeof AgendaOperationSchema>;
 
-export const ProcessingAgendaParamsSchema = z.object({ meetingId: z.string('Invalid meeting ID') }).strict();
+export const ProcessingAgendaParamsSchema = z
+  .object({ meetingId: z.string('Invalid meeting ID') })
+  .strict();

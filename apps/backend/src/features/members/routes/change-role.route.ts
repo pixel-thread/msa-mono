@@ -11,12 +11,7 @@ import z from 'zod';
 import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
 import { prisma } from '@lib/prisma';
-import {
-  ConflictError,
-  ForbiddenError,
-  NotFoundError,
-  UnauthorizedError,
-} from '@errors';
+import { ConflictError, ForbiddenError, NotFoundError, UnauthorizedError } from '@errors';
 import { withRole } from '@utils/with-role';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';

@@ -13,12 +13,7 @@ import { UserRole } from '@prisma/client';
 import { prisma } from '@lib/prisma';
 import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
-import {
-  ConflictError,
-  NotFoundError,
-  UnauthorizedError,
-  ValidationError,
-} from '@errors';
+import { ConflictError, NotFoundError, UnauthorizedError, ValidationError } from '@errors';
 import { withRole } from '@utils/with-role';
 import { asyncHandler } from '@utils/async-handler';
 import { logger } from '@src/shared/logger';
@@ -31,10 +26,7 @@ import { findUniqueAssociation } from '@feature/associations/services/findUnique
 import { updateAssociation } from '@feature/associations/services/updateAssociation';
 import { findUniqueMember } from '@feature/members/services/findUniqueMember';
 import { updateMember } from '@feature/members/services/updateMember';
-import {
-  CreateAssociationSchema,
-  UpdateAssociationSchema,
-} from '@feature/associations/validators';
+import { CreateAssociationSchema, UpdateAssociationSchema } from '@feature/associations/validators';
 import type { CreateAssociationInput } from '@validator/associations';
 
 /**

@@ -16,8 +16,11 @@ export const getTrialBalanceHandler: RequestHandler[] = [
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
     const association = await getAssociation(req);
-    logger.info({ traceId, associationId: association.id }, 'GET /api/ledger/reports/trial-balance - Request started');
-    
+    logger.info(
+      { traceId, associationId: association.id },
+      'GET /api/ledger/reports/trial-balance - Request started',
+    );
+
     await withRole(req, UserRole.FINANCE);
 
     const report = await trialBalance(association.id);
@@ -31,12 +34,15 @@ export const getIncomeStatementHandler: RequestHandler[] = [
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
     const association = await getAssociation(req);
-    logger.info({ traceId, associationId: association.id }, 'GET /api/ledger/reports/income-statement - Request started');
-    
+    logger.info(
+      { traceId, associationId: association.id },
+      'GET /api/ledger/reports/income-statement - Request started',
+    );
+
     await withRole(req, UserRole.FINANCE);
 
     const { fromDate, toDate } = req.query as any;
-    
+
     const from = fromDate ? new Date(fromDate as string) : undefined;
     const to = toDate ? new Date(toDate as string) : undefined;
 

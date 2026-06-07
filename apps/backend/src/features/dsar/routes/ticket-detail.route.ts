@@ -2,12 +2,7 @@ import { Request, NextFunction, Response } from 'express';
 import type { RequestHandler } from 'express';
 import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
-import {
-  UnauthorizedError,
-  ForbiddenError,
-  NotFoundError,
-  BadRequestError,
-} from '@errors';
+import { UnauthorizedError, ForbiddenError, NotFoundError, BadRequestError } from '@errors';
 import { prisma } from '@lib/prisma';
 import { UserRole, DsarStatus } from '@prisma/client';
 import { z } from 'zod';

@@ -50,7 +50,11 @@ describe('POST /api/v1/auth/change-password — success', () => {
     const res = await request(app)
       .post('/api/v1/auth/change-password')
       .set('Authorization', `Bearer ${token}`)
-      .send({ currentPassword: 'WrongPass1!', newPassword: 'NewPass2!', confirmPassword: 'NewPass2!' });
+      .send({
+        currentPassword: 'WrongPass1!',
+        newPassword: 'NewPass2!',
+        confirmPassword: 'NewPass2!',
+      });
     expect(res.status).toBe(400);
   });
 });

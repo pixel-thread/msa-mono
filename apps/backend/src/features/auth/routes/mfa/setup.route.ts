@@ -12,12 +12,7 @@ import { env } from '@src/env';
 import { verifyPassword, generateOTP, hashToken } from '@lib/password';
 import { sendVerificationEmail } from '@lib/email';
 
-import {
-  BadRequestError,
-  ConflictError,
-  UnauthorizedError,
-  ValidationError,
-} from '@errors';
+import { BadRequestError, ConflictError, UnauthorizedError, ValidationError } from '@errors';
 
 import { findFirstMember } from '@feature/members/services/findFirstMember';
 

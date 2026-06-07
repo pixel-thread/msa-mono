@@ -1,6 +1,6 @@
 import { Prisma } from '@prisma/client';
 import { prisma } from '@lib/prisma';
-import { buildPaginationParams } from '@src/shared/utils/helper/build-pagination-params';
+import { buildPaginationParams } from '@utils/helper';
 
 type Props = {
   where: Prisma.PaymentTransactionWhereInput;

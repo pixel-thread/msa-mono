@@ -1,9 +1,7 @@
 import { DeclarationStatus, Prisma } from '@prisma/client';
 import { differenceInCalendarMonths, addMonths, startOfMonth, endOfMonth } from 'date-fns';
-import { PAGE_SIZE } from '@src/shared/constants';
 import { prisma } from '@lib';
-import { buildPaginationParams } from '@src/shared/utils/helper/build-pagination-params';
-import { buildPagination } from '@utils';
+import { buildPaginationParams, buildPagination } from '@utils';
 import { BadRequestError, NotFoundError } from '@errors';
 
 type Props = {
@@ -33,7 +31,7 @@ export async function findUniqueDeclaration({ where, include }: FindUniqueDeclar
 
 export async function submitDeclaration(memberId: string, associationId: string, amount: number) {
   const lastDeclaration = await prisma.declarations.findFirst({
-    where: { memberId, status: 'APPROVED' },
+    where: { memberId, status: DeclarationStatus.APPROVED },
     orderBy: { lastDeclarationDate: 'desc' },
     take: 1,
   });

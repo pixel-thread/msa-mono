@@ -407,13 +407,17 @@ describe('Plan change (upgrade/downgrade) → ContributionPeriod handling', () =
         .expect(200);
 
       // Current month at ₹500, future months at ₹1000
-      expect(Number((await getContribution(user.id, currentYear, currentMonth))!.expectedAmount)).toBe(500);
+      expect(
+        Number((await getContribution(user.id, currentYear, currentMonth))!.expectedAmount),
+      ).toBe(500);
 
       // Re-run generation for full year (simulating cron job)
       await generateUserContributions(user.id, currentYear, 12);
 
       // Current month STILL ₹500 — not overwritten
-      expect(Number((await getContribution(user.id, currentYear, currentMonth))!.expectedAmount)).toBe(500);
+      expect(
+        Number((await getContribution(user.id, currentYear, currentMonth))!.expectedAmount),
+      ).toBe(500);
 
       // Future months STILL ₹1000 — not overwritten
       for (let m = currentMonth + 1; m <= 12; m++) {

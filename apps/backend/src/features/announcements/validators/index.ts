@@ -4,22 +4,11 @@
  */
 
 import z from 'zod';
-import {
-  AnnouncementStatus,
-  AnnouncementPriority,
-  UserRole,
-} from '@prisma/client';
+import { AnnouncementStatus, AnnouncementPriority, UserRole } from '@prisma/client';
 
-import {
-  pageNumberValidation,
-  pageSizeValidation,
-} from '@validator/common';
+import { pageNumberValidation, pageSizeValidation } from '@validator/common';
 
-import {
-  MAX_IMAGE_SIZE,
-  ALLOWED_IMAGE_FORMATS,
-  ALLOWED_MIME_TYPES,
-} from '@src/shared/constants';
+import { MAX_IMAGE_SIZE, ALLOWED_IMAGE_FORMATS, ALLOWED_MIME_TYPES } from '@src/shared/constants';
 
 // -- Create Announcement Schema ---------------------------------------------
 

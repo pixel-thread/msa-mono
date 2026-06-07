@@ -101,4 +101,3 @@ export const normalizeUnknownError = (error: unknown, traceId?: string): AppErro
   logger.error({ error, traceId }, displayMessage);
   return new AppError('INTERNAL_ERROR', displayMessage, 500);
 };
-

@@ -48,7 +48,11 @@ describe('POST /api/v1/auth/change-password — input validation', () => {
     const res = await request(app)
       .post('/api/v1/auth/change-password')
       .set('Authorization', `Bearer ${token}`)
-      .send({ currentPassword: 'OldPass1!', newPassword: 'NewPass1!', confirmPassword: 'DiffPass1!' });
+      .send({
+        currentPassword: 'OldPass1!',
+        newPassword: 'NewPass1!',
+        confirmPassword: 'DiffPass1!',
+      });
     expect(res.status).toBe(400);
   });
 

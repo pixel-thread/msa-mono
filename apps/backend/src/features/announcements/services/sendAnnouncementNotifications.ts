@@ -24,10 +24,7 @@ import { logger } from '@src/shared/logger';
  * @param {string} associationId - The ID of the association scoping the users.
  * @returns {Promise<void>}
  */
-export async function sendAnnouncementNotifications(
-  announcementId: string,
-  associationId: string,
-) {
+export async function sendAnnouncementNotifications(announcementId: string, associationId: string) {
   try {
     // 1. Retrieval: Fetch the announcement details
     const announcement = await prisma.announcement.findUnique({

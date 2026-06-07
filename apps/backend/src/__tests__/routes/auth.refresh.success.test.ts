@@ -41,9 +41,7 @@ describe('POST /api/v1/auth/refresh — success', () => {
   });
 
   it('should return 200 with new tokens for valid refresh token', async () => {
-    const res = await request(app)
-      .post('/api/v1/auth/refresh')
-      .send({ token: refreshToken });
+    const res = await request(app).post('/api/v1/auth/refresh').send({ token: refreshToken });
     expect(res.status).toBe(200);
     expect(res.body.success).toBe(true);
     expect(res.body.data).toHaveProperty('access_token');

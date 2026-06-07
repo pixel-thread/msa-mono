@@ -60,7 +60,13 @@ export async function allocatePaymentToContributions(
   }
 
   // Use the shared allocation engine
-  const { allocatedAmount } = await createAllocations(tx, paymentTransactionId, userId, totalAmount, ids);
+  const { allocatedAmount } = await createAllocations(
+    tx,
+    paymentTransactionId,
+    userId,
+    totalAmount,
+    ids,
+  );
 
   // Phase 2: Update payment transaction once after all allocations
   await tx.paymentTransaction.update({

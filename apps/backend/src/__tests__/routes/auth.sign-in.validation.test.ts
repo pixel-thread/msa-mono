@@ -11,17 +11,13 @@ describe('POST /api/v1/auth/sign-in — input validation', () => {
   });
 
   it('should reject missing email → 400', async () => {
-    const res = await request(app)
-      .post('/api/v1/auth/sign-in')
-      .send({ password: 'ValidPass1!' });
+    const res = await request(app).post('/api/v1/auth/sign-in').send({ password: 'ValidPass1!' });
     expect(res.status).toBe(400);
     expect(res.body.success).toBe(false);
   });
 
   it('should reject missing password → 400', async () => {
-    const res = await request(app)
-      .post('/api/v1/auth/sign-in')
-      .send({ email: 'test@test.com' });
+    const res = await request(app).post('/api/v1/auth/sign-in').send({ email: 'test@test.com' });
     expect(res.status).toBe(400);
     expect(res.body.success).toBe(false);
   });
