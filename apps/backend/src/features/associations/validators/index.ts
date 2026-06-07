@@ -61,3 +61,9 @@ export const UpdateAssociationSchema = z.object({
  * Input type inferred from UpdateAssociationSchema.
  */
 export type UpdateAssociationInput = z.infer<typeof UpdateAssociationSchema>;
+
+export const AdminAddMemberSchema = z.object({
+  memberId: z.uuid(),
+});
+
+export type AdminAddMemberInput = z.infer<typeof AdminAddMemberSchema>;

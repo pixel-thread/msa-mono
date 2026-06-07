@@ -9,7 +9,11 @@ import { createAssociation } from '@feature/associations/services/createAssociat
 import { findFirstAssociation } from '@feature/associations/services/findFirstAssociation';
 import { findUniqueAssociation } from '@feature/associations/services/findUniqueAssociation';
 import { updateAssociation } from '@feature/associations/services/updateAssociation';
-import { CreateAssociationSchema, UpdateAssociationSchema } from '@feature/associations/validators';
+import {
+  AdminAddMemberSchema,
+  CreateAssociationSchema,
+  UpdateAssociationSchema,
+} from '@feature/associations/validators';
 import { findUniqueMember } from '@feature/members/services/findUniqueMember';
 import { updateMember } from '@feature/members/services/updateMember';
 import { prisma } from '@lib/prisma';
@@ -23,14 +27,6 @@ import { withRole } from '@utils/with-role';
 import type { CreateAssociationInput } from '@validator/associations';
 import type { RequestHandler } from 'express';
 import type { NextFunction, Request, Response } from 'express';
-import { z } from 'zod';
-
-/**
- * Local schema for adding a member to an association.
- */
-const BodySchema = z.object({
-  memberId: z.string(),
-});
 
 /**
  * @description Retrieve the current user's association.
@@ -52,15 +48,15 @@ export const getAssociationByUser: RequestHandler[] = [
     );
 
     logger.info(
-      { traceId, associationId: req.user!.associationId },
+      { traceId, associationId: req.user?.associationId },
       'GET /api/associations - Success',
     );
 
     return success(res, {
       data: {
-        id: req.user!.associationId,
-        slug: req.user!.associationSlug,
-        name: req.user!.associationName,
+        id: req.user?.associationId,
+        slug: req.user?.associationSlug,
+        name: req.user?.associationName,
       },
     });
   }),
@@ -146,11 +142,11 @@ export const getCurrentAssociation: RequestHandler[] = [
 
     // Fetch full association details including relations
     const currentAssociation = await findUniqueAssociation({
-      where: { id: req.user!.associationId },
+      where: { id: req.user?.associationId },
     });
 
     logger.info(
-      { traceId, associationId: req.user!.associationId },
+      { traceId, associationId: req.user?.associationId },
       'GET /api/associations/current - Success',
     );
 
@@ -435,7 +431,7 @@ export const postUploadLogo: RequestHandler[] = [
  * @route POST /api/associations/:associationId/members
  */
 export const postAddMember: RequestHandler[] = [
-  validate({ body: BodySchema }),
+  validate({ body: AdminAddMemberSchema }),
 
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
