@@ -14,28 +14,21 @@ import { validate } from '@lib/validate';
 // ---------------------------------------------------------------------------
 // Prisma
 // ---------------------------------------------------------------------------
-import { UserRole, UserStatus } from '@prisma/client';
-import { auth } from '@src/middleware/auth';
+import { UserRole } from '@prisma/client';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 import { hasHighRoleAccess } from '@utils/has-high-role';
 import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';
-import { pageNumberValidation } from '@validator/common';
 import type { NextFunction, Request, Response } from 'express';
 import { type RequestHandler } from 'express';
-import z from 'zod';
+import type z from 'zod';
+
+import { MemberQuerySchema } from '../validators';
 
 // ---------------------------------------------------------------------------
 // Schema — validate query parameters when listing members
 // ---------------------------------------------------------------------------
-const QuerySchema = z
-  .object({
-    page: pageNumberValidation,
-    status: z.enum(UserStatus).optional(),
-    search: z.string().optional(),
-  })
-  .strict();
 
 // ---------------------------------------------------------------------------
 // GET /api/members  —  Paginated / filtered / searched member list
@@ -44,7 +37,7 @@ const QuerySchema = z
 //   association, optionally narrowed by status or a free-text search.
 // ---------------------------------------------------------------------------
 export const listMembers: RequestHandler[] = [
-  validate({ query: QuerySchema }),
+  validate({ query: MemberQuerySchema }),
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
 
@@ -72,7 +65,7 @@ export const listMembers: RequestHandler[] = [
     logger.info({ traceId, userId: user.id }, 'GET /api/members - User authorized');
 
     // ── Business logic — build filters & fetch ──────────────────────────────
-    const query = req.query as unknown as z.infer<typeof QuerySchema>;
+    const query = req.query as unknown as z.infer<typeof MemberQuerySchema>;
     const page = query?.page;
     const status = query?.status;
     const search = query?.search;

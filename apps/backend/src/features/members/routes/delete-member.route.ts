@@ -21,12 +21,9 @@ import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';
 import type { RequestHandler } from 'express';
 import type { NextFunction, Request, Response } from 'express';
-import z from 'zod';
 
-// ---------------------------------------------------------------------------
-// Schema — route param identifying the member to soft-delete
-// ---------------------------------------------------------------------------
-const ParamSchema = z.object({ memberId: z.uuid() }).strict();
+import type { MembersParamInput} from '../validators';
+import {MembersParamSchema } from '../validators';
 
 // ---------------------------------------------------------------------------
 // DELETE /api/members/:memberId  —  Soft-delete a member
@@ -35,7 +32,7 @@ const ParamSchema = z.object({ memberId: z.uuid() }).strict();
 //   destroying their record, so data can be restored if needed.
 // ---------------------------------------------------------------------------
 export const deleteMember: RequestHandler[] = [
-  validate({ params: ParamSchema }),
+  validate({ params: MembersParamSchema }),
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
 
@@ -64,7 +61,7 @@ export const deleteMember: RequestHandler[] = [
     await withRole(req, UserRole.SECRETARY);
 
     // ── Business logic — verify target & soft-delete ────────────────────────
-    const params = req.params as z.infer<typeof ParamSchema>;
+    const params = req.params as MembersParamInput;
 
     const target = await findUniqueMember({ where: { id: params.memberId } });
     if (!target) throw new NotFoundError('Member not found');

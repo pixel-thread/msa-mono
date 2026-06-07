@@ -21,33 +21,16 @@ import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';
 import type { RequestHandler } from 'express';
 import type { NextFunction, Request, Response } from 'express';
-import z from 'zod';
 
-// ---------------------------------------------------------------------------
-// Schemas
-// ---------------------------------------------------------------------------
-
-/** Route param: the member being updated. */
-const ParamSchema = z.object({ memberId: z.uuid() }).strict();
+import type {
+  MemberAdminOnboardingInput,
+  MembersParamInput} from '../validators';
+import {
+  MemberAdminOnboardingSchema,
+  MembersParamSchema,
+} from '../validators';
 
 /** Request body: fields an admin / secretary may change on a member profile. */
-const AdminOnboardingSchema = z
-  .object({
-    name: z.string().min(1, 'Name is required').optional(),
-    mobile: z
-      .string()
-      .min(10, 'Mobile must be 10 digits')
-      .max(10, 'Mobile must be 10 digits')
-      .regex(/^[0-9]+$/, 'Mobile should contain only numbers')
-      .optional(),
-    designation: z.string().optional(),
-    dateOfJoiningGovt: z.coerce.date().optional(),
-    dateOfJoiningAssociation: z.coerce.date().optional(),
-    membershipNumber: z.string().optional(),
-    associationId: z.uuid(),
-  })
-  .strict();
-
 // ---------------------------------------------------------------------------
 // PATCH /api/members/:memberId  —  Update a member's profile fields
 // Security: requires SECRETARY role
@@ -55,7 +38,7 @@ const AdminOnboardingSchema = z
 //   data for any member in their association.
 // ---------------------------------------------------------------------------
 export const updateMemberRoute: RequestHandler[] = [
-  validate({ body: AdminOnboardingSchema, params: ParamSchema }),
+  validate({ body: MemberAdminOnboardingSchema, params: MembersParamSchema }),
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
 
@@ -86,12 +69,12 @@ export const updateMemberRoute: RequestHandler[] = [
     logger.info({ traceId, userId: user.id }, 'PATCH /api/members/[memberId] - User authorized');
 
     // ── Validate body & params ──────────────────────────────────────────────
-    const body = req.body as z.infer<typeof AdminOnboardingSchema>;
+    const body = req.body as MemberAdminOnboardingInput;
     if (!body) {
       throw new ValidationError('Invalid request body');
     }
 
-    const params = req.params as z.infer<typeof ParamSchema>;
+    const params = req.params as MembersParamInput;
     const memberId = params.memberId;
 
     // ── Business logic — update only provided fields ────────────────────────

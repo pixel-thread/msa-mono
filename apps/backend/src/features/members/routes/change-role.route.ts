@@ -22,25 +22,15 @@ import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';
 import type { RequestHandler } from 'express';
 import type { NextFunction, Request, Response } from 'express';
-import z from 'zod';
+
+import type { MembersParamInput, UpdateMemberRoleInput } from '../validators';
+import { MembersParamSchema, UpdateMemberRoleSchema } from '../validators';
 
 // ---------------------------------------------------------------------------
 // Schemas
 // ---------------------------------------------------------------------------
 
 /** Body: the role to add or remove. */
-const UpdateUserRoleSchema = z
-  .object({
-    role: z.enum(UserRole),
-  })
-  .strict();
-
-/** Route param: the member whose roles are being changed. */
-const UpdateUserRoleParamsSchema = z
-  .object({
-    memberId: z.uuid(),
-  })
-  .strict();
 
 // ---------------------------------------------------------------------------
 // POST /api/members/:memberId/role  —  Add a role to a member
@@ -49,7 +39,7 @@ const UpdateUserRoleParamsSchema = z
 //   member who already holds a base role.
 // ---------------------------------------------------------------------------
 export const addRole: RequestHandler[] = [
-  validate({ body: UpdateUserRoleSchema, params: UpdateUserRoleParamsSchema }),
+  validate({ body: UpdateMemberRoleSchema, params: MembersParamSchema }),
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
 
@@ -83,7 +73,7 @@ export const addRole: RequestHandler[] = [
     );
 
     // ── Business logic — verify target & add role ───────────────────────────
-    const params = req.params as z.infer<typeof UpdateUserRoleParamsSchema>;
+    const params = req.params as MembersParamInput;
 
     const target = await findFirstMember({
       where: { id: params?.memberId, associationId: association.id },
@@ -91,7 +81,7 @@ export const addRole: RequestHandler[] = [
     if (!target) throw new NotFoundError('User does not exist in the association');
 
     const userRole = target.role;
-    const body = req.body as z.infer<typeof UpdateUserRoleSchema>;
+    const body = req.body as UpdateMemberRoleInput;
     const newRole = body?.role as UserRole;
 
     // Idempotency guard: reject if the member already has this role
@@ -121,7 +111,7 @@ export const addRole: RequestHandler[] = [
 //   member's other roles.
 // ---------------------------------------------------------------------------
 export const removeRole: RequestHandler[] = [
-  validate({ body: UpdateUserRoleSchema, params: UpdateUserRoleParamsSchema }),
+  validate({ body: UpdateMemberRoleSchema, params: MembersParamSchema }),
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
 
@@ -152,7 +142,7 @@ export const removeRole: RequestHandler[] = [
     logger.info({ traceId, userId: user.id }, 'PUT /api/members/[memberId]/role - User authorized');
 
     // ── Business logic — verify target & remove role ────────────────────────
-    const params = req.params as z.infer<typeof UpdateUserRoleParamsSchema>;
+    const params = req.params as MembersParamInput;
 
     const target = await findFirstMember({
       where: { id: params?.memberId, associationId: association.id },
@@ -160,7 +150,7 @@ export const removeRole: RequestHandler[] = [
     if (!target) throw new NotFoundError('User does not exist in the association');
 
     const userRole = target.role;
-    const body = req.body as z.infer<typeof UpdateUserRoleSchema>;
+    const body = req.body as UpdateMemberRoleInput;
     const removeRoleVal = body?.role as UserRole;
 
     // Safety guard: prevent removing a role the member does not hold

@@ -16,23 +16,12 @@ import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
 import type { RequestHandler } from 'express';
 import type { NextFunction, Request, Response } from 'express';
-import { z } from 'zod';
+
+import { MemberOnboardingInput, MemberOnboardingSchema } from '../validators';
 
 // ---------------------------------------------------------------------------
 // Schema — validate the onboarding request body
 // ---------------------------------------------------------------------------
-const OnboardingSchema = z
-  .object({
-    dateOfJoiningGovt: z.coerce
-      .date()
-      .refine((d) => new Date(d) < new Date(), 'Cannot be in the future'),
-    dateOfJoiningAssociation: z.coerce
-      .date()
-      .refine((d) => new Date(d) < new Date(), 'Cannot be in the future'),
-    mobile: z.string().regex(/^[6-9]\d{9}$/, 'Valid Indian mobile number required'),
-    designation: z.string().min(2).max(100).trim(),
-  })
-  .strict();
 
 // ---------------------------------------------------------------------------
 // POST /api/members/onboarding  —  Complete initial profile setup for the
@@ -43,7 +32,7 @@ const OnboardingSchema = z
 //   registration.
 // ---------------------------------------------------------------------------
 export const onboarding: RequestHandler[] = [
-  validate({ body: OnboardingSchema }),
+  validate({ body: MemberOnboardingSchema }),
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
 
@@ -75,7 +64,7 @@ export const onboarding: RequestHandler[] = [
     }
 
     // ── Validate body ───────────────────────────────────────────────────────
-    const body = req.body as z.infer<typeof OnboardingSchema>;
+    const body = req.body as MemberOnboardingInput;
     if (!body) {
       throw new ValidationError('Invalid request body');
     }

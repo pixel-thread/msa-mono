@@ -82,6 +82,8 @@ export const AnnouncementQuerySchema = z.object({
   search: z.string().optional(),
 });
 
+export type AnnouncementQueryInput = z.infer<typeof AnnouncementQuerySchema>;
+
 // -- Action Schemas ---------------------------------------------------------
 
 /**

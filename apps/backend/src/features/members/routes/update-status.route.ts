@@ -15,32 +15,22 @@ import { validate } from '@lib/validate';
 // ---------------------------------------------------------------------------
 // Prisma
 // ---------------------------------------------------------------------------
-import { UserRole, UserStatus } from '@prisma/client';
+import { UserRole } from '@prisma/client';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';
 import type { RequestHandler } from 'express';
 import type { NextFunction, Request, Response } from 'express';
-import z from 'zod';
+
+import { MembersParamSchema, UpdateMembersStatusSchema } from '../validators';
+import type { MembersParamInput, UpdateMembersStatusInput } from '../validators/';
 
 // ---------------------------------------------------------------------------
 // Schemas
 // ---------------------------------------------------------------------------
 
 /** Body: which status to apply. */
-const UpdateUserStatusSchema = z
-  .object({
-    status: z.nativeEnum(UserStatus),
-  })
-  .strict();
-
-/** Route param: the member whose status is being changed. */
-const UpdateUserStatusParamsSchema = z
-  .object({
-    memberId: z.uuid(),
-  })
-  .strict();
 
 // ---------------------------------------------------------------------------
 // PATCH /api/members/:memberId/status  —  Change a member's status
@@ -49,7 +39,7 @@ const UpdateUserStatusParamsSchema = z
 //   update the membership status of any user in their association.
 // ---------------------------------------------------------------------------
 export const updateStatus: RequestHandler[] = [
-  validate({ body: UpdateUserStatusSchema, params: UpdateUserStatusParamsSchema }),
+  validate({ body: UpdateMembersStatusSchema, params: MembersParamSchema }),
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
 
@@ -83,7 +73,7 @@ export const updateStatus: RequestHandler[] = [
     );
 
     // ── Validate params ─────────────────────────────────────────────────────
-    const params = req.params as z.infer<typeof UpdateUserStatusParamsSchema>;
+    const params = req.params as MembersParamInput;
     const memberId = params.memberId;
     if (!memberId) throw new UnauthorizedError('Unauthorized');
 
@@ -93,7 +83,7 @@ export const updateStatus: RequestHandler[] = [
     });
     if (!target) throw new NotFoundError('User does not exist in the association');
 
-    const body = req.body as z.infer<typeof UpdateUserStatusSchema>;
+    const body = req.body as UpdateMembersStatusInput;
     const updatedUser = await updateMember({
       where: { id: memberId },
       data: { status: body?.status },

@@ -21,12 +21,13 @@ import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';
 import type { RequestHandler } from 'express';
 import type { NextFunction, Request, Response } from 'express';
-import z from 'zod';
+
+import type { MembersParamInput} from '../validators';
+import { MembersParamSchema } from '../validators';
 
 // ---------------------------------------------------------------------------
 // Schema — route param identifying the member to fetch
 // ---------------------------------------------------------------------------
-const ParamSchema = z.object({ memberId: z.uuid() }).strict();
 
 // ---------------------------------------------------------------------------
 // GET /api/members/:memberId  —  Full member profile including attendance
@@ -35,7 +36,7 @@ const ParamSchema = z.object({ memberId: z.uuid() }).strict();
 //   plus a count of meetings they have attended for oversight purposes.
 // ---------------------------------------------------------------------------
 export const getMember: RequestHandler[] = [
-  validate({ params: ParamSchema }),
+  validate({ params: MembersParamSchema }),
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
 
@@ -66,7 +67,7 @@ export const getMember: RequestHandler[] = [
     logger.info({ traceId, userId: user.id }, 'GET /api/members/[memberId] - User authorized');
 
     // ── Business logic — fetch full member profile ──────────────────────────
-    const params = req.params as z.infer<typeof ParamSchema>;
+    const params = req.params as MembersParamInput;
 
     const member = await findFirstMember({
       where: { id: params.memberId, associationId: association.id },

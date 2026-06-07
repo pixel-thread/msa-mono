@@ -22,16 +22,9 @@ import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';
 import type { RequestHandler } from 'express';
 import type { NextFunction, Request, Response } from 'express';
-import z from 'zod';
 
-// ---------------------------------------------------------------------------
-// Schema — route param identifying the member to suspend
-// ---------------------------------------------------------------------------
-const SuspenseUserRouteParams = z
-  .object({
-    memberId: z.uuid(),
-  })
-  .strict();
+import type { MembersParamInput} from '../validators';
+import { MembersParamSchema } from '../validators';
 
 // ---------------------------------------------------------------------------
 // POST /api/members/:memberId/suspend  —  Suspend a member's account
@@ -40,7 +33,7 @@ const SuspenseUserRouteParams = z
 //   member's access when a serious policy violation has been identified.
 // ---------------------------------------------------------------------------
 export const suspendMember: RequestHandler[] = [
-  validate({ params: SuspenseUserRouteParams }),
+  validate({ params: MembersParamSchema }),
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
 
@@ -74,7 +67,7 @@ export const suspendMember: RequestHandler[] = [
     );
 
     // ── Business logic — verify target & suspend ────────────────────────────
-    const params = req.params as z.infer<typeof SuspenseUserRouteParams>;
+    const params = req.params as MembersParamInput;
 
     const target = await findUniqueMember({ where: { id: params?.memberId } });
     if (!target) {
