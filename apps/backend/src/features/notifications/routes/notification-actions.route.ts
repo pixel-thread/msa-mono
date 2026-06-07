@@ -2,6 +2,11 @@
 import { NotFoundError, UnauthorizedError, ValidationError } from '@errors';
 // ---- Services
 import { upsertPushToken } from '@feature/notifications/services/upsertPushToken';
+// ---- Validators / Types
+import {
+  NotificationLinkTokenSchema,
+  NotificationRegisterPushTokenSchema,
+} from '@feature/notifications/validators';
 import { validate } from '@lib/validate';
 // ---- Prisma
 import { UserRole } from '@prisma/client';
@@ -12,11 +17,6 @@ import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';
-// ---- Validators / Types
-import {
-  NotificationLinkTokenSchema,
-  NotificationRegisterPushTokenSchema,
-} from '@feature/notifications/validators';
 import { NotificationRouteParams, UpdateNotificationSchema } from '@validator/notification';
 import type { RequestHandler } from 'express';
 import type { NextFunction, Request, Response } from 'express';

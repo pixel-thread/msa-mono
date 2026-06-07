@@ -14,6 +14,11 @@ import {
   updateAccount,
 } from '@feature/ledger/services/ledger.service';
 import { seedChartOfAccounts } from '@feature/ledger/services/seed-chart-of-accounts';
+import {
+  CreateLedgerAccountSchema,
+  LedgerAccountParamsSchema,
+  LedgerAccountQuerySchema,
+} from '@feature/ledger/validators';
 // ---------------------------------------------------------------------------
 // Shared utilities
 // ---------------------------------------------------------------------------
@@ -28,11 +33,6 @@ import { buildPagination } from '@utils';
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';
-import {
-  CreateLedgerAccountSchema,
-  LedgerAccountParamsSchema,
-  LedgerAccountQuerySchema,
-} from '@feature/ledger/validators';
 import type { RequestHandler } from 'express';
 import type { NextFunction, Request, Response } from 'express';
 
@@ -162,7 +162,10 @@ export const deleteAccountHandler: RequestHandler[] = [
 // Security: FINANCE role required
 // ---------------------------------------------------------------------------
 export const updateAccountHandler: RequestHandler[] = [
-  validate({ params: LedgerAccountParamsSchema, body: CreateLedgerAccountSchema.partial().strict() }),
+  validate({
+    params: LedgerAccountParamsSchema,
+    body: CreateLedgerAccountSchema.partial().strict(),
+  }),
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
     const accountId = req.params.id;

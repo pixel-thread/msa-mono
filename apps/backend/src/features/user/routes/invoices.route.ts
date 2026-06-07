@@ -2,6 +2,9 @@
 import { ForbiddenError, UnauthorizedError } from '@errors';
 // ---- Services
 import { getUserInvoice, getUserInvoices } from '@feature/user/services';
+import type { UserInvoiceParamsInput } from '@feature/user/validators';
+// ---- Validators / Types
+import { UserInvoiceParamsSchema, UserInvoiceQuerySchema } from '@feature/user/validators';
 import { prisma } from '@lib/prisma';
 import { validate } from '@lib/validate';
 // ---- Prisma
@@ -12,12 +15,6 @@ import { buildPagination } from '@src/shared/utils/helper/build-pagination';
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';
-// ---- Validators / Types
-import {
-  UserInvoiceParamsSchema,
-  UserInvoiceQuerySchema,
-} from '@feature/user/validators';
-import type { UserInvoiceParamsInput } from '@feature/user/validators';
 import type { RequestHandler } from 'express';
 import type { NextFunction, Request, Response } from 'express';
 

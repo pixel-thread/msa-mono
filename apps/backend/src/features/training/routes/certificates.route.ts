@@ -9,16 +9,16 @@ import {
   findManyCertificates,
   updateCertificate,
 } from '@feature/training/services';
+import type {
+  CreateTrainingCertificateInput,
+  UpdateTrainingCertificateInput,
+} from '@feature/training/validators/training';
 // ---- Validators ----
 import {
   CreateTrainingCertificateSchema,
   TrainingCertificateParamsSchema,
   TrainingModuleParamsSchema,
   UpdateTrainingCertificateSchema,
-} from '@feature/training/validators/training';
-import type {
-  CreateTrainingCertificateInput,
-  UpdateTrainingCertificateInput,
 } from '@feature/training/validators/training';
 import { prisma } from '@lib/prisma';
 import { deleteFromBucket, uploadToBucket } from '@lib/supabase/storage';

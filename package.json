@@ -3,11 +3,14 @@
   "private": true,
   "packageManager": "pnpm@9.0.0",
   "scripts": {
+    "prepare": "husky",
     "dev": "turbo dev",
     "build": "turbo build",
     "lint": "turbo lint"
   },
   "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^17.0.7",
     "turbo": "^2.0.0",
     "typescript": "^5.0.0"
   },

@@ -6,6 +6,7 @@ import {
   findManyCompletions,
   recordCompletion,
 } from '@feature/training/services';
+import type { CompletionMetadataInput } from '@feature/training/validators/training';
 // ---- Validators ----
 import {
   CompletionMetadataSchema,
@@ -13,7 +14,6 @@ import {
   TrainingAssignmentParamsSchema,
   TrainingModuleParamsSchema,
 } from '@feature/training/validators/training';
-import type { CompletionMetadataInput } from '@feature/training/validators/training';
 import { prisma } from '@lib/prisma';
 import { uploadToBucket } from '@lib/supabase/storage';
 // ---- Shared utilities ----

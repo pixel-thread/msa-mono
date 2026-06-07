@@ -7,16 +7,16 @@ import {
   findManySupplements,
   updateSupplement,
 } from '@feature/training/services';
+import type {
+  CreateSupplementInput,
+  UpdateSupplementInput,
+} from '@feature/training/validators/training';
 // ---- Validators ----
 import {
   CreateSupplementSchema,
   TrainingModuleParamsSchema,
   TrainingSupplementParamsSchema,
   UpdateSupplementSchema,
-} from '@feature/training/validators/training';
-import type {
-  CreateSupplementInput,
-  UpdateSupplementInput,
 } from '@feature/training/validators/training';
 import { prisma } from '@lib/prisma';
 import { deleteFromBucket, uploadToBucket } from '@lib/supabase/storage';
