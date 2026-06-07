@@ -3,6 +3,7 @@ import { env } from '@src/env';
 import { errors } from 'jose';
 import { ZodError } from 'zod';
 
+import { ContextStore } from '../lib';
 import { logger } from '../logger';
 
 import { AppError } from './classes/base';
@@ -21,6 +22,7 @@ const isPrismaError = (
   | Prisma.PrismaClientKnownRequestError
   | Prisma.PrismaClientUnknownRequestError
   | Prisma.PrismaClientValidationError
+  | Prisma.PrismaClientRustPanicError
   | Prisma.PrismaClientInitializationError => {
   return (
     error instanceof Prisma.PrismaClientKnownRequestError ||
@@ -53,46 +55,48 @@ export function isSupabaseStorageError(error: unknown): boolean {
  * Converts an unknown error into a typed {@link AppError}.
  * Handles JWT, Zod, Prisma, Supabase, and generic errors.
  */
-export const normalizeUnknownError = (error: unknown, traceId?: string): AppError => {
+export const normalizeUnknownError = (error: unknown): AppError => {
   const isProd = env.NODE_ENV === 'production';
+  const userId = ContextStore.getByKey('userId');
+  const traceId = ContextStore.getByKey('requestId');
+  const associationId = ContextStore.getByKey('associationId');
 
   if (isJwtError(error)) {
-    logger.error({ error, traceId }, error.message);
+    logger.error({ error, traceId, userId, associationId }, error.message);
     return new UnauthorizedError(error.message);
   }
 
   if (error instanceof UnauthorizedError) {
-    logger.error({ error, traceId }, error.message);
     return new UnauthorizedError(error.message);
   }
 
   if (error instanceof NotFoundError) {
-    logger.error({ error, traceId }, error.message);
+    logger.error({ error, traceId, userId, associationId }, error.message);
     return new NotFoundError(error.message);
   }
 
   if (isSupabaseStorageError(error)) {
-    logger.error({ error, traceId }, 'Supabase storage error');
+    logger.error({ error, traceId, userId, associationId }, 'Supabase storage error');
     return new BadRequestError('Supabase storage error');
   }
 
   if (error instanceof ZodError) {
-    logger.info({ error, traceId }, error.message);
+    logger.info({ error, traceId, userId, associationId }, error.message);
     return new ValidationError(error.message, error.issues);
   }
 
   if (error instanceof PaymentError) {
-    logger.error({ error, traceId }, error.message);
+    logger.error({ error, traceId, userId, associationId }, error.message);
     return new PaymentError(error.message, error.code, error.statusCode);
   }
 
   if (isPrismaError(error)) {
-    logger.error({ error, traceId }, 'Database error');
+    logger.error({ error, traceId, userId, associationId }, 'Database error');
     return new AppError('DATABASE_ERROR', isProd ? 'Database error' : error.message, 500);
   }
 
   if (error instanceof AppError) {
-    logger.error({ error, traceId }, error.message);
+    logger.error({ error, traceId, userId, associationId }, error.message);
     return error;
   }
 
@@ -100,6 +104,6 @@ export const normalizeUnknownError = (error: unknown, traceId?: string): AppErro
 
   const displayMessage = isProd ? 'Internal Server Error' : message;
 
-  logger.error({ error, traceId }, displayMessage);
+  logger.error({ error, traceId, userId, associationId }, displayMessage);
   return new AppError('INTERNAL_ERROR', displayMessage, 500);
 };

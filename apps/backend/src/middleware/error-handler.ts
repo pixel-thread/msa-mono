@@ -4,10 +4,13 @@ import type { NextFunction, Request, Response } from 'express';
 
 export function errorHandler(err: unknown, req: Request, res: Response, _next: NextFunction) {
   const traceId = (req.traceId as string) || 'unknown';
-  const appError = normalizeUnknownError(err, traceId);
+  const appError = normalizeUnknownError(err);
 
   if (!(err instanceof AppError)) {
-    logger.error({ traceId, error: err }, 'Unhandled error');
+    logger.error(
+      { traceId, error: err, associationId: req.user?.associationId, userId: req.user?.id },
+      'Unhandled error',
+    );
   }
 
   const status = appError.statusCode || 500;
