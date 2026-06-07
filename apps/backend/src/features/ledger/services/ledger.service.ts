@@ -4,6 +4,7 @@
 
 import { ApprovalStatus, Prisma } from '@prisma/client';
 import { prisma } from '@lib/prisma';
+import { buildPaginationParams } from '@lib/prisma/helpers';
 
 // ---------------------------------------------------------------------------
 // Shared utilities
@@ -48,8 +49,7 @@ export interface CreateAccountInput {
  * related lines and the originating payment transaction.
  */
 export async function getEntries(associationId: string, page = 1) {
-  const validPage = Math.max(1, page);
-  const skip = (validPage - 1) * PAGE_SIZE;
+  const { skip, take, page: currentPage } = buildPaginationParams(page);
 
   const where: Prisma.LedgerEntryWhereInput = {
     OR: [
@@ -67,12 +67,12 @@ export async function getEntries(associationId: string, page = 1) {
       },
       orderBy: { createdAt: 'desc' },
       skip,
-      take: PAGE_SIZE,
+      take,
     }),
     prisma.ledgerEntry.count({ where }),
   ]);
 
-  return { entries, total, page: validPage };
+  return { entries, total, page: currentPage };
 }
 
 /**
@@ -199,22 +199,21 @@ export async function rejectEntry(entryId: string) {
  * inactive accounts are hidden from day-to-day selection.
  */
 export async function getAccounts(associationId: string, page = 1) {
-  const validPage = Math.max(1, page);
-  const skip = (validPage - 1) * PAGE_SIZE;
+  const { skip, take, page: currentPage } = buildPaginationParams(page);
 
-  const [accounts, total] = await prisma.$transaction([
+  const [accounts, total] = await Promise.all([
     prisma.account.findMany({
       where: { associationId, isActive: true },
       orderBy: { code: 'asc' },
       skip,
-      take: PAGE_SIZE,
+      take,
     }),
     prisma.account.count({
       where: { associationId, isActive: true },
     }),
   ]);
 
-  return { accounts, total, page: validPage };
+  return { accounts, total, page: currentPage };
 }
 
 /**
@@ -334,8 +333,7 @@ export async function getSummary(associationId: string) {
  * WHY: The member profile page shows a per-member transaction history.
  */
 export async function getMemberEntries(associationId: string, memberId: string, page = 1) {
-  const validPage = Math.max(1, page);
-  const skip = (validPage - 1) * PAGE_SIZE;
+  const { skip, take, page: currentPage } = buildPaginationParams(page);
 
   const where = {
     createdById: memberId,
@@ -349,14 +347,14 @@ export async function getMemberEntries(associationId: string, memberId: string, 
     prisma.ledgerEntry.findMany({
       where,
       skip,
-      take: PAGE_SIZE,
+      take,
       include: { lines: true },
       orderBy: { createdAt: 'desc' },
     }),
     prisma.ledgerEntry.count({ where }),
   ]);
 
-  return { entries, total, page: validPage };
+  return { entries, total, page: currentPage };
 }
 
 export async function getAccount(associationId: string, accountId: string) {
