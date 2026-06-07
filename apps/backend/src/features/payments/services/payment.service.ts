@@ -18,6 +18,7 @@ import { BadRequestError, NotFoundError, PaymentError } from '@errors';
 import { logAction } from '@services/audit-logs';
 import { PAGE_SIZE } from '@src/shared/constants';
 import { recordMemberPayment } from '@feature/ledger/services/accounting.service';
+import { createAllocations } from '@services/allocate-contributions';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -394,50 +395,12 @@ export async function verifyAndCompletePayment(input: VerifyAndCompleteInput) {
       method: 'ONLINE',
     });
 
-    // Allocate to outstanding contribution periods (FIFO — oldest first)
+    // Allocate to outstanding contribution periods (FIFO - oldest first)
     if (!transaction.userId) {
       throw new NotFoundError('User not found on transaction');
     }
 
-    const outstanding = await tx.contributionPeriod.findMany({
-      where: {
-        userId: transaction.userId,
-        status: {
-          in: [ContributionStatus.DUE, ContributionStatus.PARTIAL, ContributionStatus.OVERDUE],
-        },
-      },
-      orderBy: [{ year: 'asc' }, { month: 'asc' }],
-    });
-
-    let remaining = Number(transaction.amount);
-
-    for (const period of outstanding) {
-      if (remaining <= 0) break;
-
-      const dueAmount = Number(period.dueAmount);
-      const allocatedAmount = Math.min(remaining, dueAmount);
-      const newPaidAmount = Number(period.paidAmount) + allocatedAmount;
-      const newDueAmount = dueAmount - allocatedAmount;
-
-      await tx.paymentAllocation.create({
-        data: {
-          paymentTransactionId: transaction.id,
-          contributionPeriodId: period.id,
-          allocatedAmount,
-        },
-      });
-
-      await tx.contributionPeriod.update({
-        where: { id: period.id },
-        data: {
-          paidAmount: newPaidAmount,
-          dueAmount: Math.max(newDueAmount, 0),
-          status: newDueAmount <= 0 ? ContributionStatus.PAID : ContributionStatus.PARTIAL,
-        },
-      });
-
-      remaining -= allocatedAmount;
-    }
+    await createAllocations(tx, transaction.id, transaction.userId, Number(transaction.amount));
 
     await tx.auditLog.create({
       data: {
