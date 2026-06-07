@@ -10,6 +10,7 @@ import { getActiveProvider } from './payment-provider.service';
 import { decrypt } from '@lib/crypto';
 import { NotFoundError, WebhookSignatureError } from '@errors';
 import { logAction } from '@services';
+import { createAllocations } from '@services/allocate-contributions';
 import { logger } from '@src/shared/logger';
 
 // ---------------------------------------------------------------------------
@@ -364,44 +365,8 @@ async function verifyAndCompletePaymentFromWebhook(
       throw new NotFoundError(`No transaction found for User order: ${razorpayPaymentId}`);
     }
 
-    // Allocate to contribution periods
-    const outstanding = await tx.contributionPeriod.findMany({
-      where: {
-        userId: transaction.userId,
-        status: { in: ['DUE', 'PARTIAL', 'OVERDUE'] },
-      },
-      orderBy: [{ year: 'asc' }, { month: 'asc' }],
-    });
-
-    let remaining = Number(transaction.amount);
-
-    for (const period of outstanding) {
-      if (remaining <= 0) break;
-
-      const dueAmount = Number(period.dueAmount);
-      const allocatedAmount = Math.min(remaining, dueAmount);
-      const newPaidAmount = Number(period.paidAmount) + allocatedAmount;
-      const newDueAmount = dueAmount - allocatedAmount;
-
-      await tx.paymentAllocation.create({
-        data: {
-          paymentTransactionId: transactionId,
-          contributionPeriodId: period.id,
-          allocatedAmount,
-        },
-      });
-
-      await tx.contributionPeriod.update({
-        where: { id: period.id },
-        data: {
-          paidAmount: newPaidAmount,
-          dueAmount: Math.max(newDueAmount, 0),
-          status: newDueAmount <= 0 ? 'PAID' : 'PARTIAL',
-        },
-      });
-
-      remaining -= allocatedAmount;
-    }
+    // Use shared allocation engine
+    await createAllocations(tx, transactionId, transaction.userId, Number(transaction.amount));
 
     // Create ledger entry
     await recordMemberPayment(tx, {
