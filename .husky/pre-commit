@@ -1,3 +1,2 @@
 pnpm exec lint-staged
 pnpm build
-npx commitlint --edit $1
