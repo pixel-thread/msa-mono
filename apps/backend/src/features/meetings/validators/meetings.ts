@@ -66,3 +66,10 @@ export type UpdateMeetingInput = z.infer<typeof UpdateMeetingSchema>;
 export type MeetingQueryInput = z.infer<typeof MeetingQuerySchema>;
 /** Inferred type for agenda item data. */
 export type AgendaItemInput = z.infer<typeof agendaItemSchema>;
+
+/** Schema for update-meeting route params. */
+export const UpdateMeetingParamsSchema = z.object({
+  meetingId: z.uuid('Invalid meeting ID'),
+});
+
+export type UpdateMeetingParamsInput = z.infer<typeof UpdateMeetingParamsSchema>;

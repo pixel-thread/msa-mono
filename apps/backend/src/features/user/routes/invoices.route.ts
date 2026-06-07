@@ -13,24 +13,13 @@ import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';
 // ---- Validators / Types
-import { pageNumberValidation } from '@validator';
+import {
+  UserInvoiceParamsSchema,
+  UserInvoiceQuerySchema,
+} from '@feature/user/validators';
+import type { UserInvoiceParamsInput } from '@feature/user/validators';
 import type { RequestHandler } from 'express';
 import type { NextFunction, Request, Response } from 'express';
-import z from 'zod';
-
-// ---------------------------------------------------------------------------
-// Local validation schemas
-// ---------------------------------------------------------------------------
-
-/** Query schema for listing invoices with page-based pagination. */
-const InvoiceRouteQuery = z.object({
-  page: pageNumberValidation,
-});
-
-/** Route params schema for fetching a single invoice by UUID. */
-const InvoiceRouteParams = z.object({
-  invoiceId: z.uuid(),
-});
 
 // ---------------------------------------------------------------------------
 // GET /api/user/invoices
@@ -41,7 +30,7 @@ const InvoiceRouteParams = z.object({
 export const listInvoices: RequestHandler[] = [
   // ---- Validate input
 
-  validate({ query: InvoiceRouteQuery }),
+  validate({ query: UserInvoiceQuerySchema }),
 
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     // ---- Setup
@@ -122,7 +111,7 @@ export const listInvoices: RequestHandler[] = [
 export const getInvoice: RequestHandler[] = [
   // ---- Validate input
 
-  validate({ params: InvoiceRouteParams }),
+  validate({ params: UserInvoiceParamsSchema }),
 
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     // ---- Setup
@@ -171,7 +160,7 @@ export const getInvoice: RequestHandler[] = [
 
     // ---- Extract params
 
-    const params = req.params as z.infer<typeof InvoiceRouteParams>;
+    const params = req.params as UserInvoiceParamsInput;
 
     // ---- Fetch invoice
 

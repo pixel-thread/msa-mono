@@ -7,7 +7,13 @@ import {
   recordCompletion,
 } from '@feature/training/services';
 // ---- Validators ----
-import { RecordCompletionSchema } from '@feature/training/validators/training';
+import {
+  CompletionMetadataSchema,
+  RecordCompletionSchema,
+  TrainingAssignmentParamsSchema,
+  TrainingModuleParamsSchema,
+} from '@feature/training/validators/training';
+import type { CompletionMetadataInput } from '@feature/training/validators/training';
 import { prisma } from '@lib/prisma';
 import { uploadToBucket } from '@lib/supabase/storage';
 // ---- Shared utilities ----
@@ -23,28 +29,6 @@ import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';
 import type { RequestHandler } from 'express';
 import type { NextFunction, Request, Response } from 'express';
-// ---- External libs ----
-import { z } from 'zod';
-
-// ---- Schemas ----
-
-/** Schema for module ID path parameter. */
-const ModuleParamsSchema = z.object({
-  moduleId: z.uuid('Invalid module ID'),
-});
-
-/** Schema for module + user assignment path parameters. */
-const AssignmentParamsSchema = z.object({
-  moduleId: z.uuid('Invalid module ID'),
-  userId: z.uuid('Invalid user ID'),
-});
-
-/** Schema for completion metadata (score, certificate options). */
-const MetadataSchema = z.object({
-  scorePercent: z.number().min(0).max(100).optional(),
-  certificateOption: z.enum(['none', 'global', 'custom']).default('none'),
-  certificateNumber: z.string().max(100).optional(),
-});
 
 // ---------------------------------------------------------------------------
 // GET /training/modules/:moduleId/complete
@@ -53,7 +37,7 @@ const MetadataSchema = z.object({
 // ---------------------------------------------------------------------------
 
 export const getModuleCompletions: RequestHandler[] = [
-  validate({ params: ModuleParamsSchema }),
+  validate({ params: TrainingModuleParamsSchema }),
 
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
@@ -93,7 +77,7 @@ export const getModuleCompletions: RequestHandler[] = [
 // ---------------------------------------------------------------------------
 
 export const postModuleComplete: RequestHandler[] = [
-  validate({ params: ModuleParamsSchema, body: RecordCompletionSchema }),
+  validate({ params: TrainingModuleParamsSchema, body: RecordCompletionSchema }),
 
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
@@ -142,7 +126,7 @@ export const postModuleComplete: RequestHandler[] = [
 
 export const postAdminComplete: RequestHandler[] = [
   fileUpload.single('file'),
-  validate({ params: AssignmentParamsSchema }),
+  validate({ params: TrainingAssignmentParamsSchema }),
 
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
@@ -182,12 +166,12 @@ export const postAdminComplete: RequestHandler[] = [
           throw new BadRequestError('Metadata is required');
         }
 
-        let metadata: z.infer<typeof MetadataSchema>;
+        let metadata: CompletionMetadataInput;
 
         try {
           const parsed = JSON.parse(metadataRaw);
 
-          metadata = MetadataSchema.parse(parsed);
+          metadata = CompletionMetadataSchema.parse(parsed);
         } catch (error) {
           if (error instanceof SyntaxError) throw new BadRequestError('Invalid metadata JSON');
           throw error;
@@ -198,7 +182,7 @@ export const postAdminComplete: RequestHandler[] = [
         certificateNumber = metadata.certificateNumber;
       } else {
         if (!req.body) throw new BadRequestError('Invalid request body');
-        const parsed = MetadataSchema.parse(req.body);
+        const parsed = CompletionMetadataSchema.parse(req.body);
         scorePercent = parsed.scorePercent;
         certificateOption = parsed.certificateOption;
         certificateNumber = parsed.certificateNumber;

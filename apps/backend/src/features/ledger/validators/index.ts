@@ -46,3 +46,27 @@ export const ReportQuerySchema = z.object({
   fromDate: z.string().optional(),
   toDate: z.string().optional(),
 });
+
+// ---- Account schemas
+
+/** Schema for creating a new ledger account. */
+export const CreateLedgerAccountSchema = z.object({
+  code: z.string().min(1),
+  name: z.string().min(1),
+  type: z.string().min(1),
+  description: z.string().optional(),
+});
+
+/** Schema for paginated account query. */
+export const LedgerAccountQuerySchema = z.object({
+  page: pageNumberValidation,
+});
+
+/** Schema for account route parameters (UUID). */
+export const LedgerAccountParamsSchema = z.object({
+  id: z.uuid('Invalid Ledger Account ID'),
+});
+
+export type CreateLedgerAccountInput = z.infer<typeof CreateLedgerAccountSchema>;
+export type LedgerAccountQueryInput = z.infer<typeof LedgerAccountQuerySchema>;
+export type LedgerAccountParamsInput = z.infer<typeof LedgerAccountParamsSchema>;

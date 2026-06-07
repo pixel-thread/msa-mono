@@ -113,3 +113,41 @@ export type CreateTrainingCertificateInput = z.infer<typeof CreateTrainingCertif
 
 /** Validated type for updating a certificate. */
 export type UpdateTrainingCertificateInput = z.infer<typeof UpdateTrainingCertificateSchema>;
+
+// ---- Route param schemas (shared across training routes)
+
+/** Schema for module ID path parameter. */
+export const TrainingModuleParamsSchema = z.object({
+  moduleId: z.uuid('Invalid module ID'),
+});
+
+/** Schema for module + user assignment path parameters. */
+export const TrainingAssignmentParamsSchema = z.object({
+  moduleId: z.uuid('Invalid module ID'),
+  userId: z.uuid('Invalid user ID'),
+});
+
+/** Schema for module + certificate ID path parameters. */
+export const TrainingCertificateParamsSchema = z.object({
+  moduleId: z.uuid('Invalid module ID'),
+  certificateId: z.uuid('Invalid certificate ID'),
+});
+
+/** Schema for module + supplement ID path parameters. */
+export const TrainingSupplementParamsSchema = z.object({
+  moduleId: z.uuid('Invalid module ID'),
+  supplementId: z.uuid('Invalid supplement ID'),
+});
+
+/** Schema for completion metadata (score, certificate options). */
+export const CompletionMetadataSchema = z.object({
+  scorePercent: z.number().min(0).max(100).optional(),
+  certificateOption: z.enum(['none', 'global', 'custom']).default('none'),
+  certificateNumber: z.string().max(100).optional(),
+});
+
+export type TrainingModuleParamsInput = z.infer<typeof TrainingModuleParamsSchema>;
+export type TrainingAssignmentParamsInput = z.infer<typeof TrainingAssignmentParamsSchema>;
+export type TrainingCertificateParamsInput = z.infer<typeof TrainingCertificateParamsSchema>;
+export type TrainingSupplementParamsInput = z.infer<typeof TrainingSupplementParamsSchema>;
+export type CompletionMetadataInput = z.infer<typeof CompletionMetadataSchema>;

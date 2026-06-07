@@ -12,7 +12,13 @@ import {
 // ---- Validators ----
 import {
   CreateTrainingCertificateSchema,
+  TrainingCertificateParamsSchema,
+  TrainingModuleParamsSchema,
   UpdateTrainingCertificateSchema,
+} from '@feature/training/validators/training';
+import type {
+  CreateTrainingCertificateInput,
+  UpdateTrainingCertificateInput,
 } from '@feature/training/validators/training';
 import { prisma } from '@lib/prisma';
 import { deleteFromBucket, uploadToBucket } from '@lib/supabase/storage';
@@ -29,21 +35,6 @@ import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';
 import type { RequestHandler } from 'express';
 import type { NextFunction, Request, Response } from 'express';
-// ---- External libs ----
-import { z } from 'zod';
-
-// ---- Schemas ----
-
-/** Schema for module ID path parameter. */
-const ModuleParamsSchema = z.object({
-  moduleId: z.uuid('Invalid module ID'),
-});
-
-/** Schema for module + certificate ID path parameters. */
-const CertificateParamsSchema = z.object({
-  moduleId: z.uuid('Invalid module ID'),
-  certificateId: z.uuid('Invalid certificate ID'),
-});
 
 // ---------------------------------------------------------------------------
 // GET /training/modules/:moduleId/certificates
@@ -52,7 +43,7 @@ const CertificateParamsSchema = z.object({
 // ---------------------------------------------------------------------------
 
 export const getCertificates: RequestHandler[] = [
-  validate({ params: ModuleParamsSchema }),
+  validate({ params: TrainingModuleParamsSchema }),
 
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
@@ -93,7 +84,7 @@ export const getCertificates: RequestHandler[] = [
 
 export const postCertificate: RequestHandler[] = [
   fileUpload.single('file'),
-  validate({ params: ModuleParamsSchema }),
+  validate({ params: TrainingModuleParamsSchema }),
 
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
@@ -126,7 +117,7 @@ export const postCertificate: RequestHandler[] = [
       }
 
       // Validate metadata against schema
-      let metadata: z.infer<typeof CreateTrainingCertificateSchema>;
+      let metadata: CreateTrainingCertificateInput;
       try {
         metadata = CreateTrainingCertificateSchema.parse(JSON.parse(metadataRaw));
       } catch (error) {
@@ -189,7 +180,7 @@ export const postCertificate: RequestHandler[] = [
 // ---------------------------------------------------------------------------
 
 export const getCertificate: RequestHandler[] = [
-  validate({ params: CertificateParamsSchema }),
+  validate({ params: TrainingCertificateParamsSchema }),
 
   asyncHandler(async (req: Request, res: Response) => {
     const traceId = (req.traceId as string) || '';
@@ -237,7 +228,7 @@ export const getCertificate: RequestHandler[] = [
 
 export const patchCertificate: RequestHandler[] = [
   fileUpload.single('file'),
-  validate({ params: CertificateParamsSchema }),
+  validate({ params: TrainingCertificateParamsSchema }),
 
   asyncHandler(async (req: Request, res: Response) => {
     const traceId = (req.traceId as string) || '';
@@ -268,7 +259,7 @@ export const patchCertificate: RequestHandler[] = [
     }
 
     // Validate metadata
-    let metadata: z.infer<typeof UpdateTrainingCertificateSchema>;
+    let metadata: UpdateTrainingCertificateInput;
     try {
       metadata = UpdateTrainingCertificateSchema.parse(JSON.parse(metadataRaw));
     } catch (error) {
@@ -345,7 +336,7 @@ export const patchCertificate: RequestHandler[] = [
 // ---------------------------------------------------------------------------
 
 export const deleteCertificateHandler: RequestHandler[] = [
-  validate({ params: CertificateParamsSchema }),
+  validate({ params: TrainingCertificateParamsSchema }),
 
   asyncHandler(async (req: Request, res: Response) => {
     const traceId = (req.traceId as string) || '';
@@ -400,7 +391,7 @@ export const deleteCertificateHandler: RequestHandler[] = [
 
 export const postCertificateTemplate: RequestHandler[] = [
   fileUpload.single('file'),
-  validate({ params: ModuleParamsSchema }),
+  validate({ params: TrainingModuleParamsSchema }),
 
   asyncHandler(async (req: Request, res: Response) => {
     const traceId = (req.traceId as string) || '';
@@ -479,7 +470,7 @@ export const postCertificateTemplate: RequestHandler[] = [
 // ---------------------------------------------------------------------------
 
 export const deleteCertificateTemplateRoute: RequestHandler[] = [
-  validate({ params: ModuleParamsSchema }),
+  validate({ params: TrainingModuleParamsSchema }),
 
   asyncHandler(async (req: Request, res: Response) => {
     const traceId = (req.traceId as string) || '';

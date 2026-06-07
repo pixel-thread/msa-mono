@@ -10,7 +10,13 @@ import {
 // ---- Validators ----
 import {
   CreateSupplementSchema,
+  TrainingModuleParamsSchema,
+  TrainingSupplementParamsSchema,
   UpdateSupplementSchema,
+} from '@feature/training/validators/training';
+import type {
+  CreateSupplementInput,
+  UpdateSupplementInput,
 } from '@feature/training/validators/training';
 import { prisma } from '@lib/prisma';
 import { deleteFromBucket, uploadToBucket } from '@lib/supabase/storage';
@@ -27,21 +33,6 @@ import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';
 import type { RequestHandler } from 'express';
 import type { Request, Response } from 'express';
-// ---- External libs ----
-import { z } from 'zod';
-
-// ---- Schemas ----
-
-/** Schema for module ID path parameter. */
-const ModuleParamsSchema = z.object({
-  moduleId: z.uuid('Invalid module ID'),
-});
-
-/** Schema for module + supplement ID path parameters. */
-const SupplementParamsSchema = z.object({
-  moduleId: z.uuid('Invalid module ID'),
-  supplementId: z.uuid('Invalid supplement ID'),
-});
 
 // ---------------------------------------------------------------------------
 // GET /training/modules/:moduleId/supplements
@@ -50,7 +41,7 @@ const SupplementParamsSchema = z.object({
 // ---------------------------------------------------------------------------
 
 export const getSupplements: RequestHandler[] = [
-  validate({ params: ModuleParamsSchema }),
+  validate({ params: TrainingModuleParamsSchema }),
 
   asyncHandler(async (req: Request, res: Response) => {
     const traceId = (req.traceId as string) || '';
@@ -86,7 +77,7 @@ export const getSupplements: RequestHandler[] = [
 
 export const postSupplement: RequestHandler[] = [
   fileUpload.single('file'),
-  validate({ params: ModuleParamsSchema }),
+  validate({ params: TrainingModuleParamsSchema }),
 
   asyncHandler(async (req: Request, res: Response) => {
     const traceId = (req.traceId as string) || '';
@@ -117,7 +108,7 @@ export const postSupplement: RequestHandler[] = [
     }
 
     // Validate metadata against schema
-    let metadata: z.infer<typeof CreateSupplementSchema>;
+    let metadata: CreateSupplementInput;
 
     try {
       metadata = CreateSupplementSchema.parse(JSON.parse(metadataRaw));
@@ -178,7 +169,7 @@ export const postSupplement: RequestHandler[] = [
 // ---------------------------------------------------------------------------
 
 export const getSupplement: RequestHandler[] = [
-  validate({ params: SupplementParamsSchema }),
+  validate({ params: TrainingSupplementParamsSchema }),
 
   asyncHandler(async (req: Request, res: Response) => {
     const traceId = (req.traceId as string) || '';
@@ -224,7 +215,7 @@ export const getSupplement: RequestHandler[] = [
 
 export const updateSupplementHandler: RequestHandler[] = [
   fileUpload.single('file'),
-  validate({ params: SupplementParamsSchema }),
+  validate({ params: TrainingSupplementParamsSchema }),
   asyncHandler(async (req: Request, res: Response) => {
     const traceId = (req.traceId as string) || '';
 
@@ -253,7 +244,7 @@ export const updateSupplementHandler: RequestHandler[] = [
     }
 
     // Validate metadata
-    let metadata: z.infer<typeof UpdateSupplementSchema>;
+    let metadata: UpdateSupplementInput;
     try {
       metadata = UpdateSupplementSchema.parse(JSON.parse(metadataRaw));
     } catch (error) {
@@ -330,7 +321,7 @@ export const updateSupplementHandler: RequestHandler[] = [
 // ---------------------------------------------------------------------------
 
 export const deleteSupplementHandler: RequestHandler[] = [
-  validate({ params: SupplementParamsSchema }),
+  validate({ params: TrainingSupplementParamsSchema }),
 
   asyncHandler(async (req: Request, res: Response) => {
     const traceId = (req.traceId as string) || '';

@@ -13,24 +13,13 @@ import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';
 // ---- Validators / Types
+import {
+  NotificationLinkTokenSchema,
+  NotificationRegisterPushTokenSchema,
+} from '@feature/notifications/validators';
 import { NotificationRouteParams, UpdateNotificationSchema } from '@validator/notification';
 import type { RequestHandler } from 'express';
 import type { NextFunction, Request, Response } from 'express';
-import { z } from 'zod';
-
-// ---------------------------------------------------------------------------
-// Local validation schemas
-// ---------------------------------------------------------------------------
-
-/** Schema for registering a push notification token (no user link). */
-const RegisterPushTokenSchema = z.object({
-  token: z.string(),
-});
-
-/** Schema for linking an existing push token to a user. */
-const LinkNotificationSchema = z.object({
-  token: z.string().min(1, 'Token is required'),
-});
 
 // ---------------------------------------------------------------------------
 // POST /api/notifications/register
@@ -42,7 +31,7 @@ const LinkNotificationSchema = z.object({
 export const postRegisterPushToken: RequestHandler[] = [
   // ---- Validate input
 
-  validate({ body: RegisterPushTokenSchema }),
+  validate({ body: NotificationRegisterPushTokenSchema }),
 
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     // ---- Setup
@@ -79,7 +68,7 @@ export const postRegisterPushToken: RequestHandler[] = [
 export const postLinkNotification: RequestHandler[] = [
   // ---- Validate input
 
-  validate({ body: LinkNotificationSchema }),
+  validate({ body: NotificationLinkTokenSchema }),
 
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     // ---- Setup

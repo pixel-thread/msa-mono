@@ -28,29 +28,15 @@ import { buildPagination } from '@utils';
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';
-import { pageNumberValidation } from '@validator';
+import {
+  CreateLedgerAccountSchema,
+  LedgerAccountParamsSchema,
+  LedgerAccountQuerySchema,
+} from '@feature/ledger/validators';
 import type { RequestHandler } from 'express';
 import type { NextFunction, Request, Response } from 'express';
-import { z } from 'zod';
 
 import { incomeStatement, trialBalance } from '../services/reports.service';
-
-// ---------------------------------------------------------------------------
-// Local schemas
-// ---------------------------------------------------------------------------
-
-/** Schema for creating a new account. */
-const CreateAccountSchema = z.object({
-  code: z.string().min(1),
-  name: z.string().min(1),
-  type: z.string().min(1),
-  description: z.string().optional(),
-});
-
-/** Schema for paginated account query. */
-const AccountQuerySchema = z.object({
-  page: pageNumberValidation,
-});
 
 // ---------------------------------------------------------------------------
 // GET /api/ledger/accounts  –  List ledger accounts
@@ -58,7 +44,7 @@ const AccountQuerySchema = z.object({
 // ---------------------------------------------------------------------------
 
 export const listAccounts: RequestHandler[] = [
-  validate({ query: AccountQuerySchema }),
+  validate({ query: LedgerAccountQuerySchema }),
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
 
@@ -92,7 +78,7 @@ export const listAccounts: RequestHandler[] = [
 // ---------------------------------------------------------------------------
 
 export const createAccountHandler: RequestHandler[] = [
-  validate({ body: CreateAccountSchema }),
+  validate({ body: CreateLedgerAccountSchema }),
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
 
@@ -123,12 +109,8 @@ export const createAccountHandler: RequestHandler[] = [
 // DELETE /api/ledger/accounts/:id  –   Delete a ledger account
 // Security: FINANCE role required
 // ---------------------------------------------------------------------------
-const DeleteAccountRouteParam = z.object({
-  id: z.uuid('Invalid Ledger Account ID'),
-});
-
 export const deleteAccountHandler: RequestHandler[] = [
-  validate({ params: DeleteAccountRouteParam }),
+  validate({ params: LedgerAccountParamsSchema }),
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
     const accountId = req.params.id;
@@ -179,12 +161,8 @@ export const deleteAccountHandler: RequestHandler[] = [
 // PUT /api/ledger/accounts/:id  –   Delete a ledger account
 // Security: FINANCE role required
 // ---------------------------------------------------------------------------
-const UpdateAccountRouteParam = z.object({
-  id: z.uuid('Invalid Ledger Account ID'),
-});
-
 export const updateAccountHandler: RequestHandler[] = [
-  validate({ params: UpdateAccountRouteParam, body: CreateAccountSchema.partial().strict() }),
+  validate({ params: LedgerAccountParamsSchema, body: CreateLedgerAccountSchema.partial().strict() }),
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
     const accountId = req.params.id;
@@ -257,12 +235,8 @@ export const seedAccountsHandler: RequestHandler[] = [
 // GET /api/ledger/accounts/:id  –   Get a ledger account
 // Security: FINANCE role required
 // ---------------------------------------------------------------------------
-const GetAccountRouteParam = z.object({
-  id: z.uuid('Invalid Ledger Account ID'),
-});
-
 export const getAccountHandler: RequestHandler[] = [
-  validate({ params: GetAccountRouteParam }),
+  validate({ params: LedgerAccountParamsSchema }),
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
     const accountId = req.params.id;

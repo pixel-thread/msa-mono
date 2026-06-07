@@ -2,7 +2,7 @@
 // ---- Prisma
 import { $Enums, UserRole } from '@prisma/client';
 // ---- Shared utilities
-import { uuidValidiation } from '@validator/common';
+import { pageNumberValidation, uuidValidiation } from '@validator/common';
 import z from 'zod';
 
 // ---------------------------------------------------------------------------
@@ -54,3 +54,18 @@ export const AdminUserApproveSchema = z
     dateOfJoiningGovt: z.coerce.date('Invalid date').default(new Date()).optional(),
   })
   .strict();
+
+// ---- Invoices (self-service)
+
+/** Query schema for listing invoices with page-based pagination. */
+export const UserInvoiceQuerySchema = z.object({
+  page: pageNumberValidation,
+});
+
+/** Route params schema for fetching a single invoice by UUID. */
+export const UserInvoiceParamsSchema = z.object({
+  invoiceId: z.uuid(),
+});
+
+export type UserInvoiceQueryInput = z.infer<typeof UserInvoiceQuerySchema>;
+export type UserInvoiceParamsInput = z.infer<typeof UserInvoiceParamsSchema>;
