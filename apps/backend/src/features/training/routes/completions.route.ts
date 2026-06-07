@@ -20,7 +20,6 @@ import { uploadToBucket } from '@lib/supabase/storage';
 import { validate } from '@lib/validate';
 // ---- Prisma ----
 import { UserRole } from '@prisma/client';
-import { getAssociation } from '@services/association/get-association';
 import { env } from '@src/env';
 import { fileUpload } from '@src/middleware/file-upload';
 import { logger } from '@src/shared/logger';
@@ -43,11 +42,8 @@ export const getModuleCompletions: RequestHandler[] = [
     const traceId = (req.traceId as string) || '';
 
     try {
-      // Resolve association
-      const association = await getAssociation(req);
-
       logger.info(
-        { traceId, associationId: association.id },
+        { traceId, associationId: req.user!.associationId },
         'GET /training/modules/{moduleId}/complete - Request started',
       );
 
@@ -58,7 +54,7 @@ export const getModuleCompletions: RequestHandler[] = [
 
       // Fetch completions for this module
       const data = await findManyCompletions({
-        associationId: association.id,
+        associationId: req.user!.associationId,
         moduleId: req.params.moduleId as string,
       });
 
@@ -83,11 +79,8 @@ export const postModuleComplete: RequestHandler[] = [
     const traceId = (req.traceId as string) || '';
 
     try {
-      // Resolve association
-      const association = await getAssociation(req);
-
       logger.info(
-        { traceId, associationId: association.id },
+        { traceId, associationId: req.user!.associationId },
         'POST /training/modules/{moduleId}/complete - Request started',
       );
 
@@ -101,7 +94,7 @@ export const postModuleComplete: RequestHandler[] = [
 
       // Record the completion
       const completion = await recordCompletion({
-        associationId: association.id,
+        associationId: req.user!.associationId,
         userId: user.id,
         moduleId: req.params.moduleId as string,
         data: req.body,
@@ -132,11 +125,8 @@ export const postAdminComplete: RequestHandler[] = [
     const traceId = (req.traceId as string) || '';
 
     try {
-      // Resolve association
-      const association = await getAssociation(req);
-
       logger.info(
-        { traceId, associationId: association.id },
+        { traceId, associationId: req.user!.associationId },
         'POST /training/modules/{moduleId}/assignments/{userId}/complete - Request started',
       );
 
@@ -197,13 +187,13 @@ export const postAdminComplete: RequestHandler[] = [
         if (certificateOption === 'custom' && file && file.size > 0) {
           const uploadResult = await uploadToBucket(
             file,
-            `certificates/${association.slug}/${moduleId}`,
+            `certificates/${req.user!.associationSlug}/${moduleId}`,
             traceId,
           );
 
           const fileRecord = await prisma.file.create({
             data: {
-              associationId: association.id,
+              associationId: req.user!.associationId,
               originalName: file.originalname,
               storedName: uploadResult.key,
               mimeType: uploadResult.mimeType,
@@ -221,7 +211,7 @@ export const postAdminComplete: RequestHandler[] = [
         }
 
         const result = await completeAssignment({
-          associationId: association.id,
+          associationId: req.user!.associationId,
           moduleId: moduleId as string,
           userId: userId as string,
           actorId: actor.id,

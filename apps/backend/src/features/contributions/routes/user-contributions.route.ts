@@ -17,7 +17,7 @@ import { UserContributionsParamsSchema } from '@feature/contributions/validators
 import { findFirstMember } from '@feature/members/services/findFirstMember';
 import { validate } from '@lib/validate';
 import { UserRole } from '@prisma/client';
-import { getAssociation } from '@services/association/get-association';
+
 import { PAGE_SIZE } from '@src/shared/constants';
 import { logger } from '@src/shared/logger';
 import { buildPagination } from '@src/shared/utils/helper/build-pagination';
@@ -57,9 +57,6 @@ export const listUserContributionsHandler: RequestHandler[] = [
       'GET /api/contributions/users/[userId] - Request started',
     );
 
-    // --- Auth: resolve association ---
-    const association = await getAssociation(req);
-
     // --- Auth: enforce FINANCE role ---
     await withRole(req, UserRole.FINANCE);
 
@@ -81,11 +78,13 @@ export const listUserContributionsHandler: RequestHandler[] = [
       toMonth?: number;
     }) || {};
 
-    const user = await findFirstMember({ where: { id: userId, associationId: association.id } });
+    const user = await findFirstMember({
+      where: { id: userId, associationId: req.user!.associationId },
+    });
 
     if (!user) throw new NotFoundError('User not found in this association');
 
-    const whereClause: Record<string, unknown> = { userId, associationId: association.id };
+    const whereClause: Record<string, unknown> = { userId, associationId: req.user!.associationId };
 
     if (fromYear && fromMonth) {
       whereClause.AND = [
@@ -108,7 +107,7 @@ export const listUserContributionsHandler: RequestHandler[] = [
 
     await generateUserContributions(userId, new Date().getFullYear(), 12);
 
-    await markOverdueContributions(association.id, userId);
+    await markOverdueContributions(req.user!.associationId, userId);
 
     const { contributions, total } = await findContributionPeriods({
       where: whereClause as Parameters<typeof findContributionPeriods>[0]['where'],

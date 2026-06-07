@@ -3,7 +3,6 @@ import { removeAttendee, updateAttendee } from '@feature/meetings/services';
 import { UpdateAttendeeSchema } from '@feature/meetings/validators';
 import { validate } from '@lib/validate';
 import { UserRole } from '@prisma/client';
-import { getAssociation } from '@services/association/get-association';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 import { hasHighRoleAccess } from '@utils/has-high-role';
@@ -23,11 +22,10 @@ export const patchUpdateAttendee: RequestHandler[] = [
   validate({ params: AttendeeParamsSchema, body: UpdateAttendeeSchema }),
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
-    const association = await getAssociation(req);
     const meetingId = req.params.meetingId as string;
     const targetUserId = req.params.userId as string;
     logger.info(
-      { traceId, meetingId, targetUserId, associationId: association.id },
+      { traceId, meetingId, targetUserId, associationId: req.user!.associationId },
       'PATCH /api/meetings/[meetingId]/attendees/[userId] - Request started',
     );
 
@@ -53,7 +51,7 @@ export const patchUpdateAttendee: RequestHandler[] = [
 
     const updated = await updateAttendee({
       meetingId,
-      associationId: association.id,
+      associationId: req.user!.associationId,
       userId: targetUserId,
       data: req.body,
       isAdminUpdate: isAdmin,
@@ -71,11 +69,10 @@ export const patchUpdateAttendee: RequestHandler[] = [
 export const deleteRemoveAttendee: RequestHandler[] = [
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
-    const association = await getAssociation(req);
     const meetingId = req.params.meetingId as string;
     const targetUserId = req.params.userId as string;
     logger.info(
-      { traceId, meetingId, targetUserId, associationId: association.id },
+      { traceId, meetingId, targetUserId, associationId: req.user!.associationId },
       'DELETE /api/meetings/[meetingId]/attendees/[userId] - Request started',
     );
 
@@ -93,7 +90,11 @@ export const deleteRemoveAttendee: RequestHandler[] = [
       'DELETE /api/meetings/[meetingId]/attendees/[userId] - Removing attendee',
     );
 
-    await removeAttendee({ meetingId, associationId: association.id, userId: targetUserId });
+    await removeAttendee({
+      meetingId,
+      associationId: req.user!.associationId,
+      userId: targetUserId,
+    });
 
     logger.info(
       { traceId, meetingId, targetUserId },

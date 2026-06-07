@@ -7,7 +7,6 @@ import { AdminRecordCompletionSchema } from '@feature/training/validators/traini
 import { validate } from '@lib/validate';
 // ---- Prisma ----
 import { UserRole } from '@prisma/client';
-import { getAssociation } from '@services/association/get-association';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
@@ -25,10 +24,9 @@ export const getCompletions: RequestHandler[] = [
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     // Resolve association
     const traceId = (req.traceId as string) || '';
-    const association = await getAssociation(req);
 
     logger.info(
-      { traceId, associationId: association.id },
+      { traceId, associationId: req.user!.associationId },
       'GET /training/completions - Request started',
     );
 
@@ -44,7 +42,7 @@ export const getCompletions: RequestHandler[] = [
 
     // Fetch filtered completions
     const data = await findManyCompletions({
-      associationId: association.id,
+      associationId: req.user!.associationId,
       moduleId,
       userId,
       page,
@@ -67,10 +65,9 @@ export const postCompletion: RequestHandler[] = [
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     // Resolve association
     const traceId = (req.traceId as string) || '';
-    const association = await getAssociation(req);
 
     logger.info(
-      { traceId, associationId: association.id },
+      { traceId, associationId: req.user!.associationId },
       'POST /training/completions - Request started',
     );
 
@@ -81,7 +78,7 @@ export const postCompletion: RequestHandler[] = [
 
     // Record the completion on behalf of the user
     const completion = await adminRecordCompletion({
-      associationId: association.id,
+      associationId: req.user!.associationId,
       actorId: admin.id,
       data: req.body,
     });

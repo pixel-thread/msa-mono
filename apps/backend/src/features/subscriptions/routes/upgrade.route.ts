@@ -11,7 +11,7 @@ import { validate } from '@lib/validate';
 // Prisma
 // ---------------------------------------------------------------------------
 import { UserRole } from '@prisma/client';
-import { getAssociation } from '@services/association/get-association';
+
 import { logger } from '@src/shared/logger';
 import { hasHighRoleAccess } from '@utils';
 import { asyncHandler } from '@utils/async-handler';
@@ -30,10 +30,8 @@ export const postUpgrade: RequestHandler[] = [
     const traceId = (req.traceId as string) || '';
     let userId = req.user?.id;
 
-    // Validate association membership
-    const association = await getAssociation(req);
     logger.info(
-      { traceId, associationId: association.id },
+      { traceId, associationId: req.user!.associationId },
       'POST /api/subscriptions/upgrade - Request started',
     );
 

@@ -29,7 +29,6 @@ import { validate } from '@lib/validate';
 // Prisma
 // ---------------------------------------------------------------------------
 import { UserRole } from '@prisma/client';
-import { getAssociation } from '@services/association/get-association';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
@@ -48,9 +47,8 @@ export const getMemberTypes: RequestHandler[] = [
 
     // ---- Resolve association & log request ---------------------------------
 
-    const association = await getAssociation(req);
     logger.info(
-      { traceId, associationId: association.id },
+      { traceId, associationId: req.user!.associationId },
       'GET /api/member-types - Request started',
     );
 
@@ -61,7 +59,7 @@ export const getMemberTypes: RequestHandler[] = [
 
     // ---- Business logic -----------------------------------------------------
 
-    const memberTypes = await findManyMemberTypes({ associationId: association.id });
+    const memberTypes = await findManyMemberTypes({ associationId: req.user!.associationId });
 
     // ---- Result ------------------------------------------------------------
 
@@ -82,9 +80,8 @@ export const postMemberType: RequestHandler[] = [
 
     // ---- Resolve association & log request ---------------------------------
 
-    const association = await getAssociation(req);
     logger.info(
-      { traceId, associationId: association.id },
+      { traceId, associationId: req.user!.associationId },
       'POST /api/member-types - Request started',
     );
 
@@ -100,7 +97,7 @@ export const postMemberType: RequestHandler[] = [
     // ---- Business logic ----------------------------------------------------
 
     const memberType = await createMemberType({
-      associationId: association.id,
+      associationId: req.user!.associationId,
       actorId: user.id,
       data: req.body,
     });
@@ -124,9 +121,8 @@ export const getMemberTypeById: RequestHandler[] = [
 
     // ---- Resolve association & log request ---------------------------------
 
-    const association = await getAssociation(req);
     logger.info(
-      { traceId, associationId: association.id },
+      { traceId, associationId: req.user!.associationId },
       'GET /api/member-types/[memberTypeId] - Request started',
     );
 
@@ -145,7 +141,10 @@ export const getMemberTypeById: RequestHandler[] = [
     // ---- Business logic ----------------------------------------------------
 
     const memberTypeId = req.params.memberTypeId as string;
-    const memberType = await findUniqueMemberType({ associationId: association.id, memberTypeId });
+    const memberType = await findUniqueMemberType({
+      associationId: req.user!.associationId,
+      memberTypeId,
+    });
 
     if (!memberType) throw new NotFoundError('Member type not found');
 
@@ -168,9 +167,8 @@ export const patchMemberType: RequestHandler[] = [
 
     // ---- Resolve association & log request ---------------------------------
 
-    const association = await getAssociation(req);
     logger.info(
-      { traceId, associationId: association.id },
+      { traceId, associationId: req.user!.associationId },
       'PATCH /api/member-types/[memberTypeId] - Request started',
     );
 
@@ -191,7 +189,7 @@ export const patchMemberType: RequestHandler[] = [
 
     const memberTypeId = req.params.memberTypeId as string;
     const memberType = await updateMemberType({
-      associationId: association.id,
+      associationId: req.user!.associationId,
       actorId: user.id,
       memberTypeId,
       data: req.body,
@@ -216,9 +214,8 @@ export const deleteMemberType: RequestHandler[] = [
 
     // ---- Resolve association & log request ---------------------------------
 
-    const association = await getAssociation(req);
     logger.info(
-      { traceId, associationId: association.id },
+      { traceId, associationId: req.user!.associationId },
       'DELETE /api/member-types/[memberTypeId] - Request started',
     );
 
@@ -238,7 +235,11 @@ export const deleteMemberType: RequestHandler[] = [
 
     const memberTypeId = req.params.memberTypeId as string;
 
-    await _deleteMemberType({ associationId: association.id, actorId: user.id, memberTypeId });
+    await _deleteMemberType({
+      associationId: req.user!.associationId,
+      actorId: user.id,
+      memberTypeId,
+    });
 
     // ---- Result ------------------------------------------------------------
 

@@ -1,7 +1,6 @@
 import { ForbiddenError } from '@errors';
 import { deleteMeeting } from '@feature/meetings/services';
 import { UserRole } from '@prisma/client';
-import { getAssociation } from '@services/association/get-association';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 import { hasHighRoleAccess } from '@utils/has-high-role';
@@ -13,10 +12,9 @@ import type { RequestHandler } from 'express';
 export const deleteMeetingHandler: RequestHandler[] = [
   asyncHandler(async (req, res) => {
     const traceId = (req.traceId as string) || '';
-    const association = await getAssociation(req);
     const meetingId = req.params.meetingId as string;
     logger.info(
-      { traceId, meetingId, associationId: association.id },
+      { traceId, meetingId, associationId: req.user!.associationId },
       'DELETE /api/meetings/[meetingId] - Request started',
     );
 
@@ -31,7 +29,10 @@ export const deleteMeetingHandler: RequestHandler[] = [
     );
     logger.info({ traceId, meetingId }, 'DELETE /api/meetings/[meetingId] - Deleting meeting');
 
-    const deletedMeeting = await deleteMeeting({ meetingId, associationId: association.id });
+    const deletedMeeting = await deleteMeeting({
+      meetingId,
+      associationId: req.user!.associationId,
+    });
 
     logger.info(
       { traceId, meetingId: deletedMeeting.id },

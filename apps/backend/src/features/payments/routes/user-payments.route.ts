@@ -13,7 +13,7 @@ import { findFirstMember } from '@feature/members/services/findFirstMember';
 import { findPaymentTransactions } from '@feature/payments/services/find-payment-transactions';
 import { validate } from '@lib/validate';
 import { UserRole } from '@prisma/client';
-import { getAssociation } from '@services/association/get-association';
+
 import { logger } from '@src/shared/logger';
 import { buildPagination } from '@src/shared/utils/helper/build-pagination';
 import { asyncHandler } from '@utils/async-handler';
@@ -54,9 +54,6 @@ export const userPayments: RequestHandler[] = [
       'GET /api/payments/users/[userId] - Request started',
     );
 
-    // --- Auth: resolve association ---
-    const association = await getAssociation(req);
-
     // --- Auth: enforce FINANCE role ---
     await withRole(req, UserRole.FINANCE);
 
@@ -65,12 +62,14 @@ export const userPayments: RequestHandler[] = [
     // --- Business logic: fetch member and their transactions ---
     const { userId } = req.params as { userId: string };
     const page = (req.query as any)?.page || 1;
-    const user = await findFirstMember({ where: { id: userId, associationId: association.id } });
+    const user = await findFirstMember({
+      where: { id: userId, associationId: req.user!.associationId },
+    });
     if (!user) throw new NotFoundError('User not found in this association');
 
     logger.info({ traceId, userId }, 'GET /api/payments/users/[userId] - Fetching transactions');
     const { transactions, total } = await findPaymentTransactions({
-      where: { userId, associationId: association.id },
+      where: { userId, associationId: req.user!.associationId },
       page,
       pageSize: 10,
       include: {

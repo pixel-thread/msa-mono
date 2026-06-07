@@ -3,7 +3,6 @@ import { findManyMeetings } from '@feature/meetings/services';
 import { MeetingQuerySchema } from '@feature/meetings/validators/meetings';
 import { validate } from '@lib/validate';
 import { MeetingStatus, UserRole } from '@prisma/client';
-import { getAssociation } from '@services/association/get-association';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 import { hasHighRoleAccess } from '@utils/has-high-role';
@@ -17,8 +16,10 @@ export const getMeetings: RequestHandler[] = [
   validate({ query: MeetingQuerySchema }),
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
-    const association = await getAssociation(req);
-    logger.info({ traceId, associationId: association.id }, 'GET /api/meetings - Request started');
+    logger.info(
+      { traceId, associationId: req.user!.associationId },
+      'GET /api/meetings - Request started',
+    );
 
     const user = await withRole(req, UserRole.MEMBER);
     logger.info(
@@ -35,7 +36,7 @@ export const getMeetings: RequestHandler[] = [
     if (hasHighRoleAccess(user.role)) {
       const result = await findManyMeetings({
         role: user.role,
-        associationId: association.id,
+        associationId: req.user!.associationId,
         filters: { type, status } as any,
         pagination: { page: page ?? 1 },
       });
@@ -46,7 +47,7 @@ export const getMeetings: RequestHandler[] = [
     const result = await findManyMeetings({
       role: user.role,
       userId,
-      associationId: association.id,
+      associationId: req.user!.associationId,
       filters: { status: MeetingStatus.SCHEDULED } as any,
       pagination: { page: page ?? 1 },
     });

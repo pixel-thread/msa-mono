@@ -1,6 +1,5 @@
 import { findUniqueMeeting } from '@feature/meetings/services/findUniqueMeeting';
 import { UserRole } from '@prisma/client';
-import { getAssociation } from '@services/association/get-association';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
@@ -11,7 +10,6 @@ import type { NextFunction, Request, RequestHandler, Response } from 'express';
 export const getMeetingReport: RequestHandler[] = [
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
-    const association = await getAssociation(req);
     const user = await withRole(req, UserRole.SECRETARY);
 
     const meetingId = req.params.meetingId as string;
@@ -24,7 +22,7 @@ export const getMeetingReport: RequestHandler[] = [
       'GET /api/meetings/[meetingId]/report - Fetching meeting report',
     );
 
-    const meeting = await findUniqueMeeting({ meetingId, associationId: association.id });
+    const meeting = await findUniqueMeeting({ meetingId, associationId: req.user!.associationId });
 
     logger.info(
       { traceId, meetingId: meeting.id },

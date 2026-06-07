@@ -18,7 +18,7 @@ import { validate } from '@lib/validate';
 // Prisma
 // ---------------------------------------------------------------------------
 import { UserRole } from '@prisma/client';
-import { getAssociation } from '@services/association/get-association';
+
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
@@ -34,10 +34,8 @@ export const postSubscribe: RequestHandler[] = [
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
 
-    // Validate association membership
-    const association = await getAssociation(req);
     logger.info(
-      { traceId, associationId: association.id },
+      { traceId, associationId: req.user!.associationId },
       'POST /api/subscriptions/subscribe - Request started',
     );
 
@@ -51,7 +49,7 @@ export const postSubscribe: RequestHandler[] = [
     const subscription = await subscribe({
       planId: req.body.planId,
       userId: user.id,
-      associationId: association.id,
+      associationId: req.user!.associationId,
     });
 
     logger.info({ traceId, subscriptionId: subscription.id }, 'Subscription created');

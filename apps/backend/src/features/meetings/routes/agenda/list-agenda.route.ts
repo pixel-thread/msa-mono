@@ -1,7 +1,6 @@
 import { findUniqueMeeting } from '@feature/meetings/services';
 import { validate } from '@lib/validate';
 import { UserRole } from '@prisma/client';
-import { getAssociation } from '@services/association/get-association';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
@@ -17,10 +16,9 @@ export const getAgendaItems: RequestHandler[] = [
   validate({ params: ParamsSchema }),
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
-    const association = await getAssociation(req);
     const meetingId = req.params.meetingId as string;
     logger.info(
-      { traceId, meetingId, associationId: association.id },
+      { traceId, meetingId, associationId: req.user!.associationId },
       'GET /api/meetings/[meetingId]/agenda - Request started',
     );
 
@@ -30,7 +28,7 @@ export const getAgendaItems: RequestHandler[] = [
       'GET /api/meetings/[meetingId]/agenda - User authorized',
     );
 
-    const meeting = await findUniqueMeeting({ meetingId, associationId: association.id });
+    const meeting = await findUniqueMeeting({ meetingId, associationId: req.user!.associationId });
     const agenda = meeting.agendaItems;
 
     logger.info(

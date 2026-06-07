@@ -2,7 +2,6 @@ import { createMeetingMinute } from '@feature/meetings/services/minutes';
 import { CreateMeetingMinuteSchema } from '@feature/meetings/validators/minutes';
 import { validate } from '@lib/validate';
 import { UserRole } from '@prisma/client';
-import { getAssociation } from '@services/association/get-association';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
@@ -20,10 +19,9 @@ export const postCreateMinute: RequestHandler[] = [
   validate({ params: ParamsSchema, body: CreateMeetingMinuteSchema }),
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
-    const association = await getAssociation(req);
     const meetingId = req.params.meetingId as string;
     logger.info(
-      { traceId, meetingId, associationId: association.id },
+      { traceId, meetingId, associationId: req.user!.associationId },
       'POST /api/meetings/[meetingId]/minutes - Request started',
     );
 
@@ -39,7 +37,7 @@ export const postCreateMinute: RequestHandler[] = [
 
     const minute = await createMeetingMinute({
       meetingId,
-      associationId: association.id,
+      associationId: req.user!.associationId,
       data: req.body,
     });
 

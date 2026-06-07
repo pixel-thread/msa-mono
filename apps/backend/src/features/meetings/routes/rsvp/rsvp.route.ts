@@ -2,7 +2,6 @@ import { ForbiddenError } from '@errors';
 import { updateAttendee } from '@feature/meetings/services/updateAttendee';
 import { validate } from '@lib/validate';
 import { UserRole } from '@prisma/client';
-import { getAssociation } from '@services/association/get-association';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
@@ -25,7 +24,6 @@ export const postRsvp: RequestHandler[] = [
   validate({ body: RsvpSchema }),
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
-    const association = await getAssociation(req);
     const meetingId = req.params.meetingId as string;
     logger.info({ traceId, meetingId }, 'POST /api/meetings/[meetingId]/rsvp - Request started');
 
@@ -45,7 +43,7 @@ export const postRsvp: RequestHandler[] = [
 
     const updated = await updateAttendee({
       meetingId,
-      associationId: association.id,
+      associationId: req.user!.associationId,
       userId,
       data: {
         rsvpStatus: req.body.status,

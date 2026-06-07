@@ -23,7 +23,6 @@ import { validate } from '@lib/validate';
 // Prisma
 // ---------------------------------------------------------------------------
 import { UserRole } from '@prisma/client';
-import { getAssociation } from '@services/association/get-association';
 import { logger } from '@src/shared/logger';
 import { buildPagination } from '@utils';
 import { asyncHandler } from '@utils/async-handler';
@@ -44,9 +43,8 @@ export const listEntries: RequestHandler[] = [
 
     // ---- Resolve association & log request ---------------------------------
 
-    const association = await getAssociation(req);
     logger.info(
-      { traceId, associationId: association.id },
+      { traceId, associationId: req.user!.associationId },
       'GET /api/ledger/entries - Request started',
     );
 
@@ -57,7 +55,7 @@ export const listEntries: RequestHandler[] = [
     // ---- Business logic ----------------------------------------------------
 
     const page = (req.query as any).page || 1;
-    const { entries, total } = await getEntries(association.id, page);
+    const { entries, total } = await getEntries(req.user!.associationId, page);
 
     // ---- Result ------------------------------------------------------------
 
@@ -78,9 +76,8 @@ export const createEntry: RequestHandler[] = [
 
     // ---- Resolve association & log request ---------------------------------
 
-    const association = await getAssociation(req);
     logger.info(
-      { traceId, associationId: association.id },
+      { traceId, associationId: req.user!.associationId },
       'POST /api/ledger/entries - Request started',
     );
 
@@ -92,7 +89,7 @@ export const createEntry: RequestHandler[] = [
 
     // ---- Business logic ----------------------------------------------------
 
-    const entry = await createManualEntry(association.id, userId, {
+    const entry = await createManualEntry(req.user!.associationId, userId, {
       description: req.body.description,
       paymentId: req.body.paymentId,
       lines: req.body.lines,
@@ -116,9 +113,8 @@ export const approveEntryHandler: RequestHandler[] = [
 
     // ---- Resolve association & log request ---------------------------------
 
-    const association = await getAssociation(req);
     logger.info(
-      { traceId, associationId: association.id },
+      { traceId, associationId: req.user!.associationId },
       'POST /api/ledger/entries/[entryId]/approve - Request started',
     );
 
@@ -147,10 +143,9 @@ export const approveEntryHandler: RequestHandler[] = [
 export const rejectEntryHandler: RequestHandler[] = [
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
-    const association = await getAssociation(req);
 
     logger.info(
-      { traceId, associationId: association.id },
+      { traceId, associationId: req.user!.associationId },
       'POST /api/ledger/entries/[entryId]/reject - Request started',
     );
 

@@ -1,6 +1,5 @@
 import { updateMeeting } from '@feature/meetings/services/updateMeeting';
 import { MeetingStatus, UserRole } from '@prisma/client';
-import { getAssociation } from '@services/association/get-association';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
@@ -11,9 +10,8 @@ import type { RequestHandler } from 'express';
 export const postIssueNotice: RequestHandler[] = [
   asyncHandler(async (req, res) => {
     const traceId = (req.traceId as string) || '';
-    const association = await getAssociation(req);
     logger.info(
-      { traceId, associationId: association.id },
+      { traceId, associationId: req.user!.associationId },
       'POST /api/meetings/[meetingId]/notice - Request started',
     );
 
@@ -28,7 +26,7 @@ export const postIssueNotice: RequestHandler[] = [
 
     const meeting = await updateMeeting({
       meetingId,
-      associationId: association.id,
+      associationId: req.user!.associationId,
       data: {
         status: MeetingStatus.NOTICE_ISSUED,
         noticeIssuedAt: new Date(),

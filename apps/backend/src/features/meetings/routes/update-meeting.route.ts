@@ -1,9 +1,11 @@
 import { ForbiddenError } from '@errors';
 import { updateMeeting } from '@feature/meetings/services';
-import { UpdateMeetingParamsSchema, UpdateMeetingSchema } from '@feature/meetings/validators/meetings';
+import {
+  UpdateMeetingParamsSchema,
+  UpdateMeetingSchema,
+} from '@feature/meetings/validators/meetings';
 import { validate } from '@lib/validate';
 import { UserRole } from '@prisma/client';
-import { getAssociation } from '@services/association/get-association';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 import { hasHighRoleAccess } from '@utils/has-high-role';
@@ -17,10 +19,9 @@ export const patchUpdateMeeting: RequestHandler[] = [
   validate({ params: UpdateMeetingParamsSchema, body: UpdateMeetingSchema }),
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
-    const association = await getAssociation(req);
     const meetingId = req.params.meetingId as string;
     logger.info(
-      { traceId, meetingId, associationId: association.id },
+      { traceId, meetingId, associationId: req.user!.associationId },
       'PATCH /api/meetings/[meetingId] - Request started',
     );
 
@@ -42,7 +43,7 @@ export const patchUpdateMeeting: RequestHandler[] = [
 
     const meeting = await updateMeeting({
       meetingId,
-      associationId: association.id,
+      associationId: req.user!.associationId,
       data: updateData as Parameters<typeof updateMeeting>[0]['data'],
     });
 

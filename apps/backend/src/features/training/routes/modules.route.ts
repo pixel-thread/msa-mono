@@ -7,7 +7,6 @@ import { CreateTrainingModuleSchema } from '@feature/training/validators/trainin
 import { validate } from '@lib/validate';
 // ---- Prisma ----
 import { UserRole } from '@prisma/client';
-import { getAssociation } from '@services/association/get-association';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 import { hasHighRoleAccess } from '@utils/has-high-role';
@@ -26,10 +25,9 @@ export const getModules: RequestHandler[] = [
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     // Resolve association from request context
     const traceId = (req.traceId as string) || '';
-    const association = await getAssociation(req);
 
     logger.info(
-      { traceId, associationId: association.id },
+      { traceId, associationId: req.user!.associationId },
       'GET /training/modules - Request started',
     );
 
@@ -50,7 +48,7 @@ export const getModules: RequestHandler[] = [
     // Managers see all modules; members see only active ones matching their role
     if (hasHighRoleAccess(user.role)) {
       const modules = await findManyModules({
-        associationId: association.id,
+        associationId: req.user!.associationId,
         isActive,
         role,
         page,
@@ -61,7 +59,7 @@ export const getModules: RequestHandler[] = [
     }
 
     const modules = await findManyModules({
-      associationId: association.id,
+      associationId: req.user!.associationId,
       userId: user.id,
       isActive,
       role,
@@ -85,10 +83,9 @@ export const postModules: RequestHandler[] = [
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     // Resolve association
     const traceId = (req.traceId as string) || '';
-    const association = await getAssociation(req);
 
     logger.info(
-      { traceId, associationId: association.id },
+      { traceId, associationId: req.user!.associationId },
       'POST /training/modules - Request started',
     );
 
@@ -99,7 +96,7 @@ export const postModules: RequestHandler[] = [
 
     // Create the module (includes auto-assignment to matching users)
     const trainingModule = await createModule({
-      associationId: association.id,
+      associationId: req.user!.associationId,
       actorId: user.id,
       data: req.body,
     });

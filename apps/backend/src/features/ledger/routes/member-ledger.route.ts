@@ -14,7 +14,6 @@ import { validate } from '@lib/validate';
 // Prisma
 // ---------------------------------------------------------------------------
 import { UserRole } from '@prisma/client';
-import { getAssociation } from '@services/association/get-association';
 import { logger } from '@src/shared/logger';
 import { buildPagination } from '@utils';
 import { asyncHandler } from '@utils/async-handler';
@@ -46,9 +45,8 @@ export const getMemberLedger: RequestHandler[] = [
 
     // ---- Resolve association & log request ---------------------------------
 
-    const association = await getAssociation(req);
     logger.info(
-      { traceId, associationId: association.id },
+      { traceId, associationId: req.user!.associationId },
       'GET /api/ledger/member/[memberId] - Request started',
     );
 
@@ -60,7 +58,11 @@ export const getMemberLedger: RequestHandler[] = [
 
     const { memberId } = req.params;
     const page = (req.query as any).page || 1;
-    const { entries, total } = await getMemberEntries(association.id, memberId as string, page);
+    const { entries, total } = await getMemberEntries(
+      req.user!.associationId,
+      memberId as string,
+      page,
+    );
 
     // ---- Result ------------------------------------------------------------
 

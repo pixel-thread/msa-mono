@@ -8,7 +8,6 @@ import { ForbiddenError } from '@errors';
 import { findAuditLogs, getAuditLogStats } from '@feature/audit-logs/services';
 // Prisma
 import { UserRole } from '@prisma/client';
-import { getAssociation } from '@services/association/get-association';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 import { hasHighRoleAccess } from '@utils/has-high-role';
@@ -29,9 +28,8 @@ export const getAuditLogs: RequestHandler[] = [
 
     // ---- Auth: verify association membership
 
-    const association = await getAssociation(req);
     logger.info(
-      { traceId, associationId: association.id },
+      { traceId, associationId: req.user!.associationId },
       'GET /api/audit-logs - Request started',
     );
 
@@ -76,8 +74,8 @@ export const getAuditLogs: RequestHandler[] = [
     // Wire up actual typed service call
 
     const [logsResult, stats] = await Promise.all([
-      findAuditLogs(association.id, query),
-      getAuditLogStats(association.id),
+      findAuditLogs(req.user!.associationId, query),
+      getAuditLogStats(req.user!.associationId),
     ]);
 
     // ---- Log success and return response

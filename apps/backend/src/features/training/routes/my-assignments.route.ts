@@ -3,7 +3,6 @@
 import { findUserAssignments, findUserCompletions } from '@feature/training/services';
 // ---- Prisma ----
 import { UserRole } from '@prisma/client';
-import { getAssociation } from '@services/association/get-association';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 // ---- Shared utilities ----
@@ -22,10 +21,9 @@ export const getMyAssignments: RequestHandler[] = [
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     // Resolve association
     const traceId = (req.traceId as string) || '';
-    const association = await getAssociation(req);
 
     logger.info(
-      { traceId, associationId: association.id },
+      { traceId, associationId: req.user!.associationId },
       'GET /training/my-assignments - Request started',
     );
 
@@ -38,7 +36,7 @@ export const getMyAssignments: RequestHandler[] = [
     const page = parseInt(req.query.page as string) || undefined;
     const assignments = await findUserAssignments({
       userId: user.id,
-      associationId: association.id,
+      associationId: req.user!.associationId,
       page,
     });
 
@@ -57,10 +55,9 @@ export const getMyCompletions: RequestHandler[] = [
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     // Resolve association
     const traceId = (req.traceId as string) || '';
-    const association = await getAssociation(req);
 
     logger.info(
-      { traceId, associationId: association.id },
+      { traceId, associationId: req.user!.associationId },
       'GET /training/my-completions - Request started',
     );
 
@@ -73,7 +70,7 @@ export const getMyCompletions: RequestHandler[] = [
     const page = parseInt(req.query.page as string) || undefined;
     const completions = await findUserCompletions({
       userId: user.id,
-      associationId: association.id,
+      associationId: req.user!.associationId,
       page,
     });
 

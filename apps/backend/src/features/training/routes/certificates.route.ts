@@ -26,7 +26,6 @@ import { deleteFromBucket, uploadToBucket } from '@lib/supabase/storage';
 import { validate } from '@lib/validate';
 // ---- Prisma ----
 import { UserRole } from '@prisma/client';
-import { getAssociation } from '@services/association/get-association';
 import { env } from '@src/env';
 import { fileUpload } from '@src/middleware/file-upload';
 import { logger } from '@src/shared/logger';
@@ -49,11 +48,8 @@ export const getCertificates: RequestHandler[] = [
     const traceId = (req.traceId as string) || '';
 
     try {
-      // Resolve association
-      const association = await getAssociation(req);
-
       logger.info(
-        { traceId, associationId: association.id },
+        { traceId, associationId: req.user!.associationId },
         'GET /training/modules/{moduleId}/certificates - Request started',
       );
 
@@ -64,7 +60,7 @@ export const getCertificates: RequestHandler[] = [
 
       // Fetch certificates
       const certificates = await findManyCertificates({
-        associationId: association.id,
+        associationId: req.user!.associationId,
         moduleId: req.params.moduleId as string,
       });
 
@@ -90,11 +86,8 @@ export const postCertificate: RequestHandler[] = [
     const traceId = (req.traceId as string) || '';
 
     try {
-      // Resolve association
-      const association = await getAssociation(req);
-
       logger.info(
-        { traceId, associationId: association.id },
+        { traceId, associationId: req.user!.associationId },
         'POST /training/modules/{moduleId}/certificates - Request started',
       );
 
@@ -132,14 +125,14 @@ export const postCertificate: RequestHandler[] = [
       // Upload file to Supabase storage
       const uploadResult = await uploadToBucket(
         file,
-        `certificates/${association.slug}/${moduleId}`,
+        `certificates/${req.user!.associationSlug}/${moduleId}`,
         traceId,
       );
 
       // Create a File record in the database
       const fileRecord = await prisma.file.create({
         data: {
-          associationId: association.id,
+          associationId: req.user!.associationId,
           originalName: file.originalname,
           storedName: uploadResult.key || '',
           mimeType: uploadResult.mimeType,
@@ -154,7 +147,7 @@ export const postCertificate: RequestHandler[] = [
 
       // Create the certificate record
       const certificate = await createCertificate({
-        associationId: association.id,
+        associationId: req.user!.associationId,
         moduleId: moduleId as string,
         actorId: user.id,
         data: metadata,
@@ -185,11 +178,8 @@ export const getCertificate: RequestHandler[] = [
   asyncHandler(async (req: Request, res: Response) => {
     const traceId = (req.traceId as string) || '';
 
-    // Resolve association
-    const association = await getAssociation(req);
-
     logger.info(
-      { traceId, associationId: association.id },
+      { traceId, associationId: req.user!.associationId },
       'GET /training/modules/{moduleId}/certificates/{certificateId} - Request started',
     );
 
@@ -204,7 +194,7 @@ export const getCertificate: RequestHandler[] = [
     // Find certificate by filtering the module's certificate list
     const { moduleId, certificateId } = req.params;
     const certificates = await findManyCertificates({
-      associationId: association.id,
+      associationId: req.user!.associationId,
       moduleId: moduleId as string,
     });
 
@@ -233,11 +223,8 @@ export const patchCertificate: RequestHandler[] = [
   asyncHandler(async (req: Request, res: Response) => {
     const traceId = (req.traceId as string) || '';
 
-    // Resolve association
-    const association = await getAssociation(req);
-
     logger.info(
-      { traceId, associationId: association.id },
+      { traceId, associationId: req.user!.associationId },
       'PATCH /training/modules/{moduleId}/certificates/{certificateId} - Request started',
     );
 
@@ -278,13 +265,13 @@ export const patchCertificate: RequestHandler[] = [
 
       const uploadResult = await uploadToBucket(
         file,
-        `certificates/${association.slug}/${moduleId}`,
+        `certificates/${req.user!.associationSlug}/${moduleId}`,
         traceId,
       );
 
       const fileRecord = await prisma.file.create({
         data: {
-          associationId: association.id,
+          associationId: req.user!.associationId,
           originalName: file.originalname,
           storedName: uploadResult.key,
           mimeType: uploadResult.mimeType,
@@ -303,7 +290,7 @@ export const patchCertificate: RequestHandler[] = [
 
     // Apply the update (old file cleanup happens in service)
     const { certificate, oldStorageKey } = await updateCertificate({
-      associationId: association.id,
+      associationId: req.user!.associationId,
       moduleId: moduleId as string,
       certificateId: certificateId as string,
       actorId: user.id,
@@ -341,11 +328,8 @@ export const deleteCertificateHandler: RequestHandler[] = [
   asyncHandler(async (req: Request, res: Response) => {
     const traceId = (req.traceId as string) || '';
 
-    // Resolve association
-    const association = await getAssociation(req);
-
     logger.info(
-      { traceId, associationId: association.id },
+      { traceId, associationId: req.user!.associationId },
       'DELETE /training/modules/{moduleId}/certificates/{certificateId} - Request started',
     );
 
@@ -360,7 +344,7 @@ export const deleteCertificateHandler: RequestHandler[] = [
     // Delete the certificate (cascades to file record)
     const { moduleId, certificateId } = req.params;
     const result = await deleteCertificate({
-      associationId: association.id,
+      associationId: req.user!.associationId,
       moduleId: moduleId as string,
       certificateId: certificateId as string,
       actorId: user.id,
@@ -396,11 +380,8 @@ export const postCertificateTemplate: RequestHandler[] = [
   asyncHandler(async (req: Request, res: Response) => {
     const traceId = (req.traceId as string) || '';
 
-    // Resolve association
-    const association = await getAssociation(req);
-
     logger.info(
-      { traceId, associationId: association.id },
+      { traceId, associationId: req.user!.associationId },
       'POST /training/modules/{moduleId}/certificate-template - Request started',
     );
 
@@ -425,14 +406,14 @@ export const postCertificateTemplate: RequestHandler[] = [
     // Upload template file to Supabase storage
     const uploadResult = await uploadToBucket(
       file,
-      `certificates/${association.slug}/${moduleId}/template`,
+      `certificates/${req.user!.associationSlug}/${moduleId}/template`,
       traceId,
     );
 
     // Create a File record
     const fileRecord = await prisma.file.create({
       data: {
-        associationId: association.id,
+        associationId: req.user!.associationId,
         originalName: file.originalname,
         storedName: uploadResult.key,
         mimeType: uploadResult.mimeType,
@@ -447,7 +428,7 @@ export const postCertificateTemplate: RequestHandler[] = [
 
     // Create/replace the certificate template
     const template = await createCertificateTemplate({
-      associationId: association.id,
+      associationId: req.user!.associationId,
       moduleId: moduleId as string,
       actorId: user.id,
       name,
@@ -475,11 +456,8 @@ export const deleteCertificateTemplateRoute: RequestHandler[] = [
   asyncHandler(async (req: Request, res: Response) => {
     const traceId = (req.traceId as string) || '';
 
-    // Resolve association
-    const association = await getAssociation(req);
-
     logger.info(
-      { traceId, associationId: association.id },
+      { traceId, associationId: req.user!.associationId },
       'DELETE /training/modules/{moduleId}/certificate-template - Request started',
     );
 
@@ -493,7 +471,7 @@ export const deleteCertificateTemplateRoute: RequestHandler[] = [
 
     // Delete the template (old file cleanup happens in service)
     await deleteCertificateTemplate({
-      associationId: association.id,
+      associationId: req.user!.associationId,
       moduleId: req.params.moduleId as string,
       actorId: user.id,
     });

@@ -27,7 +27,6 @@ import { validate } from '@lib/validate';
 // Prisma
 // ---------------------------------------------------------------------------
 import { UserRole } from '@prisma/client';
-import { getAssociation } from '@services/association/get-association';
 import { logger } from '@src/shared/logger';
 import { buildPagination } from '@utils';
 import { asyncHandler } from '@utils/async-handler';
@@ -50,9 +49,8 @@ export const listAccounts: RequestHandler[] = [
 
     // ---- Resolve association & log request ---------------------------------
 
-    const association = await getAssociation(req);
     logger.info(
-      { traceId, associationId: association.id },
+      { traceId, associationId: req.user!.associationId },
       'GET /api/ledger/accounts - Request started',
     );
 
@@ -63,7 +61,7 @@ export const listAccounts: RequestHandler[] = [
     // ---- Business logic ----------------------------------------------------
 
     const page = parseInt(req.query.page as string) || 1;
-    const { accounts, total } = await getAccounts(association.id, page);
+    const { accounts, total } = await getAccounts(req.user!.associationId, page);
 
     // ---- Result ------------------------------------------------------------
 
@@ -84,9 +82,8 @@ export const createAccountHandler: RequestHandler[] = [
 
     // ---- Resolve association & log request ---------------------------------
 
-    const association = await getAssociation(req);
     logger.info(
-      { traceId, associationId: association.id },
+      { traceId, associationId: req.user!.associationId },
       'POST /api/ledger/accounts - Request started',
     );
 
@@ -96,7 +93,7 @@ export const createAccountHandler: RequestHandler[] = [
 
     // ---- Business logic ----------------------------------------------------
 
-    const account = await createAccount(association.id, req.body);
+    const account = await createAccount(req.user!.associationId, req.body);
 
     // ---- Result ------------------------------------------------------------
 
@@ -116,10 +113,9 @@ export const deleteAccountHandler: RequestHandler[] = [
     const accountId = req.params.id;
 
     // ---- Resolve association & log request ---------------------------------
-    const association = await getAssociation(req);
 
     logger.info(
-      { traceId, associationId: association.id },
+      { traceId, associationId: req.user!.associationId },
       'DELETE /api/ledger/accounts/:id - Request started',
     );
 
@@ -129,7 +125,7 @@ export const deleteAccountHandler: RequestHandler[] = [
 
     // ---- Business logic ----------------------------------------------------
     // check if account exist
-    const existingAccount = await getAccount(association.id, accountId as string);
+    const existingAccount = await getAccount(req.user!.associationId, accountId as string);
 
     if (!existingAccount) {
       logger.info(
@@ -147,7 +143,7 @@ export const deleteAccountHandler: RequestHandler[] = [
       { traceId, accountId },
       'DELETE /api/ledger/accounts/:id - Ledger Account Deleting',
     );
-    const account = await deleteAccount(association.id, existingAccount.id);
+    const account = await deleteAccount(req.user!.associationId, existingAccount.id);
     logger.info({ traceId, accountId }, 'DELETE /api/ledger/accounts/:id - Ledger Account Deleted');
 
     // ---- Result ------------------------------------------------------------
@@ -172,10 +168,9 @@ export const updateAccountHandler: RequestHandler[] = [
     const data = req.body;
 
     // ---- Resolve association & log request ---------------------------------
-    const association = await getAssociation(req);
 
     logger.info(
-      { traceId, associationId: association.id },
+      { traceId, associationId: req.user!.associationId },
       'PUT /api/ledger/accounts/:id - Request started',
     );
 
@@ -185,7 +180,7 @@ export const updateAccountHandler: RequestHandler[] = [
 
     // ---- Business logic ----------------------------------------------------
     // check if account exist
-    const existingAccount = await getAccount(association.id, accountId as string);
+    const existingAccount = await getAccount(req.user!.associationId, accountId as string);
 
     if (!existingAccount) {
       logger.info(
@@ -200,7 +195,7 @@ export const updateAccountHandler: RequestHandler[] = [
       'PUT /api/ledger/accounts/:id - Account found',
     );
     logger.info({ traceId, accountId }, 'PUT /api/ledger/accounts/:id - Ledger Account Updating');
-    const account = await updateAccount(association.id, existingAccount.id, data);
+    const account = await updateAccount(req.user!.associationId, existingAccount.id, data);
     logger.info({ traceId, accountId }, 'PUT /api/ledger/accounts/:id - Ledger Account Updated');
 
     // ---- Result ------------------------------------------------------------
@@ -218,16 +213,15 @@ export const updateAccountHandler: RequestHandler[] = [
 export const seedAccountsHandler: RequestHandler[] = [
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
-    const association = await getAssociation(req);
 
     logger.info(
-      { traceId, associationId: association.id },
+      { traceId, associationId: req.user!.associationId },
       'POST /api/ledger/accounts/seed - Request started',
     );
 
     await withRole(req, UserRole.PRESIDENT);
 
-    await seedChartOfAccounts(association.id);
+    await seedChartOfAccounts(req.user!.associationId);
 
     logger.info({ traceId }, 'POST /api/ledger/accounts/seed - Success');
     return success(res, { data: null, message: 'Chart of accounts seeded successfully' }, 201);
@@ -245,10 +239,9 @@ export const getAccountHandler: RequestHandler[] = [
     const accountId = req.params.id;
 
     // ---- Resolve association & log request ---------------------------------
-    const association = await getAssociation(req);
 
     logger.info(
-      { traceId, associationId: association.id },
+      { traceId, associationId: req.user!.associationId },
       'GET /api/ledger/accounts/:id - Request started',
     );
 
@@ -258,7 +251,7 @@ export const getAccountHandler: RequestHandler[] = [
 
     // ---- Business logic ----------------------------------------------------
     // check if account exist
-    const existingAccount = await getAccount(association.id, accountId as string);
+    const existingAccount = await getAccount(req.user!.associationId, accountId as string);
 
     if (!existingAccount) {
       logger.info(
@@ -279,9 +272,9 @@ export const getAccountHandler: RequestHandler[] = [
       { traceId, accountId: existingAccount.id },
       'GET /api/ledger/accounts/:id - Success',
     );
-    const trailBalance = await trialBalance(association.id, accountId as string);
+    const trailBalance = await trialBalance(req.user!.associationId, accountId as string);
     const incomeStatementReport = await incomeStatement(
-      association.id,
+      req.user!.associationId,
       undefined,
       undefined,
       accountId as string,

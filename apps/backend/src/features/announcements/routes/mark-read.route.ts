@@ -13,7 +13,6 @@ import { AnnouncementRouteParams } from '@feature/announcements/validators';
 import { validate } from '@lib/validate';
 // Prisma
 import { UserRole } from '@prisma/client';
-import { getAssociation } from '@services/association/get-association';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 // Shared utilities
@@ -40,10 +39,8 @@ export const postMarkRead: RequestHandler[] = [
       throw new BadRequestError('Invalid announcement id');
     }
 
-    const association = await getAssociation(req);
-
     logger.info(
-      { traceId, announcementId, associationId: association.id },
+      { traceId, announcementId, associationId: req.user!.associationId },
       'POST /api/announcements/[id]/read - Request started',
     );
 
@@ -61,7 +58,7 @@ export const postMarkRead: RequestHandler[] = [
     const readReceipt = await markAnnouncementRead({
       announcementId: announcementId as string,
       userId,
-      associationId: association.id,
+      associationId: req.user!.associationId,
     });
 
     logger.info({ traceId, announcementId }, 'POST /api/announcements/[id]/read - Success');

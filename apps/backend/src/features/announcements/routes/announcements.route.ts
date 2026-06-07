@@ -18,7 +18,6 @@ import { validate } from '@lib/validate';
 // Prisma
 import { AnnouncementStatus, UserRole } from '@prisma/client';
 // Services
-import { getAssociation } from '@services/association/get-association';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 import { hasHighRoleAccess } from '@utils/has-high-role';
@@ -123,9 +122,6 @@ export const postAnnouncement: RequestHandler[] = [
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
 
-    // Resolve the association from the request context
-    const association = await getAssociation(req);
-
     logger.info({ traceId }, 'POST /api/announcements - Request started');
 
     // Enforce SECRETARY role — only secretaries and above may create announcements
@@ -146,7 +142,7 @@ export const postAnnouncement: RequestHandler[] = [
     logger.info(
       {
         traceId,
-        associationId: association.id,
+        associationId: req.user!.associationId,
         title: req.body.title,
         status: req.body.status,
         isPublishing,
@@ -155,7 +151,7 @@ export const postAnnouncement: RequestHandler[] = [
     );
 
     const announcement = await createAnnouncement({
-      associationId: association.id,
+      associationId: req.user!.associationId,
       authorId: user.id,
       data: req.body,
       sendNotification: isPublishing, // Assuming notifications only on publish

@@ -9,7 +9,7 @@ import { findContributionPeriods } from '@feature/contributions/services/find-co
 import { CollectionReportQuerySchema } from '@feature/payments/validators';
 import { validate } from '@lib/validate';
 import { UserRole } from '@prisma/client';
-import { getAssociation } from '@services/association/get-association';
+
 import { PAGE_SIZE } from '@src/shared/constants';
 import { logger } from '@src/shared/logger';
 import { buildPagination } from '@src/shared/utils/helper/build-pagination';
@@ -34,9 +34,6 @@ export const collectionsReport: RequestHandler[] = [
       'GET /api/payments/reports/collections - Request started',
     );
 
-    // --- Auth: resolve association ---
-    const association = await getAssociation(req);
-
     // --- Auth: enforce FINANCE role ---
     await withRole(req, UserRole.FINANCE);
     logger.info({ traceId }, 'GET /api/payments/reports/collections - User authorized');
@@ -44,7 +41,7 @@ export const collectionsReport: RequestHandler[] = [
     // --- Business logic: fetch contribution periods with filters ---
     const { contributions: collections, total } = await findContributionPeriods({
       where: {
-        associationId: association.id,
+        associationId: req.user!.associationId,
         year: query.year,
         month: query.month,
         status: query.status,

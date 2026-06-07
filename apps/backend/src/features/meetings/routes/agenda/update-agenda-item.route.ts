@@ -1,7 +1,6 @@
 import { updateAgendaItem } from '@feature/meetings/services/updateAgendaItem';
 import { validate } from '@lib/validate';
 import { UserRole } from '@prisma/client';
-import { getAssociation } from '@services/association/get-association';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
@@ -21,9 +20,8 @@ export const patchUpdateAgendaItem: RequestHandler[] = [
   validate({ body: UpdateAgendaItemSchema }),
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
-    const association = await getAssociation(req);
     logger.info(
-      { traceId, associationId: association.id },
+      { traceId, associationId: req.user!.associationId },
       'PATCH /api/meetings/[meetingId]/agenda/[itemId] - Request started',
     );
 

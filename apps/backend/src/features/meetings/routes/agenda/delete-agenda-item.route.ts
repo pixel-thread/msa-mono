@@ -1,6 +1,5 @@
 import { deleteAgendaItem } from '@feature/meetings/services/deleteAgendaItem';
 import { UserRole } from '@prisma/client';
-import { getAssociation } from '@services/association/get-association';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
@@ -11,9 +10,8 @@ import type { NextFunction, Request, RequestHandler, Response } from 'express';
 export const deleteAgendaItemHandler: RequestHandler[] = [
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
-    const association = await getAssociation(req);
     logger.info(
-      { traceId, associationId: association.id },
+      { traceId, associationId: req.user!.associationId },
       'DELETE /api/meetings/[meetingId]/agenda/[itemId] - Request started',
     );
 

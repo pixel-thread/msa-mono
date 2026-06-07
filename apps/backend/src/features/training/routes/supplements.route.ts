@@ -24,7 +24,6 @@ import { deleteFromBucket, uploadToBucket } from '@lib/supabase/storage';
 import { validate } from '@lib/validate';
 // ---- Prisma ----
 import { UserRole } from '@prisma/client';
-import { getAssociation } from '@services/association/get-association';
 import { env } from '@src/env';
 import { fileUpload } from '@src/middleware/file-upload';
 import { logger } from '@src/shared/logger';
@@ -46,10 +45,8 @@ export const getSupplements: RequestHandler[] = [
   asyncHandler(async (req: Request, res: Response) => {
     const traceId = (req.traceId as string) || '';
 
-    const association = await getAssociation(req);
-
     logger.info(
-      { traceId, associationId: association.id },
+      { traceId, associationId: req.user!.associationId },
       'GET /training/modules/{moduleId}/supplements - Request started',
     );
 
@@ -60,7 +57,7 @@ export const getSupplements: RequestHandler[] = [
 
     // Fetch supplements
     const supplements = await findManySupplements({
-      associationId: association.id,
+      associationId: req.user!.associationId,
       moduleId: req.params.moduleId as string,
     });
 
@@ -82,11 +79,8 @@ export const postSupplement: RequestHandler[] = [
   asyncHandler(async (req: Request, res: Response) => {
     const traceId = (req.traceId as string) || '';
 
-    // Resolve association
-    const association = await getAssociation(req);
-
     logger.info(
-      { traceId, associationId: association.id, moduleId: req.params.moduleId },
+      { traceId, associationId: req.user!.associationId, moduleId: req.params.moduleId },
       'POST /training/modules/{moduleId}/supplements - Request started',
     );
 
@@ -124,14 +118,14 @@ export const postSupplement: RequestHandler[] = [
     // Upload file to Supabase storage
     const uploadResult = await uploadToBucket(
       file,
-      `supplements/${association.slug}/${moduleId}`,
+      `supplements/${req.user!.associationSlug}/${moduleId}`,
       traceId,
     );
 
     // Create a File record in the database
     const fileRecord = await prisma.file.create({
       data: {
-        associationId: association.id,
+        associationId: req.user!.associationId,
         originalName: file.originalname,
         storedName: uploadResult.key,
         mimeType: uploadResult.mimeType,
@@ -146,7 +140,7 @@ export const postSupplement: RequestHandler[] = [
 
     // Create the supplement record
     const supplement = await createSupplement({
-      associationId: association.id,
+      associationId: req.user!.associationId,
       moduleId: moduleId as string,
       actorId: user.id,
       data: metadata,
@@ -174,10 +168,8 @@ export const getSupplement: RequestHandler[] = [
   asyncHandler(async (req: Request, res: Response) => {
     const traceId = (req.traceId as string) || '';
 
-    const association = await getAssociation(req);
-
     logger.info(
-      { traceId, associationId: association.id },
+      { traceId, associationId: req.user!.associationId },
       'GET /training/modules/{moduleId}/supplements/{supplementId} - Request started',
     );
 
@@ -192,7 +184,7 @@ export const getSupplement: RequestHandler[] = [
     // Find supplement by filtering the module's supplement list
     const { moduleId, supplementId } = req.params;
     const supplements = await findManySupplements({
-      associationId: association.id,
+      associationId: req.user!.associationId,
       moduleId: moduleId as string,
     });
     const supplement = supplements.find((s) => s.id === supplementId);
@@ -219,10 +211,8 @@ export const updateSupplementHandler: RequestHandler[] = [
   asyncHandler(async (req: Request, res: Response) => {
     const traceId = (req.traceId as string) || '';
 
-    const association = await getAssociation(req);
-
     logger.info(
-      { traceId, associationId: association.id },
+      { traceId, associationId: req.user!.associationId },
       'PATCH /training/modules/{moduleId}/supplements/{supplementId} - Request started',
     );
 
@@ -263,13 +253,13 @@ export const updateSupplementHandler: RequestHandler[] = [
 
       const uploadResult = await uploadToBucket(
         file,
-        `supplements/${association.slug}/${moduleId}`,
+        `supplements/${req.user!.associationSlug}/${moduleId}`,
         traceId,
       );
 
       const fileRecord = await prisma.file.create({
         data: {
-          associationId: association.id,
+          associationId: req.user!.associationId,
           originalName: file.originalname,
           storedName: uploadResult.key,
           mimeType: uploadResult.mimeType,
@@ -288,7 +278,7 @@ export const updateSupplementHandler: RequestHandler[] = [
 
     // Apply the update (old file cleanup happens in service)
     const { supplement, oldStorageKey } = await updateSupplement({
-      associationId: association.id,
+      associationId: req.user!.associationId,
       moduleId: moduleId as string,
       supplementId: supplementId as string,
       actorId: user.id,
@@ -326,11 +316,8 @@ export const deleteSupplementHandler: RequestHandler[] = [
   asyncHandler(async (req: Request, res: Response) => {
     const traceId = (req.traceId as string) || '';
 
-    // Resolve association
-    const association = await getAssociation(req);
-
     logger.info(
-      { traceId, associationId: association.id },
+      { traceId, associationId: req.user!.associationId },
       'DELETE /training/modules/{moduleId}/supplements/{supplementId} - Request started',
     );
 
@@ -345,7 +332,7 @@ export const deleteSupplementHandler: RequestHandler[] = [
     // Delete the supplement (cascades to file record)
     const { moduleId, supplementId } = req.params;
     const result = await deleteSupplement({
-      associationId: association.id,
+      associationId: req.user!.associationId,
       moduleId: moduleId as string,
       supplementId: supplementId as string,
       actorId: user.id,

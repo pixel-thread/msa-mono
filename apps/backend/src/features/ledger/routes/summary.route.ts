@@ -10,7 +10,6 @@ import { getSummary } from '@feature/ledger/services/ledger.service';
 // Prisma
 // ---------------------------------------------------------------------------
 import { UserRole } from '@prisma/client';
-import { getAssociation } from '@services/association/get-association';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 // ---------------------------------------------------------------------------
@@ -31,9 +30,8 @@ export const getLedgerSummary: RequestHandler[] = [
 
     // ---- Resolve association -------------------------------------------------
 
-    const association = await getAssociation(req);
     logger.info(
-      { traceId, associationId: association.id },
+      { traceId, associationId: req.user!.associationId },
       'GET /api/ledger/summary - Request started',
     );
 
@@ -43,7 +41,7 @@ export const getLedgerSummary: RequestHandler[] = [
 
     // ---- Business logic ------------------------------------------------------
 
-    const data = await getSummary(association.id);
+    const data = await getSummary(req.user!.associationId);
 
     // ---- Result --------------------------------------------------------------
 

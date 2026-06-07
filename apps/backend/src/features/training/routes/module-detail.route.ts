@@ -8,7 +8,6 @@ import { UpdateTrainingModuleSchema } from '@feature/training/validators/trainin
 import { validate } from '@lib/validate';
 // ---- Prisma ----
 import { UserRole } from '@prisma/client';
-import { getAssociation } from '@services/association/get-association';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
@@ -37,10 +36,9 @@ export const getModule: RequestHandler[] = [
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     // Resolve association
     const traceId = (req.traceId as string) || '';
-    const association = await getAssociation(req);
 
     logger.info(
-      { traceId, associationId: association.id },
+      { traceId, associationId: req.user!.associationId },
       'GET /training/modules/{moduleId} - Request started',
     );
 
@@ -51,7 +49,7 @@ export const getModule: RequestHandler[] = [
 
     // Fetch the module (includes certificate template)
     const trainingModule = await findUniqueModule({
-      associationId: association.id,
+      associationId: req.user!.associationId,
       moduleId: req.params.moduleId as string,
     });
 
@@ -77,10 +75,9 @@ export const updateModuleHandler: RequestHandler[] = [
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     // Resolve association
     const traceId = (req.traceId as string) || '';
-    const association = await getAssociation(req);
 
     logger.info(
-      { traceId, associationId: association.id },
+      { traceId, associationId: req.user!.associationId },
       'PATCH /training/modules/{moduleId} - Request started',
     );
 
@@ -94,7 +91,7 @@ export const updateModuleHandler: RequestHandler[] = [
 
     // Apply the update
     const trainingModule = await updateModule({
-      associationId: association.id,
+      associationId: req.user!.associationId,
       moduleId: req.params.moduleId as string,
       actorId: user.id,
       data: req.body,
@@ -120,10 +117,9 @@ export const deleteModuleHandler: RequestHandler[] = [
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     // Resolve association
     const traceId = (req.traceId as string) || '';
-    const association = await getAssociation(req);
 
     logger.info(
-      { traceId, associationId: association.id },
+      { traceId, associationId: req.user!.associationId },
       'DELETE /training/modules/{moduleId} - Request started',
     );
 
@@ -137,7 +133,7 @@ export const deleteModuleHandler: RequestHandler[] = [
 
     // Perform the deletion
     await deleteModule({
-      associationId: association.id,
+      associationId: req.user!.associationId,
       moduleId: req.params.moduleId as string,
       actorId: user.id,
     });

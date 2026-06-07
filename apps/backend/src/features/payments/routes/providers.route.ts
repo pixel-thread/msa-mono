@@ -27,7 +27,7 @@ import {
 } from '@feature/payments/validators';
 import { validate } from '@lib/validate';
 import { UserRole } from '@prisma/client';
-import { getAssociation } from '@services/association/get-association';
+
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
@@ -46,11 +46,8 @@ export const listProviders: RequestHandler[] = [
     // --- Log: request started ---
     logger.info({ traceId }, 'GET /api/payments/providers - Request started');
 
-    // --- Auth: resolve association ---
-    const association = await getAssociation(req);
-
     // --- Business logic: list all providers ---
-    const providers = await getProvidersByAssociation(association.id);
+    const providers = await getProvidersByAssociation(req.user!.associationId);
 
     // --- Log: success ---
     logger.info({ traceId, count: providers.length }, 'GET /api/payments/providers - Success');
@@ -78,12 +75,9 @@ export const createProviderHandler: RequestHandler[] = [
       'POST /api/payments/providers - Request started',
     );
 
-    // --- Auth: resolve association ---
-    const association = await getAssociation(req);
-
     // --- Business logic: create provider ---
     const result = await createProvider({
-      associationId: association.id,
+      associationId: req.user!.associationId,
       provider: req.body.provider,
       keyId: req.body.keyId,
       keySecret: req.body.keySecret,
@@ -110,9 +104,6 @@ export const providerStatus: RequestHandler[] = [
     // --- Log: request started ---
     logger.info({ traceId }, 'GET /api/payments/providers/status - Request started');
 
-    // --- Auth: resolve association ---
-    const association = await getAssociation(req);
-
     // --- Auth: enforce MEMBER role ---
     const user = await withRole(req, UserRole.MEMBER);
     logger.info(
@@ -121,9 +112,9 @@ export const providerStatus: RequestHandler[] = [
     );
 
     // --- Business logic: check provider status ---
-    const providerByAssociation = await getProvidersByAssociation(association.id);
+    const providerByAssociation = await getProvidersByAssociation(req.user!.associationId);
     if (!providerByAssociation) throw new NotFoundError('No Provider setup');
-    const activeProvider = await getActiveProvider(association.id);
+    const activeProvider = await getActiveProvider(req.user!.associationId);
     if (!activeProvider) throw new NotFoundError('Provider not found');
 
     // --- Log: success ---
@@ -155,9 +146,6 @@ export const getProvider: RequestHandler[] = [
       'GET /api/payments/providers/[providerId] - Request started',
     );
 
-    // --- Auth: resolve association ---
-    const association = await getAssociation(req);
-
     // --- Auth: enforce PRESIDENT role ---
     await withRole(req, UserRole.PRESIDENT);
 
@@ -167,7 +155,10 @@ export const getProvider: RequestHandler[] = [
     );
 
     // --- Business logic: fetch provider ---
-    const provider = await getProviderById(req.params.providerId as string, association.id);
+    const provider = await getProviderById(
+      req.params.providerId as string,
+      req.user!.associationId,
+    );
     if (!provider) throw new NotFoundError('Provider not found');
 
     // --- Log: success ---
@@ -180,6 +171,10 @@ export const getProvider: RequestHandler[] = [
     return success(res, { data: provider });
   }),
 ];
+
+// ===========================================================================
+// PATCH /api/payments/providers/:providerId
+// ===========================================================================
 
 // ===========================================================================
 // PATCH /api/payments/providers/:providerId
@@ -199,9 +194,6 @@ export const updateProviderHandler: RequestHandler[] = [
       'PATCH /api/payments/providers/[providerId] - Request started',
     );
 
-    // --- Auth: resolve association ---
-    const association = await getAssociation(req);
-
     // --- Auth: enforce PRESIDENT role ---
     await withRole(req, UserRole.PRESIDENT);
     logger.info(
@@ -215,7 +207,7 @@ export const updateProviderHandler: RequestHandler[] = [
       'PATCH /api/payments/providers/[providerId] - Updating provider',
     );
 
-    const result = await updateProvider(req.params.providerId as string, association.id, {
+    const result = await updateProvider(req.params.providerId as string, req.user!.associationId, {
       keyId: req.body?.keyId,
       keySecret: req.body?.keySecret,
       webhookSecret: req.body?.webhookSecret,
@@ -251,9 +243,6 @@ export const deleteProviderHandler: RequestHandler[] = [
       'DELETE /api/payments/providers/[providerId] - Request started',
     );
 
-    // --- Auth: resolve association ---
-    const association = await getAssociation(req);
-
     // --- Auth: enforce PRESIDENT role ---
     await withRole(req, UserRole.PRESIDENT);
     logger.info(
@@ -262,7 +251,7 @@ export const deleteProviderHandler: RequestHandler[] = [
     );
 
     // --- Business logic: delete provider ---
-    await deleteProvider(req.params.providerId as string, association.id);
+    await deleteProvider(req.params.providerId as string, req.user!.associationId);
 
     // --- Log: success ---
     logger.info(
@@ -293,9 +282,6 @@ export const activateProvider: RequestHandler[] = [
       'POST /api/payments/providers/[providerId]/activate - Request started',
     );
 
-    // --- Auth: resolve association ---
-    const association = await getAssociation(req);
-
     // --- Auth: enforce PRESIDENT role ---
     await withRole(req, UserRole.PRESIDENT);
     logger.info(
@@ -306,14 +292,14 @@ export const activateProvider: RequestHandler[] = [
     // --- Business logic: toggle provider activation ---
     const providerId = req.params?.providerId;
     if (!providerId) throw new BadRequestError('Invalid provider ID');
-    const provderExist = await getProviderById(providerId as string, association.id);
+    const provderExist = await getProviderById(providerId as string, req.user!.associationId);
     if (!provderExist) throw new NotFoundError('Provider not found');
 
     logger.info(
       { traceId, providerId },
       'POST /api/payments/providers/[providerId]/activate - Toggling provider activation',
     );
-    const result = await setActiveProvider(provderExist.id, association.id);
+    const result = await setActiveProvider(provderExist.id, req.user!.associationId);
     const activatedMessage = 'Provider successfully activated';
     const deActivatedMessage = 'Provider successfully de-activated';
 
@@ -349,9 +335,6 @@ export const testProvider: RequestHandler[] = [
       'POST /api/payments/providers/[providerId]/test - Request started',
     );
 
-    // --- Auth: resolve association ---
-    const association = await getAssociation(req);
-
     // --- Auth: enforce PRESIDENT role ---
     const user = await withRole(req, UserRole.PRESIDENT);
     logger.info(
@@ -360,7 +343,10 @@ export const testProvider: RequestHandler[] = [
     );
 
     // --- Business logic: create test payment order ---
-    const provider = await getProviderById(req.params.providerId as string, association.id);
+    const provider = await getProviderById(
+      req.params.providerId as string,
+      req.user!.associationId,
+    );
     if (!provider) throw new NotFoundError('Provider not found');
     // Test payments require Razorpay — no other providers support checkout tests
     if (provider.provider !== 'RAZORPAY') {
@@ -372,7 +358,7 @@ export const testProvider: RequestHandler[] = [
       'POST /api/payments/providers/[providerId]/test - Creating test payment order',
     );
     const options = await createTestPaymentOrder({
-      associationId: association.id,
+      associationId: req.user!.associationId,
       userId: user.id,
       providerId: req.params.providerId as string,
     });
@@ -405,9 +391,6 @@ export const verifyTestProvider: RequestHandler[] = [
       { traceId },
       'POST /api/payments/providers/[providerId]/test/verify - Request started',
     );
-
-    // --- Auth: resolve association ---
-    await getAssociation(req);
 
     // --- Auth: enforce PRESIDENT role ---
     await withRole(req, UserRole.PRESIDENT);

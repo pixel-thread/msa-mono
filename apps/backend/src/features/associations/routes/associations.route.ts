@@ -16,7 +16,6 @@ import { prisma } from '@lib/prisma';
 import { uploadToBucket } from '@lib/supabase/storage';
 import { validate } from '@lib/validate';
 import { UserRole } from '@prisma/client';
-import { getAssociation } from '@services/association/get-association';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
@@ -42,9 +41,6 @@ export const getAssociationByUser: RequestHandler[] = [
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
 
-    // Resolve the association from the request context
-    const association = await getAssociation(req);
-
     logger.info({ traceId }, 'GET /api/associations - Request started');
 
     // Enforce MEMBER role — any authenticated member can view their association
@@ -55,9 +51,18 @@ export const getAssociationByUser: RequestHandler[] = [
       'GET /api/associations - User authorized',
     );
 
-    logger.info({ traceId, associationId: association.id }, 'GET /api/associations - Success');
+    logger.info(
+      { traceId, associationId: req.user!.associationId },
+      'GET /api/associations - Success',
+    );
 
-    return success(res, { data: association });
+    return success(res, {
+      data: {
+        id: req.user!.associationId,
+        slug: req.user!.associationSlug,
+        name: req.user!.associationName,
+      },
+    });
   }),
 ];
 
@@ -129,9 +134,6 @@ export const getCurrentAssociation: RequestHandler[] = [
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
 
-    // Resolve the association from the request context
-    const association = await getAssociation(req);
-
     logger.info({ traceId }, 'GET /api/associations/current - Request started');
 
     // Enforce MEMBER role
@@ -144,11 +146,11 @@ export const getCurrentAssociation: RequestHandler[] = [
 
     // Fetch full association details including relations
     const currentAssociation = await findUniqueAssociation({
-      where: { id: association.id },
+      where: { id: req.user!.associationId },
     });
 
     logger.info(
-      { traceId, associationId: association.id },
+      { traceId, associationId: req.user!.associationId },
       'GET /api/associations/current - Success',
     );
 
@@ -365,11 +367,8 @@ export const postUploadLogo: RequestHandler[] = [
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
 
-    // Resolve the association from the request context
-    const association = await getAssociation(req);
-
     logger.info(
-      { traceId, associationId: association.id },
+      { traceId, associationId: req.user!.associationId },
       'POST /api/associations/[associationId]/logo - Request started',
     );
 
@@ -383,12 +382,12 @@ export const postUploadLogo: RequestHandler[] = [
 
     // Confirm the association record exists
     const existing = await prisma.association.findUnique({
-      where: { id: association.id },
+      where: { id: req.user!.associationId },
     });
 
     if (!existing) {
       logger.error(
-        { traceId, associationId: association.id },
+        { traceId, associationId: req.user!.associationId },
         'POST /api/associations/[associationId]/logo - Association not found',
       );
 
@@ -401,18 +400,18 @@ export const postUploadLogo: RequestHandler[] = [
     // Upload to object storage under the association's slug
     const uploadResult = await uploadToBucket(
       file,
-      `associations/logos/${association.slug}`,
+      `associations/logos/${req.user!.associationSlug}`,
       traceId,
     );
 
     // Persist the logo URL on the association record
     await prisma.association.update({
-      where: { id: association.id },
+      where: { id: req.user!.associationId },
       data: { logo: uploadResult.url },
     });
 
     logger.info(
-      { traceId, associationId: association.id },
+      { traceId, associationId: req.user!.associationId },
       'POST /api/associations/[associationId]/logo - Success',
     );
 
@@ -440,9 +439,6 @@ export const postAddMember: RequestHandler[] = [
 
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
-
-    // Resolve the association from the request context
-    const association = await getAssociation(req);
 
     logger.info(
       {
@@ -502,14 +498,14 @@ export const postAddMember: RequestHandler[] = [
     // Reassign the member to the new association
     const updatedMember = await updateMember({
       where: { id: req.body.memberId },
-      data: { association: { connect: { id: association.id } } },
+      data: { association: { connect: { id: req.user!.associationId } } },
     });
 
     logger.info(
       {
         traceId,
         targetMemberId: req.body.memberId,
-        associationId: association.id,
+        associationId: req.user!.associationId,
       },
       'POST /api/associations/[associationId]/members - Success',
     );

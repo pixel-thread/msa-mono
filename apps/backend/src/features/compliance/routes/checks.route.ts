@@ -30,7 +30,6 @@ import { validate } from '@lib/validate';
 // ---------------------------------------------------------------------------
 import type { ComplianceCheckStatus as PrismaComplianceCheckStatus, Prisma } from '@prisma/client';
 import { UserRole } from '@prisma/client';
-import { getAssociation } from '@services/association/get-association';
 import { logger } from '@src/shared/logger';
 import { buildPagination } from '@src/shared/utils/helper/build-pagination';
 import { asyncHandler } from '@utils/async-handler';
@@ -51,11 +50,9 @@ export const listChecks: RequestHandler[] = [
     const traceId = (req.traceId as string) || '';
 
     // ── Auth ────────────────────────────────────────────────────────────────
-    const association = await getAssociation(req);
-
     // ── Auth log ────────────────────────────────────────────────────────────
     logger.info(
-      { traceId, associationId: association.id },
+      { traceId, associationId: req.user!.associationId },
       'GET /compliance/checks - Request started',
     );
 
@@ -108,11 +105,9 @@ export const getCheck: RequestHandler[] = [
     const traceId = (req.traceId as string) || '';
 
     // ── Auth ────────────────────────────────────────────────────────────────
-    const association = await getAssociation(req);
-
     // ── Auth log ────────────────────────────────────────────────────────────
     logger.info(
-      { traceId, associationId: association.id, checkId: req.params.checkId },
+      { traceId, associationId: req.user!.associationId, checkId: req.params.checkId },
       'GET /compliance/checks/:checkId - Request started',
     );
 
@@ -125,7 +120,7 @@ export const getCheck: RequestHandler[] = [
 
     // ── Business logic ──────────────────────────────────────────────────────
     const check = await findUniqueComplianceCheck({
-      where: { id: req.params.checkId as string, associationId: association.id },
+      where: { id: req.params.checkId as string, associationId: req.user!.associationId },
     });
 
     if (!check) throw new NotFoundError('Compliance check not found');
@@ -151,11 +146,9 @@ export const runChecks: RequestHandler[] = [
     const traceId = (req.traceId as string) || '';
 
     // ── Auth ────────────────────────────────────────────────────────────────
-    const association = await getAssociation(req);
-
     // ── Auth log ────────────────────────────────────────────────────────────
     logger.info(
-      { traceId, associationId: association.id },
+      { traceId, associationId: req.user!.associationId },
       'POST /compliance/checks - Request started',
     );
 
@@ -176,11 +169,11 @@ export const runChecks: RequestHandler[] = [
     }
 
     const results = await Promise.all(
-      checkTypes.map((type) => runComplianceCheck(association.id, type)),
+      checkTypes.map((type) => runComplianceCheck(req.user!.associationId, type)),
     );
 
     const checksData: Prisma.ComplianceCheckCreateManyArgs['data'][] = results.map((result) => ({
-      associationId: association.id,
+      associationId: req.user!.associationId,
       checkType: result.checkType,
       status: result.status as PrismaComplianceCheckStatus,
       score: result.score,
@@ -211,11 +204,9 @@ export const deleteCheck: RequestHandler[] = [
     const traceId = (req.traceId as string) || '';
 
     // ── Auth ────────────────────────────────────────────────────────────────
-    const association = await getAssociation(req);
-
     // ── Auth log ────────────────────────────────────────────────────────────
     logger.info(
-      { traceId, associationId: association.id, checkId: req.params.checkId },
+      { traceId, associationId: req.user!.associationId, checkId: req.params.checkId },
       'DELETE /compliance/checks/:checkId - Request started',
     );
 
@@ -228,7 +219,7 @@ export const deleteCheck: RequestHandler[] = [
 
     // ── Business logic — verify existence & delete ──────────────────────────
     const existing = await findUniqueComplianceCheck({
-      where: { id: req.params.checkId as string, associationId: association.id },
+      where: { id: req.params.checkId as string, associationId: req.user!.associationId },
     });
     if (!existing) throw new NotFoundError('Compliance check not found');
 

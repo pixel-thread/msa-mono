@@ -18,7 +18,6 @@ import {
 import { validate } from '@lib/validate';
 // ---- Prisma ----
 import { UserRole } from '@prisma/client';
-import { getAssociation } from '@services/association/get-association';
 import { logger } from '@src/shared/logger';
 import { buildPagination } from '@src/shared/utils/helper/build-pagination';
 import { asyncHandler } from '@utils/async-handler';
@@ -58,10 +57,9 @@ export const getAssignments: RequestHandler[] = [
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     // Resolve association
     const traceId = (req.traceId as string) || '';
-    const association = await getAssociation(req);
 
     logger.info(
-      { traceId, associationId: association.id },
+      { traceId, associationId: req.user!.associationId },
       'GET /training/modules/{moduleId}/assign - Request started',
     );
 
@@ -73,7 +71,7 @@ export const getAssignments: RequestHandler[] = [
     // Fetch paginated assignments
     const page = parseInt(req.query.page as string) || 1;
     const result = await getTrainingAssignments({
-      associationId: association.id,
+      associationId: req.user!.associationId,
       moduleId: req.params.moduleId as string,
       page,
     });
@@ -95,10 +93,9 @@ export const postAssign: RequestHandler[] = [
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     // Resolve association
     const traceId = (req.traceId as string) || '';
-    const association = await getAssociation(req);
 
     logger.info(
-      { traceId, associationId: association.id },
+      { traceId, associationId: req.user!.associationId },
       'POST /training/modules/{moduleId}/assign - Request started',
     );
 
@@ -113,7 +110,7 @@ export const postAssign: RequestHandler[] = [
     // Perform the assignment
     try {
       const assignment = await assignTraining({
-        associationId: association.id,
+        associationId: req.user!.associationId,
         moduleId: req.params.moduleId as string,
         userId: req.body.userId,
         assignedById: user.id,
@@ -143,10 +140,9 @@ export const putBulkAssign: RequestHandler[] = [
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     // Resolve association
     const traceId = (req.traceId as string) || '';
-    const association = await getAssociation(req);
 
     logger.info(
-      { traceId, associationId: association.id },
+      { traceId, associationId: req.user!.associationId },
       'PUT /training/modules/{moduleId}/assign - Request started',
     );
 
@@ -161,7 +157,7 @@ export const putBulkAssign: RequestHandler[] = [
     // Perform bulk assignment
     try {
       const result = await bulkAssignTraining({
-        associationId: association.id,
+        associationId: req.user!.associationId,
         moduleId: req.params.moduleId as string,
         userIds: req.body.userIds,
         assignedById: user.id,
@@ -191,10 +187,9 @@ export const deleteAssignment: RequestHandler[] = [
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     // Resolve association
     const traceId = (req.traceId as string) || '';
-    const association = await getAssociation(req);
 
     logger.info(
-      { traceId, associationId: association.id },
+      { traceId, associationId: req.user!.associationId },
       'DELETE /training/modules/{moduleId}/assign - Request started',
     );
 
@@ -209,7 +204,7 @@ export const deleteAssignment: RequestHandler[] = [
     // Remove the assignment
     try {
       const result = await removeTrainingAssignment({
-        associationId: association.id,
+        associationId: req.user!.associationId,
         moduleId: req.params.moduleId as string,
         userId: req.body.userId,
         removedById: user.id,
@@ -239,10 +234,9 @@ export const patchBulkRemove: RequestHandler[] = [
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     // Resolve association
     const traceId = (req.traceId as string) || '';
-    const association = await getAssociation(req);
 
     logger.info(
-      { traceId, associationId: association.id },
+      { traceId, associationId: req.user!.associationId },
       'PATCH /training/modules/{moduleId}/assign - Request started',
     );
 
@@ -257,7 +251,7 @@ export const patchBulkRemove: RequestHandler[] = [
     // Perform bulk removal
     try {
       const result = await bulkRemoveTrainingAssignment({
-        associationId: association.id,
+        associationId: req.user!.associationId,
         moduleId: req.params.moduleId as string,
         userIds: req.body.userIds,
         removedById: user.id,
@@ -287,10 +281,9 @@ export const getAssignedUsersHandler: RequestHandler[] = [
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     // Resolve association
     const traceId = (req.traceId as string) || '';
-    const association = await getAssociation(req);
 
     logger.info(
-      { traceId, associationId: association.id },
+      { traceId, associationId: req.user!.associationId },
       'GET /training/modules/{moduleId}/assigned-users - Request started',
     );
 
@@ -302,7 +295,7 @@ export const getAssignedUsersHandler: RequestHandler[] = [
     // Fetch paginated assigned users with completion data
     const page = parseInt(req.query.page as string) || 1;
     const result = await getAssignedUsers({
-      associationId: association.id,
+      associationId: req.user!.associationId,
       moduleId: req.params.moduleId as string,
       page,
     });

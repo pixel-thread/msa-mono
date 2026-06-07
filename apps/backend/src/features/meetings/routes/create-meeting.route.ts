@@ -3,7 +3,6 @@ import { createMeeting } from '@feature/meetings/services';
 import { CreateMeetingSchema } from '@feature/meetings/validators/meetings';
 import { validate } from '@lib/validate';
 import { UserRole } from '@prisma/client';
-import { getAssociation } from '@services/association/get-association';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 import { hasHighRoleAccess } from '@utils/has-high-role';
@@ -17,8 +16,10 @@ export const postCreateMeeting: RequestHandler[] = [
   validate({ body: CreateMeetingSchema }),
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
-    const association = await getAssociation(req);
-    logger.info({ traceId, associationId: association.id }, 'POST /api/meetings - Request started');
+    logger.info(
+      { traceId, associationId: req.user!.associationId },
+      'POST /api/meetings - Request started',
+    );
 
     const userId = req.user?.id as string;
     const user = await withRole(req, UserRole.SECRETARY);
@@ -34,7 +35,7 @@ export const postCreateMeeting: RequestHandler[] = [
     logger.info({ traceId }, 'POST /api/meetings - Creating meeting');
 
     const meeting = await createMeeting({
-      associationId: association.id,
+      associationId: req.user!.associationId,
       createdById: userId,
       data: {
         title: req.body.title,

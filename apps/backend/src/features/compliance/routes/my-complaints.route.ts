@@ -14,7 +14,6 @@ import { ComplaintParamsSchema, ComplaintQuerySchema } from '@feature/compliance
 // Shared utilities
 // ---------------------------------------------------------------------------
 import { validate } from '@lib/validate';
-import { getAssociation } from '@services/association/get-association';
 import { logger } from '@src/shared/logger';
 import { buildPagination } from '@src/shared/utils/helper/build-pagination';
 import { asyncHandler } from '@utils/async-handler';
@@ -40,17 +39,15 @@ export const listMyComplaints: RequestHandler[] = [
       throw new UnauthorizedError('Unauthorized');
     }
 
-    const association = await getAssociation(req);
-
     // ── Auth log ────────────────────────────────────────────────────────────
     logger.info(
-      { traceId, associationId: association.id, userId },
+      { traceId, associationId: req.user!.associationId, userId },
       'GET /compliance/my - Request started',
     );
 
     // ── Business logic — build filters scoped to current user ───────────────
     const query = req.query as unknown as Record<string, unknown>;
-    const where: Record<string, unknown> = { associationId: association.id, userId };
+    const where: Record<string, unknown> = { associationId: req.user!.associationId, userId };
 
     if (query.status) where.status = query.status;
     if (query.priority) where.priority = query.priority;
@@ -107,11 +104,13 @@ export const getMyComplaint: RequestHandler[] = [
       'GET /compliance/my/:complaintId - Request started',
     );
 
-    const association = await getAssociation(req);
-
     // ── Business logic — find complaint scoped to user + association ────────
     const complaint = await findUniqueComplaint({
-      where: { id: req.params.complaintId as string, associationId: association.id, userId },
+      where: {
+        id: req.params.complaintId as string,
+        associationId: req.user!.associationId,
+        userId,
+      },
     });
 
     if (!complaint) throw new NotFoundError('Complaint not found');

@@ -2,7 +2,6 @@ import { bulkAssignAttendees } from '@feature/meetings/services/bulkAssignAttend
 import { BulkAssignAttendeesSchema } from '@feature/meetings/validators';
 import { validate } from '@lib/validate';
 import { UserRole } from '@prisma/client';
-import { getAssociation } from '@services/association/get-association';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
@@ -15,9 +14,8 @@ export const postBulkAssignAttendees: RequestHandler[] = [
   validate({ body: BulkAssignAttendeesSchema }),
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
-    const association = await getAssociation(req);
     logger.info(
-      { traceId, associationId: association.id },
+      { traceId, associationId: req.user!.associationId },
       'POST /api/meetings/[meetingId]/attendees/bulk - Request started',
     );
 
@@ -34,7 +32,7 @@ export const postBulkAssignAttendees: RequestHandler[] = [
 
     await bulkAssignAttendees({
       meetingId,
-      associationId: association.id,
+      associationId: req.user!.associationId,
       userIds: req.body.userIds,
     });
 

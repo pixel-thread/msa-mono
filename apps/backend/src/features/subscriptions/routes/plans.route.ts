@@ -25,7 +25,7 @@ import { validate } from '@lib/validate';
 // Prisma
 // ---------------------------------------------------------------------------
 import { UserRole } from '@prisma/client';
-import { getAssociation } from '@services/association/get-association';
+
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
@@ -63,15 +63,12 @@ export const getPlansHandler: RequestHandler[] = [
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
 
-    // Validate association membership
-    const association = await getAssociation(req);
-
     // Authorize user — MEMBER is sufficient to list plans
     const user = await withRole(req, UserRole.MEMBER);
     logger.info({ traceId, role: user.role }, 'GET /api/subscriptions/plans - Fetching plans');
 
     // Retrieve plans scoped to association and user's role/member-type
-    const data = await getPlans(association.id, user);
+    const data = await getPlans(req.user!.associationId, user);
 
     return success(res, { data });
   }),
@@ -85,9 +82,6 @@ export const createPlanHandler: RequestHandler[] = [
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
 
-    // Validate association membership
-    const association = await getAssociation(req);
-
     // Authorize user — only SUPER_ADMIN may create plans
     await withRole(req, UserRole.SUPER_ADMIN);
 
@@ -96,7 +90,7 @@ export const createPlanHandler: RequestHandler[] = [
     logger.info({ traceId, name: req.body.name }, 'Creating new plan');
 
     // Delegate creation to service (handles transactional plan + version)
-    const plan = await createPlan(association.id, req.body);
+    const plan = await createPlan(req.user!.associationId, req.body);
 
     return success(res, { data: plan }, 201);
   }),
@@ -110,9 +104,6 @@ export const setDefaultPlanHandler: RequestHandler[] = [
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
 
-    // Validate association membership
-    const association = await getAssociation(req);
-
     // Authorize user — only SUPER_ADMIN may change the default
     await withRole(req, UserRole.SUPER_ADMIN);
 
@@ -120,7 +111,7 @@ export const setDefaultPlanHandler: RequestHandler[] = [
 
     logger.info({ traceId, planId: req.body.planId }, 'Setting plan as default');
 
-    const updated = await setDefaultPlan(association.id, req.body.planId);
+    const updated = await setDefaultPlan(req.user!.associationId, req.body.planId);
 
     return success(res, { data: updated });
   }),
@@ -134,9 +125,6 @@ export const updatePlanHandler: RequestHandler[] = [
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
 
-    // Validate association membership
-    const association = await getAssociation(req);
-
     // Authorize user — only SUPER_ADMIN may update plans
     const user = await withRole(req, UserRole.SUPER_ADMIN);
     logger.info(
@@ -149,7 +137,7 @@ export const updatePlanHandler: RequestHandler[] = [
     const { planId } = req.params;
 
     // Apply partial update; price changes trigger a new version
-    const updatedPlan = await updatePlan(association.id, planId as string, req.body);
+    const updatedPlan = await updatePlan(req.user!.associationId, planId as string, req.body);
 
     logger.info({ traceId, planId }, 'Plan updated successfully');
 
@@ -165,9 +153,6 @@ export const deletePlanHandler: RequestHandler[] = [
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
 
-    // Validate association membership
-    const association = await getAssociation(req);
-
     // Authorize user — PRESIDENT role required for deletion
     const user = await withRole(req, UserRole.PRESIDENT);
     logger.info(
@@ -177,7 +162,7 @@ export const deletePlanHandler: RequestHandler[] = [
 
     const { planId } = req.params;
 
-    const plan = await softDeletePlan(association.id, planId as string);
+    const plan = await softDeletePlan(req.user!.associationId, planId as string);
 
     logger.info({ traceId, planId }, 'Plan deleted successfully');
 
@@ -193,9 +178,6 @@ export const getPlanDetailsHandler: RequestHandler[] = [
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
 
-    // Validate association membership
-    const association = await getAssociation(req);
-
     // Authorize user — only SUPER_ADMIN may update plans
     const user = await withRole(req, UserRole.MEMBER);
 
@@ -207,7 +189,7 @@ export const getPlanDetailsHandler: RequestHandler[] = [
     const { planId } = req.params;
 
     // Apply partial update; price changes trigger a new version
-    const plan = await getPlan(planId as string, association.id);
+    const plan = await getPlan(planId as string, req.user!.associationId);
 
     logger.info({ traceId, planId }, 'GET /api/subscriptions/plans/[planId] - Success');
 

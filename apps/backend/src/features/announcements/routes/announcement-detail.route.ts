@@ -11,7 +11,6 @@ import {
 } from '@feature/announcements/validators';
 import { validate } from '@lib/validate';
 import { UserRole } from '@prisma/client';
-import { getAssociation } from '@services/association/get-association';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 import { hasHighRoleAccess } from '@utils/has-high-role';
@@ -37,8 +36,6 @@ export const getAnnouncement: RequestHandler[] = [
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
 
-    const association = await getAssociation(req);
-
     const announcementId = req.params.announcementId;
 
     if (!announcementId) {
@@ -54,7 +51,7 @@ export const getAnnouncement: RequestHandler[] = [
 
     const announcement = await findUniqueAnnouncement({
       announcementId: announcementId as string,
-      associationId: association.id,
+      associationId: req.user!.associationId,
     });
 
     logger.info({ traceId, announcementId }, 'GET /api/announcements/[id] - Success');
@@ -79,8 +76,6 @@ export const putAnnouncement: RequestHandler[] = [
 
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
-
-    const association = await getAssociation(req);
 
     logger.info({ traceId }, 'PUT /api/announcements/[id] - Request started');
 
@@ -113,7 +108,7 @@ export const putAnnouncement: RequestHandler[] = [
 
     const announcement = await updateAnnouncement({
       announcementId: announcementId as string,
-      associationId: association.id,
+      associationId: req.user!.associationId,
       authorId: userId,
       ...req.body,
     });
@@ -134,8 +129,6 @@ export const deleteAnnouncement: RequestHandler[] = [
 
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
-
-    const association = await getAssociation(req);
 
     const announcementId = req.params.announcementId;
 
@@ -167,7 +160,7 @@ export const deleteAnnouncement: RequestHandler[] = [
 
     await deleteAnnouncementData({
       announcementId: announcementId as string,
-      associationId: association.id,
+      associationId: req.user!.associationId,
       authorId: userId,
     });
 
@@ -190,8 +183,6 @@ export const patchAnnouncement: RequestHandler[] = [
 
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
-
-    const association = await getAssociation(req);
 
     const announcementId = req.params.announcementId;
 
@@ -227,7 +218,7 @@ export const patchAnnouncement: RequestHandler[] = [
     if (action === 'publish') {
       const announcement = await updateAnnouncement({
         announcementId: announcementId as string,
-        associationId: association.id,
+        associationId: req.user!.associationId,
         authorId: userId,
         data: { status: 'PUBLISHED' },
       });
@@ -240,7 +231,7 @@ export const patchAnnouncement: RequestHandler[] = [
     if (action === 'archive') {
       const announcement = await updateAnnouncement({
         announcementId: announcementId as string,
-        associationId: association.id,
+        associationId: req.user!.associationId,
         authorId: userId,
         data: { status: 'ARCHIVED' },
       });
@@ -253,7 +244,7 @@ export const patchAnnouncement: RequestHandler[] = [
     if (action === 'unpublish') {
       const announcement = await updateAnnouncement({
         announcementId: announcementId as string,
-        associationId: association.id,
+        associationId: req.user!.associationId,
         authorId: userId,
         data: { status: 'DRAFT' },
       });

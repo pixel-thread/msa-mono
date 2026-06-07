@@ -2,7 +2,6 @@ import { updateMeetingMinute } from '@feature/meetings/services/minutes';
 import { UpdateMeetingMinuteSchema } from '@feature/meetings/validators/minutes';
 import { validate } from '@lib/validate';
 import { UserRole } from '@prisma/client';
-import { getAssociation } from '@services/association/get-association';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
@@ -21,11 +20,10 @@ export const patchUpdateMinute: RequestHandler[] = [
   validate({ params: ParamsSchema, body: UpdateMeetingMinuteSchema }),
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
-    const association = await getAssociation(req);
     const meetingId = req.params.meetingId as string;
     const minutesId = req.params.minutesId as string;
     logger.info(
-      { traceId, meetingId, minutesId, associationId: association.id },
+      { traceId, meetingId, minutesId, associationId: req.user!.associationId },
       'PATCH /api/meetings/[meetingId]/minutes/[minutesId] - Request started',
     );
 
@@ -42,7 +40,7 @@ export const patchUpdateMinute: RequestHandler[] = [
     const minute = await updateMeetingMinute({
       meetingId,
       minuteId: minutesId,
-      associationId: association.id,
+      associationId: req.user!.associationId,
       data: req.body,
     });
 

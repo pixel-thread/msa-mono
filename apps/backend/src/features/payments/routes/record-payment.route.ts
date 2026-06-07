@@ -10,7 +10,7 @@ import { recordManualPayment } from '@feature/payments/services/payment.service'
 import { RecordManualPaymentSchema } from '@feature/payments/validators';
 import { validate } from '@lib/validate';
 import { UserRole } from '@prisma/client';
-import { getAssociation } from '@services/association/get-association';
+
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
@@ -29,9 +29,6 @@ export const recordPayment: RequestHandler[] = [
     // --- Log: request started ---
     logger.info({ traceId }, 'POST /api/payments/record - Request started');
 
-    // --- Auth: resolve association ---
-    const association = await getAssociation(req);
-
     // --- Auth: enforce FINANCE role ---
     // Only finance officers can record payments on behalf of others
     const user = await withRole(req, UserRole.FINANCE);
@@ -43,7 +40,7 @@ export const recordPayment: RequestHandler[] = [
       'POST /api/payments/record - Recording manual payment',
     );
     const transaction = await recordManualPayment({
-      associationId: association.id,
+      associationId: req.user!.associationId,
       amount: req.body.amount,
       method: req.body.method,
       notes: req.body.notes,

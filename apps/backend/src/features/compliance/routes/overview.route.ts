@@ -17,7 +17,6 @@ import { validate } from '@lib/validate';
 // Prisma
 // ---------------------------------------------------------------------------
 import { UserRole } from '@prisma/client';
-import { getAssociation } from '@services/association/get-association';
 import { logger } from '@src/shared/logger';
 import { buildPagination } from '@src/shared/utils/helper/build-pagination';
 import { asyncHandler } from '@utils/async-handler';
@@ -39,10 +38,11 @@ export const listComplaints: RequestHandler[] = [
     const traceId = (req.traceId as string) || '';
 
     // ── Auth ────────────────────────────────────────────────────────────────
-    const association = await getAssociation(req);
-
     // ── Auth log ────────────────────────────────────────────────────────────
-    logger.info({ traceId, associationId: association.id }, 'GET /compliance - Request started');
+    logger.info(
+      { traceId, associationId: req.user!.associationId },
+      'GET /compliance - Request started',
+    );
 
     const user = await withRole(req, UserRole.DPO);
 
@@ -53,7 +53,7 @@ export const listComplaints: RequestHandler[] = [
 
     // ── Business logic — build filters & fetch ──────────────────────────────
     const query = req.query as unknown as Record<string, unknown>;
-    const where: Record<string, unknown> = { associationId: association.id };
+    const where: Record<string, unknown> = { associationId: req.user!.associationId };
 
     if (query.status) where.status = query.status;
     if (query.priority) where.priority = query.priority;
@@ -94,10 +94,11 @@ export const createComplaintHandler: RequestHandler[] = [
     const traceId = (req.traceId as string) || '';
 
     // ── Auth ────────────────────────────────────────────────────────────────
-    const association = await getAssociation(req);
-
     // ── Auth log ────────────────────────────────────────────────────────────
-    logger.info({ traceId, associationId: association.id }, 'POST /compliance - Request started');
+    logger.info(
+      { traceId, associationId: req.user!.associationId },
+      'POST /compliance - Request started',
+    );
 
     const user = await withRole(req, UserRole.DPO);
 
@@ -109,7 +110,7 @@ export const createComplaintHandler: RequestHandler[] = [
     // ── Business logic ──────────────────────────────────────────────────────
     const userId = req.user?.id as string;
     const complaint = await createComplaint({
-      associationId: association.id,
+      associationId: req.user!.associationId,
       userId,
       data: req.body,
     });

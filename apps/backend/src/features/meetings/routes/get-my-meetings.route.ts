@@ -1,7 +1,6 @@
 import { findManyMeetings } from '@feature/meetings/services';
 import { validate } from '@lib/validate';
 import { UserRole } from '@prisma/client';
-import { getAssociation } from '@services/association/get-association';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
@@ -20,9 +19,8 @@ export const getMyMeetings: RequestHandler[] = [
   validate({ query: QuerySchema }),
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
-    const association = await getAssociation(req);
     logger.info(
-      { traceId, associationId: association.id },
+      { traceId, associationId: req.user!.associationId },
       'GET /api/meetings/my - Request started',
     );
 
@@ -36,7 +34,7 @@ export const getMyMeetings: RequestHandler[] = [
     const page = (req.query as any)?.page || 1;
 
     const { meetings, pagination } = await findManyMeetings({
-      associationId: association.id,
+      associationId: req.user!.associationId,
       userId,
       role: user.role,
       pagination: { page },

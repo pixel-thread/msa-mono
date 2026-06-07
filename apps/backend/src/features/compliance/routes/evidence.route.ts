@@ -9,7 +9,6 @@ import { generateComplianceEvidence } from '@feature/compliance/services';
 // Prisma
 // ---------------------------------------------------------------------------
 import { UserRole } from '@prisma/client';
-import { getAssociation } from '@services/association/get-association';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 // ---------------------------------------------------------------------------
@@ -32,11 +31,9 @@ export const getEvidence: RequestHandler[] = [
     const traceId = (req.traceId as string) || '';
 
     // ── Auth ────────────────────────────────────────────────────────────────
-    const association = await getAssociation(req);
-
     // ── Auth log ────────────────────────────────────────────────────────────
     logger.info(
-      { traceId, associationId: association.id },
+      { traceId, associationId: req.user!.associationId },
       'GET /compliance/evidence - Request started',
     );
 
@@ -49,10 +46,13 @@ export const getEvidence: RequestHandler[] = [
 
     // ── Business logic — generate evidence report ───────────────────────────
     const days = parseInt(req.query.days as string, 10) || 30;
-    const evidence = await generateComplianceEvidence(association.id, days);
+    const evidence = await generateComplianceEvidence(req.user!.associationId, days);
 
     // ── Result log & response ───────────────────────────────────────────────
-    logger.info({ traceId, associationId: association.id }, 'GET /compliance/evidence - Success');
+    logger.info(
+      { traceId, associationId: req.user!.associationId },
+      'GET /compliance/evidence - Success',
+    );
     return success(res, { data: evidence });
   }),
 ];

@@ -21,7 +21,7 @@ import {
 } from '@feature/contributions/validators';
 import { validate } from '@lib/validate';
 import { ContributionStatus, UserRole } from '@prisma/client';
-import { getAssociation } from '@services/association/get-association';
+
 import { PAGE_SIZE } from '@src/shared/constants';
 import { logger } from '@src/shared/logger';
 import { buildPagination } from '@src/shared/utils/helper/build-pagination';
@@ -64,9 +64,6 @@ export const listContributionsHandler: RequestHandler[] = [
     // --- Log: request started ---
     logger.info({ traceId, query: req.query }, 'GET /api/payments/contributions - Request started');
 
-    // --- Auth: resolve association ---
-    const association = await getAssociation(req);
-
     // --- Auth: enforce FINANCE role ---
     // Only finance officers can view the full contributions list
     await withRole(req, UserRole.FINANCE);
@@ -78,7 +75,7 @@ export const listContributionsHandler: RequestHandler[] = [
 
     const { status, userId: filterUserId, year, month } = req.query;
 
-    const where: Record<string, unknown> = { associationId: association.id };
+    const where: Record<string, unknown> = { associationId: req.user!.associationId };
     if (status) where.status = status;
     if (filterUserId) where.userId = filterUserId;
     if (year) where.year = year;
@@ -138,9 +135,6 @@ export const generateUserContributionsHandler: RequestHandler[] = [
       'POST /api/payments/contributions - Request started',
     );
 
-    // --- Auth: resolve association ---
-    const association = await getAssociation(req);
-
     // --- Auth: enforce FINANCE role ---
     await withRole(req, UserRole.FINANCE);
 
@@ -154,7 +148,7 @@ export const generateUserContributionsHandler: RequestHandler[] = [
 
     const count = await generateUserContributions(userId, req.body.year, req.body.months);
 
-    const overdueCount = await markOverdueContributions(association.id, userId);
+    const overdueCount = await markOverdueContributions(req.user!.associationId, userId);
 
     // --- Log: success ---
     logger.info(
@@ -240,9 +234,6 @@ export const waiveContributionHandler: RequestHandler[] = [
       'PATCH /api/payments/contributions - Request started',
     );
 
-    // --- Auth: resolve association ---
-    await getAssociation(req);
-
     // --- Auth: enforce FINANCE role ---
     // Waiving contributions is a financial decision — restricted to finance
     const user = await withRole(req, UserRole.FINANCE);
@@ -281,12 +272,9 @@ export const getContributionHandler: RequestHandler[] = [
       'GET /api/payments/contributions/[contributionId] - Request started',
     );
 
-    // --- Auth: resolve association ---
-    const association = await getAssociation(req);
-
     // --- Business logic: fetch single contribution period ---
     const contribution = await findUniqueContributionPeriod({
-      where: { id: req.params.contributionId as string, associationId: association.id },
+      where: { id: req.params.contributionId as string, associationId: req.user!.associationId },
       include: {
         user: { select: { id: true, name: true, email: true, membershipNumber: true } },
         allocations: {

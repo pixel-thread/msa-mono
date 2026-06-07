@@ -1,7 +1,6 @@
 import { ForbiddenError } from '@errors';
 import { updateMeeting } from '@feature/meetings/services';
 import { MeetingStatus, UserRole } from '@prisma/client';
-import { getAssociation } from '@services/association/get-association';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 import { hasHighRoleAccess } from '@utils/has-high-role';
@@ -13,9 +12,8 @@ import type { RequestHandler } from 'express';
 export const postCancelMeeting: RequestHandler[] = [
   asyncHandler(async (req, res) => {
     const traceId = (req.traceId as string) || '';
-    const association = await getAssociation(req);
     logger.info(
-      { traceId, associationId: association.id },
+      { traceId, associationId: req.user!.associationId },
       'POST /api/meetings/[meetingId]/cancel - Request started',
     );
 
@@ -36,7 +34,7 @@ export const postCancelMeeting: RequestHandler[] = [
 
     const meeting = await updateMeeting({
       meetingId,
-      associationId: association.id,
+      associationId: req.user!.associationId,
       data: { status: MeetingStatus.CANCELLED },
     });
 
