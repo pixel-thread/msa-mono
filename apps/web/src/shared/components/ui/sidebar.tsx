@@ -1,11 +1,8 @@
 'use client';
 
 import * as React from 'react';
-import { cva, type VariantProps } from 'class-variance-authority';
-import { Slot } from 'radix-ui';
-
-import { useIsMobile } from '@src/shared/hooks/use-mobile';
-import { cn } from '@src/shared/lib/utils';
+import { SidebarLeftIcon } from '@hugeicons/core-free-icons';
+import { HugeiconsIcon } from '@hugeicons/react';
 import { Button } from '@src/shared/components/ui/button';
 import { Input } from '@src/shared/components/ui/input';
 import { Separator } from '@src/shared/components/ui/separator';
@@ -18,8 +15,10 @@ import {
 } from '@src/shared/components/ui/sheet';
 import { Skeleton } from '@src/shared/components/ui/skeleton';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@src/shared/components/ui/tooltip';
-import { HugeiconsIcon } from '@hugeicons/react';
-import { SidebarLeftIcon } from '@hugeicons/core-free-icons';
+import { useIsMobile } from '@src/shared/hooks/use-mobile';
+import { cn } from '@src/shared/lib/utils';
+import { cva, type VariantProps } from 'class-variance-authority';
+import { Slot } from 'radix-ui';
 
 const SIDEBAR_COOKIE_NAME = 'sidebar_state';
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;

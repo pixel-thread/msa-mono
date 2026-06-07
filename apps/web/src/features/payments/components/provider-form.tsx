@@ -1,10 +1,7 @@
 'use client';
 
-import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 import { Button } from '@src/shared/components/ui/button';
-import { Input } from '@src/shared/components/ui/input';
 import {
   Form,
   FormControl,
@@ -13,6 +10,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@src/shared/components/ui/form';
+import { Input } from '@src/shared/components/ui/input';
 import {
   Select,
   SelectContent,
@@ -20,6 +18,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@src/shared/components/ui/select';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+
 import { ProviderResponse } from '../types';
 
 const PROVIDER_TYPES = ['RAZORPAY', 'STRIPE', 'PAYU', 'CASHFREE'] as const;

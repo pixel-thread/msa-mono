@@ -1,10 +1,10 @@
-import { ColumnDef } from '@tanstack/react-table';
-import { formatDate } from '@src/shared/utils';
-import type { User } from '@src/shared/types';
+import { AssociationCell } from '@src/features/members/components/cells/association-cell';
+import { NameCell } from '@src/features/members/components/cells/name-cell';
 import { RoleCell } from '@src/features/members/components/cells/role-cell';
 import { StatusCell } from '@src/features/members/components/cells/status-cell';
-import { NameCell } from '@src/features/members/components/cells/name-cell';
-import { AssociationCell } from '@src/features/members/components/cells/association-cell';
+import type { User } from '@src/shared/types';
+import { formatDate } from '@src/shared/utils';
+import { ColumnDef } from '@tanstack/react-table';
 
 interface UseMemberTableColumnsOptions {
   onRoleChange: (memberId: string, role: string, action: 'add' | 'remove') => void;

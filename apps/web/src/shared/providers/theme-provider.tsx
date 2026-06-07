@@ -2,8 +2,6 @@
 
 import * as React from 'react';
 import { DesktopIcon, MoonIcon, SunIcon } from '@radix-ui/react-icons';
-import * as z from 'zod';
-
 import { Button } from '@src/shared/components/ui/button';
 import {
   DropdownMenu,
@@ -11,6 +9,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@src/shared/components/ui/dropdown-menu';
+import * as z from 'zod';
 
 const ThemeModeSchema = z.enum(['light', 'dark', 'auto']);
 
@@ -64,7 +63,7 @@ const setupPreferredListener = () => {
 const getNextTheme = (current: ThemeMode): ThemeMode => {
   const themes: ThemeMode[] =
     getSystemTheme() === 'dark' ? ['auto', 'light', 'dark'] : ['auto', 'dark', 'light'];
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+   
   return themes[(themes.indexOf(current) + 1) % themes.length]!;
 };
 

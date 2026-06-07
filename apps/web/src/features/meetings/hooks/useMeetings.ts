@@ -1,10 +1,11 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { buildUrlWithQuery, ENDPOINTS, QUERY_KEYS } from '@repo/shared';
+import type { PaginationMeta } from '@src/shared/types/api.types';
 import http from '@src/shared/utils/http';
-import { ENDPOINTS, buildUrlWithQuery, QUERY_KEYS } from '@repo/shared';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
+
 import type { Meeting } from '../types';
 import type { CreateMeetingInput } from '../validators';
-import type { PaginationMeta } from '@src/shared/types/api.types';
 
 interface UseMeetingsOptions {
   page?: number;

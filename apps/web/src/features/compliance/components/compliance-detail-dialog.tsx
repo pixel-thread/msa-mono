@@ -1,5 +1,6 @@
 'use client';
 
+import { Badge } from '@src/shared/components/ui/badge';
 import {
   Dialog,
   DialogContent,
@@ -7,7 +8,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@src/shared/components/ui/dialog';
-import { Badge } from '@src/shared/components/ui/badge';
+
 import type { ComplianceRecord } from '../types/compliance.types';
 
 interface ComplianceDetailDialogProps {

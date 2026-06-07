@@ -1,5 +1,5 @@
 import { prisma } from '@lib/prisma';
-import { DsarRequestType, DsarStatus } from '@prisma/client';
+import type { DsarRequestType, DsarStatus } from '@prisma/client';
 import { PAGE_SIZE } from '@src/shared/constants';
 import { buildPagination } from '@src/shared/utils/helper/build-pagination';
 

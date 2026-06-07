@@ -1,7 +1,8 @@
-import { ColumnDef } from '@tanstack/react-table';
 import { AnnouncementActionsCell } from '@src/features/announcement/components/cells/announcement-actions-cell';
-import type { Announcement } from '../types';
 import { Link } from '@tanstack/react-router';
+import { ColumnDef } from '@tanstack/react-table';
+
+import type { Announcement } from '../types';
 
 interface UseAnnouncementColumnsOptions {
   onEdit: (announcement: Announcement) => void;

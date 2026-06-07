@@ -1,10 +1,11 @@
 'use client';
 
+import { QUERY_KEYS } from '@repo/shared';
+import { ProviderForm } from '@src/features/payments/components/provider-form';
 import {
   useProviderDetail,
   useUpdateProvider,
 } from '@src/features/payments/hooks/usePaymentProviders';
-import { ProviderForm } from '@src/features/payments/components/provider-form';
 import {
   Dialog,
   DialogContent,
@@ -12,9 +13,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@src/shared/components/ui/dialog';
-import { toast } from 'sonner';
-import { QUERY_KEYS } from '@repo/shared';
 import { useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 
 interface EditProviderDialogProps {
   open: boolean;

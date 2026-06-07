@@ -1,6 +1,7 @@
 import { BadRequestError, NotFoundError } from '@errors';
 import { prisma } from '@lib';
-import { DeclarationStatus, Prisma } from '@prisma/client';
+import type { Prisma } from '@prisma/client';
+import { DeclarationStatus } from '@prisma/client';
 import { buildPagination,buildPaginationParams } from '@utils';
 import { addMonths, differenceInCalendarMonths, endOfMonth,startOfMonth } from 'date-fns';
 

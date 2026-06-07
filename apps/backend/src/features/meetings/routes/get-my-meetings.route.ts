@@ -8,7 +8,7 @@ import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';
 import { pageNumberValidation } from '@validator/common';
 import type { RequestHandler } from 'express';
-import { NextFunction, Request, Response } from 'express';
+import type { NextFunction, Request, Response } from 'express';
 import { z } from 'zod';
 
 const QuerySchema = z.object({

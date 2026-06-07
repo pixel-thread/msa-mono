@@ -1,9 +1,8 @@
-import { useMutation } from '@tanstack/react-query';
-
-import http from '@src/shared/utils/http';
+import { ENDPOINTS } from '@repo/shared';
 import { type SignInInput } from '@src/features/auth/validators';
 import { useAuthStore } from '@src/shared/stores';
-import { ENDPOINTS } from '@repo/shared';
+import http from '@src/shared/utils/http';
+import { useMutation } from '@tanstack/react-query';
 
 type SigninResponse = {
   mfaRequired?: boolean;

@@ -1,6 +1,7 @@
 import { ValidationError } from '@errors';
 import { formatZodIssues } from '@validator/format-zod-issues';
-import { NextFunction, Request, type RequestHandler,Response } from 'express';
+import type { NextFunction, Request, Response } from 'express';
+import { type RequestHandler } from 'express';
 import type { ZodType } from 'zod';
 
 /** Zod validation schemas for an Express request (body, query, params). */

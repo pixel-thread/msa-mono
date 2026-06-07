@@ -1,7 +1,7 @@
 import crypto from 'crypto';
 
 /** Generates a cryptographically random hex-encoded token. */
-export function generateSecureToken(length: number = 32): string {
+export function generateSecureToken(length = 32): string {
   return crypto.randomBytes(length).toString('hex');
 }
 

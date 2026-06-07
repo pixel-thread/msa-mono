@@ -1,17 +1,16 @@
 'use client';
 
-import { useState, useCallback } from 'react';
-import { useUrlFilters } from '@src/shared/hooks';
-
+import { useCallback,useState } from 'react';
+import { AuditLogDetailsDialog } from '@src/features/audit-logs/components/audit-log-details-dialog';
+import { useAuditLogColumns } from '@src/features/audit-logs/hooks/useAuditLogColumns';
+import { useAuditLogs } from '@src/features/audit-logs/hooks/useAuditLogs';
+import type { AuditLogEntry } from '@src/features/audit-logs/types';
 import { DataTable } from '@src/shared/components/data-table';
+import { DataTableFilters } from '@src/shared/components/data-table-filters';
+import { DataTablePagination } from '@src/shared/components/data-table-pagination';
 import { SectionHeader } from '@src/shared/components/section-header';
 import { Card, CardContent } from '@src/shared/components/ui/card';
-import { DataTableFilters } from '@src/shared/components/data-table-filters';
-import { useAuditLogs } from '@src/features/audit-logs/hooks/useAuditLogs';
-import { useAuditLogColumns } from '@src/features/audit-logs/hooks/useAuditLogColumns';
-import { AuditLogDetailsDialog } from '@src/features/audit-logs/components/audit-log-details-dialog';
-import type { AuditLogEntry } from '@src/features/audit-logs/types';
-import { DataTablePagination } from '@src/shared/components/data-table-pagination';
+import { useUrlFilters } from '@src/shared/hooks';
 
 const AUDIT_ACTIONS = [
   'CREATE',

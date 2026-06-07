@@ -1,11 +1,11 @@
 'use client';
 
-import { Link } from '@tanstack/react-router';
+import { ArrowRight01Icon,CheckmarkCircle02Icon } from '@hugeicons/core-free-icons';
 import { HugeiconsIcon } from '@hugeicons/react';
-import { CheckmarkCircle02Icon, ArrowRight01Icon } from '@hugeicons/core-free-icons';
-import { Button } from '@src/shared/components/ui/button';
 import { Badge } from '@src/shared/components/ui/badge';
+import { Button } from '@src/shared/components/ui/button';
 import { Text } from '@src/shared/components/ui/text';
+import { Link } from '@tanstack/react-router';
 
 const HERO_DESCRIPTION = [
   'A unified DPDP Compliant platform for Meghalaya Finance Service Association.',

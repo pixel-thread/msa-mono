@@ -2,7 +2,8 @@
 // ---- Shared utilities ----
 import { NotFoundError } from '@errors';
 import { prisma } from '@lib/prisma';
-import { AuditAction, Prisma } from '@prisma/client';
+import type { Prisma } from '@prisma/client';
+import { AuditAction } from '@prisma/client';
 
 // ---- Interfaces ----
 

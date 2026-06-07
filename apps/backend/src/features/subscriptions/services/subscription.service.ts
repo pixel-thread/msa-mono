@@ -7,7 +7,8 @@ import { prisma } from '@lib/prisma';
 // ---------------------------------------------------------------------------
 // Prisma
 // ---------------------------------------------------------------------------
-import { ContributionStatus,UserRole } from '@prisma/client';
+import type {UserRole } from '@prisma/client';
+import { ContributionStatus } from '@prisma/client';
 import { PAGE_SIZE } from '@src/shared/constants';
 import { buildPagination } from '@src/shared/utils/helper/build-pagination';
 import { hasHighRoleAccess } from '@utils';

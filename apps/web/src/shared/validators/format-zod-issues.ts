@@ -1,6 +1,5 @@
-import type { ZodIssue } from 'zod';
-
 import type { ValidationIssue } from '@src/shared/types';
+import type { ZodIssue } from 'zod';
 
 export const formatZodIssues = (issues: ZodIssue[]): ValidationIssue[] =>
   issues.map((issue) => ({

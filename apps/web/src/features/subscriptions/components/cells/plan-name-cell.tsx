@@ -1,6 +1,7 @@
 'use client';
 
 import { Link } from '@tanstack/react-router';
+
 import { SubscriptionPlan } from '../../types';
 
 interface PlanNameCellProps {

@@ -1,17 +1,17 @@
 'use client';
 
-import { HugeiconsIcon } from '@hugeicons/react';
 import {
-  MailSend01Icon,
-  PhoneCheckIcon,
-  MapPinIcon,
   ArrowRight01Icon,
+  MailSend01Icon,
+  MapPinIcon,
+  PhoneCheckIcon,
 } from '@hugeicons/core-free-icons';
+import { HugeiconsIcon } from '@hugeicons/react';
 import { Badge } from '@src/shared/components/ui/badge';
 import { Button } from '@src/shared/components/ui/button';
 import { Input } from '@src/shared/components/ui/input';
-import { Textarea } from '@src/shared/components/ui/textarea';
 import { Text } from '@src/shared/components/ui/text';
+import { Textarea } from '@src/shared/components/ui/textarea';
 
 export function ContactSection() {
   return (

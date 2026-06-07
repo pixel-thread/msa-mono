@@ -1,7 +1,8 @@
-import { useQuery } from '@tanstack/react-query';
 import { QUERY_KEYS } from '@repo/shared';
-import type { AuditLogEntry } from '../types';
 import http from '@src/shared/utils/http';
+import { useQuery } from '@tanstack/react-query';
+
+import type { AuditLogEntry } from '../types';
 
 interface UseAuditLogsParams {
   page?: number;

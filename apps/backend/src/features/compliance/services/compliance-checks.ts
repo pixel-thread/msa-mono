@@ -1,6 +1,7 @@
 import { prisma } from '@lib/prisma';
+import type {
+  ComplianceCheckStatus} from '@prisma/client';
 import {
-  ComplianceCheckStatus,
   ConsentPurpose,
   ConsentStatus,
   DsarStatus,
@@ -478,7 +479,7 @@ async function checkAuditLogIntegrity(associationId: string): Promise<Compliance
 /** Generate a compliance evidence report for an association over a given number of days. */
 export async function generateComplianceEvidence(
   associationId: string,
-  days: number = 30,
+  days = 30,
 ): Promise<ComplianceEvidence> {
   const now = new Date();
   const from = new Date(now.getTime() - days * 24 * 60 * 60 * 1000);

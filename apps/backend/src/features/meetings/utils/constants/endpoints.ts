@@ -1,7 +1,7 @@
 /** Meeting API endpoint builders. */
 export const meetingsEndpoints = {
   base: '/meetings' as const,
-  list: (page: number = 1) => `/meetings?page=${page}`,
+  list: (page = 1) => `/meetings?page=${page}`,
   byId: (id: string) => `/meetings/${id}`,
   rsvp: (id: string) => `/meetings/${id}/rsvp`,
   attendees: {

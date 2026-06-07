@@ -1,7 +1,8 @@
-import { useQuery } from '@tanstack/react-query';
-import http from '@src/shared/utils/http';
-import type { Declaration } from '../../types';
 import { ENDPOINTS, QUERY_KEYS } from '@repo/shared';
+import http from '@src/shared/utils/http';
+import { useQuery } from '@tanstack/react-query';
+
+import type { Declaration } from '../../types';
 
 export function useDeclarationDetail(id: string) {
   const { data, isLoading, error } = useQuery({

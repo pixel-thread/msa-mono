@@ -1,8 +1,9 @@
+import { ENDPOINTS } from '@repo/shared';
 import http from '@src/shared/utils/http';
 import { useQuery } from '@tanstack/react-query';
-import { ENDPOINTS } from '@repo/shared';
-import { trainingQueryKeys } from '../../utils/constants';
+
 import { TrainingCertificateItem } from '../../types';
+import { trainingQueryKeys } from '../../utils/constants';
 
 export function useTrainingCertificates(moduleId: string | null) {
   const query = useQuery({

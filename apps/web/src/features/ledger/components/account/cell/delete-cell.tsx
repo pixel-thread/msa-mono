@@ -1,16 +1,15 @@
 import { useDeleteLedgerAccount } from '@src/features/ledger/hooks/use-delete-ledger-account';
 import {
-  AlertDialogHeader,
   AlertDialog,
   AlertDialogAction,
+  AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-  AlertDialogFooter,
-  AlertDialogCancel,
 } from '@src/shared/components/ui/alert-dialog';
-
 import { Button } from '@src/shared/components/ui/button';
 import { TrashIcon } from 'lucide-react';
 export const DeleteAccountCell = ({ id }: { id: string }) => {

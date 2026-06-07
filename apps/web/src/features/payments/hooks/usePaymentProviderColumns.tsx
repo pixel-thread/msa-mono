@@ -1,10 +1,11 @@
 'use client';
-import { ColumnDef } from '@tanstack/react-table';
 import { Badge } from '@src/shared/components/ui/badge';
 import { Button } from '@src/shared/components/ui/button';
+import { ColumnDef } from '@tanstack/react-table';
 import { Pencil, Trash2 } from 'lucide-react';
-import type { ProviderResponse } from '../types';
+
 import { TestPaymentButton } from '../components/test-payment-button';
+import type { ProviderResponse } from '../types';
 
 interface UsePaymentProviderColumnsOptions {
   onEdit: (providerId: string) => void;

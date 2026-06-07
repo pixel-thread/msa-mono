@@ -1,6 +1,7 @@
-import { NotificationDataT } from '@sharedType/notification';
+import type { NotificationDataT } from '@sharedType/notification';
 import { logger } from '@src/shared/logger';
-import { Expo, ExpoPushMessage, ExpoPushTicket } from 'expo-server-sdk';
+import type { ExpoPushMessage, ExpoPushTicket } from 'expo-server-sdk';
+import { Expo } from 'expo-server-sdk';
 
 import { prisma } from './prisma';
 

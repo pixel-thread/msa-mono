@@ -2,7 +2,8 @@ import { BadRequestError, TooManyRequestsError, UnauthorizedError } from '@error
 import { createRefreshToken } from '@feature/auth/services/create-refresh-token';
 import { getVerificationCodeFirst } from '@feature/auth/services/get-verification-code-first';
 import { updateVerificationCode } from '@feature/auth/services/update-verification-code';
-import { VerifySignInInput, VerifySignInSchema } from '@feature/auth/validators';
+import type { VerifySignInInput} from '@feature/auth/validators';
+import { VerifySignInSchema } from '@feature/auth/validators';
 import { signAccessToken, signRefreshToken,verifyMfaTempToken } from '@lib/jwt';
 import { hashToken } from '@lib/password';
 import { validate } from '@lib/validate';
@@ -12,7 +13,7 @@ import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
 import type { RequestHandler } from 'express';
-import { NextFunction, Request, Response } from 'express';
+import type { NextFunction, Request, Response } from 'express';
 
 /**
  * POST /api/auth/sign-in/verify — Complete MFA sign-in by verifying the OTP code

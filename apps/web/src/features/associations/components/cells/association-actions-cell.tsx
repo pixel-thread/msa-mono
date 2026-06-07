@@ -2,6 +2,7 @@
 
 import { Button } from '@src/shared/components/ui/button';
 import { Pencil, Power } from 'lucide-react';
+
 import { Association } from '../../types/association';
 
 interface AssociationActionsCellProps {

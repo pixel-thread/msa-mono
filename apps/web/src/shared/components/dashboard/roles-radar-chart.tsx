@@ -1,8 +1,6 @@
 // @ts-nocheck
 'use client';
 
-import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis } from 'recharts';
-
 import {
   Card,
   CardContent,
@@ -11,11 +9,12 @@ import {
   CardTitle,
 } from '@src/shared/components/ui/card';
 import {
+  type ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-  type ChartConfig,
 } from '@src/shared/components/ui/chart';
+import { PolarAngleAxis, PolarGrid, PolarRadiusAxis,Radar, RadarChart } from 'recharts';
 
 const chartConfig = {
   count: {

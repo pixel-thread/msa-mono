@@ -1,10 +1,11 @@
 'use client';
 
-import { QueryProvider } from './QueryProvider';
-import { AuthProvider } from './AuthProvider';
 import { Redirect } from '@components/Redirect';
 import { Toaster } from '@components/ui/sonner';
 import { TooltipProvider } from '@components/ui/tooltip';
+
+import { AuthProvider } from './AuthProvider';
+import { QueryProvider } from './QueryProvider';
 import { ThemeProvider } from './theme-provider';
 
 interface AppProvidersProps {

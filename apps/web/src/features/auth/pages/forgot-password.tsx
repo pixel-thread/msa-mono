@@ -1,14 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { Link } from '@tanstack/react-router';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-
-import { Button } from '@components/ui/button';
-import { Input } from '@components/ui/input';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@components/ui/card';
 import { Alert, AlertDescription } from '@components/ui/alert';
+import { Button } from '@components/ui/button';
+import { Card, CardContent,CardDescription, CardHeader, CardTitle } from '@components/ui/card';
 import {
   Form,
   FormControl,
@@ -17,8 +12,12 @@ import {
   FormLabel,
   FormMessage,
 } from '@components/ui/form';
-import { ForgotPasswordSchema, type ForgotPasswordInput } from '@feature/auth/validators';
+import { Input } from '@components/ui/input';
 import { useForgotPassword } from '@feature/auth/hooks';
+import { type ForgotPasswordInput,ForgotPasswordSchema } from '@feature/auth/validators';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Link } from '@tanstack/react-router';
+import { useForm } from 'react-hook-form';
 
 /**
  * Forgot Password page component.

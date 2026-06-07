@@ -1,10 +1,9 @@
 import * as React from 'react';
+import { ArrowDown01Icon } from '@hugeicons/core-free-icons';
+import { HugeiconsIcon } from '@hugeicons/react';
+import { cn } from '@src/shared/lib/utils';
 import { cva } from 'class-variance-authority';
 import { NavigationMenu as NavigationMenuPrimitive } from 'radix-ui';
-
-import { cn } from '@src/shared/lib/utils';
-import { HugeiconsIcon } from '@hugeicons/react';
-import { ArrowDown01Icon } from '@hugeicons/core-free-icons';
 
 function NavigationMenu({
   className,

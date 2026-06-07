@@ -26,7 +26,7 @@ import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';
 import type { RequestHandler } from 'express';
-import { Request, Response } from 'express';
+import type { Request, Response } from 'express';
 // ---- External libs ----
 import { z } from 'zod';
 

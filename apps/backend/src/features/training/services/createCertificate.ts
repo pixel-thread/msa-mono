@@ -2,10 +2,11 @@
 import { BadRequestError, NotFoundError } from '@errors';
 // ---- Shared utilities ----
 import { prisma } from '@lib/prisma';
-import { AuditAction, Prisma } from '@prisma/client';
+import type { Prisma } from '@prisma/client';
+import { AuditAction } from '@prisma/client';
 
 // ---- Validators ----
-import { CreateTrainingCertificateInput } from '../validators/training';
+import type { CreateTrainingCertificateInput } from '../validators/training';
 
 // ---- Interfaces ----
 

@@ -1,9 +1,9 @@
 'use client';
 
-import { Avatar, AvatarFallback } from '@src/shared/components/ui/avatar';
-import { Link } from '@tanstack/react-router';
 import { getInitials } from '@src/features/members/utils/helper/get-initials';
+import { Avatar, AvatarFallback } from '@src/shared/components/ui/avatar';
 import type { User } from '@src/shared/types';
+import { Link } from '@tanstack/react-router';
 
 interface NameCellProps {
   member: User;

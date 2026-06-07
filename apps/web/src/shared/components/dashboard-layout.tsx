@@ -1,13 +1,14 @@
 'use client';
 
 import * as React from 'react';
-
 import { AppSidebar } from '@src/shared/components/app-sidebar';
 import { Separator } from '@src/shared/components/ui/separator';
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '@src/shared/components/ui/sidebar';
-import { useTheme } from '../providers/theme-provider';
-import { Button } from './ui/button';
 import { MoonIcon, SunIcon } from 'lucide-react';
+
+import { useTheme } from '../providers/theme-provider';
+
+import { Button } from './ui/button';
 import { Ternary } from './Ternary';
 
 interface DashboardLayoutProps {

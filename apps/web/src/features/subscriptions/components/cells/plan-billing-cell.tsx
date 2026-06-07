@@ -1,6 +1,7 @@
 'use client';
 
 import { Badge } from '@src/shared/components/ui/badge';
+
 import { SubscriptionPlan } from '../../types';
 
 interface PlanBillingCellProps {

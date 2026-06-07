@@ -2,13 +2,14 @@ import { BadRequestError, NotFoundError, PaymentError } from '@errors';
 import { recordMemberPayment } from '@feature/ledger/services/accounting.service';
 import { decrypt } from '@lib/crypto';
 import { prisma } from '@lib/prisma';
+import type {
+  PaymentMethod,
+  Prisma} from '@prisma/client';
 import {
   AuditAction,
   ContributionStatus,
   PaymentGateway,
-  PaymentMethod,
-  PaymentStatus,
-  Prisma,
+  PaymentStatus
 } from '@prisma/client';
 import { createAllocations } from '@services/allocate-contributions';
 import { logAction } from '@services/audit-logs';

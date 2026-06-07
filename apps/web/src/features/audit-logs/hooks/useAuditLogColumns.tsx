@@ -1,7 +1,8 @@
-import { type ColumnDef } from '@tanstack/react-table';
 import { Badge } from '@src/shared/components/ui/badge';
 import { Button } from '@src/shared/components/ui/button';
 import { formatDate } from '@src/shared/utils';
+import { type ColumnDef } from '@tanstack/react-table';
+
 import type { AuditLogEntry } from '../types';
 
 function formatActionName(action: string): string {

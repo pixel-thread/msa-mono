@@ -1,4 +1,4 @@
-import { UserStatus, UserRole } from '@src/shared/types/enums';
+import { UserRole,UserStatus } from '@src/shared/types/enums';
 import { uuidValidiation } from '@src/shared/validators/common';
 import z from 'zod';
 

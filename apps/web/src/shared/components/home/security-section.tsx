@@ -1,16 +1,16 @@
 'use client';
 
-import { HugeiconsIcon } from '@hugeicons/react';
 import {
-  ShieldBlockchainIcon,
   BankIcon,
-  UserIdVerificationIcon,
+  BookOpen01Icon,
   CheckmarkBadge01Icon,
   Payment01Icon,
-  BookOpen01Icon,
+  ShieldBlockchainIcon,
+  UserIdVerificationIcon,
 } from '@hugeicons/core-free-icons';
+import { HugeiconsIcon } from '@hugeicons/react';
 import { Badge } from '@src/shared/components/ui/badge';
-import { Card, CardHeader, CardTitle, CardDescription } from '@src/shared/components/ui/card';
+import { Card, CardDescription,CardHeader, CardTitle } from '@src/shared/components/ui/card';
 import { Text } from '@src/shared/components/ui/text';
 
 const SECURITY_ITEMS = [

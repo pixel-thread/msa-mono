@@ -1,6 +1,8 @@
 'use client';
 
 import { useState } from 'react';
+import { Button } from '@src/shared/components/ui/button';
+import { Checkbox } from '@src/shared/components/ui/checkbox';
 import {
   Dialog,
   DialogContent,
@@ -10,10 +12,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@src/shared/components/ui/dialog';
-import { Button } from '@src/shared/components/ui/button';
-import { Checkbox } from '@src/shared/components/ui/checkbox';
 import { Label } from '@src/shared/components/ui/label';
 import { Play } from 'lucide-react';
+
 import { useTriggerComplianceCheck } from '../hooks/useTriggerComplianceCheck';
 import { ALL_CHECK_TYPES } from '../validators/compliance';
 

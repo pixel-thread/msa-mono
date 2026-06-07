@@ -1,17 +1,18 @@
 'use client';
 
 import { useState } from 'react';
+import { Button } from '@src/shared/components/ui/button';
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogFooter,
-  DialogDescription,
 } from '@src/shared/components/ui/dialog';
-import { Button } from '@src/shared/components/ui/button';
 import { Input } from '@src/shared/components/ui/input';
 import { Label } from '@src/shared/components/ui/label';
+
 import { useRejectEntry } from '../hooks/useRejectEntry';
 
 interface RejectEntryDialogProps {

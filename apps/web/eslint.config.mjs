@@ -1,7 +1,8 @@
-import { defineConfig, globalIgnores } from 'eslint/config';
-import tseslint from 'typescript-eslint';
-import reactHooks from 'eslint-plugin-react-hooks';
 import tanstackRouter from '@tanstack/eslint-plugin-router';
+import { defineConfig, globalIgnores } from 'eslint/config';
+import reactHooks from 'eslint-plugin-react-hooks';
+import simpleImportSort from 'eslint-plugin-simple-import-sort';
+import tseslint from 'typescript-eslint';
 
 const eslintConfig = defineConfig([
   ...tanstackRouter.configs['flat/recommended'],
@@ -9,13 +10,21 @@ const eslintConfig = defineConfig([
   {
     plugins: {
       'react-hooks': reactHooks,
+      'simple-import-sort': simpleImportSort,
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
-      'no-restricted-imports': [
-        'warn',
+      'no-restricted-imports': ['warn', { patterns: ['../*', '../../*', '../../../*'] }],
+      'simple-import-sort/imports': [
+        'error',
         {
-          patterns: ['../*', '../../*', '../../../*'],
+          groups: [
+            ['^react$', '^@?\\w'], // packages
+            ['^@/'], // aliases
+            ['^\\.\\.(?!/?$)', '^\\.\\./?$'], // parent imports
+            ['^\\./(?=.*/)(?!/?$)', '^\\.(?!/?$)', '^\\./?$'], // sibling imports
+            ['^.+\\.?(css)$'], // styles
+          ],
         },
       ],
     },

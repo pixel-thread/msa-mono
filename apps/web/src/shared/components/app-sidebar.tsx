@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-
+import { useAssociation } from '@hooks/use-association';
 import { NavMain } from '@src/shared/components/nav-main';
 import { NavUser } from '@src/shared/components/nav-user';
 import {
@@ -14,10 +14,10 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from '@src/shared/components/ui/sidebar';
-import { GalleryVerticalEndIcon } from 'lucide-react';
 import { useAuthStore } from '@src/shared/stores/auth';
+import { GalleryVerticalEndIcon } from 'lucide-react';
+
 import { DRAWER_NAV_MAIN } from '../constants/drawer';
-import { useAssociation } from '@hooks/use-association';
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { user } = useAuthStore();

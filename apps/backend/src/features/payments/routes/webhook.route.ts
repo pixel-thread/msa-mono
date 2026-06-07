@@ -14,7 +14,7 @@ import { logAction } from '@services/audit-logs';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 import type { RequestHandler } from 'express';
-import { Request, Response } from 'express';
+import type { Request, Response } from 'express';
 
 // ---- Handler ----
 

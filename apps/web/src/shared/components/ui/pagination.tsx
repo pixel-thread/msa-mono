@@ -1,13 +1,12 @@
 import * as React from 'react';
-
-import { cn } from '@src/shared/lib/utils';
-import { Button } from '@src/shared/components/ui/button';
-import { HugeiconsIcon } from '@hugeicons/react';
 import {
   ArrowLeft01Icon,
   ArrowRight01Icon,
   MoreHorizontalCircle01Icon,
 } from '@hugeicons/core-free-icons';
+import { HugeiconsIcon } from '@hugeicons/react';
+import { Button } from '@src/shared/components/ui/button';
+import { cn } from '@src/shared/lib/utils';
 
 function Pagination({ className, ...props }: React.ComponentProps<'nav'>) {
   return (

@@ -1,8 +1,7 @@
-import z from 'zod';
-import { AnnouncementStatus, AnnouncementPriority, UserRole } from '@sharedType/enums';
+import { AnnouncementPriority, AnnouncementStatus, UserRole } from '@sharedType/enums';
+import { ALLOWED_IMAGE_FORMATS, ALLOWED_MIME_TYPES,MAX_IMAGE_SIZE } from '@src/shared/constants';
 import { pageNumberValidation, pageSizeValidation } from '@src/shared/validators/common';
-
-import { MAX_IMAGE_SIZE, ALLOWED_IMAGE_FORMATS, ALLOWED_MIME_TYPES } from '@src/shared/constants';
+import z from 'zod';
 
 export const CreateAnnouncementSchema = z.object({
   title: z.string().min(1).max(200),

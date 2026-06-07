@@ -1,6 +1,7 @@
-import { ColumnDef } from '@tanstack/react-table';
-import { formatDate, formattedAmount } from '@src/shared/utils';
 import { Badge } from '@src/shared/components/ui/badge';
+import { formatDate, formattedAmount } from '@src/shared/utils';
+import { ColumnDef } from '@tanstack/react-table';
+
 import { type SubscriptionPlanVersion } from '../types';
 
 export const usePlanVersionColumns = (): {

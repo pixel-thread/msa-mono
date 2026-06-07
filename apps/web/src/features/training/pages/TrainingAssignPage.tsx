@@ -1,24 +1,24 @@
 'use client';
 
-import { useState, useMemo } from 'react';
-import { useParams } from '@tanstack/react-router';
-import { Search, Plus, Trash2, X } from 'lucide-react';
-
+import { useMemo,useState } from 'react';
+import { useUrlFilters } from '@hooks/use-url-filters';
+import { useMembers } from '@src/features/members/hooks/useMembers';
+import { DataTablePagination } from '@src/shared/components/data-table-pagination';
 import { Button } from '@src/shared/components/ui/button';
 import { Input } from '@src/shared/components/ui/input';
+import { useParams } from '@tanstack/react-router';
+import { Plus, Search, Trash2, X } from 'lucide-react';
+
+import { PaneHeader } from '../components/PaneHeader';
+import { UserRow } from '../components/UserRow';
 import {
-  useTrainingAssignmentsQuery,
   useAssignTrainingModule,
   useBulkAssignTrainingModule,
-  useRemoveTrainingAssignment,
   useBulkRemoveTrainingAssignment,
+  useRemoveTrainingAssignment,
+  useTrainingAssignmentsQuery,
 } from '../hooks/assignments';
 import { useTrainingModule } from '../hooks/useTrainingModules';
-import { useMembers } from '@src/features/members/hooks/useMembers';
-import { UserRow } from '../components/UserRow';
-import { PaneHeader } from '../components/PaneHeader';
-import { DataTablePagination } from '@src/shared/components/data-table-pagination';
-import { useUrlFilters } from '@hooks/use-url-filters';
 
 interface UserDisplay {
   id: string;

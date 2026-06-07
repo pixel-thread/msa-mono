@@ -7,7 +7,7 @@ export interface PaginationParams {
   pageSize: number;
 }
 
-export function buildPaginationParams(page: number = 1): PaginationParams {
+export function buildPaginationParams(page = 1): PaginationParams {
   const p = Math.max(1, page);
   const pageSize = PAGE_SIZE;
   return {

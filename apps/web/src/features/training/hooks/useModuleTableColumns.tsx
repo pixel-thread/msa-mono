@@ -1,5 +1,5 @@
-import { ColumnDef } from '@tanstack/react-table';
 import { Badge } from '@src/shared/components/ui/badge';
+import { Button } from '@src/shared/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,10 +8,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@src/shared/components/ui/dropdown-menu';
-import { Button } from '@src/shared/components/ui/button';
-import { MoreHorizontal, Settings, ToggleLeft, ToggleRight } from 'lucide-react';
-import type { TrainingModuleListItem } from '../types';
 import { Link } from '@tanstack/react-router';
+import { ColumnDef } from '@tanstack/react-table';
+import { MoreHorizontal, Settings, ToggleLeft, ToggleRight } from 'lucide-react';
+
+import type { TrainingModuleListItem } from '../types';
 
 export const useModuleTableColumns = (options: {
   onManage: (module: TrainingModuleListItem) => void;

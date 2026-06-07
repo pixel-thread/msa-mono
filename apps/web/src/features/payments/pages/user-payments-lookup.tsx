@@ -2,16 +2,16 @@
 
 import { useState } from 'react';
 import { MemberSearch } from '@src/features/payments/components/member-search';
-import { DataTable } from '@src/shared/components/data-table';
-import { DataTableFilters } from '@src/shared/components/data-table-filters';
 import { usePaymentTransactionColumns } from '@src/features/payments/hooks/usePaymentTransactionColumns';
 import { useUserPayments } from '@src/features/payments/hooks/useUserPayments';
-import { Card, CardContent } from '@src/shared/components/ui/card';
-import { Button } from '@src/shared/components/ui/button';
+import { DataTable } from '@src/shared/components/data-table';
+import { DataTableFilters } from '@src/shared/components/data-table-filters';
 import { SectionHeader } from '@src/shared/components/section-header';
-import { CreditCard, AlertCircle, Receipt, Clock, User } from 'lucide-react';
-import { Link } from '@tanstack/react-router';
+import { Button } from '@src/shared/components/ui/button';
+import { Card, CardContent } from '@src/shared/components/ui/card';
 import { formattedAmount } from '@src/shared/utils';
+import { Link } from '@tanstack/react-router';
+import { AlertCircle, Clock, CreditCard, Receipt, User } from 'lucide-react';
 
 export function UserPaymentsLookupPage() {
   const [selectedMember, setSelectedMember] = useState<{

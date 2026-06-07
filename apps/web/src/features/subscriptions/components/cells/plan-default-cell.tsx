@@ -1,7 +1,8 @@
 'use client';
 
-import { Star } from 'lucide-react';
 import { Button } from '@src/shared/components/ui/button';
+import { Star } from 'lucide-react';
+
 import { SubscriptionPlan } from '../../types';
 
 interface PlanDefaultCellProps {

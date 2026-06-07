@@ -1,17 +1,18 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useCallback,useState } from 'react';
 import { DataTable } from '@src/shared/components/data-table';
-import { SectionHeader } from '@src/shared/components/section-header';
 import { DataTableFilters } from '@src/shared/components/data-table-filters';
-import { useDsarTickets, useDeleteDsarTicket, useDsarColumns } from '../hooks';
-import { DsarDetailDialog } from '../components/dsar-detail-dialog';
-import { DsarRespondDialog } from '../components/dsar-respond-dialog';
-import { DsarRejectDialog } from '../components/dsar-reject-dialog';
+import { DataTablePagination } from '@src/shared/components/data-table-pagination';
+import { SectionHeader } from '@src/shared/components/section-header';
+
 import { DsarAssignDialog } from '../components/dsar-assign-dialog';
 import { DsarDeleteDialog } from '../components/dsar-delete-dialog';
+import { DsarDetailDialog } from '../components/dsar-detail-dialog';
+import { DsarRejectDialog } from '../components/dsar-reject-dialog';
+import { DsarRespondDialog } from '../components/dsar-respond-dialog';
 import { DsarSlaCards } from '../components/dsar-sla-cards';
-import { DataTablePagination } from '@src/shared/components/data-table-pagination';
+import { useDeleteDsarTicket, useDsarColumns,useDsarTickets } from '../hooks';
 import type { DsarTicketRecord } from '../types';
 
 const requestTypes = [

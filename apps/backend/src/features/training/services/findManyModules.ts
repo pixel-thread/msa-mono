@@ -1,7 +1,7 @@
 // ---- External libs ----
 // ---- Shared utilities ----
 import { prisma } from '@lib/prisma';
-import { UserRole } from '@prisma/client';
+import type { UserRole } from '@prisma/client';
 import { PAGE_SIZE } from '@src/shared/constants';
 import { buildPagination } from '@src/shared/utils/helper/build-pagination';
 

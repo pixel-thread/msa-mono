@@ -1,10 +1,11 @@
 'use client';
 
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import http from '@src/shared/utils/http';
 import { QUERY_KEYS } from '@repo/shared';
-import { ProviderResponse } from '../types';
 import { ENDPOINTS } from '@repo/shared';
+import http from '@src/shared/utils/http';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+
+import { ProviderResponse } from '../types';
 
 export function usePaymentProviders() {
   const { data, isLoading, error, refetch } = useQuery({

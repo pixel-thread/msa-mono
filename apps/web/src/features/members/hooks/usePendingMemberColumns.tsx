@@ -1,9 +1,10 @@
-import { ColumnDef } from '@tanstack/react-table';
-import { Link } from '@tanstack/react-router';
 import { Avatar, AvatarFallback } from '@components/ui/avatar';
-import { getInitials } from '../utils/helper/get-initials';
 import { PendingActionsCell } from '@src/features/members/components/cells/pending-actions-cell';
+import { Link } from '@tanstack/react-router';
+import { ColumnDef } from '@tanstack/react-table';
+
 import { MemberListItem } from '../types';
+import { getInitials } from '../utils/helper/get-initials';
 
 interface UsePendingMemberColumnsOptions {
   onAccept: (member: MemberListItem) => void;

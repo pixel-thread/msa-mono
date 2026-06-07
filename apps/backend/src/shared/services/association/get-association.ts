@@ -1,6 +1,6 @@
 import { ForbiddenError,UnauthorizedError } from '@errors';
 import { prisma } from '@lib/prisma';
-import { Request } from 'express';
+import type { Request } from 'express';
 
 /** Resolves the current user's association from the request context. */
 export async function getAssociation(req: Request) {

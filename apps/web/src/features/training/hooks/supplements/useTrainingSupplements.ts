@@ -1,8 +1,9 @@
+import { buildUrlWithQuery,ENDPOINTS } from '@repo/shared';
 import http from '@src/shared/utils/http';
 import { useQuery } from '@tanstack/react-query';
-import { ENDPOINTS, buildUrlWithQuery } from '@repo/shared';
-import { trainingQueryKeys } from '../../utils/constants';
+
 import { TrainingSupplementItem } from '../../types';
+import { trainingQueryKeys } from '../../utils/constants';
 
 export function useTrainingSupplements(moduleId: string, page?: number) {
   const pageNo = page ?? 1;

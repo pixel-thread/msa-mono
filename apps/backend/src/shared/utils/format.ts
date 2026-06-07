@@ -48,7 +48,7 @@ export const formatDate = (date: string | Date | null | undefined) => {
   return formatter.format(d);
 };
 
-export const formattedAmount = (amount: number, currency: string = 'INR') => {
+export const formattedAmount = (amount: number, currency = 'INR') => {
   return new Intl.NumberFormat('en-IN', {
     style: 'currency',
     currency,

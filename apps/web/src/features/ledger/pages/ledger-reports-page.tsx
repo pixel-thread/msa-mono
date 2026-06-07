@@ -1,7 +1,5 @@
 'use client';
 
-import { useTrialBalance } from '../hooks/useTrialBalance';
-import { useIncomeStatement } from '../hooks/useIncomeStatement';
 import { SectionHeader } from '@components/section-header';
 import { Card, CardContent, CardHeader, CardTitle } from '@components/ui/card';
 import {
@@ -13,6 +11,9 @@ import {
   TableRow,
 } from '@components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@components/ui/tabs';
+
+import { useIncomeStatement } from '../hooks/useIncomeStatement';
+import { useTrialBalance } from '../hooks/useTrialBalance';
 
 function formatCurrency(amount: string) {
   const num = Number(amount);

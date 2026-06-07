@@ -1,3 +1,4 @@
+import { Button } from '@src/shared/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -6,10 +7,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@src/shared/components/ui/dialog';
-import { Button } from '@src/shared/components/ui/button';
 import { formattedAmount } from '@src/shared/utils/format';
+import { ArrowRight, Info,Loader2 } from 'lucide-react';
+
 import { Subscription, SubscriptionPlan } from '../types';
-import { ArrowRight, Loader2, Info } from 'lucide-react';
 
 interface ChangePlanDialogProps {
   open: boolean;

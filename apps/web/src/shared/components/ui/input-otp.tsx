@@ -1,11 +1,10 @@
 'use client';
 
 import * as React from 'react';
-import { OTPInput, OTPInputContext } from 'input-otp';
-
-import { cn } from '@src/shared/lib/utils';
-import { HugeiconsIcon } from '@hugeicons/react';
 import { MinusSignIcon } from '@hugeicons/core-free-icons';
+import { HugeiconsIcon } from '@hugeicons/react';
+import { cn } from '@src/shared/lib/utils';
+import { OTPInput, OTPInputContext } from 'input-otp';
 
 function InputOTP({
   className,

@@ -1,6 +1,6 @@
 import { NotFoundError } from '@errors';
 import { prisma } from '@lib/prisma';
-import { MeetingStatus } from '@prisma/client';
+import type { MeetingStatus, MeetingType } from '@prisma/client';
 
 /** Props for updating a meeting. */
 interface UpdateMeetingProps {
@@ -8,7 +8,7 @@ interface UpdateMeetingProps {
   associationId: string;
   data: {
     title?: string;
-    type?: import('@prisma/client').MeetingType;
+    type?: MeetingType;
     scheduledAt?: Date;
     venue?: string;
     status?: MeetingStatus;

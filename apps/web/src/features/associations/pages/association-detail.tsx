@@ -1,17 +1,19 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { useEffect,useRef, useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Card, CardHeader, CardTitle, CardContent } from '@src/shared/components/ui/card';
-import { Avatar, AvatarImage, AvatarFallback } from '@src/shared/components/ui/avatar';
+import { useAssociation } from '@hooks/use-association';
+import { useUpdateAssociation } from '@src/features/associations/hooks/useUpdateAssociation';
+import { useUploadAssociationLogo } from '@src/features/associations/hooks/useUploadAssociationLogo';
+import {
+  UpdateAssociationInput,
+  UpdateAssociationSchema,
+} from '@src/features/associations/validators';
+import { SectionHeader } from '@src/shared/components/section-header';
+import { Avatar, AvatarFallback,AvatarImage } from '@src/shared/components/ui/avatar';
 import { Badge } from '@src/shared/components/ui/badge';
 import { Button } from '@src/shared/components/ui/button';
-import { SectionHeader } from '@src/shared/components/section-header';
-import { Input } from '@src/shared/components/ui/input';
-import { Textarea } from '@src/shared/components/ui/textarea';
-import { Skeleton } from '@src/shared/components/ui/skeleton';
-import { Spinner } from '@src/shared/components/ui/spinner';
+import { Card, CardContent,CardHeader, CardTitle } from '@src/shared/components/ui/card';
 import {
   Form,
   FormControl,
@@ -20,14 +22,12 @@ import {
   FormLabel,
   FormMessage,
 } from '@src/shared/components/ui/form';
-import { useUpdateAssociation } from '@src/features/associations/hooks/useUpdateAssociation';
-import { useUploadAssociationLogo } from '@src/features/associations/hooks/useUploadAssociationLogo';
-import {
-  UpdateAssociationInput,
-  UpdateAssociationSchema,
-} from '@src/features/associations/validators';
-import { Camera, Pencil, Save, X, Building2 } from 'lucide-react';
-import { useAssociation } from '@hooks/use-association';
+import { Input } from '@src/shared/components/ui/input';
+import { Skeleton } from '@src/shared/components/ui/skeleton';
+import { Spinner } from '@src/shared/components/ui/spinner';
+import { Textarea } from '@src/shared/components/ui/textarea';
+import { Building2,Camera, Pencil, Save, X } from 'lucide-react';
+import { useForm } from 'react-hook-form';
 
 export default function AssociationDetailPage() {
   const { data: association, isFetching: isLoading } = useAssociation();

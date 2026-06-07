@@ -1,5 +1,6 @@
 'use client';
 
+import { STATUSES } from '@src/features/members/utils/constants';
 import {
   Select,
   SelectContent,
@@ -7,7 +8,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@src/shared/components/ui/select';
-import { STATUSES } from '@src/features/members/utils/constants';
 import type { User } from '@src/shared/types';
 import { getStatusBadge } from '@src/shared/utils/helper/get-status-badge';
 

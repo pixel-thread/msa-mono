@@ -1,11 +1,12 @@
 'use client';
 
-import { useState, useMemo } from 'react';
-import { CheckCircle, Award } from 'lucide-react';
+import { useMemo,useState } from 'react';
 import { Badge } from '@src/shared/components/ui/badge';
 import { Button } from '@src/shared/components/ui/button';
-import { ColumnDef } from '@tanstack/react-table';
 import { formatDate } from '@src/shared/utils';
+import { ColumnDef } from '@tanstack/react-table';
+import { Award,CheckCircle } from 'lucide-react';
+
 import type { AssignedUserWithCompletion } from '../types';
 
 export function useTrainingMemberColumn(options: {

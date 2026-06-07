@@ -1,28 +1,28 @@
 'use client';
 
-import { useParams } from '@tanstack/react-router';
 import { useState } from 'react';
-import { useMeetingDetail } from '@feature/meetings/hooks/useMeetingDetail';
-import {
-  useMeetingMinutes,
-  type MeetingMinute as MeetingMinuteType,
-} from '@feature/meetings/hooks/useMeetingMinutes';
-import {
-  CreateMinuteDialog,
-  EditMinuteDialog,
-  DeleteMinuteDialog,
-} from '@feature/meetings/components';
 import { DataTable } from '@components/data-table';
 import { DataTableFilters } from '@components/data-table-filters';
-import { useMeetingMinutesColumns } from '@feature/meetings/hooks/useMeetingMinutesColumns';
-import { Button } from '@components/ui/button';
 import { SectionHeader } from '@components/section-header';
-import { FileText, Plus } from 'lucide-react';
-import { Link } from '@tanstack/react-router';
+import { Button } from '@components/ui/button';
+import {
+  CreateMinuteDialog,
+  DeleteMinuteDialog,
+  EditMinuteDialog,
+} from '@feature/meetings/components';
+import { useMeetingDetail } from '@feature/meetings/hooks/useMeetingDetail';
+import {
+  type MeetingMinute as MeetingMinuteType,
+  useMeetingMinutes,
+} from '@feature/meetings/hooks/useMeetingMinutes';
+import { useMeetingMinutesColumns } from '@feature/meetings/hooks/useMeetingMinutesColumns';
 import type {
   CreateMeetingMinuteInput,
   UpdateMeetingMinuteInput,
 } from '@feature/meetings/validators';
+import { useParams } from '@tanstack/react-router';
+import { Link } from '@tanstack/react-router';
+import { FileText, Plus } from 'lucide-react';
 
 /**
  * Meeting Minutes Page component.

@@ -2,6 +2,7 @@
 
 import { Button } from '@src/shared/components/ui/button';
 import { Eye, Pencil, Trash2 } from 'lucide-react';
+
 import type { ConsentRecord } from '../../types/consent.types';
 
 interface ConsentActionsCellProps {

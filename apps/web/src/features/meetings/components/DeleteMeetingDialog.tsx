@@ -1,5 +1,7 @@
 'use client';
 
+import { QUERY_KEYS } from '@repo/shared';
+import { Button } from '@src/shared/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -8,11 +10,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@src/shared/components/ui/dialog';
-import { Button } from '@src/shared/components/ui/button';
-import { AlertTriangle } from 'lucide-react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
-import { QUERY_KEYS } from '@repo/shared';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { AlertTriangle } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface DeleteMeetingDialogProps {

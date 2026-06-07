@@ -2,8 +2,9 @@ import { BadRequestError, ConflictError } from '@errors';
 import { findFirstAssociation } from '@feature/associations/services/findFirstAssociation';
 import { findFirstMember } from '@feature/members/services/findFirstMember';
 import { createMembershipApplication } from '@feature/membership-applications/services';
+import type {
+  MembershipApplicationInput} from '@feature/membership-applications/validators';
 import {
-  MembershipApplicationInput,
   MembershipApplicationSchema,
 } from '@feature/membership-applications/validators';
 import { validate } from '@lib/validate';
@@ -12,7 +13,7 @@ import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
 import type { RequestHandler } from 'express';
-import { NextFunction, Request, Response } from 'express';
+import type { NextFunction, Request, Response } from 'express';
 
 /**
  * POST /api/auth/sign-up — Submit a membership application for a new account

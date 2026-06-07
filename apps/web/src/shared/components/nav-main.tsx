@@ -1,7 +1,5 @@
 'use client';
 
-import { Link, useLocation } from '@tanstack/react-router';
-
 import {
   Collapsible,
   CollapsibleContent,
@@ -17,6 +15,7 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from '@src/shared/components/ui/sidebar';
+import { Link, useLocation } from '@tanstack/react-router';
 import { ChevronRightIcon } from 'lucide-react';
 
 export function NavMain({

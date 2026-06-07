@@ -1,7 +1,6 @@
 'use client';
 
-import { flexRender, getCoreRowModel, useReactTable, type ColumnDef } from '@tanstack/react-table';
-
+import { Card } from '@components/ui/card';
 import {
   Table,
   TableBody,
@@ -11,8 +10,8 @@ import {
   TableRow,
 } from '@src/shared/components/ui/table';
 import { TableSkeleton } from '@src/shared/components/ui/table-skeleton';
-import { Card } from '@components/ui/card';
 import { PAGE_SIZE } from '@src/shared/constants';
+import { type ColumnDef,flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 
 type DataTableProps<TData> = {
   loading?: boolean;

@@ -1,6 +1,6 @@
-import axios, { AxiosInstance, InternalAxiosRequestConfig } from 'axios';
 import { env } from '@src/env';
 import { logger } from '@src/shared/logger';
+import axios, { AxiosInstance, InternalAxiosRequestConfig } from 'axios';
 import cookie from 'react-cookies';
 
 type ExtendedConfig = InternalAxiosRequestConfig & { __startTime?: number };

@@ -1,15 +1,17 @@
 'use client';
 
 import { useState } from 'react';
-import { Card, CardContent } from '@components/ui/card';
 import { Badge } from '@components/ui/badge';
-import { Progress } from '@components/ui/progress';
+import { Card, CardContent } from '@components/ui/card';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@components/ui/collapsible';
+import { Progress } from '@components/ui/progress';
 import { formattedAmount } from '@src/shared/utils';
 import { getMonthName } from '@src/shared/utils/helper/get-month-name';
-import { ChevronDown, ChevronRight, BarChart3 } from 'lucide-react';
-import { ContributionStatusBadge } from './contribution-status-badge';
+import { BarChart3,ChevronDown, ChevronRight } from 'lucide-react';
+
 import type { ContributionPeriod, ContributionSummary } from '../types';
+
+import { ContributionStatusBadge } from './contribution-status-badge';
 
 interface ContributionStatsPanelProps {
   summary: ContributionSummary | null;

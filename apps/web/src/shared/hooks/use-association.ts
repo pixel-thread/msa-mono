@@ -1,8 +1,9 @@
-import { useQuery } from '@tanstack/react-query';
-import http from '../utils/http';
 import { QUERY_KEYS } from '@repo/shared';
-import { useAuthStore } from '../stores';
 import { Association } from '@src/features/associations/types/association';
+import { useQuery } from '@tanstack/react-query';
+
+import { useAuthStore } from '../stores';
+import http from '../utils/http';
 
 export function useAssociation() {
   const { isSignedIn } = useAuthStore();

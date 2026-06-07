@@ -1,5 +1,5 @@
-import { pageNumberValidation } from '@src/shared/validators/common';
 import { ComplaintStatus } from '@sharedType/enums';
+import { pageNumberValidation } from '@src/shared/validators/common';
 import { z } from 'zod';
 
 export const ComplaintQuerySchema = z.object({

@@ -1,7 +1,7 @@
 'use client';
 
-import { HugeiconsIcon } from '@hugeicons/react';
 import { CheckmarkCircle02Icon } from '@hugeicons/core-free-icons';
+import { HugeiconsIcon } from '@hugeicons/react';
 import { Badge } from '@src/shared/components/ui/badge';
 import { Card, CardContent } from '@src/shared/components/ui/card';
 import { Text } from '@src/shared/components/ui/text';

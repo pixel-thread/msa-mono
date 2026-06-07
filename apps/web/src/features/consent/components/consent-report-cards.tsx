@@ -1,8 +1,9 @@
 'use client';
 
-import { useConsentReport } from '../hooks/useConsentReport';
-import { Skeleton } from '@src/shared/components/ui/skeleton';
 import { ConsentPurpose } from '@sharedType/enums';
+import { Skeleton } from '@src/shared/components/ui/skeleton';
+
+import { useConsentReport } from '../hooks/useConsentReport';
 
 const purposeLabels: Record<ConsentPurpose, string> = {
   PAYMENTS: 'Payments',

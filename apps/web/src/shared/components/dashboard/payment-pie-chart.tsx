@@ -1,8 +1,6 @@
 // @ts-nocheck
 'use client';
 
-import { Pie, PieChart, Cell } from 'recharts';
-
 import {
   Card,
   CardContent,
@@ -11,11 +9,12 @@ import {
   CardTitle,
 } from '@src/shared/components/ui/card';
 import {
+  type ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-  type ChartConfig,
 } from '@src/shared/components/ui/chart';
+import { Cell,Pie, PieChart } from 'recharts';
 
 const COLORS = [
   'var(--color-pie-1)',

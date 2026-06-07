@@ -5,6 +5,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@src/shared/components/ui/dialog';
+
 import type { AuditLogEntry } from '../types';
 
 interface AuditLogDetailsDialogProps {

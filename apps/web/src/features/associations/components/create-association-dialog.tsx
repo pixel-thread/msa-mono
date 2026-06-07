@@ -1,6 +1,11 @@
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useCreateAssociation } from '@src/features/associations/hooks/useCreateAssociation';
+import {
+  CreateAssociationInput,
+  CreateAssociationSchema,
+} from '@src/features/associations/validators';
+import { Button } from '@src/shared/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -20,13 +25,8 @@ import {
 } from '@src/shared/components/ui/form';
 import { Input } from '@src/shared/components/ui/input';
 import { Textarea } from '@src/shared/components/ui/textarea';
-import { Button } from '@src/shared/components/ui/button';
 import { Plus } from 'lucide-react';
-import { useCreateAssociation } from '@src/features/associations/hooks/useCreateAssociation';
-import {
-  CreateAssociationInput,
-  CreateAssociationSchema,
-} from '@src/features/associations/validators';
+import { useForm } from 'react-hook-form';
 
 export function CreateAssociationDialog() {
   const [open, setOpen] = useState(false);

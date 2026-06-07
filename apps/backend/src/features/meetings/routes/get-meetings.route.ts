@@ -10,7 +10,7 @@ import { hasHighRoleAccess } from '@utils/has-high-role';
 import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';
 import type { RequestHandler } from 'express';
-import { NextFunction, Request, Response } from 'express';
+import type { NextFunction, Request, Response } from 'express';
 
 /** GET /api/meetings - List all meetings for the association. */
 export const getMeetings: RequestHandler[] = [

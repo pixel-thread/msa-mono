@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useMemo } from 'react';
-import { useNavigate, useLocation } from '@tanstack/react-router';
+import { useLocation,useNavigate } from '@tanstack/react-router';
 
 interface UseUrlFiltersOptions {
   basePath?: string;

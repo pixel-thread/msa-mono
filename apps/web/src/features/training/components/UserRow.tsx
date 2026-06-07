@@ -1,7 +1,7 @@
 'use client';
 
-import { CheckSquare, Square } from 'lucide-react';
 import { Button } from '@src/shared/components/ui/button';
+import { CheckSquare, Square } from 'lucide-react';
 
 interface UserDisplay {
   id: string;

@@ -1,7 +1,7 @@
-import { ColumnDef } from '@tanstack/react-table';
 import { Badge } from '@src/shared/components/ui/badge';
 import { formatDate } from '@src/shared/utils';
 import { getStatusBadge } from '@src/shared/utils/helper/get-status-badge';
+import { ColumnDef } from '@tanstack/react-table';
 
 interface DashboardMeeting {
   id: string;

@@ -1,6 +1,11 @@
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useCreateMemberType } from '@src/features/member-type/hooks/useCreateMemberType';
+import {
+  CreateMemberTypeInput,
+  CreateMemberTypeSchema,
+} from '@src/features/member-type/validators';
+import { Button } from '@src/shared/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -19,13 +24,8 @@ import {
   FormMessage,
 } from '@src/shared/components/ui/form';
 import { Input } from '@src/shared/components/ui/input';
-import { Button } from '@src/shared/components/ui/button';
 import { Plus } from 'lucide-react';
-import { useCreateMemberType } from '@src/features/member-type/hooks/useCreateMemberType';
-import {
-  CreateMemberTypeInput,
-  CreateMemberTypeSchema,
-} from '@src/features/member-type/validators';
+import { useForm } from 'react-hook-form';
 
 export function CreateMemberTypeDialog() {
   const [open, setOpen] = useState(false);

@@ -1,12 +1,13 @@
-import { ColumnDef } from '@tanstack/react-table';
-import { formatDate } from '@src/shared/utils';
-import { SubscriptionPlan } from '../types';
-import { PlanNameCell } from '@src/features/subscriptions/components/cells/plan-name-cell';
+import { PlanActionsCell } from '@src/features/subscriptions/components/cells/plan-actions-cell';
 import { PlanAmountCell } from '@src/features/subscriptions/components/cells/plan-amount-cell';
 import { PlanBillingCell } from '@src/features/subscriptions/components/cells/plan-billing-cell';
-import { PlanStatusCell } from '@src/features/subscriptions/components/cells/plan-status-cell';
-import { PlanActionsCell } from '@src/features/subscriptions/components/cells/plan-actions-cell';
 import { PlanDefaultCell } from '@src/features/subscriptions/components/cells/plan-default-cell';
+import { PlanNameCell } from '@src/features/subscriptions/components/cells/plan-name-cell';
+import { PlanStatusCell } from '@src/features/subscriptions/components/cells/plan-status-cell';
+import { formatDate } from '@src/shared/utils';
+import { ColumnDef } from '@tanstack/react-table';
+
+import { SubscriptionPlan } from '../types';
 
 interface UsePlanTableColumnsOptions {
   onStatusChange: (planId: string, isActive: boolean) => void;

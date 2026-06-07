@@ -1,13 +1,13 @@
 import * as React from 'react';
-import { DatabaseIcon } from 'lucide-react';
 import { Loading } from '@src/shared/components/loading/loading';
 import {
   Empty,
-  EmptyHeader,
-  EmptyTitle,
   EmptyDescription,
+  EmptyHeader,
   EmptyMedia,
+  EmptyTitle,
 } from '@src/shared/components/ui/empty';
+import { DatabaseIcon } from 'lucide-react';
 
 export interface DataStateViewProps {
   /** If true, the loading state is shown */

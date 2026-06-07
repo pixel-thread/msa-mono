@@ -1,5 +1,6 @@
 'use client';
 
+import { Button } from '@src/shared/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -8,7 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@src/shared/components/ui/dialog';
-import { Button } from '@src/shared/components/ui/button';
+
 import { useApproveEntry } from '../hooks/useApproveEntry';
 
 interface ApproveEntryDialogProps {

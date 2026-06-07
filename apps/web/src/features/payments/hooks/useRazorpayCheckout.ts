@@ -1,10 +1,11 @@
 'use client';
 
-import { useMutation } from '@tanstack/react-query';
-import http from '@src/shared/utils/http';
-import type { RazorpayCheckoutOptions } from '../types/razorpay-checkout';
-import { loadRazorpayScript, openRazorpayCheckout } from '../lib/razorpay-checkout';
 import { ENDPOINTS } from '@repo/shared';
+import http from '@src/shared/utils/http';
+import { useMutation } from '@tanstack/react-query';
+
+import { loadRazorpayScript, openRazorpayCheckout } from '../lib/razorpay-checkout';
+import type { RazorpayCheckoutOptions } from '../types/razorpay-checkout';
 
 export function useTestPayment(providerId: string) {
   return useMutation({

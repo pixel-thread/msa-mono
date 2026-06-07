@@ -1,16 +1,16 @@
 'use client';
 
-import { useParams, useNavigate } from '@tanstack/react-router';
-import { useUrlFilters } from '@src/shared/hooks';
-import { Award } from 'lucide-react';
-
-import { Button } from '@src/shared/components/ui/button';
-import { DataTablePagination } from '@src/shared/components/data-table-pagination';
 import { DataTable } from '@src/shared/components/data-table';
 import { DataTableFilters } from '@src/shared/components/data-table-filters';
-import { useTrainingModule } from '../hooks/useTrainingModules';
+import { DataTablePagination } from '@src/shared/components/data-table-pagination';
+import { Button } from '@src/shared/components/ui/button';
+import { useUrlFilters } from '@src/shared/hooks';
+import { useNavigate,useParams } from '@tanstack/react-router';
+import { Award } from 'lucide-react';
+
 import { useTrainingCompletions } from '../hooks/completions/useTrainingCompletions';
 import { useTrainingCompletionsColumns } from '../hooks/completions/useTrainingCompletionsColumns';
+import { useTrainingModule } from '../hooks/useTrainingModules';
 
 export function TrainingCompletionsPage() {
   const navigate = useNavigate();

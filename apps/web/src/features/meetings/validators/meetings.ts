@@ -1,6 +1,6 @@
-import { z } from 'zod';
-import { MeetingType, MeetingStatus } from '@sharedType/enums';
+import { MeetingStatus,MeetingType } from '@sharedType/enums';
 import { pageNumberValidation } from '@src/shared/validators/common';
+import { z } from 'zod';
 
 export const agendaItemSchema = z.object({
   title: z.string({ message: 'Title is required' }).min(1, 'Agenda item title is required'),

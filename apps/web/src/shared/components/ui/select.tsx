@@ -1,16 +1,15 @@
 'use client';
 
 import * as React from 'react';
-import { Select as SelectPrimitive } from 'radix-ui';
-
-import { cn } from '@src/shared/lib/utils';
-import { HugeiconsIcon } from '@hugeicons/react';
 import {
-  UnfoldMoreIcon,
-  Tick02Icon,
-  ArrowUp01Icon,
   ArrowDown01Icon,
+  ArrowUp01Icon,
+  Tick02Icon,
+  UnfoldMoreIcon,
 } from '@hugeicons/core-free-icons';
+import { HugeiconsIcon } from '@hugeicons/react';
+import { cn } from '@src/shared/lib/utils';
+import { Select as SelectPrimitive } from 'radix-ui';
 
 function Select({ ...props }: React.ComponentProps<typeof SelectPrimitive.Root>) {
   return <SelectPrimitive.Root data-slot="select" {...props} />;

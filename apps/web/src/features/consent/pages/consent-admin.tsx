@@ -1,16 +1,17 @@
 'use client';
 
-import { useState, useCallback } from 'react';
-import { DataTable } from '@src/shared/components/data-table';
-import { SectionHeader } from '@src/shared/components/section-header';
-import { DataTableFilters } from '@src/shared/components/data-table-filters';
-import { useConsentRecords, useDeleteConsentReceipt, useConsentColumns } from '../hooks';
-import { ConsentDetailDialog } from '../components/consent-detail-dialog';
-import { EditConsentDialog } from '../components/edit-consent-dialog';
-import { DeleteConsentDialog } from '../components/delete-consent-dialog';
-import { ConsentReportCards } from '../components/consent-report-cards';
-import { DataTablePagination } from '@src/shared/components/data-table-pagination';
+import { useCallback,useState } from 'react';
 import { ConsentPurpose, ConsentStatus } from '@sharedType/enums';
+import { DataTable } from '@src/shared/components/data-table';
+import { DataTableFilters } from '@src/shared/components/data-table-filters';
+import { DataTablePagination } from '@src/shared/components/data-table-pagination';
+import { SectionHeader } from '@src/shared/components/section-header';
+
+import { ConsentDetailDialog } from '../components/consent-detail-dialog';
+import { ConsentReportCards } from '../components/consent-report-cards';
+import { DeleteConsentDialog } from '../components/delete-consent-dialog';
+import { EditConsentDialog } from '../components/edit-consent-dialog';
+import { useConsentColumns,useConsentRecords, useDeleteConsentReceipt } from '../hooks';
 import type { ConsentRecord } from '../types/consent.types';
 
 export default function ConsentAdminPage() {

@@ -1,5 +1,5 @@
-import { ColumnDef } from '@tanstack/react-table';
 import { MemberTypeActionsCell } from '@src/features/member-type/components/cells/member-type-actions-cell';
+import { ColumnDef } from '@tanstack/react-table';
 
 interface MemberType {
   id: string;

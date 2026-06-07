@@ -1,8 +1,7 @@
 import * as React from 'react';
+import { cn } from '@src/shared/lib/utils';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { Slot } from 'radix-ui';
-
-import { cn } from '@src/shared/lib/utils';
 
 const textVariants = cva('', {
   variants: {

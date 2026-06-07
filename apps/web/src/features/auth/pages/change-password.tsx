@@ -1,14 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { useNavigate } from '@tanstack/react-router';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-
-import { Button } from '@components/ui/button';
-import { Input } from '@components/ui/input';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@components/ui/card';
 import { Alert, AlertDescription } from '@components/ui/alert';
+import { Button } from '@components/ui/button';
+import { Card, CardContent,CardDescription, CardHeader, CardTitle } from '@components/ui/card';
 import {
   Form,
   FormControl,
@@ -17,8 +12,12 @@ import {
   FormLabel,
   FormMessage,
 } from '@components/ui/form';
-import { ChangePasswordSchema, type ChangePasswordInput } from '@feature/auth/validators';
+import { Input } from '@components/ui/input';
 import { useChangePassword } from '@feature/auth/hooks';
+import { type ChangePasswordInput,ChangePasswordSchema } from '@feature/auth/validators';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useNavigate } from '@tanstack/react-router';
+import { useForm } from 'react-hook-form';
 
 /**
  * Change Password page component.

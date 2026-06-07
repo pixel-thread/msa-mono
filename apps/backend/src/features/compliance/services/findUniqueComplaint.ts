@@ -1,5 +1,5 @@
 import { prisma } from '@lib/prisma';
-import { Prisma } from '@prisma/client';
+import type { Prisma } from '@prisma/client';
 
 /** Props for fetching a single complaint. */
 type Props = {

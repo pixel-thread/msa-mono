@@ -1,5 +1,5 @@
-import { z } from 'zod';
 import { UserRole } from '@sharedType/enums';
+import { z } from 'zod';
 
 export const CreateTrainingModuleSchema = z.object({
   title: z.string().min(3, 'Title must be at least 3 characters').max(200).trim(),

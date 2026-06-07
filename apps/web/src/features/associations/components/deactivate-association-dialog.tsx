@@ -1,3 +1,4 @@
+import { Button } from '@src/shared/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -6,7 +7,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@src/shared/components/ui/dialog';
-import { Button } from '@src/shared/components/ui/button';
 
 interface Association {
   id: string;

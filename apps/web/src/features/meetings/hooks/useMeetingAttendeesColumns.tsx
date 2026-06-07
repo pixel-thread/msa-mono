@@ -1,7 +1,6 @@
 'use client';
-import { ColumnDef } from '@tanstack/react-table';
-import { Badge } from '@src/shared/components/ui/badge';
 import { Avatar, AvatarFallback } from '@src/shared/components/ui/avatar';
+import { Badge } from '@src/shared/components/ui/badge';
 import { Button } from '@src/shared/components/ui/button';
 import {
   Select,
@@ -10,6 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@src/shared/components/ui/select';
+import { ColumnDef } from '@tanstack/react-table';
 import { Trash2 } from 'lucide-react';
 
 interface AttendeeRow {

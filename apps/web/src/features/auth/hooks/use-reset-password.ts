@@ -1,8 +1,7 @@
-import { useMutation } from '@tanstack/react-query';
-
-import http from '@src/shared/utils/http';
-import { ResetPasswordSchema, type ResetPasswordInput } from '@src/features/auth/validators';
 import { ENDPOINTS } from '@repo/shared';
+import { type ResetPasswordInput,ResetPasswordSchema } from '@src/features/auth/validators';
+import http from '@src/shared/utils/http';
+import { useMutation } from '@tanstack/react-query';
 
 export function useResetPassword() {
   return useMutation({

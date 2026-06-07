@@ -1,6 +1,6 @@
-import { UserRole } from '@prisma/client';
+import type { UserRole } from '@prisma/client';
 import { getUniqueUser } from '@services/user/get-unique-user';
-import { Request } from 'express';
+import type { Request } from 'express';
 
 import { ForbiddenError, UnauthorizedError } from '../errors';
 

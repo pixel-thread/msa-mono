@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { Button } from '@src/shared/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -9,6 +10,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@src/shared/components/ui/dialog';
+import { Input } from '@src/shared/components/ui/input';
+import { Label } from '@src/shared/components/ui/label';
 import {
   Select,
   SelectContent,
@@ -16,10 +19,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@src/shared/components/ui/select';
-import { Button } from '@src/shared/components/ui/button';
-import { Label } from '@src/shared/components/ui/label';
-import { Input } from '@src/shared/components/ui/input';
 import { Textarea } from '@src/shared/components/ui/textarea';
+
 import { useRespondToDsarTicket } from '../hooks';
 import type { DsarTicketRecord } from '../types';
 

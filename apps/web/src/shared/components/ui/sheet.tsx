@@ -1,12 +1,11 @@
 'use client';
 
 import * as React from 'react';
-import { Dialog as SheetPrimitive } from 'radix-ui';
-
-import { cn } from '@src/shared/lib/utils';
-import { Button } from '@src/shared/components/ui/button';
-import { HugeiconsIcon } from '@hugeicons/react';
 import { Cancel01Icon } from '@hugeicons/core-free-icons';
+import { HugeiconsIcon } from '@hugeicons/react';
+import { Button } from '@src/shared/components/ui/button';
+import { cn } from '@src/shared/lib/utils';
+import { Dialog as SheetPrimitive } from 'radix-ui';
 
 function Sheet({ ...props }: React.ComponentProps<typeof SheetPrimitive.Root>) {
   return <SheetPrimitive.Root data-slot="sheet" {...props} />;

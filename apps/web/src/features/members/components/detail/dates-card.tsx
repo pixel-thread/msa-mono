@@ -1,7 +1,7 @@
-import { Card, CardHeader, CardTitle, CardContent } from '@src/shared/components/ui/card';
-import { Calendar } from 'lucide-react';
-import { formatDate } from '@src/shared/utils';
+import { Card, CardContent,CardHeader, CardTitle } from '@src/shared/components/ui/card';
 import type { User } from '@src/shared/types';
+import { formatDate } from '@src/shared/utils';
+import { Calendar } from 'lucide-react';
 
 interface DatesCardProps {
   member: User;

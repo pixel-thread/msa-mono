@@ -5,7 +5,7 @@ import { hasHighRoleAccess } from '@utils';
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';
-import { RequestHandler } from 'express';
+import type { RequestHandler } from 'express';
 import z from 'zod';
 
 import {
@@ -15,10 +15,11 @@ import {
   rejectDeclaration,
   submitDeclaration,
 } from '../services/declarations.service';
+import type {
+  CreateUserDeclarationsInput} from '../validators';
 import {
   ApproveDeclarationSchema,
   CreateUserDeclarations,
-  CreateUserDeclarationsInput,
   ListDeclarationsQuerySchema,
   RejectDeclarationSchema,
 } from '../validators';

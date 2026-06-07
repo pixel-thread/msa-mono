@@ -2,7 +2,7 @@
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@src/shared/components/ui/card';
-import { Users, IndianRupee, Clock, CreditCard } from 'lucide-react';
+import { Clock, CreditCard,IndianRupee, Users } from 'lucide-react';
 
 interface StatsCardsProps {
   stats: any[];

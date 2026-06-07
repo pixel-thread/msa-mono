@@ -1,7 +1,8 @@
-import { ColumnDef } from '@tanstack/react-table';
-import { Avatar, AvatarFallback } from '@src/shared/components/ui/avatar';
 import { getInitials } from '@src/features/members/utils/helper/get-initials';
 import { MembershipApplicationActionsCell } from '@src/features/membership-applications/components/cells/application-actions-cell';
+import { Avatar, AvatarFallback } from '@src/shared/components/ui/avatar';
+import { ColumnDef } from '@tanstack/react-table';
+
 import { MembershipApplicationListItem } from '../types';
 
 interface UseMembershipApplicationColumnsOptions {

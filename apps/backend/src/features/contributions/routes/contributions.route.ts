@@ -29,8 +29,8 @@ import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';
 import { pageNumberValidation } from '@validator/common';
-import type { RequestHandler } from 'express';
-import { NextFunction, type Request, Response } from 'express';
+import type { NextFunction, RequestHandler , Response } from 'express';
+import { type Request } from 'express';
 import { z } from 'zod';
 
 // ---- Validation schemas ----

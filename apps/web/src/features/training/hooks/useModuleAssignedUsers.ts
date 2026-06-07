@@ -1,9 +1,10 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { buildUrlWithQuery,ENDPOINTS } from '@repo/shared';
 import http from '@src/shared/utils/http';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { ENDPOINTS, buildUrlWithQuery } from '@repo/shared';
-import { trainingQueryKeys } from '../utils/constants';
+
 import type { AssignedUserWithCompletion } from '../types';
+import { trainingQueryKeys } from '../utils/constants';
 
 export function useModuleAssignedUsers(moduleId: string | null, page?: number) {
   const queryClient = useQueryClient();

@@ -1,9 +1,9 @@
 'use client';
 
-import { create } from 'zustand';
-import http from '@src/shared/utils/http';
-import type { UserRole } from '@src/shared/types';
 import { ENDPOINTS } from '@repo/shared';
+import type { UserRole } from '@src/shared/types';
+import http from '@src/shared/utils/http';
+import { create } from 'zustand';
 
 export interface AuthUser {
   id: string;

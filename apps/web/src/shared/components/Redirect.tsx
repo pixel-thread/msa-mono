@@ -1,11 +1,11 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { useNavigate, useLocation } from '@tanstack/react-router';
-
-import { useAuthStore } from '../stores/auth';
 import { Loading } from '@components/loading';
+import { useLocation,useNavigate } from '@tanstack/react-router';
+
 import { ROUTE_ROLE } from '../constants';
+import { useAuthStore } from '../stores/auth';
 
 type PropsT = {
   children: React.ReactNode;

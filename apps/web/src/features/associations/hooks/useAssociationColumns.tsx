@@ -1,6 +1,6 @@
-import type { ColumnDef } from '@tanstack/react-table';
 import { AssociationActionsCell } from '@feature/associations/components/cells/association-actions-cell';
 import { Association } from '@feature/associations/types/association';
+import type { ColumnDef } from '@tanstack/react-table';
 
 interface UseAssociationColumnsOptions {
   onEdit: (association: Association) => void;

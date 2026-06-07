@@ -1,23 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-import { useNavigate, Link } from '@tanstack/react-router';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { HugeiconsIcon } from '@hugeicons/react';
-import {
-  Shield01Icon,
-  BankIcon,
-  UserGroupIcon,
-  CheckmarkBadge01Icon,
-  ArrowRight01Icon,
-} from '@hugeicons/core-free-icons';
-
-import { Button } from '@components/ui/button';
-import { Badge } from '@components/ui/badge';
-import { Input } from '@components/ui/input';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@components/ui/card';
+import { PublicFooter } from '@components/public-footer';
+import { PublicHeader } from '@components/public-header';
 import { Alert, AlertDescription } from '@components/ui/alert';
+import { Badge } from '@components/ui/badge';
+import { Button } from '@components/ui/button';
+import { Card, CardContent,CardDescription, CardHeader, CardTitle } from '@components/ui/card';
 import {
   Form,
   FormControl,
@@ -26,17 +15,27 @@ import {
   FormLabel,
   FormMessage,
 } from '@components/ui/form';
+import { Input } from '@components/ui/input';
 import { Text } from '@components/ui/text';
-import { PublicHeader } from '@components/public-header';
-import {
-  SignInSchema,
-  type SignInInput,
-  VerifySignInSchema,
-  type VerifySignInInput,
-} from '@feature/auth/validators';
 import { useSignIn, useVerifyMfa } from '@feature/auth/hooks';
+import {
+  type SignInInput,
+  SignInSchema,
+  type VerifySignInInput,
+  VerifySignInSchema,
+} from '@feature/auth/validators';
+import { zodResolver } from '@hookform/resolvers/zod';
+import {
+  ArrowRight01Icon,
+  BankIcon,
+  CheckmarkBadge01Icon,
+  Shield01Icon,
+  UserGroupIcon,
+} from '@hugeicons/core-free-icons';
+import { HugeiconsIcon } from '@hugeicons/react';
 import { logger } from '@src/shared/logger';
-import { PublicFooter } from '@components/public-footer';
+import { Link,useNavigate } from '@tanstack/react-router';
+import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
 const BENEFITS = [

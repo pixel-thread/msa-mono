@@ -1,5 +1,5 @@
 import { ContextStore } from '@lib/tracing/context';
-import { NextFunction,Request, Response } from 'express';
+import type { NextFunction,Request, Response } from 'express';
 import { randomUUID } from 'node:crypto';
 
 /**

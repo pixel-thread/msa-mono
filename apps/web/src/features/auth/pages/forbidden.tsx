@@ -1,17 +1,16 @@
 'use client';
 
-import { Link } from '@tanstack/react-router';
-
 import { Button } from '@components/ui/button';
 import {
   Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
 } from '@components/ui/card';
 import { useAuthStore } from '@store/auth';
+import { Link } from '@tanstack/react-router';
 
 /**
  * ForbiddenPage component displays a 403 Access Denied message.

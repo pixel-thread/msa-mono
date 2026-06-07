@@ -1,16 +1,15 @@
 'use client';
 
-import { useParams } from '@tanstack/react-router';
-
+import { AccountCard } from '@src/features/members/components/detail/account-card';
+import { ActivityCard } from '@src/features/members/components/detail/activity-card';
+import { DatesCard } from '@src/features/members/components/detail/dates-card';
+import { PaymentsCard } from '@src/features/members/components/detail/payments-card';
+import { PersonalInfoCard } from '@src/features/members/components/detail/personal-info-card';
+import { StatusCard } from '@src/features/members/components/detail/status-card';
 import { useMember } from '@src/features/members/hooks/useMember';
 import { SectionHeader } from '@src/shared/components/section-header';
 import { Button } from '@src/shared/components/ui/button';
-import { PersonalInfoCard } from '@src/features/members/components/detail/personal-info-card';
-import { StatusCard } from '@src/features/members/components/detail/status-card';
-import { DatesCard } from '@src/features/members/components/detail/dates-card';
-import { PaymentsCard } from '@src/features/members/components/detail/payments-card';
-import { ActivityCard } from '@src/features/members/components/detail/activity-card';
-import { AccountCard } from '@src/features/members/components/detail/account-card';
+import { useParams } from '@tanstack/react-router';
 
 export function MemberDetailPage() {
   const params = useParams({ strict: false });

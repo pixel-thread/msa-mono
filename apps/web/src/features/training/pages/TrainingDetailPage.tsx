@@ -1,49 +1,50 @@
 'use client';
 
 import { useState } from 'react';
-import { useParams, useNavigate } from '@tanstack/react-router';
-import {
-  Clock,
-  Users,
-  Pencil,
-  Trash2,
-  Plus,
-  Paperclip,
-  Award,
-  Globe,
-  Download,
-  Upload,
-  X,
-} from 'lucide-react';
-import {
-  useTrainingModule,
-  useModuleAssignedUsers,
-  useTrainingSupplements,
-  useTrainingMemberColumn,
-  useTrainingSupplementsColumns,
-  useTrainingCompletions,
-  useTrainingCompletionsColumns,
-  useTrainingCertificates,
-  useTrainingCertificatesColumns,
-} from '../hooks';
-import { Button } from '@src/shared/components/ui/button';
-import { Badge } from '@src/shared/components/ui/badge';
+import { useUrlFilters } from '@hooks/use-url-filters';
 import { DataTable } from '@src/shared/components/data-table';
 import { DataTableFilters } from '@src/shared/components/data-table-filters';
+import { DataTablePagination } from '@src/shared/components/data-table-pagination';
+import { Badge } from '@src/shared/components/ui/badge';
+import { Button } from '@src/shared/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@src/shared/components/ui/tabs';
+import { useNavigate,useParams } from '@tanstack/react-router';
 import {
+  Award,
+  Clock,
+  Download,
+  Globe,
+  Paperclip,
+  Pencil,
+  Plus,
+  Trash2,
+  Upload,
+  Users,
+  X,
+} from 'lucide-react';
+
+import {
+  AddCertificateDialog,
+  AddSupplementDialog,
   CompleteAssignmentDialog,
   EditModuleDialog,
-  AddSupplementDialog,
-  AddCertificateDialog,
   RemoveCertificateAlertDialog,
 } from '../components';
-import { useUploadCertificateTemplate, useRemoveCertificateTemplate } from '../hooks';
-import type { TrainingModuleListItem } from '../types';
-import { RemoveSupplementAlertDialog } from '../components/supplements/RemoveSupplementAlertDialog';
 import { RemoveModuleAlertDialog } from '../components/RemoveModuleAlertDialog';
-import { DataTablePagination } from '@src/shared/components/data-table-pagination';
-import { useUrlFilters } from '@hooks/use-url-filters';
+import { RemoveSupplementAlertDialog } from '../components/supplements/RemoveSupplementAlertDialog';
+import {
+  useModuleAssignedUsers,
+  useTrainingCertificates,
+  useTrainingCertificatesColumns,
+  useTrainingCompletions,
+  useTrainingCompletionsColumns,
+  useTrainingMemberColumn,
+  useTrainingModule,
+  useTrainingSupplements,
+  useTrainingSupplementsColumns,
+} from '../hooks';
+import { useRemoveCertificateTemplate,useUploadCertificateTemplate } from '../hooks';
+import type { TrainingModuleListItem } from '../types';
 
 export function TrainingDetailPage() {
   const navigate = useNavigate();

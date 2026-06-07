@@ -1,15 +1,15 @@
 'use client';
 
 import { useState } from 'react';
-import { DataTable } from '@src/shared/components/data-table';
-import { DataTableFilters } from '@src/shared/components/data-table-filters';
-import { useMemberTypesList } from '@src/features/member-type/hooks/useMemberTypesList';
+import { CreateMemberTypeDialog } from '@src/features/member-type/components/create-member-type-dialog';
+import { DeleteMemberTypeDialog } from '@src/features/member-type/components/delete-member-type-dialog';
+import { EditMemberTypeDialog } from '@src/features/member-type/components/edit-member-type-dialog';
 import { useDeleteMemberType } from '@src/features/member-type/hooks/useDeleteMemberType';
 import { useMemberTypeColumns } from '@src/features/member-type/hooks/useMemberTypeColumns';
+import { useMemberTypesList } from '@src/features/member-type/hooks/useMemberTypesList';
+import { DataTable } from '@src/shared/components/data-table';
+import { DataTableFilters } from '@src/shared/components/data-table-filters';
 import { SectionHeader } from '@src/shared/components/section-header';
-import { CreateMemberTypeDialog } from '@src/features/member-type/components/create-member-type-dialog';
-import { EditMemberTypeDialog } from '@src/features/member-type/components/edit-member-type-dialog';
-import { DeleteMemberTypeDialog } from '@src/features/member-type/components/delete-member-type-dialog';
 
 interface MemberType {
   id: string;

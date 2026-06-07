@@ -1,8 +1,9 @@
-import { useQuery } from '@tanstack/react-query';
-import http from '@src/shared/utils/http';
 import { QUERY_KEYS } from '@repo/shared';
-import type { Announcement } from '../types';
 import { ENDPOINTS } from '@repo/shared';
+import http from '@src/shared/utils/http';
+import { useQuery } from '@tanstack/react-query';
+
+import type { Announcement } from '../types';
 
 export interface AnnouncementDetail extends Announcement {
   readReceipts: {

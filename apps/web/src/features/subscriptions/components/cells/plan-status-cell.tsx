@@ -7,9 +7,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@src/shared/components/ui/select';
+
+import { SubscriptionPlan } from '../../types';
 import { PLAN_STATUSES } from '../../utils/constants';
 import { getPlanStatusBadge } from '../../utils/helper/get-plan-status-badge';
-import { SubscriptionPlan } from '../../types';
 
 interface PlanStatusCellProps {
   plan: SubscriptionPlan;

@@ -1,13 +1,13 @@
 'use client';
 
-import { useParams } from '@tanstack/react-router';
-import { useContributionDetail } from '@feature/contributions/hooks/useContributionDetail';
-import { Button } from '@components/ui/button';
-import { SectionHeader } from '@components/section-header';
-import { ContributionDetail } from '@feature/contributions/components/contribution-detail';
-import { ArrowLeft } from 'lucide-react';
 import { Loading } from '@components/loading';
+import { SectionHeader } from '@components/section-header';
+import { Button } from '@components/ui/button';
+import { ContributionDetail } from '@feature/contributions/components/contribution-detail';
+import { useContributionDetail } from '@feature/contributions/hooks/useContributionDetail';
 import { EmptyState } from '@src/shared/components/empty-state';
+import { useParams } from '@tanstack/react-router';
+import { ArrowLeft } from 'lucide-react';
 
 export function ContributionDetailPage() {
   const { contributionId } = useParams({

@@ -1,6 +1,7 @@
 import { BadRequestError, UnauthorizedError, ValidationError } from '@errors';
 import { deleteRefreshTokens } from '@feature/auth/services/delete-refresh-tokens';
-import { ChangePasswordInput, ChangePasswordSchema } from '@feature/auth/validators';
+import type { ChangePasswordInput} from '@feature/auth/validators';
+import { ChangePasswordSchema } from '@feature/auth/validators';
 import { updateUser } from '@feature/user/services';
 import { hashPassword, validatePasswordStrength, verifyPassword } from '@lib/password';
 import { validate } from '@lib/validate';
@@ -9,7 +10,7 @@ import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
 import type { RequestHandler } from 'express';
-import { NextFunction, Request, Response } from 'express';
+import type { NextFunction, Request, Response } from 'express';
 
 /**
  * POST /api/auth/change-password — Change password for the authenticated user

@@ -7,7 +7,7 @@ import { asyncHandler } from '@utils/async-handler';
 import { hasHighRoleAccess } from '@utils/has-high-role';
 import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';
-import { RequestHandler } from 'express';
+import type { RequestHandler } from 'express';
 
 /** @@ POST /api/meetings/[meetingId]/cancel - Cancel a meeting. */
 export const postCancelMeeting: RequestHandler[] = [

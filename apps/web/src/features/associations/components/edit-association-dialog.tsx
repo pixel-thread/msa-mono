@@ -1,6 +1,11 @@
 import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useUpdateAssociation } from '@src/features/associations/hooks/useUpdateAssociation';
+import {
+  UpdateAssociationInput,
+  UpdateAssociationSchema,
+} from '@src/features/associations/validators';
+import { Button } from '@src/shared/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -19,12 +24,7 @@ import {
 } from '@src/shared/components/ui/form';
 import { Input } from '@src/shared/components/ui/input';
 import { Textarea } from '@src/shared/components/ui/textarea';
-import { Button } from '@src/shared/components/ui/button';
-import { useUpdateAssociation } from '@src/features/associations/hooks/useUpdateAssociation';
-import {
-  UpdateAssociationInput,
-  UpdateAssociationSchema,
-} from '@src/features/associations/validators';
+import { useForm } from 'react-hook-form';
 
 interface Association {
   id: string;

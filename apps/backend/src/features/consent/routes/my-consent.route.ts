@@ -14,7 +14,7 @@ import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 // Shared utilities
 import { success } from '@utils/responses';
-import { Request, RequestHandler,Response } from 'express';
+import type { Request, RequestHandler,Response } from 'express';
 
 // ---- Helper: Role hierarchy for permission checks
 // Lower number = higher privilege. SUPER_ADMIN (0) is the highest.

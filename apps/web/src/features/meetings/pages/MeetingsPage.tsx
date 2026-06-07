@@ -1,16 +1,16 @@
 'use client';
 
 import { useState } from 'react';
-import { useUrlFilters } from '@hooks/use-url-filters';
 import { DataTable } from '@components/data-table';
 import { DataTableFilters } from '@components/data-table-filters';
-import { Button } from '@components/ui/button';
+import { DataTablePagination } from '@components/data-table-pagination';
 import { SectionHeader } from '@components/section-header';
-import { Plus } from 'lucide-react';
+import { Button } from '@components/ui/button';
+import { CreateMeetingDialog } from '@feature/meetings/components/CreateMeetingDialog';
 import { useMeetings } from '@feature/meetings/hooks';
 import { useMeetingTableColumns } from '@feature/meetings/hooks/useMeetingTableColumns';
-import { CreateMeetingDialog } from '@feature/meetings/components/CreateMeetingDialog';
-import { DataTablePagination } from '@components/data-table-pagination';
+import { useUrlFilters } from '@hooks/use-url-filters';
+import { Plus } from 'lucide-react';
 
 /**
  * Meetings List Page component.

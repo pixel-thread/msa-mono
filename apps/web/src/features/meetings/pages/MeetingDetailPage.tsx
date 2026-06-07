@@ -1,38 +1,10 @@
 'use client';
 
-import { useParams, useNavigate, useSearch } from '@tanstack/react-router';
 import { useState } from 'react';
-
-import {
-  useMeetingDetail,
-  type AgendaItem,
-  type Attendee,
-} from '@feature/meetings/hooks/useMeetingDetail';
-import { useMeetingAttendees } from '@feature/meetings/hooks';
-import { Card, CardHeader, CardTitle, CardContent } from '@components/ui/card';
+import { SectionHeader } from '@components/section-header';
 import { Badge } from '@components/ui/badge';
 import { Button } from '@components/ui/button';
-import { SectionHeader } from '@components/section-header';
-import { Separator } from '@components/ui/separator';
-import { formatDate } from '@utils/format';
-import {
-  Calendar,
-  MapPin,
-  Users,
-  FileText,
-  Clock,
-  Pencil,
-  Trash2,
-  ClipboardList,
-  MoreHorizontal,
-  CalendarX,
-} from 'lucide-react';
-import { EditMeetingDialog } from '@feature/meetings/components/EditMeetingDialog';
-import { DeleteMeetingDialog } from '@feature/meetings/components/DeleteMeetingDialog';
-import { CancelMeetingDialog } from '@feature/meetings/components/CancelMeetingDialog';
-import { ManageAttendeesDialog } from '@feature/meetings/components/ManageAttendeesDialog';
-import type { AssignAttendeeInput } from '@feature/meetings/validators';
-import { useMembers } from '@feature/members/hooks/useMembers';
+import { Card, CardContent,CardHeader, CardTitle } from '@components/ui/card';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -41,7 +13,34 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@components/ui/dropdown-menu';
-import { getTypeBadge, getStatusBadge, getRsvpBadge } from '@utils/helper';
+import { Separator } from '@components/ui/separator';
+import { CancelMeetingDialog } from '@feature/meetings/components/CancelMeetingDialog';
+import { DeleteMeetingDialog } from '@feature/meetings/components/DeleteMeetingDialog';
+import { EditMeetingDialog } from '@feature/meetings/components/EditMeetingDialog';
+import { ManageAttendeesDialog } from '@feature/meetings/components/ManageAttendeesDialog';
+import { useMeetingAttendees } from '@feature/meetings/hooks';
+import {
+  type AgendaItem,
+  type Attendee,
+  useMeetingDetail,
+} from '@feature/meetings/hooks/useMeetingDetail';
+import type { AssignAttendeeInput } from '@feature/meetings/validators';
+import { useMembers } from '@feature/members/hooks/useMembers';
+import { useNavigate, useParams, useSearch } from '@tanstack/react-router';
+import { formatDate } from '@utils/format';
+import { getRsvpBadge,getStatusBadge, getTypeBadge } from '@utils/helper';
+import {
+  Calendar,
+  CalendarX,
+  ClipboardList,
+  Clock,
+  FileText,
+  MapPin,
+  MoreHorizontal,
+  Pencil,
+  Trash2,
+  Users,
+} from 'lucide-react';
 
 /**
  * Meeting Detail Page component.

@@ -1,3 +1,5 @@
+import type { Announcement } from '@src/features/announcement/types';
+import { Button } from '@src/shared/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -6,8 +8,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@src/shared/components/ui/dialog';
-import { Button } from '@src/shared/components/ui/button';
-import type { Announcement } from '@src/features/announcement/types';
 
 interface DeleteAnnouncementDialogProps {
   announcement: Announcement | null;

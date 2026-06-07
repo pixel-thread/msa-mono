@@ -1,5 +1,5 @@
 import { PAGE_SIZE } from '@src/shared/constants';
-import { PaginationMeta } from '@src/shared/types';
+import type { PaginationMeta } from '@src/shared/types';
 
 export const buildPagination = (total: number, page: number, pageSize?: number): PaginationMeta => {
   const size = pageSize || PAGE_SIZE;

@@ -1,15 +1,16 @@
 'use client';
 
 import { useState } from 'react';
-import { useUrlFilters } from '@src/shared/hooks';
 import { DataTable } from '@src/shared/components/data-table';
 import { DataTableFilters, FilterField } from '@src/shared/components/data-table-filters';
 import { DataTablePagination } from '@src/shared/components/data-table-pagination';
 import { SectionHeader } from '@src/shared/components/section-header';
-import { useDeclarations } from '../hooks/declarations/use-declarations';
-import { useDeclarationsColumns } from '../hooks/declarations/use-declarations-columns';
+import { useUrlFilters } from '@src/shared/hooks';
+
 import { ApproveDialog } from '../components/declarations/approve-dialog';
 import { RejectDialog } from '../components/declarations/reject-dialog';
+import { useDeclarations } from '../hooks/declarations/use-declarations';
+import { useDeclarationsColumns } from '../hooks/declarations/use-declarations-columns';
 import type { Declaration } from '../types';
 
 const DeclarationsDataTableFilters: FilterField[] = [

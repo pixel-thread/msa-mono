@@ -2,6 +2,7 @@
 
 import { Button } from '@src/shared/components/ui/button';
 import { Pencil, Trash2 } from 'lucide-react';
+
 import { SubscriptionPlan } from '../../types';
 
 interface PlanActionsCellProps {

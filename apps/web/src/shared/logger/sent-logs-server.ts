@@ -1,4 +1,5 @@
 import { Writable } from 'stream';
+
 import http from '../utils/http';
 
 const PINO_LEVELS: Record<number, string> = {

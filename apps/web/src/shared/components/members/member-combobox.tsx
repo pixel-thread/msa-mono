@@ -1,10 +1,10 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useEffect,useRef, useState } from 'react';
 import { useMemberSearch } from '@src/features/payments/hooks/useMemberSearch';
 import { Input } from '@src/shared/components/ui/input';
-import { Search, X } from 'lucide-react';
 import { cn } from '@src/shared/lib/utils';
+import { Search, X } from 'lucide-react';
 
 interface MemberComboboxProps {
   value?: string;

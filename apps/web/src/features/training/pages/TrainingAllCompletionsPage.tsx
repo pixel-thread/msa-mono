@@ -1,14 +1,14 @@
 'use client';
 
-import { useNavigate } from '@tanstack/react-router';
-import { useUrlFilters } from '@src/shared/hooks';
-import { Award, ArrowLeft } from 'lucide-react';
-
-import { Button } from '@src/shared/components/ui/button';
-import { DataTablePagination } from '@src/shared/components/data-table-pagination';
 import { DataTable } from '@src/shared/components/data-table';
 import { DataTableFilters } from '@src/shared/components/data-table-filters';
-import { useTrainingCompletionsColumns, useTrainingCompletions } from '../hooks';
+import { DataTablePagination } from '@src/shared/components/data-table-pagination';
+import { Button } from '@src/shared/components/ui/button';
+import { useUrlFilters } from '@src/shared/hooks';
+import { useNavigate } from '@tanstack/react-router';
+import { ArrowLeft,Award } from 'lucide-react';
+
+import { useTrainingCompletions,useTrainingCompletionsColumns } from '../hooks';
 
 export function TrainingAllCompletionsPage() {
   const navigate = useNavigate();

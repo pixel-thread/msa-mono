@@ -1,19 +1,18 @@
 'use client';
 
 import { useState } from 'react';
-import { useUrlFilters } from '@src/shared/hooks';
-
+import { CreatePlanDialog } from '@src/features/subscriptions/components/create-plan-dialog';
+import { DeletePlanDialog } from '@src/features/subscriptions/components/delete-plan-dialog';
+import { EditPlanDialog } from '@src/features/subscriptions/components/edit-plan-dialog';
+import { usePlans } from '@src/features/subscriptions/hooks/usePlans';
+import { usePlanTableActions } from '@src/features/subscriptions/hooks/usePlanTableActions';
+import { usePlanTableColumns } from '@src/features/subscriptions/hooks/usePlanTableColumns';
+import { SubscriptionPlan } from '@src/features/subscriptions/types';
 import { DataTable } from '@src/shared/components/data-table';
 import { DataTableFilters } from '@src/shared/components/data-table-filters';
 import { DataTablePagination } from '@src/shared/components/data-table-pagination';
-import { usePlans } from '@src/features/subscriptions/hooks/usePlans';
-import { usePlanTableColumns } from '@src/features/subscriptions/hooks/usePlanTableColumns';
-import { usePlanTableActions } from '@src/features/subscriptions/hooks/usePlanTableActions';
 import { SectionHeader } from '@src/shared/components/section-header';
-import { CreatePlanDialog } from '@src/features/subscriptions/components/create-plan-dialog';
-import { EditPlanDialog } from '@src/features/subscriptions/components/edit-plan-dialog';
-import { DeletePlanDialog } from '@src/features/subscriptions/components/delete-plan-dialog';
-import { SubscriptionPlan } from '@src/features/subscriptions/types';
+import { useUrlFilters } from '@src/shared/hooks';
 
 export default function PlansPage() {
   const { page, setPage } = useUrlFilters({ basePath: '/subscriptions/plans' });

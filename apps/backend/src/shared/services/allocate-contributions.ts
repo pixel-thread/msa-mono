@@ -1,4 +1,5 @@
-import { ContributionStatus, Prisma } from '@prisma/client';
+import type { Prisma } from '@prisma/client';
+import { ContributionStatus } from '@prisma/client';
 
 export async function createAllocations(
   tx: Prisma.TransactionClient,

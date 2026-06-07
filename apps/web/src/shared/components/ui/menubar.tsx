@@ -1,11 +1,10 @@
 'use client';
 
 import * as React from 'react';
-import { Menubar as MenubarPrimitive } from 'radix-ui';
-
-import { cn } from '@src/shared/lib/utils';
+import { ArrowRight01Icon,Tick02Icon } from '@hugeicons/core-free-icons';
 import { HugeiconsIcon } from '@hugeicons/react';
-import { Tick02Icon, ArrowRight01Icon } from '@hugeicons/core-free-icons';
+import { cn } from '@src/shared/lib/utils';
+import { Menubar as MenubarPrimitive } from 'radix-ui';
 
 function Menubar({ className, ...props }: React.ComponentProps<typeof MenubarPrimitive.Root>) {
   return (

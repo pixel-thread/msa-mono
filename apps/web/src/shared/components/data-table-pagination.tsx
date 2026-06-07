@@ -1,6 +1,5 @@
 'use client';
 
-import type { PaginationMeta } from '@src/shared/types';
 import {
   Pagination,
   PaginationContent,
@@ -10,6 +9,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@src/shared/components/ui/pagination';
+import type { PaginationMeta } from '@src/shared/types';
 
 interface DataTablePaginationProps {
   meta?: PaginationMeta;

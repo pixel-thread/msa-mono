@@ -1,15 +1,17 @@
 import { BadRequestError, NotFoundError } from '@errors';
-import { ContributionSummary } from '@feature/contributions/types';
-import { JournalLine, recordWaiver } from '@feature/ledger/services/accounting.service';
+import type { ContributionSummary } from '@feature/contributions/types';
+import type { JournalLine} from '@feature/ledger/services/accounting.service';
+import { recordWaiver } from '@feature/ledger/services/accounting.service';
 import { prisma } from '@lib/prisma';
+import type {
+  PaymentMethod,
+  Prisma} from '@prisma/client';
 import {
   ApprovalStatus,
   ContributionStatus,
   Currency,
   PaymentGateway,
-  PaymentMethod,
   PaymentStatus,
-  Prisma,
   UserStatus,
 } from '@prisma/client';
 import { createAllocations } from '@services/allocate-contributions';

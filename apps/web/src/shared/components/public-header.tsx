@@ -1,16 +1,16 @@
 'use client';
 
-import { Link, useLocation } from '@tanstack/react-router';
+import { env } from '@src/env';
+import { useSignOut } from '@src/features/auth/hooks';
+import { Button } from '@src/shared/components/ui/button';
 import {
   NavigationMenu,
-  NavigationMenuList,
   NavigationMenuItem,
   NavigationMenuLink,
+  NavigationMenuList,
 } from '@src/shared/components/ui/navigation-menu';
-import { Button } from '@src/shared/components/ui/button';
 import { useAuthStore } from '@src/shared/stores/auth';
-import { useSignOut } from '@src/features/auth/hooks';
-import { env } from '@src/env';
+import { Link, useLocation } from '@tanstack/react-router';
 
 const NAV_ITEMS = [
   { label: 'Features', href: '/#features' },

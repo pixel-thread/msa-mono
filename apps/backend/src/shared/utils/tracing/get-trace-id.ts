@@ -1,5 +1,5 @@
 import { ContextStore } from '@lib/tracing/context';
-import { Request } from 'express';
+import type { Request } from 'express';
 
 /**
  * Retrieves the trace ID for the current request.

@@ -7,7 +7,7 @@ import { asyncHandler } from '@utils/async-handler';
 import { hasHighRoleAccess } from '@utils/has-high-role';
 import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';
-import { RequestHandler } from 'express';
+import type { RequestHandler } from 'express';
 
 /** DELETE /api/meetings/[meetingId] - Delete a meeting. */
 export const deleteMeetingHandler: RequestHandler[] = [

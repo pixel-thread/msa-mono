@@ -1,4 +1,4 @@
-import { Card, CardHeader, CardTitle, CardContent } from '@src/shared/components/ui/card';
+import { Card, CardContent,CardHeader, CardTitle } from '@src/shared/components/ui/card';
 import type { User } from '@src/shared/types';
 
 interface ActivityCardProps {

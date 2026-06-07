@@ -1,8 +1,8 @@
 'use client';
 
 import { useCallback, useState } from 'react';
-import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Button } from '@src/shared/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -11,9 +11,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@src/shared/components/ui/dialog';
-import { Button } from '@src/shared/components/ui/button';
-import { Input } from '@src/shared/components/ui/input';
-import { Textarea } from '@src/shared/components/ui/textarea';
 import {
   Form,
   FormControl,
@@ -22,8 +19,11 @@ import {
   FormLabel,
   FormMessage,
 } from '@src/shared/components/ui/form';
-
+import { Input } from '@src/shared/components/ui/input';
+import { Textarea } from '@src/shared/components/ui/textarea';
 import { Paperclip, X } from 'lucide-react';
+import { useForm } from 'react-hook-form';
+
 import { useCreateTrainingSupplement } from '../../hooks';
 import { CreateSupplementInput, CreateSupplementSchema } from '../../validators/training';
 

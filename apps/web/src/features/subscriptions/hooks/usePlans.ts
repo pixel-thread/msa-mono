@@ -1,6 +1,7 @@
-import { useQuery } from '@tanstack/react-query';
+import { buildUrlWithQuery, ENDPOINTS, QUERY_KEYS } from '@repo/shared';
 import http from '@src/shared/utils/http';
-import { ENDPOINTS, buildUrlWithQuery, QUERY_KEYS } from '@repo/shared';
+import { useQuery } from '@tanstack/react-query';
+
 import { SubscriptionPlan } from '../types';
 
 interface UsePlansOptions {

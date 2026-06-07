@@ -1,6 +1,7 @@
-import { useQuery } from '@tanstack/react-query';
+import { buildUrlWithQuery,ENDPOINTS } from '@repo/shared';
 import http from '@src/shared/utils/http';
-import { ENDPOINTS, buildUrlWithQuery } from '@repo/shared';
+import { useQuery } from '@tanstack/react-query';
+
 import { UserPaymentData } from '../types';
 
 interface UseUserPaymentsOptions {

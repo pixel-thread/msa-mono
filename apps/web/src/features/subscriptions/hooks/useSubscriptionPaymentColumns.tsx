@@ -1,10 +1,10 @@
 'use client';
-import { ColumnDef } from '@tanstack/react-table';
 import { Badge } from '@src/shared/components/ui/badge';
 import { formatDate, formattedAmount } from '@src/shared/utils';
-import { getMonthName } from '@src/shared/utils/helper/get-month-name';
 import { getMethodBadge } from '@src/shared/utils/helper/get-method-badge';
+import { getMonthName } from '@src/shared/utils/helper/get-month-name';
 import { getStatusBadge } from '@src/shared/utils/helper/get-status-badge';
+import { ColumnDef } from '@tanstack/react-table';
 
 interface PaymentAllocation {
   id: string;

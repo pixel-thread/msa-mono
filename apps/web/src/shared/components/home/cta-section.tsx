@@ -1,10 +1,10 @@
 'use client';
 
-import { Link } from '@tanstack/react-router';
-import { HugeiconsIcon } from '@hugeicons/react';
 import { ArrowRight01Icon } from '@hugeicons/core-free-icons';
+import { HugeiconsIcon } from '@hugeicons/react';
 import { Button } from '@src/shared/components/ui/button';
 import { Text } from '@src/shared/components/ui/text';
+import { Link } from '@tanstack/react-router';
 
 export function CtaSection() {
   return (

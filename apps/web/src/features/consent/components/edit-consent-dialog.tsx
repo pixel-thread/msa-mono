@@ -1,8 +1,9 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { ConsentStatus } from '@sharedType/enums';
+import { Button } from '@src/shared/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -26,14 +27,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@src/shared/components/ui/select';
-import { Button } from '@src/shared/components/ui/button';
+import { useForm } from 'react-hook-form';
+
 import { useUpdateConsentReceipt } from '../hooks/useUpdateConsentReceipt';
-import {
-  UpdateConsentReceiptSchema,
-  UpdateConsentReceiptInput,
-} from '../validators/consent.validators';
-import { ConsentStatus } from '@sharedType/enums';
 import type { ConsentRecord } from '../types/consent.types';
+import {
+  UpdateConsentReceiptInput,
+  UpdateConsentReceiptSchema,
+} from '../validators/consent.validators';
 
 interface EditConsentDialogProps {
   record: ConsentRecord | null;

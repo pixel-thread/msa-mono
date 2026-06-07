@@ -1,7 +1,7 @@
 // Shared utilities
 import { prisma } from '@lib/prisma';
 // ---- Prisma
-import { Prisma } from '@prisma/client';
+import type { Prisma } from '@prisma/client';
 import { PAGE_SIZE } from '@src/shared/constants';
 
 // ---------------------------------------------------------------------------

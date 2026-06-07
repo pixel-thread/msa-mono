@@ -1,18 +1,18 @@
 'use client';
 
-import { useParams } from '@tanstack/react-router';
+import { useUrlFilters } from '@hooks/use-url-filters';
+import { useUserContributionColumns } from '@src/features/contributions/hooks/useUserContributionColumns';
 import { useUserContributions } from '@src/features/contributions/hooks/useUserContributions';
-import { Card, CardHeader, CardTitle, CardContent } from '@src/shared/components/ui/card';
-import { Button } from '@src/shared/components/ui/button';
-import { SectionHeader } from '@src/shared/components/section-header';
 import { DataTable } from '@src/shared/components/data-table';
 import { DataTableFilters } from '@src/shared/components/data-table-filters';
-import { useUserContributionColumns } from '@src/features/contributions/hooks/useUserContributionColumns';
-import { CalendarDays, CreditCard, AlertCircle, Receipt } from 'lucide-react';
-import { Link } from '@tanstack/react-router';
-import { formattedAmount } from '@src/shared/utils';
 import { DataTablePagination } from '@src/shared/components/data-table-pagination';
-import { useUrlFilters } from '@hooks/use-url-filters';
+import { SectionHeader } from '@src/shared/components/section-header';
+import { Button } from '@src/shared/components/ui/button';
+import { Card, CardContent,CardHeader, CardTitle } from '@src/shared/components/ui/card';
+import { formattedAmount } from '@src/shared/utils';
+import { useParams } from '@tanstack/react-router';
+import { Link } from '@tanstack/react-router';
+import { AlertCircle, CalendarDays, CreditCard, Receipt } from 'lucide-react';
 
 export function UserContributionsPage() {
   const params = useParams({ strict: false });

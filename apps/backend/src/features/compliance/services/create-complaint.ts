@@ -1,6 +1,7 @@
 import type { ComplianceSubmitFormData } from '@feature/compliance/validators';
 import { prisma } from '@lib/prisma';
-import { AuditAction, ComplaintCategory } from '@prisma/client';
+import type { ComplaintCategory } from '@prisma/client';
+import { AuditAction } from '@prisma/client';
 
 /** Create a new compliance complaint and log the audit trail in a transaction. */
 export async function createComplaint({

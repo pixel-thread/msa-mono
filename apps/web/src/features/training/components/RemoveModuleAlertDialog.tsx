@@ -1,16 +1,16 @@
 import {
   AlertDialog,
   AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
-  AlertDialogCancel,
   AlertDialogHeader,
-  AlertDialogContent,
   AlertDialogMedia,
   AlertDialogTitle,
 } from '@components/ui/alert-dialog';
-
 import { Trash2 } from 'lucide-react';
+
 import { useDeleteTrainingModule } from '../hooks';
 type RemoveModuleAlertDialogProps = {
   isOpen: boolean;

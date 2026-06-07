@@ -16,7 +16,7 @@ import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 // ---- Shared Utilities
 import { success } from '@utils/responses';
-import { NextFunction, Request, RequestHandler,Response } from 'express';
+import type { NextFunction, Request, RequestHandler,Response } from 'express';
 
 // ---- Role Hierarchy
 

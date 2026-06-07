@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Button } from '@src/shared/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -11,12 +11,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@src/shared/components/ui/dialog';
-import { Button } from '@src/shared/components/ui/button';
 import { Input } from '@src/shared/components/ui/input';
 import { Label } from '@src/shared/components/ui/label';
 import { Textarea } from '@src/shared/components/ui/textarea';
 import { Plus, Trash2 } from 'lucide-react';
-import { CreateMeetingMinuteSchema, type CreateMeetingMinuteInput } from '../validators/minutes';
+import { useForm } from 'react-hook-form';
+
+import { type CreateMeetingMinuteInput,CreateMeetingMinuteSchema } from '../validators/minutes';
 
 interface ActionItemInput {
   assigneeId?: string;

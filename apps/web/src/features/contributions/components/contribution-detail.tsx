@@ -1,13 +1,14 @@
 'use client';
 
-import { Link } from '@tanstack/react-router';
-import { Card, CardHeader, CardTitle, CardContent } from '@src/shared/components/ui/card';
 import { Badge } from '@src/shared/components/ui/badge';
-import { User, CreditCard } from 'lucide-react';
-import { ContributionPeriod } from '../types';
-import { getMonthName } from '@src/shared/utils/helper/get-month-name';
+import { Card, CardContent,CardHeader, CardTitle } from '@src/shared/components/ui/card';
 import { formattedAmount } from '@src/shared/utils';
+import { getMonthName } from '@src/shared/utils/helper/get-month-name';
 import { getStatusBadge } from '@src/shared/utils/helper/get-status-badge';
+import { Link } from '@tanstack/react-router';
+import { CreditCard,User } from 'lucide-react';
+
+import { ContributionPeriod } from '../types';
 
 interface ContributionDetailProps {
   contribution: ContributionPeriod;

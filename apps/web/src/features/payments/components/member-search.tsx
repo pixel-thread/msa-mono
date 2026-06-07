@@ -1,10 +1,10 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useRef,useState } from 'react';
 import { useMemberSearch } from '@src/features/payments/hooks/useMemberSearch';
-import { Input } from '@src/shared/components/ui/input';
 import { Button } from '@src/shared/components/ui/button';
-import { Search, X, User } from 'lucide-react';
+import { Input } from '@src/shared/components/ui/input';
+import { Search, User,X } from 'lucide-react';
 
 interface MemberSearchProps {
   onSelect: (member: { id: string; name: string; email: string }) => void;

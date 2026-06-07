@@ -1,8 +1,9 @@
-import { useQuery } from '@tanstack/react-query';
+import { buildUrlWithQuery,ENDPOINTS } from '@repo/shared';
 import http from '@src/shared/utils/http';
-import { ENDPOINTS, buildUrlWithQuery } from '@repo/shared';
-import { trainingQueryKeys } from '../../utils/constants';
+import { useQuery } from '@tanstack/react-query';
+
 import type { TrainingAssignment } from '../../types';
+import { trainingQueryKeys } from '../../utils/constants';
 
 type Props = {
   page?: number;

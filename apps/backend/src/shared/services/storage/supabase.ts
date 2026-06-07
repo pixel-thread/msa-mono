@@ -1,7 +1,7 @@
 import { supabase as supabseClient } from '@lib/supabase';
-import { UploadResult } from '@sharedType/storage';
+import type { UploadResult } from '@sharedType/storage';
 import { env } from '@src/env';
-import { StorageProvider, UploadParams } from '@src/shared/types/storage';
+import type { StorageProvider, UploadParams } from '@src/shared/types/storage';
 
 /** Supabase Storage-backed provider. Requires SUPABASE_URL and SUPABASE_SECRET_KEY env vars. */
 export class SupabaseStorageProvider implements StorageProvider {

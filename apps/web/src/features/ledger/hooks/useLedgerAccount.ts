@@ -1,9 +1,10 @@
-import { useQuery } from '@tanstack/react-query';
 import { ENDPOINTS } from '@repo/shared';
-import http from '@src/shared/utils/http';
 import type { Account } from '@src/shared/types';
-import type { TrialBalanceLine } from './useTrialBalance';
+import http from '@src/shared/utils/http';
+import { useQuery } from '@tanstack/react-query';
+
 import type { IncomeStatementLine } from './useIncomeStatement';
+import type { TrialBalanceLine } from './useTrialBalance';
 
 export interface AccountDetailResponse extends Account {
   report: {

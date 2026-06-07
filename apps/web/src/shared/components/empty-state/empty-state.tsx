@@ -1,14 +1,13 @@
 import * as React from 'react';
-import { RefreshCwIcon } from 'lucide-react';
-
 import { Button } from '@src/shared/components/ui/button';
 import {
   Empty,
+  EmptyContent,
+  EmptyDescription,
   EmptyHeader,
   EmptyTitle,
-  EmptyDescription,
-  EmptyContent,
 } from '@src/shared/components/ui/empty';
+import { RefreshCwIcon } from 'lucide-react';
 
 interface EmptyStateProps {
   label: string;

@@ -1,6 +1,11 @@
 import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useUpdateMemberType } from '@src/features/member-type/hooks/useUpdateMemberType';
+import {
+  UpdateMemberTypeInput,
+  UpdateMemberTypeSchema,
+} from '@src/features/member-type/validators';
+import { Button } from '@src/shared/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -18,12 +23,7 @@ import {
   FormMessage,
 } from '@src/shared/components/ui/form';
 import { Input } from '@src/shared/components/ui/input';
-import { Button } from '@src/shared/components/ui/button';
-import { useUpdateMemberType } from '@src/features/member-type/hooks/useUpdateMemberType';
-import {
-  UpdateMemberTypeInput,
-  UpdateMemberTypeSchema,
-} from '@src/features/member-type/validators';
+import { useForm } from 'react-hook-form';
 
 interface MemberType {
   id: string;

@@ -1,7 +1,6 @@
 'use client';
 
-import { useNavigate } from '@tanstack/react-router';
-
+import { useSignOut } from '@src/features/auth/hooks';
 import { Avatar, AvatarFallback } from '@src/shared/components/ui/avatar';
 import {
   DropdownMenu,
@@ -18,8 +17,8 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@src/shared/components/ui/sidebar';
-import { ChevronsUpDownIcon, BadgeCheckIcon, CreditCardIcon, LogOutIcon } from 'lucide-react';
-import { useSignOut } from '@src/features/auth/hooks';
+import { useNavigate } from '@tanstack/react-router';
+import { BadgeCheckIcon, ChevronsUpDownIcon, CreditCardIcon, LogOutIcon } from 'lucide-react';
 import { toast } from 'sonner';
 
 const getInitials = (name: string) => {

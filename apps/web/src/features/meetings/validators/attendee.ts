@@ -1,5 +1,5 @@
-import z from 'zod';
 import { AttendeeRole, RsvpStatus } from '@sharedType/enums';
+import z from 'zod';
 
 export const AssignAttendeeSchema = z.object({
   userId: z.string('Invalid user ID format'),

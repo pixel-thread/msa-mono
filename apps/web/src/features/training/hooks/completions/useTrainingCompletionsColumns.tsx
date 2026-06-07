@@ -1,8 +1,9 @@
 'use client';
 
-import { Award } from 'lucide-react';
-import { ColumnDef } from '@tanstack/react-table';
 import { formatDate } from '@src/shared/utils';
+import { ColumnDef } from '@tanstack/react-table';
+import { Award } from 'lucide-react';
+
 import type { TrainingCompletionItem } from '../../types';
 
 export function useTrainingCompletionsColumns(options?: { showModule?: boolean }) {

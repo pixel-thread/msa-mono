@@ -1,8 +1,6 @@
 // @ts-nocheck
 'use client';
 
-import { Line, LineChart, CartesianGrid, XAxis } from 'recharts';
-
 import {
   Card,
   CardContent,
@@ -11,11 +9,12 @@ import {
   CardTitle,
 } from '@src/shared/components/ui/card';
 import {
+  type ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-  type ChartConfig,
 } from '@src/shared/components/ui/chart';
+import { CartesianGrid, Line, LineChart, XAxis } from 'recharts';
 
 const chartConfig = {
   revenue: {

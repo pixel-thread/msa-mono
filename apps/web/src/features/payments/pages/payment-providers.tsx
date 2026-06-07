@@ -1,17 +1,15 @@
 'use client';
 
 import { useState } from 'react';
+import { usePaymentProviderColumns } from '@src/features/payments/hooks/usePaymentProviderColumns';
 import {
-  usePaymentProviders,
   useDeleteProvider,
+  usePaymentProviders,
 } from '@src/features/payments/hooks/usePaymentProviders';
 import { DataTable } from '@src/shared/components/data-table';
 import { DataTableFilters } from '@src/shared/components/data-table-filters';
-import { usePaymentProviderColumns } from '@src/features/payments/hooks/usePaymentProviderColumns';
-import { Button } from '@src/shared/components/ui/button';
 import { SectionHeader } from '@src/shared/components/section-header';
-import { Plus } from 'lucide-react';
-import { toast } from 'sonner';
+import { Button } from '@src/shared/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -20,6 +18,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@src/shared/components/ui/dialog';
+import { Plus } from 'lucide-react';
+import { toast } from 'sonner';
+
 import { CreateProviderDialog } from '../components/create-provider-dialog';
 import { EditProviderDialog } from '../components/edit-provider-dialog';
 import { ProviderDetailDialog } from '../components/provider-detail-dialog';

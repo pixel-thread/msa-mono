@@ -2,8 +2,6 @@
 'use client';
 
 import * as React from 'react';
-import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts';
-
 import {
   Card,
   CardContent,
@@ -12,11 +10,12 @@ import {
   CardTitle,
 } from '@src/shared/components/ui/card';
 import {
+  type ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-  type ChartConfig,
 } from '@src/shared/components/ui/chart';
+import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts';
 
 const chartConfig = {
   revenue: {

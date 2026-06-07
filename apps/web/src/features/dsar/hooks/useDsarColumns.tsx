@@ -1,5 +1,6 @@
-import { ColumnDef } from '@tanstack/react-table';
 import { Badge } from '@src/shared/components/ui/badge';
+import { ColumnDef } from '@tanstack/react-table';
+
 import { DsarActionsCell } from '../components/cells/dsar-actions-cell';
 import type { DsarTicketRecord } from '../types';
 

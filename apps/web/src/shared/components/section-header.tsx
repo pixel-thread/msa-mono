@@ -1,6 +1,6 @@
-import { ArrowLeftIcon } from 'lucide-react';
-import { cn } from '@src/shared/lib/utils';
 import { Button } from '@src/shared/components/ui/button';
+import { cn } from '@src/shared/lib/utils';
+import { ArrowLeftIcon } from 'lucide-react';
 
 interface SectionHeaderProps {
   title: React.ReactNode;

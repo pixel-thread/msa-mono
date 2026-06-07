@@ -16,10 +16,10 @@ import { hasHighRoleAccess } from '@utils/has-high-role';
 import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';
 import type { RequestHandler } from 'express';
-import { NextFunction, Request, Response } from 'express';
+import type { NextFunction, Request, Response } from 'express';
 
 // Types
-import { AuditLogQuery } from '../types';
+import type { AuditLogQuery } from '../types';
 
 export const getAuditLogs: RequestHandler[] = [
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {

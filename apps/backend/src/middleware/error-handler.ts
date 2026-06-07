@@ -1,6 +1,6 @@
 import { AppError, normalizeUnknownError } from '@errors';
 import { logger } from '@src/shared/logger';
-import { NextFunction,Request, Response } from 'express';
+import type { NextFunction,Request, Response } from 'express';
 
 export function errorHandler(err: unknown, req: Request, res: Response, _next: NextFunction) {
   const traceId = (req.traceId as string) || 'unknown';

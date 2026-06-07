@@ -1,14 +1,15 @@
 'use client';
 
+import { zodResolver } from '@hookform/resolvers/zod';
 import {
   CheckIcon as Check,
   ClockIcon as Clock,
   UserIcon as Users,
   XIcon,
 } from '@phosphor-icons/react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-
+import { MemberListItem } from '@src/features/members/types';
+import { Avatar, AvatarFallback } from '@src/shared/components/ui/avatar';
+import { Button } from '@src/shared/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -17,15 +18,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@src/shared/components/ui/dialog';
-import { Button } from '@src/shared/components/ui/button';
-import { Avatar, AvatarFallback } from '@src/shared/components/ui/avatar';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@src/shared/components/ui/select';
 import {
   Form,
   FormControl,
@@ -34,10 +26,18 @@ import {
   FormLabel,
   FormMessage,
 } from '@src/shared/components/ui/form';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@src/shared/components/ui/select';
 import { cn } from '@src/shared/lib/utils';
+import { useForm } from 'react-hook-form';
+
 import type { Attendee } from '../types';
-import { AssignAttendeeSchema, type AssignAttendeeInput } from '../validators';
-import { MemberListItem } from '@src/features/members/types';
+import { type AssignAttendeeInput,AssignAttendeeSchema } from '../validators';
 
 interface ManageAttendeesDialogProps {
   open: boolean;

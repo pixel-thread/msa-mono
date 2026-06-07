@@ -2,7 +2,7 @@
 import { ValidationError } from '@errors';
 import { validate } from '@lib/validate';
 // ---- Prisma
-import { Prisma } from '@prisma/client';
+import type { Prisma } from '@prisma/client';
 // ---- Services
 import { createLogs, createLogsBatch } from '@services/logs';
 // Shared utilities
@@ -11,7 +11,7 @@ import { success } from '@utils/responses';
 // ---- Validators / Types
 import { LogBatchSchema,LogIngestSchema } from '@validator/logs';
 import type { RequestHandler } from 'express';
-import { NextFunction, Request, Response } from 'express';
+import type { NextFunction, Request, Response } from 'express';
 
 // ---------------------------------------------------------------------------
 // POST /api/logs

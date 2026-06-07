@@ -5,7 +5,7 @@
 // Shared utilities
 // ---------------------------------------------------------------------------
 import { prisma } from '@lib/prisma';
-import { Association, Prisma } from '@prisma/client';
+import type { Association, Prisma } from '@prisma/client';
 import { buildPagination } from '@src/shared/utils/helper/build-pagination';
 
 // ---------------------------------------------------------------------------

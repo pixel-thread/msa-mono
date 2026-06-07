@@ -5,7 +5,7 @@ import { env } from '@src/env';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
-import { Request, RequestHandler,Response } from 'express';
+import type { Request, RequestHandler,Response } from 'express';
 
 /**
  * GET /api/auth/me — Fetch the current authenticated user's profile

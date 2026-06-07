@@ -2,6 +2,7 @@
 
 import { Button } from '@src/shared/components/ui/button';
 import { Check, X } from 'lucide-react';
+
 import { MembershipApplicationListItem } from '../../types';
 
 interface MembershipApplicationActionsCellProps {

@@ -6,19 +6,20 @@
 import { BadRequestError,NotFoundError } from '@errors';
 // Prisma
 import { prisma } from '@lib/prisma';
-import { AuditAction, ConsentPurpose, ConsentStatus, Prisma } from '@prisma/client';
+import type { Prisma } from '@prisma/client';
+import { AuditAction, ConsentPurpose, ConsentStatus } from '@prisma/client';
 import { PAGE_SIZE } from '@src/shared/constants';
-import { PaginationMeta } from '@src/shared/types';
+import type { PaginationMeta } from '@src/shared/types';
 import { buildPagination } from '@utils';
 
 // Types
-import {
+import type {
   ConsentReceiptRecord,
   ConsentSummaryReport,
   UserConsentState,
 } from '../types/consent.types';
 // Validators
-import {
+import type {
   AllConsentRecordsQueryInput,
   ConsentUpdateInput,
   UpdateConsentReceiptInput,

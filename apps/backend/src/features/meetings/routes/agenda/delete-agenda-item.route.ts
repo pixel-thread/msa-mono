@@ -5,7 +5,7 @@ import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';
-import { NextFunction, Request, RequestHandler,Response } from 'express';
+import type { NextFunction, Request, RequestHandler,Response } from 'express';
 
 /** DELETE /api/meetings/[meetingId]/agenda/[itemId] - Delete an agenda item. */
 export const deleteAgendaItemHandler: RequestHandler[] = [

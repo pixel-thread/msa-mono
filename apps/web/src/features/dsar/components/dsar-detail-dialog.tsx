@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { Badge } from '@src/shared/components/ui/badge';
 import {
   Dialog,
   DialogContent,
@@ -8,7 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@src/shared/components/ui/dialog';
-import { Badge } from '@src/shared/components/ui/badge';
+
 import { useDsarTicketDetail } from '../hooks';
 import type { DsarTicketRecord } from '../types';
 

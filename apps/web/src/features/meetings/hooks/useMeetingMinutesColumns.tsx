@@ -1,9 +1,9 @@
 'use client';
-import { ColumnDef } from '@tanstack/react-table';
+import type { MeetingMinute } from '@src/features/meetings/hooks/useMeetingMinutes';
 import { Badge } from '@src/shared/components/ui/badge';
 import { Button } from '@src/shared/components/ui/button';
+import { ColumnDef } from '@tanstack/react-table';
 import { Pencil, Trash2 } from 'lucide-react';
-import type { MeetingMinute } from '@src/features/meetings/hooks/useMeetingMinutes';
 
 interface UseMeetingMinutesColumnsOptions {
   onEdit: (minute: MeetingMinute) => void;

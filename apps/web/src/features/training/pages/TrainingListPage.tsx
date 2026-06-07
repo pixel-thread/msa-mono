@@ -1,17 +1,17 @@
 'use client';
 
 import { useState } from 'react';
-import { useNavigate } from '@tanstack/react-router';
-import { useUrlFilters } from '@src/shared/hooks';
 import { DataTable } from '@src/shared/components/data-table';
+import { DataTableFilters } from '@src/shared/components/data-table-filters';
+import { DataTablePagination } from '@src/shared/components/data-table-pagination';
 import { SectionHeader } from '@src/shared/components/section-header';
 import { Button } from '@src/shared/components/ui/button';
-import { DataTableFilters } from '@src/shared/components/data-table-filters';
-import { Plus, Award } from 'lucide-react';
+import { useUrlFilters } from '@src/shared/hooks';
+import { useNavigate } from '@tanstack/react-router';
+import { Award,Plus } from 'lucide-react';
 
-import { useTrainingModules, useUpdateTrainingModule, useModuleTableColumns } from '../hooks';
 import { CreateModuleDialog } from '../components';
-import { DataTablePagination } from '@src/shared/components/data-table-pagination';
+import { useModuleTableColumns,useTrainingModules, useUpdateTrainingModule } from '../hooks';
 
 export function TrainingListPage() {
   const navigate = useNavigate();

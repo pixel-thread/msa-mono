@@ -5,7 +5,7 @@ import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';
-import { RequestHandler } from 'express';
+import type { RequestHandler } from 'express';
 
 /** POST /api/meetings/[meetingId]/notice - Issue a notice for a meeting. */
 export const postIssueNotice: RequestHandler[] = [

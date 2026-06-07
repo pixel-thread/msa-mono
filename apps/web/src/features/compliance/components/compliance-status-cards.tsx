@@ -1,8 +1,9 @@
 'use client';
 
 import { useMemo } from 'react';
-import { useComplianceChecks } from '../hooks/useComplianceChecks';
 import { Skeleton } from '@src/shared/components/ui/skeleton';
+
+import { useComplianceChecks } from '../hooks/useComplianceChecks';
 import { ALL_CHECK_TYPES } from '../validators/compliance';
 
 const checkTypeLabels: Record<string, string> = {

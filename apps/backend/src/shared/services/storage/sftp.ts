@@ -1,6 +1,6 @@
 import { env } from '@src/env';
 import { logger } from '@src/shared/logger';
-import { StorageProvider, UploadParams, UploadResult } from '@src/shared/types/storage';
+import type { StorageProvider, UploadParams, UploadResult } from '@src/shared/types/storage';
 import path from 'node:path';
 import SftpClient from 'ssh2-sftp-client';
 

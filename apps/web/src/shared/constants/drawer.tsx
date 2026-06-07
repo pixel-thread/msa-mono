@@ -1,15 +1,15 @@
 import {
-  UsersIcon,
-  LayoutDashboardIcon,
-  Settings2Icon,
-  CalendarDaysIcon,
-  CreditCardIcon,
-  BookOpenIcon,
-  WalletIcon,
   AlertTriangleIcon,
-  ScrollTextIcon,
-  ShieldIcon,
+  BookOpenIcon,
+  CalendarDaysIcon,
   ClipboardCheck,
+  CreditCardIcon,
+  LayoutDashboardIcon,
+  ScrollTextIcon,
+  Settings2Icon,
+  ShieldIcon,
+  UsersIcon,
+  WalletIcon,
 } from 'lucide-react';
 
 export const DRAWER_NAV_MAIN = [

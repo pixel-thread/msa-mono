@@ -1,24 +1,11 @@
 'use client';
 
-import { Link } from '@tanstack/react-router';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { HugeiconsIcon } from '@hugeicons/react';
-import {
-  UserIdVerificationIcon,
-  BankIcon,
-  UserGroupIcon,
-  ShieldBlockchainIcon,
-  BookOpen01Icon,
-  ArrowRight01Icon,
-  CheckmarkCircle02Icon,
-} from '@hugeicons/core-free-icons';
-
-import { Button } from '@components/ui/button';
-import { Badge } from '@components/ui/badge';
-import { Input } from '@components/ui/input';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@components/ui/card';
+import { PublicFooter } from '@components/public-footer';
+import { PublicHeader } from '@components/public-header';
 import { Alert, AlertDescription } from '@components/ui/alert';
+import { Badge } from '@components/ui/badge';
+import { Button } from '@components/ui/button';
+import { Card, CardContent,CardDescription, CardHeader, CardTitle } from '@components/ui/card';
 import {
   Form,
   FormControl,
@@ -27,16 +14,28 @@ import {
   FormLabel,
   FormMessage,
 } from '@components/ui/form';
+import { Input } from '@components/ui/input';
 import { Text } from '@components/ui/text';
-import { PublicHeader } from '@components/public-header';
-import { PublicFooter } from '@components/public-footer';
-import {
-  MembershipApplicationSchema,
-  type MembershipApplicationInput,
-} from '@validator/membership-application.validator';
 import { useSignUp } from '@feature/auth/hooks';
-import { logger } from '@src/shared/logger';
+import { zodResolver } from '@hookform/resolvers/zod';
+import {
+  ArrowRight01Icon,
+  BankIcon,
+  BookOpen01Icon,
+  CheckmarkCircle02Icon,
+  ShieldBlockchainIcon,
+  UserGroupIcon,
+  UserIdVerificationIcon,
+} from '@hugeicons/core-free-icons';
+import { HugeiconsIcon } from '@hugeicons/react';
 import { env } from '@src/env';
+import { logger } from '@src/shared/logger';
+import { Link } from '@tanstack/react-router';
+import {
+  type MembershipApplicationInput,
+  MembershipApplicationSchema,
+} from '@validator/membership-application.validator';
+import { useForm } from 'react-hook-form';
 
 const BENEFITS = [
   {

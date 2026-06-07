@@ -14,8 +14,8 @@ import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';
 import type { RequestHandler } from 'express';
-import { NextFunction, Request, Response } from 'express';
-import z from 'zod';
+import type { NextFunction, Request, Response } from 'express';
+import type z from 'zod';
 
 // ---------------------------------------------------------------------------
 // GET /api/user

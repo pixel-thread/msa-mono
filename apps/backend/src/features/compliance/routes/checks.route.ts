@@ -28,9 +28,10 @@ import { validate } from '@lib/validate';
 // ---------------------------------------------------------------------------
 // Prisma
 // ---------------------------------------------------------------------------
-import {
+import type {
   ComplianceCheckStatus as PrismaComplianceCheckStatus,
-  Prisma,
+  Prisma} from '@prisma/client';
+import {
   UserRole,
 } from '@prisma/client';
 import { getAssociation } from '@services/association/get-association';
@@ -40,7 +41,7 @@ import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';
 import type { RequestHandler } from 'express';
-import { NextFunction, Request, Response } from 'express';
+import type { NextFunction, Request, Response } from 'express';
 
 // ---------------------------------------------------------------------------
 // GET /compliance/checks  —  List compliance checks

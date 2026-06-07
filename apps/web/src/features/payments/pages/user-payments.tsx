@@ -1,19 +1,19 @@
 'use client';
 
-import { useParams } from '@tanstack/react-router';
-import { useUrlFilters } from '@src/shared/hooks';
+import { usePaymentTransactionColumns } from '@src/features/payments/hooks/usePaymentTransactionColumns';
 import { useUserPayments } from '@src/features/payments/hooks/useUserPayments';
 import { DataTable } from '@src/shared/components/data-table';
 import { DataTableFilters } from '@src/shared/components/data-table-filters';
-import { usePaymentTransactionColumns } from '@src/features/payments/hooks/usePaymentTransactionColumns';
 import { DataTablePagination } from '@src/shared/components/data-table-pagination';
-import { Card, CardHeader, CardTitle, CardContent } from '@src/shared/components/ui/card';
-import { Badge } from '@src/shared/components/ui/badge';
-import { Separator } from '@src/shared/components/ui/separator';
-import { Button } from '@src/shared/components/ui/button';
 import { SectionHeader } from '@src/shared/components/section-header';
-import { CreditCard, Clock, AlertCircle, Receipt } from 'lucide-react';
+import { Badge } from '@src/shared/components/ui/badge';
+import { Button } from '@src/shared/components/ui/button';
+import { Card, CardContent,CardHeader, CardTitle } from '@src/shared/components/ui/card';
+import { Separator } from '@src/shared/components/ui/separator';
+import { useUrlFilters } from '@src/shared/hooks';
+import { useParams } from '@tanstack/react-router';
 import { Link } from '@tanstack/react-router';
+import { AlertCircle, Clock, CreditCard, Receipt } from 'lucide-react';
 
 export function UserPaymentsPage() {
   const params = useParams({ strict: false });

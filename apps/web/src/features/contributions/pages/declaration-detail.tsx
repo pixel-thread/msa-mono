@@ -1,14 +1,15 @@
 'use client';
 
-import { useParams } from '@tanstack/react-router';
-import { useDeclarationDetail } from '../hooks/declarations/use-declaration-detail';
 import { SectionHeader } from '@src/shared/components/section-header';
-import { Card, CardHeader, CardTitle, CardContent } from '@src/shared/components/ui/card';
-import { Button } from '@src/shared/components/ui/button';
 import { Badge } from '@src/shared/components/ui/badge';
+import { Button } from '@src/shared/components/ui/button';
+import { Card, CardContent,CardHeader, CardTitle } from '@src/shared/components/ui/card';
 import { Separator } from '@src/shared/components/ui/separator';
 import { formatDate } from '@src/shared/utils';
-import { User, Calendar, IndianRupee, ClipboardList } from 'lucide-react';
+import { useParams } from '@tanstack/react-router';
+import { Calendar, ClipboardList,IndianRupee, User } from 'lucide-react';
+
+import { useDeclarationDetail } from '../hooks/declarations/use-declaration-detail';
 
 const statusBadgeVariant: Record<string, 'default' | 'secondary' | 'destructive' | 'outline'> = {
   APPROVED: 'default',

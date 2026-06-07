@@ -1,20 +1,19 @@
 'use client';
 
-import { useParams, useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
-
+import { DeleteAnnouncementDialog } from '@src/features/announcement/components/delete-announcement-dialog';
+import { EditAnnouncementDialog } from '@src/features/announcement/components/edit-announcement-dialog';
 import { useAnnouncement } from '@src/features/announcement/hooks/useAnnouncement';
 import { useDeleteAnnouncement } from '@src/features/announcement/hooks/useDeleteAnnouncement';
 import { useMarkAnnouncementRead } from '@src/features/announcement/hooks/useMarkAnnouncementRead';
-import { Card, CardHeader, CardTitle, CardContent } from '@src/shared/components/ui/card';
+import { SectionHeader } from '@src/shared/components/section-header';
 import { Badge } from '@src/shared/components/ui/badge';
 import { Button } from '@src/shared/components/ui/button';
-import { SectionHeader } from '@src/shared/components/section-header';
+import { Card, CardContent,CardHeader, CardTitle } from '@src/shared/components/ui/card';
 import { Separator } from '@src/shared/components/ui/separator';
 import { formatDate } from '@src/shared/utils';
-import { ArrowLeft, Pencil, Trash2, Eye, Pin, User, Calendar, Flag, BarChart3 } from 'lucide-react';
-import { EditAnnouncementDialog } from '@src/features/announcement/components/edit-announcement-dialog';
-import { DeleteAnnouncementDialog } from '@src/features/announcement/components/delete-announcement-dialog';
+import { useNavigate,useParams } from '@tanstack/react-router';
+import { ArrowLeft, BarChart3,Calendar, Eye, Flag, Pencil, Pin, Trash2, User } from 'lucide-react';
 
 const priorityVariants: Record<string, 'default' | 'secondary' | 'destructive' | 'outline'> = {
   LOW: 'outline',

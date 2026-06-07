@@ -6,7 +6,7 @@
  */
 
 import { prisma } from '@lib/prisma';
-import { AnnouncementPriority, AnnouncementStatus, Prisma } from '@prisma/client';
+import type { AnnouncementPriority, AnnouncementStatus, Prisma } from '@prisma/client';
 import { PAGE_SIZE } from '@src/shared/constants';
 import { buildPagination } from '@src/shared/utils/helper/build-pagination';
 

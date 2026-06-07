@@ -1,5 +1,5 @@
 import { ForbiddenError } from '@errors';
-import { UserRole } from '@prisma/client';
+import type { UserRole } from '@prisma/client';
 import { asyncHandler } from '@utils/async-handler';
 import type { RequestHandler } from 'express';
 

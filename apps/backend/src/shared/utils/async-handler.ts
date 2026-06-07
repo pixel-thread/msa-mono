@@ -1,4 +1,4 @@
-import { RequestHandler } from 'express';
+import type { RequestHandler } from 'express';
 
 /**
  * Wraps an async Express route handler and forwards errors to Express error middleware.

@@ -1,17 +1,17 @@
 'use client';
 
+import { ROLES } from '@src/features/members/utils/constants';
+import { Button } from '@src/shared/components/ui/button';
 import {
   DropdownMenu,
-  DropdownMenuContent,
   DropdownMenuCheckboxItem,
+  DropdownMenuContent,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@src/shared/components/ui/dropdown-menu';
-import { Button } from '@src/shared/components/ui/button';
-import { ChevronDown } from 'lucide-react';
-import { ROLES } from '@src/features/members/utils/constants';
 import type { User } from '@src/shared/types';
+import { ChevronDown } from 'lucide-react';
 
 interface RoleCellProps {
   member: User;

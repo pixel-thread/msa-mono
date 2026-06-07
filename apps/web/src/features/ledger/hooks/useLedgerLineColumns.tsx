@@ -1,7 +1,8 @@
 'use client';
-import { ColumnDef } from '@tanstack/react-table';
-import type { LedgerLineResponse } from './useLedgerEntries';
 import { Link } from '@tanstack/react-router';
+import { ColumnDef } from '@tanstack/react-table';
+
+import type { LedgerLineResponse } from './useLedgerEntries';
 
 interface UseLedgerLineColumnsOptions {
   getAccountName: (accountId: string) => string;

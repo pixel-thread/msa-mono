@@ -1,10 +1,11 @@
 // ---- External libs ----
 // ---- Shared utilities ----
 import { prisma } from '@lib/prisma';
-import { AuditAction, Prisma, UserRole } from '@prisma/client';
+import type { Prisma} from '@prisma/client';
+import { AuditAction, UserRole } from '@prisma/client';
 
 // ---- Validators ----
-import { CreateTrainingModuleInput } from '../validators/training';
+import type { CreateTrainingModuleInput } from '../validators/training';
 
 // ---- Interfaces ----
 

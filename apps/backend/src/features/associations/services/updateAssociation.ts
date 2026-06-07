@@ -4,7 +4,7 @@
  */
 
 import { prisma } from '@lib/prisma';
-import { Prisma } from '@prisma/client';
+import type { Prisma } from '@prisma/client';
 
 /**
  * Parameters for updating an association.

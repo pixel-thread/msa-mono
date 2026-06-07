@@ -10,7 +10,7 @@ import { prisma } from '@lib/prisma';
 // ---------------------------------------------------------------------------
 // Prisma
 // ---------------------------------------------------------------------------
-import { Prisma, UserRole } from '@prisma/client';
+import type { Prisma, UserRole } from '@prisma/client';
 import { hasHighRoleAccess } from '@utils/has-high-role';
 
 // ---- Interfaces --------------------------------------------------------------

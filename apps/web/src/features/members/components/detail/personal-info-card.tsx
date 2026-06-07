@@ -1,9 +1,9 @@
-import { Card, CardHeader, CardTitle, CardContent } from '@src/shared/components/ui/card';
-import { Avatar, AvatarFallback } from '@src/shared/components/ui/avatar';
-import { Separator } from '@src/shared/components/ui/separator';
-import { Mail, Phone, Hash, Briefcase } from 'lucide-react';
 import { getInitials } from '@src/features/members/utils/helper/get-initials';
+import { Avatar, AvatarFallback } from '@src/shared/components/ui/avatar';
+import { Card, CardContent,CardHeader, CardTitle } from '@src/shared/components/ui/card';
+import { Separator } from '@src/shared/components/ui/separator';
 import type { User } from '@src/shared/types';
+import { Briefcase,Hash, Mail, Phone } from 'lucide-react';
 
 interface PersonalInfoCardProps {
   member: User;

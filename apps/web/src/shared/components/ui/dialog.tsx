@@ -1,12 +1,11 @@
 'use client';
 
 import * as React from 'react';
-import { Dialog as DialogPrimitive } from 'radix-ui';
-
-import { cn } from '@src/shared/lib/utils';
-import { Button } from '@src/shared/components/ui/button';
-import { HugeiconsIcon } from '@hugeicons/react';
 import { Cancel01Icon } from '@hugeicons/core-free-icons';
+import { HugeiconsIcon } from '@hugeicons/react';
+import { Button } from '@src/shared/components/ui/button';
+import { cn } from '@src/shared/lib/utils';
+import { Dialog as DialogPrimitive } from 'radix-ui';
 
 function Dialog({ ...props }: React.ComponentProps<typeof DialogPrimitive.Root>) {
   return <DialogPrimitive.Root data-slot="dialog" {...props} />;

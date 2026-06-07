@@ -1,6 +1,7 @@
-import { ColumnDef } from '@tanstack/react-table';
-import { formatDate } from '@src/shared/utils';
-import { Link } from '@tanstack/react-router';
+import { CancelMeetingCell } from '@feature/meetings/components/cells/cancel-meeting';
+import { useMeetings } from '@feature/meetings/hooks';
+import type { Meeting } from '@feature/meetings/types';
+import { Button } from '@src/shared/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,13 +10,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@src/shared/components/ui/dropdown-menu';
-import { Button } from '@src/shared/components/ui/button';
-import { MoreHorizontal, Pencil, Trash2, Eye } from 'lucide-react';
-import { useMeetings } from '@feature/meetings/hooks';
-import type { Meeting } from '@feature/meetings/types';
-import { getTypeBadge } from '@utils/helper/get-type-badge';
+import { formatDate } from '@src/shared/utils';
+import { Link } from '@tanstack/react-router';
+import { ColumnDef } from '@tanstack/react-table';
 import { getStatusBadge } from '@utils/helper/get-status-badge';
-import { CancelMeetingCell } from '@feature/meetings/components/cells/cancel-meeting';
+import { getTypeBadge } from '@utils/helper/get-type-badge';
+import { Eye,MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
 
 export const useMeetingTableColumns = (): {
   columns: ColumnDef<Meeting>[];

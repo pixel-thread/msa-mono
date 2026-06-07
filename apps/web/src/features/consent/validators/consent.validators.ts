@@ -1,5 +1,5 @@
-import { z } from 'zod';
 import { ConsentPurpose, ConsentStatus } from '@sharedType/enums';
+import { z } from 'zod';
 
 /**
  * Validator for granting or revoking consent.

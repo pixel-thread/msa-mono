@@ -1,12 +1,11 @@
 'use client';
 
 import * as React from 'react';
-import { DayPicker, getDefaultClassNames, type DayButton, type Locale } from 'react-day-picker';
-
-import { cn } from '@src/shared/lib/utils';
-import { Button, buttonVariants } from '@src/shared/components/ui/button';
+import { ArrowDownIcon,ArrowLeftIcon, ArrowRightIcon } from '@hugeicons/core-free-icons';
 import { HugeiconsIcon } from '@hugeicons/react';
-import { ArrowLeftIcon, ArrowRightIcon, ArrowDownIcon } from '@hugeicons/core-free-icons';
+import { Button, buttonVariants } from '@src/shared/components/ui/button';
+import { cn } from '@src/shared/lib/utils';
+import { type DayButton, DayPicker, getDefaultClassNames, type Locale } from 'react-day-picker';
 
 function Calendar({
   className,

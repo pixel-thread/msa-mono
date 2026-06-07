@@ -22,7 +22,8 @@ import { hasHighRoleAccess } from '@utils/has-high-role';
 import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';
 import { pageNumberValidation } from '@validator/common';
-import { NextFunction, Request, type RequestHandler,Response } from 'express';
+import type { NextFunction, Request,Response } from 'express';
+import { type RequestHandler } from 'express';
 import z from 'zod';
 
 // ---------------------------------------------------------------------------

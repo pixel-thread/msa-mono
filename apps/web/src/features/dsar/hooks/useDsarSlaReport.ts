@@ -1,7 +1,7 @@
-import { useQuery } from '@tanstack/react-query';
-import http from '@src/shared/utils/http';
 import { ENDPOINTS, QUERY_KEYS } from '@repo/shared';
 import type { ApiResponse } from '@src/shared/utils/http';
+import http from '@src/shared/utils/http';
+import { useQuery } from '@tanstack/react-query';
 
 interface SlaReport {
   breached: number;

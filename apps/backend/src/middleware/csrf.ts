@@ -4,7 +4,7 @@ import { env } from '@src/env';
 import { API_PUBLIC_ROUTES } from '@src/shared/constants';
 import { logger } from '@src/shared/logger';
 import { getTraceId } from '@utils';
-import { NextFunction,Request, Response } from 'express';
+import type { NextFunction,Request, Response } from 'express';
 
 export function csrf(req: Request, res: Response, next: NextFunction) {
   const traceId = getTraceId();

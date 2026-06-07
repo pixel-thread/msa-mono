@@ -1,9 +1,10 @@
 'use client';
 
-import { useLedgerSummary } from '../hooks/useLedgerSummary';
-import { Card, CardContent, CardHeader, CardTitle } from '@src/shared/components/ui/card';
 import { SectionHeader } from '@src/shared/components/section-header';
-import { ArrowUpRight, ArrowDownRight, Scale, Clock } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@src/shared/components/ui/card';
+import { ArrowDownRight, ArrowUpRight, Clock,Scale } from 'lucide-react';
+
+import { useLedgerSummary } from '../hooks/useLedgerSummary';
 
 export function formatCurrency(amount: number) {
   return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);

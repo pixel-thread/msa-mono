@@ -1,7 +1,7 @@
 import { NotFoundError } from '@errors';
 import { prisma } from '@lib/prisma';
 
-import { AgendaOperationInput } from '../validators/agenda-items';
+import type { AgendaOperationInput } from '../validators/agenda-items';
 
 /** Props for processing agenda operations. */
 interface ProcessAgendaOperationsProps {

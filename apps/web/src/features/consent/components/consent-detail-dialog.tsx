@@ -1,5 +1,7 @@
 'use client';
 
+import { ConsentStatus } from '@sharedType/enums';
+import { Badge } from '@src/shared/components/ui/badge';
 import {
   Dialog,
   DialogContent,
@@ -7,8 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@src/shared/components/ui/dialog';
-import { Badge } from '@src/shared/components/ui/badge';
-import { ConsentStatus } from '@sharedType/enums';
+
 import type { ConsentRecord } from '../types/consent.types';
 
 interface ConsentDetailDialogProps {

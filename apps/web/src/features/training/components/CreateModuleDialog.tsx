@@ -1,8 +1,9 @@
 'use client';
 
-import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-
+import { UserRole } from '@sharedType/enums';
+import { Button } from '@src/shared/components/ui/button';
+import { Checkbox } from '@src/shared/components/ui/checkbox';
 import {
   Dialog,
   DialogContent,
@@ -11,11 +12,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@src/shared/components/ui/dialog';
-import { Button } from '@src/shared/components/ui/button';
-import { Input } from '@src/shared/components/ui/input';
-import { Textarea } from '@src/shared/components/ui/textarea';
-import { Switch } from '@src/shared/components/ui/switch';
-import { Checkbox } from '@src/shared/components/ui/checkbox';
 import {
   Form,
   FormControl,
@@ -24,9 +20,13 @@ import {
   FormLabel,
   FormMessage,
 } from '@src/shared/components/ui/form';
-import { CreateTrainingModuleSchema, type CreateTrainingModuleInput } from '../validators/training';
+import { Input } from '@src/shared/components/ui/input';
+import { Switch } from '@src/shared/components/ui/switch';
+import { Textarea } from '@src/shared/components/ui/textarea';
+import { useForm } from 'react-hook-form';
+
 import { useCreateTrainingModule } from '../hooks';
-import { UserRole } from '@sharedType/enums';
+import { type CreateTrainingModuleInput,CreateTrainingModuleSchema } from '../validators/training';
 
 interface CreateModuleDialogProps {
   open: boolean;

@@ -1,8 +1,9 @@
-import { useQuery } from '@tanstack/react-query';
-import http from '@src/shared/utils/http';
 import { QUERY_KEYS } from '@repo/shared';
-import { Association } from '../types/association';
 import { ENDPOINTS } from '@repo/shared';
+import http from '@src/shared/utils/http';
+import { useQuery } from '@tanstack/react-query';
+
+import { Association } from '../types/association';
 
 export function useAssociationsList() {
   const { data, isLoading, error, refetch } = useQuery({

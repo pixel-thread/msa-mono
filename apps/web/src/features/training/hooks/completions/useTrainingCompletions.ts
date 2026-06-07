@@ -1,10 +1,11 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
+import { buildUrlWithQuery,ENDPOINTS } from '@repo/shared';
 import http from '@src/shared/utils/http';
-import { ENDPOINTS, buildUrlWithQuery } from '@repo/shared';
-import { trainingQueryKeys } from '../../utils/constants';
+import { useQuery } from '@tanstack/react-query';
+
 import type { TrainingCompletionItem } from '../../types';
+import { trainingQueryKeys } from '../../utils/constants';
 
 export function useTrainingCompletions(moduleId: string | null, options: { page?: number } = {}) {
   const { page = 1 } = options;

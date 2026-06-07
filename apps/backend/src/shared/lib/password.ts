@@ -51,7 +51,7 @@ export function validatePasswordStrength(password: string): {
 }
 
 /** Generates a cryptographically strong random password meeting complexity rules. */
-export function generateRandomPassword(length: number = 16): string {
+export function generateRandomPassword(length = 16): string {
   const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
   const lowercase = 'abcdefghijklmnopqrstuvwxyz';
   const digits = '0123456789';

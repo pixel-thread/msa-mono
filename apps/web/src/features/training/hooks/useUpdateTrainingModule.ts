@@ -1,9 +1,10 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import http from '@src/shared/utils/http';
-import { toast } from 'sonner';
 import { ENDPOINTS } from '@repo/shared';
-import { trainingQueryKeys } from '../utils/constants';
+import http from '@src/shared/utils/http';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
+
 import type { TrainingModuleListItem } from '../types';
+import { trainingQueryKeys } from '../utils/constants';
 import type { UpdateTrainingModuleInput } from '../validators/training';
 
 export function useUpdateTrainingModule() {

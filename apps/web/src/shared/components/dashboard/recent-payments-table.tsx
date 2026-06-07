@@ -1,6 +1,8 @@
 // @ts-nocheck
 'use client';
 
+import { Card } from '@components/ui/card';
+import { Badge } from '@src/shared/components/ui/badge';
 import {
   Table,
   TableBody,
@@ -9,8 +11,6 @@ import {
   TableHeader,
   TableRow,
 } from '@src/shared/components/ui/table';
-import { Badge } from '@src/shared/components/ui/badge';
-import { Card } from '@components/ui/card';
 
 const statusColor: Record<string, 'default' | 'secondary' | 'destructive' | 'outline'> = {
   COMPLETED: 'default',

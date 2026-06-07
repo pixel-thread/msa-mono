@@ -1,11 +1,13 @@
 'use client';
 
 import { useState } from 'react';
-import {
-  useProviderDetail,
-  useDeleteProvider,
-} from '@src/features/payments/hooks/usePaymentProviders';
+import { QUERY_KEYS } from '@repo/shared';
 import { ProviderDetail } from '@src/features/payments/components/provider-detail';
+import {
+  useDeleteProvider,
+  useProviderDetail,
+} from '@src/features/payments/hooks/usePaymentProviders';
+import { Button } from '@src/shared/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -14,10 +16,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@src/shared/components/ui/dialog';
-import { Button } from '@src/shared/components/ui/button';
-import { toast } from 'sonner';
-import { QUERY_KEYS } from '@repo/shared';
 import { useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 
 interface ProviderDetailDialogProps {
   open: boolean;

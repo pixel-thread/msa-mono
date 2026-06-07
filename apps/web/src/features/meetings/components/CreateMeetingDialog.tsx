@@ -1,9 +1,8 @@
 'use client';
 
-import { useFieldArray } from 'react-hook-form';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Plus, Trash } from '@phosphor-icons/react';
-
+import { Button } from '@src/shared/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -12,15 +11,14 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@src/shared/components/ui/dialog';
-import { Button } from '@src/shared/components/ui/button';
-import { Input } from '@src/shared/components/ui/input';
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@src/shared/components/ui/select';
+  Field,
+  FieldContent,
+  FieldGroup,
+  FieldLabel as ShadFieldLabel,
+  FieldLegend,
+  FieldSet,
+} from '@src/shared/components/ui/field';
 import {
   Form,
   FormControl,
@@ -29,17 +27,19 @@ import {
   FormLabel,
   FormMessage,
 } from '@src/shared/components/ui/form';
+import { Input } from '@src/shared/components/ui/input';
 import {
-  FieldSet,
-  FieldLegend,
-  FieldGroup,
-  FieldContent,
-  FieldLabel as ShadFieldLabel,
-  Field,
-} from '@src/shared/components/ui/field';
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@src/shared/components/ui/select';
+import { useFieldArray } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
+
 import { useMeetings } from '../hooks';
-import { CreateMeetingSchema, type CreateMeetingInput } from '../validators';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { type CreateMeetingInput,CreateMeetingSchema } from '../validators';
 
 export function CreateMeetingDialog({
   open,

@@ -1,10 +1,11 @@
-import { useQuery } from '@tanstack/react-query';
-import http from '@src/shared/utils/http';
 import { QUERY_KEYS } from '@repo/shared';
-import type { ConsentReceiptRecord } from '../types/consent.types';
+import { buildUrlWithQuery,ENDPOINTS } from '@repo/shared';
 import type { PaginationMeta } from '@src/shared/types/api.types';
 import type { ApiResponse } from '@src/shared/utils/http';
-import { ENDPOINTS, buildUrlWithQuery } from '@repo/shared';
+import http from '@src/shared/utils/http';
+import { useQuery } from '@tanstack/react-query';
+
+import type { ConsentReceiptRecord } from '../types/consent.types';
 
 interface UseConsentRecordsOptions {
   page?: number;

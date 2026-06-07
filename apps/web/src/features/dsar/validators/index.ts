@@ -1,6 +1,6 @@
-import { z } from 'zod';
 import { DsarRequestType, DsarStatus } from '@sharedType/enums';
 import { pageNumberValidation } from '@src/shared/validators/common';
+import { z } from 'zod';
 
 export const SubmitDsarSchema = z.object({
   requestType: z.nativeEnum(DsarRequestType),

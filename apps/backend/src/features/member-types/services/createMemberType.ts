@@ -7,12 +7,13 @@
 // ---------------------------------------------------------------------------
 import { ConflictError } from '@errors';
 import { prisma } from '@lib/prisma';
-import { AuditAction, Prisma } from '@prisma/client';
+import type { Prisma } from '@prisma/client';
+import { AuditAction } from '@prisma/client';
 
 // ---------------------------------------------------------------------------
 // Validators / Types
 // ---------------------------------------------------------------------------
-import { CreateMemberTypeInput } from '../validators';
+import type { CreateMemberTypeInput } from '../validators';
 
 // ---------------------------------------------------------------------------
 // Interface

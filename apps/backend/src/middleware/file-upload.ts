@@ -1,7 +1,8 @@
 import { BadRequestError } from '@errors';
 import { BLOCK_FILE_EXT,MAX_IMAGE_SIZE } from '@src/shared/constants';
 import type { Request } from 'express';
-import multer, { FileFilterCallback } from 'multer';
+import type { FileFilterCallback } from 'multer';
+import multer from 'multer';
 import path from 'node:path';
 
 /**

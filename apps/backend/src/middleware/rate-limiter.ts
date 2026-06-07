@@ -4,7 +4,7 @@ import { env } from '@src/env';
 import { logger } from '@src/shared/logger';
 import type { Duration } from '@upstash/ratelimit';
 import { Ratelimit } from '@upstash/ratelimit';
-import { NextFunction, Request, RequestHandler,Response } from 'express';
+import type { NextFunction, Request, RequestHandler,Response } from 'express';
 
 // Singleton Redis client
 

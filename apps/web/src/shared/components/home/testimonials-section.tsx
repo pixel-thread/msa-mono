@@ -1,18 +1,18 @@
 'use client';
 
-import { HugeiconsIcon } from '@hugeicons/react';
 import { StarIcon } from '@hugeicons/core-free-icons';
+import { HugeiconsIcon } from '@hugeicons/react';
+import { Avatar, AvatarFallback } from '@src/shared/components/ui/avatar';
 import { Badge } from '@src/shared/components/ui/badge';
 import { Card, CardContent } from '@src/shared/components/ui/card';
-import { Text } from '@src/shared/components/ui/text';
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselPrevious,
   CarouselNext,
+  CarouselPrevious,
 } from '@src/shared/components/ui/carousel';
-import { Avatar, AvatarFallback } from '@src/shared/components/ui/avatar';
+import { Text } from '@src/shared/components/ui/text';
 
 const TESTIMONIALS = [
   {

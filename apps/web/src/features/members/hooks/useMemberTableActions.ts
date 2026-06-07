@@ -1,6 +1,6 @@
-import { useUpdateMemberStatus } from './useUpdateMemberStatus';
-import { useUpdateMemberRole } from './useUpdateMemberRole';
 import { useUpdateMemberAssociation } from './useUpdateMemberAssociation';
+import { useUpdateMemberRole } from './useUpdateMemberRole';
+import { useUpdateMemberStatus } from './useUpdateMemberStatus';
 
 export function useMemberTableActions() {
   const updateStatus = useUpdateMemberStatus();

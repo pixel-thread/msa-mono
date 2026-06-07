@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { Button } from '@src/shared/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -9,9 +10,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@src/shared/components/ui/dialog';
-import { Button } from '@src/shared/components/ui/button';
 import { Label } from '@src/shared/components/ui/label';
 import { Textarea } from '@src/shared/components/ui/textarea';
+
 import { useRejectDsarTicket } from '../hooks';
 import type { DsarTicketRecord } from '../types';
 

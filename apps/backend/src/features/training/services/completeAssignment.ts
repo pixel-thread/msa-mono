@@ -2,7 +2,8 @@
 import { BadRequestError } from '@errors';
 // ---- Shared utilities ----
 import { prisma } from '@lib/prisma';
-import { AuditAction, Prisma, TrainingAssignmentStatus } from '@prisma/client';
+import type { Prisma } from '@prisma/client';
+import { AuditAction, TrainingAssignmentStatus } from '@prisma/client';
 import { PAGE_SIZE } from '@src/shared/constants';
 
 // ---- Interfaces ----
@@ -214,9 +215,9 @@ export async function getAssignedUsers({
       user: assignment.user,
       completion: completionMap.has(assignment.userId)
         ? {
-            id: completionMap.get(assignment.userId)!.id,
-            scorePercent: completionMap.get(assignment.userId)!.scorePercent?.toNumber() ?? null,
-            completedAt: completionMap.get(assignment.userId)!.completedAt.toISOString(),
+            id: completionMap?.get(assignment.userId)?.id,
+            scorePercent: completionMap?.get(assignment.userId)?.scorePercent?.toNumber() ?? null,
+            completedAt: completionMap.get(assignment.userId)?.completedAt.toISOString(),
           }
         : null,
     })),

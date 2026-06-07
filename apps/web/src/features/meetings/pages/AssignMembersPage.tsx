@@ -1,21 +1,21 @@
 'use client';
 
-import { useParams } from '@tanstack/react-router';
 import { useState } from 'react';
-import { useMeetingDetail } from '@feature/meetings/hooks/useMeetingDetail';
-import { useMeetingAttendees } from '@feature/meetings/hooks/useMeetingAttendees';
-import { ManageAttendeesDialog } from '@feature/meetings/components/ManageAttendeesDialog';
-import { useMembers } from '@feature/members/hooks/useMembers';
-import { Card, CardHeader, CardTitle, CardContent } from '@components/ui/card';
-import { Button } from '@components/ui/button';
-import { SectionHeader } from '@components/section-header';
-import { DataTableFilters } from '@components/data-table-filters';
 import { DataTable } from '@components/data-table';
+import { DataTableFilters } from '@components/data-table-filters';
+import { SectionHeader } from '@components/section-header';
+import { Button } from '@components/ui/button';
+import { Card, CardContent,CardHeader, CardTitle } from '@components/ui/card';
+import { ManageAttendeesDialog } from '@feature/meetings/components/ManageAttendeesDialog';
+import { useMeetingAttendees } from '@feature/meetings/hooks/useMeetingAttendees';
 import { useMeetingAttendeesColumns } from '@feature/meetings/hooks/useMeetingAttendeesColumns';
-import { Users, CheckCircle2, XCircle, Clock, UserPlus } from 'lucide-react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMeetingDetail } from '@feature/meetings/hooks/useMeetingDetail';
+import { useMembers } from '@feature/members/hooks/useMembers';
 import { QUERY_KEYS } from '@repo/shared';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useParams } from '@tanstack/react-router';
 import http from '@utils/http';
+import { CheckCircle2, Clock, UserPlus,Users, XCircle } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface AttendeeRow {

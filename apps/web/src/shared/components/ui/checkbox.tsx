@@ -1,11 +1,10 @@
 'use client';
 
 import * as React from 'react';
-import { Checkbox as CheckboxPrimitive } from 'radix-ui';
-
-import { cn } from '@src/shared/lib/utils';
-import { HugeiconsIcon } from '@hugeicons/react';
 import { Tick02Icon } from '@hugeicons/core-free-icons';
+import { HugeiconsIcon } from '@hugeicons/react';
+import { cn } from '@src/shared/lib/utils';
+import { Checkbox as CheckboxPrimitive } from 'radix-ui';
 
 function Checkbox({ className, ...props }: React.ComponentProps<typeof CheckboxPrimitive.Root>) {
   return (
