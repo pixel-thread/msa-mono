@@ -1,23 +1,27 @@
 'use client';
 
 import { useParams } from '@tanstack/react-router';
-import { useContributionDetail } from '@src/features/contributions/hooks/useContributionDetail';
-import { Button } from '@src/shared/components/ui/button';
-import { SectionHeader } from '@src/shared/components/section-header';
-import { ContributionDetail } from '@src/features/contributions/components/contribution-detail';
+import { useContributionDetail } from '@feature/contributions/hooks/useContributionDetail';
+import { Button } from '@components/ui/button';
+import { SectionHeader } from '@components/section-header';
+import { ContributionDetail } from '@feature/contributions/components/contribution-detail';
 import { ArrowLeft } from 'lucide-react';
+import { Loading } from '@components/loading';
 
 export function ContributionDetailPage() {
-  const params = useParams({ strict: false });
-  const contributionId = params.contributionId as string;
+  const { contributionId } = useParams({
+    strict: true,
+    from: '/_dashboard/contributions/$contributionId/',
+  });
 
   const { contribution, isLoading } = useContributionDetail(contributionId);
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center py-24">
-        <p className="text-body">Loading contribution details...</p>
-      </div>
+      <Loading
+        label="Loading contribution details..."
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+      />
     );
   }
 
