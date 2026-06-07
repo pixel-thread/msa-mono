@@ -5,7 +5,7 @@ import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
   {
-    ignores: ['dist', 'node_modules', '.pnpm-store', 'src/__tests__', 'src/__mocks__'],
+    ignores: ['dist', 'node_modules', '.pnpm-store', 'src/__tests__', 'src/__mocks__', 'src/**/*.tsx'],
   },
 
   js.configs.recommended,
@@ -25,6 +25,9 @@ export default tseslint.config(
 
   {
     languageOptions: {
+      parserOptions: {
+        project: './tsconfig.json',
+      },
       globals: {
         ...globals.node,
       },
@@ -36,6 +39,8 @@ export default tseslint.config(
       '@typescript-eslint/no-non-null-assertion': 'warn',
       '@typescript-eslint/no-inferrable-types': 'error',
       // Async / Promise safety
+
+      '@typescript-eslint/no-floating-promises': 'error',
 
       '@typescript-eslint/no-unused-vars': [
         'warn',

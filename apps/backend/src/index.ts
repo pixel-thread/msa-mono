@@ -124,6 +124,14 @@ export function createApp(): express.Express {
 
 const app = createApp();
 
+process.on('unhandledRejection', (reason) => {
+  logger.error({ error: reason }, 'Unhandled promise rejection — keeping server alive');
+});
+
+process.on('uncaughtException', (error) => {
+  logger.error({ error }, 'Uncaught exception — keeping server alive');
+});
+
 if (process.env.NODE_ENV !== 'test') {
   app.listen(env.PORT, () => {
     logger.debug(`🚀 Express API running on http://localhost:${env.PORT}`);

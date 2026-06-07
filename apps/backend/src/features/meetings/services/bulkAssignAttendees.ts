@@ -83,7 +83,7 @@ export async function bulkAssignAttendees({
 
   // 5. Handle Notifications (Database Persistence + Push Delivery)
   // We wrap this in a non-awaited block to return the response to the UI faster
-  (async () => {
+  void (async () => {
     try {
       // Fetch tokens for newly assigned users
       const userPushTokens = await prisma.pushToken.findMany({
@@ -134,6 +134,7 @@ export async function bulkAssignAttendees({
         },
         'Background notification processing failed',
       );
+      throw error;
     }
   })();
 

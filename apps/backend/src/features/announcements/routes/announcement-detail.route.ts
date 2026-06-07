@@ -111,7 +111,7 @@ export const putAnnouncement: RequestHandler[] = [
 
     logger.info({ traceId, announcementId }, 'PUT /api/announcements/[id] - Updating announcement');
 
-    const announcement = updateAnnouncement({
+    const announcement = await updateAnnouncement({
       announcementId: announcementId as string,
       associationId: association.id,
       authorId: userId,
