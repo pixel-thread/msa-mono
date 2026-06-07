@@ -1,5 +1,6 @@
 import { Prisma } from '@prisma/client';
 import { prisma } from '@lib/prisma';
+import { buildPaginationParams } from '@lib/prisma/helpers';
 
 type Props = {
   where: Prisma.PaymentTransactionWhereInput;
@@ -9,13 +10,13 @@ type Props = {
 };
 
 export async function findPaymentTransactions({ where, page = 1, pageSize = 20, include }: Props) {
-  const skip = (page - 1) * pageSize;
+  const { skip, take } = buildPaginationParams(page, pageSize);
   const [transactions, total] = await Promise.all([
     prisma.paymentTransaction.findMany({
       where,
       include,
       orderBy: { paymentDate: 'desc' },
-      take: pageSize,
+      take,
       skip,
     }),
     prisma.paymentTransaction.count({ where }),
