@@ -46,7 +46,11 @@ const router: Router = Router();
 // ===========================================================================
 // Static Routes
 // ===========================================================================
+// webhook does not need auth check will be send from razorpay
+router.post('/webhook', webhook);
+
 router.use(auth);
+
 router.get('/', listPayments);
 router.get('/my', myPayments);
 router.get('/history', paymentHistory);
@@ -58,7 +62,6 @@ router.get('/stats', paymentStats);
 
 router.post('/order', createOrder);
 router.post('/verify', verifyPayment);
-router.post('/webhook', webhook);
 router.post('/record', recordPayment);
 
 // ===========================================================================

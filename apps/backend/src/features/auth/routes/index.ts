@@ -1,23 +1,25 @@
 import { Router } from 'express';
 
-import { auth } from '@src/middleware/auth';
+import { auth } from '@middleware/auth';
+import { routeRateLimiter } from '@middleware/rate-limiter';
 
 import { postSignUp } from './sign-up.route';
 import { postSignIn } from './sign-in.route';
 import { postSignInVerify } from './sign-in-verify.route';
 import { postSignInResend } from './sign-in-resend.route';
-import { postRefresh } from './refresh.route';
 import { postLogout } from './logout.route';
+
 import { postChangePassword } from './change-password.route';
 import { postForgotPassword } from './forgot-password.route';
 import { postResetPassword } from './reset-password.route';
+
 import { getMe } from './me.route';
+import { postRefresh } from './refresh.route';
 
 import { postMfaSetup } from './mfa/setup.route';
 import { postMfaVerify } from './mfa/verify.route';
 import { postMfaResend } from './mfa/resend.route';
 import { postMfaDisable } from './mfa/disable.route';
-import { routeRateLimiter } from '@src/middleware/rate-limiter';
 
 // ---- Auth Router ----
 

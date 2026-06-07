@@ -36,13 +36,14 @@ router.use(auth);
 
 router.get('/', listTickets);
 
-// ---- Submit Ticket
+// ----  Submit Ticket
 
 router.post('/submit', submitDsar);
 
 // ---- My Tickets
 
 router.get('/my', listMyTickets);
+
 router.get('/my/:ticketId', getMyTicket);
 
 // ---- Admins
@@ -53,7 +54,7 @@ router.get('/admins', listAdmins);
 
 router.get('/sla-report', getSlaReport);
 
-// ---- Ticket Detail (by ID)
+//  ---- Ticket Detail (by ID)
 
 router.get('/:ticketId', getTicket);
 router.delete('/:ticketId', deleteTicket);

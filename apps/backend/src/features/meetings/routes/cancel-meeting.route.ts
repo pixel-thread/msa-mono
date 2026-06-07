@@ -9,7 +9,7 @@ import { getAssociation } from '@services/association/get-association';
 import { withRole } from '@utils/with-role';
 import { asyncHandler } from '@utils/async-handler';
 
-/** POST /api/meetings/[meetingId]/cancel - Cancel a meeting. */
+/** @@ POST /api/meetings/[meetingId]/cancel - Cancel a meeting. */
 export const postCancelMeeting: RequestHandler[] = [
   asyncHandler(async (req, res) => {
     const traceId = (req.traceId as string) || '';

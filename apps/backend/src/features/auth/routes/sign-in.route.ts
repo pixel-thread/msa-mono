@@ -47,7 +47,7 @@ export const postSignIn: RequestHandler[] = [
       isMobile = true;
     }
 
-    // ---- Handle invalid credentials ----
+    // ---- Handle invalid credentials & ----
     if (!user) {
       logger.info({ traceId }, 'POST /api/auth/sign-in - Invalid credentials');
       throw new UnauthorizedError('Invalid credentials');

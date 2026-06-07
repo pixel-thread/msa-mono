@@ -380,12 +380,12 @@ export const testProvider: RequestHandler[] = [
 
     // --- Log: success ---
     logger.info(
-      { traceId, providerId: req.params.providerId, orderId: (options as any).id },
+      { traceId, providerId: req.params.providerId, order: options },
       'POST /api/payments/providers/[providerId]/test - Success',
     );
 
     // --- Response ---
-    return success(res, { data: options }, 201);
+    return success(res, { data: options, message: 'Test payment order created successfully' }, 201);
   }),
 ];
 

@@ -2,10 +2,7 @@
 
 import { Link } from '@tanstack/react-router';
 import { HugeiconsIcon } from '@hugeicons/react';
-import {
-  CheckmarkCircle02Icon,
-  ArrowRight01Icon,
-} from '@hugeicons/core-free-icons';
+import { CheckmarkCircle02Icon, ArrowRight01Icon } from '@hugeicons/core-free-icons';
 import { Button } from '@src/shared/components/ui/button';
 import { Badge } from '@src/shared/components/ui/badge';
 import { Text } from '@src/shared/components/ui/text';
