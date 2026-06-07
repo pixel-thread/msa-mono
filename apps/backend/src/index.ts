@@ -29,10 +29,9 @@ import { rateLimiter } from '@middleware/rate-limiter';
 import { securityHeaders } from '@middleware/security-headers';
 import { timeout } from '@middleware/timeout';
 import { env } from '@src/env';
+import { logger } from '@src/shared/logger';
 import cookieParser from 'cookie-parser';
 import express from 'express';
-
-import { logger } from './shared/logger';
 
 export function createApp(): express.Express {
   const app = express();

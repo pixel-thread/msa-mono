@@ -1,8 +1,8 @@
-import { env } from '@src/env';
-import { logger } from '@src/shared/logger';
 import type { StorageProvider, UploadParams, UploadResult } from '@src/shared/types/storage';
 import path from 'node:path';
 import SftpClient from 'ssh2-sftp-client';
+import { env } from '@src/env';
+import { logger } from '@src/shared/logger';
 
 /** Returns the SFTP connection config from env vars. */
 function getSftpConfig() {
@@ -42,7 +42,7 @@ export class SftpStorageProvider implements StorageProvider {
     }
 
     const key = `${params.folder}/${Date.now()}-${params.fileName}`;
-    const remotePath = `/${env.STORAGE_BUCKET}/${key}`;
+    const remotePath = `/${env.SFTP_ROOT}/${env.STORAGE_BUCKET}/${key}`;
     const remoteDir = path.posix.dirname(remotePath);
 
     try {
@@ -59,9 +59,11 @@ export class SftpStorageProvider implements StorageProvider {
       await sftp.end().catch(() => {});
     }
 
+    const url = `${env.PUBLIC_BASE_URL}/${key}`;
+
     return {
       key,
-      url: `${env.SFTP_HOST}/${env.SFTP_ROOT}/${key}`,
+      url,
     };
   }
 

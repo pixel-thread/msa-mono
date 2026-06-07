@@ -5,6 +5,7 @@
  * @module features/announcements/routes
  */
 
+import express from 'express';
 import { BadRequestError } from '@errors';
 import { uploadAnnouncementImage } from '@feature/announcements/services';
 // Validators
@@ -22,6 +23,7 @@ import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';
 import type { RequestHandler } from 'express';
 import type { NextFunction, Request, Response } from 'express';
+import { env } from '@src/env';
 
 /**
  * POST /api/announcements/:announcementId/upload
@@ -32,6 +34,7 @@ import type { NextFunction, Request, Response } from 'express';
  */
 export const postUploadImage: RequestHandler[] = [
   fileUpload.single('file'),
+  express.static(env.SFTP_ROOT, { dotfiles: 'deny', maxAge: '1d', index: false }),
   validate({ params: AnnouncementRouteParams }),
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
