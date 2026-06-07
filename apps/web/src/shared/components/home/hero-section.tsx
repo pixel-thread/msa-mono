@@ -1,6 +1,6 @@
 'use client';
 
-import { ArrowRight01Icon,CheckmarkCircle02Icon } from '@hugeicons/core-free-icons';
+import { ArrowRight01Icon, CheckmarkCircle02Icon } from '@hugeicons/core-free-icons';
 import { HugeiconsIcon } from '@hugeicons/react';
 import { Badge } from '@src/shared/components/ui/badge';
 import { Button } from '@src/shared/components/ui/button';
@@ -21,7 +21,7 @@ export function HeroSection() {
       <div className="absolute -bottom-32 right-1/4 size-400 rounded-full bg-primary/2 blur-3xl" />
       <div className="absolute inset-0 bg-[image:radial-gradient(var(--border)_0.5px,transparent_0.5px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,black_20%,transparent_70%)]" />
       <div className="relative mx-auto flex w-full max-w-7xl flex-col items-center gap-16 px-6 py-24 lg:flex-row lg:py-32">
-        <div className="max-w-xl text-center lg:w-3/5 lg:text-left">
+        <div className="max-w-xl order-2 lg:order-1 text-center lg:w-3/5 lg:text-left">
           <Badge variant="default" className="mb-5 justify-center lg:justify-start">
             MFSA Connect Platform
           </Badge>
@@ -57,7 +57,7 @@ export function HeroSection() {
             </Button>
           </div>
         </div>
-        <div className="shrink-0 lg:w-2/5">
+        <div className="order-1 lg:order-2 shrink-0 lg:w-2/5">
           <div className="relative mx-auto flex aspect-square w-full max-w-sm items-center justify-center">
             <div className="relative flex size-full items-center justify-center p-8">
               <img
