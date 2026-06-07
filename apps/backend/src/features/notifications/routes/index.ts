@@ -1,4 +1,5 @@
 // External libs
+import { auth } from '@src/middleware';
 import { Router } from 'express';
 
 // ---- Route handlers
@@ -7,7 +8,6 @@ import {
   postLinkNotification,
   postRegisterPushToken,
 } from './notification-actions.route';
-import { auth } from '@src/middleware';
 
 // ---------------------------------------------------------------------------
 // Notifications router

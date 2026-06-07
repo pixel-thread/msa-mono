@@ -10,7 +10,7 @@
     "build:api": "tsc && tsc-alias",
     "start": "node -r tsconfig-paths/register dist/index.js",
     "format": "prettier --write \"src/**/*.{ts,js,json}\"",
-    "lint": "eslint src/ --ext .ts",
+    "lint": "eslint src/ --ext .ts --fix",
     "lint:fix": "eslint src/ --ext .ts --fix",
     "check": "prettier --check \"src/**/*.{ts,js,json}\" && eslint src/ --ext .ts",
     "db:generate": "prisma generate",
