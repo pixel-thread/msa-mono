@@ -5,7 +5,7 @@ import type { RequestHandler } from 'express';
 // ---- Shared utilities ----
 import { validate } from '@lib/validate';
 import { success } from '@utils/responses';
-import { buildPagination } from '@utils/build-pagination';
+import { buildPagination } from '@src/shared/utils/helper/build-pagination';
 import { BadRequestError } from '@errors';
 import { logger } from '@src/shared/logger';
 import { getAssociation } from '@services/association/get-association';

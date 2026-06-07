@@ -7,7 +7,7 @@ import {
   AuditAction,
   PaymentMethod,
 } from '@prisma/client';
-import { buildPagination } from '@utils/build-pagination';
+import { buildPagination } from '@src/shared/utils/helper/build-pagination';
 
 import { verifyPaymentSignature } from './razorpay.service';
 import { getActiveProvider, getProviderById } from './payment-provider.service';

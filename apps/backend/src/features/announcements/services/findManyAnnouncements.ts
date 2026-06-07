@@ -9,7 +9,7 @@ import { prisma } from '@lib/prisma';
 import { AnnouncementStatus, AnnouncementPriority, Prisma } from '@prisma/client';
 
 import { PAGE_SIZE } from '@src/shared/constants';
-import { buildPagination } from '@utils/build-pagination';
+import { buildPagination } from '@src/shared/utils/helper/build-pagination';
 
 /**
  * Props for finding announcements with filters and pagination.
@@ -77,11 +77,7 @@ export async function findManyAnnouncements({
       where,
       skip,
       take: limit,
-      orderBy: [
-        { isPinned: 'desc' },
-        { publishedAt: 'desc' },
-        { createdAt: 'desc' },
-      ],
+      orderBy: [{ isPinned: 'desc' }, { publishedAt: 'desc' }, { createdAt: 'desc' }],
       include: {
         author: {
           select: {

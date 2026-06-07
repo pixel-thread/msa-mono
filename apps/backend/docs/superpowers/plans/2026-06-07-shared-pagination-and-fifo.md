@@ -4,7 +4,7 @@
 
 **Goal:** Eliminate 7+ duplicated paginated Prisma query patterns across payments/contributions/ledger, and remove 3 duplicate FIFO allocation implementations in payments that already exist in contributions.
 
-**Architecture:** Two independent refactors: (1) extract a `paginatedQuery` utility that eliminates the duplicated `skip = (page - 1) * pageSize` + `Promise.all([findMany, count])` pattern across all 3 features, and (2) extract `createAllocations` from `contribution.service.ts` so `payment.service.ts` and `webhook.service.ts` call it instead of reimplementing the allocation loop.
+**Architecture:** Two independent refactors: (1) extract a `buildPaginationParams` utility that eliminates the duplicated `skip = (page - 1) * pageSize` + `Promise.all([findMany, count])` pattern across all 3 features, and (2) extract `createAllocations` from `contribution.service.ts` so `payment.service.ts` and `webhook.service.ts` call it instead of reimplementing the allocation loop.
 
 **Tech Stack:** TypeScript, Prisma, Jest (ts-jest, ESM), Express
 
@@ -15,16 +15,16 @@
 ### Files to Create
 | File | Responsibility |
 |---|---|
-| `src/shared/lib/prisma/helpers.ts` | Export `paginatedQuery()` shared utility |
+| `src/shared/lib/prisma/helpers.ts` | Export `buildPaginationParams()` shared utility |
 | `src/shared/services/allocate-contributions.ts` | Export `createAllocations()` shared FIFO allocation engine |
 
 ### Files to Modify
 | File | Change |
 |---|---|
-| `src/features/payments/services/find-payment-transactions.ts` | Rewrite to use `paginatedQuery` helper |
-| `src/features/contributions/services/find-contribution-periods.ts` | Rewrite to use `paginatedQuery` helper |
-| `src/features/contributions/services/declarations.service.ts` | Replace inline `findDeclarations` pagination with `paginatedQuery` |
-| `src/features/ledger/services/ledger.service.ts` | Replace 3 inline pagination blocks (`getEntries`, `getAccounts`, `getMemberEntries`) with `paginatedQuery` |
+| `src/features/payments/services/find-payment-transactions.ts` | Rewrite to use `buildPaginationParams` helper |
+| `src/features/contributions/services/find-contribution-periods.ts` | Rewrite to use `buildPaginationParams` helper |
+| `src/features/contributions/services/declarations.service.ts` | Replace inline `findDeclarations` pagination with `buildPaginationParams` |
+| `src/features/ledger/services/ledger.service.ts` | Replace 3 inline pagination blocks (`getEntries`, `getAccounts`, `getMemberEntries`) with `buildPaginationParams` |
 | `src/features/contributions/services/contribution.service.ts` | Extract `createAllocations()` from `allocatePaymentToContributions`; export it |
 | `src/features/payments/services/payment.service.ts` | Replace inline FIFO allocation loop in `verifyAndCompletePayment` with `createAllocations` |
 | `src/features/payments/services/webhook.service.ts` | Replace inline FIFO allocation loop in `verifyAndCompletePaymentFromWebhook` with `createAllocations` |
@@ -39,26 +39,26 @@
 
 ## Part 1: Shared Paginated Query Helper
 
-### Task 1.1: Create the paginatedQuery helper
+### Task 1.1: Create the buildPaginationParams helper
 
 **Files:**
 - Create: `src/shared/lib/prisma/helpers.ts`
 
-- [ ] **Step 1.1.1: Create paginatedQuery implementation**
+- [ ] **Step 1.1.1: Create buildPaginationParams implementation**
 
 Create `src/shared/lib/prisma/helpers.ts`:
 
 ```typescript
 import { PAGE_SIZE } from '@src/shared/constants';
 
-export interface PaginatedQueryResult {
+export interface PaginationParams {
   skip: number;
   take: number;
   page: number;
   pageSize: number;
 }
 
-export function paginatedQuery(page: number = 1, pageSize: number = PAGE_SIZE): PaginatedQueryResult {
+export function buildPaginationParams(page: number = 1, pageSize: number = PAGE_SIZE): PaginationParams {
   const p = Math.max(1, page);
   return {
     skip: (p - 1) * pageSize,
@@ -79,7 +79,7 @@ Expected: No errors
 
 ```bash
 git add src/shared/lib/prisma/helpers.ts
-git commit -m "feat: add paginatedQuery helper"
+git commit -m "feat: add buildPaginationParams helper"
 ```
 
 ---
@@ -89,14 +89,14 @@ git commit -m "feat: add paginatedQuery helper"
 **Files:**
 - Modify: `src/features/payments/services/find-payment-transactions.ts`
 
-- [ ] **Step 1.2.1: Replace body with paginatedQuery**
+- [ ] **Step 1.2.1: Replace body with buildPaginationParams**
 
 Replace the entire file:
 
 ```typescript
 import { Prisma } from '@prisma/client';
 import { prisma } from '@lib/prisma';
-import { paginatedQuery } from '@lib/prisma/helpers';
+import { buildPaginationParams } from '@lib/prisma/helpers';
 
 type Props = {
   where: Prisma.PaymentTransactionWhereInput;
@@ -106,7 +106,7 @@ type Props = {
 };
 
 export async function findPaymentTransactions({ where, page = 1, pageSize = 20, include }: Props) {
-  const { skip, take } = paginatedQuery(page, pageSize);
+  const { skip, take } = buildPaginationParams(page, pageSize);
   const [transactions, total] = await Promise.all([
     prisma.paymentTransaction.findMany({
       where,
@@ -131,7 +131,7 @@ Expected: No errors
 
 ```bash
 git add src/features/payments/services/find-payment-transactions.ts
-git commit -m "refactor: use paginatedQuery in find-payment-transactions"
+git commit -m "refactor: use buildPaginationParams in find-payment-transactions"
 ```
 
 ---
@@ -141,7 +141,7 @@ git commit -m "refactor: use paginatedQuery in find-payment-transactions"
 **Files:**
 - Modify: `src/features/contributions/services/find-contribution-periods.ts`
 
-- [ ] **Step 1.3.1: Replace body with paginatedQuery**
+- [ ] **Step 1.3.1: Replace body with buildPaginationParams**
 
 Replace the entire file:
 
@@ -149,7 +149,7 @@ Replace the entire file:
 import { Prisma } from '@prisma/client';
 import { prisma } from '@lib/prisma';
 import { PAGE_SIZE } from '@src/shared/constants';
-import { paginatedQuery } from '@lib/prisma/helpers';
+import { buildPaginationParams } from '@lib/prisma/helpers';
 
 type Props = {
   where: Prisma.ContributionPeriodWhereInput;
@@ -164,7 +164,7 @@ export async function findContributionPeriods({
   pageSize = PAGE_SIZE,
   include,
 }: Props) {
-  const { skip, take } = paginatedQuery(page, pageSize);
+  const { skip, take } = buildPaginationParams(page, pageSize);
   const [contributions, total] = await Promise.all([
     prisma.contributionPeriod.findMany({
       where,
@@ -189,7 +189,7 @@ Expected: No errors
 
 ```bash
 git add src/features/contributions/services/find-contribution-periods.ts
-git commit -m "refactor: use paginatedQuery in find-contribution-periods"
+git commit -m "refactor: use buildPaginationParams in find-contribution-periods"
 ```
 
 ---
@@ -203,14 +203,14 @@ git commit -m "refactor: use paginatedQuery in find-contribution-periods"
 
 Add import at the top of `src/features/contributions/services/declarations.service.ts`:
 ```typescript
-import { paginatedQuery } from '@lib/prisma/helpers';
+import { buildPaginationParams } from '@lib/prisma/helpers';
 ```
 
 Replace the `findDeclarations` function body:
 
 ```typescript
 export async function findDeclarations({ where, include, page = 1 }: Props) {
-  const { skip, take } = paginatedQuery(page);
+  const { skip, take } = buildPaginationParams(page);
   return await prisma.$transaction(async (tx) => {
     const declaration = await tx.declarations.findMany({ where, include, take, skip });
     const total = await tx.declarations.count({ where });
@@ -230,7 +230,7 @@ Expected: No errors
 
 ```bash
 git add src/features/contributions/services/declarations.service.ts
-git commit -m "refactor: use paginatedQuery in findDeclarations"
+git commit -m "refactor: use buildPaginationParams in findDeclarations"
 ```
 
 ---
@@ -244,7 +244,7 @@ git commit -m "refactor: use paginatedQuery in findDeclarations"
 
 At the top of `src/features/ledger/services/ledger.service.ts`, add:
 ```typescript
-import { paginatedQuery } from '@lib/prisma/helpers';
+import { buildPaginationParams } from '@lib/prisma/helpers';
 ```
 
 - [ ] **Step 1.5.2: Replace getEntries pagination**
@@ -253,7 +253,7 @@ Replace the body of `getEntries`:
 
 ```typescript
 export async function getEntries(associationId: string, page = 1) {
-  const { skip, take, page: currentPage } = paginatedQuery(page);
+  const { skip, take, page: currentPage } = buildPaginationParams(page);
 
   const where: Prisma.LedgerEntryWhereInput = {
     OR: [
@@ -283,7 +283,7 @@ Replace the body of `getAccounts`:
 
 ```typescript
 export async function getAccounts(associationId: string, page = 1) {
-  const { skip, take, page: currentPage } = paginatedQuery(page);
+  const { skip, take, page: currentPage } = buildPaginationParams(page);
 
   const [accounts, total] = await Promise.all([
     prisma.account.findMany({
@@ -307,7 +307,7 @@ Replace the body of `getMemberEntries`:
 
 ```typescript
 export async function getMemberEntries(associationId: string, memberId: string, page = 1) {
-  const { skip, take, page: currentPage } = paginatedQuery(page);
+  const { skip, take, page: currentPage } = buildPaginationParams(page);
 
   const where = {
     createdById: memberId,
@@ -342,7 +342,7 @@ Expected: No errors
 
 ```bash
 git add src/features/ledger/services/ledger.service.ts
-git commit -m "refactor: use paginatedQuery in ledger service"
+git commit -m "refactor: use buildPaginationParams in ledger service"
 ```
 
 ---

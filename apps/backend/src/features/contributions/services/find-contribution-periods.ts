@@ -1,7 +1,7 @@
 import { Prisma } from '@prisma/client';
 import { prisma } from '@lib/prisma';
 import { PAGE_SIZE } from '@src/shared/constants';
-import { buildPaginationParams } from '@lib/prisma/helpers';
+import { buildPaginationParams } from '@src/shared/utils/helper/build-pagination-params';
 
 type Props = {
   where: Prisma.ContributionPeriodWhereInput;

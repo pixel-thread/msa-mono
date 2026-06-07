@@ -2,7 +2,7 @@ import { DeclarationStatus, Prisma } from '@prisma/client';
 import { differenceInCalendarMonths, addMonths, startOfMonth, endOfMonth } from 'date-fns';
 import { PAGE_SIZE } from '@src/shared/constants';
 import { prisma } from '@lib';
-import { buildPaginationParams } from '@lib/prisma/helpers';
+import { buildPaginationParams } from '@src/shared/utils/helper/build-pagination-params';
 import { buildPagination } from '@utils';
 import { BadRequestError, NotFoundError } from '@errors';
 

@@ -11,7 +11,7 @@ import { prisma } from '@lib/prisma';
 import { ForbiddenError, UnauthorizedError } from '@errors';
 import { logger } from '@src/shared/logger';
 import { withRole } from '@utils/with-role';
-import { buildPagination } from '@utils/build-pagination';
+import { buildPagination } from '@src/shared/utils/helper/build-pagination';
 
 // ---- Prisma
 

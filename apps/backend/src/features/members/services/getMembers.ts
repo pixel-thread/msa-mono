@@ -7,7 +7,7 @@ import { Association, Prisma } from '@prisma/client';
 // Shared utilities
 // ---------------------------------------------------------------------------
 import { prisma } from '@lib/prisma';
-import { buildPagination } from '@utils/build-pagination';
+import { buildPagination } from '@src/shared/utils/helper/build-pagination';
 
 // ---------------------------------------------------------------------------
 // Types — Props

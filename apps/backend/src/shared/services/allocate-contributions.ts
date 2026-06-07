@@ -14,9 +14,11 @@ export async function createAllocations(
         ContributionStatus.DUE,
         ContributionStatus.PARTIAL,
         ContributionStatus.OVERDUE,
+        ContributionStatus.PENDING,
       ],
     },
   };
+
   if (periodIds && periodIds.length > 0) {
     where.id = { in: periodIds };
   }
@@ -27,6 +29,7 @@ export async function createAllocations(
   });
 
   let remaining = amount;
+
   let totalAllocated = 0;
 
   for (const period of outstanding) {
@@ -50,14 +53,12 @@ export async function createAllocations(
       data: {
         paidAmount: newPaidAmount,
         dueAmount: Math.max(newDueAmount, 0),
-        status:
-          newDueAmount <= 0
-            ? ContributionStatus.PAID
-            : ContributionStatus.PARTIAL,
+        status: newDueAmount <= 0 ? ContributionStatus.PAID : ContributionStatus.PARTIAL,
       },
     });
 
     remaining -= allocatedAmount;
+
     totalAllocated += allocatedAmount;
   }
 

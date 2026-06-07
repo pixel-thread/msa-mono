@@ -11,7 +11,7 @@ import { ApplicationStatus, Prisma, UserRole } from '@prisma/client';
 import { prisma } from '@lib/prisma';
 import { generateRandomPassword, hashPassword } from '@lib/password';
 import { ConflictError, NotFoundError } from '@errors';
-import { buildPagination } from '@utils/build-pagination';
+import { buildPagination } from '@src/shared/utils/helper/build-pagination';
 import { PAGE_SIZE } from '@src/shared/constants';
 
 // ---- Types (Private)
