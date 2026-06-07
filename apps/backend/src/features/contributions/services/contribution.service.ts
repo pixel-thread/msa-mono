@@ -12,6 +12,7 @@ import {
 import { JournalLine, recordWaiver } from '@feature/ledger/services/accounting.service';
 import { ContributionSummary } from '@feature/contributions/types';
 import { BadRequestError, NotFoundError } from '@errors';
+import { createAllocations } from '@services/allocate-contributions';
 
 // ---------------------------------------------------------------------------
 // Service functions
@@ -58,38 +59,8 @@ export async function allocatePaymentToContributions(
     throw new NotFoundError('Payment not found');
   }
 
-  let remaining = totalAmount;
-  let totalAllocated = 0;
-
-  // Phase 1: Create allocations and update each contribution period
-  for (const period of outstanding) {
-    if (remaining <= 0) break;
-
-    const dueAmount = Number(period.dueAmount);
-    const allocatedAmount = Math.min(remaining, dueAmount);
-    const newPaidAmount = Number(period.paidAmount) + allocatedAmount;
-    const newDueAmount = dueAmount - allocatedAmount;
-
-    await tx.paymentAllocation.create({
-      data: {
-        paymentTransactionId,
-        contributionPeriodId: period.id,
-        allocatedAmount,
-      },
-    });
-
-    await tx.contributionPeriod.update({
-      where: { id: period.id },
-      data: {
-        paidAmount: newPaidAmount,
-        dueAmount: Math.max(newDueAmount, 0),
-        status: newDueAmount <= 0 ? ContributionStatus.PAID : ContributionStatus.PARTIAL,
-      },
-    });
-
-    remaining -= allocatedAmount;
-    totalAllocated += allocatedAmount;
-  }
+  // Use the shared allocation engine
+  const { allocatedAmount } = await createAllocations(tx, paymentTransactionId, userId, totalAmount);
 
   // Phase 2: Update payment transaction once after all allocations
   await tx.paymentTransaction.update({
@@ -116,14 +87,14 @@ export async function allocatePaymentToContributions(
     }
   }
 
-  if (totalAllocated > 0 && outstanding.length > 0) {
+  if (allocatedAmount > 0 && outstanding.length > 0) {
     const isCash = payment.method === 'CASH';
     const associationId = outstanding[0].associationId;
     const debitCode = isCash ? '1200' : '1000';
 
     const lines: JournalLine[] = [
-      { accountCode: debitCode, isDebit: true, amount: totalAllocated },
-      { accountCode: '4000', isDebit: false, amount: totalAllocated },
+      { accountCode: debitCode, isDebit: true, amount: allocatedAmount },
+      { accountCode: '4000', isDebit: false, amount: allocatedAmount },
     ];
 
     const resolvedLines = await Promise.all(
@@ -154,7 +125,7 @@ export async function allocatePaymentToContributions(
     });
   }
 
-  return remaining;
+  return allocatedAmount;
 }
 
 /**
