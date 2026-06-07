@@ -8,6 +8,7 @@
 
 import { ForbiddenError, NotFoundError } from '@errors';
 import { getTransactionById } from '@feature/payments/services/payment.service';
+import { PaymentIdParamSchema } from '@feature/payments/validators';
 import { validate } from '@lib/validate';
 import { UserRole } from '@prisma/client';
 import { logger } from '@src/shared/logger';
@@ -16,7 +17,6 @@ import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';
 import type { RequestHandler } from 'express';
 import type { NextFunction, Request, Response } from 'express';
-import { PaymentIdParamSchema } from '@feature/payments/validators';
 
 // ---- Handler ----
 

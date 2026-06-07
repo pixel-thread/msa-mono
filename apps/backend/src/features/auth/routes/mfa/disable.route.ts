@@ -1,4 +1,5 @@
 import { BadRequestError, UnauthorizedError } from '@errors';
+import { DisableMfaSchema } from '@feature/auth/validators';
 import { findFirstMember } from '@feature/members/services/findFirstMember';
 import { updateMember } from '@feature/members/services/updateMember';
 import { verifyPassword } from '@lib/password';
@@ -8,7 +9,6 @@ import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
 import type { RequestHandler } from 'express';
 import type { NextFunction, Request, Response } from 'express';
-import { DisableMfaSchema } from '@feature/auth/validators';
 
 /**
  * POST /api/auth/mfa/disable — Disable MFA for the authenticated user

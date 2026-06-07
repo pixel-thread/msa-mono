@@ -1,6 +1,7 @@
 import { TooManyRequestsError, UnauthorizedError } from '@errors';
 import { getVerificationCodeFirst } from '@feature/auth/services/get-verification-code-first';
 import { updateVerificationCode } from '@feature/auth/services/update-verification-code';
+import { VerifyMfaSchema } from '@feature/auth/validators';
 import { updateMember } from '@feature/members/services/updateMember';
 import { hashToken } from '@lib/password';
 import { validate } from '@lib/validate';
@@ -10,7 +11,6 @@ import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
 import type { RequestHandler } from 'express';
 import type { NextFunction, Request, Response } from 'express';
-import { VerifyMfaSchema } from '@feature/auth/validators';
 
 /**
  * POST /api/auth/mfa/verify — Confirm MFA setup by submitting the verification code

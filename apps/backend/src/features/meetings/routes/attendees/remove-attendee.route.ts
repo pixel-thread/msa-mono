@@ -1,11 +1,11 @@
 import { ForbiddenError } from '@errors';
 import { removeAttendee, updateAttendee } from '@feature/meetings/services';
 import { UpdateAttendeeSchema } from '@feature/meetings/validators';
+import { AttendeeParamsSchema } from '@feature/meetings/validators';
 import { validate } from '@lib/validate';
 import { UserRole } from '@prisma/client';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
-import { AttendeeParamsSchema } from '@feature/meetings/validators';
 import { hasHighRoleAccess } from '@utils/has-high-role';
 import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';

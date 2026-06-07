@@ -5,6 +5,7 @@
 // Services
 // ---------------------------------------------------------------------------
 import { getMySubscription } from '@feature/subscriptions/services';
+import { MySubscriptionQuerySchema } from '@feature/subscriptions/validators';
 // ---------------------------------------------------------------------------
 // Shared utilities
 // ---------------------------------------------------------------------------
@@ -13,12 +14,10 @@ import { validate } from '@lib/validate';
 // Prisma
 // ---------------------------------------------------------------------------
 import { UserRole } from '@prisma/client';
-
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';
-import { MySubscriptionQuerySchema } from '@feature/subscriptions/validators';
 import type { RequestHandler } from 'express';
 import type { NextFunction, Request, Response } from 'express';
 import { z } from 'zod';

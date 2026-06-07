@@ -1,10 +1,10 @@
 import { updateMeetingMinute } from '@feature/meetings/services/minutes';
+import { MinuteParamsSchema } from '@feature/meetings/validators';
 import { UpdateMeetingMinuteSchema } from '@feature/meetings/validators/minutes';
 import { validate } from '@lib/validate';
 import { UserRole } from '@prisma/client';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
-import { MinuteParamsSchema } from '@feature/meetings/validators';
 import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';
 import type { RequestHandler } from 'express';

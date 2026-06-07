@@ -1,8 +1,8 @@
 // ---------------------------------------------------------------------------
 // External libs
 // ---------------------------------------------------------------------------
-import { z } from 'zod';
 import { pageNumberValidation } from '@validator/common';
+import { z } from 'zod';
 
 // ---- Create subscription plan ------------------------------------------------
 

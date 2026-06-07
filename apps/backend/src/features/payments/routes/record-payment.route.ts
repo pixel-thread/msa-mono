@@ -10,7 +10,6 @@ import { recordManualPayment } from '@feature/payments/services/payment.service'
 import { RecordManualPaymentSchema } from '@feature/payments/validators';
 import { validate } from '@lib/validate';
 import { UserRole } from '@prisma/client';
-
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';

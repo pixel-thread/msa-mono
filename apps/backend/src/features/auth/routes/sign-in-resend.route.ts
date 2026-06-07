@@ -1,6 +1,7 @@
 import { BadRequestError, NotFoundError, TooManyRequestsError } from '@errors';
 import { createVerificationCode } from '@feature/auth/services/create-verification-code';
 import { getVerificationCodeFirst } from '@feature/auth/services/get-verification-code-first';
+import { ResendSignInCodeSchema } from '@feature/auth/validators';
 import { sendVerificationEmail } from '@lib/email';
 import { verifyMfaTempToken } from '@lib/jwt';
 import { generateOTP, hashToken } from '@lib/password';
@@ -12,7 +13,6 @@ import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
 import type { RequestHandler } from 'express';
 import type { NextFunction, Request, Response } from 'express';
-import { ResendSignInCodeSchema } from '@feature/auth/validators';
 
 /**
  * POST /api/auth/sign-in/resend — Resend the MFA code during sign-in

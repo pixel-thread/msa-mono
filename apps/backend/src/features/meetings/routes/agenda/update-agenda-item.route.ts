@@ -1,9 +1,9 @@
 import { updateAgendaItem } from '@feature/meetings/services/updateAgendaItem';
+import { UpdateAgendaItemSchema } from '@feature/meetings/validators/agenda-items';
 import { validate } from '@lib/validate';
 import { UserRole } from '@prisma/client';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
-import { UpdateAgendaItemSchema } from '@feature/meetings/validators/agenda-items';
 import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';
 import type { RequestHandler } from 'express';

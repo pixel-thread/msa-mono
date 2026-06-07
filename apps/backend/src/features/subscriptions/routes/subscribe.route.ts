@@ -18,7 +18,6 @@ import { validate } from '@lib/validate';
 // Prisma
 // ---------------------------------------------------------------------------
 import { UserRole } from '@prisma/client';
-
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';

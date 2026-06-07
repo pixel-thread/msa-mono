@@ -11,7 +11,6 @@ import { validate } from '@lib/validate';
 // Prisma
 // ---------------------------------------------------------------------------
 import { UserRole } from '@prisma/client';
-
 import { logger } from '@src/shared/logger';
 import { hasHighRoleAccess } from '@utils';
 import { asyncHandler } from '@utils/async-handler';

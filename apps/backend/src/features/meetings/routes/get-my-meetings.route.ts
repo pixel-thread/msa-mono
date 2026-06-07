@@ -1,9 +1,9 @@
 import { findManyMeetings } from '@feature/meetings/services';
+import { MeetingQuerySchema } from '@feature/meetings/validators';
 import { validate } from '@lib/validate';
 import { UserRole } from '@prisma/client';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
-import { MeetingQuerySchema } from '@feature/meetings/validators';
 import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';
 import type { RequestHandler } from 'express';
