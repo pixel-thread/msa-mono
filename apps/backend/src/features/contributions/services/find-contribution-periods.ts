@@ -1,6 +1,7 @@
 import { Prisma } from '@prisma/client';
 import { prisma } from '@lib/prisma';
 import { PAGE_SIZE } from '@src/shared/constants';
+import { buildPaginationParams } from '@lib/prisma/helpers';
 
 type Props = {
   where: Prisma.ContributionPeriodWhereInput;
@@ -15,13 +16,13 @@ export async function findContributionPeriods({
   pageSize = PAGE_SIZE,
   include,
 }: Props) {
-  const skip = (page - 1) * pageSize;
+  const { skip, take } = buildPaginationParams(page, pageSize);
   const [contributions, total] = await Promise.all([
     prisma.contributionPeriod.findMany({
       where,
       include,
       orderBy: [{ year: 'asc' }, { month: 'asc' }],
-      take: pageSize,
+      take,
       skip,
     }),
     prisma.contributionPeriod.count({ where }),
