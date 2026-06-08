@@ -40,8 +40,9 @@ import {
 } from '@src/shared/components/ui/select';
 import { Textarea } from '@src/shared/components/ui/textarea';
 import { cn } from '@src/shared/lib';
+import { formatCurrency } from '@src/shared/utils/format';
 import { useQueryClient } from '@tanstack/react-query';
-import { ArrowRightLeft } from 'lucide-react';
+import { ArrowRight, ArrowRightLeft } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
@@ -51,7 +52,7 @@ const transferSchema = z
     fromAccountId: z.string().min(1, 'Please select source account'),
     toAccountId: z.string().min(1, 'Please select destination account'),
     amount: z.number().positive('Amount must be greater than 0'),
-    remark: z.string().optional(),
+    remark: z.string().min(1, 'Remark is required'),
   })
   .refine((data) => data.fromAccountId !== data.toAccountId, {
     message: 'Source and destination accounts must be different',
@@ -89,10 +90,17 @@ export function TransferPaymentDialog() {
     [toAccountId, accounts],
   );
 
+  const fromBalance = Number(fromAccount?.balance.balance ?? 0);
+
+  const toBalance = Number(toAccount?.balance.balance ?? 0);
+
   const onSubmit = () => {
     if (!fromAccount || !toAccount) return;
-    if (parseInt(fromAccount.balance.balance) <= amount)
-      return toast.error(fromAccount.name + ' does not have enough balance');
+    if (fromBalance <= amount) {
+      form.setError('amount', { message: 'Insufficient balance' });
+      return;
+    }
+
     setShowConfirm(true);
   };
 
@@ -124,61 +132,91 @@ export function TransferPaymentDialog() {
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="flex justify-between flex-row gap-4 items-start">
               <FormField
                 control={form.control}
                 name="fromAccountId"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="flex-1">
                     <FormLabel>From Account</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
-                        <SelectTrigger>
+                        <SelectTrigger className="flex w-full">
                           <SelectValue placeholder="Select account" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {accounts.map((acc) => (
-                          <SelectItem key={acc.id} value={acc.id}>
-                            {acc.name}
-                          </SelectItem>
-                        ))}
+                        {accounts
+                          .filter((acc) => acc.id !== toAccountId)
+                          .map((acc) => (
+                            <SelectItem key={acc.id} value={acc.id}>
+                              {acc.name}
+                            </SelectItem>
+                          ))}
                       </SelectContent>
                     </Select>
-                    {accounts && (
-                      <p className="text-sm text-muted-foreground mt-1">
-                        Balance: {fromAccount?.balance.balance}
-                      </p>
+                    {fromAccount && (
+                      <div className="mt-2 space-y-1">
+                        <p className="text-sm">
+                          <span className="text-muted-foreground">Balance: </span>
+                          <span className="font-semibold">{formatCurrency(fromBalance)}</span>
+                        </p>
+                        {amount > 0 && (
+                          <p className="text-sm text-red-600">
+                            - {formatCurrency(amount)}
+                            <span className="text-muted-foreground ml-1">
+                              → {formatCurrency(fromBalance - amount)}
+                            </span>
+                          </p>
+                        )}
+                      </div>
                     )}
                     <FormMessage />
                   </FormItem>
                 )}
               />
 
+              <div className="flex items-center pt-8">
+                <ArrowRight className="h-5 w-5 text-primary shrink-0" />
+              </div>
+
               <FormField
                 control={form.control}
                 name="toAccountId"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="flex-1">
                     <FormLabel>To Account</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
-                        <SelectTrigger>
+                        <SelectTrigger className="flex w-full">
                           <SelectValue placeholder="Select account" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {accounts.map((acc) => (
-                          <SelectItem key={acc.id} value={acc.id}>
-                            {acc.name}
-                          </SelectItem>
-                        ))}
+                        {accounts
+                          .filter((a) => a.id !== fromAccountId)
+                          .map((acc) => (
+                            <SelectItem key={acc.id} value={acc.id}>
+                              {acc.name}
+                            </SelectItem>
+                          ))}
                       </SelectContent>
                     </Select>
                     {toAccount && (
-                      <p className="text-sm text-muted-foreground mt-1">
-                        Balance: ${toAccount.balance.balance}
-                      </p>
+                      <div className="mt-2 space-y-1">
+                        <p className="text-sm">
+                          <span className="text-muted-foreground">Balance: </span>
+                          <span className="font-semibold">{formatCurrency(toBalance)}</span>
+                        </p>
+                        {amount > 0 && (
+                          <p className="text-sm text-green-600">
+                            + {formatCurrency(amount)}
+                            <span className="text-muted-foreground ml-1">
+                              → {formatCurrency(toBalance + amount)}
+                            </span>
+                          </p>
+                        )}
+                      </div>
                     )}
                     <FormMessage />
                   </FormItem>
@@ -219,12 +257,6 @@ export function TransferPaymentDialog() {
               )}
             />
 
-            {fromAccount && toAccount && amount > 0 && (
-              <div className="p-3 bg-muted rounded-md text-sm text-center font-medium">
-                Note: {amount} will be transferred from {fromAccount.name} to {toAccount.name}.
-              </div>
-            )}
-
             <DialogFooter>
               <DialogClose className={cn(buttonVariants({ variant: 'outline' }))}>
                 Cancel
@@ -237,15 +269,58 @@ export function TransferPaymentDialog() {
         </Form>
 
         <AlertDialog open={showConfirm} onOpenChange={setShowConfirm}>
-          <AlertDialogContent>
+          <AlertDialogContent className="sm:max-w-lg">
             <AlertDialogHeader>
               <AlertDialogTitle>Confirm Transfer</AlertDialogTitle>
               <AlertDialogDescription>
-                Transfer {amount} from{' '}
-                <span className="text-primary font-bold"> "{fromAccount?.name}" </span>to{' '}
-                <span className="text-primary font-bold">"{toAccount?.name}"</span>?{' '}
+                Please review the transfer details before confirming.
               </AlertDialogDescription>
             </AlertDialogHeader>
+
+            <div className="space-y-4">
+              <div className="text-center">
+                <p className="text-sm text-muted-foreground">Amount</p>
+                <p className="text-3xl font-bold text-primary">{formatCurrency(amount)}</p>
+              </div>
+
+              <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-3 rounded-md border p-4">
+                <div className="text-center space-y-1">
+                  <p className="font-medium">{fromAccount?.name}</p>
+                  <p className="text-sm text-muted-foreground">
+                    Balance:{' '}
+                    <span className="text-foreground font-semibold">
+                      {formatCurrency(fromBalance)}
+                    </span>
+                  </p>
+                  <p className="text-xs text-red-600">
+                    - {formatCurrency(amount)} → {formatCurrency(fromBalance - amount)}
+                  </p>
+                </div>
+
+                <ArrowRightLeft className="h-5 w-5 text-muted-foreground shrink-0" />
+
+                <div className="text-center space-y-1">
+                  <p className="font-medium">{toAccount?.name}</p>
+                  <p className="text-sm text-muted-foreground">
+                    Balance:{' '}
+                    <span className="text-foreground font-semibold">
+                      {formatCurrency(toBalance)}
+                    </span>
+                  </p>
+                  <p className="text-xs text-green-600">
+                    + {formatCurrency(amount)} → {formatCurrency(toBalance + amount)}
+                  </p>
+                </div>
+              </div>
+
+              {form.watch('remark') && (
+                <div className="text-sm">
+                  <span className="text-muted-foreground">Remark: </span>
+                  {form.watch('remark')}
+                </div>
+              )}
+            </div>
+
             <AlertDialogFooter>
               <AlertDialogCancel>Cancel</AlertDialogCancel>
               <AlertDialogAction
