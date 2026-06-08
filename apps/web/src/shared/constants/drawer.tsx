@@ -12,7 +12,15 @@ import {
   WalletIcon,
 } from 'lucide-react';
 
-export const DRAWER_NAV_MAIN = [
+type DrawerItem = {
+  title: string;
+  url: string;
+  icon?: React.ReactNode;
+  isActive?: boolean;
+  items?: DrawerItem[];
+};
+
+export const DRAWER_NAV_MAIN: DrawerItem[] = [
   {
     title: 'Dashboard',
     url: '/dashboard',
@@ -22,7 +30,7 @@ export const DRAWER_NAV_MAIN = [
     title: 'Announcement',
     url: '/announcement',
     icon: <AlertTriangleIcon />,
-    isActive: false,
+    isActive: true,
     items: [
       {
         title: 'Published',
@@ -96,10 +104,6 @@ export const DRAWER_NAV_MAIN = [
         title: 'Change Plan',
         url: '/subscriptions/change-plan',
       },
-      {
-        title: 'History',
-        url: '/subscriptions/my',
-      },
     ],
   },
   {
@@ -119,6 +123,10 @@ export const DRAWER_NAV_MAIN = [
       {
         title: 'Providers',
         url: '/payments/providers',
+      },
+      {
+        title: 'History',
+        url: '/payments/history',
       },
     ],
   },

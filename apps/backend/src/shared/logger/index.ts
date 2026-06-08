@@ -7,6 +7,9 @@ const isProduction = env.NODE_ENV === 'production';
 
 const REDACTED = [
   'password',
+  'username',
+  'host',
+  'port',
   'secret',
   'token',
   'authorization',
