@@ -24,7 +24,7 @@ export const LedgerQueryParams = z.object({
 
 /** Schema for a single ledger entry line (debit/credit). */
 export const CreateLedgerLineSchema = z.object({
-  accountId: z.string().uuid(),
+  accountId: z.uuid(),
   isDebit: z.boolean(),
   amount: z.number().positive(),
 });
@@ -32,7 +32,7 @@ export const CreateLedgerLineSchema = z.object({
 /** Schema for creating a new ledger entry with multiple lines. */
 export const CreateLedgerEntrySchema = z.object({
   description: z.string().min(1),
-  paymentId: z.string().uuid().optional().nullable(),
+  paymentId: z.uuid().optional().nullable(),
   lines: z.array(CreateLedgerLineSchema).min(2),
 });
 
