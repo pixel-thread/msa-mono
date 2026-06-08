@@ -5,12 +5,12 @@ export const PAYMENTS = {
   STATS: '/payments/stats',
   DETAIL: (id: string) => `/payments/${id}`,
   RECEIPT: (id: string) => `/payments/${id}/receipt`,
-  
+  TRANSFER: '/payments/transfer',
+  RECORD: '/payments/record',
   RAZORPAY: {
     CREATE_ORDER: '/payments/order',
     VERIFY: '/payments/verify',
     WEBHOOK: '/payments/webhook',
-    RECORD: '/payments/record',
   },
 
   USERS: {

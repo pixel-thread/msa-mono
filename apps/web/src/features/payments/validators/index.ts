@@ -79,3 +79,17 @@ export const ProviderIdParamSchema = z.object({
 export const UserPaymentsParamsSchema = z.object({
   userId: z.uuid('Invalid user ID'),
 });
+
+export const TransferAccountBalanceSchema = z
+  .object({
+    fromAccountId: z.string().min(1, 'Please select source account'),
+    toAccountId: z.string().min(1, 'Please select destination account'),
+    amount: z.number().positive('Amount must be greater than 0'),
+    remark: z.string().min(1, 'Remark is required'),
+  })
+  .refine((data) => data.fromAccountId !== data.toAccountId, {
+    message: 'Source and destination accounts must be different',
+    path: ['toAccountId'],
+  });
+
+export type TransferAccountBalanceInput = z.infer<typeof TransferAccountBalanceSchema>;

@@ -108,8 +108,9 @@ export const TransferBalanceSchema = z
       .max(500, 'Description must be at most 500 characters'),
   })
   .strict()
-  .refine((data) => data.fromAccountId !== data.fromAccountId, {
-    message: 'Source and destination accounts must be different',
+  .refine((data) => data.fromAccountId !== data.toAccountId, {
+    message: 'from and to accounts must be different',
     path: ['destinationAccountId'],
   });
+
 export type TransferBalanceInput = z.infer<typeof TransferBalanceSchema>;

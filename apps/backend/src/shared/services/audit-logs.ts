@@ -21,7 +21,7 @@ interface LogActionParams {
 }
 
 /** Persists an audit log entry for a tracked action. */
-export async function logAction(params: LogActionParams) {
+export async function logAction(params: LogActionParams, tx?: Prisma.TransactionClient) {
   const {
     actorId,
     action,
@@ -35,7 +35,8 @@ export async function logAction(params: LogActionParams) {
     traceId,
   } = params;
 
-  await prisma.auditLog.create({
+  const prismaClient = tx || prisma;
+  await prismaClient.auditLog.create({
     data: {
       associationId,
       actorId,

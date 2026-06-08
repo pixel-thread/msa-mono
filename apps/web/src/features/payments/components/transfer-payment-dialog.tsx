@@ -45,30 +45,18 @@ import { useQueryClient } from '@tanstack/react-query';
 import { ArrowRight, ArrowRightLeft } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import { z } from 'zod';
 
-const transferSchema = z
-  .object({
-    fromAccountId: z.string().min(1, 'Please select source account'),
-    toAccountId: z.string().min(1, 'Please select destination account'),
-    amount: z.number().positive('Amount must be greater than 0'),
-    remark: z.string().min(1, 'Remark is required'),
-  })
-  .refine((data) => data.fromAccountId !== data.toAccountId, {
-    message: 'Source and destination accounts must be different',
-    path: ['toAccountId'],
-  });
+import { TransferAccountBalanceInput, TransferAccountBalanceSchema } from '../validators';
 
-type TransferFormValues = z.infer<typeof transferSchema>;
+import { useTransferAccountBalance } from '../hooks/useTransferAccountBalance';
 
 export function TransferPaymentDialog() {
   const queryClient = useQueryClient();
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const { accounts } = useLedgerAccounts();
 
-  const form = useForm<TransferFormValues>({
-    resolver: zodResolver(transferSchema),
+  const form = useForm<TransferAccountBalanceInput>({
+    resolver: zodResolver(TransferAccountBalanceSchema),
     defaultValues: {
       fromAccountId: '',
       toAccountId: '',
@@ -85,6 +73,7 @@ export function TransferPaymentDialog() {
     () => accounts.find((a) => a.id === fromAccountId),
     [fromAccountId, accounts],
   );
+
   const toAccount = useMemo(
     () => accounts.find((a) => a.id === toAccountId),
     [toAccountId, accounts],
@@ -93,6 +82,8 @@ export function TransferPaymentDialog() {
   const fromBalance = Number(fromAccount?.balance.balance ?? 0);
 
   const toBalance = Number(toAccount?.balance.balance ?? 0);
+
+  const { mutate, isPending } = useTransferAccountBalance();
 
   const onSubmit = () => {
     if (!fromAccount || !toAccount) return;
@@ -106,14 +97,24 @@ export function TransferPaymentDialog() {
 
   const handleConfirmTransfer = async () => {
     setShowConfirm(false);
-    setIsSubmitting(true);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
-    queryClient.invalidateQueries({ queryKey: ['payments'] });
-    toast.success('Transfer successful');
-
-    setIsSubmitting(false);
-    form.reset();
+    const formValues = form.getValues();
+    mutate(
+      {
+        fromAccountId: formValues.fromAccountId,
+        toAccountId: formValues.toAccountId,
+        amount: formValues.amount,
+        remark: formValues.remark,
+      },
+      {
+        onSuccess: (data) => {
+          if (data.success) {
+            queryClient.invalidateQueries({ queryKey: ['payments'] });
+            toast.success('Transfer successful');
+            form.reset();
+          }
+        },
+      },
+    );
   };
 
   return (
@@ -261,8 +262,8 @@ export function TransferPaymentDialog() {
               <DialogClose className={cn(buttonVariants({ variant: 'outline' }))}>
                 Cancel
               </DialogClose>
-              <Button type="submit" disabled={isSubmitting}>
-                {isSubmitting ? 'Transferring...' : 'Transfer'}
+              <Button type="submit" disabled={isPending}>
+                {isPending ? 'Transferring...' : 'Transfer'}
               </Button>
             </DialogFooter>
           </form>
@@ -326,9 +327,9 @@ export function TransferPaymentDialog() {
               <AlertDialogAction
                 onClick={handleConfirmTransfer}
                 variant={'destructive'}
-                disabled={isSubmitting}
+                disabled={isPending}
               >
-                {isSubmitting ? 'Saving...' : 'Confirm'}
+                {isPending ? 'Saving...' : 'Confirm'}
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
