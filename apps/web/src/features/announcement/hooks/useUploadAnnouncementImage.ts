@@ -12,7 +12,7 @@ export function useUploadAnnouncementImage(announcementId: string) {
       const formData = new FormData();
       formData.append('file', file);
       return http.post(ENDPOINTS.ANNOUNCEMENTS.UPLOAD(announcementId), formData, {
-        headers: { 'Content-Type': undefined },
+        headers: { 'Content-Type': 'multipart/form-data' },
       });
     },
     onSuccess: (res) => {
@@ -21,7 +21,7 @@ export function useUploadAnnouncementImage(announcementId: string) {
         queryClient.invalidateQueries({
           queryKey: QUERY_KEYS.ANNOUNCEMENTS_KEYS.DETAIL(announcementId),
         });
-        toast.success('Image uploaded successfully');
+        toast.success(res.message);
         return res;
       }
       toast.error(res.message || 'Failed to upload image');
