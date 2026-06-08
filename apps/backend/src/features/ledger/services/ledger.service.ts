@@ -1,15 +1,10 @@
 // ---------------------------------------------------------------------------
-// Prisma
-// ---------------------------------------------------------------------------
-
-// ---------------------------------------------------------------------------
 // Shared utilities
 // ---------------------------------------------------------------------------
 import { NotFoundError, ValidationError } from '@errors';
 import { ContextStore } from '@lib';
 import { prisma } from '@lib/prisma';
 import { ApprovalStatus, Prisma } from '@prisma/client';
-import { PAGE_SIZE } from '@src/shared/constants';
 import { logger } from '@src/shared/logger';
 import { buildPaginationParams } from '@utils/helper';
 
@@ -197,7 +192,7 @@ export async function rejectEntry(entryId: string) {
  * inactive accounts are hidden from day-to-day selection.
  */
 export async function getAccounts(associationId: string, page = 1) {
-  const { skip, take, page: currentPage } = buildPaginationParams(page);
+  const { skip, take } = buildPaginationParams(page);
 
   const [accounts, total] = await Promise.all([
     prisma.account.findMany({
@@ -206,12 +201,13 @@ export async function getAccounts(associationId: string, page = 1) {
       skip,
       take,
     }),
+
     prisma.account.count({
       where: { associationId, isActive: true },
     }),
   ]);
 
-  return { accounts, total, page: currentPage };
+  return { accounts, total };
 }
 
 /**

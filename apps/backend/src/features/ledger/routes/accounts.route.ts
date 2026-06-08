@@ -35,7 +35,7 @@ import { withRole } from '@utils/with-role';
 import type { RequestHandler } from 'express';
 import type { NextFunction, Request, Response } from 'express';
 
-import { incomeStatement, trialBalance } from '../services/reports.service';
+import { accountBalance } from '../services/reports.service';
 
 // ---------------------------------------------------------------------------
 // GET /api/ledger/accounts  –  List ledger accounts
@@ -139,6 +139,7 @@ export const deleteAccountHandler: RequestHandler[] = [
       { traceId, accountId, userId: user.id },
       'DELETE /api/ledger/accounts/:id - Ledger Account found',
     );
+
     logger.info(
       { traceId, accountId },
       'DELETE /api/ledger/accounts/:id - Ledger Account Deleting',
@@ -272,21 +273,8 @@ export const getAccountHandler: RequestHandler[] = [
       { traceId, accountId: existingAccount.id },
       'GET /api/ledger/accounts/:id - Success',
     );
-    const trailBalance = await trialBalance(req.user!.associationId, accountId as string);
-    const incomeStatementReport = await incomeStatement(
-      req.user!.associationId,
-      undefined,
-      undefined,
-      accountId as string,
-    );
+    const balance = await accountBalance(req.user!.associationId, accountId as string);
 
-    const dataWithReport = {
-      ...existingAccount,
-      report: {
-        trailBalance,
-        incomeStatement: incomeStatementReport,
-      },
-    };
-    return success(res, { data: dataWithReport, message: 'Ledger Account Updated' });
+    return success(res, { data: { ...existingAccount, balance } });
   }),
 ];
