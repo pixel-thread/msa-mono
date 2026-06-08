@@ -153,10 +153,10 @@ export async function accountBalance(associationId: string, accountId: string) {
 
   const isDebitNormal = account.type === 'ASSET' || account.type === 'EXPENSE';
   const balance = isDebitNormal ? debitTotal.sub(creditTotal) : creditTotal.sub(debitTotal);
-
   return {
     debitTotal,
     creditTotal,
-    balance,
+    balance: balance.abs(),
+    balanceType: isDebitNormal ? 'Debit' : 'Credit',
   };
 }
