@@ -62,7 +62,7 @@ export const getAnnouncements: RequestHandler[] = [
       const result = await findManyAnnouncements({
         associationId: user.associationId,
         filters: {
-          status: 'PUBLISHED',
+          status: query.status,
           priority: query.priority,
           search: query.search,
         },
