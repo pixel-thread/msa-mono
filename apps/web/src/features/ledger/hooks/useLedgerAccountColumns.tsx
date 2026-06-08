@@ -26,6 +26,10 @@ export function useLedgerAccountColumns(onEdit: (account: Account) => void) {
       ),
     },
     {
+      accessorKey: 'balance.balance',
+      header: 'Balance',
+    },
+    {
       accessorKey: 'type',
       header: 'Type',
       cell: ({ row }) => {
