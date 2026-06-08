@@ -289,6 +289,11 @@ export interface Account {
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
+  balance: {
+    balance: string;
+    debitTotal: string;
+    creditTotal: string;
+  };
 }
 
 export interface User {

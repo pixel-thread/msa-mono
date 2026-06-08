@@ -11,10 +11,10 @@ import { useUrlFilters } from '@src/shared/hooks';
 import type { Account } from '@src/shared/types';
 import { BanknoteIcon, Plus, Sprout } from 'lucide-react';
 
+import { useLedgerAccounts } from '../../../shared/hooks/useLedgerAccounts';
 import { CreateAccountDialog } from '../components/create-account-dialog';
 import { UpdateAccountDialog } from '../components/update-account-dialog';
 import { useLedgerAccountColumns } from '../hooks/useLedgerAccountColumns';
-import { useLedgerAccounts } from '../hooks/useLedgerAccounts';
 import { useSeedAccounts } from '../hooks/useSeedAccounts';
 
 export default function LedgerAccountsPage() {

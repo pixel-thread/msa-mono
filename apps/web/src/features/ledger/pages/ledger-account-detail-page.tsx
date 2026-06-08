@@ -13,9 +13,9 @@ import {
   TableRow,
 } from '@src/shared/components/ui/table';
 import { formatCurrency } from '@src/shared/utils/format';
-import { useNavigate,useParams } from '@tanstack/react-router';
+import { useNavigate, useParams } from '@tanstack/react-router';
 
-import { useLedgerAccount } from '../hooks/useLedgerAccount';
+import { useLedgerAccount } from '../../../shared/hooks/useLedgerAccount';
 import { useLedgerEntries } from '../hooks/useLedgerEntries';
 import { useLedgerEntriesColumns } from '../hooks/useLedgerEntriesColumns';
 

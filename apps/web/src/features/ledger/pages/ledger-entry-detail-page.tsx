@@ -9,12 +9,12 @@ import { Badge } from '@src/shared/components/ui/badge';
 import { Button } from '@src/shared/components/ui/button';
 import { Card, CardContent } from '@src/shared/components/ui/card';
 import { formatDate } from '@src/shared/utils/format';
-import { useNavigate,useParams } from '@tanstack/react-router';
+import { useNavigate, useParams } from '@tanstack/react-router';
 import { ArrowLeftIcon } from 'lucide-react';
 import { toast } from 'sonner';
 
+import { useLedgerAccounts } from '../../../shared/hooks/useLedgerAccounts';
 import { useApproveEntry } from '../hooks/useApproveEntry';
-import { useLedgerAccounts } from '../hooks/useLedgerAccounts';
 import { useLedgerEntries } from '../hooks/useLedgerEntries';
 import { useLedgerLineColumns } from '../hooks/useLedgerLineColumns';
 

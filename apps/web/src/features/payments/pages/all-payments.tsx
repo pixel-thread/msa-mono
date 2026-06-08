@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { RecordPaymentDialog } from '@src/features/payments/components';
+import { RecordPaymentDialog, TransferPaymentDialog } from '@src/features/payments/components';
 import { usePayments } from '@src/features/payments/hooks/usePayments';
 import { usePaymentTransactionColumns } from '@src/features/payments/hooks/usePaymentTransactionColumns';
 import { DataTable } from '@src/shared/components/data-table';
@@ -10,10 +10,11 @@ import { DataTablePagination } from '@src/shared/components/data-table-paginatio
 import { SectionHeader } from '@src/shared/components/section-header';
 import { Button } from '@src/shared/components/ui/button';
 import { useUrlFilters } from '@src/shared/hooks';
-import { Plus } from 'lucide-react';
+import { ArrowRightLeft, Plus } from 'lucide-react';
 
 export default function AllPaymentsPage() {
   const [recordDialogOpen, setRecordDialogOpen] = useState(false);
+  const [transferDialogOpen, setTransferDialogOpen] = useState(false);
   const { filters, page, setPage, setFilters } = useUrlFilters({
     basePath: '/payments',
   });
@@ -28,10 +29,13 @@ export default function AllPaymentsPage() {
   return (
     <>
       <SectionHeader title="All Payments" description="View and manage all payment transactions">
-        <Button onClick={() => setRecordDialogOpen(true)} className="h-10">
-          <Plus className="mr-2 h-4 w-4" />
-          Record Payment
-        </Button>
+        <div className="flex gap-2">
+          <TransferPaymentDialog />
+          <Button onClick={() => setRecordDialogOpen(true)} className="h-10">
+            <Plus className="mr-2 h-4 w-4" />
+            Record Payment
+          </Button>
+        </div>
       </SectionHeader>
 
       <DataTableFilters
