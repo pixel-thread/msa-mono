@@ -63,10 +63,17 @@ export const listAccounts: RequestHandler[] = [
     const page = parseInt(req.query.page as string) || 1;
     const { accounts, total } = await getAccounts(req.user!.associationId, page);
 
+    const accountsWithBalance = await Promise.all(
+      accounts.map(async (account) => ({
+        ...account,
+        balance: await accountBalance(req.user!.associationId, account.id),
+      })),
+    );
+
     // ---- Result ------------------------------------------------------------
 
     logger.info({ traceId, count: accounts.length }, 'GET /api/ledger/accounts - Success');
-    return success(res, { data: accounts, meta: buildPagination(total, page) });
+    return success(res, { data: accountsWithBalance, meta: buildPagination(total, page) });
   }),
 ];
 
