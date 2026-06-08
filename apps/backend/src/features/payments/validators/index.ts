@@ -91,3 +91,25 @@ export const PaymentIdParamSchema = z.object({ paymentId: z.uuid() });
 export const UserPaymentsQuerySchema = z.object({
   page: pageNumberValidation,
 });
+
+// ---- Transfer Balance Between Ledger Accounts ----
+
+export const TransferBalanceSchema = z
+  .object({
+    fromAccountId: z.uuid('Invalid source account ID'),
+    toAccountId: z.uuid('Invalid destination account ID'),
+    amount: z
+      .number()
+      .positive('Amount must be positive')
+      .max(99999999, 'Amount must be less than 99999999'),
+    remark: z
+      .string()
+      .min(5, 'Description must be at least 5 characters')
+      .max(500, 'Description must be at most 500 characters'),
+  })
+  .strict()
+  .refine((data) => data.fromAccountId !== data.fromAccountId, {
+    message: 'Source and destination accounts must be different',
+    path: ['destinationAccountId'],
+  });
+export type TransferBalanceInput = z.infer<typeof TransferBalanceSchema>;

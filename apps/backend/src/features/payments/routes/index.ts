@@ -32,6 +32,7 @@ import {
   verifyTestProvider,
 } from './providers.route';
 import { recordPayment } from './record-payment.route';
+import { postTransferBalance } from './transfer-balance.route';
 // ---- User-Specific ----
 import { userPayments } from './user-payments.route';
 import { verifyPayment } from './verify-payment.route';
@@ -59,6 +60,7 @@ router.get('/stats', paymentStats);
 router.post('/order', createOrder);
 router.post('/verify', verifyPayment);
 router.post('/record', recordPayment);
+router.post('/transfer', postTransferBalance);
 
 // ===========================================================================
 // User-Specific

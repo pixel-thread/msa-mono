@@ -221,6 +221,7 @@ enum AuditAction {
   TRAINING_UNASSIGN
   COMPLAINT_CREATE
   COMPLAINT_UPDATE
+  LEDGER_TRANSFER
 
   @@map("audit_action")
 }

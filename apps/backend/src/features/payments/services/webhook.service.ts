@@ -1,9 +1,9 @@
 import { NotFoundError, WebhookSignatureError } from '@errors';
-import { recordMemberPayment, recordRefund } from '@feature/ledger/services/accounting.service';
 import { decrypt } from '@lib/crypto';
 import { prisma } from '@lib/prisma';
 import { AuditAction, PaymentGateway } from '@prisma/client';
 import { logAction } from '@services';
+import { recordMemberPayment, recordRefund } from '@services/accounting';
 import { createAllocations } from '@services/allocate-contributions';
 import { logger } from '@src/shared/logger';
 

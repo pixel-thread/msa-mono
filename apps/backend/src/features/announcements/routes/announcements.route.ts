@@ -10,7 +10,6 @@ import { ForbiddenError } from '@errors';
 import { createAnnouncement, findManyAnnouncements } from '@feature/announcements/services';
 // Validators
 import {
-  AnnouncementQueryInput,
   AnnouncementQuerySchema,
   CreateAnnouncementSchema,
 } from '@feature/announcements/validators';

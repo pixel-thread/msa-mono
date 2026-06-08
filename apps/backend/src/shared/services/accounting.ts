@@ -70,11 +70,10 @@ export async function createJournalEntry(
       where: { paymentTransactionId },
     });
     if (existing) {
-      // if it exists, it's possible it was an auto-retry of webhook
       return tx.ledgerEntry.findUnique({
         where: { id: existing.id },
         include: { lines: true },
-      }) as unknown as any;
+      });
     }
   }
 
@@ -94,19 +93,21 @@ export async function createJournalEntry(
   });
 }
 
+type RecordMemberPaymentOpts = {
+  associationId: string;
+  paymentTransactionId: string;
+  amount: number;
+  description: string;
+  createdById: string;
+  method: PaymentMethod | string | null;
+};
+
 export async function recordMemberPayment(
   tx: Prisma.TransactionClient,
-  opts: {
-    associationId: string;
-    paymentTransactionId: string;
-    amount: number;
-    description: string;
-    createdById: string;
-    method: PaymentMethod | string | null;
-  },
+  opts: RecordMemberPaymentOpts,
 ) {
   const isCash = opts.method === 'CASH';
-  const debitCode = isCash ? '1200' : '1000'; // 1200 Cash, 1000 Bank
+  const debitCode = isCash ? '1200' : '1000';
 
   return createJournalEntry(tx, {
     associationId: opts.associationId,
@@ -121,16 +122,15 @@ export async function recordMemberPayment(
   });
 }
 
-export async function recordRefund(
-  tx: Prisma.TransactionClient,
-  opts: {
-    associationId: string;
-    paymentTransactionId: string;
-    amount: number;
-    description: string;
-    createdById: string;
-  },
-) {
+type RecordRefundOpts = {
+  associationId: string;
+  paymentTransactionId: string;
+  amount: number;
+  description: string;
+  createdById: string;
+};
+
+export async function recordRefund(tx: Prisma.TransactionClient, opts: RecordRefundOpts) {
   return createJournalEntry(tx, {
     associationId: opts.associationId,
     paymentTransactionId: opts.paymentTransactionId,
@@ -166,16 +166,15 @@ export async function recordExpense(
   });
 }
 
-export async function recordWaiver(
-  tx: Prisma.TransactionClient,
-  opts: {
-    associationId: string;
-    amount: number;
-    memberId: string;
-    period: string;
-    approvedById: string;
-  },
-) {
+type RecordWaiverOptions = {
+  associationId: string;
+  amount: number;
+  memberId: string;
+  period: string;
+  approvedById: string;
+};
+
+export async function recordWaiver(tx: Prisma.TransactionClient, opts: RecordWaiverOptions) {
   return createJournalEntry(tx, {
     associationId: opts.associationId,
     description: `Dues waiver - ${opts.memberId} - ${opts.period}`,
