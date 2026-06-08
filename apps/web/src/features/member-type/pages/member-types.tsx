@@ -46,9 +46,8 @@ export default function MemberTypesPage() {
       <SectionHeader
         title="Member Types"
         description="Manage member type levels for your association"
-      >
-        <CreateMemberTypeDialog />
-      </SectionHeader>
+      />
+      <CreateMemberTypeDialog />
 
       <DataTableFilters
         fields={[
