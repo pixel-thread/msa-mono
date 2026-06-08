@@ -32,15 +32,7 @@ import http from '@src/shared/utils/http';
 import { useMutation } from '@tanstack/react-query';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import { z } from 'zod';
-
-const CreateManualContributionSchema = z.object({
-  amount: z.string('Amount must be greater than 0'),
-  memberId: z.uuid('Invalid member id'),
-  paymentMethod: z.string().min(1, 'Payment method is required'),
-});
-
-type CreateManualContributionInput = z.infer<typeof CreateManualContributionSchema>;
+import { CreateManualContributionInput, CreateManualContributionSchema } from '../validators';
 
 export const ManualContributionDialog = () => {
   const form = useForm({
@@ -54,7 +46,7 @@ export const ManualContributionDialog = () => {
 
   const { mutate, isPending } = useMutation({
     mutationFn: (data: CreateManualContributionInput) =>
-      http.post(ENDPOINTS.CONTRIBUTION.CREATE_PAYMENT, data),
+      http.post(ENDPOINTS.CONTRIBUTION.RECORD_CONTRIBUTION, data),
 
     onSuccess: (data) => {
       if (data.success) {

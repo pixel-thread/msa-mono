@@ -38,9 +38,17 @@ export const CollectionReportQuerySchema = z.object({
   page: pageNumberValidation,
   year: z.coerce.number().int().min(2020).max(2100).optional(),
   month: z.coerce.number().int().min(1).max(12).optional(),
-  status: z.nativeEnum(ContributionStatus).optional(),
+  status: z.enum(ContributionStatus).optional(),
 });
 
 export const UserContributionsParamsSchema = z.object({
   userId: z.uuid('Invalid user ID'),
 });
+
+export const CreateManualContributionSchema = z.object({
+  amount: z.string('Amount must be greater than 0'),
+  memberId: z.uuid('Invalid member id'),
+  paymentMethod: z.string().min(1, 'Payment method is required'),
+});
+
+export type CreateManualContributionInput = z.infer<typeof CreateManualContributionSchema>;

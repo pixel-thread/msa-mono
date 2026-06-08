@@ -63,7 +63,8 @@ const ConfirmSavingContributions = ({
   const queryClient = useQueryClient();
 
   const { mutate, isPending } = useMutation({
-    mutationFn: (data: ContributionValue) => http.post(ENDPOINTS.CONTRIBUTION.CREATE_PAYMENT, data),
+    mutationFn: (data: ContributionValue) =>
+      http.post(ENDPOINTS.CONTRIBUTION.RECORD_CONTRIBUTION, data),
   });
 
   const handleConfirm = () => {
