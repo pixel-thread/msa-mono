@@ -47,6 +47,12 @@ type ConfirmSavingContributionsProps = {
   onSuccess: () => void;
 };
 
+type ContributionValue = {
+  userId: string;
+  contributionPeriodIds: string[];
+  amount: string;
+  paidAt: string;
+};
 const ConfirmSavingContributions = ({
   periods,
   paidAt,
@@ -57,12 +63,7 @@ const ConfirmSavingContributions = ({
   const queryClient = useQueryClient();
 
   const { mutate, isPending } = useMutation({
-    mutationFn: (data: {
-      userId: string;
-      contributionPeriodIds: string[];
-      amount: string;
-      paidAt?: string;
-    }) => http.post(ENDPOINTS.CONTRIBUTION.CREATE_PAYMENT, data),
+    mutationFn: (data: ContributionValue) => http.post(ENDPOINTS.CONTRIBUTION.CREATE_PAYMENT, data),
   });
 
   const handleConfirm = () => {
@@ -71,7 +72,7 @@ const ConfirmSavingContributions = ({
         userId,
         contributionPeriodIds: periods.map((p) => p.id),
         amount: selectedTotal.toString(),
-        paidAt: paidAt?.toISOString(),
+        paidAt: paidAt?.toISOString() || new Date().toISOString(),
       },
       {
         onSuccess: (data) => {

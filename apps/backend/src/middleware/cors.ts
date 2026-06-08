@@ -3,7 +3,6 @@ import corsLib from 'cors';
 const allowedOrigins = [
   'http://localhost:3000',
   'http://localhost:4000',
-  'https://mfsa.vercel.app',
   'https://msa-mono.onrender.com',
   'https://msa-web.onrender.com',
 ];

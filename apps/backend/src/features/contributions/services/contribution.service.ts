@@ -41,6 +41,12 @@ export async function allocatePaymentToContributions(
     orderBy: [{ year: 'asc' }, { month: 'asc' }],
   });
 
+  const selectedOutStandingAmount = outstanding.reduce((acc, p) => acc + Number(p.dueAmount), 0);
+
+  if (totalAmount !== selectedOutStandingAmount) {
+    throw new BadRequestError('Target Amount does not match outstanding contributions');
+  }
+
   const user = await tx.user.findUnique({ where: { id: userId } });
 
   if (!user) {
@@ -89,7 +95,7 @@ export async function allocatePaymentToContributions(
       return tx.ledgerEntry.findUnique({
         where: { id: existing.id },
         include: { lines: true },
-      }) as unknown as any;
+      });
     }
   }
 
