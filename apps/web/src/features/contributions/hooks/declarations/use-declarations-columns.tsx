@@ -40,6 +40,10 @@ export function useDeclarationsColumns({
       ),
     },
     {
+      accessorKey: 'remark',
+      header: 'Remark',
+    },
+    {
       accessorKey: 'lastDeclarationDate',
       header: 'Last Declaration',
       cell: ({ row }) => formatDate(row.original.lastDeclarationDate),

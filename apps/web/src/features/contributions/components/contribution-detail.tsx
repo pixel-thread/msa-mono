@@ -1,12 +1,12 @@
 'use client';
 
 import { Badge } from '@src/shared/components/ui/badge';
-import { Card, CardContent,CardHeader, CardTitle } from '@src/shared/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@src/shared/components/ui/card';
 import { formattedAmount } from '@src/shared/utils';
 import { getMonthName } from '@src/shared/utils/helper/get-month-name';
 import { getStatusBadge } from '@src/shared/utils/helper/get-status-badge';
 import { Link } from '@tanstack/react-router';
-import { CreditCard,User } from 'lucide-react';
+import { CreditCard, User } from 'lucide-react';
 
 import { ContributionPeriod } from '../types';
 
@@ -80,7 +80,7 @@ export function ContributionDetail({ contribution }: ContributionDetailProps) {
           <CardContent>
             <div className="space-y-3">
               <Link
-                to={`/payments/users/${contribution.userId}`}
+                to={`/payments/users/${contribution.user?.id}`}
                 className="text-sm text-primary hover:underline"
               >
                 {contribution.user?.name || 'Unknown'}
