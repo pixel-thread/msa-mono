@@ -50,7 +50,7 @@ export const refreshToken = async (): Promise<string> => {
   logger.debug('Refreshing token Started');
   const response = await axios.post<{
     data?: { accessToken: string; refreshToken?: string };
-  }>(`${API_BASE_URL}/auth/refresh`, { refreshToken }, { withCredentials: true });
+  }>(`${API_BASE_URL}/auth/refresh`, { token: refreshToken }, { withCredentials: true });
   logger.debug('Refreshing token Completed');
 
   const newAccessToken = response.data?.data?.accessToken;
