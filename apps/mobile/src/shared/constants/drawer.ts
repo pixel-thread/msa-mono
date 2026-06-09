@@ -25,6 +25,11 @@ export const drawerMenuGroups: DrawerMenuGroup[] = [
         href: '/(protected)/consent',
       },
       {
+        label: 'Declarations',
+        icon: 'document-text-outline',
+        href: '/(protected)/declarations',
+      },
+      {
         label: 'Compliance',
         icon: 'warning-outline',
         href: '/(protected)/compliance',
