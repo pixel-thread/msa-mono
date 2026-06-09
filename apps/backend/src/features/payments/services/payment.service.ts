@@ -532,7 +532,7 @@ export async function recordManualPayment(input: RecordManualPaymentInput) {
       associationId: input.associationId,
       paymentTransactionId: transaction.id,
       amount: input.amount,
-      description: `Manual payment (${input.method}) recorded by finance`,
+      description: input.notes || 'Manual payment',
       createdById: input.createdById,
       method: input.method,
       incomeAccountCode: incomeAccount.code,

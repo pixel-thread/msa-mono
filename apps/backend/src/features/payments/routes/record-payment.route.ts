@@ -35,11 +35,11 @@ export const recordPayment: RequestHandler[] = [
 
     // --- Business logic: record the manual payment ---
     logger.info(
-      { traceId, amount: req.body.amount, actorId: user.id },
+      { traceId, amount: req.body.amount, actorId: user.id, assocaitonId: req.user?.associationId },
       'POST /api/payments/record - Recording manual payment',
     );
     const transaction = await recordManualPayment({
-      associationId: req.user!.associationId,
+      associationId: req.user?.associationId as string,
       amount: req.body.amount,
       method: req.body.method,
       notes: req.body.notes,
@@ -50,7 +50,10 @@ export const recordPayment: RequestHandler[] = [
     });
 
     // --- Log: success ---
-    logger.info({ traceId, transactionId: transaction.id }, 'POST /api/payments/record - Success');
+    logger.info(
+      { traceId, transactionId: transaction.id, associationId: req.user?.associationId },
+      'POST /api/payments/record - Success',
+    );
 
     // --- Response ---
     return success(
