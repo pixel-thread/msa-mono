@@ -11,7 +11,6 @@ export const GenerateUserContributionsSchema = z.object({
 
 export const GenerateContributionsSchema = z.object({
   year: z.number().int().min(2020).max(2100).default(new Date().getFullYear()),
-  months: z.number().int().min(1).max(12),
 });
 
 // ---- Waive Contribution ----

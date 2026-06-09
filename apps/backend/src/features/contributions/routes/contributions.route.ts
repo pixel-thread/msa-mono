@@ -25,6 +25,7 @@ import { validate } from '@lib/validate';
 import { UserRole } from '@prisma/client';
 import { PAGE_SIZE } from '@src/shared/constants';
 import { logger } from '@src/shared/logger';
+import { getUnpaginatedUsers } from '@src/shared/services/user/getUsers';
 import { buildPagination } from '@src/shared/utils/helper/build-pagination';
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
@@ -179,7 +180,13 @@ export const generateContributionsHandler: RequestHandler[] = [
       'POST /api/payments/contributions - Generating contributions',
     );
 
-    const count = await generateUserContributions(associationId, req.body.year, req.body.months);
+    const users = await getUnpaginatedUsers({ where: { associationId, status: 'ACTIVE' } });
+
+    let count;
+
+    for (const user of users) {
+      count = await generateUserContributions(user.id, req.body.year, 12);
+    }
 
     const overdueCount = await markOverdueContributions(associationId);
 
