@@ -1,30 +1,11 @@
 import { PrismaPg } from '@prisma/adapter-pg';
 import {
-  AnnouncementPriority,
-  AnnouncementStatus,
-  AttendeeRole,
-  ComplaintCategory,
-  ComplaintStatus,
-  ComplianceCheckStatus,
-  ConsentPurpose,
-  ConsentStatus,
-  DsarRequestType,
-  DsarStatus,
-  MeetingStatus,
-  MeetingType,
-  NotificationType,
-  PaymentGateway,
-  PaymentMethod,
-  PaymentStatus,
   Prisma,
   PrismaClient,
-  RsvpStatus,
-  TrainingAssignmentStatus,
   UserRole,
   UserStatus,
 } from '@prisma/client';
 import bcrypt from 'bcryptjs';
-import * as crypto from 'crypto';
 import { Pool } from 'pg';
 
 // -----------------------------------------------------------------------------
@@ -75,16 +56,6 @@ const ASSOCIATIONS = [
   },
 ];
 
-export const encrypt = (plain: string): string => {
-  const iv = crypto.randomBytes(16);
-  const KEY = Buffer.from(process.env.FIELD_ENCRYPTION_KEY!, 'hex');
-  const cipher = crypto.createCipheriv('aes-256-gcm', KEY, iv);
-  const encrypted = Buffer.concat([cipher.update(plain, 'utf8'), cipher.final()]);
-
-  const tag = cipher.getAuthTag();
-
-  return [iv.toString('hex'), tag.toString('hex'), encrypted.toString('hex')].join(':');
-};
 // -----------------------------------------------------------------------------
 // SEED ASSOCIATION
 // -----------------------------------------------------------------------------
@@ -93,9 +64,6 @@ async function seedAssociation(data: (typeof ASSOCIATIONS)[number]) {
   console.log(`\n--- Seeding ${data.name} ---`);
 
   const password = await hashPassword(process.env.PASSWORD!);
-  const hashRazorpayKey = process.env.RAZORPAY_KEY_SECRET!;
-  const hashRazorpayWebhook = process.env.RAZORPAY_WEBHOOK_SECRET!;
-  const hashRazorpayKeyId = process.env.RAZORPAY_KEY_ID!;
 
   // ---------------------------------------------------------------------------
   // ASSOCIATION
@@ -118,65 +86,8 @@ async function seedAssociation(data: (typeof ASSOCIATIONS)[number]) {
   });
 
   // ---------------------------------------------------------------------------
-  // MEMBER TYPES
-  // ---------------------------------------------------------------------------
-
-  await prisma.memberType.createMany({
-    data: [
-      {
-        associationId: association.id,
-        description: 'Regular Member',
-        level: 1,
-      },
-      {
-        associationId: association.id,
-        description: 'Executive Member',
-        level: 2,
-      },
-      {
-        associationId: association.id,
-        description: 'Honorary Member',
-        level: 3,
-      },
-    ],
-  });
-  const createdMemberTypes = await prisma.memberType.findMany({
-    where: {
-      associationId: association.id,
-    },
-  });
-
-  // ---------------------------------------------------------------------------
   // SUBSCRIPTION PLAN
   // ---------------------------------------------------------------------------
-
-  for (const memberType of createdMemberTypes) {
-    await prisma.subscriptionPlan.create({
-      data: {
-        associationId: association.id,
-        name: memberType.description || 'Seed Membership',
-        description: memberType.description,
-        memberTypeId: memberType.id,
-
-        isDefault: false,
-        versions: {
-          create: {
-            amount: new Prisma.Decimal(memberType.level * 100),
-            effectiveFrom: new Date(),
-            effectiveTo: null,
-            currency: 'INR',
-            billingCycle: 'MONTHLY',
-            features: {
-              voting: true,
-              newsletter: true,
-              events: true,
-            },
-            description: 'Default membership plan',
-          },
-        },
-      },
-    });
-  }
 
   const subscriptionPlan = await prisma.subscriptionPlan.create({
     data: {
@@ -217,15 +128,8 @@ async function seedAssociation(data: (typeof ASSOCIATIONS)[number]) {
     UserRole.MEMBER,
   ];
 
-  const users: Record<UserRole, any> = {} as any;
-
-  await prisma.memberType.findMany({
-    where: { associationId: association.id },
-  });
-
   for (const role of roles) {
-    let i = 1;
-    const user = await prisma.user.create({
+    await prisma.user.create({
       data: {
         associationId: association.id,
         email: buildUserEmail(role, data.short),
@@ -238,510 +142,19 @@ async function seedAssociation(data: (typeof ASSOCIATIONS)[number]) {
         membershipNumber: `${data.short.toUpperCase()}-${role}`,
         imageUrl: 'https://placehold.co/300x300',
         mfaEnabled: false,
-        dateOfJoiningGovt: new Date(`2025-01-01`),
-        dateOfJoiningAssociation: new Date(`2025-01-01`),
+        dateOfJoiningGovt: new Date('2025-01-01'),
+        dateOfJoiningAssociation: new Date('2025-01-01'),
         subscription: {
           create: {
             planId: subscriptionPlan.id,
-            startDate: new Date(`201${i}-01-01`),
-            endDate: new Date(`202${i}-01-01`),
+            startDate: new Date('2024-01-01'),
+            endDate: new Date('2025-01-01'),
             planVersionId: subscriptionPlan.versions[0].id,
           },
         },
       },
     });
-    i++;
-
-    users[role] = user;
   }
-
-  for (let i = 20; i !== 0; i--) {
-    await prisma.membershipApplication.create({
-      data: {
-        associationSlug: 'mfsa',
-        firstName: `Applicatnt first-${i}`,
-        lastName: `Applicatnt last-${i}`,
-        phone: '999999999' + i,
-        email: `member_applicant_${i}@mfsa.com`,
-        status: 'PENDING',
-        dateOfBirth: new Date('2000-01-01'),
-        age: 20 + i,
-      },
-    });
-  }
-
-  // ---------------------------------------------------------------------------
-  // PUSH TOKENS
-  // ---------------------------------------------------------------------------
-
-  for (const role of roles) {
-    await prisma.pushToken.create({
-      data: {
-        userId: users[role].id,
-        token: `${data.short}-${role}-push-token`,
-      },
-    });
-  }
-
-  // ---------------------------------------------------------------------------
-  // REFRESH TOKENS
-  // ---------------------------------------------------------------------------
-
-  for (const role of roles) {
-    await prisma.refreshToken.create({
-      data: {
-        userId: users[role].id,
-        token: `${data.short}-${role}-refresh-token`,
-        expiresAt: new Date('2027-01-01'),
-      },
-    });
-  }
-
-  // ---------------------------------------------------------------------------
-  // VERIFICATION CODE
-  // ---------------------------------------------------------------------------
-
-  await prisma.verificationCode.create({
-    data: {
-      userId: users[UserRole.MEMBER].id,
-      code: '123456',
-      type: 'EMAIL_VERIFICATION',
-      expiresAt: new Date(Date.now() + 1000 * 60 * 10),
-    },
-  });
-
-  // ---------------------------------------------------------------------------
-  // MEETING
-  // ---------------------------------------------------------------------------
-
-  const meeting = await prisma.meeting.create({
-    data: {
-      associationId: association.id,
-      title: `${data.short.toUpperCase()} Annual General Meeting`,
-      type: MeetingType.GENERAL_MEETING,
-      status: MeetingStatus.SCHEDULED,
-      scheduledAt: new Date('2026-06-15T10:00:00Z'),
-      venue: 'Shillong Convention Hall',
-      createdById: users[UserRole.SUPER_ADMIN].id,
-    },
-  });
-
-  // ---------------------------------------------------------------------------
-  // MEETING ATTENDEES
-  // ---------------------------------------------------------------------------
-
-  await prisma.meetingAttendee.createMany({
-    data: [
-      {
-        meetingId: meeting.id,
-        userId: users[UserRole.SUPER_ADMIN].id,
-        attendeeRole: AttendeeRole.HOST,
-        rsvpStatus: RsvpStatus.ACCEPTED,
-        rsvpNote: 'Confirmed attendance',
-        rsvpAt: new Date(),
-        notifiedAt: new Date(),
-      },
-      ...roles
-        .filter((role) => role !== UserRole.SUPER_ADMIN)
-        .map((role) => ({
-          meetingId: meeting.id,
-          userId: users[role].id,
-          attendeeRole: role === UserRole.SECRETARY ? AttendeeRole.CO_HOST : AttendeeRole.REQUIRED,
-          rsvpStatus: RsvpStatus.PENDING,
-          notifiedAt: new Date(),
-        })),
-    ],
-  });
-
-  // ---------------------------------------------------------------------------
-  // AGENDA ITEMS
-  // ---------------------------------------------------------------------------
-
-  await prisma.agendaItem.createMany({
-    data: [
-      {
-        meetingId: meeting.id,
-        order: 1,
-        title: 'Opening Remarks',
-        description: 'President speech',
-      },
-      {
-        meetingId: meeting.id,
-        order: 2,
-        title: 'Financial Report',
-        description: 'Annual financial report',
-      },
-    ],
-  });
-
-  // ---------------------------------------------------------------------------
-  // MEETING MINUTES
-  // ---------------------------------------------------------------------------
-
-  await prisma.meetingMinutes.create({
-    data: {
-      meetingId: meeting.id,
-      agendaPoint: 'Financial Report',
-      decision: 'Budget approved unanimously',
-      actionItems: [
-        {
-          assignee: users[UserRole.FINANCE].name,
-          task: 'Prepare next quarter report',
-        },
-      ],
-    },
-  });
-
-  // ---------------------------------------------------------------------------
-  // TRAINING MODULE
-  // ---------------------------------------------------------------------------
-
-  const trainingModule = await prisma.trainingModule.create({
-    data: {
-      associationId: association.id,
-      title: 'Data Privacy Training',
-      description: 'Mandatory compliance training',
-      content: 'Training content goes here',
-      durationMinutes: 45,
-      requiredForRoles: [UserRole.MEMBER, UserRole.SECRETARY],
-    },
-  });
-
-  // ---------------------------------------------------------------------------
-  // TRAINING ASSIGNMENTS
-  // ---------------------------------------------------------------------------
-
-  await prisma.trainingAssignment.createMany({
-    data: [
-      {
-        moduleId: trainingModule.id,
-        userId: users[UserRole.MEMBER].id,
-        status: TrainingAssignmentStatus.ASSIGNED,
-        assignedAt: new Date(),
-        dueDate: new Date('2026-12-31'),
-        assignedById: users[UserRole.SUPER_ADMIN].id,
-      },
-      {
-        moduleId: trainingModule.id,
-        userId: users[UserRole.SECRETARY].id,
-        status: TrainingAssignmentStatus.IN_PROGRESS,
-        assignedAt: new Date(),
-        dueDate: new Date('2026-12-31'),
-        startedAt: new Date(),
-        assignedById: users[UserRole.SUPER_ADMIN].id,
-      },
-    ],
-  });
-
-  // ---------------------------------------------------------------------------
-  // TRAINING COMPLETION
-  // ---------------------------------------------------------------------------
-
-  await prisma.trainingCompletion.create({
-    data: {
-      moduleId: trainingModule.id,
-      userId: users[UserRole.SECRETARY].id,
-      scorePercent: new Prisma.Decimal(95),
-    },
-  });
-
-  // ---------------------------------------------------------------------------
-  // ANNOUNCEMENT
-  // ---------------------------------------------------------------------------
-
-  const announcement = await prisma.announcement.create({
-    data: {
-      associationId: association.id,
-      authorId: users[UserRole.PRESIDENT].id,
-      title: 'Annual Conference 2026',
-      summary: 'Conference scheduled next month',
-      content: 'Detailed conference information here',
-      status: AnnouncementStatus.PUBLISHED,
-      priority: AnnouncementPriority.HIGH,
-      targetRoles: [UserRole.MEMBER],
-      publishedAt: new Date(),
-      isPinned: true,
-    },
-  });
-
-  // ---------------------------------------------------------------------------
-  // ANNOUNCEMENT READ
-  // ---------------------------------------------------------------------------
-
-  await prisma.announcementRead.create({
-    data: {
-      announcementId: announcement.id,
-      userId: users[UserRole.MEMBER].id,
-    },
-  });
-
-  // ---------------------------------------------------------------------------
-  // CONSENT RECEIPT
-  // ---------------------------------------------------------------------------
-
-  await prisma.consentReceipt.create({
-    data: {
-      associationId: association.id,
-      userId: users[UserRole.MEMBER].id,
-      purpose: ConsentPurpose.PAYMENTS,
-      status: ConsentStatus.GRANTED,
-      ipAddress: '127.0.0.1',
-      userAgent: 'seed-script',
-      channel: 'web',
-    },
-  });
-
-  // ---------------------------------------------------------------------------
-  // DSAR TICKET
-  // ---------------------------------------------------------------------------
-
-  const dsarTicket = await prisma.dsarTicket.create({
-    data: {
-      associationId: association.id,
-      userId: users[UserRole.MEMBER].id,
-      assignedToId: users[UserRole.DPO].id,
-      ticketNumber: `${data.short.toUpperCase()}-DSAR-001`,
-      requestType: DsarRequestType.ACCESS,
-      requestedData: ['Profile', 'Payments'],
-      description: 'Need all personal data',
-      status: DsarStatus.IN_PROGRESS,
-    },
-  });
-
-  // ---------------------------------------------------------------------------
-  // DSAR RESPONSE
-  // ---------------------------------------------------------------------------
-
-  await prisma.dsarResponse.create({
-    data: {
-      dsarTicketId: dsarTicket.id,
-      responseType: 'ACCESS_EXPORT',
-      deliveryMethod: 'secure_download',
-      notes: 'Data exported successfully',
-    },
-  });
-
-  // ---------------------------------------------------------------------------
-  // PAYMENT TRANSACTION
-  // ---------------------------------------------------------------------------
-
-  const payment = await prisma.paymentTransaction.create({
-    data: {
-      associationId: association.id,
-      userId: users[UserRole.MEMBER].id,
-      amount: new Prisma.Decimal(500),
-      currency: 'INR',
-      gateway: PaymentGateway.RAZORPAY,
-      status: PaymentStatus.COMPLETED,
-      method: PaymentMethod.UPI,
-      referenceNumber: `${data.short}-payment-ref`,
-      receiptNumber: `${data.short}-receipt-001`,
-      razorpayOrderId: `${data.short}-order-id`,
-      razorpayPaymentId: `${data.short}-payment-id`,
-      razorpaySignature: 'signature',
-      receiptUrl: 'https://example.com/receipt.pdf',
-      invoiceUrl: 'https://example.com/invoice.pdf',
-      paidAt: new Date(),
-      paymentDate: new Date(),
-      notes: 'Membership payment',
-      createdById: users[UserRole.FINANCE].id,
-      verifiedById: users[UserRole.SUPER_ADMIN].id,
-    },
-  });
-
-  // ---------------------------------------------------------------------------
-  // CONTRIBUTION PERIOD
-  // ---------------------------------------------------------------------------
-
-  // const contributionPeriod = await prisma.contributionPeriod.create({
-  //   data: {
-  //     associationId: association.id,
-  //     userId: users[UserRole.MEMBER].id,
-  //     year: 2026,
-  //     month: 5,
-  //     expectedAmount: new Prisma.Decimal(500),
-  //     paidAmount: new Prisma.Decimal(500),
-  //     dueAmount: new Prisma.Decimal(0),
-  //     status: ContributionStatus.PAID,
-  //     dueDate: new Date('2026-05-31'),
-  //   },
-  // });
-
-  // ---------------------------------------------------------------------------
-  // PAYMENT ALLOCATION
-  // ---------------------------------------------------------------------------
-
-  // await prisma.paymentAllocation.create({
-  //   data: {
-  //     paymentTransactionId: payment.id,
-  //     contributionPeriodId: contributionPeriod.id,
-  //     allocatedAmount: new Prisma.Decimal(500),
-  //   },
-  // });
-
-  // ---------------------------------------------------------------------------
-  // PAYMENT WEBHOOK EVENT
-  // ---------------------------------------------------------------------------
-
-  await prisma.paymentWebhookEvent.create({
-    data: {
-      eventId: `${data.short}-event-001`,
-      eventType: 'payment.captured',
-      gateway: PaymentGateway.RAZORPAY,
-      payload: {
-        success: true,
-      },
-      signature: 'webhook-signature',
-      processed: true,
-      processedAt: new Date(),
-    },
-  });
-
-  // ---------------------------------------------------------------------------
-  // ACCOUNTS
-  // ---------------------------------------------------------------------------
-
-  const bankAccount = await prisma.account.create({
-    data: {
-      associationId: association.id,
-      code: '1000',
-      name: 'Bank',
-      type: 'ASSET',
-      description: 'Bank balance',
-    },
-  });
-
-  await prisma.account.create({
-    data: {
-      associationId: association.id,
-      code: '1200',
-      name: 'Cash',
-      type: 'ASSET',
-      description: 'Cash on hand',
-    },
-  });
-
-  const membershipIncomeAccount = await prisma.account.create({
-    data: {
-      associationId: association.id,
-      code: '4000',
-      name: 'Membership Income',
-      type: 'INCOME',
-      description: 'Income from membership fees',
-    },
-  });
-
-  // ---------------------------------------------------------------------------
-  // LEDGER ENTRY
-  // ---------------------------------------------------------------------------
-
-  const ledgerEntry = await prisma.ledgerEntry.create({
-    data: {
-      paymentTransactionId: payment.id,
-      description: 'Membership fee ledger entry',
-      approvalStatus: 'APPROVED',
-      createdById: users[UserRole.FINANCE].id,
-      approvedById: users[UserRole.SUPER_ADMIN].id,
-    },
-  });
-
-  // ---------------------------------------------------------------------------
-  // LEDGER LINES
-  // ---------------------------------------------------------------------------
-
-  await prisma.ledgerLine.createMany({
-    data: [
-      {
-        ledgerEntryId: ledgerEntry.id,
-        associationId: association.id,
-        accountId: bankAccount.id,
-        isDebit: true,
-        amount: new Prisma.Decimal(500),
-      },
-      {
-        ledgerEntryId: ledgerEntry.id,
-        associationId: association.id,
-        accountId: membershipIncomeAccount.id,
-        isDebit: false,
-        amount: new Prisma.Decimal(500),
-      },
-    ],
-  });
-
-  // ---------------------------------------------------------------------------
-  // NOTIFICATION
-  // ---------------------------------------------------------------------------
-
-  await prisma.notification.create({
-    data: {
-      associationId: association.id,
-      userId: users[UserRole.MEMBER].id,
-      title: 'Payment Successful',
-      body: 'Your membership payment was successful',
-      type: NotificationType.SYSTEM,
-      route: '/payments',
-      entityId: payment.id,
-      isRead: false,
-      isReceived: true,
-      receivedAt: new Date(),
-    },
-  });
-
-  // ---------------------------------------------------------------------------
-  // COMPLAINT
-  // ---------------------------------------------------------------------------
-
-  await prisma.complaint.create({
-    data: {
-      associationId: association.id,
-      userId: users[UserRole.MEMBER].id,
-      category: ComplaintCategory.PAYMENT_DISPUTE,
-      subject: 'Unable to download receipt',
-      description: 'Receipt PDF download failing',
-      status: ComplaintStatus.OPEN,
-      priority: 'HIGH',
-      assignedToId: users[UserRole.SECRETARY].id,
-    },
-  });
-
-  // ---------------------------------------------------------------------------
-  // PAYMENT PROVIDER
-  // ---------------------------------------------------------------------------
-
-  await prisma.paymentProvider.create({
-    data: {
-      associationId: association.id,
-      provider: 'RAZORPAY',
-      keyId: hashRazorpayKeyId,
-      encryptedKeySecret: hashRazorpayKey,
-      encryptedWebhookSecret: hashRazorpayWebhook,
-      isActive: true,
-    },
-  });
-
-  // ---------------------------------------------------------------------------
-  // AUDIT LOG
-  // ---------------------------------------------------------------------------
-
-  // ---------------------------------------------------------------------------
-  // COMPLIANCE CHECK
-  // ---------------------------------------------------------------------------
-
-  await prisma.complianceCheck.create({
-    data: {
-      associationId: association.id,
-      checkType: 'GDPR_CHECK',
-      status: ComplianceCheckStatus.PASSED,
-      score: 96,
-      message: 'Association compliant',
-      details: {
-        encryption: true,
-      },
-      recommendations: {
-        rotateKeys: true,
-      },
-    },
-  });
 
   console.log(`✓ ${data.name} seeded successfully`);
 }
@@ -753,37 +166,8 @@ async function seedAssociation(data: (typeof ASSOCIATIONS)[number]) {
 async function main() {
   console.log('\n--- Cleaning Database ---');
 
-  await prisma.announcementRead.deleteMany();
-  await prisma.meetingMinutes.deleteMany();
-  await prisma.agendaItem.deleteMany();
-  await prisma.meetingAttendee.deleteMany();
-  await prisma.meeting.deleteMany();
-  await prisma.trainingCompletion.deleteMany();
-  await prisma.trainingAssignment.deleteMany();
-  await prisma.trainingModule.deleteMany();
-  await prisma.announcement.deleteMany();
-  await prisma.consentReceipt.deleteMany();
-  await prisma.dsarResponse.deleteMany();
-  await prisma.dsarTicket.deleteMany();
-  await prisma.paymentWebhookEvent.deleteMany();
-  await prisma.paymentAllocation.deleteMany();
-  await prisma.contributionPeriod.deleteMany();
-  await prisma.ledgerLine.deleteMany();
-  await prisma.ledgerEntry.deleteMany();
-  await prisma.account.deleteMany();
-  await prisma.paymentTransaction.deleteMany();
-  await prisma.notification.deleteMany();
-  await prisma.complaint.deleteMany();
-  await prisma.complianceCheck.deleteMany();
-  await prisma.paymentProvider.deleteMany();
-  await prisma.auditLog.deleteMany();
   await prisma.subscription.deleteMany();
   await prisma.subscriptionPlan.deleteMany();
-  await prisma.memberType.deleteMany();
-  await prisma.pushToken.deleteMany();
-  await prisma.refreshToken.deleteMany();
-  await prisma.verificationCode.deleteMany();
-  await prisma.membershipApplication.deleteMany();
   await prisma.user.deleteMany();
   await prisma.association.deleteMany();
 
