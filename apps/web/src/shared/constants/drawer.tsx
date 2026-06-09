@@ -133,6 +133,7 @@ export const DRAWER_NAV_MAIN: DrawerItem[] = [
   {
     title: 'Contributions',
     url: '/contributions',
+    icon: <ClipboardCheck />,
     items: [
       {
         title: 'List',

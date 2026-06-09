@@ -21,6 +21,10 @@ import { toast } from 'sonner';
 
 import { useGeneratePeriodicContribution } from '../hooks/useGeneratePeriodicContribution';
 
+const currentYear = new Date().getFullYear();
+
+const years = Array.from({ length: 6 }, (_, i) => currentYear - 5 + i);
+
 const filterFields: FilterField[] = [
   {
     type: 'select',
@@ -32,16 +36,14 @@ const filterFields: FilterField[] = [
       { value: 'PAID', label: 'Paid' },
       { value: 'WAIVED', label: 'Waived' },
       { value: 'OVERDUE', label: 'Overdue' },
+      { value: 'PENDING', label: 'Pending' },
     ],
   },
   {
     type: 'select',
     id: 'year',
     label: 'Year',
-    options: Array.from({ length: 6 }, (_, i) => {
-      const y = 2026 - 5 + i;
-      return { value: String(y), label: String(y) };
-    }),
+    options: years.map((y) => ({ value: y.toString(), label: y.toString() })),
   },
 ];
 
@@ -49,10 +51,6 @@ export default function ContributionsPage() {
   const { filters, page, setPage, setFilters } = useUrlFilters({
     basePath: '/contributions',
   });
-
-  const currentYear = new Date().getFullYear();
-
-  const years = Array.from({ length: 6 }, (_, i) => currentYear - 5 + i);
 
   const [year, setYear] = useState(String(new Date().getFullYear()));
 
