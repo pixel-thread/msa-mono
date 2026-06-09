@@ -43,15 +43,7 @@ const formatMessage = (level: LogLevel, message: string, context?: LogContext): 
 };
 
 const flushClient = async (batch: QueuedLog[]) => {
-  await axiosClient.post(
-    `${env.NEXT_PUBLIC_API_BASE_URL}/logs/batch`,
-    { logs: batch },
-    {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    },
-  );
+  await axiosClient.post(`${env.NEXT_PUBLIC_API_BASE_URL}/logs/batch`, { logs: batch });
 };
 
 const flush = async () => {
