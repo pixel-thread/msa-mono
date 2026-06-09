@@ -85,50 +85,96 @@ async function seedAssociation(data: (typeof ASSOCIATIONS)[number]) {
     },
   });
 
+// ---------------------------------------------------------------------------
+// MEMBER TYPES
+// ---------------------------------------------------------------------------
+
+  const memberTypes = await Promise.all(
+    [
+      { description: 'Regular', level: 1 },
+      { description: 'Executive', level: 2 },
+      { description: 'Honorary', level: 3 },
+    ].map((mt) =>
+      prisma.memberType.create({
+        data: { associationId: association.id, ...mt },
+      })
+    )
+  );
+
+  const [regular, executive, honorary] = memberTypes;
+
   // ---------------------------------------------------------------------------
-  // SUBSCRIPTION PLAN
+  // SUBSCRIPTION PLANS
   // ---------------------------------------------------------------------------
 
-  const subscriptionPlan = await prisma.subscriptionPlan.create({
-    data: {
-      associationId: association.id,
-      name: 'Standard Membership',
-      description: 'Default membership plan',
-      versions: {
-        create: {
-          amount: new Prisma.Decimal(50),
-          currency: 'INR',
-          billingCycle: 'MONTHLY',
-          features: {
-            voting: true,
-            newsletter: true,
-            events: true,
+  const planConfigs = [
+    {
+      name: 'Basic Membership',
+      memberTypeId: regular.id,
+      amount: 50,
+    },
+    {
+      name: 'Executive Membership',
+      memberTypeId: executive.id,
+      amount: 150,
+    },
+    {
+      name: 'Premium Membership',
+      memberTypeId: honorary.id,
+      amount: 300,
+    },
+  ];
+
+  const plans = await Promise.all(
+    planConfigs.map((cfg) =>
+      prisma.subscriptionPlan.create({
+        data: {
+          associationId: association.id,
+          name: cfg.name,
+          memberTypeId: cfg.memberTypeId,
+          versions: {
+            create: {
+              amount: new Prisma.Decimal(cfg.amount),
+              currency: 'INR',
+              billingCycle: 'MONTHLY',
+              features: { voting: true, newsletter: true, events: true },
+              description: cfg.name,
+            },
           },
-          description: 'Default membership plan',
         },
-      },
-    },
-    include: {
-      versions: {
-        take: 1,
-      },
-    },
-  });
+        include: { versions: { take: 1 } },
+      })
+    )
+  );
 
   // ---------------------------------------------------------------------------
   // USERS
   // ---------------------------------------------------------------------------
 
-  const roles = [
-    UserRole.SUPER_ADMIN,
-    UserRole.PRESIDENT,
-    UserRole.SECRETARY,
-    UserRole.FINANCE,
-    UserRole.DPO,
-    UserRole.MEMBER,
-  ];
+  const rolePlanMap: Record<UserRole, typeof plans[number]> = {
+    [UserRole.MEMBER]: plans[0],
+    [UserRole.DPO]: plans[0],
+    [UserRole.SECRETARY]: plans[1],
+    [UserRole.FINANCE]: plans[1],
+    [UserRole.PRESIDENT]: plans[2],
+    [UserRole.SUPER_ADMIN]: plans[2],
+  };
+
+  const roleMemberTypeMap: Record<UserRole, typeof memberTypes[number]> = {
+    [UserRole.MEMBER]: regular,
+    [UserRole.DPO]: regular,
+    [UserRole.SECRETARY]: executive,
+    [UserRole.FINANCE]: executive,
+    [UserRole.PRESIDENT]: honorary,
+    [UserRole.SUPER_ADMIN]: honorary,
+  };
+
+  const roles = Object.values(UserRole);
 
   for (const role of roles) {
+    const plan = rolePlanMap[role];
+    const memberType = roleMemberTypeMap[role];
+
     await prisma.user.create({
       data: {
         associationId: association.id,
@@ -142,14 +188,15 @@ async function seedAssociation(data: (typeof ASSOCIATIONS)[number]) {
         membershipNumber: `${data.short.toUpperCase()}-${role}`,
         imageUrl: 'https://placehold.co/300x300',
         mfaEnabled: false,
+        memberTypeId: memberType.id,
         dateOfJoiningGovt: new Date('2025-01-01'),
         dateOfJoiningAssociation: new Date('2025-01-01'),
         subscription: {
           create: {
-            planId: subscriptionPlan.id,
+            planId: plan.id,
             startDate: new Date('2024-01-01'),
             endDate: new Date('2025-01-01'),
-            planVersionId: subscriptionPlan.versions[0].id,
+            planVersionId: plan.versions[0].id,
           },
         },
       },
@@ -169,6 +216,7 @@ async function main() {
   await prisma.subscription.deleteMany();
   await prisma.subscriptionPlan.deleteMany();
   await prisma.user.deleteMany();
+  await prisma.memberType.deleteMany();
   await prisma.association.deleteMany();
 
   for (const association of ASSOCIATIONS) {
