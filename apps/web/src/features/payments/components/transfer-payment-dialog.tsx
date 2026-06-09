@@ -87,7 +87,7 @@ export function TransferPaymentDialog() {
 
   const onSubmit = () => {
     if (!fromAccount || !toAccount) return;
-    if (fromBalance <= amount) {
+    if (fromBalance < amount) {
       form.setError('amount', { message: 'Insufficient balance' });
       return;
     }
