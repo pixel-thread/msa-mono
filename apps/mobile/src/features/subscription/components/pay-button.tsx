@@ -1,10 +1,9 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { View, TouchableOpacity } from 'react-native';
+import React, { useCallback } from 'react';
+import { View } from 'react-native';
 import RazorpayCheckout from 'react-native-razorpay';
 import { Ionicons } from '@expo/vector-icons';
 
 import { Button, Text } from '@src/shared/components/ui';
-import { cn } from '@src/shared/lib/cn';
 import { logger } from '@src/shared/utils';
 
 import { isRazorpayError } from '../types/razorpay';
@@ -31,11 +30,12 @@ export const PayButton = () => {
     try {
       const { data } = await createPaymentOrder();
       if (data) {
-        const response = await RazorpayCheckout.open(data);
-        verifyPayment({
-          razorpayOrderId: response.razorpay_order_id,
-          razorpayPaymentId: response.razorpay_payment_id,
-          razorpaySignature: response.razorpay_signature,
+        await RazorpayCheckout.open(data).then((response) => {
+          verifyPayment({
+            razorpayOrderId: response.razorpay_order_id,
+            razorpayPaymentId: response.razorpay_payment_id,
+            razorpaySignature: response.razorpay_signature,
+          });
         });
       }
     } catch (error) {

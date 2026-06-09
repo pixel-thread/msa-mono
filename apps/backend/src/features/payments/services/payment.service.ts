@@ -1,7 +1,8 @@
 import { BadRequestError, NotFoundError, PaymentError } from '@errors';
 import { decrypt } from '@lib/crypto';
 import { prisma } from '@lib/prisma';
-import type { PaymentMethod, Prisma } from '@prisma/client';
+import type { Prisma } from '@prisma/client';
+import { PaymentMethod } from '@prisma/client';
 import { AuditAction, ContributionStatus, PaymentGateway, PaymentStatus } from '@prisma/client';
 import { recordMemberPayment } from '@services/accounting';
 import { createAllocations } from '@services/allocate-contributions';
@@ -363,23 +364,34 @@ export async function verifyAndCompletePayment(input: VerifyAndCompleteInput) {
     keySecret,
   );
 
-  if (!isValid) {
-    throw new BadRequestError('Invalid Razorpay payment signature');
-  }
-
   return prisma.$transaction(async (tx) => {
     const now = new Date();
 
-    const updatedTransaction = await tx.paymentTransaction.update({
-      where: { id: transaction.id },
-      data: {
-        status: PaymentStatus.COMPLETED,
-        razorpayPaymentId: input.razorpayPaymentId,
-        razorpaySignature: input.razorpaySignature,
-        paidAt: now,
-        method: 'ONLINE' as PaymentMethod,
-      },
-    });
+    let updatedTransaction;
+
+    if (!isValid) {
+      updatedTransaction = await tx.paymentTransaction.update({
+        where: { id: transaction.id },
+        data: {
+          status: PaymentStatus.FAILED,
+          razorpayPaymentId: input.razorpayPaymentId,
+          razorpaySignature: input.razorpaySignature,
+          paidAt: now,
+          method: PaymentMethod.ONLINE as PaymentMethod,
+        },
+      });
+    } else {
+      updatedTransaction = await tx.paymentTransaction.update({
+        where: { id: transaction.id },
+        data: {
+          status: PaymentStatus.COMPLETED,
+          razorpayPaymentId: input.razorpayPaymentId,
+          razorpaySignature: input.razorpaySignature,
+          paidAt: now,
+          method: PaymentMethod.ONLINE as PaymentMethod,
+        },
+      });
+    }
 
     await recordMemberPayment(tx, {
       associationId: transaction.associationId,

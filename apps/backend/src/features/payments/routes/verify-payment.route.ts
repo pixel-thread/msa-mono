@@ -8,7 +8,9 @@
 import { verifyAndCompletePayment } from '@feature/payments/services/payment.service';
 import { VerifyPaymentSchema } from '@feature/payments/validators';
 import { validate } from '@lib/validate';
+import { UserRole } from '@prisma/client';
 import { logger } from '@src/shared/logger';
+import { withRole } from '@src/shared/utils/with-role';
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
 import type { RequestHandler } from 'express';
@@ -23,6 +25,8 @@ export const verifyPayment: RequestHandler[] = [
   // Step 2: Execute
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
+
+    await withRole(req, UserRole.MEMBER);
 
     // --- Log: request started ---
     logger.info(
