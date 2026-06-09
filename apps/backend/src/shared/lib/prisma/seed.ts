@@ -1,10 +1,5 @@
 import { PrismaPg } from '@prisma/adapter-pg';
-import {
-  Prisma,
-  PrismaClient,
-  UserRole,
-  UserStatus,
-} from '@prisma/client';
+import { Prisma, PrismaClient, UserRole, UserStatus } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 import { Pool } from 'pg';
 
@@ -85,9 +80,9 @@ async function seedAssociation(data: (typeof ASSOCIATIONS)[number]) {
     },
   });
 
-// ---------------------------------------------------------------------------
-// MEMBER TYPES
-// ---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
+  // MEMBER TYPES
+  // ---------------------------------------------------------------------------
 
   const memberTypes = await Promise.all(
     [
@@ -97,8 +92,8 @@ async function seedAssociation(data: (typeof ASSOCIATIONS)[number]) {
     ].map((mt) =>
       prisma.memberType.create({
         data: { associationId: association.id, ...mt },
-      })
-    )
+      }),
+    ),
   );
 
   const [regular, executive, honorary] = memberTypes;
@@ -112,6 +107,7 @@ async function seedAssociation(data: (typeof ASSOCIATIONS)[number]) {
       name: 'Basic Membership',
       memberTypeId: regular.id,
       amount: 50,
+      isDefault: true,
     },
     {
       name: 'Executive Membership',
@@ -132,6 +128,7 @@ async function seedAssociation(data: (typeof ASSOCIATIONS)[number]) {
           associationId: association.id,
           name: cfg.name,
           memberTypeId: cfg.memberTypeId,
+          isDefault: cfg.isDefault ?? false,
           versions: {
             create: {
               amount: new Prisma.Decimal(cfg.amount),
@@ -143,15 +140,15 @@ async function seedAssociation(data: (typeof ASSOCIATIONS)[number]) {
           },
         },
         include: { versions: { take: 1 } },
-      })
-    )
+      }),
+    ),
   );
 
   // ---------------------------------------------------------------------------
   // USERS
   // ---------------------------------------------------------------------------
 
-  const rolePlanMap: Record<UserRole, typeof plans[number]> = {
+  const rolePlanMap: Record<UserRole, (typeof plans)[number]> = {
     [UserRole.MEMBER]: plans[0],
     [UserRole.DPO]: plans[0],
     [UserRole.SECRETARY]: plans[1],
@@ -160,7 +157,7 @@ async function seedAssociation(data: (typeof ASSOCIATIONS)[number]) {
     [UserRole.SUPER_ADMIN]: plans[2],
   };
 
-  const roleMemberTypeMap: Record<UserRole, typeof memberTypes[number]> = {
+  const roleMemberTypeMap: Record<UserRole, (typeof memberTypes)[number]> = {
     [UserRole.MEMBER]: regular,
     [UserRole.DPO]: regular,
     [UserRole.SECRETARY]: executive,
