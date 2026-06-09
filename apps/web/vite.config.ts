@@ -9,6 +9,8 @@ export default defineConfig({
     port: 3000,
     strictPort: true,
   },
+  publicDir: 'public',
+  appType: 'spa',
   preview: {
     host: true,
     port: 4173,
