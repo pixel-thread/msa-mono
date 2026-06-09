@@ -4,6 +4,7 @@ import axios from 'axios';
 import cookies from 'react-cookies';
 
 import { safeStringify } from '../utils/helper/safe-stringify';
+import { axiosClient } from '../api';
 
 type LogLevel = 'info' | 'warn' | 'error' | 'debug';
 
@@ -42,14 +43,12 @@ const formatMessage = (level: LogLevel, message: string, context?: LogContext): 
 };
 
 const flushClient = async (batch: QueuedLog[]) => {
-  const csrfToken = cookies.load('csrf-token');
-  await axios.post(
+  await axiosClient.post(
     `${env.NEXT_PUBLIC_API_BASE_URL}/logs/batch`,
     { logs: batch },
     {
       headers: {
         'Content-Type': 'application/json',
-        'X-CSRF-Token': csrfToken,
       },
     },
   );
