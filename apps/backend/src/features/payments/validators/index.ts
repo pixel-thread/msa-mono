@@ -32,6 +32,7 @@ export const RecordManualPaymentSchema = z
     method: z.enum(PaymentMethod, 'Invalid payment method').default(PaymentMethod.CASH),
     receiptNumber: z.string("Receipt number can't be empty").optional(),
     referenceNumber: z.string("Reference number can't be empty").optional(),
+    incomeAccountId: z.uuid('Invalid income account ID'),
   })
   .strict();
 

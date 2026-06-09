@@ -111,7 +111,9 @@ export function TransferPaymentDialog() {
             queryClient.invalidateQueries({ queryKey: ['payments'] });
             toast.success('Transfer successful');
             form.reset();
+            return;
           }
+          toast.error(data.message);
         },
       },
     );

@@ -51,6 +51,7 @@ export interface RecordManualPaymentInput {
   notes?: string;
   receiptNumber?: string;
   referenceNumber?: string;
+  incomeAccountId: string;
   /** The user who recorded this payment (finance/admin). */
   createdById: string;
 }
@@ -518,6 +519,14 @@ export async function recordManualPayment(input: RecordManualPaymentInput) {
       },
     });
 
+    // Look up income account code
+    const incomeAccount = await tx.account.findUnique({
+      where: { id: input.incomeAccountId },
+    });
+    if (!incomeAccount) {
+      throw new NotFoundError(`Income account not found: ${input.incomeAccountId}`);
+    }
+
     // Create ledger entry
     await recordMemberPayment(tx, {
       associationId: input.associationId,
@@ -526,6 +535,7 @@ export async function recordManualPayment(input: RecordManualPaymentInput) {
       description: `Manual payment (${input.method}) recorded by finance`,
       createdById: input.createdById,
       method: input.method,
+      incomeAccountCode: incomeAccount.code,
     });
 
     // Audit log

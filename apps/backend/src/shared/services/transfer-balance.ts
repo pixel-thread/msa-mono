@@ -1,4 +1,4 @@
-import { NotFoundError } from '@errors';
+import { BadRequestError, NotFoundError } from '@errors';
 import type { Prisma } from '@prisma/client';
 import { createJournalEntry } from '@services/accounting';
 
@@ -11,33 +11,92 @@ type TransferBalanceOptions = {
   createdById: string;
 };
 
+function isDebitNormal(type: string): boolean {
+  return type === 'ASSET' || type === 'EXPENSE';
+}
+
 export async function transferBalance(tx: Prisma.TransactionClient, opts: TransferBalanceOptions) {
   const [sourceAccount, destinationAccount] = await Promise.all([
     tx.account.findFirst({
-      where: { id: opts.sourceAccountId, associationId: opts.associationId, isActive: true },
+      where: {
+        id: opts.sourceAccountId,
+        associationId: opts.associationId,
+        isActive: true,
+      },
     }),
+
     tx.account.findFirst({
-      where: { id: opts.destinationAccountId, associationId: opts.associationId, isActive: true },
+      where: {
+        id: opts.destinationAccountId,
+        associationId: opts.associationId,
+        isActive: true,
+      },
     }),
   ]);
 
   if (!sourceAccount) {
-    throw new NotFoundError(`Source account not found or inactive: ${opts.sourceAccountId}`);
+    throw new NotFoundError(`Source account not found: ${opts.sourceAccountId}`);
   }
+
   if (!destinationAccount) {
-    throw new NotFoundError(
-      `Destination account not found or inactive: ${opts.destinationAccountId}`,
-    );
+    throw new NotFoundError(`Destination account not found: ${opts.destinationAccountId}`);
   }
+
+  if (isDebitNormal(sourceAccount.type) !== isDebitNormal(destinationAccount.type)) {
+    throw new Error(`Cannot transfer between ${sourceAccount.type} and ${destinationAccount.type}`);
+  }
+
+  const debitNormalAccounts = isDebitNormal(sourceAccount.type);
+
+  if (debitNormalAccounts) {
+    // Asset/Expense
+    //
+    // Cash -> Bank
+    // Cr Cash
+    // Dr Bank
+
+    return createJournalEntry(tx, {
+      associationId: opts.associationId,
+      description: opts.description,
+      createdById: opts.createdById,
+      autoApprove: false,
+
+      lines: [
+        {
+          accountCode: sourceAccount.code,
+          isDebit: false,
+          amount: opts.amount,
+        },
+        {
+          accountCode: destinationAccount.code,
+          isDebit: true,
+          amount: opts.amount,
+        },
+      ],
+    });
+  }
+
+  // Liability/Equity/Income
+  //
+  // Reverse direction
 
   return createJournalEntry(tx, {
     associationId: opts.associationId,
     description: opts.description,
     createdById: opts.createdById,
     autoApprove: false,
+
     lines: [
-      { accountCode: sourceAccount.code, isDebit: true, amount: opts.amount },
-      { accountCode: destinationAccount.code, isDebit: false, amount: opts.amount },
+      {
+        accountCode: sourceAccount.code,
+        isDebit: true,
+        amount: opts.amount,
+      },
+      {
+        accountCode: destinationAccount.code,
+        isDebit: false,
+        amount: opts.amount,
+      },
     ],
   });
 }

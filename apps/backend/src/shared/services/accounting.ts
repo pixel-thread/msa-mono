@@ -100,6 +100,7 @@ type RecordMemberPaymentOpts = {
   description: string;
   createdById: string;
   method: PaymentMethod | string | null;
+  incomeAccountCode?: string;
 };
 
 export async function recordMemberPayment(
@@ -117,7 +118,7 @@ export async function recordMemberPayment(
     autoApprove: true,
     lines: [
       { accountCode: debitCode, isDebit: true, amount: opts.amount },
-      { accountCode: '4000', isDebit: false, amount: opts.amount },
+      { accountCode: opts.incomeAccountCode ?? '4000', isDebit: false, amount: opts.amount },
     ],
   });
 }

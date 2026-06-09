@@ -3,6 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { QUERY_KEYS } from '@repo/shared';
 import { RecordManualPaymentSchema } from '@src/features/payments/validators';
+import { useLedgerAccounts } from '@hooks/useLedgerAccounts';
 import { Button } from '@src/shared/components/ui/button';
 import {
   Dialog,
@@ -44,6 +45,8 @@ interface RecordPaymentDialogProps {
 
 export function RecordPaymentDialog({ open, onOpenChange }: RecordPaymentDialogProps) {
   const queryClient = useQueryClient();
+  const { accounts } = useLedgerAccounts();
+  const incomeAccounts = accounts.filter((a) => a.type === 'INCOME');
 
   const form = useForm({
     resolver: zodResolver(RecordManualPaymentSchema),
@@ -53,6 +56,7 @@ export function RecordPaymentDialog({ open, onOpenChange }: RecordPaymentDialogP
       receiptNumber: '',
       referenceNumber: '',
       method: 'CASH',
+      incomeAccountId: '',
     },
   });
 
@@ -168,6 +172,31 @@ export function RecordPaymentDialog({ open, onOpenChange }: RecordPaymentDialogP
                   <FormControl>
                     <Input {...field} placeholder="Optional reference number" />
                   </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="incomeAccountId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Income Account *</FormLabel>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select income account" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {incomeAccounts.map((acc) => (
+                        <SelectItem key={acc.id} value={acc.id}>
+                          {acc.name} ({acc.code})
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}

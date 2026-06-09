@@ -30,6 +30,7 @@ export const RecordManualPaymentSchema = z.object({
   notes: z.string(),
   receiptNumber: z.string().optional(),
   referenceNumber: z.string().optional(),
+  incomeAccountId: z.string().min(1, 'Please select an income account'),
 });
 
 // ---------------------------------------------------------------------------

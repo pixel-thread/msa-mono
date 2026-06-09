@@ -1,6 +1,6 @@
 import { NotFoundError } from '@errors';
 import { prisma } from '@lib/prisma';
-import { Prisma } from '@prisma/client';
+import { Account, Prisma } from '@prisma/client';
 
 export async function trialBalance(associationId: string, accountId?: string) {
   const accounts = await prisma.account.findMany({
@@ -129,10 +129,22 @@ export async function incomeStatement(
     netIncome: totalIncome.sub(totalExpense),
   };
 }
+function isDebitNormal(type: string) {
+  return type === 'ASSET' || type === 'EXPENSE';
+}
+
+function getSignedBalance(balance: Prisma.Decimal, balanceType: string) {
+  const amount = Number(balance);
+
+  return balanceType === 'Credit' ? -amount : amount;
+}
 
 export async function accountBalance(associationId: string, accountId: string) {
   const account = await prisma.account.findUnique({
-    where: { id: accountId, associationId },
+    where: {
+      id: accountId,
+      associationId,
+    },
   });
 
   if (!account) {
@@ -143,20 +155,41 @@ export async function accountBalance(associationId: string, accountId: string) {
     by: ['isDebit'],
     where: {
       accountId,
-      ledgerEntry: { approvalStatus: 'APPROVED' },
+      ledgerEntry: {
+        approvalStatus: 'APPROVED',
+      },
     },
-    _sum: { amount: true },
+    _sum: {
+      amount: true,
+    },
   });
 
   const debitTotal = totals.find((t) => t.isDebit)?._sum.amount ?? new Prisma.Decimal(0);
+
   const creditTotal = totals.find((t) => !t.isDebit)?._sum.amount ?? new Prisma.Decimal(0);
 
-  const isDebitNormal = account.type === 'ASSET' || account.type === 'EXPENSE';
-  const balance = isDebitNormal ? debitTotal.sub(creditTotal) : creditTotal.sub(debitTotal);
+  const debitNormal = isDebitNormal(account.type);
+
+  const netBalance = debitNormal ? debitTotal.sub(creditTotal) : creditTotal.sub(debitTotal);
+
+  const balanceType = netBalance.greaterThanOrEqualTo(0)
+    ? debitNormal
+      ? 'Debit'
+      : 'Credit'
+    : debitNormal
+      ? 'Credit'
+      : 'Debit';
+
   return {
     debitTotal,
     creditTotal,
-    balance: balance.abs(),
-    balanceType: isDebitNormal ? 'Debit' : 'Credit',
+
+    balance: getSignedBalance(netBalance.abs(), balanceType),
+
+    balanceType,
+
+    normalBalanceType: debitNormal ? 'Debit' : 'Credit',
+
+    accountType: account.type,
   };
 }
