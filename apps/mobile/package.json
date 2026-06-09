@@ -51,7 +51,7 @@
     "expo-system-ui": "~6.0.7",
     "expo-updates": "~29.0.17",
     "expo-web-browser": "~15.0.7",
-    "nativewind": "latest",
+    "nativewind": "4.2.5",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-hook-form": "^7.75.0",
@@ -75,6 +75,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
+    "@babel/plugin-transform-react-jsx": "^7.29.7",
     "@types/react": "~19.1.10",
     "@types/react-native-razorpay": "^2.2.6",
     "@typescript-eslint/eslint-plugin": "^8.59.2",
