@@ -1,10 +1,8 @@
 'use client';
 import { env } from '@src/env';
-import axios from 'axios';
-import cookies from 'react-cookies';
 
-import { safeStringify } from '../utils/helper/safe-stringify';
 import { axiosClient } from '../api';
+import { safeStringify } from '../utils/helper/safe-stringify';
 
 type LogLevel = 'info' | 'warn' | 'error' | 'debug';
 

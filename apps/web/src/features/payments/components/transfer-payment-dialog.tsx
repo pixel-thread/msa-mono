@@ -46,9 +46,8 @@ import { ArrowRight, ArrowRightLeft } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
-import { TransferAccountBalanceInput, TransferAccountBalanceSchema } from '../validators';
-
 import { useTransferAccountBalance } from '../hooks/useTransferAccountBalance';
+import { TransferAccountBalanceInput, TransferAccountBalanceSchema } from '../validators';
 
 export function TransferPaymentDialog() {
   const queryClient = useQueryClient();
