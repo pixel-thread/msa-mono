@@ -133,10 +133,8 @@ function isDebitNormal(type: string) {
   return type === 'ASSET' || type === 'EXPENSE';
 }
 
-function getSignedBalance(balance: Prisma.Decimal, balanceType: string) {
-  const amount = Number(balance);
-
-  return balanceType === 'Credit' ? -amount : amount;
+function getSignedBalance(balance: Prisma.Decimal) {
+  return Number(balance);
 }
 
 export async function accountBalance(associationId: string, accountId: string) {
@@ -184,7 +182,7 @@ export async function accountBalance(associationId: string, accountId: string) {
     debitTotal,
     creditTotal,
 
-    balance: getSignedBalance(netBalance.abs(), balanceType),
+    balance: getSignedBalance(netBalance),
 
     balanceType,
 
