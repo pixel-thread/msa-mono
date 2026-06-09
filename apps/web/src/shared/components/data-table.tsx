@@ -11,7 +11,7 @@ import {
 } from '@src/shared/components/ui/table';
 import { TableSkeleton } from '@src/shared/components/ui/table-skeleton';
 import { PAGE_SIZE } from '@src/shared/constants';
-import { type ColumnDef,flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
+import { type ColumnDef, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 
 type DataTableProps<TData> = {
   loading?: boolean;

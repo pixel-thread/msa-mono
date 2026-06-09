@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { ArrowRight01Icon,Tick02Icon } from '@hugeicons/core-free-icons';
+import { ArrowRight01Icon, Tick02Icon } from '@hugeicons/core-free-icons';
 import { HugeiconsIcon } from '@hugeicons/react';
 import { cn } from '@src/shared/lib/utils';
 import { Menubar as MenubarPrimitive } from 'radix-ui';

@@ -28,7 +28,7 @@ import { useForm } from 'react-hook-form';
 
 import { useUpdateTrainingModule } from '../hooks';
 import type { TrainingModuleListItem } from '../types';
-import { type UpdateTrainingModuleInput,UpdateTrainingModuleSchema } from '../validators/training';
+import { type UpdateTrainingModuleInput, UpdateTrainingModuleSchema } from '../validators/training';
 
 interface EditModuleDialogProps {
   open: boolean;

@@ -22,7 +22,7 @@ import {
 import { Input } from '@src/shared/components/ui/input';
 import { Label } from '@src/shared/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@src/shared/components/ui/radio-group';
-import { Ban,Globe, Paperclip, Upload, X } from 'lucide-react';
+import { Ban, Globe, Paperclip, Upload, X } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 

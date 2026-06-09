@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback,useState } from 'react';
+import { useCallback, useState } from 'react';
 import { ConsentPurpose, ConsentStatus } from '@sharedType/enums';
 import { DataTable } from '@src/shared/components/data-table';
 import { DataTableFilters } from '@src/shared/components/data-table-filters';
@@ -11,7 +11,7 @@ import { ConsentDetailDialog } from '../components/consent-detail-dialog';
 import { ConsentReportCards } from '../components/consent-report-cards';
 import { DeleteConsentDialog } from '../components/delete-consent-dialog';
 import { EditConsentDialog } from '../components/edit-consent-dialog';
-import { useConsentColumns,useConsentRecords, useDeleteConsentReceipt } from '../hooks';
+import { useConsentColumns, useConsentRecords, useDeleteConsentReceipt } from '../hooks';
 import type { ConsentRecord } from '../types/consent.types';
 
 export default function ConsentAdminPage() {

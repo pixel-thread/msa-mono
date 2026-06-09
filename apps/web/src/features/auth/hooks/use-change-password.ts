@@ -1,5 +1,5 @@
 import { ENDPOINTS } from '@repo/shared';
-import { type ChangePasswordInput,ChangePasswordSchema } from '@src/features/auth/validators';
+import { type ChangePasswordInput, ChangePasswordSchema } from '@src/features/auth/validators';
 import http from '@src/shared/utils/http';
 import { useMutation } from '@tanstack/react-query';
 

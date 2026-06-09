@@ -8,7 +8,7 @@ import { DataTablePagination } from '@src/shared/components/data-table-paginatio
 import { Badge } from '@src/shared/components/ui/badge';
 import { Button } from '@src/shared/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@src/shared/components/ui/tabs';
-import { useNavigate,useParams } from '@tanstack/react-router';
+import { useNavigate, useParams } from '@tanstack/react-router';
 import {
   Award,
   Clock,
@@ -43,7 +43,7 @@ import {
   useTrainingSupplements,
   useTrainingSupplementsColumns,
 } from '../hooks';
-import { useRemoveCertificateTemplate,useUploadCertificateTemplate } from '../hooks';
+import { useRemoveCertificateTemplate, useUploadCertificateTemplate } from '../hooks';
 import type { TrainingModuleListItem } from '../types';
 
 export function TrainingDetailPage() {

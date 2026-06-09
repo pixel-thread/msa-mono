@@ -3,11 +3,11 @@
 import { SectionHeader } from '@src/shared/components/section-header';
 import { Badge } from '@src/shared/components/ui/badge';
 import { Button } from '@src/shared/components/ui/button';
-import { Card, CardContent,CardHeader, CardTitle } from '@src/shared/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@src/shared/components/ui/card';
 import { Separator } from '@src/shared/components/ui/separator';
 import { formatDate } from '@src/shared/utils';
 import { useParams } from '@tanstack/react-router';
-import { Calendar, ClipboardList,IndianRupee, User } from 'lucide-react';
+import { Calendar, ClipboardList, IndianRupee, User } from 'lucide-react';
 
 import { useDeclarationDetail } from '../hooks/declarations/use-declaration-detail';
 

@@ -17,7 +17,7 @@ import { Textarea } from '@src/shared/components/ui/textarea';
 import { Plus, Trash2 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 
-import { type CreateMeetingMinuteInput,CreateMeetingMinuteSchema } from '../validators/minutes';
+import { type CreateMeetingMinuteInput, CreateMeetingMinuteSchema } from '../validators/minutes';
 
 interface ActionItemInput {
   assigneeId?: string;

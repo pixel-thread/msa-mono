@@ -26,7 +26,7 @@ import { Textarea } from '@src/shared/components/ui/textarea';
 import { useForm } from 'react-hook-form';
 
 import { useCreateTrainingModule } from '../hooks';
-import { type CreateTrainingModuleInput,CreateTrainingModuleSchema } from '../validators/training';
+import { type CreateTrainingModuleInput, CreateTrainingModuleSchema } from '../validators/training';
 
 interface CreateModuleDialogProps {
   open: boolean;

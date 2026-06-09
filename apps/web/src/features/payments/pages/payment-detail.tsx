@@ -3,13 +3,13 @@
 import { usePaymentDetail } from '@src/features/payments/hooks/usePaymentDetail';
 import { SectionHeader } from '@src/shared/components/section-header';
 import { Button } from '@src/shared/components/ui/button';
-import { Card, CardContent,CardHeader, CardTitle } from '@src/shared/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@src/shared/components/ui/card';
 import { Separator } from '@src/shared/components/ui/separator';
 import { formatDate, formattedAmount } from '@src/shared/utils';
 import { getStatusBadge } from '@src/shared/utils/helper/get-status-badge';
 import { useParams } from '@tanstack/react-router';
 import { Link } from '@tanstack/react-router';
-import { CreditCard,User } from 'lucide-react';
+import { CreditCard, User } from 'lucide-react';
 
 export function PaymentDetailPage() {
   const params = useParams({ strict: false });

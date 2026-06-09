@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { Alert, AlertDescription } from '@components/ui/alert';
 import { Button } from '@components/ui/button';
-import { Card, CardContent,CardDescription, CardHeader, CardTitle } from '@components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@components/ui/card';
 import {
   Form,
   FormControl,
@@ -14,9 +14,9 @@ import {
 } from '@components/ui/form';
 import { Input } from '@components/ui/input';
 import { useResetPassword } from '@feature/auth/hooks';
-import { type ResetPasswordInput,ResetPasswordSchema } from '@feature/auth/validators';
+import { type ResetPasswordInput, ResetPasswordSchema } from '@feature/auth/validators';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Link,useSearch } from '@tanstack/react-router';
+import { Link, useSearch } from '@tanstack/react-router';
 import { useForm } from 'react-hook-form';
 
 /**

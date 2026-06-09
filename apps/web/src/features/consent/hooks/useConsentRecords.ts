@@ -1,5 +1,5 @@
 import { QUERY_KEYS } from '@repo/shared';
-import { buildUrlWithQuery,ENDPOINTS } from '@repo/shared';
+import { buildUrlWithQuery, ENDPOINTS } from '@repo/shared';
 import type { PaginationMeta } from '@src/shared/types/api.types';
 import type { ApiResponse } from '@src/shared/utils/http';
 import http from '@src/shared/utils/http';

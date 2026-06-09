@@ -5,7 +5,7 @@ import { DataTable } from '@components/data-table';
 import { DataTableFilters } from '@components/data-table-filters';
 import { SectionHeader } from '@components/section-header';
 import { Button } from '@components/ui/button';
-import { Card, CardContent,CardHeader, CardTitle } from '@components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@components/ui/card';
 import { ManageAttendeesDialog } from '@feature/meetings/components/ManageAttendeesDialog';
 import { useMeetingAttendees } from '@feature/meetings/hooks/useMeetingAttendees';
 import { useMeetingAttendeesColumns } from '@feature/meetings/hooks/useMeetingAttendeesColumns';
@@ -15,7 +15,7 @@ import { QUERY_KEYS } from '@repo/shared';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useParams } from '@tanstack/react-router';
 import http from '@utils/http';
-import { CheckCircle2, Clock, UserPlus,Users, XCircle } from 'lucide-react';
+import { CheckCircle2, Clock, UserPlus, Users, XCircle } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface AttendeeRow {

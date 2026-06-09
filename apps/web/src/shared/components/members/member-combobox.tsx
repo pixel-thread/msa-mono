@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect,useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useMemberSearch } from '@src/features/payments/hooks/useMemberSearch';
 import { Input } from '@src/shared/components/ui/input';
 import { cn } from '@src/shared/lib/utils';

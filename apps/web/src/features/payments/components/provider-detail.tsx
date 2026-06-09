@@ -2,7 +2,7 @@
 
 import { Badge } from '@src/shared/components/ui/badge';
 import { Button } from '@src/shared/components/ui/button';
-import { Card, CardContent,CardHeader, CardTitle } from '@src/shared/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@src/shared/components/ui/card';
 import { Separator } from '@src/shared/components/ui/separator';
 import { Pencil, Trash2 } from 'lucide-react';
 

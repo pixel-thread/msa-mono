@@ -1,4 +1,4 @@
-import { buildUrlWithQuery,ENDPOINTS } from '@repo/shared';
+import { buildUrlWithQuery, ENDPOINTS } from '@repo/shared';
 import http from '@src/shared/utils/http';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';

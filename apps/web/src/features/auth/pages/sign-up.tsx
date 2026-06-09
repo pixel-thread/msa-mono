@@ -5,7 +5,7 @@ import { PublicHeader } from '@components/public-header';
 import { Alert, AlertDescription } from '@components/ui/alert';
 import { Badge } from '@components/ui/badge';
 import { Button } from '@components/ui/button';
-import { Card, CardContent,CardDescription, CardHeader, CardTitle } from '@components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@components/ui/card';
 import {
   Form,
   FormControl,

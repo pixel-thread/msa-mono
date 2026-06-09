@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo,useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Card } from '@components/ui/card';
 import { Button } from '@src/shared/components/ui/button';
 import { Input } from '@src/shared/components/ui/input';
@@ -12,7 +12,7 @@ import {
   SelectValue,
 } from '@src/shared/components/ui/select';
 import type { FilterOption } from '@src/shared/types';
-import { Filter,Search } from 'lucide-react';
+import { Filter, Search } from 'lucide-react';
 
 export type FilterField =
   | { type: 'search'; id: string; placeholder?: string }

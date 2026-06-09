@@ -34,7 +34,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
-import { type UpdateMeetingInput,UpdateMeetingSchema } from '../validators';
+import { type UpdateMeetingInput, UpdateMeetingSchema } from '../validators';
 
 interface MeetingData {
   id: string;

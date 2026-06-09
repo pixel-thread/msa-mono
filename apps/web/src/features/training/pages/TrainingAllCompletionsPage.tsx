@@ -6,9 +6,9 @@ import { DataTablePagination } from '@src/shared/components/data-table-paginatio
 import { Button } from '@src/shared/components/ui/button';
 import { useUrlFilters } from '@src/shared/hooks';
 import { useNavigate } from '@tanstack/react-router';
-import { ArrowLeft,Award } from 'lucide-react';
+import { ArrowLeft, Award } from 'lucide-react';
 
-import { useTrainingCompletions,useTrainingCompletionsColumns } from '../hooks';
+import { useTrainingCompletions, useTrainingCompletionsColumns } from '../hooks';
 
 export function TrainingAllCompletionsPage() {
   const navigate = useNavigate();

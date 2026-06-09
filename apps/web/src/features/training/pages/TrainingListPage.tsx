@@ -8,10 +8,10 @@ import { SectionHeader } from '@src/shared/components/section-header';
 import { Button } from '@src/shared/components/ui/button';
 import { useUrlFilters } from '@src/shared/hooks';
 import { useNavigate } from '@tanstack/react-router';
-import { Award,Plus } from 'lucide-react';
+import { Award, Plus } from 'lucide-react';
 
 import { CreateModuleDialog } from '../components';
-import { useModuleTableColumns,useTrainingModules, useUpdateTrainingModule } from '../hooks';
+import { useModuleTableColumns, useTrainingModules, useUpdateTrainingModule } from '../hooks';
 
 export function TrainingListPage() {
   const navigate = useNavigate();

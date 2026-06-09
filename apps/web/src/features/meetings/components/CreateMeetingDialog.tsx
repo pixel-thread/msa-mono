@@ -39,7 +39,7 @@ import { useFieldArray } from 'react-hook-form';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 import { useMeetings } from '../hooks';
-import { type CreateMeetingInput,CreateMeetingSchema } from '../validators';
+import { type CreateMeetingInput, CreateMeetingSchema } from '../validators';
 
 export function CreateMeetingDialog({
   open,

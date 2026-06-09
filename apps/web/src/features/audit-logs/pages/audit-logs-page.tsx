@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback,useState } from 'react';
+import { useCallback, useState } from 'react';
 import { AuditLogDetailsDialog } from '@src/features/audit-logs/components/audit-log-details-dialog';
 import { useAuditLogColumns } from '@src/features/audit-logs/hooks/useAuditLogColumns';
 import { useAuditLogs } from '@src/features/audit-logs/hooks/useAuditLogs';

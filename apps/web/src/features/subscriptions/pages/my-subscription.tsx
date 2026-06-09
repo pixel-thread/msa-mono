@@ -11,7 +11,7 @@ import { useUrlFilters } from '@src/shared/hooks';
 import { formattedAmount } from '@src/shared/utils';
 import http from '@src/shared/utils/http';
 import { useQuery } from '@tanstack/react-query';
-import { AlertCircle,Clock, CreditCard } from 'lucide-react';
+import { AlertCircle, Clock, CreditCard } from 'lucide-react';
 
 interface PaymentAllocation {
   id: string;

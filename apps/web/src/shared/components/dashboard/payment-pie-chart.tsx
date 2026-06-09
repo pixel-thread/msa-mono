@@ -14,7 +14,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@src/shared/components/ui/chart';
-import { Cell,Pie, PieChart } from 'recharts';
+import { Cell, Pie, PieChart } from 'recharts';
 
 const COLORS = [
   'var(--color-pie-1)',

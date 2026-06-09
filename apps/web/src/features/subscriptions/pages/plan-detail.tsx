@@ -5,7 +5,7 @@ import { DataTable } from '@src/shared/components/data-table';
 import { SectionHeader } from '@src/shared/components/section-header';
 import { Badge } from '@src/shared/components/ui/badge';
 import { Button } from '@src/shared/components/ui/button';
-import { Card, CardContent,CardHeader, CardTitle } from '@src/shared/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@src/shared/components/ui/card';
 import { Separator } from '@src/shared/components/ui/separator';
 import { formatDate } from '@src/shared/utils';
 import { useParams } from '@tanstack/react-router';

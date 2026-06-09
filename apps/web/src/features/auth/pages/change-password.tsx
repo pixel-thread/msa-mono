@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { Alert, AlertDescription } from '@components/ui/alert';
 import { Button } from '@components/ui/button';
-import { Card, CardContent,CardDescription, CardHeader, CardTitle } from '@components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@components/ui/card';
 import {
   Form,
   FormControl,
@@ -14,7 +14,7 @@ import {
 } from '@components/ui/form';
 import { Input } from '@components/ui/input';
 import { useChangePassword } from '@feature/auth/hooks';
-import { type ChangePasswordInput,ChangePasswordSchema } from '@feature/auth/validators';
+import { type ChangePasswordInput, ChangePasswordSchema } from '@feature/auth/validators';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate } from '@tanstack/react-router';
 import { useForm } from 'react-hook-form';

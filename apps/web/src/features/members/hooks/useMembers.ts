@@ -1,4 +1,4 @@
-import { buildUrlWithQuery,ENDPOINTS, QUERY_KEYS } from '@repo/shared';
+import { buildUrlWithQuery, ENDPOINTS, QUERY_KEYS } from '@repo/shared';
 import type { User, UserStatus } from '@src/shared/types';
 import http from '@src/shared/utils/http';
 import { useQuery } from '@tanstack/react-query';

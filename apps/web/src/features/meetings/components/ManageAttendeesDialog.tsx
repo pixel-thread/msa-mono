@@ -37,7 +37,7 @@ import { cn } from '@src/shared/lib/utils';
 import { useForm } from 'react-hook-form';
 
 import type { Attendee } from '../types';
-import { type AssignAttendeeInput,AssignAttendeeSchema } from '../validators';
+import { type AssignAttendeeInput, AssignAttendeeSchema } from '../validators';
 
 interface ManageAttendeesDialogProps {
   open: boolean;

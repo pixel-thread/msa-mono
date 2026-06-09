@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback,useState } from 'react';
+import { useCallback, useState } from 'react';
 import { DataTable } from '@src/shared/components/data-table';
 import { DataTableFilters } from '@src/shared/components/data-table-filters';
 import { DataTablePagination } from '@src/shared/components/data-table-pagination';
@@ -11,7 +11,7 @@ import { ComplianceDetailDialog } from '../components/compliance-detail-dialog';
 import { ComplianceStatusCards } from '../components/compliance-status-cards';
 import { DeleteComplianceDialog } from '../components/delete-compliance-dialog';
 import { TriggerChecksDialog } from '../components/trigger-checks-dialog';
-import { useComplianceChecks, useComplianceColumns,useDeleteComplianceCheck } from '../hooks';
+import { useComplianceChecks, useComplianceColumns, useDeleteComplianceCheck } from '../hooks';
 import type { ComplianceRecord } from '../types/compliance.types';
 import { ALL_CHECK_TYPES, ComplianceCheckStatusEnum } from '../validators/compliance';
 

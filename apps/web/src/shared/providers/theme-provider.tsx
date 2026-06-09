@@ -63,7 +63,7 @@ const setupPreferredListener = () => {
 const getNextTheme = (current: ThemeMode): ThemeMode => {
   const themes: ThemeMode[] =
     getSystemTheme() === 'dark' ? ['auto', 'light', 'dark'] : ['auto', 'dark', 'light'];
-   
+
   return themes[(themes.indexOf(current) + 1) % themes.length]!;
 };
 

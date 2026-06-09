@@ -1,4 +1,4 @@
-import { MeetingStatus,MeetingType } from '@sharedType/enums';
+import { MeetingStatus, MeetingType } from '@sharedType/enums';
 import { pageNumberValidation } from '@src/shared/validators/common';
 import { z } from 'zod';
 

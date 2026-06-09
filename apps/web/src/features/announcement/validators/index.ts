@@ -1,5 +1,5 @@
 import { AnnouncementPriority, AnnouncementStatus, UserRole } from '@sharedType/enums';
-import { ALLOWED_IMAGE_FORMATS, ALLOWED_MIME_TYPES,MAX_IMAGE_SIZE } from '@src/shared/constants';
+import { ALLOWED_IMAGE_FORMATS, ALLOWED_MIME_TYPES, MAX_IMAGE_SIZE } from '@src/shared/constants';
 import { pageNumberValidation, pageSizeValidation } from '@src/shared/validators/common';
 import z from 'zod';
 

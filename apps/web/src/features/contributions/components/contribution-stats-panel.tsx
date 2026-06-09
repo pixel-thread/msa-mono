@@ -7,7 +7,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@components
 import { Progress } from '@components/ui/progress';
 import { formattedAmount } from '@src/shared/utils';
 import { getMonthName } from '@src/shared/utils/helper/get-month-name';
-import { BarChart3,ChevronDown, ChevronRight } from 'lucide-react';
+import { BarChart3, ChevronDown, ChevronRight } from 'lucide-react';
 
 import type { ContributionPeriod, ContributionSummary } from '../types';
 

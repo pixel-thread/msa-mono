@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { SectionHeader } from '@components/section-header';
 import { Badge } from '@components/ui/badge';
 import { Button } from '@components/ui/button';
-import { Card, CardContent,CardHeader, CardTitle } from '@components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@components/ui/card';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -28,7 +28,7 @@ import type { AssignAttendeeInput } from '@feature/meetings/validators';
 import { useMembers } from '@feature/members/hooks/useMembers';
 import { useNavigate, useParams, useSearch } from '@tanstack/react-router';
 import { formatDate } from '@utils/format';
-import { getRsvpBadge,getStatusBadge, getTypeBadge } from '@utils/helper';
+import { getRsvpBadge, getStatusBadge, getTypeBadge } from '@utils/helper';
 import {
   Calendar,
   CalendarX,

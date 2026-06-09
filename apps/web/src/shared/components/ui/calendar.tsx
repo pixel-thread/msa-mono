@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { ArrowDownIcon,ArrowLeftIcon, ArrowRightIcon } from '@hugeicons/core-free-icons';
+import { ArrowDownIcon, ArrowLeftIcon, ArrowRightIcon } from '@hugeicons/core-free-icons';
 import { HugeiconsIcon } from '@hugeicons/react';
 import { Button, buttonVariants } from '@src/shared/components/ui/button';
 import { cn } from '@src/shared/lib/utils';

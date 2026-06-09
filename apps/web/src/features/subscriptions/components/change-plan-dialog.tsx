@@ -8,7 +8,7 @@ import {
   DialogTitle,
 } from '@src/shared/components/ui/dialog';
 import { formattedAmount } from '@src/shared/utils/format';
-import { ArrowRight, Info,Loader2 } from 'lucide-react';
+import { ArrowRight, Info, Loader2 } from 'lucide-react';
 
 import { Subscription, SubscriptionPlan } from '../types';
 

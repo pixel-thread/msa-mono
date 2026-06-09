@@ -1,6 +1,6 @@
 'use client';
 
-import { buildUrlWithQuery,ENDPOINTS } from '@repo/shared';
+import { buildUrlWithQuery, ENDPOINTS } from '@repo/shared';
 import http from '@src/shared/utils/http';
 import { useQuery } from '@tanstack/react-query';
 

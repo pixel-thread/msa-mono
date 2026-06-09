@@ -2,7 +2,7 @@
 
 import { SectionHeader } from '@src/shared/components/section-header';
 import { Card, CardContent, CardHeader, CardTitle } from '@src/shared/components/ui/card';
-import { ArrowDownRight, ArrowUpRight, Clock,Scale } from 'lucide-react';
+import { ArrowDownRight, ArrowUpRight, Clock, Scale } from 'lucide-react';
 
 import { useLedgerSummary } from '../hooks/useLedgerSummary';
 

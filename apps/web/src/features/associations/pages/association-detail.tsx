@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect,useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useAssociation } from '@hooks/use-association';
 import { useUpdateAssociation } from '@src/features/associations/hooks/useUpdateAssociation';
@@ -10,10 +10,10 @@ import {
   UpdateAssociationSchema,
 } from '@src/features/associations/validators';
 import { SectionHeader } from '@src/shared/components/section-header';
-import { Avatar, AvatarFallback,AvatarImage } from '@src/shared/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@src/shared/components/ui/avatar';
 import { Badge } from '@src/shared/components/ui/badge';
 import { Button } from '@src/shared/components/ui/button';
-import { Card, CardContent,CardHeader, CardTitle } from '@src/shared/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@src/shared/components/ui/card';
 import {
   Form,
   FormControl,
@@ -26,7 +26,7 @@ import { Input } from '@src/shared/components/ui/input';
 import { Skeleton } from '@src/shared/components/ui/skeleton';
 import { Spinner } from '@src/shared/components/ui/spinner';
 import { Textarea } from '@src/shared/components/ui/textarea';
-import { Building2,Camera, Pencil, Save, X } from 'lucide-react';
+import { Building2, Camera, Pencil, Save, X } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 
 export default function AssociationDetailPage() {

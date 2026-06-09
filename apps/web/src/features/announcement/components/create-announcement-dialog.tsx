@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { AnnouncementPriority,AnnouncementStatus } from '@sharedType/enums';
+import { AnnouncementPriority, AnnouncementStatus } from '@sharedType/enums';
 import { useCreateAnnouncement } from '@src/features/announcement/hooks/useCreateAnnouncement';
 import {
   CreateAnnouncementInput,

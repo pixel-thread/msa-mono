@@ -14,7 +14,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@src/shared/components/ui/chart';
-import { PolarAngleAxis, PolarGrid, PolarRadiusAxis,Radar, RadarChart } from 'recharts';
+import { PolarAngleAxis, PolarGrid, PolarRadiusAxis, Radar, RadarChart } from 'recharts';
 
 const chartConfig = {
   count: {

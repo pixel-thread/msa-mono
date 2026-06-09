@@ -8,7 +8,7 @@ import { DataTablePagination } from '@src/shared/components/data-table-paginatio
 import { SectionHeader } from '@src/shared/components/section-header';
 import { Badge } from '@src/shared/components/ui/badge';
 import { Button } from '@src/shared/components/ui/button';
-import { Card, CardContent,CardHeader, CardTitle } from '@src/shared/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@src/shared/components/ui/card';
 import { Separator } from '@src/shared/components/ui/separator';
 import { useUrlFilters } from '@src/shared/hooks';
 import { useParams } from '@tanstack/react-router';

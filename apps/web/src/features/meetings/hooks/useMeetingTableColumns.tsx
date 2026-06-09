@@ -15,7 +15,7 @@ import { Link } from '@tanstack/react-router';
 import { ColumnDef } from '@tanstack/react-table';
 import { getStatusBadge } from '@utils/helper/get-status-badge';
 import { getTypeBadge } from '@utils/helper/get-type-badge';
-import { Eye,MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
+import { Eye, MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
 
 export const useMeetingTableColumns = (): {
   columns: ColumnDef<Meeting>[];

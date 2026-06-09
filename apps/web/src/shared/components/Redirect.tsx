@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { Loading } from '@components/loading';
-import { useLocation,useNavigate } from '@tanstack/react-router';
+import { useLocation, useNavigate } from '@tanstack/react-router';
 
 import { ROUTE_ROLE } from '../constants';
 import { useAuthStore } from '../stores/auth';

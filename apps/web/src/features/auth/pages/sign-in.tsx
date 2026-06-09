@@ -6,7 +6,7 @@ import { PublicHeader } from '@components/public-header';
 import { Alert, AlertDescription } from '@components/ui/alert';
 import { Badge } from '@components/ui/badge';
 import { Button } from '@components/ui/button';
-import { Card, CardContent,CardDescription, CardHeader, CardTitle } from '@components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@components/ui/card';
 import {
   Form,
   FormControl,
@@ -34,7 +34,7 @@ import {
 } from '@hugeicons/core-free-icons';
 import { HugeiconsIcon } from '@hugeicons/react';
 import { logger } from '@src/shared/logger';
-import { Link,useNavigate } from '@tanstack/react-router';
+import { Link, useNavigate } from '@tanstack/react-router';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 

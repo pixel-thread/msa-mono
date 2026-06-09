@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback,useState } from 'react';
+import { useCallback, useState } from 'react';
 import { DataTable } from '@src/shared/components/data-table';
 import { DataTableFilters } from '@src/shared/components/data-table-filters';
 import { DataTablePagination } from '@src/shared/components/data-table-pagination';
@@ -12,7 +12,7 @@ import { Plus } from 'lucide-react';
 import { ApproveEntryDialog } from '../components/approve-entry-dialog';
 import { CreateEntryDialog } from '../components/create-entry-dialog';
 import { RejectEntryDialog } from '../components/reject-entry-dialog';
-import { type LedgerEntryResponse,useLedgerEntries } from '../hooks/useLedgerEntries';
+import { type LedgerEntryResponse, useLedgerEntries } from '../hooks/useLedgerEntries';
 import { useLedgerEntriesColumns } from '../hooks/useLedgerEntriesColumns';
 
 export default function LedgerEntriesPage() {
