@@ -39,6 +39,7 @@ export const verifyPayment: RequestHandler[] = [
       { traceId, razorpayOrderId: req.body.razorpayOrderId },
       'POST /api/payments/verify - Verifying payment',
     );
+
     const result = await verifyAndCompletePayment({
       razorpayOrderId: req.body.razorpayOrderId,
       razorpayPaymentId: req.body.razorpayPaymentId,
