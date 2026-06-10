@@ -3,6 +3,7 @@ import { prisma } from '@lib/prisma';
 // ---- Prisma
 import type { Prisma } from '@prisma/client';
 import { PAGE_SIZE } from '@src/shared/constants';
+import { findUnpaginatedUsers } from '@src/shared/services/user/getUsers';
 
 // ---------------------------------------------------------------------------
 // User Service — Data Access Layer
@@ -147,6 +148,7 @@ export async function getUserInvoice({ where }: GetUserInvoiceProps) {
 type GetUsersProps = {
   /** Prisma filter criteria to scope which users are returned. */
   where: Prisma.UserWhereInput;
+  include: Prisma.UserInclude;
 };
 
 // ---------------------------------------------------------------------------
@@ -156,6 +158,6 @@ type GetUsersProps = {
 // search use-cases where a list of users is needed rather than a single one.
 // ---------------------------------------------------------------------------
 
-export async function getUsers(props: GetUsersProps) {
-  return await prisma.user.findMany(props);
+export async function findUsers(props: GetUsersProps) {
+  return await findUnpaginatedUsers(props);
 }

@@ -13,6 +13,11 @@ import {
 import type { JournalLine } from '@services/accounting';
 import { recordWaiver } from '@services/accounting';
 import { createAllocations } from '@services/allocate-contributions';
+import { findUniqueUser } from '@src/shared/services';
+import {
+  findUniquePaymentTransactions,
+  updatePaymentTransaction,
+} from '@src/shared/services/payments';
 
 // ---------------------------------------------------------------------------
 // Service functions
@@ -47,7 +52,7 @@ export async function allocatePaymentToContributions(
     throw new BadRequestError('Target Amount does not match outstanding contributions');
   }
 
-  const user = await tx.user.findUnique({ where: { id: userId } });
+  const user = await findUniqueUser({ where: { id: userId } });
 
   if (!user) {
     throw new NotFoundError('User not found');
@@ -59,7 +64,7 @@ export async function allocatePaymentToContributions(
 
   const description = `Contribution payment for ${user.name} (${user.email}) covering periods: ${descriptionMonths}`;
 
-  const payment = await tx.paymentTransaction.findUnique({ where: { id: paymentTransactionId } });
+  const payment = await findUniquePaymentTransactions({ id: paymentTransactionId }, tx);
 
   if (!payment) {
     throw new NotFoundError('Payment not found');
@@ -75,8 +80,9 @@ export async function allocatePaymentToContributions(
   );
 
   // Phase 2: Update payment transaction once after all allocations
-  await tx.paymentTransaction.update({
-    where: { id: payment.id },
+  await updatePaymentTransaction({
+    db: tx,
+    where: { id: paymentTransactionId },
     data: {
       status: PaymentStatus.COMPLETED,
       verifiedById: actorId,

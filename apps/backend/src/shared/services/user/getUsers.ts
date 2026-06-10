@@ -6,7 +6,7 @@ type Props = {
   include?: Prisma.UserInclude;
 };
 
-export async function getUnpaginatedUsers({ where, include }: Props = {}) {
+export async function findUnpaginatedUsers({ where, include }: Props = {}) {
   const { users } = await prisma.$transaction(async (tx) => {
     const users = await tx.user.findMany({ where, include });
     return { users };

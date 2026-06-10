@@ -25,7 +25,7 @@ import { validate } from '@lib/validate';
 import { UserRole } from '@prisma/client';
 import { PAGE_SIZE } from '@src/shared/constants';
 import { logger } from '@src/shared/logger';
-import { getUnpaginatedUsers } from '@src/shared/services/user/getUsers';
+import { findUnpaginatedUsers } from '@src/shared/services/user/getUsers';
 import { buildPagination } from '@src/shared/utils/helper/build-pagination';
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
@@ -180,7 +180,7 @@ export const generateContributionsHandler: RequestHandler[] = [
       'POST /api/payments/contributions - Generating contributions',
     );
 
-    const users = await getUnpaginatedUsers({ where: { associationId, status: 'ACTIVE' } });
+    const users = await findUnpaginatedUsers({ where: { associationId, status: 'ACTIVE' } });
 
     let count;
 

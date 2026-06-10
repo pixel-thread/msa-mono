@@ -6,7 +6,7 @@ type Props = {
 };
 
 /** Finds a unique user by its identifier, returning only safe/public fields. */
-export async function getUniqueUser({ where }: Props) {
+export async function findUniqueUser({ where }: Props) {
   return await prisma.user.findUnique({
     where,
     select: {

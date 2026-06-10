@@ -1,6 +1,6 @@
 import { UnauthorizedError } from '@errors';
 import { cacheAuthUser, getAuthCachedUser } from '@feature/auth/lib/cache';
-import { getUniqueUser } from '@services/user/get-unique-user';
+import { findUniqueUser } from '@services/user/get-unique-user';
 import { env } from '@src/env';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
@@ -34,7 +34,7 @@ export const getMe: RequestHandler[] = [
     }
 
     // ---- Fetch fresh user data from the database ----
-    const user = await getUniqueUser({ where: { id: userId } });
+    const user = await findUniqueUser({ where: { id: userId } });
 
     if (!user || user.status !== 'ACTIVE')
       throw new UnauthorizedError('User not found or inactive');

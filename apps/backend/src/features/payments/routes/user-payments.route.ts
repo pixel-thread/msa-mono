@@ -11,7 +11,7 @@ import { NotFoundError } from '@errors';
 import { getUserContributionSummary } from '@feature/contributions/services/contribution.service';
 import { UserContributionsParamsSchema } from '@feature/contributions/validators';
 import { findFirstMember } from '@feature/members/services/findFirstMember';
-import { findPaymentTransactions } from '@feature/payments/services/find-payment-transactions';
+import { findPaginatedPaymentTransactions } from '@feature/payments/services/find-payment-transactions';
 import { UserPaymentsQuerySchema } from '@feature/payments/validators';
 import { validate } from '@lib/validate';
 import { UserRole } from '@prisma/client';
@@ -57,7 +57,7 @@ export const userPayments: RequestHandler[] = [
     if (!user) throw new NotFoundError('User not found in this association');
 
     logger.info({ traceId, userId }, 'GET /api/payments/users/[userId] - Fetching transactions');
-    const { transactions, total } = await findPaymentTransactions({
+    const { transactions, total } = await findPaginatedPaymentTransactions({
       where: { userId, associationId: req.user!.associationId },
       page,
       pageSize: 10,

@@ -6,6 +6,11 @@ import { logAction } from '@services';
 import { recordMemberPayment, recordRefund } from '@services/accounting';
 import { createAllocations } from '@services/allocate-contributions';
 import { logger } from '@src/shared/logger';
+import {
+  findPaymentTransactionsFirst,
+  findUniquePaymentTransactions,
+  updatePaymentTransaction,
+} from '@src/shared/services/payments';
 
 import { markPaymentFailed } from './payment.service';
 import { getActiveProvider } from './payment-provider.service';
@@ -87,9 +92,7 @@ export async function processWebhookEvent(
 
   const paymentOrderId = payload.payload.payment?.entity?.order_id;
   if (paymentOrderId) {
-    const transaction = await prisma.paymentTransaction.findUnique({
-      where: { razorpayOrderId: paymentOrderId },
-    });
+    const transaction = await findUniquePaymentTransactions({ razorpayOrderId: paymentOrderId });
 
     if (transaction) {
       const provider = await getActiveProvider(transaction.associationId, 'RAZORPAY');
@@ -218,9 +221,7 @@ async function handlePaymentCaptured(payload: RazorpayWebhookPayload): Promise<v
   if (!payment) return;
 
   // Find the transaction by Razorpay order ID
-  const transaction = await prisma.paymentTransaction.findUnique({
-    where: { razorpayOrderId: payment.order_id },
-  });
+  const transaction = await findUniquePaymentTransactions({ razorpayOrderId: payment.order_id });
 
   if (!transaction) {
     logger.error(`[Webhook] No transaction found for order: ${payment.order_id}`);
@@ -257,9 +258,7 @@ async function handleRefund(payload: RazorpayWebhookPayload): Promise<void> {
   if (!refund) return;
 
   // Find the original transaction
-  const transaction = await prisma.paymentTransaction.findFirst({
-    where: { razorpayPaymentId: refund.payment_id },
-  });
+  const transaction = await findPaymentTransactionsFirst({ razorpayPaymentId: refund.payment_id });
 
   if (!transaction) {
     logger.error(`[Webhook] No transaction found for refund payment: ${refund.payment_id}`);
@@ -268,7 +267,7 @@ async function handleRefund(payload: RazorpayWebhookPayload): Promise<void> {
 
   await prisma.$transaction(async (tx) => {
     // Update transaction status
-    await tx.paymentTransaction.update({
+    await updatePaymentTransaction({
       where: { id: transaction.id },
       data: {
         status: 'REFUNDED',
@@ -340,16 +339,15 @@ async function verifyAndCompletePaymentFromWebhook(
   return prisma.$transaction(async (tx) => {
     const now = new Date();
 
-    const transaction = await tx.paymentTransaction.findUnique({
-      where: { id: transactionId },
-    });
+    const transaction = await findUniquePaymentTransactions({ id: transactionId }, tx);
 
     if (!transaction || transaction.status === 'COMPLETED') {
       return transaction;
     }
 
     // Mark completed
-    const updated = await tx.paymentTransaction.update({
+    const updated = await updatePaymentTransaction({
+      db: tx,
       where: { id: transactionId },
       data: {
         status: 'COMPLETED',

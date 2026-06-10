@@ -15,7 +15,7 @@ import { validate } from '@lib/validate';
 // ---- Prisma Types
 import { UserRole } from '@prisma/client';
 // ---- Shared Services
-import { getUniqueUser } from '@services/user/get-unique-user';
+import { findUniqueUser } from '@services/user/get-unique-user';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
@@ -42,7 +42,7 @@ async function withRole(req: Request, role: UserRole) {
   const userId = req.user?.id as string;
   if (!userId) throw new UnauthorizedError('Unauthorized');
 
-  const user = await getUniqueUser({ where: { id: userId } });
+  const user = await findUniqueUser({ where: { id: userId } });
   if (!user) throw new UnauthorizedError('Unauthorized');
 
   const roles = user.role as UserRole[];

@@ -1,5 +1,5 @@
 import type { UserRole } from '@prisma/client';
-import { getUniqueUser } from '@services/user/get-unique-user';
+import { findUniqueUser } from '@services/user/get-unique-user';
 import type { Request } from 'express';
 
 import { ForbiddenError, UnauthorizedError } from '../errors';
@@ -18,7 +18,7 @@ export async function withRole(req: Request, role: UserRole) {
 
   if (!userId) throw new UnauthorizedError('Unauthorized');
 
-  const user = await getUniqueUser({ where: { id: userId } });
+  const user = await findUniqueUser({ where: { id: userId } });
 
   if (!user) throw new UnauthorizedError('Unauthorized');
 

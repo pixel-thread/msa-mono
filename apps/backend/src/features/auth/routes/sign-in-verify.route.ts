@@ -7,7 +7,7 @@ import { VerifySignInSchema } from '@feature/auth/validators';
 import { signAccessToken, signRefreshToken, verifyMfaTempToken } from '@lib/jwt';
 import { hashToken } from '@lib/password';
 import { validate } from '@lib/validate';
-import { getUniqueUser } from '@services/user/get-unique-user';
+import { findUniqueUser } from '@services/user/get-unique-user';
 import { env } from '@src/env';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
@@ -42,7 +42,7 @@ export const postSignInVerify: RequestHandler[] = [
     }
 
     // ---- Look up user from the temp token payload ----
-    const user = await getUniqueUser({ where: { id: payload.sub } });
+    const user = await findUniqueUser({ where: { id: payload.sub } });
     if (!user || user.status !== 'ACTIVE') {
       throw new UnauthorizedError('User not found or inactive');
     }

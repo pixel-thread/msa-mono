@@ -17,7 +17,7 @@ import { prisma } from '@lib/prisma';
 // Shared utilities
 import { validate } from '@lib/validate';
 import { UserRole } from '@prisma/client';
-import { getUniqueUser } from '@services/user/get-unique-user';
+import { findUniqueUser } from '@services/user/get-unique-user';
 import { logger } from '@src/shared/logger';
 import { buildPagination } from '@utils';
 import { asyncHandler } from '@utils/async-handler';
@@ -43,7 +43,7 @@ const ROLE_HIERARCHY: Record<UserRole, number> = {
 async function withRole(req: Request, role: UserRole) {
   const userId = req.user?.id as string;
   if (!userId) throw new UnauthorizedError('Unauthorized');
-  const user = await getUniqueUser({ where: { id: userId } });
+  const user = await findUniqueUser({ where: { id: userId } });
   if (!user) throw new UnauthorizedError('Unauthorized');
   const roles = user.role as UserRole[];
   const highestUserRole = roles.reduce((highest, current) =>

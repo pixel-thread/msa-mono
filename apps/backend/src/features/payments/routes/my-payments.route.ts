@@ -5,7 +5,7 @@
 //            pagination. Self-service — no finance role required.
 // ---------------------------------------------------------------------------
 
-import { findPaymentTransactions } from '@feature/payments/services/find-payment-transactions';
+import { findPaginatedPaymentTransactions } from '@feature/payments/services/find-payment-transactions';
 import { PaymentHistoryQuerySchema } from '@feature/payments/validators';
 import { validate } from '@lib/validate';
 import { UserRole } from '@prisma/client';
@@ -37,7 +37,7 @@ export const myPayments: RequestHandler[] = [
 
     // --- Business logic: fetch user's own transactions ---
     const { page = 1, pageSize = 20 } = (req.query as any) || {};
-    const { transactions: payments, total } = await findPaymentTransactions({
+    const { transactions: payments, total } = await findPaginatedPaymentTransactions({
       where: { userId, associationId: req.user!.associationId },
       page,
       pageSize,

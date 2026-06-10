@@ -14,7 +14,7 @@ import {
 import { prisma } from '@lib/prisma';
 import { validate } from '@lib/validate';
 import { DsarStatus, UserRole } from '@prisma/client';
-import { getUniqueUser } from '@services/user/get-unique-user';
+import { findUniqueUser } from '@services/user/get-unique-user';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 import { hasHighRoleAccess } from '@utils/has-high-role';
@@ -34,7 +34,7 @@ const ROLE_HIERARCHY: Record<UserRole, number> = {
 async function withRole(req: Request, role: UserRole) {
   const userId = req.user?.id as string;
   if (!userId) throw new UnauthorizedError('Unauthorized');
-  const user = await getUniqueUser({ where: { id: userId } });
+  const user = await findUniqueUser({ where: { id: userId } });
   if (!user) throw new UnauthorizedError('Unauthorized');
   const roles = user.role as UserRole[];
   const highestUserRole = roles.reduce((highest, current) =>
@@ -138,7 +138,7 @@ export const assignTicket: RequestHandler[] = [
     const actorId = req.user?.id as string;
     await withRole(req, UserRole.DPO);
 
-    const user = await getUniqueUser({ where: { id: req.body.assignedToId } });
+    const user = await findUniqueUser({ where: { id: req.body.assignedToId } });
     if (!user) throw new NotFoundError('User not found');
     if (!hasHighRoleAccess(user.role as UserRole[]))
       throw new BadRequestError('User does not have the required role');

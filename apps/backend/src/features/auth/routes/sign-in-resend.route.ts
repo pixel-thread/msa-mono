@@ -6,7 +6,7 @@ import { sendVerificationEmail } from '@lib/email';
 import { verifyMfaTempToken } from '@lib/jwt';
 import { generateOTP, hashToken } from '@lib/password';
 import { validate } from '@lib/validate';
-import { getUniqueUser } from '@services/user/get-unique-user';
+import { findUniqueUser } from '@services/user/get-unique-user';
 import { env } from '@src/env';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
@@ -37,7 +37,7 @@ export const postSignInResend: RequestHandler[] = [
     }
 
     // ---- Look up the user from the token payload ----
-    const user = await getUniqueUser({ where: { id: payload?.sub } });
+    const user = await findUniqueUser({ where: { id: payload?.sub } });
     if (!user) throw new NotFoundError('User not found');
 
     // ---- Enforce resend cooldown ----
