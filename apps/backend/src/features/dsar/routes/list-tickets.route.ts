@@ -4,7 +4,7 @@
 
 // ---- External Libraries
 
-import { ForbiddenError, UnauthorizedError } from '@errors';
+import { UnauthorizedError } from '@errors';
 // ---- DSAR Services
 import { findDsarTickets } from '@feature/dsar/services';
 // ---- DSAR Validators
@@ -14,7 +14,6 @@ import { validate } from '@lib/validate';
 // ---- Prisma Types
 import { UserRole } from '@prisma/client';
 // ---- Shared Services
-import { findUniqueUser } from '@services/user/get-unique-user';
 import { logger } from '@src/shared/logger';
 import { withRole } from '@src/shared/utils/with-role';
 import { asyncHandler } from '@utils/async-handler';
@@ -41,7 +40,7 @@ export const listTickets: RequestHandler[] = [
     // ---- Auth log
 
     logger.info(
-      { traceId, associationId: req.user!.associationId },
+      { traceId, associationId: req.user?.associationId },
       'GET /api/dsar - Request started',
     );
 

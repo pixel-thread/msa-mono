@@ -1,4 +1,4 @@
-import { BadRequestError, ForbiddenError, NotFoundError, UnauthorizedError } from '@errors';
+import { BadRequestError, NotFoundError } from '@errors';
 import {
   assignDsarTicket,
   deleteDsarTicket,

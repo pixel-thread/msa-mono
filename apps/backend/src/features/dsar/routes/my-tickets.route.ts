@@ -14,7 +14,6 @@ import { validate } from '@lib/validate';
 // ---- Prisma Types
 import { UserRole } from '@prisma/client';
 // ---- Shared Services
-import { findUniqueUser } from '@services/user/get-unique-user';
 import { logger } from '@src/shared/logger';
 import { withRole } from '@src/shared/utils/with-role';
 import { asyncHandler } from '@utils/async-handler';
