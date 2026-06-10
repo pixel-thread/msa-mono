@@ -5,20 +5,20 @@ import { DeclarationStatus } from '@prisma/client';
 import { buildPagination, buildPaginationParams } from '@utils';
 import { addMonths, differenceInCalendarMonths, endOfMonth, startOfMonth } from 'date-fns';
 
+type DbClient = Prisma.TransactionClient | typeof prisma;
+
 type Props = {
   where: Prisma.DeclarationsWhereInput;
   include?: Prisma.DeclarationsInclude;
   page?: number;
 };
 
-export async function findDeclarations({ where, include, page = 1 }: Props) {
+export async function findDeclarations({ where, include, page = 1, db = prisma }: Props & { db?: DbClient }) {
   const { skip, take } = buildPaginationParams(page);
-  return await prisma.$transaction(async (tx) => {
-    const declaration = await tx.declarations.findMany({ where, include, take, skip });
-    const total = await tx.declarations.count({ where });
-    const pagination = buildPagination(total, page);
-    return { declaration, pagination };
-  });
+  const declaration = await db.declarations.findMany({ where, include, take, skip });
+  const total = await db.declarations.count({ where });
+  const pagination = buildPagination(total, page);
+  return { declaration, pagination };
 }
 
 type FindUniqueDeclarationsProps = {
@@ -26,12 +26,12 @@ type FindUniqueDeclarationsProps = {
   include?: Prisma.DeclarationsInclude;
 };
 
-export async function findUniqueDeclaration({ where, include }: FindUniqueDeclarationsProps) {
-  return await prisma.declarations.findUnique({ where, include });
+export async function findUniqueDeclaration({ where, include }: FindUniqueDeclarationsProps, db: DbClient = prisma) {
+  return await db.declarations.findUnique({ where, include });
 }
 
-export async function submitDeclaration(memberId: string, associationId: string, amount: number) {
-  const lastDeclaration = await prisma.declarations.findFirst({
+export async function submitDeclaration(memberId: string, associationId: string, amount: number, db: DbClient = prisma) {
+  const lastDeclaration = await db.declarations.findFirst({
     where: { memberId, status: DeclarationStatus.APPROVED },
     orderBy: { lastDeclarationDate: 'desc' },
     take: 1,
@@ -54,7 +54,7 @@ export async function submitDeclaration(memberId: string, associationId: string,
 
   const endDate = endOfMonth(today);
 
-  return prisma.declarations.create({
+  return db.declarations.create({
     data: {
       memberId,
       associationId,
@@ -71,8 +71,9 @@ export async function approveDeclaration(
   associationId: string,
   reviewBy: string,
   remark: string,
+  db: DbClient = prisma,
 ) {
-  const existing = await prisma.declarations.findUnique({
+  const existing = await db.declarations.findUnique({
     where: { id, associationId },
   });
 
@@ -82,7 +83,7 @@ export async function approveDeclaration(
     return { declaration: existing, wasAlreadyApproved: true };
   }
 
-  const updated = await prisma.declarations.update({
+  const updated = await db.declarations.update({
     where: { id, associationId },
     data: {
       status: DeclarationStatus.APPROVED,
@@ -101,8 +102,9 @@ export async function rejectDeclaration(
   associationId: string,
   reviewBy: string,
   remark: string,
+  db: DbClient = prisma,
 ) {
-  const existing = await prisma.declarations.findUnique({
+  const existing = await db.declarations.findUnique({
     where: { id, associationId },
   });
 
@@ -116,7 +118,7 @@ export async function rejectDeclaration(
     return { declaration: existing, wasAlreadyRejected: true };
   }
 
-  const updated = await prisma.declarations.update({
+  const updated = await db.declarations.update({
     where: { id, associationId },
     data: {
       status: DeclarationStatus.REJECTED,

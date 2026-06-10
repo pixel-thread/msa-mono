@@ -19,6 +19,8 @@ import {
   updatePaymentTransaction,
 } from '@src/shared/services/payments';
 
+type DbClient = Prisma.TransactionClient | typeof prisma;
+
 // ---------------------------------------------------------------------------
 // Service functions
 // ---------------------------------------------------------------------------
@@ -52,7 +54,7 @@ export async function allocatePaymentToContributions(
     throw new BadRequestError('Target Amount does not match outstanding contributions');
   }
 
-  const user = await findUniqueUser({ where: { id: userId } });
+  const user = await findUniqueUser({ where: { id: userId }, db: tx });
 
   if (!user) {
     throw new NotFoundError('User not found');
@@ -257,6 +259,7 @@ export async function generateUserContributions(
 export async function markOverdueContributions(
   associationId: string,
   userId?: string,
+  db: DbClient = prisma,
 ): Promise<number> {
   const now = new Date();
   const filter = {
@@ -264,55 +267,35 @@ export async function markOverdueContributions(
     ...(userId && { userId }),
   };
 
-  return await prisma.$transaction(async (tx) => {
-    const presentPeriods = await tx.contributionPeriod.updateMany({
-      where: {
-        ...filter,
-        status: ContributionStatus.DUE,
-        dueDate: { lte: now },
-      },
-      data: {
-        status: ContributionStatus.OVERDUE,
-      },
-    });
-
-    const futurePeriods = await tx.contributionPeriod.updateMany({
-      where: {
-        ...filter,
-        status: ContributionStatus.DUE,
-        dueDate: { gte: now },
-      },
-      data: { status: ContributionStatus.PENDING },
-    });
-
-    await tx.contributionPeriod.updateMany({
-      where: {
-        ...filter,
-        status: ContributionStatus.PENDING,
-        dueDate: { lte: now },
-      },
-      data: { status: ContributionStatus.DUE },
-    });
-
-    await tx.contributionPeriod.updateMany({
-      where: {
-        ...filter,
-        status: ContributionStatus.PARTIAL,
-        dueDate: { lte: now },
-      },
-      data: { status: ContributionStatus.DUE },
-    });
-
-    return presentPeriods.count + futurePeriods.count;
+  const presentPeriods = await db.contributionPeriod.updateMany({
+    where: { ...filter, status: ContributionStatus.DUE, dueDate: { lte: now } },
+    data: { status: ContributionStatus.OVERDUE },
   });
+
+  const futurePeriods = await db.contributionPeriod.updateMany({
+    where: { ...filter, status: ContributionStatus.DUE, dueDate: { gte: now } },
+    data: { status: ContributionStatus.PENDING },
+  });
+
+  await db.contributionPeriod.updateMany({
+    where: { ...filter, status: ContributionStatus.PENDING, dueDate: { lte: now } },
+    data: { status: ContributionStatus.DUE },
+  });
+
+  await db.contributionPeriod.updateMany({
+    where: { ...filter, status: ContributionStatus.PARTIAL, dueDate: { lte: now } },
+    data: { status: ContributionStatus.DUE },
+  });
+
+  return presentPeriods.count + futurePeriods.count;
 }
 
 /**
  * Get all outstanding (DUE / PARTIAL / OVERDUE) contribution periods for a user,
  * ordered chronologically (oldest first — for FIFO allocation).
  */
-export async function getOutstandingContributions(userId: string) {
-  return prisma.contributionPeriod.findMany({
+export async function getOutstandingContributions(userId: string, db: DbClient = prisma) {
+  return db.contributionPeriod.findMany({
     where: {
       userId,
       status: {
@@ -326,8 +309,8 @@ export async function getOutstandingContributions(userId: string) {
 /**
  * Get a user's contribution summary (for member/finance reports).
  */
-export async function getUserContributionSummary(userId: string): Promise<ContributionSummary> {
-  const contributions = await prisma.contributionPeriod.findMany({
+export async function getUserContributionSummary(userId: string, db: DbClient = prisma): Promise<ContributionSummary> {
+  const contributions = await db.contributionPeriod.findMany({
     where: {
       userId,
       status: {
@@ -384,40 +367,39 @@ export async function waiveContribution(
   contributionPeriodId: string,
   reason: string,
   approvedById: string,
+  db: DbClient = prisma,
 ) {
-  return prisma.$transaction(async (tx) => {
-    const period = await tx.contributionPeriod.findUnique({
-      where: { id: contributionPeriodId },
-    });
-
-    if (!period) {
-      throw new NotFoundError('Contribution period not found');
-    }
-
-    const amount = Number(period.dueAmount);
-
-    const updated = await tx.contributionPeriod.update({
-      where: { id: contributionPeriodId },
-      data: {
-        status: ContributionStatus.WAIVED,
-        dueAmount: 0,
-        waivedAt: new Date(),
-        waivedReason: reason,
-      },
-    });
-
-    if (amount > 0) {
-      await recordWaiver(tx, {
-        associationId: period.associationId,
-        amount,
-        memberId: period.userId,
-        period: `${period.year}-${period.month}`,
-        approvedById,
-      });
-    }
-
-    return updated;
+  const period = await db.contributionPeriod.findUnique({
+    where: { id: contributionPeriodId },
   });
+
+  if (!period) {
+    throw new NotFoundError('Contribution period not found');
+  }
+
+  const amount = Number(period.dueAmount);
+
+  const updated = await db.contributionPeriod.update({
+    where: { id: contributionPeriodId },
+    data: {
+      status: ContributionStatus.WAIVED,
+      dueAmount: 0,
+      waivedAt: new Date(),
+      waivedReason: reason,
+    },
+  });
+
+  if (amount > 0) {
+    await recordWaiver(db, {
+      associationId: period.associationId,
+      amount,
+      memberId: period.userId,
+      period: `${period.year}-${period.month}`,
+      approvedById,
+    });
+  }
+
+  return updated;
 }
 
 /**
@@ -429,8 +411,9 @@ export async function getUserContributions(
   fromMonth: number,
   toYear: number,
   toMonth: number,
+  db: DbClient = prisma,
 ) {
-  return prisma.contributionPeriod.findMany({
+  return db.contributionPeriod.findMany({
     where: {
       userId,
       OR: [
@@ -476,35 +459,34 @@ export async function recordContributionPayment(
   contributionPeriodIds: string[],
   paidAt: Date,
   createdById: string,
+  db: DbClient = prisma,
 ) {
   if (contributionPeriodIds.length === 0) {
     throw new BadRequestError('No contribution periods selected');
   }
 
-  return prisma.$transaction(async (tx) => {
-    const payment = await tx.paymentTransaction.create({
-      data: {
-        userId,
-        associationId,
-        amount,
-        currency: Currency.INR,
-        gateway: PaymentGateway.MANUAL,
-        status: PaymentStatus.PENDING,
-        method: paymentMethod,
-        paidAt,
-        createdById,
-      },
-    });
-
-    await allocatePaymentToContributions(
-      tx,
-      payment.id,
+  const payment = await db.paymentTransaction.create({
+    data: {
       userId,
+      associationId,
       amount,
-      contributionPeriodIds,
+      currency: Currency.INR,
+      gateway: PaymentGateway.MANUAL,
+      status: PaymentStatus.PENDING,
+      method: paymentMethod,
+      paidAt,
       createdById,
-    );
-
-    return payment;
+    },
   });
+
+  await allocatePaymentToContributions(
+    db,
+    payment.id,
+    userId,
+    amount,
+    contributionPeriodIds,
+    createdById,
+  );
+
+  return payment;
 }

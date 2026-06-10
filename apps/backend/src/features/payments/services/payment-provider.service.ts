@@ -1,9 +1,12 @@
 import { NotFoundError } from '@errors';
 import { encrypt } from '@lib/crypto';
 import { prisma } from '@lib/prisma';
+import type { Prisma } from '@prisma/client';
 import { PaymentProviderType } from '@prisma/client';
 import { env } from '@src/env';
 import { logger } from '@src/shared/logger';
+
+type DbClient = Prisma.TransactionClient | typeof prisma;
 
 export interface UpsertProviderInput {
   id: string;
@@ -54,12 +57,15 @@ function maskProvider(provider: any): ProviderResponse {
   };
 }
 
-export async function createProvider(input: CreateProviderInput): Promise<ProviderResponse> {
+export async function createProvider(
+  input: CreateProviderInput,
+  db: DbClient = prisma,
+): Promise<ProviderResponse> {
   const encryptedKeySecret = encrypt(input.keySecret);
 
   const encryptedWebhookSecret = input.webhookSecret ? encrypt(input.webhookSecret) : null;
 
-  const provider = await prisma.paymentProvider.create({
+  const provider = await db.paymentProvider.create({
     data: {
       associationId: input.associationId,
       provider: input.provider,
@@ -72,12 +78,15 @@ export async function createProvider(input: CreateProviderInput): Promise<Provid
 
   return maskProvider(provider);
 }
-export async function upsertProvider(input: UpsertProviderInput): Promise<ProviderResponse> {
+export async function upsertProvider(
+  input: UpsertProviderInput,
+  db: DbClient = prisma,
+): Promise<ProviderResponse> {
   const encryptedKeySecret = encrypt(input.keySecret);
 
   const encryptedWebhookSecret = input.webhookSecret ? encrypt(input.webhookSecret) : null;
 
-  const provider = await prisma.paymentProvider.upsert({
+  const provider = await db.paymentProvider.upsert({
     where: {
       id: input.id,
       provider: input.provider,
@@ -105,8 +114,9 @@ export async function upsertProvider(input: UpsertProviderInput): Promise<Provid
 export async function getProviderById(
   providerId: string,
   associationId: string,
+  db: DbClient = prisma,
 ): Promise<ProviderResponse | null> {
-  const provider = await prisma.paymentProvider.findFirst({
+  const provider = await db.paymentProvider.findFirst({
     where: {
       id: providerId,
       associationId,
@@ -119,8 +129,9 @@ export async function getProviderById(
 
 export async function getProvidersByAssociation(
   associationId: string,
+  db: DbClient = prisma,
 ): Promise<ProviderResponse[]> {
-  const providers = await prisma.paymentProvider.findMany({
+  const providers = await db.paymentProvider.findMany({
     where: { associationId },
     orderBy: { createdAt: 'desc' },
   });
@@ -128,7 +139,11 @@ export async function getProvidersByAssociation(
   return providers.map(maskProvider);
 }
 
-export async function getActiveProvider(associationId: string, providerType?: PaymentProviderType) {
+export async function getActiveProvider(
+  associationId: string,
+  providerType?: PaymentProviderType,
+  db: DbClient = prisma,
+) {
   const where: Record<string, unknown> = {
     associationId,
     isActive: true,
@@ -138,15 +153,16 @@ export async function getActiveProvider(associationId: string, providerType?: Pa
     where.provider = providerType;
   }
 
-  const provider = await prisma.paymentProvider.findFirst({ where });
+  const provider = await db.paymentProvider.findFirst({ where });
   return provider;
 }
 
 export async function setActiveProvider(
   providerId: string,
   associationId: string,
+  db: DbClient = prisma,
 ): Promise<ProviderResponse> {
-  const provider = await prisma.paymentProvider.findFirst({
+  const provider = await db.paymentProvider.findFirst({
     where: { id: providerId, associationId },
   });
 
@@ -154,7 +170,7 @@ export async function setActiveProvider(
     throw new NotFoundError('Provider not found');
   }
 
-  await prisma.paymentProvider.updateMany({
+  await db.paymentProvider.updateMany({
     where: {
       associationId,
       provider: provider.provider,
@@ -163,7 +179,7 @@ export async function setActiveProvider(
     data: { isActive: false },
   });
 
-  await prisma.paymentProvider.updateMany({
+  await db.paymentProvider.updateMany({
     where: {
       associationId,
       id: { not: providerId },
@@ -171,7 +187,7 @@ export async function setActiveProvider(
     data: { isActive: false },
   });
 
-  const updated = await prisma.paymentProvider.update({
+  const updated = await db.paymentProvider.update({
     where: { id: providerId },
     data: { isActive: provider.isActive ? false : true },
   });
@@ -183,8 +199,9 @@ export async function updateProvider(
   providerId: string,
   associationId: string,
   input: UpdateProviderInput,
+  db: DbClient = prisma,
 ): Promise<ProviderResponse> {
-  const provider = await prisma.paymentProvider.findFirst({
+  const provider = await db.paymentProvider.findFirst({
     where: { id: providerId, associationId },
   });
 
@@ -210,7 +227,7 @@ export async function updateProvider(
     updateData.isActive = input.isActive;
   }
 
-  const updated = await prisma.paymentProvider.update({
+  const updated = await db.paymentProvider.update({
     where: { id: providerId },
     data: updateData,
   });
@@ -218,9 +235,13 @@ export async function updateProvider(
   return maskProvider(updated);
 }
 
-export async function deleteProvider(providerId: string, associationId: string): Promise<void> {
+export async function deleteProvider(
+  providerId: string,
+  associationId: string,
+  db: DbClient = prisma,
+): Promise<void> {
   logger.debug({ providerId, associationId }, 'Deleting provider');
-  const provider = await prisma.paymentProvider.findUnique({
+  const provider = await db.paymentProvider.findUnique({
     where: { id: providerId, associationId },
   });
 
@@ -228,13 +249,13 @@ export async function deleteProvider(providerId: string, associationId: string):
     throw new NotFoundError('Provider not found');
   }
 
-  await prisma.paymentProvider.delete({
+  await db.paymentProvider.delete({
     where: { id: providerId },
   });
 }
 
-export async function migrateFromEnv(): Promise<number> {
-  const existing = await prisma.paymentProvider.count();
+export async function migrateFromEnv(db: DbClient = prisma): Promise<number> {
+  const existing = await db.paymentProvider.count();
   if (existing > 0) {
     logger.debug('Providers already exist, skipping migration');
     return 0;
@@ -249,11 +270,11 @@ export async function migrateFromEnv(): Promise<number> {
     return 0;
   }
 
-  const associations = await prisma.association.findMany();
+  const associations = await db.association.findMany();
   let migrated = 0;
 
   for (const assoc of associations) {
-    await prisma.paymentProvider.create({
+    await db.paymentProvider.create({
       data: {
         associationId: assoc.id,
         provider: PaymentProviderType.RAZORPAY,

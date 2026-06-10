@@ -2,6 +2,8 @@ import { BadRequestError, NotFoundError, PaymentError } from '@errors';
 import { decrypt } from '@lib/crypto';
 import { prisma } from '@lib/prisma';
 import type { Prisma } from '@prisma/client';
+
+type DbClient = Prisma.TransactionClient | typeof prisma;
 import { PaymentMethod } from '@prisma/client';
 import { AuditAction, ContributionStatus, PaymentGateway, PaymentStatus } from '@prisma/client';
 import { recordMemberPayment } from '@services/accounting';
@@ -516,8 +518,8 @@ export async function recordManualPayment(input: RecordManualPaymentInput) {
 // 5. Mark Payment as Failed
 // ---------------------------------------------------------------------------
 
-export async function markPaymentFailed(razorpayOrderId: string, reason?: string) {
-  const transaction = await prisma.paymentTransaction.findUnique({
+export async function markPaymentFailed(razorpayOrderId: string, reason?: string, db: DbClient = prisma) {
+  const transaction = await db.paymentTransaction.findUnique({
     where: { razorpayOrderId },
   });
 
@@ -549,12 +551,12 @@ export async function markPaymentFailed(razorpayOrderId: string, reason?: string
 // 6. Get Payment History
 // ---------------------------------------------------------------------------
 
-export async function getUserPaymentHistory(userId: string, page = 1) {
+export async function getUserPaymentHistory(userId: string, page = 1, db: DbClient = prisma) {
   const validPage = Math.max(1, page);
   const skip = (validPage - 1) * PAGE_SIZE;
 
   const [transactions, total] = await Promise.all([
-    prisma.paymentTransaction.findMany({
+    db.paymentTransaction.findMany({
       where: { userId },
       include: {
         allocations: {
@@ -574,7 +576,7 @@ export async function getUserPaymentHistory(userId: string, page = 1) {
       skip,
       take: PAGE_SIZE,
     }),
-    prisma.paymentTransaction.count({ where: { userId } }),
+    db.paymentTransaction.count({ where: { userId } }),
   ]);
 
   return {
@@ -590,7 +592,7 @@ export async function getUserPaymentHistory(userId: string, page = 1) {
 /**
  * List all transactions with advanced filtering for admin dashboard.
  */
-export async function getAllTransactions(associationId: string, filters: TransactionFilters) {
+export async function getAllTransactions(associationId: string, filters: TransactionFilters, db: DbClient = prisma) {
   const { page = 1, userId, status, method, gateway, search, startDate, endDate } = filters;
 
   const validPage = Math.max(1, page);
@@ -637,7 +639,7 @@ export async function getAllTransactions(associationId: string, filters: Transac
   }
 
   const [transactions, total] = await Promise.all([
-    prisma.paymentTransaction.findMany({
+    db.paymentTransaction.findMany({
       where,
       include: {
         user: { select: { name: true, email: true, membershipNumber: true } },
@@ -646,7 +648,7 @@ export async function getAllTransactions(associationId: string, filters: Transac
       skip,
       take: PAGE_SIZE,
     }),
-    prisma.paymentTransaction.count({ where }),
+    db.paymentTransaction.count({ where }),
   ]);
 
   return {
@@ -658,8 +660,8 @@ export async function getAllTransactions(associationId: string, filters: Transac
 /**
  * Fetch a specific transaction with its full context (user, allocations, ledger).
  */
-export async function getTransactionById(id: string, associationId: string) {
-  return prisma.paymentTransaction.findFirst({
+export async function getTransactionById(id: string, associationId: string, db: DbClient = prisma) {
+  return db.paymentTransaction.findFirst({
     where: { id, associationId },
     include: {
       user: { select: { name: true, email: true, membershipNumber: true } },
@@ -676,12 +678,12 @@ export async function getTransactionById(id: string, associationId: string) {
 /**
  * Get top-level financial summary for an association dashboard.
  */
-export async function getFinancialStats(associationId: string) {
+export async function getFinancialStats(associationId: string, db: DbClient = prisma) {
   const now = new Date();
   const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
 
   const [monthTotal, duesSum, uniqueUsersWithDues] = await Promise.all([
-    prisma.paymentTransaction.aggregate({
+    db.paymentTransaction.aggregate({
       where: {
         associationId,
         status: PaymentStatus.COMPLETED,
@@ -689,7 +691,7 @@ export async function getFinancialStats(associationId: string) {
       },
       _sum: { amount: true },
     }),
-    prisma.contributionPeriod.aggregate({
+    db.contributionPeriod.aggregate({
       where: {
         associationId,
         status: {
@@ -698,7 +700,7 @@ export async function getFinancialStats(associationId: string) {
       },
       _sum: { dueAmount: true },
     }),
-    prisma.contributionPeriod.groupBy({
+    db.contributionPeriod.groupBy({
       by: ['userId'],
       where: {
         associationId,
