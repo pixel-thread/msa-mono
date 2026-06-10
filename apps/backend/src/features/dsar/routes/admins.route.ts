@@ -1,56 +1,15 @@
-// ---- DSAR - List Admins
-
 // ---- Imports
 
-// ---- External Libraries
-
-import { ForbiddenError, UnauthorizedError } from '@errors';
 // ---- DSAR Services
-import { findAssociationAdmins } from '@feature/dsar/services';
-import { prisma } from '@lib/prisma';
-// ---- Prisma Types
 import { UserRole } from '@prisma/client';
-// ---- Shared Services
-import { findUniqueUser } from '@services/user/get-unique-user';
+import { NotFoundError } from '@src/shared/errors';
 import { logger } from '@src/shared/logger';
+import { findUnpaginatedUsers } from '@src/shared/services/user/getUsers';
+import { withRole } from '@src/shared/utils/with-role';
 import { asyncHandler } from '@utils/async-handler';
 // ---- Shared Utilities
 import { success } from '@utils/responses';
 import type { NextFunction, Request, RequestHandler, Response } from 'express';
-
-// ---- Role Hierarchy
-
-// Lower number = higher privilege
-const ROLE_HIERARCHY: Record<UserRole, number> = {
-  SUPER_ADMIN: 0,
-  PRESIDENT: 1,
-  SECRETARY: 2,
-  FINANCE: 3,
-  DPO: 4,
-  MEMBER: 5,
-};
-
-/**
- * Verify the requesting user has at minimum the given role.
- * Business logic: Uses a numeric hierarchy where lower values = higher privilege.
- */
-async function withRole(req: Request, role: UserRole) {
-  const userId = req.user?.id as string;
-  if (!userId) throw new UnauthorizedError('Unauthorized');
-
-  const user = await findUniqueUser({ where: { id: userId } });
-  if (!user) throw new UnauthorizedError('Unauthorized');
-
-  const roles = user.role as UserRole[];
-  const highestUserRole = roles.reduce((highest, current) =>
-    ROLE_HIERARCHY[current] < ROLE_HIERARCHY[highest] ? current : highest,
-  );
-
-  const hasPermission = ROLE_HIERARCHY[highestUserRole] <= ROLE_HIERARCHY[role];
-  if (!hasPermission) throw new ForbiddenError('Permission denied');
-
-  return { ...user, role: roles };
-}
 
 // ---- Handlers
 
@@ -69,7 +28,7 @@ export const listAdmins: RequestHandler[] = [
     // ---- Auth log
 
     logger.info(
-      { traceId, associationId: req.user!.associationId },
+      { traceId, associationId: req.user?.associationId, userId: req.user?.id },
       'GET /api/dsar/admins - Request started',
     );
 
@@ -78,13 +37,27 @@ export const listAdmins: RequestHandler[] = [
     await withRole(req, UserRole.DPO);
 
     // ---- Business logic: Fetch admins
+    if (!req.user?.associationId) throw new NotFoundError('No association ID found');
 
-    const admins = await findAssociationAdmins(req.user!.associationId);
+    const admins = await findUnpaginatedUsers({
+      where: {
+        associationId: req.user.associationId,
+        role: {
+          hasSome: [UserRole.DPO, UserRole.PRESIDENT, UserRole.SUPER_ADMIN],
+        },
+      },
+    });
 
     // ---- Result log
+    const users = admins.map((user) => ({
+      id: user.id,
+      email: user.email,
+      role: user.role,
+      name: user.name,
+    }));
 
     logger.info({ traceId, count: admins.length }, 'GET /api/dsar/admins - Success');
 
-    return success(res, { data: admins });
+    return success(res, { data: users });
   }),
 ];

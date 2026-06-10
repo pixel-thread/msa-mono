@@ -16,34 +16,12 @@ import { validate } from '@lib/validate';
 import { DsarStatus, UserRole } from '@prisma/client';
 import { findUniqueUser } from '@services/user/get-unique-user';
 import { logger } from '@src/shared/logger';
+import { withRole } from '@src/shared/utils/with-role';
 import { asyncHandler } from '@utils/async-handler';
 import { hasHighRoleAccess } from '@utils/has-high-role';
 import { success } from '@utils/responses';
 import type { RequestHandler } from 'express';
 import type { NextFunction, Request, Response } from 'express';
-
-const ROLE_HIERARCHY: Record<UserRole, number> = {
-  SUPER_ADMIN: 0,
-  PRESIDENT: 1,
-  SECRETARY: 2,
-  FINANCE: 3,
-  DPO: 4,
-  MEMBER: 5,
-};
-
-async function withRole(req: Request, role: UserRole) {
-  const userId = req.user?.id as string;
-  if (!userId) throw new UnauthorizedError('Unauthorized');
-  const user = await findUniqueUser({ where: { id: userId } });
-  if (!user) throw new UnauthorizedError('Unauthorized');
-  const roles = user.role as UserRole[];
-  const highestUserRole = roles.reduce((highest, current) =>
-    ROLE_HIERARCHY[current] < ROLE_HIERARCHY[highest] ? current : highest,
-  );
-  const hasPermission = ROLE_HIERARCHY[highestUserRole] <= ROLE_HIERARCHY[role];
-  if (!hasPermission) throw new ForbiddenError('Permission denied');
-  return { ...user, role: roles };
-}
 
 /** GET /api/dsar/:ticketId - Retrieve a single DSAR ticket (owner or DPO role required). */
 export const getTicket: RequestHandler[] = [
