@@ -7,8 +7,8 @@ type DbClient = Prisma.TransactionClient | typeof prisma;
 import { PaymentMethod } from '@prisma/client';
 import { AuditAction, ContributionStatus, PaymentGateway, PaymentStatus } from '@prisma/client';
 import { recordMemberPayment } from '@services/accounting';
-import { createAllocations } from '@services/allocate-contributions';
 import { logAction } from '@services/audit-logs';
+import { completePaymentInTransaction } from '@services/complete-payment-transaction';
 import {
   createPaymentTransaction,
   findUniquePaymentTransactions,
@@ -17,12 +17,11 @@ import {
 import { env } from '@src/env';
 import { PAGE_SIZE } from '@src/shared/constants';
 import { buildPagination } from '@utils/helper/build-pagination';
-import Razorpay from 'razorpay';
 
 import type { RazorpayCheckoutOptions } from '../types';
 
 import { getActiveProvider, getProviderById } from './payment-provider.service';
-import { verifyPaymentSignature } from './razorpay.service';
+import { createRazorpayClient, verifyPaymentSignature } from './razorpay.service';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -96,19 +95,7 @@ export async function createPaymentOrder(input: CreateOrderInput) {
     }
   }
 
-  let razorpayClient;
-  try {
-    razorpayClient = new Razorpay({
-      key_id: keyId,
-      key_secret: keySecret,
-    });
-  } catch (error: any) {
-    throw new PaymentError(
-      error?.error?.description || 'Payment failed',
-      error?.error?.code,
-      error?.statusCode,
-    );
-  }
+  const razorpayClient = createRazorpayClient(keyId, keySecret);
 
   // Create pending transaction first
   const transaction = await createPaymentTransaction({
@@ -196,19 +183,7 @@ export async function createTestPaymentOrder(input: CreateTestOrderInput) {
 
   const keySecret = decrypt(fullProvider.encryptedKeySecret);
 
-  let razorpayClient;
-  try {
-    razorpayClient = new Razorpay({
-      key_id: provider.keyId,
-      key_secret: keySecret,
-    });
-  } catch (error: any) {
-    throw new PaymentError(
-      error?.error?.description || 'Payment failed',
-      error?.error?.code,
-      error?.statusCode,
-    );
-  }
+  const razorpayClient = createRazorpayClient(provider.keyId, keySecret);
 
   const testAmount = 1;
   const amountInPaise = 100;
@@ -308,68 +283,33 @@ export async function verifyAndCompletePayment(input: VerifyAndCompleteInput) {
   );
 
   return prisma.$transaction(async (tx) => {
-    const now = new Date();
-
-    let updatedTransaction;
+    if (!transaction.userId) {
+      throw new NotFoundError('User not found on transaction');
+    }
 
     if (!isValid) {
-      updatedTransaction = await updatePaymentTransaction({
+      return await updatePaymentTransaction({
         where: { id: transaction.id },
         data: {
           status: PaymentStatus.FAILED,
           razorpayPaymentId: input.razorpayPaymentId,
           razorpaySignature: input.razorpaySignature,
-          paidAt: now,
-          method: PaymentMethod.ONLINE as PaymentMethod,
-        },
-        db: tx,
-      });
-    } else {
-      updatedTransaction = await updatePaymentTransaction({
-        where: { id: transaction.id },
-        data: {
-          status: PaymentStatus.COMPLETED,
-          razorpayPaymentId: input.razorpayPaymentId,
-          razorpaySignature: input.razorpaySignature,
-          paidAt: now,
+          paidAt: new Date(),
           method: PaymentMethod.ONLINE as PaymentMethod,
         },
         db: tx,
       });
     }
 
-    await recordMemberPayment(tx, {
+    return await completePaymentInTransaction(tx, {
+      transactionId: transaction.id,
+      userId: transaction.userId,
       associationId: transaction.associationId,
-      paymentTransactionId: transaction.id,
       amount: Number(transaction.amount),
-      description: 'Online payment via Razorpay',
-      createdById: transaction.userId || '',
+      razorpayPaymentId: input.razorpayPaymentId,
       method: 'ONLINE',
+      description: 'Online payment via Razorpay',
     });
-
-    // Allocate to outstanding contribution periods (FIFO - oldest first)
-    if (!transaction.userId) {
-      throw new NotFoundError('User not found on transaction');
-    }
-
-    await createAllocations(tx, transaction.id, transaction.userId, Number(transaction.amount));
-
-    await logAction(
-      {
-        associationId: transaction.associationId,
-        actorId: transaction.userId,
-        action: AuditAction.PAYMENT_COMPLETED,
-        resourceType: 'PaymentTransaction',
-        resourceId: transaction.id,
-        newValues: {
-          razorpayPaymentId: input.razorpayPaymentId,
-          amount: Number(transaction.amount),
-        },
-      },
-      tx,
-    );
-
-    return updatedTransaction;
   });
 }
 

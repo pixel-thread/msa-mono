@@ -1,10 +1,10 @@
-import { NotFoundError, WebhookSignatureError } from '@errors';
+import { WebhookSignatureError } from '@errors';
 import { decrypt } from '@lib/crypto';
 import { prisma } from '@lib/prisma';
 import { AuditAction, PaymentGateway } from '@prisma/client';
-import { logAction } from '@services';
-import { recordMemberPayment, recordRefund } from '@services/accounting';
-import { createAllocations } from '@services/allocate-contributions';
+import { logAction } from '@services/audit-logs';
+import { recordRefund } from '@services/accounting';
+import { completePaymentInTransaction } from '@services/complete-payment-transaction';
 import { logger } from '@src/shared/logger';
 import {
   findPaymentTransactionsFirst,
@@ -276,20 +276,18 @@ async function handleRefund(payload: RazorpayWebhookPayload): Promise<void> {
     });
 
     // Audit log
-    await tx.auditLog.create({
-      data: {
-        associationId: transaction.associationId,
-        actorId: null, // System-initiated via webhook
-        action: AuditAction.PAYMENT_REFUNDED,
-        resourceType: 'PaymentTransaction',
-        resourceId: transaction.id,
-        newValues: {
-          refundId: refund.id,
-          refundAmount: refund.amount / 100,
-          refundStatus: refund.status,
-        },
+    await logAction({
+      associationId: transaction.associationId,
+      actorId: '',
+      action: AuditAction.PAYMENT_REFUNDED,
+      resourceType: 'PaymentTransaction',
+      resourceId: transaction.id,
+      newValues: {
+        refundId: refund.id,
+        refundAmount: refund.amount / 100,
+        refundStatus: refund.status,
       },
-    });
+    }, tx);
 
     // Reverse allocations — revert contribution periods to DUE
     const allocations = await tx.paymentAllocation.findMany({
@@ -337,58 +335,21 @@ async function verifyAndCompletePaymentFromWebhook(
   razorpayPaymentId: string,
 ) {
   return prisma.$transaction(async (tx) => {
-    const now = new Date();
-
     const transaction = await findUniquePaymentTransactions({ id: transactionId }, tx);
-
     if (!transaction || transaction.status === 'COMPLETED') {
       return transaction;
     }
 
-    // Mark completed
-    const updated = await updatePaymentTransaction({
-      db: tx,
-      where: { id: transactionId },
-      data: {
-        status: 'COMPLETED',
-        razorpayPaymentId,
-        paidAt: now,
-        method: 'ONLINE',
-      },
-    });
-
-    if (!transaction.userId) {
-      throw new NotFoundError(`No transaction found for User order: ${razorpayPaymentId}`);
-    }
-
-    // Use shared allocation engine
-    await createAllocations(tx, transactionId, transaction.userId, Number(transaction.amount));
-
-    // Create ledger entry
-    await recordMemberPayment(tx, {
+    return await completePaymentInTransaction(tx, {
+      transactionId,
+      userId: transaction.userId || '',
       associationId: transaction.associationId,
-      paymentTransactionId: transactionId,
       amount: Number(transaction.amount),
-      description: 'Online payment via Razorpay (webhook confirmed)',
-      createdById: transaction?.userId || 'N/A',
+      razorpayPaymentId,
       method: 'ONLINE',
+      source: 'webhook',
+      description: 'Online payment via Razorpay (webhook confirmed)',
     });
-
-    // Audit log
-    await logAction({
-      associationId: transaction.associationId,
-      actorId: transaction.userId,
-      action: AuditAction.PAYMENT_COMPLETED,
-      resourceType: 'PaymentTransaction',
-      resourceId: transactionId,
-      newValues: {
-        razorpayPaymentId,
-        source: 'webhook',
-        amount: Number(transaction.amount),
-      },
-    });
-
-    return updated;
   });
 }
 

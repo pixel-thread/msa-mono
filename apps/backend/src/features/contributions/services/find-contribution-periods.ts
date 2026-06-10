@@ -1,6 +1,6 @@
 import { prisma } from '@lib/prisma';
 import type { Prisma } from '@prisma/client';
-import { buildPaginationParams } from '@utils/helper';
+import { findPaginated } from '@services/find-paginated';
 
 type Props = {
   where: Prisma.ContributionPeriodWhereInput;
@@ -10,16 +10,9 @@ type Props = {
 };
 
 export async function findContributionPeriods({ where, page = 1, include }: Props) {
-  const { skip, take } = buildPaginationParams(page);
-  const [contributions, total] = await Promise.all([
-    prisma.contributionPeriod.findMany({
-      where,
-      include,
-      orderBy: [{ year: 'asc' }, { month: 'asc' }],
-      take,
-      skip,
-    }),
-    prisma.contributionPeriod.count({ where }),
-  ]);
-  return { contributions, total };
+  const { items, total } = await findPaginated(
+    prisma.contributionPeriod,
+    { where, include, orderBy: [{ year: 'asc' }, { month: 'asc' }], page },
+  );
+  return { contributions: items, total };
 }

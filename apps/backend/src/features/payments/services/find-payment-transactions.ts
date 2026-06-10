@@ -1,6 +1,6 @@
 import { prisma } from '@lib/prisma';
 import type { Prisma } from '@prisma/client';
-import { buildPaginationParams } from '@utils/helper';
+import { findPaginated } from '@services/find-paginated';
 
 type Props = {
   where: Prisma.PaymentTransactionWhereInput;
@@ -10,16 +10,9 @@ type Props = {
 };
 
 export async function findPaginatedPaymentTransactions({ where, page = 1, include }: Props) {
-  const { skip, take } = buildPaginationParams(page);
-  const [transactions, total] = await Promise.all([
-    prisma.paymentTransaction.findMany({
-      where,
-      include,
-      orderBy: { paymentDate: 'desc' },
-      take,
-      skip,
-    }),
-    prisma.paymentTransaction.count({ where }),
-  ]);
-  return { transactions, total };
+  const { items, total } = await findPaginated(
+    prisma.paymentTransaction,
+    { where, include, orderBy: { paymentDate: 'desc' }, page },
+  );
+  return { transactions: items, total };
 }

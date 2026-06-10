@@ -3,18 +3,17 @@ import type { ContributionSummary } from '@feature/contributions/types';
 import { prisma } from '@lib/prisma';
 import type { PaymentMethod, Prisma } from '@prisma/client';
 import {
-  ApprovalStatus,
   ContributionStatus,
   Currency,
   PaymentGateway,
   PaymentStatus,
   UserStatus,
 } from '@prisma/client';
-import type { JournalLine } from '@services/accounting';
-import { recordWaiver } from '@services/accounting';
+import { recordMemberPayment, recordWaiver } from '@services/accounting';
 import { createAllocations } from '@services/allocate-contributions';
 import { findUniqueUser } from '@src/shared/services';
 import {
+  createPaymentTransaction,
   findUniquePaymentTransactions,
   updatePaymentTransaction,
 } from '@src/shared/services/payments';
@@ -94,54 +93,14 @@ export async function allocatePaymentToContributions(
   });
 
   // Phase 3: Create one consolidated ledger entry for the entire payment
-  if (paymentTransactionId) {
-    const existing = await tx.ledgerEntry.findFirst({
-      where: { paymentTransactionId },
-    });
-
-    if (existing) {
-      return tx.ledgerEntry.findUnique({
-        where: { id: existing.id },
-        include: { lines: true },
-      });
-    }
-  }
-
   if (allocatedAmount > 0 && outstanding.length > 0) {
-    const isCash = payment.method === 'CASH';
-    const associationId = outstanding[0].associationId;
-    const debitCode = isCash ? '1200' : '1000';
-
-    const lines: JournalLine[] = [
-      { accountCode: debitCode, isDebit: true, amount: allocatedAmount },
-      { accountCode: '4000', isDebit: false, amount: allocatedAmount },
-    ];
-
-    const resolvedLines = await Promise.all(
-      lines.map(async (line) => {
-        const account = await tx.account.findFirst({
-          where: { associationId, code: line.accountCode, isActive: true },
-        });
-        if (!account) throw new NotFoundError(`Account not found: ${line.accountCode}`);
-        return {
-          accountId: account.id,
-          isDebit: line.isDebit,
-          amount: line.amount,
-          associationId,
-        };
-      }),
-    );
-
-    await tx.ledgerEntry.create({
-      data: {
-        paymentTransactionId: paymentTransactionId ?? null,
-        description,
-        approvalStatus: ApprovalStatus.APPROVED,
-        createdById: actorId || '',
-        approvedById: userId ?? 'system',
-        lines: { create: resolvedLines },
-      },
-      include: { lines: true },
+    await recordMemberPayment(tx, {
+      associationId: outstanding[0].associationId,
+      paymentTransactionId,
+      amount: allocatedAmount,
+      description,
+      createdById: actorId || userId,
+      method: payment.method,
     });
   }
 
@@ -465,10 +424,10 @@ export async function recordContributionPayment(
     throw new BadRequestError('No contribution periods selected');
   }
 
-  const payment = await db.paymentTransaction.create({
+  const payment = await createPaymentTransaction({
     data: {
-      userId,
-      associationId,
+      user: { connect: { id: userId } },
+      association: { connect: { id: associationId } },
       amount,
       currency: Currency.INR,
       gateway: PaymentGateway.MANUAL,
@@ -477,6 +436,7 @@ export async function recordContributionPayment(
       paidAt,
       createdById,
     },
+    db,
   });
 
   await allocatePaymentToContributions(
