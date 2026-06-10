@@ -2,16 +2,8 @@ import type { UserRole } from '@prisma/client';
 import { findUniqueUser } from '@services/user/get-unique-user';
 import type { Request } from 'express';
 
+import { ROLE_HIERARCHY } from '../constants';
 import { ForbiddenError, UnauthorizedError } from '../errors';
-
-const ROLE_HIERARCHY: Record<UserRole, number> = {
-  SUPER_ADMIN: 0,
-  PRESIDENT: 1,
-  SECRETARY: 2,
-  FINANCE: 3,
-  DPO: 4,
-  MEMBER: 5,
-};
 
 export async function withRole(req: Request, role: UserRole) {
   const userId = req?.user?.id;
