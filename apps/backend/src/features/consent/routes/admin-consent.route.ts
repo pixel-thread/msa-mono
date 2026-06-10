@@ -1,9 +1,3 @@
-// ---- Routes: Admin consent
-// ---- Description: Admin endpoints for viewing all consent records, history, and reports.
-// ---- Security: DPO role required (except getConsentHistory which is for the current user)
-
-// External libs
-
 // Services
 import { ConsentService } from '@feature/consent/services/consent.service';
 // Validators
