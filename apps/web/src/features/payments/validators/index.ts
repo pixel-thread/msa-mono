@@ -1,6 +1,6 @@
-import { PaymentMethod, PAYMENT_REFERENCE } from '@sharedType/enums';
-import { pageNumberValidation, pageSizeValidation } from '@src/shared/validators/common';
 import { z } from 'zod';
+import { pageNumberValidation, pageSizeValidation } from '@src/shared/validators/common';
+import { PaymentMethod, PAYMENT_REFERENCE } from '@sharedType/enums';
 
 // ---------------------------------------------------------------------------
 // Create Order (Razorpay)
@@ -88,6 +88,9 @@ export const TransferAccountBalanceSchema = z
     fromAccountId: z.string().min(1, 'Please select source account'),
     toAccountId: z.string().min(1, 'Please select destination account'),
     amount: z.number().positive('Amount must be greater than 0'),
+    reference: z.string().optional(),
+    referenceType: z.enum(PAYMENT_REFERENCE, 'Invalid payment reference'),
+    paidAt: z.string().transform((val) => new Date(val)),
     remark: z.string().min(1, 'Remark is required'),
   })
   .refine((data) => data.fromAccountId !== data.toAccountId, {

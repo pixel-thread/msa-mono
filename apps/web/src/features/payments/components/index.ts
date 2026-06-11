@@ -6,3 +6,4 @@ export * from './create-provider-dialog';
 export * from './edit-provider-dialog';
 export * from './test-payment-button';
 export * from './transfer-payment-dialog';
+export * from './confirm-transfer-dialog';

@@ -1,16 +1,6 @@
 import { useMemo, useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useLedgerAccounts } from '@hooks/useLedgerAccounts';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from '@src/shared/components/ui/alert-dialog';
 import { Button, buttonVariants } from '@src/shared/components/ui/button';
 import {
   Dialog,
@@ -46,21 +36,27 @@ import { ArrowRight, ArrowRightLeft } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
+import { z } from 'zod';
 import { useTransferAccountBalance } from '../hooks/useTransferAccountBalance';
-import { TransferAccountBalanceInput, TransferAccountBalanceSchema } from '../validators';
+import { TransferAccountBalanceSchema } from '../validators';
+import { PAYMENT_REFERENCE } from '@src/shared/types';
+import { ConfirmTransferDialog } from './confirm-transfer-dialog';
 
 export function TransferPaymentDialog() {
   const queryClient = useQueryClient();
   const [showConfirm, setShowConfirm] = useState(false);
   const { accounts } = useLedgerAccounts();
 
-  const form = useForm<TransferAccountBalanceInput>({
+  const form = useForm<z.input<typeof TransferAccountBalanceSchema>>({
     resolver: zodResolver(TransferAccountBalanceSchema),
     defaultValues: {
       fromAccountId: '',
       toAccountId: '',
       amount: 0,
+      reference: '',
+      referenceType: 'CASH' as const,
       remark: '',
+      paidAt: new Date().toISOString(),
     },
   });
 
@@ -96,14 +92,9 @@ export function TransferPaymentDialog() {
 
   const handleConfirmTransfer = async () => {
     setShowConfirm(false);
-    const formValues = form.getValues();
+    const formValues = TransferAccountBalanceSchema.parse(form.getValues());
     mutate(
-      {
-        fromAccountId: formValues.fromAccountId,
-        toAccountId: formValues.toAccountId,
-        amount: formValues.amount,
-        remark: formValues.remark,
-      },
+      formValues,
       {
         onSuccess: (data) => {
           if (data.success) {
@@ -245,6 +236,66 @@ export function TransferPaymentDialog() {
               )}
             />
 
+            <div className="flex gap-x-2">
+              <FormField
+                control={form.control}
+                name="referenceType"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormLabel>Reference Type</FormLabel>
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <FormControl>
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Select reference type" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {Object.values(PAYMENT_REFERENCE).map((ref) => (
+                          <SelectItem key={ref} value={ref}>
+                            {ref}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="paidAt"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormLabel>Transfer Date</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        type="date"
+                        value={field.value ? new Date(field.value).toISOString().split('T')[0] : ''}
+                        onChange={(e) => field.onChange(new Date(e.target.value).toISOString())}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <FormField
+              control={form.control}
+              name="reference"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Reference</FormLabel>
+                  <FormControl>
+                    <Input {...field} placeholder="Optional reference number" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             <FormField
               control={form.control}
               name="remark"
@@ -252,7 +303,7 @@ export function TransferPaymentDialog() {
                 <FormItem>
                   <FormLabel>Remark</FormLabel>
                   <FormControl>
-                    <Textarea {...field} placeholder="Optional remark" rows={3} />
+                    <Textarea {...field} placeholder="Required remark" rows={3} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -270,71 +321,18 @@ export function TransferPaymentDialog() {
           </form>
         </Form>
 
-        <AlertDialog open={showConfirm} onOpenChange={setShowConfirm}>
-          <AlertDialogContent className="sm:max-w-lg">
-            <AlertDialogHeader>
-              <AlertDialogTitle>Confirm Transfer</AlertDialogTitle>
-              <AlertDialogDescription>
-                Please review the transfer details before confirming.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-
-            <div className="space-y-4">
-              <div className="text-center">
-                <p className="text-sm text-muted-foreground">Amount</p>
-                <p className="text-3xl font-bold text-primary">{formatCurrency(amount)}</p>
-              </div>
-
-              <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-3 rounded-md border p-4">
-                <div className="text-center space-y-1">
-                  <p className="font-medium">{fromAccount?.name}</p>
-                  <p className="text-sm text-muted-foreground">
-                    Balance:{' '}
-                    <span className="text-foreground font-semibold">
-                      {formatCurrency(fromBalance)}
-                    </span>
-                  </p>
-                  <p className="text-xs text-red-600">
-                    - {formatCurrency(amount)} → {formatCurrency(fromBalance - amount)}
-                  </p>
-                </div>
-
-                <ArrowRightLeft className="h-5 w-5 text-muted-foreground shrink-0" />
-
-                <div className="text-center space-y-1">
-                  <p className="font-medium">{toAccount?.name}</p>
-                  <p className="text-sm text-muted-foreground">
-                    Balance:{' '}
-                    <span className="text-foreground font-semibold">
-                      {formatCurrency(toBalance)}
-                    </span>
-                  </p>
-                  <p className="text-xs text-green-600">
-                    + {formatCurrency(amount)} → {formatCurrency(toBalance + amount)}
-                  </p>
-                </div>
-              </div>
-
-              {form.watch('remark') && (
-                <div className="text-sm">
-                  <span className="text-muted-foreground">Remark: </span>
-                  {form.watch('remark')}
-                </div>
-              )}
-            </div>
-
-            <AlertDialogFooter>
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <AlertDialogAction
-                onClick={handleConfirmTransfer}
-                variant={'destructive'}
-                disabled={isPending}
-              >
-                {isPending ? 'Saving...' : 'Confirm'}
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
+        <ConfirmTransferDialog
+          open={showConfirm}
+          onOpenChange={setShowConfirm}
+          isPending={isPending}
+          onConfirm={handleConfirmTransfer}
+          amount={amount}
+          fromAccount={fromAccount}
+          toAccount={toAccount}
+          fromBalance={fromBalance}
+          toBalance={toBalance}
+          remark={form.watch('remark')}
+        />
       </DialogContent>
     </Dialog>
   );
