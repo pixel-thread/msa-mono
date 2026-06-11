@@ -1,11 +1,10 @@
 'use client';
 
-import { buildUrlWithQuery, ENDPOINTS } from '@repo/shared';
+import { buildUrlWithQuery, ENDPOINTS, QUERY_KEYS } from '@repo/shared';
 import http from '@src/shared/utils/http';
 import { useQuery } from '@tanstack/react-query';
 
 import type { TrainingCompletionItem } from '../../types';
-import { trainingQueryKeys } from '../../utils/constants';
 
 export function useTrainingCompletions(moduleId: string | null, options: { page?: number } = {}) {
   const { page = 1 } = options;
@@ -15,8 +14,8 @@ export function useTrainingCompletions(moduleId: string | null, options: { page?
     : buildUrlWithQuery(ENDPOINTS.TRAINING.COMPLETIONS, { page });
 
   const queryKey = !!moduleId
-    ? trainingQueryKeys.completions.byModule(moduleId, page)
-    : trainingQueryKeys.completions.adminList(page);
+    ? QUERY_KEYS.TRAINING_KEYS.COMPLETIONS_BY_MODULE(moduleId, page)
+    : QUERY_KEYS.TRAINING_KEYS.COMPLETIONS_ADMIN_LIST(page);
 
   const query = useQuery({
     queryKey: queryKey,

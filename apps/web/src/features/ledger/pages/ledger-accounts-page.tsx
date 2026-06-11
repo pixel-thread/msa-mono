@@ -1,17 +1,17 @@
 'use client';
 
 import { useState } from 'react';
-import { DataTable } from '@src/shared/components/data-table';
-import { DataTableFilters } from '@src/shared/components/data-table-filters';
-import { DataTablePagination } from '@src/shared/components/data-table-pagination';
-import { SectionHeader } from '@src/shared/components/section-header';
-import { Button } from '@src/shared/components/ui/button';
-import { Card, CardContent } from '@src/shared/components/ui/card';
+import { DataTable } from '@components/data-table';
+import { DataTableFilters } from '@components/data-table-filters';
+import { DataTablePagination } from '@components/data-table-pagination';
+import { SectionHeader } from '@components/section-header';
+import { Button } from '@components/ui/button';
+import { Card, CardContent } from '@components/ui/card';
+import { useLedgerAccounts } from '@hooks/useLedgerAccounts';
 import { useUrlFilters } from '@src/shared/hooks';
 import type { Account } from '@src/shared/types';
 import { BanknoteIcon, Plus, Sprout } from 'lucide-react';
 
-import { useLedgerAccounts } from '../../../shared/hooks/useLedgerAccounts';
 import { CreateAccountDialog } from '../components/create-account-dialog';
 import { UpdateAccountDialog } from '../components/update-account-dialog';
 import { useLedgerAccountColumns } from '../hooks/useLedgerAccountColumns';
@@ -44,7 +44,10 @@ export default function LedgerAccountsPage() {
             onClick={() => seedAccounts()}
             disabled={isSeeding || accounts.length > 0}
           >
-            <Sprout className="h-4 w-4 mr-2" />
+            <Sprout
+              className="h-
+            4 w-4 mr-2"
+            />
             Seed Accounts
           </Button>
           <Button onClick={() => setCreateOpen(true)}>
