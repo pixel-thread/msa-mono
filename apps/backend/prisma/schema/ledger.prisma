@@ -10,6 +10,7 @@ model LedgerEntry {
 
   paymentTransaction PaymentTransaction? @relation(fields: [paymentTransactionId], references: [id])
   lines              LedgerLine[]
+  references         LedgerEntryReference[]
 
   @@index([paymentTransactionId])
   @@map("ledger_entries")
@@ -50,4 +51,21 @@ model Account {
   @@index([associationId])
   @@index([code])
   @@map("accounts")
+}
+
+model LedgerEntryReference {
+  id            String   @id @default(uuid())
+  ledgerEntryId String
+  type          LedgerEntryReferenceType @default(TEXT)
+  reference     String?
+  fileId        String?
+  remarks       String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  ledgerEntry LedgerEntry @relation(fields: [ledgerEntryId], references: [id], onDelete: Cascade)
+  file        File?       @relation(fields: [fileId], references: [id], onDelete: SetNull)
+
+  @@index([ledgerEntryId])
+  @@map("ledger_entry_references")
 }

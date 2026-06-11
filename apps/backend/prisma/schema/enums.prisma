@@ -290,3 +290,10 @@ enum PaymentReferenceType {
   PAYSLIP
   ONLINE_PAYMENT
 }
+
+enum LedgerEntryReferenceType {
+  TEXT
+  FILE
+
+  @@map("ledger_entry_reference_type")
+}

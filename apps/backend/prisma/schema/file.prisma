@@ -38,8 +38,9 @@ model File {
 
   trainingCertificateTemplate TrainingCertificateTemplate?
 
-  trainingSupplement TrainingSupplement[]
-  announcement       Announcement?        @relation("AnnouncementImage")
+  trainingSupplement   TrainingSupplement[]
+  ledgerEntryReferences LedgerEntryReference[]
+  announcement         Announcement?        @relation("AnnouncementImage")
 
   association Association? @relation(fields: [associationId], references: [id], onDelete: Cascade)
 
