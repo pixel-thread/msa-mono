@@ -61,7 +61,9 @@ export const MeetingDetailScreen = () => {
       { status: status },
       {
         onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: QUERY_KEYS.MEETINGS_KEYS.ATTENDEES(id as string) });
+          queryClient.invalidateQueries({
+            queryKey: QUERY_KEYS.MEETINGS_KEYS.ATTENDEES(id as string),
+          });
         },
       }
     );
@@ -204,33 +206,35 @@ export const MeetingDetailScreen = () => {
                 <CardTitle>Order of Business</CardTitle>
               </CardHeader>
               <CardContent className="p-0">
-                {agenda?.map((item, index) => (
-                  <View
-                    key={index}
-                    className={cn(
-                      'flex-1 flex-col gap-x-4 p-4',
-                      index !== agenda.length - 1 &&
-                        'border-b border-slate-100 dark:border-slate-800'
-                    )}>
-                    <View className="flex-row items-start gap-x-3">
-                      <View className="pt-0.5">
-                        <Text size="sm" weight="bold" className="text-slate-400">
-                          {String(index + 1).padStart(2, '0')}.
-                        </Text>
-                      </View>
-                      <View className="flex-1">
-                        <Text className="font-semibold leading-tight text-slate-900 dark:text-slate-100">
-                          {item.title}
-                        </Text>
-                        {item.description && (
-                          <Text className="mt-1 leading-tight text-slate-600 dark:text-slate-400">
-                            {item.description}
+                {agenda
+                  .sort((a, b) => a.order - b.order)
+                  ?.map((item, index) => (
+                    <View
+                      key={index}
+                      className={cn(
+                        'flex-1 flex-col gap-x-4 p-4',
+                        index !== agenda.length - 1 &&
+                          'border-b border-slate-100 dark:border-slate-800'
+                      )}>
+                      <View className="flex-row items-start gap-x-3">
+                        <View className="pt-0.5">
+                          <Text size="sm" weight="bold">
+                            {String(index + 1).padStart(2, '0')}.
                           </Text>
-                        )}
+                        </View>
+                        <View className="flex-1 gap-2">
+                          <Text weight={'semibold'} className="leading-tight">
+                            {item.title}
+                          </Text>
+                          {item.description && (
+                            <Text variant={'subtext'} className=" leading-tight">
+                              {item.description}
+                            </Text>
+                          )}
+                        </View>
                       </View>
                     </View>
-                  </View>
-                ))}
+                  ))}
               </CardContent>
             </Card>
           </View>
