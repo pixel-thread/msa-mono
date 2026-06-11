@@ -1,5 +1,5 @@
 import { NotFoundError } from '@errors';
-import type { Prisma } from '@prisma/client';
+import type { DocumentReferenceType, Prisma } from '@prisma/client';
 import { createJournalEntry } from '@services/accounting';
 
 type TransferBalanceOptions = {
@@ -9,6 +9,8 @@ type TransferBalanceOptions = {
   amount: number;
   description: string;
   createdById: string;
+  reference: string;
+  referenceType: DocumentReferenceType;
 };
 
 function isDebitNormal(type: string): boolean {

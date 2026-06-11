@@ -1,6 +1,6 @@
 import { BadRequestError, NotFoundError } from '@errors';
 import type { PaymentMethod, Prisma } from '@prisma/client';
-import { ApprovalStatus } from '@prisma/client';
+import { ApprovalStatus, DocumentReferenceType } from '@prisma/client';
 
 export interface JournalLine {
   accountCode: string;
@@ -76,6 +76,15 @@ export async function createJournalEntry(
       });
     }
   }
+  // Write to Reference
+  await tx.documentReference.create({
+    data: {
+      paymentTransactionId: paymentTransactionId ?? null,
+      type: DocumentReferenceType.TEXT,
+      reference: description,
+      remarks: description ?? null,
+    },
+  });
 
   // 4. Write to DB
   return tx.ledgerEntry.create({

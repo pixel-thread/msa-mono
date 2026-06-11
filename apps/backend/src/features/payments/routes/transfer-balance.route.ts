@@ -4,8 +4,9 @@ import { prisma } from '@lib/prisma';
 import { validate } from '@lib/validate';
 import { AuditAction, UserRole } from '@prisma/client';
 import { logAction } from '@services/audit-logs';
-import { createLedgerDocumentReferences } from '@services/document-reference';
+import { createLedgerDocumentReference } from '@services/document-reference';
 import { transferBalance } from '@services/transfer-balance';
+import { BadRequestError } from '@src/shared/errors';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
@@ -30,7 +31,8 @@ export const postTransferBalance: RequestHandler[] = [
       toAccountId: destinationAccountId,
       amount,
       remark: description,
-      references,
+      reference,
+      referenceType,
     } = req.body as TransferBalanceInput;
 
     const entryWithRefs = await prisma.$transaction(async (tx) => {
@@ -41,19 +43,17 @@ export const postTransferBalance: RequestHandler[] = [
         amount,
         description,
         createdById: user.id,
+        referenceType,
+        reference,
       });
 
-      if (references?.length) {
-        await createLedgerDocumentReferences(
-          tx,
-          ledgerEntry!.id,
-          references.map((ref) => ({
-            type: 'TEXT' as const,
-            reference: ref.reference,
-            remarks: ref.remarks ?? null,
-          })),
-        );
-      }
+      if (!ledgerEntry?.id) throw new BadRequestError('Ledger entry not created');
+
+      await createLedgerDocumentReference(tx, ledgerEntry.id, {
+        type: 'TEXT' as const,
+        reference: reference,
+        remarks: description ?? null,
+      });
 
       await logAction(
         {
@@ -67,7 +67,8 @@ export const postTransferBalance: RequestHandler[] = [
             destinationAccountId,
             amount,
             description,
-            referenceCount: references?.length ?? 0,
+            reference,
+            referenceType,
           },
         },
         tx,
@@ -79,7 +80,10 @@ export const postTransferBalance: RequestHandler[] = [
       });
     });
 
-    logger.info({ traceId, entryId: entryWithRefs!.id }, 'POST /api/v1/payments/transfer - Success');
+    logger.info(
+      { traceId, entryId: entryWithRefs!.id },
+      'POST /api/v1/payments/transfer - Success',
+    );
 
     return success(
       res,

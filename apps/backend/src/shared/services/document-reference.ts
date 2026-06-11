@@ -19,22 +19,20 @@ export interface CreateDocumentReferenceInput {
  * @param ledgerEntryId - The ledger entry to attach references to
  * @param references - Array of reference inputs
  */
-export async function createLedgerDocumentReferences(
+export async function createLedgerDocumentReference(
   tx: Prisma.TransactionClient,
   ledgerEntryId: string,
-  references: CreateDocumentReferenceInput[],
+  reference: CreateDocumentReferenceInput,
 ) {
-  if (references.length === 0) return [];
-
-  return tx.documentReference.createMany({
-    data: references.map((ref) => ({
+  return tx.documentReference.create({
+    data: {
       ledgerEntryId,
-      type: ref.type,
-      reference: ref.reference ?? null,
-      fileId: ref.fileId ?? null,
-      remarks: ref.remarks ?? null,
-      paidAt: ref.paidAt ?? null,
-    })),
+      type: reference.type,
+      reference: reference.reference ?? null,
+      fileId: reference.fileId ?? null,
+      remarks: reference.remarks ?? null,
+      paidAt: reference.paidAt ?? null,
+    },
   });
 }
 

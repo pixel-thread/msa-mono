@@ -284,7 +284,6 @@ enum DeclarationStatus {
 }
 
 enum DocumentReferenceType {
-  // Payment instrument types (migrated from PaymentReferenceType)
   CASH
   BANK_TRANSFER
   CHEQUE
