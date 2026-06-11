@@ -14,8 +14,8 @@ export function useTrainingCompletions(moduleId: string | null, options: { page?
     : buildUrlWithQuery(ENDPOINTS.TRAINING.COMPLETIONS, { page });
 
   const queryKey = !!moduleId
-    ? QUERY_KEYS.TRAINING_KEYS.COMPLETIONS_BY_MODULE(moduleId, page)
-    : QUERY_KEYS.TRAINING_KEYS.COMPLETIONS_ADMIN_LIST(page);
+    ? [...QUERY_KEYS.TRAINING_KEYS.COMPLETIONS_BY_MODULE(moduleId, page), url]
+    : [...QUERY_KEYS.TRAINING_KEYS.COMPLETIONS_ADMIN_LIST(page), url];
 
   const query = useQuery({
     queryKey: queryKey,
