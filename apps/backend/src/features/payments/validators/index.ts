@@ -34,7 +34,9 @@ export const RecordManualPaymentSchema = z
     incomeAccountId: z.uuid('Invalid income account ID'),
     paidAt: z.coerce.date('Invalid Payment date'),
     reference: z.string("Instrument can't be empty").optional(),
-    referenceType: z.string("Instrument type can't be empty").optional(),
+    referenceType: z
+      .enum(['CASH', 'BANK_TRANSFER', 'CHEQUE', 'PAYSLIP', 'ONLINE_PAYMENT', 'TEXT', 'FILE'])
+      .optional(),
   })
   .strict();
 
