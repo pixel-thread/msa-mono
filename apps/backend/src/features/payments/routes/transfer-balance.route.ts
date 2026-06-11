@@ -4,7 +4,7 @@ import { prisma } from '@lib/prisma';
 import { validate } from '@lib/validate';
 import { AuditAction, UserRole } from '@prisma/client';
 import { logAction } from '@services/audit-logs';
-import { createLedgerEntryReferences } from '@services/ledger-entry-reference';
+import { createLedgerDocumentReferences } from '@services/document-reference';
 import { transferBalance } from '@services/transfer-balance';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
@@ -44,7 +44,7 @@ export const postTransferBalance: RequestHandler[] = [
       });
 
       if (references?.length) {
-        await createLedgerEntryReferences(
+        await createLedgerDocumentReferences(
           tx,
           ledgerEntry!.id,
           references.map((ref) => ({
