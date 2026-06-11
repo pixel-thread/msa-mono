@@ -283,17 +283,18 @@ enum DeclarationStatus {
   REJECTED
 }
 
-enum PaymentReferenceType {
+enum DocumentReferenceType {
+  // Payment instrument types (migrated from PaymentReferenceType)
   CASH
   BANK_TRANSFER
   CHEQUE
   PAYSLIP
   ONLINE_PAYMENT
-}
 
-enum LedgerEntryReferenceType {
+  // Attachment types (migrated from LedgerEntryReferenceType)
   TEXT
   FILE
 
-  @@map("ledger_entry_reference_type")
+  @@map("document_reference_type")
 }
+
