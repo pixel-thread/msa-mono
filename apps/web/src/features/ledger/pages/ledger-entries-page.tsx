@@ -20,10 +20,12 @@ export default function LedgerEntriesPage() {
   const { page, setPage } = useUrlFilters({ basePath: '/ledger/entries' });
 
   const [createOpen, setCreateOpen] = useState(false);
+
   const [approveTarget, setApproveTarget] = useState<{
     id: string;
     description: string;
   } | null>(null);
+
   const [rejectTarget, setRejectTarget] = useState<{
     id: string;
     description: string;

@@ -1,4 +1,4 @@
-import { ENDPOINTS } from '@repo/shared';
+import { buildUrlWithQuery, ENDPOINTS, QUERY_KEYS } from '@repo/shared';
 import type { PaginationMeta } from '@src/shared/types';
 import http from '@src/shared/utils/http';
 import { useQuery } from '@tanstack/react-query';
@@ -31,13 +31,13 @@ interface UseLedgerEntriesParams {
 export function useLedgerEntries(params: UseLedgerEntriesParams = {}) {
   const { page = 1 } = params;
 
-  const queryParams = new URLSearchParams();
-  queryParams.set('page', String(page));
+  const url = buildUrlWithQuery(ENDPOINTS.LEDGER.ENTRIES, {
+    page,
+  });
 
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['ledger-entries', page],
-    queryFn: () =>
-      http.get<LedgerEntryResponse[]>(`${ENDPOINTS.LEDGER.ENTRIES}?${queryParams.toString()}`),
+    queryKey: QUERY_KEYS.LEDGER_KEYS.ENTRIES_LIST(page),
+    queryFn: () => http.get<LedgerEntryResponse[]>(url),
   });
 
   return {
