@@ -104,11 +104,16 @@ axiosClient.interceptors.response.use(
     });
 
     if (status === 403 && originalRequest && !originalRequest._retry) {
-      originalRequest._retry = true;
-      const token = cookie.load('csrf-token');
-      if (token) {
-        originalRequest.headers['X-CSRF-Token'] = token;
-        return axiosClient(originalRequest);
+      const isCsrfError =
+        error.response?.data?.message?.toLowerCase()?.includes('invalid csrf token');
+
+      if (isCsrfError) {
+        originalRequest._retry = true;
+        const token = cookie.load('csrf-token');
+        if (token) {
+          originalRequest.headers['X-CSRF-Token'] = token;
+          return axiosClient(originalRequest);
+        }
       }
     }
 
