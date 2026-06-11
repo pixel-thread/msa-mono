@@ -14,9 +14,9 @@ import { ArrowLeftIcon } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { useLedgerAccounts } from '../../../shared/hooks/useLedgerAccounts';
+import { useLedgerLineColumns } from '../hooks/columns/useLedgerLineColumns';
 import { useApproveEntry } from '../hooks/useApproveEntry';
 import { useLedgerEntries } from '../hooks/useLedgerEntries';
-import { useLedgerLineColumns } from '../hooks/columns/useLedgerLineColumns';
 
 export default function LedgerEntryDetailPage() {
   const params = useParams({ strict: false });
