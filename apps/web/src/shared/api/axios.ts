@@ -104,8 +104,9 @@ axiosClient.interceptors.response.use(
     });
 
     if (status === 403 && originalRequest && !originalRequest._retry) {
-      const isCsrfError =
-        error.response?.data?.message?.toLowerCase()?.includes('invalid csrf token');
+      const isCsrfError = error.response?.data?.message
+        ?.toLowerCase()
+        ?.includes('invalid csrf token');
 
       if (isCsrfError) {
         originalRequest._retry = true;

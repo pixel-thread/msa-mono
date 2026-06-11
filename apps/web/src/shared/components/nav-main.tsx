@@ -17,7 +17,9 @@ import {
 } from '@src/shared/components/ui/sidebar';
 import { Link, useLocation } from '@tanstack/react-router';
 import { ArrowRight, ChevronRightIcon } from 'lucide-react';
+
 import { cn } from '../lib';
+
 import { buttonVariants } from './ui/button';
 
 export function NavMain({
