@@ -16,7 +16,9 @@ import {
   SidebarMenuSubItem,
 } from '@src/shared/components/ui/sidebar';
 import { Link, useLocation } from '@tanstack/react-router';
-import { ChevronRightIcon } from 'lucide-react';
+import { ArrowRight, ChevronRightIcon } from 'lucide-react';
+import { cn } from '../lib';
+import { buttonVariants } from './ui/button';
 
 export function NavMain({
   items,
@@ -33,14 +35,14 @@ export function NavMain({
   }[];
 }) {
   const pathname = useLocation().pathname;
-
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Platform</SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => {
           const hasSubItems = item.items && item.items.length > 0;
-          const isActive = pathname === item.url || pathname?.startsWith(item.url + '/');
+          const isActive =
+            item.url === pathname || item?.items?.some((subItem) => subItem.url === pathname);
 
           if (!hasSubItems) {
             return (
@@ -48,7 +50,7 @@ export function NavMain({
                 <SidebarMenuButton
                   asChild
                   tooltip={item.title}
-                  data-active={isActive}
+                  data-active={item.url === pathname}
                   className="data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground data-[active=true]:font-medium"
                 >
                   <Link preload="intent" to={item.url}>
@@ -64,7 +66,7 @@ export function NavMain({
             <Collapsible
               key={item.title}
               asChild
-              defaultOpen={item.isActive}
+              defaultOpen={isActive}
               className="group/collapsible"
             >
               <SidebarMenuItem>
@@ -80,8 +82,20 @@ export function NavMain({
                     {item.items?.map((subItem) => (
                       <SidebarMenuSubItem key={subItem.title}>
                         <SidebarMenuSubButton asChild>
-                          <Link to={subItem.url}>
-                            <span>{subItem.title}</span>
+                          <Link
+                            className={cn(
+                              buttonVariants({
+                                variant: subItem.url === pathname ? 'link' : 'ghost',
+                                size: 'xs',
+                                className: 'w-full justify-start text-muted',
+                              }),
+                            )}
+                            to={subItem.url}
+                          >
+                            {subItem.url === pathname && <ArrowRight className="mr-2" />}
+                            <span className="text-secondary-foreground capitalize">
+                              {subItem.title}
+                            </span>
                           </Link>
                         </SidebarMenuSubButton>
                       </SidebarMenuSubItem>
