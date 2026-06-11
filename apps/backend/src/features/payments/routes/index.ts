@@ -33,6 +33,7 @@ import {
 } from './providers.route';
 import { recordPayment } from './record-payment.route';
 import { postTransferBalance } from './transfer-balance.route';
+import { postTransferReferenceFile } from './upload-transfer-reference-file.route';
 // ---- User-Specific ----
 import { userPayments } from './user-payments.route';
 import { verifyPayment } from './verify-payment.route';
@@ -61,6 +62,7 @@ router.post('/order', createOrder);
 router.post('/verify', verifyPayment);
 router.post('/record', recordPayment);
 router.post('/transfer', postTransferBalance);
+router.post('/transfer/:entryId/references/files', postTransferReferenceFile);
 
 // ===========================================================================
 // User-Specific
