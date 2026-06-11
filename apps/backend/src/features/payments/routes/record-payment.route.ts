@@ -38,6 +38,7 @@ export const recordPayment: RequestHandler[] = [
       { traceId, amount: req.body.amount, actorId: user.id, assocaitonId: req.user?.associationId },
       'POST /api/payments/record - Recording manual payment',
     );
+
     const transaction = await recordManualPayment({
       associationId: req.user?.associationId as string,
       amount: req.body.amount,

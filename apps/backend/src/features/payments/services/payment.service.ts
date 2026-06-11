@@ -423,6 +423,7 @@ export async function recordManualPayment(input: RecordManualPaymentInput) {
         remarks: input.notes ?? 'N/A',
       },
     });
+
     // Look up income account code
     const incomeAccount = await tx.account.findUnique({
       where: { id: input.incomeAccountId },
