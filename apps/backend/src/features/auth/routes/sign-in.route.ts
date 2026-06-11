@@ -30,15 +30,16 @@ export const postSignIn: RequestHandler[] = [
   validate({ body: SignInSchema }),
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
+
     logger.info({ traceId }, 'POST /api/auth/sign-in - Request started');
+
     const user = await getUserFirst({ where: { email: req.body?.email } });
     // check origin
     let isMobile = false;
 
-    const origin = req.headers.origin;
     const deviceType = req.headers['x-device-type'];
 
-    if (deviceType === 'mobile' && !origin) {
+    if (deviceType === 'mobile') {
       isMobile = true;
     }
 
@@ -176,7 +177,7 @@ export const postSignIn: RequestHandler[] = [
       httpOnly: true,
       secure: env.NODE_ENV === 'production',
       sameSite: env.NODE_ENV === 'development' ? 'strict' : 'none',
-      maxAge: 15 * 60 * 1000, // 15 minutes
+      maxAge: 1 * 60 * 1000, // 1 minutes
       path: '/',
     });
 
@@ -184,7 +185,7 @@ export const postSignIn: RequestHandler[] = [
       httpOnly: true,
       secure: env.NODE_ENV === 'production',
       sameSite: env.NODE_ENV === 'development' ? 'strict' : 'none',
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      maxAge: 60 * 60 * 1000, // 1 hour
       path: '/',
     });
 
