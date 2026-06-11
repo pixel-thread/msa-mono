@@ -73,7 +73,7 @@ export const postTransferReferenceFile: RequestHandler[] = [
         },
       });
 
-      return tx.ledgerEntryReference.create({
+      return tx.documentReference.create({
         data: {
           ledgerEntryId: entryId,
           type: 'FILE',
