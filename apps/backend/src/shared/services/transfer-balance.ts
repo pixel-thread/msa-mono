@@ -1,4 +1,4 @@
-import { BadRequestError, NotFoundError } from '@errors';
+import { NotFoundError } from '@errors';
 import type { Prisma } from '@prisma/client';
 import { createJournalEntry } from '@services/accounting';
 
@@ -59,7 +59,7 @@ export async function transferBalance(tx: Prisma.TransactionClient, opts: Transf
       associationId: opts.associationId,
       description: opts.description,
       createdById: opts.createdById,
-      autoApprove: false,
+      autoApprove: true,
 
       lines: [
         {
@@ -84,7 +84,7 @@ export async function transferBalance(tx: Prisma.TransactionClient, opts: Transf
     associationId: opts.associationId,
     description: opts.description,
     createdById: opts.createdById,
-    autoApprove: false,
+    autoApprove: true,
 
     lines: [
       {

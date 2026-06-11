@@ -33,7 +33,7 @@ export const postTransferBalance: RequestHandler[] = [
       references,
     } = req.body as TransferBalanceInput;
 
-    const entry = await prisma.$transaction(async (tx) => {
+    const entryWithRefs = await prisma.$transaction(async (tx) => {
       const ledgerEntry = await transferBalance(tx, {
         associationId: req.user!.associationId,
         sourceAccountId,
@@ -73,15 +73,13 @@ export const postTransferBalance: RequestHandler[] = [
         tx,
       );
 
-      return ledgerEntry!;
+      return tx.ledgerEntry.findUnique({
+        where: { id: ledgerEntry!.id },
+        include: { lines: true, references: true },
+      });
     });
 
-    const entryWithRefs = await prisma.ledgerEntry.findUnique({
-      where: { id: entry.id },
-      include: { lines: true, references: true },
-    });
-
-    logger.info({ traceId, entryId: entry.id }, 'POST /api/v1/payments/transfer - Success');
+    logger.info({ traceId, entryId: entryWithRefs!.id }, 'POST /api/v1/payments/transfer - Success');
 
     return success(
       res,

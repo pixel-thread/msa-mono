@@ -420,6 +420,7 @@ export async function recordManualPayment(input: RecordManualPaymentInput) {
         reference: input.reference,
         paidAt: input.paidAt,
         type: input.referenceType as PaymentReferenceType,
+        remarks: input.notes ?? 'N/A',
       },
     });
     // Look up income account code

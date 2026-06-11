@@ -39,14 +39,15 @@ export const postTransferReferenceFile: RequestHandler[] = [
 
     const entry = await prisma.ledgerEntry.findUnique({
       where: { id: entryId },
+      include: { lines: { take: 1, where: { associationId: req.user!.associationId } } },
     });
 
-    if (!entry) {
+    if (!entry || entry.lines.length === 0) {
       throw new NotFoundError('Ledger entry not found');
     }
 
     const file = req.file;
-    if (!file || !file.size || file.size === 0) {
+    if (!file?.size) {
       throw new BadRequestError('File is required and must not be empty');
     }
 
@@ -56,29 +57,31 @@ export const postTransferReferenceFile: RequestHandler[] = [
       traceId,
     );
 
-    const fileRecord = await prisma.file.create({
-      data: {
-        associationId: req.user!.associationId,
-        originalName: file.originalname,
-        storedName: uploadResult.key,
-        mimeType: uploadResult.mimeType,
-        extension: file.originalname.split('.').pop() || null,
-        sizeBytes: uploadResult.sizeBytes,
-        bucket: env.STORAGE_BUCKET,
-        storageKey: uploadResult.key,
-        url: uploadResult.url,
-        uploadedById: user.id,
-      },
-    });
+    const reference = await prisma.$transaction(async (tx) => {
+      const fileRecord = await tx.file.create({
+        data: {
+          associationId: req.user!.associationId,
+          originalName: file.originalname,
+          storedName: uploadResult.key,
+          mimeType: uploadResult.mimeType,
+          extension: file.originalname.split('.').pop() || null,
+          sizeBytes: uploadResult.sizeBytes,
+          bucket: env.STORAGE_BUCKET,
+          storageKey: uploadResult.key,
+          url: uploadResult.url,
+          uploadedById: user.id,
+        },
+      });
 
-    const reference = await prisma.ledgerEntryReference.create({
-      data: {
-        ledgerEntryId: entryId,
-        type: 'FILE',
-        fileId: fileRecord.id,
-        remarks: (req.body.remarks as string) ?? null,
-      },
-      include: { file: true },
+      return tx.ledgerEntryReference.create({
+        data: {
+          ledgerEntryId: entryId,
+          type: 'FILE',
+          fileId: fileRecord.id,
+          remarks: (req.body.remarks as string) ?? null,
+        },
+        include: { file: true },
+      });
     });
 
     logger.info(
