@@ -282,3 +282,6 @@ enum DeclarationStatus {
   APPROVED
   REJECTED
 }
+enum InstrumentType {
+  CHEQUE
+}

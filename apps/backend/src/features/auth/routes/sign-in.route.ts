@@ -15,6 +15,11 @@ import { success } from '@utils/responses';
 import type { RequestHandler } from 'express';
 import type { NextFunction, Request, Response } from 'express';
 
+import {
+  setAccessTokenCookie,
+  setMFATempTokenCookie,
+  setRefreshTokenCookie,
+} from '../utils/helpers';
 import { mockAsyncVerification } from '../utils/mock-async-verification';
 
 /**
@@ -139,13 +144,7 @@ export const postSignIn: RequestHandler[] = [
 
       const mfaTempToken = await signMfaTempToken(user.id);
 
-      res.cookie('mfa_temp_token', mfaTempToken, {
-        httpOnly: true,
-        secure: env.NODE_ENV === 'production',
-        sameSite: env.NODE_ENV === 'production' ? 'none' : 'strict',
-        maxAge: 5 * 60 * 1000,
-        path: '/',
-      });
+      setMFATempTokenCookie(res, mfaTempToken);
 
       logger.info(
         { traceId, userId: user.id },
@@ -158,11 +157,16 @@ export const postSignIn: RequestHandler[] = [
     }
 
     // ---- Non-MFA branch — issue access and refresh tokens directly ----
-    const accessToken = await signAccessToken(user.id);
-    const refreshToken = await signRefreshToken(user.id);
+    const [accessToken, refreshToken] = await Promise.all([
+      signAccessToken(user.id),
+      signRefreshToken(user.id),
+    ]);
+
     const hashedRefreshToken = hashToken(refreshToken);
+
     const refreshTokenExpiry = new Date();
-    refreshTokenExpiry.setDate(refreshTokenExpiry.getDate() + 7);
+
+    refreshTokenExpiry.setDate(refreshTokenExpiry.getMinutes() + 60);
 
     await createRefreshToken({
       data: {
@@ -173,21 +177,8 @@ export const postSignIn: RequestHandler[] = [
     });
 
     // Set secure httpOnly cookies for both tokens
-    res.cookie('access_token', accessToken, {
-      httpOnly: true,
-      secure: env.NODE_ENV === 'production',
-      sameSite: env.NODE_ENV === 'development' ? 'strict' : 'none',
-      maxAge: 1 * 60 * 1000, // 1 minutes
-      path: '/',
-    });
-
-    res.cookie('refresh_token', refreshToken, {
-      httpOnly: true,
-      secure: env.NODE_ENV === 'production',
-      sameSite: env.NODE_ENV === 'development' ? 'strict' : 'none',
-      maxAge: 60 * 60 * 1000, // 1 hour
-      path: '/',
-    });
+    setAccessTokenCookie(res, accessToken);
+    setRefreshTokenCookie(res, refreshToken);
 
     return success(res, {
       message: 'Signed in successfully',

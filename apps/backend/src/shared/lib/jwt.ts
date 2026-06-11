@@ -34,7 +34,7 @@ const passwordResetSecret = new TextEncoder().encode(env.JWT_PASSWORD_RESET_SECR
 
 /** Signs a short-lived access JWT for the given user ID. */
 export async function signAccessToken(userId: string): Promise<string> {
-  return new SignJWT({ sub: userId, type: 'access' })
+  return new SignJWT({ sub: userId, type: 'access', audience: env.JWT_AUDIENCE })
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
     .setAudience(env.JWT_AUDIENCE)
