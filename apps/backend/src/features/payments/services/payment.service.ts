@@ -1,7 +1,7 @@
 import { BadRequestError, NotFoundError, PaymentError } from '@errors';
 import { decrypt } from '@lib/crypto';
 import { prisma } from '@lib/prisma';
-import type { PaymentReferenceType, Prisma } from '@prisma/client';
+import type { DocumentReferenceType, Prisma } from '@prisma/client';
 
 type DbClient = Prisma.TransactionClient | typeof prisma;
 import { PaymentMethod } from '@prisma/client';
@@ -414,12 +414,12 @@ export async function recordManualPayment(input: RecordManualPaymentInput) {
       db: tx,
     });
 
-    await tx.paymentReference.create({
+    await tx.documentReference.create({
       data: {
-        transaction: { connect: { id: transaction.id } },
+        paymentTransaction: { connect: { id: transaction.id } },
         reference: input.reference,
         paidAt: input.paidAt,
-        type: input.referenceType as PaymentReferenceType,
+        type: input.referenceType as DocumentReferenceType,
         remarks: input.notes ?? 'N/A',
       },
     });
