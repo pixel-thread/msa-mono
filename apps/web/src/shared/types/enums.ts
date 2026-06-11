@@ -326,3 +326,13 @@ export interface User {
     meetingAttendances?: number;
   };
 }
+
+export const PAYMENT_REFERENCE = {
+  CASH: 'CASH',
+  BANK_TRANSFER: 'BANK_TRANSFER',
+  CHEQUE: 'CHEQUE',
+  PAYSLIP: 'PAYSLIP',
+  ONLINE_PAYMENT: 'ONLINE_PAYMENT',
+};
+
+export type PaymentReference = (typeof PAYMENT_REFERENCE)[keyof typeof PAYMENT_REFERENCE];

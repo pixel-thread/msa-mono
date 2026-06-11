@@ -30,6 +30,7 @@ import {
   SelectValue,
 } from '@src/shared/components/ui/select';
 import { Textarea } from '@src/shared/components/ui/textarea';
+import { PAYMENT_REFERENCE } from '@src/shared/types';
 import http from '@src/shared/utils/http';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
@@ -54,9 +55,11 @@ export function RecordPaymentDialog({ open, onOpenChange }: RecordPaymentDialogP
       amount: 0,
       notes: '',
       receiptNumber: '',
-      referenceNumber: '',
+      reference: '',
+      referenceType: 'CASH',
       method: 'CASH',
       incomeAccountId: '',
+      paidAt: new Date().toISOString(),
     },
   });
 
@@ -125,50 +128,53 @@ export function RecordPaymentDialog({ open, onOpenChange }: RecordPaymentDialogP
               )}
             />
 
-            <FormField
-              control={form.control}
-              name="method"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Payment Method *</FormLabel>
-                  <Select onValueChange={field.onChange} value={field.value}>
+            <div className="flex gap-x-2">
+              <FormField
+                control={form.control}
+                name="referenceType"
+                render={({ field }) => (
+                  <FormItem className="w-full flex flex-col">
+                    <FormLabel className="">Reference Type</FormLabel>
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <FormControl>
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Select income account" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {Object.values(PAYMENT_REFERENCE).map((acc) => (
+                          <SelectItem key={acc} value={acc}>
+                            {acc}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="paidAt"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormLabel>Payment Recieved at</FormLabel>
                     <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select method" />
-                      </SelectTrigger>
+                      <Input {...field} type="date" placeholder="Optional paid at date" />
                     </FormControl>
-                    <SelectContent>
-                      <SelectItem value="CASH">Cash</SelectItem>
-                      <SelectItem value="BANK_TRANSFER">Bank Transfer</SelectItem>
-                      <SelectItem value="UPI">UPI</SelectItem>
-                      <SelectItem value="CHEQUE">Cheque</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
             <FormField
               control={form.control}
-              name="receiptNumber"
+              name="reference"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Receipt Number</FormLabel>
-                  <FormControl>
-                    <Input {...field} placeholder="Optional receipt number" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="referenceNumber"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Reference Number</FormLabel>
+                  <FormLabel>Reference</FormLabel>
                   <FormControl>
                     <Input {...field} placeholder="Optional reference number" />
                   </FormControl>

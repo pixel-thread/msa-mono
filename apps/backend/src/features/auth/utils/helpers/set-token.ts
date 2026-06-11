@@ -8,7 +8,6 @@ export function setAccessTokenCookie(res: Response, accessToken: string) {
     sameSite: env.NODE_ENV === 'production' ? 'none' : 'strict',
     maxAge: 5 * 60 * 1000, // 5 minutes
     path: '/',
-    signed: true,
   });
 }
 
@@ -19,7 +18,6 @@ export function setRefreshTokenCookie(res: Response, refreshToken: string) {
     sameSite: env.NODE_ENV === 'production' ? 'none' : 'strict',
     maxAge: 60 * 60 * 1000, // 1 hour
     path: '/',
-    signed: true,
   });
 }
 
@@ -30,7 +28,6 @@ export function setMFATempTokenCookie(res: Response, mfaTempToken: string) {
     sameSite: env.NODE_ENV === 'production' ? 'none' : 'strict',
     maxAge: 15 * 60 * 1000, // 15 minutes
     path: '/',
-    signed: true,
   });
 }
 

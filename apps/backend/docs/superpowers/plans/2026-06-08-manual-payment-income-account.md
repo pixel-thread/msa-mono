@@ -39,7 +39,7 @@
 
 - [ ] **Step 1: Add `incomeAccountId` field**
 
-Add `incomeAccountId` as a required UUID field after `referenceNumber`:
+Add `incomeAccountId` as a required UUID field after `reference`:
 
 ```typescript
 export const RecordManualPaymentSchema = z.object({
@@ -47,7 +47,7 @@ export const RecordManualPaymentSchema = z.object({
   method: z.enum(PaymentMethod).default(PaymentMethod.CASH),
   notes: z.string(),
   receiptNumber: z.string().optional(),
-  referenceNumber: z.string().optional(),
+  reference: z.string().optional(),
   incomeAccountId: z.string().min(1, 'Please select an income account'),
 });
 ```
@@ -89,7 +89,7 @@ const incomeAccounts = accounts.filter((a) => a.type === 'INCOME');
 
 - [ ] **Step 3: Add the income account form field**
 
-Add after the `referenceNumber` field (line 174) and before the `DialogFooter`:
+Add after the `reference` field (line 174) and before the `DialogFooter`:
 
 ```typescript
             <FormField
@@ -127,7 +127,7 @@ defaultValues: {
   amount: 0,
   notes: '',
   receiptNumber: '',
-  referenceNumber: '',
+  reference: '',
   method: 'CASH',
   incomeAccountId: '',
 },
@@ -164,7 +164,7 @@ export const RecordManualPaymentSchema = z
       .max(99999999, 'Amount must be less than 99999999'),
     method: z.enum(PaymentMethod, 'Invalid payment method').default(PaymentMethod.CASH),
     receiptNumber: z.string("Receipt number can't be empty").optional(),
-    referenceNumber: z.string("Reference number can't be empty").optional(),
+    reference: z.string("Reference number can't be empty").optional(),
     incomeAccountId: z.uuid('Invalid income account ID'),
   })
   .strict();
@@ -248,7 +248,7 @@ export interface RecordManualPaymentInput {
   method: PaymentMethod;
   notes?: string;
   receiptNumber?: string;
-  referenceNumber?: string;
+  reference?: string;
   /** The user who recorded this payment (finance/admin). */
   createdById: string;
   incomeAccountId: string;

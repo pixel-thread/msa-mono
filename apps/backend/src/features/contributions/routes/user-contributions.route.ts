@@ -114,7 +114,7 @@ export const listUserContributionsHandler: RequestHandler[] = [
                 gateway: true,
                 status: true,
                 paidAt: true,
-                receiptNumber: true,
+                references: true,
               },
             },
           },

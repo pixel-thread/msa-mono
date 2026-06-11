@@ -28,7 +28,6 @@ export interface ContributionPeriod {
       method: string | null;
       status: string;
       paidAt: string | null;
-      receiptNumber: string | null;
     };
   }[];
 }

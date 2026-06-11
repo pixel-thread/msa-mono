@@ -1,4 +1,4 @@
-import { PaymentMethod } from '@sharedType/enums';
+import { PaymentMethod, PAYMENT_REFERENCE } from '@sharedType/enums';
 import { pageNumberValidation, pageSizeValidation } from '@src/shared/validators/common';
 import { z } from 'zod';
 
@@ -29,8 +29,10 @@ export const RecordManualPaymentSchema = z.object({
   method: z.enum(PaymentMethod).default(PaymentMethod.CASH),
   notes: z.string(),
   receiptNumber: z.string().optional(),
-  referenceNumber: z.string().optional(),
-  incomeAccountId: z.string().min(1, 'Please select an income account'),
+  reference: z.string().optional(),
+  referenceType: z.enum(PAYMENT_REFERENCE, 'Invalid reference type').optional(),
+  paidAt: z.string('Invalid date format').transform((date) => new Date(date)),
+  incomeAccountId: z.uuid().optional(),
 });
 
 // ---------------------------------------------------------------------------

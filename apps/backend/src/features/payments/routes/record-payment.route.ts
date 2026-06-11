@@ -43,10 +43,11 @@ export const recordPayment: RequestHandler[] = [
       amount: req.body.amount,
       method: req.body.method,
       notes: req.body.notes,
-      receiptNumber: req.body.receiptNumber,
-      referenceNumber: req.body.referenceNumber,
       incomeAccountId: req.body.incomeAccountId,
       createdById: user.id,
+      paidAt: req.body.paidAt,
+      reference: req.body.reference,
+      referenceType: req.body.referenceType,
     });
 
     // --- Log: success ---

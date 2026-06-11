@@ -59,7 +59,7 @@ export const getReceipt: RequestHandler[] = [
 
     // --- Build receipt data ---
     const receiptData = {
-      receiptNumber: transaction.receiptNumber || transaction.id,
+      // receiptNumber: transaction.receiptNumber || transaction.id,
       paidAt: transaction.paidAt,
       memberInfo: {
         name: (transaction as any).user?.name,

@@ -282,6 +282,11 @@ enum DeclarationStatus {
   APPROVED
   REJECTED
 }
-enum InstrumentType {
+
+enum PaymentReferenceType {
+  CASH
+  BANK_TRANSFER
   CHEQUE
+  PAYSLIP
+  ONLINE_PAYMENT
 }

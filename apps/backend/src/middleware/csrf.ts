@@ -1,6 +1,5 @@
 import { ForbiddenError } from '@errors';
 import { generateCsrfToken, verifyCsrfToken } from '@lib/csrf';
-import { env } from '@src/env';
 import { setCSRFTokenCookie } from '@src/features/auth/utils/helpers';
 import { API_PUBLIC_ROUTES } from '@src/shared/constants';
 import { logger } from '@src/shared/logger';

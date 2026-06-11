@@ -403,7 +403,6 @@ export async function getUserContributions(
               gateway: true,
               status: true,
               paidAt: true,
-              receiptNumber: true,
             },
           },
         },

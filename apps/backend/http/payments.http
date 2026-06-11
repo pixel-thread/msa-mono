@@ -44,7 +44,7 @@ Authorization: Bearer {{TOKEN}}
   "method": "CASH",
   "notes": "Paid in cash at the office",
   "receiptNumber": "REC-001",
-  "referenceNumber": "REF-12345"
+  "reference": "REF-12345"
 }
 
 ###

@@ -180,7 +180,11 @@ export function UserContributionsPage() {
       </Card>
 
       <div className="mt-4">
-        <Link to={`/payments/users/${userId}`} className="text-sm text-primary hover:underline">
+        <Link
+          to={`/payments/users/$userId`}
+          params={{ userId: user.id }}
+          className="text-sm text-primary hover:underline"
+        >
           ← Back to Payment History
         </Link>
       </div>

@@ -1,6 +1,19 @@
 // ─────────────────────────────────────────────────────────────────────────────
 // PAYMENTS & LEDGER
 // ─────────────────────────────────────────────────────────────────────────────
+model PaymentReference{ 
+  id String @id @default(uuid())
+  type PaymentReferenceType?
+  reference String?
+  paidAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  transactionId String
+  transaction PaymentTransaction @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+
+  @@map("payment_references")
+}
 
 model PaymentTransaction {
   id String @id @default(uuid())
@@ -17,8 +30,7 @@ model PaymentTransaction {
 
   method PaymentMethod?
 
-  referenceNumber String?
-  receiptNumber   String?
+  references PaymentReference[]
 
   notes String?
 

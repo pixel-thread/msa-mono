@@ -1,7 +1,7 @@
 import { BadRequestError, NotFoundError, PaymentError } from '@errors';
 import { decrypt } from '@lib/crypto';
 import { prisma } from '@lib/prisma';
-import type { Prisma } from '@prisma/client';
+import type { PaymentReferenceType, Prisma } from '@prisma/client';
 
 type DbClient = Prisma.TransactionClient | typeof prisma;
 import { PaymentMethod } from '@prisma/client';
@@ -58,9 +58,10 @@ export interface RecordManualPaymentInput {
   amount: number;
   method: PaymentMethod;
   notes?: string;
-  receiptNumber?: string;
-  referenceNumber?: string;
+  referenceType?: string;
+  reference?: string;
   incomeAccountId: string;
+  paidAt?: string;
   /** The user who recorded this payment (finance/admin). */
   createdById: string;
 }
@@ -395,32 +396,37 @@ export async function verifyTestPayment(input: VerifyAndCompleteInput) {
  */
 export async function recordManualPayment(input: RecordManualPaymentInput) {
   return prisma.$transaction(async (tx) => {
-    const now = new Date();
-
     // Create completed transaction
     const transaction = await createPaymentTransaction({
       data: {
         association: { connect: { id: input.associationId } },
-        user: { connect: { id: input.userId || '' } },
         amount: input.amount,
         currency: 'INR',
         gateway: PaymentGateway.MANUAL,
         status: PaymentStatus.COMPLETED,
         method: input.method,
         notes: input.notes,
-        receiptNumber: input.receiptNumber,
-        referenceNumber: input.referenceNumber,
         createdById: input.createdById,
         verifiedById: input.createdById,
-        paidAt: now,
-        paymentDate: now,
+        paidAt: input.paidAt,
+        paymentDate: input.paidAt,
       },
+      db: tx,
     });
 
+    await tx.paymentReference.create({
+      data: {
+        transaction: { connect: { id: transaction.id } },
+        reference: input.reference,
+        paidAt: input.paidAt,
+        type: input.referenceType as PaymentReferenceType,
+      },
+    });
     // Look up income account code
     const incomeAccount = await tx.account.findUnique({
       where: { id: input.incomeAccountId },
     });
+
     if (!incomeAccount) {
       throw new NotFoundError(`Income account not found: ${input.incomeAccountId}`);
     }
@@ -577,8 +583,8 @@ export async function getAllTransactions(
 
   if (search) {
     where.OR = [
-      { referenceNumber: { contains: search, mode: 'insensitive' } },
-      { receiptNumber: { contains: search, mode: 'insensitive' } },
+      // { reference: { contains: search, mode: 'insensitive' } },
+      // { receiptNumber: { contains: search, mode: 'insensitive' } },
       { notes: { contains: search, mode: 'insensitive' } },
       { user: { name: { contains: search, mode: 'insensitive' } } },
       { user: { email: { contains: search, mode: 'insensitive' } } },
@@ -615,6 +621,7 @@ export async function getTransactionById(id: string, associationId: string, db: 
       user: { select: { name: true, email: true, membershipNumber: true } },
       allocations: { include: { contributionPeriod: true } },
       ledgerEntries: { include: { lines: true } },
+      references: true,
     },
   });
 }

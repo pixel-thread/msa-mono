@@ -31,8 +31,10 @@ export const RecordManualPaymentSchema = z
       .max(99999999, 'Amount must be less than 99999999'),
     method: z.enum(PaymentMethod, 'Invalid payment method').default(PaymentMethod.CASH),
     receiptNumber: z.string("Receipt number can't be empty").optional(),
-    referenceNumber: z.string("Reference number can't be empty").optional(),
     incomeAccountId: z.uuid('Invalid income account ID'),
+    paidAt: z.coerce.date('Invalid Payment date'),
+    reference: z.string("Instrument can't be empty").optional(),
+    referenceType: z.string("Instrument type can't be empty").optional(),
   })
   .strict();
 

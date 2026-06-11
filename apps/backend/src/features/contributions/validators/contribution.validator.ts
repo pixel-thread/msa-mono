@@ -51,7 +51,7 @@ export const RecordContributionSchema = z.object({
   contributionPeriodIds: z.array(z.uuid()),
   amount: z.coerce.number().positive(),
   paymentMethod: z.enum(PaymentMethod).default(PaymentMethod.CASH),
-  referenceNumber: z.string().optional().nullable(),
+  reference: z.string().optional().nullable(),
   paidAt: z.coerce.date('Cash recieve date is required'),
   remarks: z.string().optional().nullable(),
 });

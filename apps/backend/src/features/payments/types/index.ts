@@ -49,8 +49,7 @@ export interface PaymentTransaction {
   gateway: string;
   status: string;
   method: string | null;
-  referenceNumber: string | null;
-  receiptNumber: string | null;
+  reference: string | null;
   notes: string | null;
   razorpayOrderId: string | null;
   razorpayPaymentId: string | null;
