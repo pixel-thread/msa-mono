@@ -1,0 +1,30 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// DOCUMENT REFERENCES
+// A unified reference / attachment model for both PaymentTransactions and
+// LedgerEntries. Replaces the old PaymentReference + LedgerEntryReference.
+// ─────────────────────────────────────────────────────────────────────────────
+model DocumentReference {
+  id String @id @default(uuid())
+
+  // Polymorphic parent — exactly one must be set
+  paymentTransactionId String?
+  ledgerEntryId        String?
+
+  type      DocumentReferenceType
+  reference String?
+  fileId    String?
+  paidAt    DateTime?
+  remarks   String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  paymentTransaction PaymentTransaction? @relation(fields: [paymentTransactionId], references: [id], onDelete: Cascade)
+  ledgerEntry        LedgerEntry?        @relation(fields: [ledgerEntryId], references: [id], onDelete: Cascade)
+  file               File?               @relation(fields: [fileId], references: [id], onDelete: SetNull)
+
+  @@index([paymentTransactionId])
+  @@index([ledgerEntryId])
+  @@index([fileId])
+  @@map("document_references")
+}
