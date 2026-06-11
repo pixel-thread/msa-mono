@@ -97,6 +97,14 @@ export const UserPaymentsQuerySchema = z.object({
 
 // ---- Transfer Balance Between Ledger Accounts ----
 
+const TextReferenceInputSchema = z.object({
+  reference: z
+    .string()
+    .min(1, 'Reference is required')
+    .max(500, 'Reference must be at most 500 characters'),
+  remarks: z.string().max(500, 'Remarks must be at most 500 characters').optional(),
+});
+
 export const TransferBalanceSchema = z
   .object({
     fromAccountId: z.uuid('Invalid source account ID'),
@@ -109,6 +117,7 @@ export const TransferBalanceSchema = z
       .string()
       .min(5, 'Description must be at least 5 characters')
       .max(500, 'Description must be at most 500 characters'),
+    references: z.array(TextReferenceInputSchema).max(10).optional(),
   })
   .strict()
   .refine((data) => data.fromAccountId !== data.toAccountId, {
