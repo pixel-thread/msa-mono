@@ -1,10 +1,9 @@
+import { DeleteAccountCell } from '@feature/ledger/components/account/cell/delete-cell';
 import { Button } from '@src/shared/components/ui/button';
 import type { Account } from '@src/shared/types';
 import { Link } from '@tanstack/react-router';
 import { type ColumnDef } from '@tanstack/react-table';
 import { Edit2 } from 'lucide-react';
-
-import { DeleteAccountCell } from '../components/account/cell/delete-cell';
 
 export function useLedgerAccountColumns(onEdit: (account: Account) => void) {
   const columns: ColumnDef<Account>[] = [

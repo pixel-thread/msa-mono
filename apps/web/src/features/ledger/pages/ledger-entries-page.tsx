@@ -13,7 +13,7 @@ import { ApproveEntryDialog } from '../components/approve-entry-dialog';
 import { CreateEntryDialog } from '../components/create-entry-dialog';
 import { RejectEntryDialog } from '../components/reject-entry-dialog';
 import { type LedgerEntryResponse, useLedgerEntries } from '../hooks/useLedgerEntries';
-import { useLedgerEntriesColumns } from '../hooks/useLedgerEntriesColumns';
+import { useLedgerEntriesColumns } from '../hooks/columns/useLedgerEntriesColumns';
 
 export default function LedgerEntriesPage() {
   const navigate = useNavigate();

@@ -16,7 +16,7 @@ import { toast } from 'sonner';
 import { useLedgerAccounts } from '../../../shared/hooks/useLedgerAccounts';
 import { useApproveEntry } from '../hooks/useApproveEntry';
 import { useLedgerEntries } from '../hooks/useLedgerEntries';
-import { useLedgerLineColumns } from '../hooks/useLedgerLineColumns';
+import { useLedgerLineColumns } from '../hooks/columns/useLedgerLineColumns';
 
 export default function LedgerEntryDetailPage() {
   const params = useParams({ strict: false });

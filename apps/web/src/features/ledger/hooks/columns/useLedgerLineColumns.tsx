@@ -1,8 +1,7 @@
 'use client';
+import type { LedgerLineResponse } from '@feature/ledger/hooks/useLedgerEntries';
 import { Link } from '@tanstack/react-router';
 import { ColumnDef } from '@tanstack/react-table';
-
-import type { LedgerLineResponse } from './useLedgerEntries';
 
 interface UseLedgerLineColumnsOptions {
   getAccountName: (accountId: string) => string;
@@ -17,7 +16,8 @@ export function useLedgerLineColumns(options: UseLedgerLineColumnsOptions) {
       header: 'Account',
       cell: ({ row }) => (
         <Link
-          to={`/accounts/${row.original.accountId}`}
+          to={`/ledger/accounts/$id`}
+          params={{ id: row.original.accountId }}
           className="text-sm text-ink hover:underline"
         >
           {getAccountName(row.original.accountId)}

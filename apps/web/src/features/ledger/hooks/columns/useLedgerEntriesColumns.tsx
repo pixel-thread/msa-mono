@@ -1,10 +1,9 @@
+import type { LedgerEntryResponse } from '@feature/ledger/hooks/useLedgerEntries';
 import { Badge } from '@src/shared/components/ui/badge';
 import { Button } from '@src/shared/components/ui/button';
 import { formatDate } from '@src/shared/utils/format';
 import { Link } from '@tanstack/react-router';
 import { type ColumnDef } from '@tanstack/react-table';
-
-import type { LedgerEntryResponse } from './useLedgerEntries';
 
 interface UseLedgerEntriesColumnsOptions {
   onViewDetails?: (entry: LedgerEntryResponse) => void;

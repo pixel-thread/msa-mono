@@ -14,7 +14,7 @@ import { BanknoteIcon, Plus, Sprout } from 'lucide-react';
 
 import { CreateAccountDialog } from '../components/create-account-dialog';
 import { UpdateAccountDialog } from '../components/update-account-dialog';
-import { useLedgerAccountColumns } from '../hooks/useLedgerAccountColumns';
+import { useLedgerAccountColumns } from '../hooks/columns/useLedgerAccountColumns';
 import { useSeedAccounts } from '../hooks/useSeedAccounts';
 
 export default function LedgerAccountsPage() {

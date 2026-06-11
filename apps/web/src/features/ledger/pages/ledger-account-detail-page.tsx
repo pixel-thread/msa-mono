@@ -17,7 +17,7 @@ import { useNavigate, useParams } from '@tanstack/react-router';
 
 import { useLedgerAccount } from '../../../shared/hooks/useLedgerAccount';
 import { useLedgerEntries } from '../hooks/useLedgerEntries';
-import { useLedgerEntriesColumns } from '../hooks/useLedgerEntriesColumns';
+import { useLedgerEntriesColumns } from '../hooks/columns/useLedgerEntriesColumns';
 
 export default function LedgerAccountDetailPage() {
   const params = useParams({ strict: false });

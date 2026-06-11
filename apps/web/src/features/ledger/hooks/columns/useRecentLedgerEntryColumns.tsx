@@ -1,8 +1,7 @@
 'use client';
-import { formatDate } from '@src/shared/utils/format';
+import type { LedgerEntryResponse } from '@feature/ledger/hooks/useLedgerEntries';
 import { ColumnDef } from '@tanstack/react-table';
-
-import type { LedgerEntryResponse } from './useLedgerEntries';
+import { formatDate } from '@utils/format';
 
 export function useRecentLedgerEntryColumns() {
   const columns: ColumnDef<LedgerEntryResponse>[] = [
