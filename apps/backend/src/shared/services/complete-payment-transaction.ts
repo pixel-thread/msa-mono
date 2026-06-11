@@ -1,8 +1,8 @@
 import { NotFoundError } from '@errors';
 import type { PaymentMethod, Prisma } from '@prisma/client';
 import { AuditAction, PaymentStatus } from '@prisma/client';
-import { createAllocations } from '@services/allocate-contributions';
 import { recordMemberPayment } from '@services/accounting';
+import { createAllocations } from '@services/allocate-contributions';
 import { logAction } from '@services/audit-logs';
 import { updatePaymentTransaction } from '@src/shared/services/payments';
 
@@ -22,7 +22,17 @@ export async function completePaymentInTransaction(
   tx: Prisma.TransactionClient,
   options: CompletePaymentOptions,
 ) {
-  const { transactionId, userId, associationId, amount, razorpayPaymentId, method, source, description, paidAt } = options;
+  const {
+    transactionId,
+    userId,
+    associationId,
+    amount,
+    razorpayPaymentId,
+    method,
+    source,
+    description,
+    paidAt,
+  } = options;
   const now = paidAt ?? new Date();
 
   const updated = await updatePaymentTransaction({

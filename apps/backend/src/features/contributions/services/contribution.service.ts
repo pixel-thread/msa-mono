@@ -268,7 +268,10 @@ export async function getOutstandingContributions(userId: string, db: DbClient =
 /**
  * Get a user's contribution summary (for member/finance reports).
  */
-export async function getUserContributionSummary(userId: string, db: DbClient = prisma): Promise<ContributionSummary> {
+export async function getUserContributionSummary(
+  userId: string,
+  db: DbClient = prisma,
+): Promise<ContributionSummary> {
   const contributions = await db.contributionPeriod.findMany({
     where: {
       userId,

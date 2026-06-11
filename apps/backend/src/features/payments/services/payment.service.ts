@@ -458,7 +458,11 @@ export async function recordManualPayment(input: RecordManualPaymentInput) {
 // 5. Mark Payment as Failed
 // ---------------------------------------------------------------------------
 
-export async function markPaymentFailed(razorpayOrderId: string, reason?: string, db: DbClient = prisma) {
+export async function markPaymentFailed(
+  razorpayOrderId: string,
+  reason?: string,
+  db: DbClient = prisma,
+) {
   const transaction = await db.paymentTransaction.findUnique({
     where: { razorpayOrderId },
   });
@@ -532,7 +536,11 @@ export async function getUserPaymentHistory(userId: string, page = 1, db: DbClie
 /**
  * List all transactions with advanced filtering for admin dashboard.
  */
-export async function getAllTransactions(associationId: string, filters: TransactionFilters, db: DbClient = prisma) {
+export async function getAllTransactions(
+  associationId: string,
+  filters: TransactionFilters,
+  db: DbClient = prisma,
+) {
   const { page = 1, userId, status, method, gateway, search, startDate, endDate } = filters;
 
   const validPage = Math.max(1, page);

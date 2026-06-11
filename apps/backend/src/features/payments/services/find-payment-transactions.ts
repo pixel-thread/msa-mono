@@ -10,9 +10,11 @@ type Props = {
 };
 
 export async function findPaginatedPaymentTransactions({ where, page = 1, include }: Props) {
-  const { items, total } = await findPaginated(
-    prisma.paymentTransaction,
-    { where, include, orderBy: { paymentDate: 'desc' }, page },
-  );
+  const { items, total } = await findPaginated(prisma.paymentTransaction, {
+    where,
+    include,
+    orderBy: { paymentDate: 'desc' },
+    page,
+  });
   return { transactions: items, total };
 }

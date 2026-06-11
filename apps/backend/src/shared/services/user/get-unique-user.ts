@@ -12,6 +12,7 @@ type Props = {
 export async function findUniqueUser({ where, db = prisma }: Props) {
   return await db.user.findUnique({
     where,
+
     select: {
       id: true,
       associationId: true,

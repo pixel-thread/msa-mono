@@ -13,7 +13,12 @@ type Props = {
   page?: number;
 };
 
-export async function findDeclarations({ where, include, page = 1, db = prisma }: Props & { db?: DbClient }) {
+export async function findDeclarations({
+  where,
+  include,
+  page = 1,
+  db = prisma,
+}: Props & { db?: DbClient }) {
   const { skip, take } = buildPaginationParams(page);
   const declaration = await db.declarations.findMany({ where, include, take, skip });
   const total = await db.declarations.count({ where });
@@ -26,11 +31,19 @@ type FindUniqueDeclarationsProps = {
   include?: Prisma.DeclarationsInclude;
 };
 
-export async function findUniqueDeclaration({ where, include }: FindUniqueDeclarationsProps, db: DbClient = prisma) {
+export async function findUniqueDeclaration(
+  { where, include }: FindUniqueDeclarationsProps,
+  db: DbClient = prisma,
+) {
   return await db.declarations.findUnique({ where, include });
 }
 
-export async function submitDeclaration(memberId: string, associationId: string, amount: number, db: DbClient = prisma) {
+export async function submitDeclaration(
+  memberId: string,
+  associationId: string,
+  amount: number,
+  db: DbClient = prisma,
+) {
   const lastDeclaration = await db.declarations.findFirst({
     where: { memberId, status: DeclarationStatus.APPROVED },
     orderBy: { lastDeclarationDate: 'desc' },

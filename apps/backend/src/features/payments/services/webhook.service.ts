@@ -2,8 +2,8 @@ import { WebhookSignatureError } from '@errors';
 import { decrypt } from '@lib/crypto';
 import { prisma } from '@lib/prisma';
 import { AuditAction, PaymentGateway } from '@prisma/client';
-import { logAction } from '@services/audit-logs';
 import { recordRefund } from '@services/accounting';
+import { logAction } from '@services/audit-logs';
 import { completePaymentInTransaction } from '@services/complete-payment-transaction';
 import { logger } from '@src/shared/logger';
 import {
@@ -276,18 +276,21 @@ async function handleRefund(payload: RazorpayWebhookPayload): Promise<void> {
     });
 
     // Audit log
-    await logAction({
-      associationId: transaction.associationId,
-      actorId: '',
-      action: AuditAction.PAYMENT_REFUNDED,
-      resourceType: 'PaymentTransaction',
-      resourceId: transaction.id,
-      newValues: {
-        refundId: refund.id,
-        refundAmount: refund.amount / 100,
-        refundStatus: refund.status,
+    await logAction(
+      {
+        associationId: transaction.associationId,
+        actorId: '',
+        action: AuditAction.PAYMENT_REFUNDED,
+        resourceType: 'PaymentTransaction',
+        resourceId: transaction.id,
+        newValues: {
+          refundId: refund.id,
+          refundAmount: refund.amount / 100,
+          refundStatus: refund.status,
+        },
       },
-    }, tx);
+      tx,
+    );
 
     // Reverse allocations — revert contribution periods to DUE
     const allocations = await tx.paymentAllocation.findMany({
