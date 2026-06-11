@@ -23,7 +23,7 @@ import trainingRouter from '@feature/training/routes/index';
 import userRouter from '@feature/user/routes/index';
 import { contextMiddleware } from '@middleware/context';
 import { cors } from '@middleware/cors';
-// import { csrf } from '@middleware/csrf';
+import { csrf } from '@middleware/csrf';
 import { errorHandler } from '@middleware/error-handler';
 import { rateLimiter } from '@middleware/rate-limiter';
 import { securityHeaders } from '@middleware/security-headers';
@@ -46,7 +46,7 @@ export function createApp(): express.Express {
   app.use(cors);
   app.use(contextMiddleware);
   app.use(cookieParser());
-  // app.use(csrf);
+  app.use(csrf);
   app.use(securityHeaders);
   app.use(rateLimiter);
   app.use(express.json({ limit: '5mb' }));

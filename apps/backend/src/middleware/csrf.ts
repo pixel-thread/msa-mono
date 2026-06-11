@@ -48,7 +48,7 @@ export function csrf(req: Request, res: Response, next: NextFunction) {
   if (!verifyCsrfToken(csrfHeader as string, csrfCookie)) {
     const token = generateCsrfToken();
     res.cookie('csrf-token', token, csrfCookieOptions);
-    return next(new ForbiddenError('Invalid or missing CSRF token'));
+    return next(new ForbiddenError('Invalid CSRF token'));
   }
 
   next();
