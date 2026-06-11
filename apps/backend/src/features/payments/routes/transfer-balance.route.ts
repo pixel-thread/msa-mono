@@ -4,6 +4,7 @@ import { prisma } from '@lib/prisma';
 import { validate } from '@lib/validate';
 import { AuditAction, UserRole } from '@prisma/client';
 import { logAction } from '@services/audit-logs';
+import { createLedgerEntryReferences } from '@services/ledger-entry-reference';
 import { transferBalance } from '@services/transfer-balance';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
@@ -29,6 +30,7 @@ export const postTransferBalance: RequestHandler[] = [
       toAccountId: destinationAccountId,
       amount,
       remark: description,
+      references,
     } = req.body as TransferBalanceInput;
 
     const entry = await prisma.$transaction(async (tx) => {
@@ -40,6 +42,18 @@ export const postTransferBalance: RequestHandler[] = [
         description,
         createdById: user.id,
       });
+
+      if (references?.length) {
+        await createLedgerEntryReferences(
+          tx,
+          ledgerEntry!.id,
+          references.map((ref) => ({
+            type: 'TEXT' as const,
+            reference: ref.reference,
+            remarks: ref.remarks ?? null,
+          })),
+        );
+      }
 
       await logAction(
         {
@@ -53,6 +67,7 @@ export const postTransferBalance: RequestHandler[] = [
             destinationAccountId,
             amount,
             description,
+            referenceCount: references?.length ?? 0,
           },
         },
         tx,
@@ -61,11 +76,16 @@ export const postTransferBalance: RequestHandler[] = [
       return ledgerEntry!;
     });
 
+    const entryWithRefs = await prisma.ledgerEntry.findUnique({
+      where: { id: entry.id },
+      include: { lines: true, references: true },
+    });
+
     logger.info({ traceId, entryId: entry.id }, 'POST /api/v1/payments/transfer - Success');
 
     return success(
       res,
-      { data: entry, message: 'Balance transfer recorded successfully. Pending approval.' },
+      { data: entryWithRefs, message: 'Balance transfer recorded successfully. Pending approval.' },
       201,
     );
   }),
