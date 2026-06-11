@@ -31,13 +31,10 @@ interface UseLedgerEntriesParams {
 export function useLedgerEntries(params: UseLedgerEntriesParams = {}) {
   const { page = 1 } = params;
 
-  const url = buildUrlWithQuery(ENDPOINTS.LEDGER.ENTRIES, {
-    page,
-  });
-
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: QUERY_KEYS.LEDGER_KEYS.ENTRIES_LIST(page),
-    queryFn: () => http.get<LedgerEntryResponse[]>(url),
+    queryFn: () =>
+      http.get<LedgerEntryResponse[]>(buildUrlWithQuery(ENDPOINTS.LEDGER.ENTRIES, { page })),
   });
 
   return {

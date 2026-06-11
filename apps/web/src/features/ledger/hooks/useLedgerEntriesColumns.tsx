@@ -28,7 +28,8 @@ export function useLedgerEntriesColumns({
       header: 'Description',
       cell: ({ row }) => (
         <Link
-          to={`/ledger/entries/${row.original.id}`}
+          to={`/ledger/entries/$entryId`}
+          params={{ entryId: row.original.id }}
           className="text-sm text-ink max-w-[300px] block truncate hover:underline"
         >
           {row.original.description}
