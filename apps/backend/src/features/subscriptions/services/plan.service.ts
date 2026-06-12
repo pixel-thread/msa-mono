@@ -445,7 +445,12 @@ export async function updatePlan(associationId: string, planId: string, body: Up
       });
 
       // ── Retroactive adjustment ──────────────────────────────────────
-      if (body.effectiveFrom && body.effectiveTo && body.amount !== undefined) {
+      if (
+        body.effectiveFrom &&
+        body.effectiveTo &&
+        body.amount !== undefined &&
+        body.amount !== Number(currentVersion.amount)
+      ) {
         await retroactivelyAdjustContributionsForPlan(
           tx,
           planId,
