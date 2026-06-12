@@ -134,7 +134,7 @@ export function RecordPaymentDialog({ open, onOpenChange }: RecordPaymentDialogP
                 name="referenceType"
                 render={({ field }) => (
                   <FormItem className="w-full flex flex-col">
-                    <FormLabel className="">Reference Type</FormLabel>
+                    <FormLabel className="">Instrument Type</FormLabel>
                     <Select onValueChange={field.onChange} value={field.value}>
                       <FormControl>
                         <SelectTrigger className="w-full">
@@ -174,7 +174,7 @@ export function RecordPaymentDialog({ open, onOpenChange }: RecordPaymentDialogP
               name="reference"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Reference</FormLabel>
+                  <FormLabel>Instrument Number</FormLabel>
                   <FormControl>
                     <Input {...field} placeholder="Optional reference number" />
                   </FormControl>

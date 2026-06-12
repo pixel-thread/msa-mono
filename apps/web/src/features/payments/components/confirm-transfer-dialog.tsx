@@ -1,6 +1,5 @@
 'use client';
 
-import type { Account } from '@src/shared/types';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -11,6 +10,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@src/shared/components/ui/alert-dialog';
+import type { Account } from '@src/shared/types';
 import { formatCurrency } from '@src/shared/utils/format';
 import { ArrowRightLeft } from 'lucide-react';
 
@@ -60,9 +60,7 @@ export function ConfirmTransferDialog({
               <p className="font-medium">{fromAccount?.name}</p>
               <p className="text-sm text-muted-foreground">
                 Balance:{' '}
-                <span className="text-foreground font-semibold">
-                  {formatCurrency(fromBalance)}
-                </span>
+                <span className="text-foreground font-semibold">{formatCurrency(fromBalance)}</span>
               </p>
               <p className="text-xs text-red-600">
                 - {formatCurrency(amount)} → {formatCurrency(fromBalance - amount)}
@@ -75,9 +73,7 @@ export function ConfirmTransferDialog({
               <p className="font-medium">{toAccount?.name}</p>
               <p className="text-sm text-muted-foreground">
                 Balance:{' '}
-                <span className="text-foreground font-semibold">
-                  {formatCurrency(toBalance)}
-                </span>
+                <span className="text-foreground font-semibold">{formatCurrency(toBalance)}</span>
               </p>
               <p className="text-xs text-green-600">
                 + {formatCurrency(amount)} → {formatCurrency(toBalance + amount)}
@@ -95,11 +91,7 @@ export function ConfirmTransferDialog({
 
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction
-            onClick={onConfirm}
-            variant="destructive"
-            disabled={isPending}
-          >
+          <AlertDialogAction onClick={onConfirm} variant="destructive" disabled={isPending}>
             {isPending ? 'Saving...' : 'Confirm'}
           </AlertDialogAction>
         </AlertDialogFooter>

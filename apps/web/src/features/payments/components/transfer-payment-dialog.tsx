@@ -30,16 +30,17 @@ import {
 } from '@src/shared/components/ui/select';
 import { Textarea } from '@src/shared/components/ui/textarea';
 import { cn } from '@src/shared/lib';
+import { PAYMENT_REFERENCE } from '@src/shared/types';
 import { formatCurrency } from '@src/shared/utils/format';
 import { useQueryClient } from '@tanstack/react-query';
 import { ArrowRight, ArrowRightLeft } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-
 import { z } from 'zod';
+
 import { useTransferAccountBalance } from '../hooks/useTransferAccountBalance';
 import { TransferAccountBalanceSchema } from '../validators';
-import { PAYMENT_REFERENCE } from '@src/shared/types';
+
 import { ConfirmTransferDialog } from './confirm-transfer-dialog';
 
 export function TransferPaymentDialog() {
@@ -93,20 +94,17 @@ export function TransferPaymentDialog() {
   const handleConfirmTransfer = async () => {
     setShowConfirm(false);
     const formValues = TransferAccountBalanceSchema.parse(form.getValues());
-    mutate(
-      formValues,
-      {
-        onSuccess: (data) => {
-          if (data.success) {
-            queryClient.invalidateQueries({ queryKey: ['payments'] });
-            toast.success('Transfer successful');
-            form.reset();
-            return;
-          }
-          toast.error(data.message);
-        },
+    mutate(formValues, {
+      onSuccess: (data) => {
+        if (data.success) {
+          queryClient.invalidateQueries({ queryKey: ['payments'] });
+          toast.success('Transfer successful');
+          form.reset();
+          return;
+        }
+        toast.error(data.message);
       },
-    );
+    });
   };
 
   return (
@@ -242,11 +240,11 @@ export function TransferPaymentDialog() {
                 name="referenceType"
                 render={({ field }) => (
                   <FormItem className="w-full">
-                    <FormLabel>Reference Type</FormLabel>
+                    <FormLabel>Instrument Type</FormLabel>
                     <Select onValueChange={field.onChange} value={field.value}>
                       <FormControl>
                         <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Select reference type" />
+                          <SelectValue placeholder="Select instrument type" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -267,7 +265,7 @@ export function TransferPaymentDialog() {
                 name="paidAt"
                 render={({ field }) => (
                   <FormItem className="w-full">
-                    <FormLabel>Transfer Date</FormLabel>
+                    <FormLabel>Instrument Date</FormLabel>
                     <FormControl>
                       <Input
                         {...field}
@@ -287,7 +285,7 @@ export function TransferPaymentDialog() {
               name="reference"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Reference</FormLabel>
+                  <FormLabel>Instrument Number</FormLabel>
                   <FormControl>
                     <Input {...field} placeholder="Optional reference number" />
                   </FormControl>
