@@ -23,7 +23,7 @@ model Association {
 
   users               User[]
   files               File[]
-  subscriptionPlans   SubscriptionPlan[]
+  plans               Plan[]
   meetings            Meeting[]
   auditLogs           AuditLog[]
   paymentTransactions PaymentTransaction[]

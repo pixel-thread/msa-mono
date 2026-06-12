@@ -1,8 +1,8 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// SUBSCRIPTIONS
+// PLANS
 // ─────────────────────────────────────────────────────────────────────────────
 
-model SubscriptionPlan {
+model Plan {
   id            String   @id @default(uuid())
   associationId String
   name          String
@@ -14,18 +14,18 @@ model SubscriptionPlan {
 
   association Association @relation(fields: [associationId], references: [id], onDelete: Cascade)
 
-  versions      SubscriptionPlanVersion[]
-  subscriptions Subscription[]
+  versions      PlanVersion[]
+  subscriptions Subscription[] // Will be removed in Task 2
 
   memberTypeId String?
   memberType   MemberType? @relation(fields: [memberTypeId], references: [id])
 
   @@unique([associationId, name])
   @@index([associationId])
-  @@map("subscription_plans")
+  @@map("plans")
 }
 
-model SubscriptionPlanVersion {
+model PlanVersion {
   id     String @id @default(uuid())
   planId String
 
@@ -40,12 +40,12 @@ model SubscriptionPlanVersion {
 
   createdAt DateTime @default(now())
 
-  plan           SubscriptionPlan             @relation(fields: [planId], references: [id], onDelete: Cascade)
-  subscriptions  Subscription[]
-  billingHistory SubscriptionBillingHistory[]
+  plan           Plan                       @relation(fields: [planId], references: [id], onDelete: Cascade)
+  subscriptions  Subscription[]             // Will be removed in Task 2
+  billingHistory SubscriptionBillingHistory[] // Will be removed in Task 2
 
   @@index([planId])
-  @@map("subscription_plan_versions")
+  @@map("plan_versions")
 }
 
 model Subscription {
@@ -62,9 +62,9 @@ model Subscription {
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
-  user        User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  plan        SubscriptionPlan        @relation(fields: [planId], references: [id])
-  planVersion SubscriptionPlanVersion @relation(fields: [planVersionId], references: [id])
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  plan        Plan       @relation(fields: [planId], references: [id])
+  planVersion PlanVersion @relation(fields: [planVersionId], references: [id])
 
   billingHistory SubscriptionBillingHistory[]
 
@@ -84,8 +84,8 @@ model SubscriptionBillingHistory {
   dueDate        DateTime
   createdAt      DateTime @default(now())
 
-  subscription Subscription            @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
-  planVersion  SubscriptionPlanVersion @relation(fields: [planVersionId], references: [id])
+  subscription Subscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+  planVersion  PlanVersion  @relation(fields: [planVersionId], references: [id])
 
   @@index([subscriptionId])
   @@map("subscription_billing_history")

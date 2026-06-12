@@ -6,7 +6,7 @@ model MemberType {
   associationId     String
   association       Association        @relation(fields: [associationId], references: [id], onDelete: Cascade)
   users             User[]
-  subscriptionPlans SubscriptionPlan[]
+  plans             Plan[]
 
   @@unique([associationId, level])
   @@index([level])
