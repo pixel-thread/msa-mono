@@ -1,11 +1,11 @@
-type BillCycle = 'MONTHLY' | 'YEARLY';
+import { BillingCycle } from '@src/shared/types';
 
 export type SubscriptionPlanVersion = {
   id: string;
   planId: string;
   amount: number;
   currency: string;
-  billingCycle: BillCycle;
+  billingCycle: BillingCycle;
   features: Record<string, unknown>;
   description: string | null;
   effectiveFrom: string;
@@ -34,7 +34,7 @@ export type SubscriptionPlanListItem = {
   description: string | null;
   amount: number;
   currency: string;
-  billingCycle: BillCycle;
+  billingCycle: BillingCycle;
   isActive: boolean;
   effectiveFrom: string;
   createdAt: string;

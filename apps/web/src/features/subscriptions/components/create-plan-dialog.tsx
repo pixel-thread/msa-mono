@@ -33,8 +33,8 @@ import { logger } from '@src/shared/logger';
 import { Plus } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 
-import { BILLING_CYCLES } from '../utils/constants';
 import { CreateSubscriptionPlanInput, CreateSubscriptionPlanSchema } from '../validators';
+import { BILLING_CYCLE } from '@src/shared/types';
 
 export function CreatePlanDialog() {
   const [open, setOpen] = useState(false);
@@ -215,7 +215,7 @@ export function CreatePlanDialog() {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {BILLING_CYCLES.map((cycle) => (
+                        {Object.values(BILLING_CYCLE).map((cycle) => (
                           <SelectItem key={cycle} value={cycle}>
                             {cycle}
                           </SelectItem>

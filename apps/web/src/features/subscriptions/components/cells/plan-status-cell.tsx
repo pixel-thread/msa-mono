@@ -9,8 +9,8 @@ import {
 } from '@src/shared/components/ui/select';
 
 import { SubscriptionPlan } from '../../types';
-import { PLAN_STATUSES } from '../../utils/constants';
 import { getPlanStatusBadge } from '../../utils/helper/get-plan-status-badge';
+import { Plan_STATUS } from '@src/shared/types';
 
 interface PlanStatusCellProps {
   plan: SubscriptionPlan;
@@ -29,7 +29,7 @@ export function PlanStatusCell({ plan, onStatusChange }: PlanStatusCellProps) {
         <SelectValue />
       </SelectTrigger>
       <SelectContent>
-        {PLAN_STATUSES.map((status) => (
+        {Object.values(Plan_STATUS).map((status) => (
           <SelectItem key={status} value={status}>
             {getPlanStatusBadge(status)}
           </SelectItem>

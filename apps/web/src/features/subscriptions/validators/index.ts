@@ -1,3 +1,4 @@
+import { BILLING_CYCLE } from '@src/shared/types';
 import { z } from 'zod';
 
 export const CreateSubscriptionPlanSchema = z.object({
@@ -29,3 +30,18 @@ export const UpgradeSubscriptionSchema = z.object({
   userId: z.string().optional(),
 });
 export type UpgradeSubscriptionInput = z.infer<typeof UpgradeSubscriptionSchema>;
+
+export const EditPlanSchema = z.object({
+  name: z.string().min(1, 'Plan name is required'),
+  description: z.string(),
+  amount: z.number().min(0, 'Amount must be non-negative'),
+  currency: z.string(),
+  billingCycle: z.enum(BILLING_CYCLE),
+  features: z.record(z.string(), z.any()),
+  memberTypeId: z.string().optional(),
+  effectiveTo: z.string().optional(),
+  effectiveFrom: z.string().optional(),
+  isActive: z.boolean().optional(),
+});
+
+export type EditPlanInput = z.infer<typeof EditPlanSchema>;

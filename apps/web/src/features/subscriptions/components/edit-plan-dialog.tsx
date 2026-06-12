@@ -28,26 +28,11 @@ import {
   SelectValue,
 } from '@src/shared/components/ui/select';
 import { Switch } from '@src/shared/components/ui/switch';
+import { BILLING_CYCLE } from '@src/shared/types';
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
 
 import { usePlan } from '../hooks/usePlan';
-import { BILLING_CYCLES } from '../utils/constants';
-
-const EditPlanSchema = z.object({
-  name: z.string().min(1, 'Plan name is required'),
-  description: z.string(),
-  amount: z.number().min(0, 'Amount must be non-negative'),
-  currency: z.string(),
-  billingCycle: z.enum(['MONTHLY', 'YEARLY']),
-  features: z.record(z.string(), z.any()),
-  memberTypeId: z.string().optional(),
-  effectiveTo: z.string().optional(),
-  effectiveFrom: z.string().optional(),
-  isActive: z.boolean().optional(),
-});
-
-type EditPlanForm = z.infer<typeof EditPlanSchema>;
+import { EditPlanInput, EditPlanSchema } from '../validators';
 
 interface EditPlanDialogProps {
   planId: string;
@@ -60,7 +45,7 @@ export function EditPlanDialog({ planId, open, onOpenChange }: EditPlanDialogPro
   const { data: plan } = usePlan({ planId: planId });
   const { memberTypes } = useMemberTypes();
 
-  const form = useForm<EditPlanForm>({
+  const form = useForm<EditPlanInput>({
     resolver: zodResolver(EditPlanSchema),
     defaultValues: {
       name: '',
@@ -93,7 +78,7 @@ export function EditPlanDialog({ planId, open, onOpenChange }: EditPlanDialogPro
     }
   }, [plan, open, form]);
 
-  const onSubmit = (data: EditPlanForm) => {
+  const onSubmit = (data: EditPlanInput) => {
     if (!plan) return;
 
     const { memberTypeId, effectiveTo, effectiveFrom, isActive, ...rest } = data;
@@ -220,7 +205,7 @@ export function EditPlanDialog({ planId, open, onOpenChange }: EditPlanDialogPro
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {BILLING_CYCLES.map((cycle) => (
+                        {Object.values(BILLING_CYCLE).map((cycle) => (
                           <SelectItem key={cycle} value={cycle}>
                             {cycle}
                           </SelectItem>

@@ -1,20 +1,12 @@
 import { ENDPOINTS, QUERY_KEYS } from '@repo/shared';
-import http from '@src/shared/utils/http';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import http from '@utils/http';
 import { toast } from 'sonner';
 
-interface UpdatePlanData {
+import { EditPlanInput } from '../validators';
+
+interface UpdatePlanData extends EditPlanInput {
   planId: string;
-  name?: string;
-  description?: string;
-  amount?: number;
-  currency?: string;
-  billingCycle?: 'MONTHLY' | 'YEARLY';
-  features?: Record<string, unknown>;
-  isActive?: boolean;
-  effectiveFrom?: string;
-  effectiveTo?: string;
-  memberTypeId?: string | null;
 }
 
 export function useUpdatePlan() {
