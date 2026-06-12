@@ -5,7 +5,7 @@ import { BadRequestError, NotFoundError } from '@errors';
 // ---------------------------------------------------------------------------
 // Validators / Types
 // ---------------------------------------------------------------------------
-import type { CreateSubscriptionPlanInput } from '@feature/subscriptions/validators';
+import type { CreatePlanInput } from '@feature/plans/validators';
 import { prisma } from '@lib/prisma';
 // ---------------------------------------------------------------------------
 // Prisma
@@ -42,7 +42,7 @@ export async function getPlans(
   user: { role: UserRole[]; memberTypeId?: string | null },
 ) {
   if (hasHighRoleAccess(user.role)) {
-    const plans = await prisma.subscriptionPlan.findMany({
+    const plans = await prisma.plan.findMany({
       where: { associationId },
       include: {
         memberType: true,
@@ -72,7 +72,7 @@ export async function getPlans(
     whereClause.memberTypeId = null;
   }
 
-  const plans = await prisma.subscriptionPlan.findMany({
+  const plans = await prisma.plan.findMany({
     where: whereClause,
     include: {
       versions: {
@@ -84,7 +84,7 @@ export async function getPlans(
   });
 
   if (plans.length === 0) {
-    const defaultPlan = await prisma.subscriptionPlan.findMany({
+    const defaultPlan = await prisma.plan.findMany({
       where: {
         associationId,
         isDefault: true,
@@ -132,8 +132,8 @@ export async function getPlans(
  * unsets any existing default, creates the plan + first version, and sets
  * the new plan as default.
  */
-export async function createPlan(associationId: string, body: CreateSubscriptionPlanInput) {
-  const isPlanExistWithSameName = await prisma.subscriptionPlan.findFirst({
+export async function createPlan(associationId: string, body: CreatePlanInput) {
+  const isPlanExistWithSameName = await prisma.plan.findFirst({
     where: {
       name: body.name,
       associationId,
@@ -143,12 +143,12 @@ export async function createPlan(associationId: string, body: CreateSubscription
   if (isPlanExistWithSameName) throw new BadRequestError('Plan with same name already exist');
 
   const plan = await prisma.$transaction(async (tx) => {
-    await tx.subscriptionPlan.updateMany({
+    await tx.plan.updateMany({
       where: { associationId },
       data: { isDefault: false },
     });
 
-    return tx.subscriptionPlan.create({
+    return tx.plan.create({
       data: {
         name: body.name,
         description: body.description,
@@ -189,7 +189,7 @@ export async function createPlan(associationId: string, body: CreateSubscription
  * the existing default and sets the target plan as the new default.
  */
 export async function setDefaultPlan(associationId: string, planId: string) {
-  const plan = await prisma.subscriptionPlan.findFirst({
+  const plan = await prisma.plan.findFirst({
     where: { id: planId, associationId },
   });
 
@@ -198,12 +198,12 @@ export async function setDefaultPlan(associationId: string, planId: string) {
   }
 
   const updated = await prisma.$transaction(async (tx) => {
-    await tx.subscriptionPlan.updateMany({
+    await tx.plan.updateMany({
       where: { associationId },
       data: { isDefault: false },
     });
 
-    return tx.subscriptionPlan.update({
+    return tx.plan.update({
       where: { id: planId },
       data: { isDefault: true },
     });
@@ -239,13 +239,23 @@ async function retroactivelyAdjustContributionsForPlan(
   const toYear = effectiveTo.getFullYear();
   const toMonth = effectiveTo.getMonth() + 1;
 
-  // 1. Find all users with an ACTIVE subscription to this plan
-  const subscribers = await tx.subscription.findMany({
-    where: { planId, status: 'ACTIVE' },
-    select: { userId: true },
+  // 1. Find users associated with this plan via member type
+  const plan = await tx.plan.findUnique({
+    where: { id: planId },
+    select: { memberTypeId: true, associationId: true },
   });
 
-  for (const { userId } of subscribers) {
+  if (!plan) return;
+
+  const users = await tx.user.findMany({
+    where: {
+      associationId: plan.associationId,
+      ...(plan.memberTypeId ? { memberTypeId: plan.memberTypeId } : {}),
+    },
+    select: { id: true },
+  });
+
+  for (const { id: userId } of users) {
     // 2. Find contribution periods in the date range, sorted oldest first
     const periods = await tx.contributionPeriod.findMany({
       where: {
@@ -407,7 +417,7 @@ export async function updatePlan(associationId: string, planId: string, body: Up
   const hasPriceChange = priceFields.some((field) => body[field] !== undefined);
 
   if (hasPriceChange) {
-    const currentVersion = await prisma.subscriptionPlanVersion.findFirst({
+    const currentVersion = await prisma.planVersion.findFirst({
       where: { planId, effectiveTo: null },
     });
 
@@ -416,12 +426,12 @@ export async function updatePlan(associationId: string, planId: string, body: Up
     }
 
     const updatedPlan = await prisma.$transaction(async (tx) => {
-      await tx.subscriptionPlanVersion.update({
+      await tx.planVersion.update({
         where: { id: currentVersion.id },
         data: { effectiveTo: new Date() },
       });
 
-      const newVersion = await tx.subscriptionPlanVersion.create({
+      const newVersion = await tx.planVersion.create({
         data: {
           planId,
           amount: body.amount ?? currentVersion.amount,
@@ -434,7 +444,7 @@ export async function updatePlan(associationId: string, planId: string, body: Up
         },
       });
 
-      const plan = await tx.subscriptionPlan.update({
+      const plan = await tx.plan.update({
         where: { id: planId, associationId },
         data: {
           name: body.name,
@@ -466,9 +476,9 @@ export async function updatePlan(associationId: string, planId: string, body: Up
     return updatedPlan;
   }
 
-  // Strip version-only fields that don't exist on SubscriptionPlan
+  // Strip version-only fields that don't exist on Plan
   const { effectiveFrom, effectiveTo, ...metadata } = body;
-  const plan = await prisma.subscriptionPlan.update({
+  const plan = await prisma.plan.update({
     where: { id: planId, associationId },
     data: metadata,
   });
@@ -485,7 +495,7 @@ export async function updatePlan(associationId: string, planId: string, body: Up
  * from active use.
  */
 export async function softDeletePlan(associationId: string, planId: string) {
-  const plan = await prisma.subscriptionPlan.update({
+  const plan = await prisma.plan.update({
     where: { id: planId, associationId },
     data: { isActive: false },
   });
@@ -494,7 +504,7 @@ export async function softDeletePlan(associationId: string, planId: string) {
 }
 
 export async function getPlan(id: string, associationId: string) {
-  const plan = await prisma.subscriptionPlan.findUnique({
+  const plan = await prisma.plan.findUnique({
     where: { id: id, associationId },
     include: { versions: { orderBy: { createdAt: 'desc' } } },
   });
