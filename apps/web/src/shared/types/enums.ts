@@ -345,3 +345,10 @@ export const BILLING_CYCLE = {
 };
 
 export type BillingCycle = (typeof BILLING_CYCLE)[keyof typeof BILLING_CYCLE];
+
+export const Plan_STATUS = {
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE',
+};
+
+export type Plan_STATUS = (typeof Plan_STATUS)[keyof typeof Plan_STATUS];
