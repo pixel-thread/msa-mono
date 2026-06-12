@@ -23,7 +23,6 @@ export async function runComplianceCheck(
     DSAR_SLA_COMPLIANCE: () => checkDsarSlaCompliance(associationId),
     DATA_RETENTION: () => checkDataRetention(associationId),
     PII_ENCRYPTION: () => checkPiiEncryption(associationId),
-    SUBSCRIPTION_EXPIRY: () => checkSubscriptionExpiry(associationId),
     MEMBER_DATA_COMPLETENESS: () => checkMemberDataCompleteness(associationId),
     PAYMENT_RECONCILIATION: () => checkPaymentReconciliation(associationId),
     AUDIT_LOG_INTEGRITY: () => checkAuditLogIntegrity(associationId),
@@ -275,51 +274,13 @@ async function checkPiiEncryption(associationId: string): Promise<ComplianceChec
 }
 
 /** Check subscription expiry compliance — identifies expired and soon-to-expire subscriptions. */
-async function checkSubscriptionExpiry(associationId: string): Promise<ComplianceCheckResult> {
-  const now = new Date();
-
-  const [totalActive, expired, upcomingExpire, total] = await Promise.all([
-    prisma.subscription.count({
-      where: {
-        user: { associationId },
-        status: 'ACTIVE',
-      },
-    }),
-    prisma.subscription.count({
-      where: {
-        user: { associationId },
-        status: 'EXPIRED',
-      },
-    }),
-    prisma.subscription.count({
-      where: {
-        user: { associationId },
-        status: 'ACTIVE',
-        endDate: {
-          gte: now,
-          lte: new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000),
-        },
-      },
-    }),
-    prisma.subscription.count({
-      where: { user: { associationId } },
-    }),
-  ]);
-
-  const score = total > 0 ? (totalActive / total) * 100 : 100;
-
-  let status: ComplianceCheckStatus = 'PASSED';
-  if (expired > totalActive * 0.2) status = 'FAILED';
-  else if (upcomingExpire > 0) status = 'WARNING';
-
+async function checkSubscriptionExpiry(_associationId: string): Promise<ComplianceCheckResult> {
   return {
     checkType: 'SUBSCRIPTION_EXPIRY',
-    status,
-    score: Math.round(score),
-    message: `${totalActive} active, ${upcomingExpire} expiring within 30 days`,
-    details: { total, totalActive, expired, upcomingExpire },
-    recommendations:
-      upcomingExpire > 0 ? ['Send renewal reminders to members with expiring subscriptions'] : [],
+    status: 'SKIPPED',
+    score: 100,
+    message: 'Subscription feature has been removed',
+    recommendations: [],
     checkedAt: new Date(),
   };
 }
@@ -557,9 +518,7 @@ async function getMemberEvidence(associationId: string) {
   const [total, active, withSubscription] = await Promise.all([
     prisma.user.count({ where: { associationId } }),
     prisma.user.count({ where: { associationId, status: UserStatus.ACTIVE } }),
-    prisma.user.count({
-      where: { associationId, subscription: { isNot: null } },
-    }),
+    prisma.user.count({ where: { associationId } }),
   ]);
 
   return {

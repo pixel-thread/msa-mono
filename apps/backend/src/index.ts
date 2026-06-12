@@ -19,7 +19,7 @@ import membersRouter from '@feature/members/routes/index';
 import membershipApplicationsRouter from '@feature/membership-applications/routes/index';
 import notificationsRouter from '@feature/notifications/routes/index';
 import paymentsRouter from '@feature/payments/routes/index';
-import subscriptionsRouter from '@feature/subscriptions/routes/index';
+import plansRouter from '@feature/plans/routes/index';
 import trainingRouter from '@feature/training/routes/index';
 import userRouter from '@feature/user/routes/index';
 import { contextMiddleware } from '@middleware/context';
@@ -79,7 +79,7 @@ export function createApp(): express.Express {
   app.use('/api/v1/membership-applications', membershipApplicationsRouter);
   app.use('/api/v1/notifications', notificationsRouter);
   app.use('/api/v1/payments', paymentsRouter);
-  app.use('/api/v1/subscriptions', subscriptionsRouter);
+  app.use('/api/v1/plans', plansRouter);
   app.use('/api/v1/training', trainingRouter);
   app.use('/api/v1/user', userRouter);
   app.use('/api/v1/eas', easRouter);

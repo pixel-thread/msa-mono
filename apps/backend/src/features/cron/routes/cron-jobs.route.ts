@@ -1,7 +1,6 @@
 import {
   runAnonymizeCron,
   runDsarSlaCron,
-  runSubscriptionExpiryCron,
 } from '@feature/cron/services';
 import { env } from '@src/env';
 import { logger } from '@src/shared/logger';
@@ -18,52 +17,6 @@ function verifyCronSecret(req: Request): boolean {
 }
 
 // ---- Handlers ----------------------------------------------------------------
-// POST /api/cron/subscription-expiry
-// Description: Trigger subscription expiry check (cron job)
-// Security: Bearer token (CRON_SECRET)
-
-export const postSubscriptionExpiry: RequestHandler[] = [
-  asyncHandler(async (req: Request, res: Response) => {
-    try {
-      logger.info('POST /api/cron/subscription-expiry - Request started');
-
-      if (!verifyCronSecret(req)) {
-        logger.warn('POST /api/cron/subscription-expiry - Unauthorized access attempt');
-        return res.status(401).json({ error: 'Unauthorized', code: 'UNAUTHORIZED' });
-      }
-
-      const results = await runSubscriptionExpiryCron();
-      const totalExpired = results.reduce((sum, r) => sum + r.expired, 0);
-      const totalFailed = results.reduce((sum, r) => sum + r.failed, 0);
-      const processedAssociations = results.filter((r) => r.expired > 0 || !r.error).length;
-
-      logger.info(
-        { totalAssociations: results.length, processedAssociations, totalExpired, totalFailed },
-        'POST /api/cron/subscription-expiry - Subscription expiry check completed',
-      );
-
-      return res.json({
-        success: true,
-        message: 'Subscription expiry check completed',
-        summary: {
-          totalAssociations: results.length,
-          processedAssociations,
-          totalExpired,
-          totalFailed,
-        },
-        results,
-      });
-    } catch (error) {
-      logger.error({ error }, 'POST /api/cron/subscription-expiry - Unhandled error');
-      return res.status(500).json({
-        error: 'Internal server error',
-        code: 'INTERNAL_ERROR',
-        message: error instanceof Error ? error.message : 'Unknown error',
-      });
-    }
-  }),
-];
-
 // POST /api/cron/dsar-sla
 // Description: Trigger DSAR SLA deadline check (cron job)
 // Security: Bearer token (CRON_SECRET)

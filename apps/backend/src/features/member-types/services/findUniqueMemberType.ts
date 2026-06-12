@@ -36,7 +36,7 @@ export async function findUniqueMemberType({
     where: { id: memberTypeId, associationId },
     include: {
       _count: {
-        select: { users: true, subscriptionPlans: true },
+        select: { users: true, plans: true },
       },
     },
   });

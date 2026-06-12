@@ -32,7 +32,7 @@ export async function findManyMemberTypes({ associationId }: FindManyMemberTypes
     orderBy: { level: 'asc' },
     include: {
       _count: {
-        select: { users: true, subscriptionPlans: true },
+        select: { users: true, plans: true },
       },
     },
   });

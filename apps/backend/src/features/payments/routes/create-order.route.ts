@@ -8,7 +8,7 @@
 // ---------------------------------------------------------------------------
 
 import { NotFoundError } from '@errors';
-import { findSubscriptionPlans } from '@feature/payments/services/find-subscription-plans';
+import { findPlans } from '@feature/payments/services/find-plans';
 import { createPaymentOrder } from '@feature/payments/services/payment.service';
 import { getActiveProvider } from '@feature/payments/services/payment-provider.service';
 import { CreateOrderSchema } from '@feature/payments/validators';
@@ -61,8 +61,8 @@ export const createOrder: RequestHandler[] = [
       versions: { take: 1, orderBy: { createdAt: 'desc' as const } },
     };
 
-    let plansRaw = await findSubscriptionPlans({
-      where: whereClause as Parameters<typeof findSubscriptionPlans>[0]['where'],
+    let plansRaw = await findPlans({
+      where: whereClause as Parameters<typeof findPlans>[0]['where'],
       include: plansInclude,
     });
     let plans = plansRaw as unknown as ((typeof plansRaw)[number] & {
@@ -71,7 +71,7 @@ export const createOrder: RequestHandler[] = [
 
     // Step C: Fallback to default plan if no member-type-specific plan exists
     if (plans.length === 0) {
-      plansRaw = await findSubscriptionPlans({
+      plansRaw = await findPlans({
         where: { associationId: req.user!.associationId, isDefault: true, isActive: true },
         include: plansInclude,
       });

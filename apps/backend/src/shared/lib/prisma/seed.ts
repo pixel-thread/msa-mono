@@ -123,7 +123,7 @@ async function seedAssociation(data: (typeof ASSOCIATIONS)[number]) {
 
   const plans = await Promise.all(
     planConfigs.map((cfg) =>
-      prisma.subscriptionPlan.create({
+      prisma.plan.create({
         data: {
           associationId: association.id,
           name: cfg.name,
@@ -187,15 +187,6 @@ async function seedAssociation(data: (typeof ASSOCIATIONS)[number]) {
         mfaEnabled: false,
         memberTypeId: memberType.id,
         dateOfJoiningGovt: new Date('2025-01-01'),
-        dateOfJoiningAssociation: new Date('2025-01-01'),
-        subscription: {
-          create: {
-            planId: plan.id,
-            startDate: new Date('2024-01-01'),
-            endDate: new Date('2025-01-01'),
-            planVersionId: plan.versions[0].id,
-          },
-        },
       },
     });
   }
@@ -210,8 +201,8 @@ async function seedAssociation(data: (typeof ASSOCIATIONS)[number]) {
 async function main() {
   console.log('\n--- Cleaning Database ---');
 
-  await prisma.subscription.deleteMany();
-  await prisma.subscriptionPlan.deleteMany();
+  await prisma.planVersion.deleteMany();
+  await prisma.plan.deleteMany();
   await prisma.user.deleteMany();
   await prisma.memberType.deleteMany();
   await prisma.association.deleteMany();

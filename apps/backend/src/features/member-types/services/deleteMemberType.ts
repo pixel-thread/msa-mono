@@ -54,13 +54,13 @@ export async function deleteMemberType({
 
   // ---- Guard: check for linked subscription plans --------------------------
 
-  const plansCount = await prisma.subscriptionPlan.count({
+  const plansCount = await prisma.plan.count({
     where: { memberTypeId },
   });
 
   if (plansCount > 0) {
     throw new BadRequestError(
-      'Cannot delete member type that has subscription plans linked. Please update plans first.',
+      'Cannot delete member type that has plans linked. Please update plans first.',
     );
   }
 
