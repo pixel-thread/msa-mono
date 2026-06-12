@@ -267,7 +267,8 @@ export async function updatePlan(associationId: string, planId: string, body: Up
     return updatedPlan;
   }
 
-  const { ...metadata } = body;
+  // Strip version-only fields that don't exist on SubscriptionPlan
+  const { effectiveFrom, effectiveTo, ...metadata } = body;
   const plan = await prisma.subscriptionPlan.update({
     where: { id: planId, associationId },
     data: metadata,
