@@ -162,7 +162,13 @@ export function createEasWebhookService(secret: string): EasWebhookService {
         signature,
         processed: false,
       },
-      update: {},
+      update: {
+        eventType,
+        platform: payload.platform,
+        status: payload.status,
+        payload: JSON.stringify(payload),
+        signature,
+      },
     });
 
     // Route to handler
