@@ -336,3 +336,12 @@ export const PAYMENT_REFERENCE = {
 };
 
 export type PaymentReference = (typeof PAYMENT_REFERENCE)[keyof typeof PAYMENT_REFERENCE];
+
+export const BILLING_CYCLE = {
+  MONTHLY: 'MONTHLY',
+  YEARLY: 'YEARLY',
+  QUARTERLY: 'QUARTERLY',
+  HALF_YEARLY: 'HALF_YEARLY',
+};
+
+export type BillingCycle = (typeof BILLING_CYCLE)[keyof typeof BILLING_CYCLE];
