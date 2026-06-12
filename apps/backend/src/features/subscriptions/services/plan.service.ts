@@ -267,12 +267,12 @@ async function retroactivelyAdjustContributionsForPlan(
     });
 
     const newExpected = Number(newAmount);
+    const now = new Date();
     let surplus = 0;
 
     for (const period of periods) {
       const paidAmount = Number(period.paidAmount);
       const totalPaid = paidAmount + surplus;
-      const now = new Date();
 
       if (totalPaid >= newExpected) {
         // Fully paid (or overpaid) — record surplus
@@ -319,8 +319,19 @@ async function retroactivelyAdjustContributionsForPlan(
     }
 
     // 3. If surplus remains after the last period in range, forward-allocate
+    //    If any surplus can't be allocated (no outstanding future periods),
+    //    it stays on the last overpaid period as a visible credit.
     if (surplus > 0) {
-      await allocateSurplusToNextPeriods(tx, userId, surplus, effectiveTo);
+      const unallocated = await allocateSurplusToNextPeriods(tx, userId, surplus, effectiveTo);
+      if (unallocated > 0 && periods.length > 0) {
+        const lastPeriod = periods[periods.length - 1];
+        await tx.contributionPeriod.update({
+          where: { id: lastPeriod.id },
+          data: {
+            paidAmount: { increment: unallocated },
+          },
+        });
+      }
     }
   }
 }
@@ -334,7 +345,7 @@ async function allocateSurplusToNextPeriods(
   userId: string,
   surplus: number,
   afterDate: Date,
-): Promise<void> {
+): Promise<number> {
   const afterYear = afterDate.getFullYear();
   const afterMonth = afterDate.getMonth() + 1;
 
@@ -378,6 +389,8 @@ async function allocateSurplusToNextPeriods(
 
     remaining -= allocateToPeriod;
   }
+
+  return remaining;
 }
 
 // ---- updatePlan --------------------------------------------------------------
