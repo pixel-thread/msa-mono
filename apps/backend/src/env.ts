@@ -47,6 +47,9 @@ const envSchema = z.object({
   RAZORPAY_KEY_SECRET: z.string('RAZORPAY_KEY_SECRET').min(1).optional(),
   RAZORPAY_WEBHOOK_SECRET: z.string('RAZORPAY_WEBHOOK_SECRET').min(1).optional(),
 
+  // EAS Webhook
+  EAS_WEBHOOK_SECRET: z.string('EAS_WEBHOOK_SECRET').min(16),
+
   // JWT
   JWT_SECRET: z.string('JWT_SECRET').min(32),
   JWT_REFRESH_SECRET: z.string('JWT_REFRESH_SECRET').min(32),

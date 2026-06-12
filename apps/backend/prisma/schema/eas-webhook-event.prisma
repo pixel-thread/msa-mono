@@ -1,0 +1,21 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// EAS Webhook Events
+// ─────────────────────────────────────────────────────────────────────────────
+
+model EasWebhookEvent {
+  id           String               @id
+  eventType    EasWebhookEventType
+  platform     String
+  status       String
+  payload      Json
+  signature    String
+  processed    Boolean              @default(false)
+  processedAt  DateTime?
+  errorMessage String?
+  createdAt    DateTime             @default(now())
+
+  build        EasBuild?
+  submission   EasSubmission?
+
+  @@map("eas_webhook_events")
+}

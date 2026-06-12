@@ -9,6 +9,7 @@ import contributions from '@feature/contributions/routes/index';
 import cronRouter from '@feature/cron/routes/index';
 import dashboardRouter from '@feature/dashboard/routes/index';
 import dsarRouter from '@feature/dsar/routes/index';
+import easRouter from '@feature/eas/routes/index';
 import healthRouter from '@feature/health/routes/index';
 import ledgerRouter from '@feature/ledger/routes/index';
 import logsRouter from '@feature/logs/routes/index';
@@ -81,6 +82,7 @@ export function createApp(): express.Express {
   app.use('/api/v1/subscriptions', subscriptionsRouter);
   app.use('/api/v1/training', trainingRouter);
   app.use('/api/v1/user', userRouter);
+  app.use('/api/v1/eas', easRouter);
 
   /**
    * -------------------------------------------------------

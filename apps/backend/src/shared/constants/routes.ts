@@ -31,6 +31,7 @@ export const API_PUBLIC_ROUTES = [
   '/auth/forgot-password',
   '/auth/reset-password',
   '/payments/webhook',
+  '/eas/webhook',
   '/logs',
 ] as const;
 
