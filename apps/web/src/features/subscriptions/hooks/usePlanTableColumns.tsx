@@ -7,12 +7,12 @@ import { PlanStatusCell } from '@src/features/subscriptions/components/cells/pla
 import { formatDate } from '@src/shared/utils';
 import { ColumnDef } from '@tanstack/react-table';
 
-import { SubscriptionPlan } from '../types';
+import { Plan } from '../types';
 
 interface UsePlanTableColumnsOptions {
   onStatusChange: (planId: string, isActive: boolean) => void;
   onDelete: (planId: string) => void;
-  onEdit: (plan: SubscriptionPlan) => void;
+  onEdit: (plan: Plan) => void;
   onSetDefault: (planId: string) => void;
 }
 
@@ -21,8 +21,8 @@ export const usePlanTableColumns = ({
   onDelete,
   onEdit,
   onSetDefault,
-}: UsePlanTableColumnsOptions): { columns: ColumnDef<SubscriptionPlan>[] } => {
-  const columns: ColumnDef<SubscriptionPlan>[] = [
+}: UsePlanTableColumnsOptions): { columns: ColumnDef<Plan>[] } => {
+  const columns: ColumnDef<Plan>[] = [
     {
       accessorKey: 'isDefault',
       header: 'Default',

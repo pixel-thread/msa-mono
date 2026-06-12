@@ -1,58 +1,37 @@
-import { BillingCycle } from '@src/shared/types';
-
-export type SubscriptionPlanVersion = {
+export interface PlanVersion {
   id: string;
-  planId: string;
   amount: number;
   currency: string;
-  billingCycle: BillingCycle;
+  billingCycle: string;
   features: Record<string, unknown>;
-  description: string | null;
+  description?: string;
   effectiveFrom: string;
-  effectiveTo: string | null;
+  effectiveTo?: string;
   createdAt: string;
-};
+}
 
-export type SubscriptionPlan = {
+export interface Plan {
   id: string;
   associationId: string;
   name: string;
-  description: string | null;
+  description?: string;
   isActive: boolean;
   isDefault: boolean;
+  memberTypeId?: string;
+  memberType?: { id: string; level: number; description?: string };
+  activeVersion?: PlanVersion;
+  versions?: PlanVersion[];
   createdAt: string;
   updatedAt: string;
-  memberTypeId: string | null;
-  memberType: { id: string; level: number };
-  activeVersion: SubscriptionPlanVersion;
-  versions: SubscriptionPlanVersion[];
-};
+}
 
-export type SubscriptionPlanListItem = {
+export interface PlanListItem {
   id: string;
   name: string;
-  description: string | null;
-  amount: number;
-  currency: string;
-  billingCycle: BillingCycle;
+  description?: string;
   isActive: boolean;
-  effectiveFrom: string;
+  isDefault: boolean;
+  memberTypeId?: string;
+  activeVersion?: PlanVersion;
   createdAt: string;
-};
-
-export type Subscription = {
-  id: string;
-  userId: string;
-  planId: string;
-  planVersionId: string;
-  status: string;
-  startDate: string;
-  endDate: string;
-  waivedAt: string | null;
-  waivedReason: string | null;
-  waivedBy: string | null;
-  createdAt: string;
-  updatedAt: string;
-  plan?: SubscriptionPlan;
-  planVersion?: SubscriptionPlanVersion;
-};
+}

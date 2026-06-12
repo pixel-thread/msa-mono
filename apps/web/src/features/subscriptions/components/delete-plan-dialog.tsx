@@ -8,10 +8,10 @@ import {
   DialogTitle,
 } from '@src/shared/components/ui/dialog';
 
-import { SubscriptionPlan } from '../types';
+import { Plan } from '../types';
 
 interface DeletePlanDialogProps {
-  plan: SubscriptionPlan | null;
+  plan: Plan | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onConfirm: () => void;
@@ -29,7 +29,7 @@ export function DeletePlanDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-100">
         <DialogHeader>
-          <DialogTitle>Delete Subscription Plan</DialogTitle>
+          <DialogTitle>Delete Plan</DialogTitle>
           <DialogDescription>
             Are you sure you want to delete the plan &quot;{plan?.name}&quot;? This action cannot be
             undone.

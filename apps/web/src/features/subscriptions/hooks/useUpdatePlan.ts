@@ -3,9 +3,9 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import http from '@utils/http';
 import { toast } from 'sonner';
 
-import { EditPlanInput } from '../validators';
+import { UpdatePlanInput } from '../validators';
 
-interface UpdatePlanData extends EditPlanInput {
+interface UpdatePlanData extends UpdatePlanInput {
   planId: string;
 }
 
@@ -14,11 +14,11 @@ export function useUpdatePlan() {
 
   return useMutation({
     mutationFn: ({ planId, ...data }: UpdatePlanData) =>
-      http.patch(ENDPOINTS.SUBSCRIPTIONS.PLAN_DETAILS(planId), data),
+      http.patch(ENDPOINTS.PLANS.PLAN_DETAILS(planId), data),
     onSuccess: (data) => {
       if (data.success) {
         toast.success('Plan updated successfully');
-        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.SUBSCRIPTIONS_KEYS.PLANS() });
+        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.PLANS_KEYS.PLANS() });
         return;
       }
       toast.error(data.message);

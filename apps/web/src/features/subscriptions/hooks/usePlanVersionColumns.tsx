@@ -2,12 +2,12 @@ import { Badge } from '@src/shared/components/ui/badge';
 import { formatDate, formattedAmount } from '@src/shared/utils';
 import { ColumnDef } from '@tanstack/react-table';
 
-import { type SubscriptionPlanVersion } from '../types';
+import { type PlanVersion } from '../types';
 
 export const usePlanVersionColumns = (): {
-  columns: ColumnDef<SubscriptionPlanVersion>[];
+  columns: ColumnDef<PlanVersion>[];
 } => {
-  const columns: ColumnDef<SubscriptionPlanVersion>[] = [
+  const columns: ColumnDef<PlanVersion>[] = [
     {
       accessorKey: 'createdAt',
       header: 'Version Date',

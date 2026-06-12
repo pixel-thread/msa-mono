@@ -7,11 +7,11 @@ export function useSetDefaultPlan() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (planId: string) => http.post(ENDPOINTS.SUBSCRIPTIONS.PLANS_DEFAULT, { planId }),
+    mutationFn: (planId: string) => http.post(ENDPOINTS.PLANS.PLANS_DEFAULT, { planId }),
     onSuccess: (data) => {
       if (data.success) {
         toast.success('Default plan updated successfully');
-        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.SUBSCRIPTIONS_KEYS.PLANS() });
+        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.PLANS_KEYS.PLANS() });
         return;
       }
       toast.error(data.message);

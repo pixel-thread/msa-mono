@@ -2,10 +2,10 @@
 
 import { Badge } from '@src/shared/components/ui/badge';
 
-import { SubscriptionPlan } from '../../types';
+import { Plan } from '../../types';
 
 interface PlanBillingCellProps {
-  plan: SubscriptionPlan;
+  plan: Plan;
 }
 
 export function PlanBillingCell({ plan }: PlanBillingCellProps) {

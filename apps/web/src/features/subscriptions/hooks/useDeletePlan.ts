@@ -7,11 +7,11 @@ export function useDeletePlan() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (planId: string) => http.delete(ENDPOINTS.SUBSCRIPTIONS.PLAN_DETAILS(planId)),
+    mutationFn: (planId: string) => http.delete(ENDPOINTS.PLANS.PLAN_DETAILS(planId)),
     onSuccess: (data) => {
       if (data.success) {
         toast.success('Plan deleted successfully');
-        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.SUBSCRIPTIONS_KEYS.PLANS() });
+        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.PLANS_KEYS.PLANS() });
         return;
       }
       toast.error(data.message);

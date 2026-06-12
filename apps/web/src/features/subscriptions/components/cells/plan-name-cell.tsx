@@ -2,10 +2,10 @@
 
 import { Link } from '@tanstack/react-router';
 
-import { SubscriptionPlan } from '../../types';
+import { Plan } from '../../types';
 
 interface PlanNameCellProps {
-  plan: SubscriptionPlan;
+  plan: Plan;
 }
 
 export function PlanNameCell({ plan }: PlanNameCellProps) {

@@ -7,7 +7,7 @@ import { EditPlanDialog } from '@src/features/subscriptions/components/edit-plan
 import { usePlans } from '@src/features/subscriptions/hooks/usePlans';
 import { usePlanTableActions } from '@src/features/subscriptions/hooks/usePlanTableActions';
 import { usePlanTableColumns } from '@src/features/subscriptions/hooks/usePlanTableColumns';
-import { SubscriptionPlan } from '@src/features/subscriptions/types';
+import { Plan } from '@src/features/subscriptions/types';
 import { DataTable } from '@src/shared/components/data-table';
 import { DataTableFilters } from '@src/shared/components/data-table-filters';
 import { DataTablePagination } from '@src/shared/components/data-table-pagination';
@@ -16,8 +16,8 @@ import { useUrlFilters } from '@src/shared/hooks';
 
 export default function PlansPage() {
   const { page, setPage } = useUrlFilters({ basePath: '/subscriptions/plans' });
-  const [editingPlan, setEditingPlan] = useState<SubscriptionPlan | null>(null);
-  const [deletingPlan, setDeletingPlan] = useState<SubscriptionPlan | null>(null);
+  const [editingPlan, setEditingPlan] = useState<Plan | null>(null);
+  const [deletingPlan, setDeletingPlan] = useState<Plan | null>(null);
 
   const { plans, meta, isLoading } = usePlans({ page });
   const { onStatusChange, onDelete, onSetDefault, isPending } = usePlanTableActions();
@@ -28,7 +28,7 @@ export default function PlansPage() {
       const plan = plans.find((p) => p.id === planId);
       if (plan) setDeletingPlan(plan);
     },
-    onEdit: (plan: SubscriptionPlan) => setEditingPlan(plan),
+    onEdit: (plan: Plan) => setEditingPlan(plan),
   });
 
   const handleDeleteConfirm = () => {

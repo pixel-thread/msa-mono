@@ -34,7 +34,7 @@ import { BILLING_CYCLE } from '@src/shared/types';
 import { Plus } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 
-import { CreateSubscriptionPlanInput, CreateSubscriptionPlanSchema } from '../validators';
+import { CreatePlanInput, CreatePlanSchema } from '../validators';
 
 export function CreatePlanDialog() {
   const [open, setOpen] = useState(false);
@@ -42,7 +42,7 @@ export function CreatePlanDialog() {
   const { memberTypes } = useMemberTypes();
 
   const form = useForm({
-    resolver: zodResolver(CreateSubscriptionPlanSchema),
+    resolver: zodResolver(CreatePlanSchema),
     defaultValues: {
       name: '',
       description: '',
@@ -56,7 +56,7 @@ export function CreatePlanDialog() {
     },
   });
 
-  const onSubmit = (data: CreateSubscriptionPlanInput) => {
+  const onSubmit = (data: CreatePlanInput) => {
     const { memberTypeId, isActive, ...rest } = data;
     createPlan.mutate(
       {
@@ -75,7 +75,7 @@ export function CreatePlanDialog() {
     );
   };
 
-  logger.debug('Create Subscription Plan Dialog', {
+  logger.debug('Create Plan Dialog', {
     error: form.formState.errors,
   });
 
@@ -89,9 +89,9 @@ export function CreatePlanDialog() {
       </DialogTrigger>
       <DialogContent className="sm:max-w-125">
         <DialogHeader>
-          <DialogTitle>Create Subscription Plan</DialogTitle>
+          <DialogTitle>Create Plan</DialogTitle>
           <DialogDescription>
-            Add a new subscription plan for your association members.
+            Add a new plan for your association members.
           </DialogDescription>
         </DialogHeader>
 

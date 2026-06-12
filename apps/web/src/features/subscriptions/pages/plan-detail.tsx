@@ -56,7 +56,7 @@ export function PlanDetailPage() {
   }
   return (
     <>
-      <SectionHeader title={plan.name} description="Subscription plan details">
+      <SectionHeader title={plan.name} description="Plan details">
         <Badge variant={plan.isActive ? 'default' : 'secondary'}>
           {plan.isActive ? 'Active' : 'Inactive'}
         </Badge>

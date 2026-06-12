@@ -32,7 +32,7 @@ import { BILLING_CYCLE, BillingCycle } from '@src/shared/types';
 import { useForm } from 'react-hook-form';
 
 import { usePlan } from '../hooks/usePlan';
-import { EditPlanInput, EditPlanSchema } from '../validators';
+import { UpdatePlanInput, UpdatePlanSchema } from '../validators';
 
 interface EditPlanDialogProps {
   planId: string;
@@ -45,8 +45,8 @@ export function EditPlanDialog({ planId, open, onOpenChange }: EditPlanDialogPro
   const { data: plan } = usePlan({ planId: planId });
   const { memberTypes } = useMemberTypes();
 
-  const form = useForm<EditPlanInput>({
-    resolver: zodResolver(EditPlanSchema),
+  const form = useForm<UpdatePlanInput>({
+    resolver: zodResolver(UpdatePlanSchema),
     defaultValues: {
       name: '',
       description: '',
@@ -82,7 +82,7 @@ export function EditPlanDialog({ planId, open, onOpenChange }: EditPlanDialogPro
     }
   }, [plan, open, form]);
 
-  const onSubmit = (data: EditPlanInput) => {
+  const onSubmit = (data: UpdatePlanInput) => {
     if (!plan) return;
 
     const { memberTypeId, effectiveTo, effectiveFrom, isActive, ...rest } = data;
@@ -105,8 +105,8 @@ export function EditPlanDialog({ planId, open, onOpenChange }: EditPlanDialogPro
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-125">
         <DialogHeader>
-          <DialogTitle>Edit Subscription Plan</DialogTitle>
-          <DialogDescription>Update the details of the subscription plan.</DialogDescription>
+          <DialogTitle>Edit Plan</DialogTitle>
+          <DialogDescription>Update the details of the plan.</DialogDescription>
         </DialogHeader>
 
         <Form {...form}>

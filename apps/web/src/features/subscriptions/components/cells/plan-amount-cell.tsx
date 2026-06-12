@@ -1,9 +1,9 @@
 'use client';
 
-import { SubscriptionPlan } from '../../types';
+import { Plan } from '../../types';
 
 interface PlanAmountCellProps {
-  plan: SubscriptionPlan;
+  plan: Plan;
 }
 
 export function PlanAmountCell({ plan }: PlanAmountCellProps) {

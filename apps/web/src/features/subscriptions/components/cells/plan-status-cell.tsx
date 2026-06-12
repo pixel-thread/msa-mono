@@ -9,11 +9,11 @@ import {
 } from '@src/shared/components/ui/select';
 import { Plan_STATUS } from '@src/shared/types';
 
-import { SubscriptionPlan } from '../../types';
+import { Plan } from '../../types';
 import { getPlanStatusBadge } from '../../utils/helper/get-plan-status-badge';
 
 interface PlanStatusCellProps {
-  plan: SubscriptionPlan;
+  plan: Plan;
   onStatusChange: (planId: string, isActive: boolean) => void;
 }
 

@@ -3,10 +3,10 @@
 import { Button } from '@src/shared/components/ui/button';
 import { Star } from 'lucide-react';
 
-import { SubscriptionPlan } from '../../types';
+import { Plan } from '../../types';
 
 interface PlanDefaultCellProps {
-  plan: SubscriptionPlan;
+  plan: Plan;
   onSetDefault: (planId: string) => void;
 }
 

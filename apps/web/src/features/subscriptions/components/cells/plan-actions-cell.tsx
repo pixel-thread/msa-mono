@@ -3,12 +3,12 @@
 import { Button } from '@src/shared/components/ui/button';
 import { Pencil, Trash2 } from 'lucide-react';
 
-import { SubscriptionPlan } from '../../types';
+import { Plan } from '../../types';
 
 interface PlanActionsCellProps {
-  plan: SubscriptionPlan;
+  plan: Plan;
   onDelete: (planId: string) => void;
-  onEdit: (plan: SubscriptionPlan) => void;
+  onEdit: (plan: Plan) => void;
 }
 
 export function PlanActionsCell({ plan, onDelete, onEdit }: PlanActionsCellProps) {
