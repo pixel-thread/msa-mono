@@ -10,7 +10,7 @@ config({ path: resolve(__dirname, '.env.test') });
 const jestConfig = {
   preset: 'ts-jest/presets/default-esm',
   testEnvironment: 'node',
-  roots: ['<rootDir>/src/__tests__'],
+  roots: ['<rootDir>/src/__tests__', '<rootDir>/src/features'],
   testMatch: ['**/*.test.ts'],
   extensionsToTreatAsEsm: ['.ts'],
   moduleNameMapper: {
