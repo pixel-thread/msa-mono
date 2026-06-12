@@ -148,4 +148,3 @@ export const AnnouncementDetailScreen = () => {
     </Container>
   );
 };
-

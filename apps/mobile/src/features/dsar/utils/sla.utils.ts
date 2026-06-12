@@ -13,9 +13,13 @@ export const getSLAStatus = (createdAt: string | Date): SLAStatus => {
 
 export const getSLAColor = (status: SLAStatus): string => {
   switch (status) {
-    case 'BREACHED': return '#ef4444'; // Red-500
-    case 'AT_RISK': return '#f97316';  // Orange-500
-    case 'ON_TRACK': return '#22c55e'; // Green-500
-    default: return '#6b7280';       // Gray-500
+    case 'BREACHED':
+      return '#ef4444'; // Red-500
+    case 'AT_RISK':
+      return '#f97316'; // Orange-500
+    case 'ON_TRACK':
+      return '#22c55e'; // Green-500
+    default:
+      return '#6b7280'; // Gray-500
   }
 };

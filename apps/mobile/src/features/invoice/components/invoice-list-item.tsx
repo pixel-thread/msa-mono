@@ -37,8 +37,7 @@ export const InvoiceListItem = ({ invoice }: { invoice: Invoice }) => {
       <Card className="overflow-hidden border-slate-100 shadow-sm dark:border-slate-800">
         <TouchableOpacity
           activeOpacity={0.7}
-          onPress={() => router.push(`/(protected)/profile/invoices/${invoice.id}`)}
-        >
+          onPress={() => router.push(`/(protected)/profile/invoices/${invoice.id}`)}>
           <CardContent className="p-4">
             <View className="flex-row items-start justify-between">
               <View className="flex-1 gap-y-2">
@@ -46,8 +45,7 @@ export const InvoiceListItem = ({ invoice }: { invoice: Invoice }) => {
                   weight={'semibold'}
                   variant="heading"
                   size="sm"
-                  className="mb-2 text-slate-900 dark:text-white"
-                >
+                  className="mb-2 text-slate-900 dark:text-white">
                   #INV-{invoice.id.substring(0, 8).toUpperCase()}
                 </Text>
 
@@ -62,11 +60,7 @@ export const InvoiceListItem = ({ invoice }: { invoice: Invoice }) => {
 
                 <View className="flex-row items-center justify-start gap-x-2">
                   <View className={cn('px-2 py-0.5', config.bgClass)}>
-                    <Text
-                      size="xs"
-                      weight="medium"
-                      className={cn('text-[10px]', config.textClass)}
-                    >
+                    <Text size="xs" weight="medium" className={cn('text-[10px]', config.textClass)}>
                       {status}
                     </Text>
                   </View>
@@ -77,11 +71,20 @@ export const InvoiceListItem = ({ invoice }: { invoice: Invoice }) => {
                 <View className="h-10 w-10 items-center justify-center bg-slate-50 dark:bg-slate-800">
                   <Ionicons name="chevron-forward" size={18} color="#94a3b8" />
                 </View>
-                <View className="items-end mt-4">
-                  <Text weight="semibold" size="sm" className="text-slate-900 dark:text-slate-100 font-sans-bold">
-                    {invoice.amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                <View className="mt-4 items-end">
+                  <Text
+                    weight="semibold"
+                    size="sm"
+                    className="font-sans-bold text-slate-900 dark:text-slate-100">
+                    {invoice.amount.toLocaleString(undefined, {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}
                   </Text>
-                  <Text variant="subtext" size="xs" className="uppercase tracking-widest opacity-60">
+                  <Text
+                    variant="subtext"
+                    size="xs"
+                    className="uppercase tracking-widest opacity-60">
                     {invoice.currency}
                   </Text>
                 </View>
@@ -93,5 +96,3 @@ export const InvoiceListItem = ({ invoice }: { invoice: Invoice }) => {
     </View>
   );
 };
-
-

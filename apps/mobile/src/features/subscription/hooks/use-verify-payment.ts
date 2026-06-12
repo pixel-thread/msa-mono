@@ -78,7 +78,9 @@ export function useVerifyPayment() {
     onSuccess: (data) => {
       if (data.success) {
         toast.success(data.message);
-        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.SUBSCRIPTIONS_KEYS.PAYMENT_HISTORY() });
+        queryClient.invalidateQueries({
+          queryKey: QUERY_KEYS.SUBSCRIPTIONS_KEYS.PAYMENT_HISTORY(),
+        });
         return data;
       }
       toast.error(data.message);

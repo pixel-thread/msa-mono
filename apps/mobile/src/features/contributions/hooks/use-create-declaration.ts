@@ -6,8 +6,7 @@ export const useCreateDeclaration = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: { amount: number }) =>
-      http.post(ENDPOINTS.CONTRIBUTION.DECLARATIONS, data),
+    mutationFn: (data: { amount: number }) => http.post(ENDPOINTS.CONTRIBUTION.DECLARATIONS, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.CONTRIBUTIONS_KEYS.DECLARATIONS() });
     },

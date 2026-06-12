@@ -168,10 +168,7 @@ export const MemberSubmitDSARScreen = () => {
           )}
         </View>
 
-        <Button
-          onPress={handleSubmit(onSubmit)}
-          disabled={isPending}
-          className="mt-2">
+        <Button onPress={handleSubmit(onSubmit)} disabled={isPending} className="mt-2">
           {isPending ? 'Submitting...' : 'Submit Request'}
         </Button>
       </ScrollView>

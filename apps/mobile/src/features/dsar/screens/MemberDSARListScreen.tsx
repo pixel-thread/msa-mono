@@ -65,7 +65,9 @@ export const MemberDSARListScreen = () => {
               You haven&apos;t submitted any data privacy requests yet. You can request access to
               your profile data or payment history anytime.
             </Text>
-            <Button onPress={handleNewRequest} className="w-full">Submit New Request</Button>
+            <Button onPress={handleNewRequest} className="w-full">
+              Submit New Request
+            </Button>
           </View>
         }
       />

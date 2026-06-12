@@ -18,23 +18,39 @@ const FILTERS: { key: FilterType; label: string }[] = [
 ];
 
 const MONTHS = [
-  'January', 'February', 'March', 'April', 'May', 'June',
-  'July', 'August', 'September', 'October', 'November', 'December',
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
 ];
 
 function getStatusBadgeStyle(status: ContributionStatus) {
   switch (status) {
-    case 'PAID': return 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400';
-    case 'DUE': return 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400';
-    case 'PARTIAL': return 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400';
-    case 'WAIVED': return 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400';
+    case 'PAID':
+      return 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400';
+    case 'DUE':
+      return 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400';
+    case 'PARTIAL':
+      return 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400';
+    case 'WAIVED':
+      return 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400';
   }
 }
 
 function ContributionStatusBadge({ status }: { status: ContributionStatus }) {
   return (
     <View className={cn('self-start rounded px-2 py-0.5', getStatusBadgeStyle(status))}>
-      <Text size="xs" weight="medium">{status}</Text>
+      <Text size="xs" weight="medium">
+        {status}
+      </Text>
     </View>
   );
 }
@@ -42,7 +58,9 @@ function ContributionStatusBadge({ status }: { status: ContributionStatus }) {
 function ContributionRow({ item }: { item: ContributionPeriod }) {
   const monthLabel = MONTHS[item.month - 1] ?? `Month ${item.month}`;
   const dueDate = new Date(item.dueDate).toLocaleDateString('en-IN', {
-    day: 'numeric', month: 'short', year: 'numeric',
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
   });
 
   return (
@@ -79,7 +97,7 @@ function ContributionRow({ item }: { item: ContributionPeriod }) {
 export const MyContributions = () => {
   const [activeFilter, setActiveFilter] = useState<FilterType>('all');
   const { data, isLoading, isError, refetch, isRefetching } = useMyContributions(
-    activeFilter === 'due' || activeFilter === 'pending' ? 'DUE' : undefined,
+    activeFilter === 'due' || activeFilter === 'pending' ? 'DUE' : undefined
   );
 
   const { filteredData, summary } = useMemo(() => {
@@ -124,7 +142,9 @@ export const MyContributions = () => {
         <Text variant="subtext" className="mt-3 text-center">
           Failed to load contributions.
         </Text>
-        <TouchableOpacity onPress={() => refetch()} className="mt-4 rounded bg-indigo-600 px-6 py-2">
+        <TouchableOpacity
+          onPress={() => refetch()}
+          className="mt-4 rounded bg-indigo-600 px-6 py-2">
           <Text className="font-medium text-white">Retry</Text>
         </TouchableOpacity>
       </View>
@@ -136,7 +156,11 @@ export const MyContributions = () => {
       {/* Summary Cards */}
       <View className="mb-4 flex-row flex-wrap gap-2">
         {[
-          { label: 'Total Paid', value: formatCurrency(summary.totalPaid), color: 'text-green-600' },
+          {
+            label: 'Total Paid',
+            value: formatCurrency(summary.totalPaid),
+            color: 'text-green-600',
+          },
           { label: 'Total Due', value: formatCurrency(summary.totalDue), color: 'text-amber-600' },
           { label: 'Pending', value: String(summary.pendingCount), color: 'text-slate-600' },
           { label: 'Waived', value: formatCurrency(summary.waivedTotal), color: 'text-slate-400' },
@@ -164,7 +188,9 @@ export const MyContributions = () => {
               onPress={() => setActiveFilter(filter.key)}
               className={cn(
                 'rounded-full px-4 py-2',
-                active ? 'bg-indigo-600' : 'border border-slate-200 bg-transparent dark:border-slate-700',
+                active
+                  ? 'bg-indigo-600'
+                  : 'border border-slate-200 bg-transparent dark:border-slate-700'
               )}>
               <Text
                 size="sm"
@@ -181,7 +207,9 @@ export const MyContributions = () => {
       {filteredData.length === 0 ? (
         <View className="items-center justify-center border border-dashed border-slate-200 bg-slate-50/50 py-12 dark:border-slate-800 dark:bg-slate-900/30">
           <Ionicons name="receipt-outline" size={40} color="#94a3b8" />
-          <Text variant="subtext" className="mt-2">No contributions found</Text>
+          <Text variant="subtext" className="mt-2">
+            No contributions found
+          </Text>
         </View>
       ) : (
         <FlashList

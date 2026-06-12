@@ -13,4 +13,3 @@ export const ResetPasswordSchema = z
   });
 
 export type ResetPasswordInput = z.infer<typeof ResetPasswordSchema>;
-

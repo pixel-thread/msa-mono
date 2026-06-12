@@ -60,9 +60,7 @@ export default function MemberConsentScreen() {
           <Link
             href="/consent/history"
             style={{ fontFamily: 'JetBrainsMono_400Regular' }}
-            className={cn(
-              'mt-6 bg-indigo-50 p-4 text-center font-semibold text-indigo-700'
-            )}>
+            className={cn('mt-6 bg-indigo-50 p-4 text-center font-semibold text-indigo-700')}>
             View Consent Audit History
           </Link>
         </ScrollView>

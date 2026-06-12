@@ -118,4 +118,3 @@ export interface BulkRemoveAssignmentResponse {
   deleted: string[];
   notFound: string[];
 }
-

@@ -9,7 +9,10 @@ import { Container, StackHeader } from '@src/shared/components';
 import { Text, Button, FieldInput } from '@src/shared/components/ui';
 
 const createDeclarationSchema = z.object({
-  amount: z.string().min(1, 'Amount is required').regex(/^\d+(\.\d+)?$/, 'Must be a valid number'),
+  amount: z
+    .string()
+    .min(1, 'Amount is required')
+    .regex(/^\d+(\.\d+)?$/, 'Must be a valid number'),
 });
 
 type CreateDeclarationForm = z.infer<typeof createDeclarationSchema>;
@@ -23,11 +26,14 @@ export const CreateDeclarationScreen = () => {
   });
 
   const onSubmit = (data: CreateDeclarationForm) => {
-    mutate({ amount: Number(data.amount) }, {
-      onSuccess: () => {
-        router.back();
-      },
-    });
+    mutate(
+      { amount: Number(data.amount) },
+      {
+        onSuccess: () => {
+          router.back();
+        },
+      }
+    );
   };
 
   return (
@@ -38,7 +44,11 @@ export const CreateDeclarationScreen = () => {
         className="flex-1">
         <View className="flex-1 p-4">
           <View className="mb-8">
-            <Text variant="heading" size="2xl" weight="bold" className="mb-1 text-slate-900 dark:text-white">
+            <Text
+              variant="heading"
+              size="2xl"
+              weight="bold"
+              className="mb-1 text-slate-900 dark:text-white">
               New Declaration
             </Text>
             <Text variant="subtext" size="sm">

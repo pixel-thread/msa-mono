@@ -72,7 +72,8 @@ export const OtaUpdateModal = () => {
         <AlertDialogHeader>
           <AlertDialogTitle>Update Available</AlertDialogTitle>
           <AlertDialogDescription>
-            A new version of the app is available. Update now to get the latest features and improvements.
+            A new version of the app is available. Update now to get the latest features and
+            improvements.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

@@ -15,12 +15,7 @@ export const ComplianceResponseCard = ({ response }: Props) => {
   const isResolution = response.responseType === 'RESOLUTION';
 
   return (
-    <Card
-      className={cn(
-        'mb-3',
-        isResolution ? 'border-green-200' : ''
-      )}
-    >
+    <Card className={cn('mb-3', isResolution ? 'border-green-200' : '')}>
       <CardContent className="p-4">
         <View className="mb-2 flex-row items-center justify-between">
           <View className="flex-row items-center gap-2">

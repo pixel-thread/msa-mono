@@ -12,4 +12,6 @@ interface PushNotificationContextType {
 
 export const NotificationContext = createContext<NotificationContextType | undefined>(undefined);
 
-export const PushNotificationContext = createContext<PushNotificationContextType | undefined>(undefined);
+export const PushNotificationContext = createContext<PushNotificationContextType | undefined>(
+  undefined
+);

@@ -27,7 +27,11 @@ export const DeclarationCard = ({ declaration }: DeclarationCardProps) => {
                 </Text>
               </View>
 
-              <Text weight="semibold" variant="heading" size="xl" className="mb-2 text-slate-900 dark:text-white">
+              <Text
+                weight="semibold"
+                variant="heading"
+                size="xl"
+                className="mb-2 text-slate-900 dark:text-white">
                 ₹{declaration.amount}
               </Text>
 

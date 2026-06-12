@@ -8,20 +8,25 @@ export const dsarSubmitSchema = z.object({
 
 export type DSARSubmitFormData = z.infer<typeof dsarSubmitSchema>;
 
-export const dsarResponseSchema = z.object({
-  status: z.enum(['IN_PROGRESS', 'COMPLETED', 'REJECTED']),
-  notes: z.string().max(1000, 'Notes cannot exceed 1000 characters').optional(),
-  responseType: z.string().optional(),
-  storageKey: z.string().optional(),
-  rejectedReason: z.string().max(500, 'Reason cannot exceed 500 characters').optional(),
-}).refine((data) => {
-  if (data.status === 'REJECTED' && !data.rejectedReason) {
-    return false;
-  }
-  return true;
-}, {
-  message: "Rejected reason is required when status is REJECTED",
-  path: ["rejectedReason"],
-});
+export const dsarResponseSchema = z
+  .object({
+    status: z.enum(['IN_PROGRESS', 'COMPLETED', 'REJECTED']),
+    notes: z.string().max(1000, 'Notes cannot exceed 1000 characters').optional(),
+    responseType: z.string().optional(),
+    storageKey: z.string().optional(),
+    rejectedReason: z.string().max(500, 'Reason cannot exceed 500 characters').optional(),
+  })
+  .refine(
+    (data) => {
+      if (data.status === 'REJECTED' && !data.rejectedReason) {
+        return false;
+      }
+      return true;
+    },
+    {
+      message: 'Rejected reason is required when status is REJECTED',
+      path: ['rejectedReason'],
+    }
+  );
 
 export type DSARResponseFormData = z.infer<typeof dsarResponseSchema>;

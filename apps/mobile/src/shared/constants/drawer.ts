@@ -61,7 +61,11 @@ export const drawerMenuGroups: DrawerMenuGroup[] = [
 export const drawerFooterItems: DrawerMenuItem[] = [
   { label: 'About', icon: 'information-circle-outline', href: '/(protected)/legal/about' },
   { label: 'Terms & Conditions', icon: 'document-text-outline', href: '/(protected)/legal/terms' },
-  { label: 'Privacy Policy', icon: 'shield-checkmark-outline', href: '/(protected)/legal/privacy-policy' },
+  {
+    label: 'Privacy Policy',
+    icon: 'shield-checkmark-outline',
+    href: '/(protected)/legal/privacy-policy',
+  },
 ];
 
 export const adminDrawerMenuGroups: DrawerMenuGroup[] = [

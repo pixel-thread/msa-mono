@@ -47,9 +47,7 @@ export const Image = ({
 
       {/* Error / Placeholder Layer */}
       {status === 'error' && (
-        <View
-          style={StyleSheet.absoluteFill}
-          className="items-center justify-center bg-muted">
+        <View style={StyleSheet.absoluteFill} className="items-center justify-center bg-muted">
           <Ionicons name={fallbackIcon} size={32} color="#94a3b8" />
         </View>
       )}

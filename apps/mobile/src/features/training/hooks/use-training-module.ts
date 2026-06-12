@@ -6,7 +6,7 @@ import { QUERY_KEYS, ENDPOINTS } from '@repo/shared';
 
 export const useTrainingModule = (id: string) => {
   const { isAuthenticated } = useAuthStore();
-  
+
   return useQuery({
     queryKey: QUERY_KEYS.TRAINING_KEYS.MODULE_DETAIL(id),
     select: (data) => data?.data,

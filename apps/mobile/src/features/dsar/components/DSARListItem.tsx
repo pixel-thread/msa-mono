@@ -13,16 +13,12 @@ interface Props {
 
 export const DSARListItem = ({ request, onPress }: Props) => {
   return (
-    <TouchableOpacity
-      activeOpacity={0.7}
-      onPress={() => onPress?.(request)}
-      className="mb-4"
-    >
+    <TouchableOpacity activeOpacity={0.7} onPress={() => onPress?.(request)} className="mb-4">
       <Card>
         <CardContent className="p-4">
-          <View className="flex-row justify-between items-start mb-2">
-            <View className="flex-1 mr-2">
-              <Text variant="subtext" size="xs" className="uppercase font-bold mb-1 text-slate-400">
+          <View className="mb-2 flex-row items-start justify-between">
+            <View className="mr-2 flex-1">
+              <Text variant="subtext" size="xs" className="mb-1 font-bold uppercase text-slate-400">
                 {request.ticketNumber}
               </Text>
               <Text weight="bold" size="lg" className="text-slate-900">
@@ -34,11 +30,11 @@ export const DSARListItem = ({ request, onPress }: Props) => {
 
           <View className="mb-3">
             <Text variant="subtext" size="sm" className="text-slate-600" numberOfLines={1}>
-              {request.requestedData.map(d => d.replace('_', ' ')).join(', ')}
+              {request.requestedData.map((d) => d.replace('_', ' ')).join(', ')}
             </Text>
           </View>
 
-          <View className="flex-row justify-between items-center pt-3 border-t border-slate-100">
+          <View className="flex-row items-center justify-between border-t border-slate-100 pt-3">
             <Text variant="subtext" size="xs" className="text-slate-400">
               Requested on {formatDate(request.createdAt)}
             </Text>

@@ -54,8 +54,7 @@ export const AnnouncementCard = ({ announcement }: AnnouncementCardProps) => {
                     </View>
                   )}
 
-                  <View
-                    className={`px-2 py-0.5 ${priorityColors[announcement.priority]}`}>
+                  <View className={`px-2 py-0.5 ${priorityColors[announcement.priority]}`}>
                     <Text size="xs" weight="medium" className="text-[10px]">
                       {announcement.priority}
                     </Text>
@@ -111,4 +110,3 @@ export const AnnouncementCard = ({ announcement }: AnnouncementCardProps) => {
     </View>
   );
 };
-

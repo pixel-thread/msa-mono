@@ -8,7 +8,8 @@ import { ForgotPasswordInput } from '../validators/forgot-password';
 export function useForgotPassword() {
   const router = useRouter();
   return useMutation({
-    mutationFn: async (data: ForgotPasswordInput) => http.post(ENDPOINTS.AUTH.FORGOT_PASSWORD, data),
+    mutationFn: async (data: ForgotPasswordInput) =>
+      http.post(ENDPOINTS.AUTH.FORGOT_PASSWORD, data),
     onSuccess: (data) => {
       if (data.success) {
         toast.success(data.message);

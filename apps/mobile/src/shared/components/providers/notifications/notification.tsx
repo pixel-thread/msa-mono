@@ -96,4 +96,3 @@ export const NotificationProvider = ({ children }: { children: React.ReactNode }
     <NotificationContext.Provider value={{ notification }}>{children}</NotificationContext.Provider>
   );
 };
-

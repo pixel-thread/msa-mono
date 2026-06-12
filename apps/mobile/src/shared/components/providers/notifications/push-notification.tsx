@@ -56,4 +56,3 @@ export const PushNotificationProvider = ({ children }: { children: React.ReactNo
     </PushNotificationContext.Provider>
   );
 };
-

@@ -7,14 +7,13 @@ import { DSARSubmitFormData } from '../validators/dsar.validator';
 
 /**
  * Hook to submit a new DSAR request.
- * 
+ *
  * @returns Mutation object for submitting a DSAR request
  */
 export const useSubmitDSAR = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (data: DSARSubmitFormData) => 
-      http.post<DSARRequest>(ENDPOINTS.DSAR.SUBMIT, data),
+    mutationFn: (data: DSARSubmitFormData) => http.post<DSARRequest>(ENDPOINTS.DSAR.SUBMIT, data),
     onSuccess: (data) => {
       if (data.success) {
         queryClient.invalidateQueries({ queryKey: QUERY_KEYS.DSAR_KEYS.MY() });
@@ -32,7 +31,7 @@ export const useSubmitDSAR = () => {
 
 /**
  * Hook to respond to a DSAR request.
- * 
+ *
  * @returns Mutation object for responding to a DSAR request
  */
 export const useRespondToDSAR = () => {
@@ -57,7 +56,7 @@ export const useRespondToDSAR = () => {
 
 /**
  * Hook to assign a DSAR request to a user.
- * 
+ *
  * @returns Mutation object for assigning a DSAR request
  */
 export const useAssignDSAR = () => {
@@ -82,14 +81,13 @@ export const useAssignDSAR = () => {
 
 /**
  * Hook to cancel a pending DSAR request.
- * 
+ *
  * @returns Mutation object for cancelling a DSAR request
  */
 export const useCancelDSAR = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (ticketId: string) =>
-      http.post<DSARRequest>(`/dsar/my/${ticketId}/cancel`),
+    mutationFn: (ticketId: string) => http.post<DSARRequest>(`/dsar/my/${ticketId}/cancel`),
     onSuccess: (data) => {
       if (data.success) {
         queryClient.invalidateQueries({ queryKey: QUERY_KEYS.DSAR_KEYS.MY() });

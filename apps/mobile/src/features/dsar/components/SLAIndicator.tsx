@@ -15,13 +15,8 @@ export const SLAIndicator = ({ createdAt, className }: Props) => {
 
   return (
     <View className={cn('flex-row items-center gap-1.5', className)}>
-      <View 
-        style={{ backgroundColor: color }} 
-        className="w-2.5 h-2.5 " 
-      />
-      <Text className="text-xs font-medium text-gray-600">
-        {status.replace('_', ' ')}
-      </Text>
+      <View style={{ backgroundColor: color }} className="h-2.5 w-2.5 " />
+      <Text className="text-xs font-medium text-gray-600">{status.replace('_', ' ')}</Text>
     </View>
   );
 };

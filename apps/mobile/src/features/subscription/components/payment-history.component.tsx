@@ -9,7 +9,7 @@ export const PaymentHistory = () => {
 
   if (isLoading) {
     return (
-      <View className="py-12 items-center justify-center">
+      <View className="items-center justify-center py-12">
         <ActivityIndicator size="large" color="#4f46e5" />
       </View>
     );
@@ -17,7 +17,7 @@ export const PaymentHistory = () => {
 
   if (isError || !data) {
     return (
-      <View className="py-12 items-center justify-center">
+      <View className="items-center justify-center py-12">
         <Text variant="subtext" className="text-center">
           Failed to load payment history. Please try again later.
         </Text>
@@ -30,7 +30,7 @@ export const PaymentHistory = () => {
   return (
     <View className="flex-1">
       {/* Stats Grid */}
-      <View className="flex-row flex-wrap gap-2 mb-6">
+      <View className="mb-6 flex-row flex-wrap gap-2">
         {[
           { label: 'Total Paid', value: `${summary.totalPaid}` },
           { label: 'Total Due', value: `${summary.totalDue}` },
@@ -39,7 +39,7 @@ export const PaymentHistory = () => {
         ].map((stat, idx) => (
           <View
             key={idx}
-            className="flex-1 min-w-[45%] border border-slate-100 bg-slate-50 p-3 dark:border-slate-800 dark:bg-slate-900/50">
+            className="min-w-[45%] flex-1 border border-slate-100 bg-slate-50 p-3 dark:border-slate-800 dark:bg-slate-900/50">
             <Text variant="subtext" size="xs" className="mb-1 uppercase tracking-wider">
               {stat.label}
             </Text>

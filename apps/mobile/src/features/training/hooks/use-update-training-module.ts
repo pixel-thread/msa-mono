@@ -17,7 +17,9 @@ export const useUpdateTrainingModule = ({ moduleId }: Props) => {
       if (data.success) {
         toast.success(data.message);
         queryClient.invalidateQueries({ queryKey: QUERY_KEYS.TRAINING_KEYS.MY_ALL() });
-        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.TRAINING_KEYS.MODULE_DETAIL(moduleId) });
+        queryClient.invalidateQueries({
+          queryKey: QUERY_KEYS.TRAINING_KEYS.MODULE_DETAIL(moduleId),
+        });
         return data;
       }
       toast.error(data.message);

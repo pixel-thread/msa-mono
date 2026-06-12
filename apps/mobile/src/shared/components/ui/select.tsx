@@ -90,12 +90,16 @@ export const Select = ({
         </Text>
       </TouchableOpacity>
 
-      <Modal visible={isDropdownOpen} transparent animationType="fade" onRequestClose={() => setIsDropdownOpen(false)}>
+      <Modal
+        visible={isDropdownOpen}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setIsDropdownOpen(false)}>
         <TouchableOpacity
           className="flex-1 justify-center bg-black/40 px-4"
           activeOpacity={1}
           onPress={() => setIsDropdownOpen(false)}>
-          <View className="mx-auto w-full max-h-64 bg-popover shadow-md">
+          <View className="mx-auto max-h-64 w-full bg-popover shadow-md">
             <FlatList
               data={new_options}
               keyExtractor={(item) => String(item.value)}
@@ -105,13 +109,13 @@ export const Select = ({
                   <TouchableOpacity
                     onPress={() => handleSelect(item.value)}
                     className={cn(
-                      'px-4 py-3 border-b border-border last:border-b-0',
+                      'border-b border-border px-4 py-3 last:border-b-0',
                       isSelected && 'bg-accent'
                     )}
                     activeOpacity={0.6}>
                     <Text
                       className={cn(
-                        'text-primary text-base',
+                        'text-base text-primary',
                         isSelected && 'font-semibold text-accent-foreground'
                       )}>
                       {item.label}

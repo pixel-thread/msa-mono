@@ -68,7 +68,9 @@ export const MemberComplianceListScreen = () => {
               You haven&apos;t submitted any compliance yet. If you have an issue, we&apos;re here
               to help.
             </Text>
-            <Button onPress={handleNewCompliance} className="w-full">Submit a Compliance</Button>
+            <Button onPress={handleNewCompliance} className="w-full">
+              Submit a Compliance
+            </Button>
           </View>
         }
       />

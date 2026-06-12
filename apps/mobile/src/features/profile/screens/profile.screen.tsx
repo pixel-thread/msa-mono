@@ -113,7 +113,9 @@ export const ProfileScreen = () => {
                     Configure how you receive updates about meetings and institutional
                     announcements.
                   </Text>
-                  <Button variant="outline" size="sm" className="mt-3 h-10">Manage Alerts</Button>
+                  <Button variant="outline" size="sm" className="mt-3 h-10">
+                    Manage Alerts
+                  </Button>
                 </AccordionContent>
               </AccordionItem>
 
@@ -129,10 +131,7 @@ export const ProfileScreen = () => {
                     Update your password, manage MFA devices, and view active sessions.
                   </Text>
                   <View className="mt-3 flex-row gap-x-3">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="h-10 flex-1">
+                    <Button variant="outline" size="sm" className="h-10 flex-1">
                       Security Settings
                     </Button>
                     <Button
@@ -202,10 +201,7 @@ export const ProfileScreen = () => {
                   <Text variant="subtext" size="sm">
                     Get assistance with your account or report issues with the application.
                   </Text>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="mt-3 h-10">
+                  <Button variant="outline" size="sm" className="mt-3 h-10">
                     Contact Support
                   </Button>
                 </AccordionContent>

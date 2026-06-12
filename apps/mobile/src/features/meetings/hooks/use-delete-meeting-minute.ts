@@ -86,4 +86,4 @@ export function useDeleteMeetingMinute({ meetingId }: Props) {
       return data;
     },
   });
-};
+}

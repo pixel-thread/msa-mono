@@ -17,7 +17,9 @@ export const useCompleteTraining = ({ moduleId }: Props) => {
       if (data.success) {
         toast.success(data.message);
         queryClient.invalidateQueries({ queryKey: QUERY_KEYS.TRAINING_KEYS.COMPLETIONS_MY() });
-        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.TRAINING_KEYS.COMPLETIONS_ADMIN_LIST() });
+        queryClient.invalidateQueries({
+          queryKey: QUERY_KEYS.TRAINING_KEYS.COMPLETIONS_ADMIN_LIST(),
+        });
         return data;
       }
       toast.error(data.message);
@@ -25,4 +27,3 @@ export const useCompleteTraining = ({ moduleId }: Props) => {
     },
   });
 };
-

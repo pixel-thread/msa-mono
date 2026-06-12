@@ -6,7 +6,7 @@ import { PaymentProviderPayload, PaymentProvider } from '../types';
 export const useAddProvider = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (payload: PaymentProviderPayload) => 
+    mutationFn: (payload: PaymentProviderPayload) =>
       http.post<PaymentProvider>(ENDPOINTS.PAYMENTS.PROVIDERS.CREATE, payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.PAYMENTS_KEYS.PROVIDERS() });
@@ -17,8 +17,7 @@ export const useAddProvider = () => {
 export const useDeleteProvider = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (id: string) => 
-      http.delete(ENDPOINTS.PAYMENTS.PROVIDERS.DELETE(id)),
+    mutationFn: (id: string) => http.delete(ENDPOINTS.PAYMENTS.PROVIDERS.DELETE(id)),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.PAYMENTS_KEYS.PROVIDERS() });
     },
@@ -28,7 +27,7 @@ export const useDeleteProvider = () => {
 export const useActivateProvider = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (id: string) => 
+    mutationFn: (id: string) =>
       http.post<PaymentProvider>(ENDPOINTS.PAYMENTS.PROVIDERS.ACTIVATE(id)),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.PAYMENTS_KEYS.PROVIDERS() });

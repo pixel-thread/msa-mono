@@ -182,10 +182,7 @@ export const MemberSubmitComplianceScreen = () => {
           )}
         </View>
 
-        <Button
-          onPress={handleSubmit(onSubmit)}
-          disabled={isPending}
-          className="mt-2">
+        <Button onPress={handleSubmit(onSubmit)} disabled={isPending} className="mt-2">
           {isPending ? 'Submitting...' : 'Submit Compliance'}
         </Button>
       </ScrollView>

@@ -38,9 +38,9 @@ export const InvoiceDetailView = ({ invoice }: { invoice: Invoice }) => {
   return (
     <ScrollView className="flex-1 px-4 py-6" showsVerticalScrollIndicator={false}>
       {/* Invoice Card */}
-      <View className="mb-6 border border-border bg-card p-6 shadow-sm rounded-none">
+      <View className="mb-6 rounded-none border border-border bg-card p-6 shadow-sm">
         {/* Header Block */}
-        <View className="flex-row items-start justify-between pb-6 border-b border-border">
+        <View className="flex-row items-start justify-between border-b border-border pb-6">
           <View className="gap-y-1">
             <Text variant="label" className="uppercase tracking-widest text-slate-400" size="xs">
               Invoice
@@ -53,15 +53,18 @@ export const InvoiceDetailView = ({ invoice }: { invoice: Invoice }) => {
             </Text>
           </View>
 
-          <View className={cn("px-3 py-1 rounded-none", config.bgClass)}>
-            <Text weight="medium" size="xs" className={cn("uppercase tracking-wider", config.textClass)}>
+          <View className={cn('rounded-none px-3 py-1', config.bgClass)}>
+            <Text
+              weight="medium"
+              size="xs"
+              className={cn('uppercase tracking-wider', config.textClass)}>
               {status}
             </Text>
           </View>
         </View>
-        
+
         {/* Billing & Details Split */}
-        <View className="py-6 flex-row flex-wrap gap-y-6 justify-between">
+        <View className="flex-row flex-wrap justify-between gap-y-6 py-6">
           <View className="w-[48%] min-w-[140px] gap-y-2">
             <Text variant="label" className="uppercase tracking-widest text-slate-400" size="xs">
               Billed To
@@ -70,16 +73,20 @@ export const InvoiceDetailView = ({ invoice }: { invoice: Invoice }) => {
               <Text weight="semibold" className="text-slate-900 dark:text-slate-100" size="sm">
                 {invoice.user?.name}
               </Text>
-              <Text size="xs" className="text-slate-500 mt-0.5">
+              <Text size="xs" className="mt-0.5 text-slate-500">
                 {invoice.user?.email}
               </Text>
               {invoice.user?.designation && (
-                <Text size="xs" className="text-slate-400 mt-0.5 font-sans-medium uppercase tracking-wider">
+                <Text
+                  size="xs"
+                  className="mt-0.5 font-sans-medium uppercase tracking-wider text-slate-400">
                   {invoice.user?.designation}
                 </Text>
               )}
               {invoice.user?.membershipNumber && (
-                <Text size="xs" className="text-slate-400 mt-0.5 font-sans-medium uppercase tracking-wider">
+                <Text
+                  size="xs"
+                  className="mt-0.5 font-sans-medium uppercase tracking-wider text-slate-400">
                   Member: {invoice.user?.membershipNumber}
                 </Text>
               )}
@@ -100,29 +107,37 @@ export const InvoiceDetailView = ({ invoice }: { invoice: Invoice }) => {
         </View>
 
         {/* Allocations Table */}
-        <View className="pt-4 border-t border-border">
-          <View className="flex-row justify-between mb-2">
+        <View className="border-t border-border pt-4">
+          <View className="mb-2 flex-row justify-between">
             <Text variant="label" className="uppercase tracking-widest text-slate-400" size="xs">
               Allocation Period
             </Text>
-            <Text variant="label" className="uppercase tracking-widest text-slate-400 text-right" size="xs">
+            <Text
+              variant="label"
+              className="text-right uppercase tracking-widest text-slate-400"
+              size="xs">
               Amount
             </Text>
           </View>
 
           {invoice.allocations && invoice.allocations.length > 0 ? (
             invoice.allocations.map((alloc, idx) => (
-              <View key={idx} className="flex-row justify-between py-2.5 border-b border-border/40">
-                <Text className="text-slate-600 dark:text-slate-400 size-sm font-sans-medium">
-                  Contribution Period {alloc.contributionPeriod?.month}/{alloc.contributionPeriod?.year}
+              <View key={idx} className="flex-row justify-between border-b border-border/40 py-2.5">
+                <Text className="size-sm font-sans-medium text-slate-600 dark:text-slate-400">
+                  Contribution Period {alloc.contributionPeriod?.month}/
+                  {alloc.contributionPeriod?.year}
                 </Text>
-                <Text weight="semibold" className="text-slate-900 dark:text-slate-100 size-sm">
-                  {alloc.allocatedAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} {invoice.currency}
+                <Text weight="semibold" className="size-sm text-slate-900 dark:text-slate-100">
+                  {alloc.allocatedAmount.toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}{' '}
+                  {invoice.currency}
                 </Text>
               </View>
             ))
           ) : (
-            <View className="py-4 border-b border-border/40">
+            <View className="border-b border-border/40 py-4">
               <Text variant="subtext" size="xs" className="italic">
                 No subscription contribution periods allocated.
               </Text>
@@ -130,12 +145,19 @@ export const InvoiceDetailView = ({ invoice }: { invoice: Invoice }) => {
           )}
 
           {/* Grand Total */}
-          <View className="mt-6 pt-4 flex-row justify-between items-center">
-            <Text weight="bold" size="sm" className="text-slate-900 dark:text-slate-100 uppercase tracking-widest">
+          <View className="mt-6 flex-row items-center justify-between pt-4">
+            <Text
+              weight="bold"
+              size="sm"
+              className="uppercase tracking-widest text-slate-900 dark:text-slate-100">
               Total Amount
             </Text>
-            <Text weight="bold" size="lg" className="text-primary font-sans-bold">
-              {invoice.amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} {invoice.currency}
+            <Text weight="bold" size="lg" className="font-sans-bold text-primary">
+              {invoice.amount.toLocaleString(undefined, {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}{' '}
+              {invoice.currency}
             </Text>
           </View>
         </View>
@@ -144,15 +166,13 @@ export const InvoiceDetailView = ({ invoice }: { invoice: Invoice }) => {
       {/* Action Button */}
       <Button
         variant="default"
-        className="mb-12 h-14 w-full rounded-none shadow-none flex-row items-center justify-center gap-x-2"
-        onPress={handleSharePdf}
-      >
+        className="mb-12 h-14 w-full flex-row items-center justify-center gap-x-2 rounded-none shadow-none"
+        onPress={handleSharePdf}>
         <Ionicons name="share-social-outline" size={18} color="#ffffff" />
-        <Text weight="bold" className="text-white uppercase tracking-widest text-sm">
+        <Text weight="bold" className="text-sm uppercase tracking-widest text-white">
           Share PDF
         </Text>
       </Button>
     </ScrollView>
   );
 };
-

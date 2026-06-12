@@ -27,7 +27,9 @@ const TrainingCard: React.FC<TrainingCardProps> = ({ module, isCompleted, onPres
                 <View
                   className={cn(
                     'px-2 py-0.5',
-                    isCompleted ? 'bg-emerald-50 dark:bg-emerald-900/20' : 'bg-indigo-50 dark:bg-indigo-900/20'
+                    isCompleted
+                      ? 'bg-emerald-50 dark:bg-emerald-900/20'
+                      : 'bg-indigo-50 dark:bg-indigo-900/20'
                   )}>
                   <Text
                     variant="label"
@@ -52,7 +54,11 @@ const TrainingCard: React.FC<TrainingCardProps> = ({ module, isCompleted, onPres
               </Text>
 
               {module.description && (
-                <Text variant="subtext" size="xs" numberOfLines={2} className="text-slate-600 dark:text-slate-400">
+                <Text
+                  variant="subtext"
+                  size="xs"
+                  numberOfLines={2}
+                  className="text-slate-600 dark:text-slate-400">
                   {module.description}
                 </Text>
               )}
@@ -68,9 +74,7 @@ const TrainingCard: React.FC<TrainingCardProps> = ({ module, isCompleted, onPres
               </View>
               <View className="mt-4 flex-row flex-wrap justify-end gap-1">
                 {module.requiredForRoles.slice(0, 2).map((role) => (
-                  <View
-                    key={role}
-                    className="bg-slate-50 px-2 py-0.5 dark:bg-slate-800">
+                  <View key={role} className="bg-slate-50 px-2 py-0.5 dark:bg-slate-800">
                     <Text size="xs" weight="medium" className="text-slate-600 dark:text-slate-400">
                       {role.replace('_', ' ')}
                     </Text>

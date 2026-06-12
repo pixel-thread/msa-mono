@@ -7,8 +7,7 @@ import { toast } from 'sonner-native';
 export const useCreateTrainingModule = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (data: CreateTrainingModuleInput) =>
-      http.post(ENDPOINTS.TRAINING.MODULES, data),
+    mutationFn: (data: CreateTrainingModuleInput) => http.post(ENDPOINTS.TRAINING.MODULES, data),
     onSuccess: (data) => {
       if (data.success) {
         toast.success(data.message);

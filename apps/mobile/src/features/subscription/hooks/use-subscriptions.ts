@@ -59,4 +59,3 @@ export function useSubscriptionPlans() {
     select: (data) => data.data,
   });
 }
-
