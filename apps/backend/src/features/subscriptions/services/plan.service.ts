@@ -429,6 +429,8 @@ export async function updatePlan(associationId: string, planId: string, body: Up
           billingCycle: body.billingCycle ?? currentVersion.billingCycle,
           features: (body.features as Prisma.InputJsonValue) ?? currentVersion.features,
           description: body.description ?? currentVersion.description,
+          effectiveFrom: body.effectiveFrom,
+          effectiveTo: body.effectiveTo,
         },
       });
 
@@ -441,6 +443,17 @@ export async function updatePlan(associationId: string, planId: string, body: Up
           memberTypeId: body.memberTypeId,
         },
       });
+
+      // ── Retroactive adjustment ──────────────────────────────────────
+      if (body.effectiveFrom && body.effectiveTo && body.amount !== undefined) {
+        await retroactivelyAdjustContributionsForPlan(
+          tx,
+          planId,
+          newVersion.amount,
+          body.effectiveFrom,
+          body.effectiveTo,
+        );
+      }
 
       return { ...plan, activeVersion: newVersion };
     });
