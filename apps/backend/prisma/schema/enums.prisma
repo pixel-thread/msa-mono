@@ -94,7 +94,6 @@ enum PaymentMethod {
 }
 
 enum PaymentType {
-  SUBSCRIPTION
   DONATION
   EVENT_FEE
   BANK_INTEREST
