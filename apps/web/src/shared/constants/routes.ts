@@ -145,7 +145,7 @@ export const ROUTE_ROLE: RouteRole[] = [
     needAuth: true,
   },
   {
-    url: '/subscriptions/*',
+    url: '/plans/*',
     role: nonMemberRoles,
     redirect: '/forbidden',
     needAuth: true,

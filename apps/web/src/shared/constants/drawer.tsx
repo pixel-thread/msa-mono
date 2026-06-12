@@ -91,20 +91,10 @@ export const DRAWER_NAV_MAIN: DrawerItem[] = [
     ],
   },
   {
-    title: 'Subscriptions',
-    url: '/subscriptions/plans',
+    title: 'Plans',
+    url: '/plans',
     icon: <CreditCardIcon />,
     isActive: false,
-    items: [
-      {
-        title: 'Plans',
-        url: '/subscriptions/plans',
-      },
-      {
-        title: 'Change Plan',
-        url: '/subscriptions/change-plan',
-      },
-    ],
   },
   {
     title: 'Payments',

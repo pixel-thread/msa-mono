@@ -107,7 +107,7 @@ export function SignInPage() {
           </Text>
           <Text variant="body-md" color="muted" asChild>
             <p className="mb-10 leading-relaxed">
-              Access your association dashboard, manage subscriptions, view financial records, and
+              Access your association dashboard, manage contributions, view financial records, and
               participate in governance — all from one secure platform.
             </p>
           </Text>

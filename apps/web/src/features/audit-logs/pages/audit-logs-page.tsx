@@ -61,7 +61,6 @@ const RESOURCE_TYPES = [
   'TrainingModule',
   'TrainingCompletion',
   'Payment',
-  'Subscription',
   'Complaint',
   'AuditLog',
 ] as const;

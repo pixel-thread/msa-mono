@@ -7,7 +7,7 @@ interface MemberType {
   description: string | null;
   _count: {
     users: number;
-    subscriptionPlans: number;
+    plans: number;
   };
 }
 
@@ -34,9 +34,9 @@ export function useMemberTypeColumns({ onEdit, onDelete }: UseMemberTypeColumnsO
       cell: ({ row }) => <span className="text-sm">{row.original._count.users}</span>,
     },
     {
-      accessorKey: 'subscriptionPlans',
+      accessorKey: 'plans',
       header: 'Plans',
-      cell: ({ row }) => <span className="text-sm">{row.original._count.subscriptionPlans}</span>,
+      cell: ({ row }) => <span className="text-sm">{row.original._count.plans}</span>,
     },
     {
       id: 'actions',

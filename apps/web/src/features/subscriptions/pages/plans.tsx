@@ -15,7 +15,7 @@ import { SectionHeader } from '@src/shared/components/section-header';
 import { useUrlFilters } from '@src/shared/hooks';
 
 export default function PlansPage() {
-  const { page, setPage } = useUrlFilters({ basePath: '/subscriptions/plans' });
+  const { page, setPage } = useUrlFilters({ basePath: '/plans' });
   const [editingPlan, setEditingPlan] = useState<Plan | null>(null);
   const [deletingPlan, setDeletingPlan] = useState<Plan | null>(null);
 

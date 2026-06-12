@@ -271,7 +271,6 @@ export const Status = {
 export type Status = (typeof Status)[keyof typeof Status];
 
 export const PaymentType = {
-  SUBSCRIPTION: 'SUBSCRIPTION',
   DONATION: 'DONATION',
   EVENT_FEE: 'EVENT_FEE',
   BANK_INTEREST: 'BANK_INTEREST',

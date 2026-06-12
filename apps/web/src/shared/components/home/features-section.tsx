@@ -34,9 +34,8 @@ const FEATURES = [
   },
   {
     icon: Payment01Icon,
-    title: 'Subscription Engine',
-    description:
-      'Configurable subscription plans with automated billing, payment tracking, receipt generation, and waiver management.',
+    title: 'Contribution Plans',
+    description: 'Configurable contribution plans with automated period generation, payment allocation, receipt tracking, and waiver management.',
   },
   {
     icon: ShieldBlockchainIcon,

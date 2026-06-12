@@ -9,7 +9,7 @@ interface MemberType {
   description: string | null;
   _count: {
     users: number;
-    subscriptionPlans: number;
+    plans: number;
   };
 }
 
