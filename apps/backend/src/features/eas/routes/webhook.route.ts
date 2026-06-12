@@ -37,6 +37,7 @@ export const webhook: RequestHandler[] = [
         return res.status(400).json({ error: 'Invalid webhook signature' });
       }
 
+      logger.error({ error }, 'EAS webhook processing error');
       return res.status(200).json({ status: 'error', message: 'Webhook processing failed' });
     }
   }),

@@ -1,5 +1,5 @@
-import { prisma } from '@lib/prisma';
 import { WebhookSignatureError } from '@errors';
+import { prisma } from '@lib/prisma';
 import { env } from '@src/env';
 import { logger } from '@src/shared/logger';
 import crypto from 'node:crypto';
@@ -123,9 +123,18 @@ export function createEasWebhookService(secret: string): EasWebhookService {
       throw new WebhookSignatureError('Invalid EAS webhook signature');
     }
 
-    const payload: EasEventPayload = JSON.parse(rawBody);
+    let payload: EasEventPayload;
+    try {
+      payload = JSON.parse(rawBody);
+    } catch {
+      throw new WebhookSignatureError('Invalid JSON payload');
+    }
 
-    // Detect event type from payload shape
+    // Detect event type from payload shape.
+    // EAS build payloads include `artifacts` and `buildDetailsPageUrl` fields
+    // that submit payloads do not. This heuristic is stable across EAS versions
+    // since the build/submit schemas diverge at the root level.
+    // EAS does not provide an explicit top-level event type discriminator.
     const eventType = 'artifacts' in payload || 'buildDetailsPageUrl' in payload
       ? 'BUILD' as const
       : 'SUBMIT' as const;
@@ -149,7 +158,7 @@ export function createEasWebhookService(secret: string): EasWebhookService {
         eventType,
         platform: payload.platform,
         status: payload.status,
-        payload: JSON.parse(rawBody),
+        payload: JSON.stringify(payload),
         signature,
         processed: false,
       },
@@ -219,7 +228,7 @@ async function handleBuildEvent(payload: EasBuildPayload, eventId: string): Prom
       errorCode: payload.error?.errorCode ?? null,
       message: meta?.message ?? null,
       runFromCI: meta?.runFromCI ?? false,
-      metrics: payload.metrics ? JSON.parse(JSON.stringify(payload.metrics)) : null,
+      metrics: payload.metrics ? JSON.stringify(payload.metrics) : undefined,
       createdAt: new Date(payload.createdAt),
       completedAt: payload.completedAt ? new Date(payload.completedAt) : null,
       rawEventId: eventId,
