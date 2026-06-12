@@ -66,6 +66,12 @@ Content-Type: application/json
 Authorization: Bearer {{TOKEN}}
 
 ###
+# @name getMyContributions
+GET {{NEXT_PUBLIC_API_BASE_URL}}/contributions/my
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+###
 # @name generateContributions
 POST {{NEXT_PUBLIC_API_BASE_URL}}/contributions
 Content-Type: application/json

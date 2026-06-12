@@ -5,7 +5,7 @@
 //            waive individual periods, and view a single period by ID.
 // ---------------------------------------------------------------------------
 
-import { NotFoundError } from '@errors';
+import { NotFoundError, UnauthorizedError } from '@errors';
 import {
   generateUserContributions,
   markOverdueContributions,
@@ -38,6 +38,72 @@ import { type Request } from 'express';
 // ===========================================================================
 // LIST /api/payments/contributions
 // ===========================================================================
+
+export const myContributionsHandler: RequestHandler[] = [
+  // Step 1: Validate query params
+  validate({ query: ContributionsQuerySchema }),
+
+  // Step 2: Execute
+  asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
+    const traceId = (req.traceId as string) || '';
+    const userId = req.user?.id;
+
+    if (!userId) throw new UnauthorizedError('User not found');
+
+    // --- Log: request started ---
+    logger.info({ traceId, query: req.query }, 'GET /api/payments/contributions - Request started');
+
+    // --- Auth: enforce FINANCE role ---
+    // Only finance officers can view the full contributions list
+    await withRole(req, UserRole.MEMBER);
+
+    logger.info({ traceId }, 'GET /api/payments/contributions - User authorized');
+
+    // --- Business logic: build filters and fetch ---
+    const page = (req.query as any)?.page || 1;
+
+    const { status, year, month } = req.query;
+
+    const where: Record<string, unknown> = { associationId: req.user!.associationId };
+    where.userId = userId;
+    if (status) where.status = status;
+    if (year) where.year = year;
+    if (month) where.month = month;
+
+    const { contributions, total } = await findContributionPeriods({
+      where: where as Parameters<typeof findContributionPeriods>[0]['where'],
+      page,
+      pageSize: PAGE_SIZE,
+      include: {
+        user: { select: { id: true, name: true, email: true, membershipNumber: true } },
+        allocations: {
+          take: 1,
+          where: { paymentTransaction: { paidAt: { not: null } } },
+          include: {
+            paymentTransaction: {
+              select: {
+                id: true,
+                amount: true,
+                method: true,
+                status: true,
+                paidAt: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    // --- Log: success ---
+    logger.info(
+      { traceId, count: contributions.length },
+      'GET /api/payments/contributions - Success',
+    );
+
+    // --- Response ---
+    return success(res, { data: contributions, meta: buildPagination(total, page) });
+  }),
+];
 
 export const listContributionsHandler: RequestHandler[] = [
   // Step 1: Validate query params
