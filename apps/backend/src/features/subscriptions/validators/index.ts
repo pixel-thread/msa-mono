@@ -72,6 +72,8 @@ export const UpdatePlanSchema = z.object({
   features: z.record(z.string(), z.any()).optional(),
   isActive: z.boolean().optional(),
   memberTypeId: z.uuid().optional().nullable(),
+  effectiveFrom: z.coerce.date().optional(),
+  effectiveTo: z.coerce.date().optional(),
 });
 
 /** Schema for setting a default plan. */
