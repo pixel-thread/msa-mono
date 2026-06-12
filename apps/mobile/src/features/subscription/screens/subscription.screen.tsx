@@ -11,7 +11,7 @@ import { Text } from '@src/shared/components/ui';
 import { EmptyScreen, ErrorScreen, LoadingScreen } from '@src/shared/components/screens';
 import { ErrorBoundary } from '@components/common/error-boundary';
 
-import { PaymentHistory } from '../components';
+import { MyContributions } from '@src/features/contributions/components';
 import { PayButton } from '../components/pay-button';
 
 import { formatSubscriptionBillingCycle } from '@src/shared/utils';
@@ -19,7 +19,7 @@ import { formatSubscriptionBillingCycle } from '@src/shared/utils';
 const Divider = () => <View className="h-px bg-slate-100 dark:bg-slate-800/60" />;
 
 export const SubscriptionScreen = () => {
-  const [activeTab, setActiveTab] = useState<'plan' | 'history'>('plan');
+  const [activeTab, setActiveTab] = useState<'plan' | 'contributions'>('plan');
 
   const { data: plan, isLoading, isError, refetch } = useSubscriptionPlans();
 
@@ -64,14 +64,14 @@ export const SubscriptionScreen = () => {
 
         {/* Tab Bar */}
         <View className="flex-row border-b border-slate-100 px-6 dark:border-slate-800">
-          {(['plan', 'history'] as const).map((tab) => {
+          {(['plan', 'contributions'] as const).map((tab) => {
             const active = activeTab === tab;
 
             return (
               <TouchableOpacity key={tab} onPress={() => setActiveTab(tab)} className="flex-1 py-4">
                 <View className="flex-row items-center justify-center gap-x-2">
                   <Ionicons
-                    name={tab === 'plan' ? 'receipt-outline' : 'time-outline'}
+                    name={tab === 'plan' ? 'receipt-outline' : 'wallet-outline'}
                     size={20}
                     color={active ? '#6366f1' : '#94a3b8'}
                   />
@@ -172,7 +172,7 @@ export const SubscriptionScreen = () => {
               paddingBottom: 40,
             }}
             showsVerticalScrollIndicator={false}>
-            <PaymentHistory />
+            <MyContributions />
           </ScrollView>
         )}
       </Container>
