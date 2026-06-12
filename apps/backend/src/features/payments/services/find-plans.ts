@@ -4,13 +4,13 @@ import type { Prisma } from '@prisma/client';
 type DbClient = Prisma.TransactionClient | typeof prisma;
 
 type Props = {
-  where: Prisma.SubscriptionPlanWhereInput;
-  include?: Prisma.SubscriptionPlanInclude;
+  where: Prisma.PlanWhereInput;
+  include?: Prisma.PlanInclude;
   db?: DbClient;
 };
 
-export async function findSubscriptionPlans({ where, include, db = prisma }: Props) {
-  return await db.subscriptionPlan.findMany({
+export async function findPlans({ where, include, db = prisma }: Props) {
+  return await db.plan.findMany({
     where,
     include,
     orderBy: { createdAt: 'desc' },
