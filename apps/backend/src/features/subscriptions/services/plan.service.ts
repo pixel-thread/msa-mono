@@ -250,11 +250,18 @@ async function retroactivelyAdjustContributionsForPlan(
     const periods = await tx.contributionPeriod.findMany({
       where: {
         userId,
-        OR: [
-          { year: { gt: fromYear, lt: toYear } },
-          { year: fromYear, month: { gte: fromMonth } },
-          { year: toYear, month: { lte: toMonth } },
-        ],
+        ...(fromYear === toYear
+          ? {
+              year: fromYear,
+              month: { gte: fromMonth, lte: toMonth },
+            }
+          : {
+              OR: [
+                { year: { gt: fromYear, lt: toYear } },
+                { year: fromYear, month: { gte: fromMonth } },
+                { year: toYear, month: { lte: toMonth } },
+              ],
+            }),
       },
       orderBy: [{ year: 'asc' }, { month: 'asc' }],
     });
