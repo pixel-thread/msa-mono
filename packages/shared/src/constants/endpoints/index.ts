@@ -17,7 +17,7 @@ import { MEMBERS } from "./members";
 import { MEMBER_TYPES } from "./member-types";
 import { NOTIFICATIONS } from "./notifications";
 import { PAYMENTS } from "./payments";
-import { SUBSCRIPTIONS } from "./subscriptions";
+import { PLANS } from "./subscriptions";
 import { TRAINING } from "./training";
 import { USER } from "./user";
 
@@ -41,7 +41,7 @@ export const ENDPOINTS = {
   MEMBER_TYPES,
   NOTIFICATIONS,
   PAYMENTS,
-  SUBSCRIPTIONS,
+  PLANS,
   TRAINING,
   USER,
 } as const;

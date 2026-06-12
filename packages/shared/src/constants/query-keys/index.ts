@@ -14,7 +14,7 @@ import { MEMBERS_KEYS } from './members'
 import { MEMBER_TYPES_KEYS } from './member-types'
 import { MEMBERSHIP_APPLICATIONS_KEYS } from './membership-applications'
 import { PAYMENTS_KEYS } from './payments'
-import { SUBSCRIPTIONS_KEYS } from './subscriptions'
+import { PLANS_KEYS } from './subscriptions'
 import { TRAINING_KEYS } from './training'
 import { USER_KEYS } from './user'
 
@@ -35,7 +35,7 @@ export const QUERY_KEYS = {
   MEMBER_TYPES_KEYS,
   MEMBERSHIP_APPLICATIONS_KEYS,
   PAYMENTS_KEYS,
-  SUBSCRIPTIONS_KEYS,
+  PLANS_KEYS,
   TRAINING_KEYS,
   USER_KEYS,
 } as const
