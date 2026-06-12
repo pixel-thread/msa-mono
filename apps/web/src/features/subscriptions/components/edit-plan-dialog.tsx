@@ -28,7 +28,7 @@ import {
   SelectValue,
 } from '@src/shared/components/ui/select';
 import { Switch } from '@src/shared/components/ui/switch';
-import { BILLING_CYCLE } from '@src/shared/types';
+import { BILLING_CYCLE, BillingCycle } from '@src/shared/types';
 import { useForm } from 'react-hook-form';
 
 import { usePlan } from '../hooks/usePlan';
@@ -52,7 +52,7 @@ export function EditPlanDialog({ planId, open, onOpenChange }: EditPlanDialogPro
       description: '',
       amount: 0,
       currency: 'INR',
-      billingCycle: 'YEARLY',
+      billingCycle: BILLING_CYCLE.MONTHLY,
       features: {},
       memberTypeId: '',
       effectiveTo: '',
@@ -68,11 +68,15 @@ export function EditPlanDialog({ planId, open, onOpenChange }: EditPlanDialogPro
         description: plan.description || '',
         amount: plan.activeVersion?.amount ?? 0,
         currency: plan.activeVersion?.currency ?? 'INR',
-        billingCycle: (plan.activeVersion.billingCycle ?? 'YEARLY') as 'MONTHLY' | 'YEARLY',
+        billingCycle: (plan.activeVersion.billingCycle ?? BILLING_CYCLE.YEARLY) as BillingCycle,
         features: (plan.activeVersion?.features as Record<string, unknown>) || {},
         memberTypeId: plan.memberTypeId || '',
-        effectiveTo: plan.activeVersion?.effectiveTo || '',
-        effectiveFrom: plan.activeVersion?.effectiveFrom || '',
+        effectiveTo: plan.activeVersion.effectiveTo
+          ? plan.activeVersion.effectiveTo.slice(0, 16)
+          : '',
+        effectiveFrom: plan.activeVersion.effectiveFrom
+          ? plan.activeVersion.effectiveFrom.slice(0, 16)
+          : '',
         isActive: plan.isActive,
       });
     }
@@ -87,7 +91,7 @@ export function EditPlanDialog({ planId, open, onOpenChange }: EditPlanDialogPro
         planId: plan.id,
         ...rest,
         effectiveTo: effectiveTo || undefined,
-        effectiveFrom: effectiveFrom || undefined,
+        effectiveFrom: effectiveFrom,
         memberTypeId: memberTypeId || undefined,
         isActive,
       },
@@ -147,8 +151,11 @@ export function EditPlanDialog({ planId, open, onOpenChange }: EditPlanDialogPro
                   <FormControl>
                     <Input
                       type="datetime-local"
-                      {...field}
+                      value={typeof field.value === 'string' ? field.value.slice(0, 16) : ''}
                       onChange={(e) => field.onChange(e.target.value)}
+                      onBlur={field.onBlur}
+                      ref={field.ref}
+                      name={field.name}
                     />
                   </FormControl>
                   <FormMessage />
@@ -165,8 +172,11 @@ export function EditPlanDialog({ planId, open, onOpenChange }: EditPlanDialogPro
                   <FormControl>
                     <Input
                       type="datetime-local"
-                      {...field}
+                      value={typeof field.value === 'string' ? field.value.slice(0, 16) : ''}
                       onChange={(e) => field.onChange(e.target.value)}
+                      onBlur={field.onBlur}
+                      ref={field.ref}
+                      name={field.name}
                     />
                   </FormControl>
                   <FormMessage />

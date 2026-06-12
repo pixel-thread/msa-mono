@@ -40,7 +40,7 @@ export const EditPlanSchema = z.object({
   features: z.record(z.string(), z.any()),
   memberTypeId: z.string().optional(),
   effectiveTo: z.string().optional(),
-  effectiveFrom: z.string().optional(),
+  effectiveFrom: z.string('Effective From is required'),
   isActive: z.boolean().optional(),
 });
 
