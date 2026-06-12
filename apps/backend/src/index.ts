@@ -21,6 +21,7 @@ import paymentsRouter from '@feature/payments/routes/index';
 import subscriptionsRouter from '@feature/subscriptions/routes/index';
 import trainingRouter from '@feature/training/routes/index';
 import userRouter from '@feature/user/routes/index';
+import easRouter from '@feature/eas/routes/index';
 import { contextMiddleware } from '@middleware/context';
 import { cors } from '@middleware/cors';
 // import { csrf } from '@middleware/csrf';
@@ -81,6 +82,7 @@ export function createApp(): express.Express {
   app.use('/api/v1/subscriptions', subscriptionsRouter);
   app.use('/api/v1/training', trainingRouter);
   app.use('/api/v1/user', userRouter);
+  app.use('/api/v1/eas', easRouter);
 
   /**
    * -------------------------------------------------------
