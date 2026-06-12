@@ -25,6 +25,8 @@ interface UpdatePlanInput {
   features?: Record<string, unknown>;
   isActive?: boolean;
   memberTypeId?: string | null;
+  effectiveFrom?: Date;
+  effectiveTo?: Date;
 }
 
 // ---- getPlans ----------------------------------------------------------------
