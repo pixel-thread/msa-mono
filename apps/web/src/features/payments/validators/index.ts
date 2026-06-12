@@ -31,7 +31,7 @@ export const RecordManualPaymentSchema = z.object({
   receiptNumber: z.string().optional(),
   reference: z.string().optional(),
   referenceType: z.enum(PAYMENT_REFERENCE, 'Invalid reference type').optional(),
-  paidAt: z.string('Invalid date format').transform((date) => new Date(date)),
+  paidAt: z.coerce.date('Invalid date format').transform((date) => new Date(date)),
   incomeAccountId: z.uuid().optional(),
 });
 
@@ -90,7 +90,7 @@ export const TransferAccountBalanceSchema = z
     amount: z.number().positive('Amount must be greater than 0'),
     reference: z.string().optional(),
     referenceType: z.enum(PAYMENT_REFERENCE, 'Invalid payment reference'),
-    paidAt: z.string().transform((val) => new Date(val)),
+    paidAt: z.coerce.date('Invalid date format'),
     remark: z.string().min(1, 'Remark is required'),
   })
   .refine((data) => data.fromAccountId !== data.toAccountId, {

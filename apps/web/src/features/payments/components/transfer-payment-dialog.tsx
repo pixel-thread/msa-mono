@@ -36,7 +36,6 @@ import { useQueryClient } from '@tanstack/react-query';
 import { ArrowRight, ArrowRightLeft } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import { z } from 'zod';
 
 import { useTransferAccountBalance } from '../hooks/useTransferAccountBalance';
 import { TransferAccountBalanceSchema } from '../validators';
@@ -48,7 +47,7 @@ export function TransferPaymentDialog() {
   const [showConfirm, setShowConfirm] = useState(false);
   const { accounts } = useLedgerAccounts();
 
-  const form = useForm<z.input<typeof TransferAccountBalanceSchema>>({
+  const form = useForm({
     resolver: zodResolver(TransferAccountBalanceSchema),
     defaultValues: {
       fromAccountId: '',
@@ -57,7 +56,7 @@ export function TransferPaymentDialog() {
       reference: '',
       referenceType: 'CASH' as const,
       remark: '',
-      paidAt: new Date().toISOString(),
+      paidAt: new Date(),
     },
   });
 
@@ -267,12 +266,7 @@ export function TransferPaymentDialog() {
                   <FormItem className="w-full">
                     <FormLabel>Instrument Date</FormLabel>
                     <FormControl>
-                      <Input
-                        {...field}
-                        type="date"
-                        value={field.value ? new Date(field.value).toISOString().split('T')[0] : ''}
-                        onChange={(e) => field.onChange(new Date(e.target.value).toISOString())}
-                      />
+                      <Input {...field} value={(field.value as string) ?? ''} type="date" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -287,7 +281,7 @@ export function TransferPaymentDialog() {
                 <FormItem>
                   <FormLabel>Instrument Number</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="Optional reference number" />
+                    <Input {...field} placeholder="Optional instrument number" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

@@ -161,7 +161,12 @@ export function RecordPaymentDialog({ open, onOpenChange }: RecordPaymentDialogP
                   <FormItem className="w-full">
                     <FormLabel>Payment Recieved at</FormLabel>
                     <FormControl>
-                      <Input {...field} type="date" placeholder="Optional paid at date" />
+                      <Input
+                        {...field}
+                        value={(field.value as string) ?? ''}
+                        type="date"
+                        placeholder="Optional paid at date"
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
