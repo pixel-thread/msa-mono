@@ -123,7 +123,6 @@ export async function generateUserContributions(
   numberOfMonth: number,
 ): Promise<number> {
   const monthsToGenerate = Math.min(Math.max(numberOfMonth, 1), 12);
-
   let totalProcessed = 0;
 
   for (let month = 1; month <= monthsToGenerate; month++) {
@@ -134,47 +133,54 @@ export async function generateUserContributions(
       where: {
         id: userId,
         status: UserStatus.ACTIVE,
-        subscription: {
-          status: 'ACTIVE',
-        },
         dateOfJoiningAssociation: {
           lte: generateDate,
         },
       },
       include: {
-        subscription: {
-          include: {
-            plan: true,
-            planVersion: true,
-          },
-        },
+        memberType: true,
       },
     });
 
     if (activeMembers.length === 0) continue;
 
     for (const member of activeMembers) {
-      if (!member.subscription?.planVersion) continue;
       if (!member.dateOfJoiningAssociation) continue;
 
       const memberJoinedMonth =
         member.dateOfJoiningAssociation.getFullYear() * 12 +
         member.dateOfJoiningAssociation.getMonth();
-
       const targetMonth = year * 12 + (month - 1);
-
-      const subscriptionStartDate = member.subscription.planVersion.effectiveFrom;
-
-      const subscriptionMonth =
-        subscriptionStartDate.getFullYear() * 12 + subscriptionStartDate.getMonth();
-
-      if (targetMonth < subscriptionMonth) {
-        continue; // skip months before subscription started
-      }
 
       if (memberJoinedMonth > targetMonth) continue;
 
-      const expectedAmount = member.subscription.planVersion.amount;
+      // Find the plan for this user's member type (or the default plan)
+      const plan = await prisma.plan.findFirst({
+        where: {
+          associationId: member.associationId,
+          isActive: true,
+          ...(member.memberTypeId
+            ? { memberTypeId: member.memberTypeId }
+            : { isDefault: true }),
+        },
+        include: {
+          versions: {
+            where: { effectiveTo: null },
+            orderBy: { createdAt: 'desc' },
+            take: 1,
+          },
+        },
+      });
+
+      if (!plan || plan.versions.length === 0) continue;
+      const activeVersion = plan.versions[0];
+      const expectedAmount = activeVersion.amount;
+
+      const planEffectiveFrom = activeVersion.effectiveFrom;
+      const planMonth =
+        planEffectiveFrom.getFullYear() * 12 + planEffectiveFrom.getMonth();
+
+      if (targetMonth < planMonth) continue;
 
       const contributionData = {
         associationId: member.associationId,
@@ -198,9 +204,7 @@ export async function generateUserContributions(
         },
       });
 
-      if (existingContribution) {
-        continue;
-      }
+      if (existingContribution) continue;
 
       await prisma.contributionPeriod.create({
         data: contributionData,
