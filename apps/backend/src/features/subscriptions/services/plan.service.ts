@@ -10,7 +10,7 @@ import { prisma } from '@lib/prisma';
 // ---------------------------------------------------------------------------
 // Prisma
 // ---------------------------------------------------------------------------
-import type { Prisma, UserRole } from '@prisma/client';
+import { ContributionStatus, type Prisma, type UserRole } from '@prisma/client';
 import { hasHighRoleAccess } from '@utils/has-high-role';
 
 // ---- Interfaces --------------------------------------------------------------
@@ -210,6 +210,167 @@ export async function setDefaultPlan(associationId: string, planId: string) {
   });
 
   return updated;
+}
+
+// ── Retroactive plan price adjustment ───────────────────────────────
+
+/**
+ * After a plan's price changes, retroactively adjust ContributionPeriods
+ * within [effectiveFrom, effectiveTo] for ALL users on this plan.
+ *
+ * For each period:
+ *   - If paidAmount > newExpectedAmount → surplus forwarded to next period
+ *   - If paidAmount == newExpectedAmount → stays PAID
+ *   - If 0 < paidAmount < newExpectedAmount → PARTIAL
+ *   - If paidAmount == 0 → DUE or OVERDUE (based on dueDate)
+ *
+ * Surplus from overpaid periods is carried forward FIFO to the user's
+ * next outstanding period(s) after the date range.
+ */
+async function retroactivelyAdjustContributionsForPlan(
+  tx: Prisma.TransactionClient,
+  planId: string,
+  newAmount: Prisma.Decimal,
+  effectiveFrom: Date,
+  effectiveTo: Date,
+): Promise<void> {
+  const fromYear = effectiveFrom.getFullYear();
+  const fromMonth = effectiveFrom.getMonth() + 1;
+  const toYear = effectiveTo.getFullYear();
+  const toMonth = effectiveTo.getMonth() + 1;
+
+  // 1. Find all users with an ACTIVE subscription to this plan
+  const subscribers = await tx.subscription.findMany({
+    where: { planId, status: 'ACTIVE' },
+    select: { userId: true },
+  });
+
+  for (const { userId } of subscribers) {
+    // 2. Find contribution periods in the date range, sorted oldest first
+    const periods = await tx.contributionPeriod.findMany({
+      where: {
+        userId,
+        OR: [
+          { year: { gt: fromYear, lt: toYear } },
+          { year: fromYear, month: { gte: fromMonth } },
+          { year: toYear, month: { lte: toMonth } },
+        ],
+      },
+      orderBy: [{ year: 'asc' }, { month: 'asc' }],
+    });
+
+    const newExpected = Number(newAmount);
+    let surplus = 0;
+
+    for (const period of periods) {
+      const paidAmount = Number(period.paidAmount);
+      const totalPaid = paidAmount + surplus;
+      const now = new Date();
+
+      if (totalPaid >= newExpected) {
+        // Fully paid (or overpaid) — record surplus
+        const excess = totalPaid - newExpected;
+
+        await tx.contributionPeriod.update({
+          where: { id: period.id },
+          data: {
+            expectedAmount: newAmount,
+            paidAmount: newExpected,
+            dueAmount: 0,
+            status: ContributionStatus.PAID,
+          },
+        });
+
+        surplus = excess;
+      } else if (totalPaid > 0) {
+        // Partially paid — no surplus to carry
+        surplus = 0;
+
+        await tx.contributionPeriod.update({
+          where: { id: period.id },
+          data: {
+            expectedAmount: newAmount,
+            paidAmount: totalPaid,
+            dueAmount: newExpected - totalPaid,
+            status: ContributionStatus.PARTIAL,
+          },
+        });
+      } else {
+        // Nothing paid — determine status by dueDate
+        surplus = 0;
+        const isOverdue = period.dueDate <= now;
+
+        await tx.contributionPeriod.update({
+          where: { id: period.id },
+          data: {
+            expectedAmount: newAmount,
+            dueAmount: newExpected,
+            status: isOverdue ? ContributionStatus.OVERDUE : ContributionStatus.DUE,
+          },
+        });
+      }
+    }
+
+    // 3. If surplus remains after the last period in range, forward-allocate
+    if (surplus > 0) {
+      await allocateSurplusToNextPeriods(tx, userId, surplus, effectiveTo);
+    }
+  }
+}
+
+/**
+ * Carry surplus (overpayment) forward to the user's next outstanding
+ * ContributionPeriod(s) after `afterDate`, FIFO.
+ */
+async function allocateSurplusToNextPeriods(
+  tx: Prisma.TransactionClient,
+  userId: string,
+  surplus: number,
+  afterDate: Date,
+): Promise<void> {
+  const afterYear = afterDate.getFullYear();
+  const afterMonth = afterDate.getMonth() + 1;
+
+  const nextPeriods = await tx.contributionPeriod.findMany({
+    where: {
+      userId,
+      status: {
+        in: [
+          ContributionStatus.DUE,
+          ContributionStatus.PENDING,
+          ContributionStatus.PARTIAL,
+          ContributionStatus.OVERDUE,
+        ],
+      },
+      OR: [
+        { year: { gt: afterYear } },
+        { year: afterYear, month: { gt: afterMonth } },
+      ],
+    },
+    orderBy: [{ year: 'asc' }, { month: 'asc' }],
+  });
+
+  let remaining = surplus;
+
+  for (const period of nextPeriods) {
+    if (remaining <= 0) break;
+
+    const dueAmount = Number(period.dueAmount);
+    const allocateToPeriod = Math.min(remaining, dueAmount);
+    const newPaidAmount = Number(period.paidAmount) + allocateToPeriod;
+    const newDueAmount = dueAmount - allocateToPeriod;
+
+    await tx.contributionPeriod.update({
+      where: { id: period.id },
+      data: {
+        paidAmount: newPaidAmount,
+        dueAmount: Math.max(newDueAmount, 0),
+        status: newDueAmount <= 0 ? ContributionStatus.PAID : ContributionStatus.PARTIAL,
+      },
+    });
+
+    remaining -= allocateToPeriod;
+  }
 }
 
 // ---- updatePlan --------------------------------------------------------------
