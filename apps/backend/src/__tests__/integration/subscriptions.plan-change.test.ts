@@ -427,4 +427,189 @@ describe('Plan change (upgrade/downgrade) → ContributionPeriod handling', () =
       }
     });
   });
+
+  // ════════════════════════════════════════════════════════════════════════
+  // RETROACTIVE PLAN PRICE ADJUSTMENT TESTS
+  // ════════════════════════════════════════════════════════════════════════
+
+  describe('PATCH /api/subscriptions/plans/:planId (retroactive adjustment)', () => {
+    it('should mark a PAID contribution as PARTIAL when amount increases retroactively', async () => {
+      const now = new Date();
+      const currentYear = now.getFullYear();
+      const currentMonth = now.getMonth() + 1;
+
+      // Subscribe to Plan A (₹500)
+      const { user, token } = await createSubscribedUser('retro-partial', planA.id);
+      await generateUserContributions(user.id, currentYear, currentMonth);
+
+      // Mark current month as PAID (fully paid ₹500)
+      await prisma.contributionPeriod.update({
+        where: {
+          userId_year_month: { userId: user.id, year: currentYear, month: currentMonth },
+        },
+        data: {
+          status: ContributionStatus.PAID,
+          paidAmount: 500,
+          dueAmount: 0,
+        },
+      });
+
+      // Build a SUPER_ADMIN token to update the plan
+      const admin = await createUser({
+        email: `${PREFIX}-retro-admin@test.com`,
+        password: 'TestPass1!',
+        role: ['SUPER_ADMIN'],
+        associationId: association.id,
+      });
+      const adminToken = await signAccessToken(admin.id);
+
+      // Update Plan A amount to ₹700, effective from last month to next month
+      const oneMonthAgo = new Date();
+      oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+      const oneMonthFromNow = new Date();
+      oneMonthFromNow.setMonth(oneMonthFromNow.getMonth() + 1);
+
+      await request(app)
+        .patch(`/api/v1/subscriptions/plans/${planA.id}`)
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send({
+          amount: 700,
+          effectiveFrom: oneMonthAgo.toISOString(),
+          effectiveTo: oneMonthFromNow.toISOString(),
+        })
+        .expect(200);
+
+      // The current month should now be PARTIAL with ₹200 dueAmount
+      const period = await getContribution(user.id, currentYear, currentMonth);
+      expect(period).not.toBeNull();
+      expect(Number(period!.expectedAmount)).toBe(700);
+      expect(Number(period!.paidAmount)).toBe(500);
+      expect(Number(period!.dueAmount)).toBe(200);
+      expect(period!.status).toBe(ContributionStatus.PARTIAL);
+    });
+
+    it('should forward overpayment surplus to the next period when amount decreases', async () => {
+      const now = new Date();
+      const currentYear = now.getFullYear();
+      const currentMonth = now.getMonth() + 1;
+
+      // Subscribe to Plan B (₹1000)
+      const { user } = await createSubscribedUser('retro-surplus', planB.id);
+      await generateUserContributions(user.id, currentYear, 12);
+
+      // Mark current month as PAID (fully paid ₹1000)
+      await prisma.contributionPeriod.update({
+        where: {
+          userId_year_month: { userId: user.id, year: currentYear, month: currentMonth },
+        },
+        data: {
+          status: ContributionStatus.PAID,
+          paidAmount: 1000,
+          dueAmount: 0,
+        },
+      });
+
+      const nextMonth = currentMonth < 12 ? currentMonth + 1 : 1;
+      const nextYear = currentMonth < 12 ? currentYear : currentYear + 1;
+
+      // Build a SUPER_ADMIN token
+      const admin = await createUser({
+        email: `${PREFIX}-retro-admin2@test.com`,
+        password: 'TestPass1!',
+        role: ['SUPER_ADMIN'],
+        associationId: association.id,
+      });
+      const adminToken = await signAccessToken(admin.id);
+
+      // Update Plan B amount to ₹600 with retroactive range
+      const oneMonthAgo = new Date();
+      oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+      const oneMonthFromNow = new Date();
+      oneMonthFromNow.setMonth(oneMonthFromNow.getMonth() + 1);
+
+      await request(app)
+        .patch(`/api/v1/subscriptions/plans/${planB.id}`)
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send({
+          amount: 600,
+          effectiveFrom: oneMonthAgo.toISOString(),
+          effectiveTo: oneMonthFromNow.toISOString(),
+        })
+        .expect(200);
+
+      // Current month: expectedAmount=600, paidAmount=600 (surplus 400 forwarded)
+      const currentPeriod = await getContribution(user.id, currentYear, currentMonth);
+      expect(currentPeriod).not.toBeNull();
+      expect(Number(currentPeriod!.expectedAmount)).toBe(600);
+      expect(currentPeriod!.status).toBe(ContributionStatus.PAID);
+
+      // Next month should have received the ₹400 surplus
+      // expectedAmount should also be 600 (same plan update range)
+      const nextPeriod = await getContribution(user.id, nextYear, nextMonth);
+      expect(nextPeriod).not.toBeNull();
+      expect(Number(nextPeriod!.expectedAmount)).toBe(600);
+      expect(Number(nextPeriod!.paidAmount)).toBe(400);
+      expect(Number(nextPeriod!.dueAmount)).toBe(200);
+      expect(nextPeriod!.status).toBe(ContributionStatus.PARTIAL);
+    });
+
+    it('should preserve existing PAID periods when no effectiveFrom/To provided', async () => {
+      const now = new Date();
+      const currentYear = now.getFullYear();
+      const currentMonth = now.getMonth() + 1;
+
+      // Create a fresh plan (planA may have been modified by earlier retroactive tests)
+      const freshPlan = await prisma.subscriptionPlan.create({
+        data: {
+          name: `${PREFIX}-retro-noop-plan`,
+          associationId: association.id,
+          isDefault: false,
+          versions: {
+            create: {
+              amount: 500,
+              billingCycle: 'MONTHLY',
+              features: {},
+            },
+          },
+        },
+        include: { versions: true },
+      });
+
+      // Subscribe to the fresh plan (₹500)
+      const { user } = await createSubscribedUser('retro-noop', freshPlan.id);
+      await generateUserContributions(user.id, currentYear, currentMonth);
+
+      // Mark as PAID
+      await prisma.contributionPeriod.update({
+        where: {
+          userId_year_month: { userId: user.id, year: currentYear, month: currentMonth },
+        },
+        data: {
+          status: ContributionStatus.PAID,
+          paidAmount: 500,
+          dueAmount: 0,
+        },
+      });
+
+      const admin = await createUser({
+        email: `${PREFIX}-retro-admin3@test.com`,
+        password: 'TestPass1!',
+        role: ['SUPER_ADMIN'],
+        associationId: association.id,
+      });
+      const adminToken = await signAccessToken(admin.id);
+
+      // Update amount WITHOUT effectiveFrom/To (no retroactive adjustment)
+      await request(app)
+        .patch(`/api/v1/subscriptions/plans/${freshPlan.id}`)
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send({ amount: 900 })
+        .expect(200);
+
+      // The PAID period must NOT be changed
+      const period = await getContribution(user.id, currentYear, currentMonth);
+      expect(Number(period!.expectedAmount)).toBe(500);
+      expect(period!.status).toBe(ContributionStatus.PAID);
+    });
+  });
 });
