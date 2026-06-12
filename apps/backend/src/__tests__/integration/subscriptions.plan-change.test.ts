@@ -541,6 +541,7 @@ describe('Plan change (upgrade/downgrade) → ContributionPeriod handling', () =
       const currentPeriod = await getContribution(user.id, currentYear, currentMonth);
       expect(currentPeriod).not.toBeNull();
       expect(Number(currentPeriod!.expectedAmount)).toBe(600);
+      expect(Number(currentPeriod!.paidAmount)).toBe(600);
       expect(currentPeriod!.status).toBe(ContributionStatus.PAID);
 
       // Next month should have received the ₹400 surplus
