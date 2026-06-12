@@ -1,0 +1,26 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// EAS Submissions
+// ─────────────────────────────────────────────────────────────────────────────
+
+model EasSubmission {
+  id                        String   @id
+  accountName               String
+  projectName               String
+  platform                  String
+  status                    String
+  archiveUrl                String?
+  turtleBuildId             String?
+  initiatingUserId          String?
+  errorMessage              String?
+  errorCode                 String?
+  logsUrl                   String?
+  submissionDetailsPageUrl  String?
+  createdAt                 DateTime
+  completedAt               DateTime?
+  updatedAt                 DateTime @updatedAt
+
+  rawEventId                String   @unique
+  rawEvent                  EasWebhookEvent @relation(fields: [rawEventId], references: [id], onDelete: Cascade)
+
+  @@map("eas_submissions")
+}

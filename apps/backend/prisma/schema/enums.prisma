@@ -297,3 +297,10 @@ enum DocumentReferenceType {
   @@map("document_reference_type")
 }
 
+enum EasWebhookEventType {
+  BUILD
+  SUBMIT
+
+  @@map("eas_webhook_event_type")
+}
+
