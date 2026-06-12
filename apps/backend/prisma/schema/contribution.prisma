@@ -23,6 +23,7 @@ model ContributionPeriod {
 
   waivedAt     DateTime?
   waivedReason String?
+  waivedBy     String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

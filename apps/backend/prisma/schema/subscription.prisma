@@ -14,8 +14,7 @@ model Plan {
 
   association Association @relation(fields: [associationId], references: [id], onDelete: Cascade)
 
-  versions      PlanVersion[]
-  subscriptions Subscription[] // Will be removed in Task 2
+  versions PlanVersion[]
 
   memberTypeId String?
   memberType   MemberType? @relation(fields: [memberTypeId], references: [id])
@@ -40,53 +39,8 @@ model PlanVersion {
 
   createdAt DateTime @default(now())
 
-  plan           Plan                       @relation(fields: [planId], references: [id], onDelete: Cascade)
-  subscriptions  Subscription[]             // Will be removed in Task 2
-  billingHistory SubscriptionBillingHistory[] // Will be removed in Task 2
+  plan Plan @relation(fields: [planId], references: [id], onDelete: Cascade)
 
   @@index([planId])
   @@map("plan_versions")
-}
-
-model Subscription {
-  id            String    @id @default(uuid())
-  userId        String    @unique
-  planId        String
-  planVersionId String
-  status        String    @default("ACTIVE")
-  startDate     DateTime  @default(now())
-  endDate       DateTime
-  waivedAt      DateTime?
-  waivedReason  String?
-  waivedBy      String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-
-  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  plan        Plan       @relation(fields: [planId], references: [id])
-  planVersion PlanVersion @relation(fields: [planVersionId], references: [id])
-
-  billingHistory SubscriptionBillingHistory[]
-
-  @@index([status])
-  @@index([endDate])
-  @@map("subscriptions")
-}
-
-model SubscriptionBillingHistory {
-  id             String   @id @default(uuid())
-  subscriptionId String
-  planVersionId  String
-  amountCharged  Decimal  @db.Decimal(10, 2)
-  status         String   @default("PENDING")
-  periodStart    DateTime
-  periodEnd      DateTime
-  dueDate        DateTime
-  createdAt      DateTime @default(now())
-
-  subscription Subscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
-  planVersion  PlanVersion  @relation(fields: [planVersionId], references: [id])
-
-  @@index([subscriptionId])
-  @@map("subscription_billing_history")
 }
