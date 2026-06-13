@@ -23,7 +23,7 @@ const csvUpload = createUploadMiddleware({
 });
 
 const CsvUserImportRowSchema = z.object({
-  email: z.string().email('Invalid email'),
+  email: z.email('Invalid email'),
   name: z.string().min(1, 'Name is required'),
   mobile: z
     .string()
@@ -42,7 +42,7 @@ export const importUsersCsv: RequestHandler[] = [
   csvUpload.single('file'),
   asyncHandler(async (req: Request, res: Response) => {
     const traceId = (req.traceId as string) || '';
-    const user = await withRole(req, UserRole.SECRETARY);
+    const user = await withRole(req, UserRole.MEMBER);
 
     const file = req.file;
     if (!file) throw new BadRequestError('CSV file is required');
@@ -135,10 +135,7 @@ export const importUsersCsv: RequestHandler[] = [
     const created = toCreate.length;
     const skipped = errors.length;
 
-    logger.info(
-      { traceId, created, skipped },
-      'POST /api/v1/admin/users/import-csv - Completed',
-    );
+    logger.info({ traceId, created, skipped }, 'POST /api/v1/admin/users/import-csv - Completed');
 
     return success(
       res,
