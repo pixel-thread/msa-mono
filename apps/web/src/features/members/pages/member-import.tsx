@@ -1,8 +1,9 @@
 'use client';
 
-import { useRef } from 'react';
+import { useMemo, useRef } from 'react';
 import { useCsvPreview } from '@src/features/members/hooks/useCsvPreview';
 import { useImportMembers } from '@src/features/members/hooks/useImportMembers';
+import { DataTable } from '@src/shared/components/data-table';
 import { SectionHeader } from '@src/shared/components/section-header';
 import { Button } from '@src/shared/components/ui/button';
 import { Card } from '@src/shared/components/ui/card';
@@ -15,6 +16,7 @@ import {
   TableRow,
 } from '@src/shared/components/ui/table';
 import { useNavigate } from '@tanstack/react-router';
+import type { ColumnDef } from '@tanstack/react-table';
 import { AlertCircle, CheckCircle2, Download, Upload, X } from 'lucide-react';
 
 function generateTemplateCsv(): string {
@@ -25,16 +27,16 @@ function generateTemplateCsv(): string {
     'designation',
     'dateOfJoiningGovt',
     'dateOfJoiningAssociation',
-    'membershipNumber',
+    'dateOfRetirement',
   ];
   const sampleRow = [
     'john@example.com',
     'John Doe',
     '9876543210',
     'Secretary',
-    '2020-01-15',
+    '2020-06-01',
     '2021-06-01',
-    'MEM-001',
+    '2022-06-01',
   ];
   return [headers.join(','), sampleRow.join(',')].join('\n');
 }
@@ -77,6 +79,24 @@ export default function MemberImportPage() {
     a.click();
     URL.revokeObjectURL(url);
   };
+
+  const columns = useMemo<ColumnDef<Record<string, string>>[]>(() => {
+    if (!preview) return [];
+    return [
+      {
+        id: 'rowNumber',
+        header: '#',
+        cell: ({ row }) => <span className="text-muted-foreground">{row.index + 1}</span>,
+        size: 60,
+      },
+      ...preview.headers.map((header) => ({
+        id: header,
+        header,
+        accessorKey: header,
+        cell: ({ getValue }: { getValue: () => unknown }) => (getValue() as string) ?? '',
+      })),
+    ];
+  }, [preview]);
 
   const importResult = importMutation.data?.data;
 
@@ -188,60 +208,37 @@ export default function MemberImportPage() {
           </div>
         </Card>
       ) : (
-        <div className="mt-6">
-          <Card className="p-4">
-            <div className="flex items-center justify-between mb-4">
-              <div>
-                <p className="text-sm font-medium">{preview.fileName}</p>
-                <p className="text-xs text-body">
-                  {preview.totalRows} row{preview.totalRows !== 1 ? 's' : ''} found
-                  {' · '}
-                  {(preview.fileSize / 1024).toFixed(1)} KB
-                </p>
-              </div>
-              <div className="flex items-center gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={clear}
-                  disabled={importMutation.isPending}
-                >
-                  <X className="h-4 w-4 mr-1" />
-                  Clear
-                </Button>
-                <Button
-                  size="sm"
-                  onClick={handleImport}
-                  disabled={importMutation.isPending || preview.totalRows === 0}
-                >
-                  {importMutation.isPending ? 'Importing...' : 'Import Members'}
-                </Button>
-              </div>
+        <div className="mt-6 flex flex-col gap-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium">{preview.fileName}</p>
+              <p className="text-xs text-body">
+                {preview.totalRows} row{preview.totalRows !== 1 ? 's' : ''} found
+                {' · '}
+                {(preview.fileSize / 1024).toFixed(1)} KB
+              </p>
             </div>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={clear}
+                disabled={importMutation.isPending}
+              >
+                <X className="h-4 w-4 mr-1" />
+                Clear
+              </Button>
+              <Button
+                size="sm"
+                onClick={handleImport}
+                disabled={importMutation.isPending || preview.totalRows === 0}
+              >
+                {importMutation.isPending ? 'Importing...' : 'Import Members'}
+              </Button>
+            </div>
+          </div>
 
-            <div className="max-h-96 overflow-auto border rounded-lg">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="w-12">#</TableHead>
-                    {preview.headers.map((header) => (
-                      <TableHead key={header}>{header}</TableHead>
-                    ))}
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {preview.rows.map((row, rowIndex) => (
-                    <TableRow key={rowIndex}>
-                      <TableCell className="text-muted-foreground">{rowIndex + 1}</TableCell>
-                      {preview.headers.map((header) => (
-                        <TableCell key={header}>{row[header] ?? ''}</TableCell>
-                      ))}
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
-          </Card>
+          <DataTable data={preview.rows} columns={columns} />
         </div>
       )}
 
