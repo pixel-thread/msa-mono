@@ -5,4 +5,5 @@ export const ADMIN = {
   MEMBERSHIP_APPLICATIONS: '/admin/membership-applications',
   MEMBERSHIP_APPLICATION_APPROVE: (id: string) => `/admin/membership-applications/${id}/approve`,
   MEMBERSHIP_APPLICATION_REJECT: (id: string) => `/admin/membership-applications/${id}/reject`,
+  IMPORT_USERS_CSV: '/admin/users/import-csv',
 } as const;
