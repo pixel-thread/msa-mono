@@ -20,6 +20,7 @@ import {
   postApproveApplication,
   postRejectApplication,
 } from './membership-applications.route';
+import { importUsersCsv } from './users.route';
 
 /**
  * @description Central router for all admin features.
@@ -44,6 +45,12 @@ router.put('/associations/:id', putAssociation);
 router.delete('/associations/:id', deleteAssociationById);
 
 router.post('/associations/:id/member', postAssociationMember);
+
+// ---------------------------------------------------------------------------
+// Users — CSV import
+// ---------------------------------------------------------------------------
+
+router.post('/users/import-csv', importUsersCsv);
 
 // ---------------------------------------------------------------------------
 // Membership Applications — review workflow
