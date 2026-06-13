@@ -1,22 +1,22 @@
 'use client';
 
-import { useState } from 'react';
 import { CreatePlanDialog } from '@src/features/subscriptions/components/create-plan-dialog';
 import { DeletePlanDialog } from '@src/features/subscriptions/components/delete-plan-dialog';
 import { EditPlanDialog } from '@src/features/subscriptions/components/edit-plan-dialog';
 import { usePlans } from '@src/features/subscriptions/hooks/usePlans';
 import { usePlanTableActions } from '@src/features/subscriptions/hooks/usePlanTableActions';
 import { usePlanTableColumns } from '@src/features/subscriptions/hooks/usePlanTableColumns';
-import { Plan } from '@src/features/subscriptions/types';
 import { DataTable } from '@src/shared/components/data-table';
 import { DataTableFilters } from '@src/shared/components/data-table-filters';
 import { DataTablePagination } from '@src/shared/components/data-table-pagination';
 import { SectionHeader } from '@src/shared/components/section-header';
 import { useUrlFilters } from '@src/shared/hooks';
+
 import { usePlanStore } from '../stores';
 
 export default function PlansPage() {
   const { page, setPage } = useUrlFilters({ basePath: '/plans' });
+
   const { isDeletingConfirmOpen, plan, isEditing, setIsEditing, setIsDeletingConfirmOpen } =
     usePlanStore();
 

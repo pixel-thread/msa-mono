@@ -32,8 +32,8 @@ import { BILLING_CYCLE } from '@src/shared/types';
 import { useForm } from 'react-hook-form';
 
 import { usePlan } from '../hooks/usePlan';
-import { UpdatePlanInput, UpdatePlanSchema } from '../validators';
 import { usePlanStore } from '../stores';
+import { UpdatePlanInput, UpdatePlanSchema } from '../validators';
 
 interface EditPlanDialogProps {
   planId: string;

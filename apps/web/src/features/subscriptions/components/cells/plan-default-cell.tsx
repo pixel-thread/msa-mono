@@ -3,8 +3,8 @@
 import { Button } from '@src/shared/components/ui/button';
 import { Star } from 'lucide-react';
 
-import { Plan } from '../../types';
 import { usePlanTableActions } from '../../hooks/usePlanTableActions';
+import { Plan } from '../../types';
 
 interface PlanDefaultCellProps {
   plan: Plan;
