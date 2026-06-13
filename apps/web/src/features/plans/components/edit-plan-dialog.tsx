@@ -1,8 +1,7 @@
-'use client';
-import { useState } from 'react';
+import { useEffect } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMemberTypes } from '@src/features/members/hooks/useMemberTypes';
-import { useCreatePlan } from '@src/features/subscriptions/hooks/useCreatePlan';
+import { useUpdatePlan } from '@src/features/plans/hooks/useUpdatePlan';
 import { Button } from '@src/shared/components/ui/button';
 import {
   Dialog,
@@ -11,7 +10,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from '@src/shared/components/ui/dialog';
 import {
   Form,
@@ -29,70 +27,90 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@src/shared/components/ui/select';
-import { logger } from '@src/shared/logger';
+import { Switch } from '@src/shared/components/ui/switch';
 import { BILLING_CYCLE } from '@src/shared/types';
-import { Plus } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 
-import { CreatePlanInput, CreatePlanSchema } from '../validators';
+import { usePlan } from '../hooks/usePlan';
+import { usePlanStore } from '../stores';
+import { UpdatePlanInput, UpdatePlanSchema } from '../validators';
 
-export function CreatePlanDialog() {
-  const [open, setOpen] = useState(false);
-  const createPlan = useCreatePlan();
+interface EditPlanDialogProps {
+  planId: string;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}
+
+export function EditPlanDialog({ planId, open, onOpenChange }: EditPlanDialogProps) {
+  const updatePlan = useUpdatePlan();
+  const { data: plan } = usePlan({ planId: planId });
   const { memberTypes } = useMemberTypes();
+  const { setPlan } = usePlanStore();
 
   const form = useForm({
-    resolver: zodResolver(CreatePlanSchema),
+    resolver: zodResolver(UpdatePlanSchema),
     defaultValues: {
       name: '',
       description: '',
       amount: 0,
       currency: 'INR',
-      billingCycle: 'YEARLY',
+      billingCycle: 'MONTHLY',
       features: {},
       memberTypeId: '',
       isActive: true,
-      effectiveFrom: '',
     },
   });
 
-  const onSubmit = (data: CreatePlanInput) => {
-    const { memberTypeId, isActive, ...rest } = data;
-    createPlan.mutate(
+  useEffect(() => {
+    if (plan && open) {
+      const activeVersion = plan.activeVersion;
+      form.reset({
+        name: plan.name,
+        description: plan.description || '',
+        amount: activeVersion?.amount ?? 0,
+        currency: activeVersion?.currency ?? 'INR',
+        billingCycle: (activeVersion?.billingCycle ?? 'YEARLY') as 'MONTHLY' | 'YEARLY',
+        features: (activeVersion?.features as Record<string, unknown>) || {},
+        memberTypeId: plan.memberTypeId || '',
+        effectiveTo: activeVersion?.effectiveTo ? new Date(activeVersion.effectiveTo) : undefined,
+        effectiveFrom: activeVersion?.effectiveFrom
+          ? new Date(activeVersion.effectiveFrom)
+          : undefined,
+        isActive: plan.isActive,
+      });
+    }
+  }, [plan, open, form]);
+
+  const onSubmit = (data: UpdatePlanInput) => {
+    if (!plan) return;
+
+    const { memberTypeId, effectiveTo, effectiveFrom, isActive, ...rest } = data;
+    updatePlan.mutate(
       {
+        planId: plan.id,
         ...rest,
+        effectiveTo: effectiveTo || undefined,
+        effectiveFrom: effectiveFrom,
         memberTypeId: memberTypeId || undefined,
-        isActive: isActive ?? true,
+        isActive,
       },
       {
-        onSuccess: (data) => {
-          if (data.success) {
-            setOpen(false);
-            form.reset();
+        onSuccess: ({ success }) => {
+          if (success) {
+            onOpenChange(false);
+            setPlan(null);
           }
         },
       },
     );
   };
 
-  logger.debug('Create Plan Dialog', {
-    error: form.formState.errors,
-  });
-
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button>
-          <Plus className="h-4 w-4 mr-2" />
-          Create Plan
-        </Button>
-      </DialogTrigger>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-125">
         <DialogHeader>
-          <DialogTitle>Create Plan</DialogTitle>
-          <DialogDescription>
-            Add a new plan for your association members.
-          </DialogDescription>
+          <DialogTitle>Edit Plan</DialogTitle>
+          <DialogDescription>Update the details of the plan.</DialogDescription>
         </DialogHeader>
 
         <Form {...form}>
@@ -138,17 +156,14 @@ export function CreatePlanDialog() {
                     <Input
                       type="datetime-local"
                       value={
-                        field.value instanceof Date
-                          ? field.value.toISOString().slice(0, 16)
-                          : typeof field.value === 'string'
-                            ? field.value.slice(0, 16)
-                            : ''
+                        field.value instanceof Date ? field.value.toISOString().slice(0, 16) : ''
                       }
-                      onChange={(e) => field.onChange(e.target.value)}
+                      onChange={(e) =>
+                        field.onChange(e.target.value ? new Date(e.target.value) : undefined)
+                      }
                       onBlur={field.onBlur}
                       ref={field.ref}
                       name={field.name}
-                      disabled={field.disabled}
                     />
                   </FormControl>
                   <FormMessage />
@@ -166,17 +181,14 @@ export function CreatePlanDialog() {
                     <Input
                       type="datetime-local"
                       value={
-                        field.value instanceof Date
-                          ? field.value.toISOString().slice(0, 16)
-                          : typeof field.value === 'string'
-                            ? field.value.slice(0, 16)
-                            : ''
+                        field.value instanceof Date ? field.value.toISOString().slice(0, 16) : ''
                       }
-                      onChange={(e) => field.onChange(e.target.value)}
+                      onChange={(e) =>
+                        field.onChange(e.target.value ? new Date(e.target.value) : undefined)
+                      }
                       onBlur={field.onBlur}
                       ref={field.ref}
                       name={field.name}
-                      disabled={field.disabled}
                     />
                   </FormControl>
                   <FormMessage />
@@ -208,7 +220,7 @@ export function CreatePlanDialog() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Billing Cycle</FormLabel>
-                    <Select onValueChange={field.onChange} value={field.value}>
+                    <Select onValueChange={field.onChange} value={field.value ?? ''}>
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Select billing cycle" />
@@ -234,7 +246,7 @@ export function CreatePlanDialog() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Member Type (Optional)</FormLabel>
-                  <Select onValueChange={field.onChange} value={field.value}>
+                  <Select onValueChange={field.onChange} value={field.value ?? ''}>
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Select member type" />
@@ -254,12 +266,26 @@ export function CreatePlanDialog() {
               )}
             />
 
+            <FormField
+              control={form.control}
+              name="isActive"
+              render={({ field }) => (
+                <FormItem className="flex items-center gap-3">
+                  <FormControl>
+                    <Switch checked={field.value} onCheckedChange={field.onChange} />
+                  </FormControl>
+                  <FormLabel className="mb-0">Active</FormLabel>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             <DialogFooter>
-              <Button type="button" variant="outline" onClick={() => setOpen(false)}>
+              <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
                 Cancel
               </Button>
-              <Button type="submit" disabled={createPlan.isPending}>
-                {createPlan.isPending ? 'Creating...' : 'Create Plan'}
+              <Button type="submit" disabled={updatePlan.isPending}>
+                {updatePlan.isPending ? 'Updating...' : 'Update Plan'}
               </Button>
             </DialogFooter>
           </form>

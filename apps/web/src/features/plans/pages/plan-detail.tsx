@@ -1,6 +1,6 @@
 'use client';
 
-import { usePlans } from '@src/features/subscriptions/hooks/usePlans';
+import { usePlans } from '@src/features/plans/hooks/usePlans';
 import { DataTable } from '@src/shared/components/data-table';
 import { SectionHeader } from '@src/shared/components/section-header';
 import { Badge } from '@src/shared/components/ui/badge';

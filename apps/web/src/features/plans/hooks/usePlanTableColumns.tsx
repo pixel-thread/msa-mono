@@ -1,9 +1,9 @@
-import { PlanActionsCell } from '@src/features/subscriptions/components/cells/plan-actions-cell';
-import { PlanAmountCell } from '@src/features/subscriptions/components/cells/plan-amount-cell';
-import { PlanBillingCell } from '@src/features/subscriptions/components/cells/plan-billing-cell';
-import { PlanDefaultCell } from '@src/features/subscriptions/components/cells/plan-default-cell';
-import { PlanNameCell } from '@src/features/subscriptions/components/cells/plan-name-cell';
-import { PlanStatusCell } from '@src/features/subscriptions/components/cells/plan-status-cell';
+import { PlanActionsCell } from '@src/features/plans/components/cells/plan-actions-cell';
+import { PlanAmountCell } from '@src/features/plans/components/cells/plan-amount-cell';
+import { PlanBillingCell } from '@src/features/plans/components/cells/plan-billing-cell';
+import { PlanDefaultCell } from '@src/features/plans/components/cells/plan-default-cell';
+import { PlanNameCell } from '@src/features/plans/components/cells/plan-name-cell';
+import { PlanStatusCell } from '@src/features/plans/components/cells/plan-status-cell';
 import { formatDate } from '@src/shared/utils';
 import { ColumnDef } from '@tanstack/react-table';
 

@@ -1,11 +1,11 @@
 'use client';
 
-import { CreatePlanDialog } from '@src/features/subscriptions/components/create-plan-dialog';
-import { DeletePlanDialog } from '@src/features/subscriptions/components/delete-plan-dialog';
-import { EditPlanDialog } from '@src/features/subscriptions/components/edit-plan-dialog';
-import { usePlans } from '@src/features/subscriptions/hooks/usePlans';
-import { usePlanTableActions } from '@src/features/subscriptions/hooks/usePlanTableActions';
-import { usePlanTableColumns } from '@src/features/subscriptions/hooks/usePlanTableColumns';
+import { CreatePlanDialog } from '@src/features/plans/components/create-plan-dialog';
+import { DeletePlanDialog } from '@src/features/plans/components/delete-plan-dialog';
+import { EditPlanDialog } from '@src/features/plans/components/edit-plan-dialog';
+import { usePlans } from '@src/features/plans/hooks/usePlans';
+import { usePlanTableActions } from '@src/features/plans/hooks/usePlanTableActions';
+import { usePlanTableColumns } from '@src/features/plans/hooks/usePlanTableColumns';
 import { DataTable } from '@src/shared/components/data-table';
 import { DataTableFilters } from '@src/shared/components/data-table-filters';
 import { DataTablePagination } from '@src/shared/components/data-table-pagination';
