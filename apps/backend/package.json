@@ -28,6 +28,7 @@
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
+    "csv-parser": "^3.2.1",
     "date-fns": "^4.2.1",
     "dotenv": "^16.4.7",
     "expo-server-sdk": "^6.1.0",
