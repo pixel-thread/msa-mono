@@ -257,25 +257,48 @@ async function retroactivelyAdjustContributionsForPlan(
   const users = await tx.user.findMany({
     where: {
       associationId: plan.associationId,
+      status: 'ACTIVE',
       ...(plan.memberTypeId ? { memberTypeId: plan.memberTypeId } : {}),
     },
-    select: { id: true },
+    select: { id: true, dateOfJoiningAssociation: true },
   });
 
-  for (const { id: userId } of users) {
+  for (const { id: userId, dateOfJoiningAssociation } of users) {
+    // Skip users without a join date — they haven't been onboarded
+    if (!dateOfJoiningAssociation) continue;
+
+    // Compute the effective start for this user — the later of:
+    //   (a) the plan version's effectiveFrom
+    //   (b) the member's dateOfJoiningAssociation
+    // This ensures a member who joined in Feb is NOT retro-billed for Jan.
+    const memberJoinYear = dateOfJoiningAssociation.getFullYear();
+    const memberJoinMonth = dateOfJoiningAssociation.getMonth() + 1; // 1-indexed
+
+    const userFromYear =
+      memberJoinYear * 12 + memberJoinMonth > fromYear * 12 + fromMonth
+        ? memberJoinYear
+        : fromYear;
+    const userFromMonth =
+      memberJoinYear * 12 + memberJoinMonth > fromYear * 12 + fromMonth
+        ? memberJoinMonth
+        : fromMonth;
+
+    // If the user joined after the retro window ends, skip entirely
+    if (userFromYear * 12 + userFromMonth > toYear * 12 + toMonth) continue;
+
     // 2. Find contribution periods in the date range, sorted oldest first
     const periods = await tx.contributionPeriod.findMany({
       where: {
         userId,
-        ...(fromYear === toYear
+        ...(userFromYear === toYear
           ? {
-              year: fromYear,
-              month: { gte: fromMonth, lte: toMonth },
+              year: userFromYear,
+              month: { gte: userFromMonth, lte: toMonth },
             }
           : {
               OR: [
-                { year: { gt: fromYear, lt: toYear } },
-                { year: fromYear, month: { gte: fromMonth } },
+                { year: { gt: userFromYear, lt: toYear } },
+                { year: userFromYear, month: { gte: userFromMonth } },
                 { year: toYear, month: { lte: toMonth } },
               ],
             }),
@@ -288,6 +311,9 @@ async function retroactivelyAdjustContributionsForPlan(
     let surplus = 0;
 
     for (const period of periods) {
+      // Never touch waived periods — they are intentionally set to 0
+      if (period.status === ContributionStatus.WAIVED) continue;
+
       const paidAmount = Number(period.paidAmount);
       const totalPaid = paidAmount + surplus;
 
