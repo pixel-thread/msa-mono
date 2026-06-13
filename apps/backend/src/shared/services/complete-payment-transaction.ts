@@ -1,4 +1,3 @@
-import { NotFoundError } from '@errors';
 import type { PaymentMethod, Prisma } from '@prisma/client';
 import { AuditAction, PaymentStatus } from '@prisma/client';
 import { recordMemberPayment } from '@services/accounting';
@@ -46,7 +45,13 @@ export async function completePaymentInTransaction(
     },
   });
 
-  await createAllocations(tx, transactionId, userId, Number(amount));
+  let periods: string[] = [];
+
+  if (updated.contributionId) {
+    periods = [...periods, updated.contributionId];
+  }
+
+  await createAllocations(tx, transactionId, userId, Number(amount), periods);
 
   await recordMemberPayment(tx, {
     associationId,

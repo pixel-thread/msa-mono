@@ -39,6 +39,7 @@ export interface TransactionFilters {
 }
 
 export interface CreateOrderInput {
+  contributionPeriodId?: string;
   associationId: string;
   userId: string;
   /** Amount in INR (rupees, not paise). */
@@ -108,6 +109,7 @@ export async function createPaymentOrder(input: CreateOrderInput) {
       gateway: PaymentGateway.RAZORPAY,
       status: PaymentStatus.PENDING,
       notes: input.notes,
+      contributionPeriod: { connect: { id: input.contributionPeriodId } },
     },
   });
 
@@ -121,6 +123,7 @@ export async function createPaymentOrder(input: CreateOrderInput) {
       receipt: transaction.id,
       notes: {
         transactionId: transaction.id,
+        contributionPeriodId: input.contributionPeriodId || '',
         userId: input.userId,
         associationId: input.associationId,
       },

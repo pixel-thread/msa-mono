@@ -9,7 +9,9 @@ import { z } from 'zod';
 
 export const CreateOrderSchema = z.object({
   notes: z.string().optional(),
+  contributionPeriodId: z.string().min(1, 'Contribution period is required'),
 });
+export type CreateOrderInput = z.infer<typeof CreateOrderSchema>;
 
 // ---- Verify Payment (Client callback from Razorpay Checkout) ----
 
