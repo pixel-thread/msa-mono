@@ -1,5 +1,6 @@
 import { validate } from '@lib/validate';
 import { UserRole } from '@prisma/client';
+import { prisma } from '@src/shared/lib';
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';
@@ -8,7 +9,6 @@ import type { RequestHandler } from 'express';
 import { recordContributionPayment } from '../services';
 import type { RecordContributionInput } from '../validators';
 import { RecordContributionSchema } from '../validators';
-import { prisma } from '@src/shared/lib';
 
 export const recordContributionHandler: RequestHandler[] = [
   validate({ body: RecordContributionSchema }),
