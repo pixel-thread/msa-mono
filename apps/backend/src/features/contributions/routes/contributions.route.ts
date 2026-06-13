@@ -68,7 +68,7 @@ export const myContributionsHandler: RequestHandler[] = [
 
     const where: Record<string, unknown> = { associationId: req.user!.associationId };
     where.userId = userId;
-    if (status) where.status = status;
+    if (status !== 'ALL') where.status = status;
     if (year) where.year = year;
 
     const { contributions, total } = await findContributionPeriods({

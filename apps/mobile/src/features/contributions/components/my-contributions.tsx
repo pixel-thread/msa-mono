@@ -10,12 +10,14 @@ import { PayContributionButton } from './pay-contribution-button';
 import type { ContributionPeriod, ContributionStatus } from '../types';
 import { EmptyScreen, LoadingScreen } from '@src/shared/components/screens';
 
-const FILTERS: { key: ContributionStatus; label: string }[] = [
+type FilterType = 'ALL' | ContributionStatus;
+
+const FILTERS: { key: FilterType; label: string }[] = [
+  { key: 'ALL', label: 'All' },
   { key: 'PAID', label: 'Paid' },
   { key: 'DUE', label: 'Due' },
-  { key: 'OVERDUE', label: 'Overdue' },
-  { key: 'WAIVED', label: 'Waived' },
   { key: 'PENDING', label: 'Pending' },
+  { key: 'WAIVED', label: 'Waived' },
 ];
 
 const MONTHS = [
@@ -35,10 +37,12 @@ const MONTHS = [
 
 function getStatusBadgeStyle(status: ContributionStatus) {
   switch (status) {
-    case 'PAID':
-      return 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400';
+    case 'OVERDUE':
+      return 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400';
     case 'DUE':
       return 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400';
+    case 'PAID':
+      return 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400';
     case 'PARTIAL':
       return 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400';
     case 'WAIVED':
@@ -104,46 +108,60 @@ function ContributionRow({ item }: { item: ContributionPeriod }) {
 }
 
 export const MyContributions = () => {
-  const [activeFilter, setActiveFilter] = useState<ContributionStatus>('DUE');
+  const [activeFilter, setActiveFilter] = useState<FilterType>('ALL');
+  const page = 1;
 
-  const {
-    data: filteredData,
-    isLoading,
-    isError,
-    refetch,
-    isRefetching,
-  } = useMyContributions(activeFilter, 1);
-
-  const data = filteredData;
-
-  console.log(data);
+  const { data, isLoading, isError, refetch, isRefetching } = useMyContributions(
+    activeFilter,
+    page
+  );
 
   const { summary } = useMemo(() => {
-    const now = new Date();
-    const filtered = data.filter((item) => {
-      if (activeFilter === 'PAID') return item.status === 'PAID' || item.status === 'PARTIAL';
-      if (activeFilter === 'DUE') return item.status === 'DUE' && new Date(item.dueDate) <= now;
-      if (activeFilter === 'PENDING') return item.status === 'DUE' && new Date(item.dueDate) > now;
-      return true;
-    });
-
-    const totalPaid = data
-      .filter((i) => i.status === 'PAID' || i.status === 'PARTIAL')
-      .reduce((s, i) => s + i.paidAmount, 0);
-
-    const totalDue = data.filter((i) => i.status === 'DUE').reduce((s, i) => s + i.dueAmount, 0);
-
-    const pendingCount = data.filter((i) => i.status === 'DUE' && new Date(i.dueDate) > now).length;
-
-    const waivedTotal = data
-      .filter((i) => i.status === 'WAIVED')
-      .reduce((s, i) => s + i.expectedAmount, 0);
+    const overdueItems = data.filter((i) => i.status === 'OVERDUE');
+    const dueItems = data.filter((i) => i.status === 'DUE');
+    const pendingItems = data.filter((i) => i.status === 'PENDING');
+    const paidItems = data.filter((i) => i.status === 'PAID' || i.status === 'PARTIAL');
+    const waivedItems = data.filter((i) => i.status === 'WAIVED');
 
     return {
-      filteredData: filtered,
-      summary: { totalPaid, totalDue, pendingCount, waivedTotal },
+      summary: {
+        totalExpected: data.reduce((s, i) => s + i.expectedAmount, 0),
+        totalPaid: paidItems.reduce((s, i) => s + i.paidAmount, 0),
+        overdueAmount: overdueItems.reduce((s, i) => s + i.dueAmount, 0),
+        pendingCount: pendingItems.length,
+        waivedTotal: waivedItems.reduce((s, i) => s + i.expectedAmount, 0),
+        dueTotal: dueItems.reduce((s, i) => s + i.expectedAmount, 0),
+      },
     };
   }, [data]);
+
+  const summaryCards = [
+    {
+      label: 'Total Expected',
+      value: formatCurrency(summary.totalExpected),
+      color: 'text-indigo-600',
+    },
+    {
+      label: 'Total Paid',
+      value: formatCurrency(summary.totalPaid),
+      color: 'text-green-600',
+    },
+    {
+      label: 'Overdue',
+      value: `${summary.overdueAmount} (${formatCurrency(summary.overdueAmount)})`,
+      color: 'text-amber-600',
+    },
+    {
+      label: 'Pending',
+      value: String(summary.pendingCount),
+      color: 'text-slate-600',
+    },
+    {
+      label: 'Waived',
+      value: formatCurrency(summary.waivedTotal),
+      color: 'text-slate-400',
+    },
+  ];
 
   if (isLoading) {
     return <LoadingScreen />;
@@ -160,41 +178,10 @@ export const MyContributions = () => {
     );
   }
 
-  if (filteredData.length === 0) {
+  if (data.length === 0) {
     return (
       <>
         <View className="mb-4 flex-row flex-wrap gap-2">
-          {[
-            {
-              label: 'Total Paid',
-              value: formatCurrency(summary.totalPaid),
-              color: 'text-green-600',
-            },
-            {
-              label: 'Total Due',
-              value: formatCurrency(summary.totalDue),
-              color: 'text-amber-600',
-            },
-            { label: 'Pending', value: String(summary.pendingCount), color: 'text-slate-600' },
-            {
-              label: 'Waived',
-              value: formatCurrency(summary.waivedTotal),
-              color: 'text-slate-400',
-            },
-          ].map((stat, idx) => (
-            <View
-              key={idx}
-              className="min-w-[45%] flex-1 border border-slate-100 bg-slate-50 p-3 dark:border-slate-800 dark:bg-slate-900/50">
-              <Text variant="subtext" size="xs" className="mb-1 uppercase tracking-wider">
-                {stat.label}
-              </Text>
-              <Text variant="heading" size="default" className={stat.color}>
-                {stat.value}
-              </Text>
-            </View>
-          ))}
-        </View>
-        <View className="mb-4 flex-row gap-2">
           {FILTERS.map((filter) => {
             const active = activeFilter === filter.key;
             return (
@@ -214,29 +201,18 @@ export const MyContributions = () => {
           })}
         </View>
         <EmptyScreen
-          icon="file-tray-outline"
+          icon="alert-circle-outline"
           refresh={refetch}
-          title="No Contributions Found"
-          description="No contributions found."
+          title="No contributions found"
+          description="No contributions found. Please try again later."
         />
       </>
     );
   }
-
   return (
     <View className="flex-1">
-      {/* Summary Cards */}
       <View className="mb-4 flex-row flex-wrap gap-2">
-        {[
-          {
-            label: 'Total Paid',
-            value: formatCurrency(summary.totalPaid),
-            color: 'text-green-600',
-          },
-          { label: 'Total Due', value: formatCurrency(summary.totalDue), color: 'text-amber-600' },
-          { label: 'Pending', value: String(summary.pendingCount), color: 'text-slate-600' },
-          { label: 'Waived', value: formatCurrency(summary.waivedTotal), color: 'text-slate-400' },
-        ].map((stat, idx) => (
+        {summaryCards.map((stat, idx) => (
           <View
             key={idx}
             className="min-w-[45%] flex-1 border border-slate-100 bg-slate-50 p-3 dark:border-slate-800 dark:bg-slate-900/50">
@@ -250,8 +226,7 @@ export const MyContributions = () => {
         ))}
       </View>
 
-      {/* Filter Chips */}
-      <View className="mb-4 flex-row gap-2">
+      <View className="mb-4 flex-row flex-wrap gap-2">
         {FILTERS.map((filter) => {
           const active = activeFilter === filter.key;
           return (
@@ -271,25 +246,15 @@ export const MyContributions = () => {
         })}
       </View>
 
-      {/* List */}
-      {filteredData.length === 0 ? (
-        <View className="items-center justify-center border border-dashed border-slate-200 bg-slate-50/50 py-12 dark:border-slate-800 dark:bg-slate-900/30">
-          <Ionicons name="receipt-outline" size={40} color="#94a3b8" />
-          <Text variant="subtext" className="mt-2">
-            No contributions found
-          </Text>
-        </View>
-      ) : (
-        <FlashList
-          data={filteredData}
-          renderItem={({ item }) => <ContributionRow item={item} />}
-          keyExtractor={(item) => item.id}
-          showsVerticalScrollIndicator={false}
-          refreshControl={
-            <RefreshControl refreshing={isRefetching} onRefresh={refetch} tintColor="#6366f1" />
-          }
-        />
-      )}
+      <FlashList
+        data={data}
+        renderItem={({ item }) => <ContributionRow item={item} />}
+        keyExtractor={(item) => item.id}
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl refreshing={isRefetching} onRefresh={refetch} tintColor="#6366f1" />
+        }
+      />
     </View>
   );
 };

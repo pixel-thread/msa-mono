@@ -56,9 +56,13 @@ export const RecordContributionSchema = z.object({
   remarks: z.string().optional().nullable(),
 });
 
+const FilterStatus = {
+  ...ContributionStatus,
+  ALL: 'ALL',
+};
 export const ContributionsQuerySchema = z.object({
   page: pageNumberValidation,
-  status: z.enum(ContributionStatus).optional(),
+  status: z.enum(FilterStatus).optional(),
   userId: z.uuid().optional(),
   year: z.coerce.number().int().min(2020).max(2100).optional(),
   month: z.coerce.number().int().min(1).max(12).optional(),
