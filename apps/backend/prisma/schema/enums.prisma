@@ -302,4 +302,3 @@ enum EasWebhookEventType {
 
   @@map("eas_webhook_event_type")
 }
-

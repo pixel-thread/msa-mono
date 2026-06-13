@@ -43,6 +43,9 @@ model PaymentTransaction {
   association Association @relation(fields: [associationId], references: [id], onDelete: Cascade)
   user        User?       @relation(fields: [userId], references: [id])
 
+  constributionId     String             @unique
+  contributionPeriond ContributionPeriod @relation(fields: [constributionId], references: [id], onDelete: Cascade)
+
   allocations   PaymentAllocation[]
   ledgerEntries LedgerEntry[]
 

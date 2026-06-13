@@ -26,9 +26,10 @@ model ContributionPeriod {
 
   user User @relation(fields: [userId], references: [id])
 
-  allocations  PaymentAllocation[]
-  declarations Declarations[]
-  waiver        ContributionWaiver?
+  allocations        PaymentAllocation[]
+  declarations       Declarations[]
+  waiver             ContributionWaiver?
+  paymentTransaction PaymentTransaction?
 
   @@unique([userId, year, month])
   @@index([associationId])
@@ -51,7 +52,7 @@ model Declarations {
   member               User                 @relation(fields: [memberId], references: [id])
   association          Association          @relation(fields: [associationId], references: [id])
   periods              ContributionPeriod[]
-  remark              String?
+  remark               String?
   reviewer             User?                @relation("reviewedBy", fields: [reviewBy], references: [id])
 
   @@map("declarations")

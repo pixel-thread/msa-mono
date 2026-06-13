@@ -3,10 +3,10 @@ model MemberType {
   description String?
   level       Int
 
-  associationId     String
-  association       Association        @relation(fields: [associationId], references: [id], onDelete: Cascade)
-  users             User[]
-  plans             Plan[]
+  associationId String
+  association   Association @relation(fields: [associationId], references: [id], onDelete: Cascade)
+  users         User[]
+  plans         Plan[]
 
   @@unique([associationId, level])
   @@index([level])

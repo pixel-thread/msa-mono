@@ -3,34 +3,34 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 model EasBuild {
-  id                 String   @id
-  accountName        String
-  projectName        String
-  platform           String
-  status             String
-  buildProfile       String
-  buildUrl           String?
-  appVersion         String?
-  appBuildVersion    String?
-  runtimeVersion     String?
-  channel            String?
-  distribution       String?
-  gitCommitHash      String?
-  gitCommitMessage   String?
-  sdkVersion         String?
-  cliVersion         String?
-  initiatingUserId   String?
-  errorMessage       String?
-  errorCode          String?
-  message            String?
-  runFromCI          Boolean  @default(false)
-  metrics            Json?
-  createdAt          DateTime
-  completedAt        DateTime?
-  updatedAt          DateTime @updatedAt
+  id               String    @id
+  accountName      String
+  projectName      String
+  platform         String
+  status           String
+  buildProfile     String
+  buildUrl         String?
+  appVersion       String?
+  appBuildVersion  String?
+  runtimeVersion   String?
+  channel          String?
+  distribution     String?
+  gitCommitHash    String?
+  gitCommitMessage String?
+  sdkVersion       String?
+  cliVersion       String?
+  initiatingUserId String?
+  errorMessage     String?
+  errorCode        String?
+  message          String?
+  runFromCI        Boolean   @default(false)
+  metrics          Json?
+  createdAt        DateTime
+  completedAt      DateTime?
+  updatedAt        DateTime  @updatedAt
 
-  rawEventId         String   @unique
-  rawEvent           EasWebhookEvent @relation(fields: [rawEventId], references: [id], onDelete: Cascade)
+  rawEventId String          @unique
+  rawEvent   EasWebhookEvent @relation(fields: [rawEventId], references: [id], onDelete: Cascade)
 
   @@map("eas_builds")
 }
