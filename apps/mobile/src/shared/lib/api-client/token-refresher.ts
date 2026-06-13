@@ -4,6 +4,7 @@ import { SECURE_STORE_KEYS } from '@src/shared/constants';
 import { logger } from '@utils/logger';
 import { API_BASE_URL } from './constants';
 import { QueueItem } from './types';
+import { useSecureTokenStore } from '@src/features/auth/store/secure-token.store';
 
 /** Flag indicating if a token refresh request is currently in flight */
 export let isRefreshing = false;
@@ -49,11 +50,11 @@ export const refreshToken = async (): Promise<string> => {
 
   logger.debug('Refreshing token Started');
   const response = await axios.post<{
-    data?: { accessToken: string; refreshToken?: string };
+    data?: { access_token: string; refresh_token: string };
   }>(`${API_BASE_URL}/auth/refresh`, { token: refreshToken }, { withCredentials: true });
   logger.debug('Refreshing token Completed');
 
-  const newAccessToken = response.data?.data?.accessToken;
+  const newAccessToken = response.data?.data?.access_token;
 
   if (!newAccessToken) {
     throw new Error('No access token in refresh response');
@@ -61,9 +62,13 @@ export const refreshToken = async (): Promise<string> => {
 
   await SecureStore.setItemAsync(SECURE_STORE_KEYS.ACCESS_TOKEN, newAccessToken);
 
-  const newRefreshToken = response.data?.data?.refreshToken;
+  const { setAccessToken, setRefreshToken } = useSecureTokenStore.getState();
+  setAccessToken(newAccessToken);
+
+  const newRefreshToken = response.data?.data?.refresh_token;
   if (newRefreshToken) {
     await SecureStore.setItemAsync(SECURE_STORE_KEYS.REFRESH_TOKEN, newRefreshToken);
+    setRefreshToken(newRefreshToken);
   }
   logger.debug('Token Refreshed');
   return newAccessToken;

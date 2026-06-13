@@ -43,7 +43,7 @@ export const useAuthStore = create<AuthState>()(
           }
         } catch (error) {
           logger.error('Failed to fetch user', { error });
-          set({ isAuthLoading: false });
+          set({ user: null, isAuthenticated: false, isAuthLoading: false });
         }
       },
       logout: async () => {
