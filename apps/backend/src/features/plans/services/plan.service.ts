@@ -346,16 +346,23 @@ async function retroactivelyAdjustContributionsForPlan(
           },
         });
       } else {
-        // Nothing paid — determine status by dueDate
+        // Nothing paid — determine status by dueDate, but preserve PENDING
         surplus = 0;
-        const isOverdue = period.dueDate <= now;
+        let newStatus: ContributionStatus;
+        if (period.status === ContributionStatus.PENDING) {
+          newStatus = ContributionStatus.PENDING;
+        } else if (period.dueDate <= now) {
+          newStatus = ContributionStatus.OVERDUE;
+        } else {
+          newStatus = ContributionStatus.DUE;
+        }
 
         await tx.contributionPeriod.update({
           where: { id: period.id },
           data: {
             expectedAmount: newAmount,
             dueAmount: newExpected,
-            status: isOverdue ? ContributionStatus.OVERDUE : ContributionStatus.DUE,
+            status: newStatus,
           },
         });
       }
