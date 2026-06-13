@@ -10,7 +10,7 @@ import { prisma } from '@lib/prisma';
 // ---------------------------------------------------------------------------
 // Prisma
 // ---------------------------------------------------------------------------
-import { ContributionStatus, Status, type Prisma, type UserRole } from '@prisma/client';
+import { ContributionStatus, type Prisma, Status, type UserRole } from '@prisma/client';
 import { hasHighRoleAccess } from '@utils/has-high-role';
 
 // ---- Interfaces --------------------------------------------------------------
@@ -236,7 +236,6 @@ async function retroactivelyAdjustContributionsForPlan(
   const fromMonth = effectiveFrom.getMonth() + 1;
   const toYear = effectiveTo.getFullYear();
   const toMonth = effectiveTo.getMonth() + 1;
-  console.log({ effectiveTo: effectiveTo, toMonth });
 
   // 1. Find users associated with this plan via member type
   const plan = await tx.plan.findUnique({

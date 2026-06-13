@@ -8,6 +8,7 @@ import type { RequestHandler } from 'express';
 import { recordContributionPayment } from '../services';
 import type { RecordContributionInput } from '../validators';
 import { RecordContributionSchema } from '../validators';
+import { prisma } from '@src/shared/lib';
 
 export const recordContributionHandler: RequestHandler[] = [
   validate({ body: RecordContributionSchema }),
@@ -17,15 +18,18 @@ export const recordContributionHandler: RequestHandler[] = [
     const { userId, amount, paymentMethod, contributionPeriodIds, paidAt } =
       req.body as RecordContributionInput;
 
-    const result = await recordContributionPayment(
-      userId,
-      user.associationId,
-      amount,
-      paymentMethod,
-      contributionPeriodIds,
-      paidAt,
-      user.id,
-    );
+    const result = await prisma.$transaction(async (tx) => {
+      return await recordContributionPayment(
+        userId,
+        user.associationId,
+        amount,
+        paymentMethod,
+        contributionPeriodIds,
+        paidAt,
+        user.id,
+        tx,
+      );
+    });
 
     return success(res, {
       data: result,

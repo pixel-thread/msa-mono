@@ -97,7 +97,7 @@ export function ContributionDetail({ contribution }: ContributionDetailProps) {
           </CardContent>
         </Card>
 
-        {contribution.waivedAt && (
+        {contribution.waiver && (
           <Card className=" border-hairline bg-surface-card">
             <CardHeader>
               <CardTitle className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
@@ -107,14 +107,14 @@ export function ContributionDetail({ contribution }: ContributionDetailProps) {
             <CardContent>
               <p className="text-sm text-muted-foreground">
                 Waived on{' '}
-                {new Date(contribution.waivedAt).toLocaleDateString('en-IN', {
+                {new Date(contribution.waiver.waivedAt).toLocaleDateString('en-IN', {
                   day: '2-digit',
                   month: 'short',
                   year: 'numeric',
                 })}
               </p>
-              {contribution.waivedReason && (
-                <p className="text-sm text-ink mt-2">Reason: {contribution.waivedReason}</p>
+              {contribution.waiver.reason && (
+                <p className="text-sm text-ink mt-2">Reason: {contribution.waiver.reason}</p>
               )}
             </CardContent>
           </Card>

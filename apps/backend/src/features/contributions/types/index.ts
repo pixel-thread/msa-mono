@@ -9,8 +9,12 @@ export interface ContributionPeriod {
   dueAmount: number;
   status: string;
   dueDate: string;
-  waivedAt: string | null;
-  waivedReason: string | null;
+  waiver: {
+    id: string;
+    waivedAt: string;
+    reason: string | null;
+    waivedBy: string | null;
+  } | null;
   createdAt: string;
   updatedAt: string;
   user?: {

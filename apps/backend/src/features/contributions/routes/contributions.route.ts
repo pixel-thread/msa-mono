@@ -76,6 +76,7 @@ export const myContributionsHandler: RequestHandler[] = [
       pageSize: PAGE_SIZE,
       include: {
         user: { select: { id: true, name: true, email: true, membershipNumber: true } },
+        waiver: true,
         allocations: {
           take: 1,
           where: { paymentTransaction: { paidAt: { not: null } } },
@@ -139,6 +140,7 @@ export const listContributionsHandler: RequestHandler[] = [
       pageSize: PAGE_SIZE,
       include: {
         user: { select: { id: true, name: true, email: true, membershipNumber: true } },
+        waiver: true,
         allocations: {
           take: 1,
           where: { paymentTransaction: { paidAt: { not: null } } },
@@ -334,6 +336,7 @@ export const getContributionHandler: RequestHandler[] = [
       where: { id: req.params.contributionId as string, associationId: req.user!.associationId },
       include: {
         user: { select: { id: true, name: true, email: true, membershipNumber: true } },
+        waiver: true,
         allocations: {
           include: {
             paymentTransaction: {

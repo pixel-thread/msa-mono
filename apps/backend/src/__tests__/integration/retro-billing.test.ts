@@ -158,13 +158,20 @@ describe('Retroactive Billing on Plan Price Change', () => {
         ],
       });
 
-      // Manually set waived fields
+      // Create waiver record in new model
       const waivedPeriod = await prisma.contributionPeriod.findUnique({
         where: { userId_year_month: { userId: user.id, year: 2026, month: 3 } },
       });
+      await prisma.contributionWaiver.create({
+        data: {
+          periodId: waivedPeriod!.id,
+          waivedAt: new Date(),
+          reason: 'Hardship',
+        },
+      });
       await prisma.contributionPeriod.update({
         where: { id: waivedPeriod!.id },
-        data: { dueAmount: 0, waivedAt: new Date(), waivedReason: 'Hardship' },
+        data: { dueAmount: 0 },
       });
 
       // Act: update plan price to ₹150

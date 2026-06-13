@@ -349,15 +349,30 @@ export async function waiveContribution(
 
   const amount = Number(period.dueAmount);
 
-  const updated = await db.contributionPeriod.update({
-    where: { id: contributionPeriodId },
-    data: {
-      status: ContributionStatus.WAIVED,
-      dueAmount: 0,
-      waivedAt: new Date(),
-      waivedReason: reason,
-    },
-  });
+  const [updated] = await db.$transaction([
+    db.contributionPeriod.update({
+      where: { id: contributionPeriodId },
+      data: {
+        status: ContributionStatus.WAIVED,
+        dueAmount: 0,
+        waiver: {
+          upsert: {
+            create: {
+              waivedAt: new Date(),
+              reason,
+              waivedBy: approvedById,
+            },
+            update: {
+              waivedAt: new Date(),
+              reason,
+              waivedBy: approvedById,
+            },
+          },
+        },
+      },
+      include: { waiver: true },
+    }),
+  ]);
 
   if (amount > 0) {
     await recordWaiver(db, {
@@ -432,6 +447,18 @@ export async function recordContributionPayment(
 ) {
   if (contributionPeriodIds.length === 0) {
     throw new BadRequestError('No contribution periods selected');
+  }
+
+  if (amount <= 0) {
+    throw new BadRequestError('Amount must be greater than zero');
+  }
+
+  const accountExist = await db.account.findFirstOrThrow({
+    where: { code: '1200' },
+  });
+
+  if (!accountExist) {
+    throw new NotFoundError('Cash account not found for code 1200');
   }
 
   const payment = await createPaymentTransaction({
