@@ -1,7 +1,7 @@
 import React from 'react';
-import { View } from 'react-native';
 import { Text, Button } from '@src/shared/components/ui';
 import type { ContributionStatus } from '../types';
+import { ScrollView } from 'react-native';
 
 type FilterType = 'ALL' | ContributionStatus;
 
@@ -9,6 +9,7 @@ const FILTERS: { key: FilterType; label: string }[] = [
   { key: 'ALL', label: 'All' },
   { key: 'DUE', label: 'Due' },
   { key: 'OVERDUE', label: 'OverDue' },
+  { key: 'PARTIAL', label: 'Partial' },
   { key: 'PAID', label: 'Paid' },
   { key: 'PENDING', label: 'Pending' },
   { key: 'WAIVED', label: 'Waived' },
@@ -26,7 +27,10 @@ export const ContributionFilterBar = ({
   onFilterChange,
 }: ContributionFilterBarProps) => {
   return (
-    <View className="mb-4 flex-row flex-wrap gap-2">
+    <ScrollView
+      horizontal
+      showsHorizontalScrollIndicator={false}
+      className="mb-4 flex-row flex-wrap gap-2">
       {FILTERS.map((filter) => {
         const active = activeFilter === filter.key;
         return (
@@ -34,6 +38,7 @@ export const ContributionFilterBar = ({
             key={filter.key}
             onPress={() => onFilterChange(filter.key)}
             size="sm"
+            className="mx-1"
             variant={active ? 'default' : 'outline'}>
             <Text
               size="sm"
@@ -44,6 +49,6 @@ export const ContributionFilterBar = ({
           </Button>
         );
       })}
-    </View>
+    </ScrollView>
   );
 };
