@@ -13,6 +13,15 @@ import { prisma } from '@lib/prisma';
 import { ContributionStatus, Status, type Prisma, type UserRole } from '@prisma/client';
 import { hasHighRoleAccess } from '@utils/has-high-role';
 
+/**
+ * Return the last day of the current month at 23:59:59.999.
+ * Used as the default upper bound for retroactive adjustments.
+ */
+function endOfCurrentMonth(): Date {
+  const now = new Date();
+  return new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
+}
+
 // ---- Interfaces --------------------------------------------------------------
 
 /** Input for updating a subscription plan. */
@@ -448,18 +457,20 @@ export async function updatePlan(associationId: string, planId: string, body: Up
       });
 
       // ── Retroactive adjustment ──────────────────────────────────────
+      // Trigger retro-adjustment whenever price changes AND effectiveFrom
+      // is provided. effectiveTo defaults to end of current month.
       if (
         body.effectiveFrom &&
-        body.effectiveTo &&
         body.amount !== undefined &&
         body.amount !== Number(currentVersion.amount)
       ) {
+        const retroEnd = body.effectiveTo ?? endOfCurrentMonth();
         await retroactivelyAdjustContributionsForPlan(
           tx,
           planId,
           newVersion.amount,
           body.effectiveFrom,
-          body.effectiveTo,
+          retroEnd,
         );
       }
 
