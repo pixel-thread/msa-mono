@@ -85,18 +85,14 @@ async function seedAssociation(data: (typeof ASSOCIATIONS)[number]) {
   // ---------------------------------------------------------------------------
 
   const memberTypes = await Promise.all(
-    [
-      { description: 'Regular', level: 1 },
-      { description: 'Executive', level: 2 },
-      { description: 'Honorary', level: 3 },
-    ].map((mt) =>
+    [{ description: 'Regular', level: 1 }].map((mt) =>
       prisma.memberType.create({
         data: { associationId: association.id, ...mt },
       }),
     ),
   );
 
-  const [regular, executive, honorary] = memberTypes;
+  const [regular] = memberTypes;
 
   // ---------------------------------------------------------------------------
   // SUBSCRIPTION PLANS
@@ -104,20 +100,10 @@ async function seedAssociation(data: (typeof ASSOCIATIONS)[number]) {
 
   const planConfigs = [
     {
-      name: 'Basic Membership',
+      name: 'Super Admin Plan',
       memberTypeId: regular.id,
-      amount: 50,
-      isDefault: true,
-    },
-    {
-      name: 'Executive Membership',
-      memberTypeId: executive.id,
-      amount: 150,
-    },
-    {
-      name: 'Premium Membership',
-      memberTypeId: honorary.id,
       amount: 300,
+      isDefault: true,
     },
   ];
 
@@ -148,25 +134,17 @@ async function seedAssociation(data: (typeof ASSOCIATIONS)[number]) {
   // USERS
   // ---------------------------------------------------------------------------
 
-  const rolePlanMap: Record<UserRole, (typeof plans)[number]> = {
+  const rolePlanMap: Partial<Record<UserRole, (typeof plans)[number]>> = {
     [UserRole.MEMBER]: plans[0],
-    [UserRole.DPO]: plans[0],
-    [UserRole.SECRETARY]: plans[1],
-    [UserRole.FINANCE]: plans[1],
-    [UserRole.PRESIDENT]: plans[2],
-    [UserRole.SUPER_ADMIN]: plans[2],
+    [UserRole.SUPER_ADMIN]: plans[0],
   };
 
-  const roleMemberTypeMap: Record<UserRole, (typeof memberTypes)[number]> = {
+  const roleMemberTypeMap: Partial<Record<UserRole, (typeof memberTypes)[number]>> = {
     [UserRole.MEMBER]: regular,
-    [UserRole.DPO]: regular,
-    [UserRole.SECRETARY]: executive,
-    [UserRole.FINANCE]: executive,
-    [UserRole.PRESIDENT]: honorary,
-    [UserRole.SUPER_ADMIN]: honorary,
+    [UserRole.SUPER_ADMIN]: regular,
   };
 
-  const roles = Object.values(UserRole);
+  const roles: UserRole[] = [UserRole.MEMBER, UserRole.SUPER_ADMIN];
 
   for (const role of roles) {
     const plan = rolePlanMap[role];
@@ -185,8 +163,9 @@ async function seedAssociation(data: (typeof ASSOCIATIONS)[number]) {
         membershipNumber: `${data.short.toUpperCase()}-${role}`,
         imageUrl: 'https://placehold.co/300x300',
         mfaEnabled: false,
-        memberTypeId: memberType.id,
+        memberTypeId: memberType?.id,
         dateOfJoiningGovt: new Date('2025-01-01'),
+        dateOfJoiningAssociation: new Date('2025-01-01'),
       },
     });
   }
