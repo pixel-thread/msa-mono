@@ -125,3 +125,4 @@ node_modules/.prisma
 apps/web/next-env.d.ts
 apps/web/src/vite-env.d.ts
 apps/web/src/routeTree.gen.ts
+apps/mobile/nativewind-env.d.ts
