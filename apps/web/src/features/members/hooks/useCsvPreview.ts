@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import Papa from 'papaparse';
 
 interface CsvPreviewState {
@@ -21,6 +21,20 @@ export function useCsvPreview(): UseCsvPreviewReturn {
   const [preview, setPreview] = useState<CsvPreviewState | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isParsing, setIsParsing] = useState(false);
+  const mountedRef = useRef(true);
+
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
+
+  const safeSetState = useCallback((updater: () => void) => {
+    if (mountedRef.current) {
+      updater();
+    }
+  }, []);
 
   const parseFile = useCallback((file: File) => {
     if (!file.name.endsWith('.csv') && !file.type.includes('csv')) {
@@ -32,26 +46,20 @@ export function useCsvPreview(): UseCsvPreviewReturn {
     setError(null);
     setPreview(null);
 
-    Papa.parse<string[]>(file, {
-      header: false,
-      preview: 1,
-      complete(results) {
-        if (!results.data || results.data.length === 0) {
-          setError('CSV file appears to be empty');
-          setIsParsing(false);
-          return;
-        }
-        const headers = results.data[0] as string[];
+    Papa.parse<Record<string, string>>(file, {
+      header: true,
+      skipEmptyLines: true,
+      dynamicTyping: false,
+      complete(parseResult) {
+        const headers = parseResult.meta.fields ?? [];
+        const rows = parseResult.data.filter(
+          (row) => Object.values(row).some((val) => val !== null && val !== ''),
+        );
 
-        Papa.parse<Record<string, string>>(file, {
-          header: true,
-          skipEmptyLines: true,
-          dynamicTyping: false,
-          complete(parseResult) {
-            const rows = parseResult.data.filter(
-              (row) => Object.values(row).some((val) => val !== null && val !== ''),
-            );
-
+        safeSetState(() => {
+          if (rows.length === 0 && headers.length === 0) {
+            setError('CSV file appears to be empty');
+          } else {
             setPreview({
               headers,
               rows,
@@ -59,20 +67,18 @@ export function useCsvPreview(): UseCsvPreviewReturn {
               fileName: file.name,
               fileSize: file.size,
             });
-            setIsParsing(false);
-          },
-          error(parseError) {
-            setError(parseError.message || 'Failed to parse CSV file');
-            setIsParsing(false);
-          },
+          }
+          setIsParsing(false);
         });
       },
-      error(err) {
-        setError(err.message || 'Failed to read CSV file');
-        setIsParsing(false);
+      error(parseError) {
+        safeSetState(() => {
+          setError(parseError.message || 'Failed to parse CSV file');
+          setIsParsing(false);
+        });
       },
     });
-  }, []);
+  }, [safeSetState]);
 
   const clear = useCallback(() => {
     setPreview(null);
