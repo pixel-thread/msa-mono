@@ -29,7 +29,6 @@ export const PaymentHistory = () => {
 
   return (
     <View className="flex-1">
-      {/* Stats Grid */}
       <View className="mb-6 flex-row flex-wrap gap-2">
         {[
           { label: 'Total Paid', value: `${summary.totalPaid}` },
@@ -37,23 +36,14 @@ export const PaymentHistory = () => {
           { label: 'Overdue', value: `${summary.overdueMonths} mo` },
           { label: 'Paid', value: `${summary.paidMonths} mo` },
         ].map((stat, idx) => (
-          <View
-            key={idx}
-            className="min-w-[45%] flex-1 border border-slate-100 bg-slate-50 p-3 dark:border-slate-800 dark:bg-slate-900/50">
-            <Text variant="subtext" size="xs" className="mb-1 uppercase tracking-wider">
-              {stat.label}
-            </Text>
-            <Text variant="heading" size="md" className="text-indigo-600 dark:text-indigo-400">
-              {stat.value}
-            </Text>
+          <View key={idx} className="min-w-[45%] flex-1 border border-slate-100 bg-slate-50 p-3 dark:border-slate-800 dark:bg-slate-900/50">
+            <Text variant="subtext" size="xs" className="mb-1 uppercase tracking-wider">{stat.label}</Text>
+            <Text variant="heading" size="md" className="text-indigo-600 dark:text-indigo-400">{stat.value}</Text>
           </View>
         ))}
       </View>
 
-      {/* Transactions List */}
-      <Text variant="heading" size="sm" className="mb-4 text-slate-900 dark:text-white">
-        Recent Transactions
-      </Text>
+      <Text variant="heading" size="sm" className="mb-4 text-slate-900 dark:text-white">Recent Transactions</Text>
       {transactions.length === 0 ? (
         <View className="items-center justify-center border border-dashed border-slate-200 bg-slate-50/50 py-12 dark:border-slate-800 dark:bg-slate-900/30">
           <Text variant="subtext">No transactions found</Text>

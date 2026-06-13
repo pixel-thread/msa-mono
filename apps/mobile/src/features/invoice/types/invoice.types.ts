@@ -1,4 +1,4 @@
-import { Transaction, Allocation } from '@src/features/subscription/types/payment';
+import { Transaction, Allocation } from '@src/features/contributions/types/payment';
 import { AssociationT } from '@src/shared/types/association';
 import { IUser } from '@src/shared/types/user';
 

@@ -139,7 +139,7 @@ export const InvoiceDetailView = ({ invoice }: { invoice: Invoice }) => {
           ) : (
             <View className="border-b border-border/40 py-4">
               <Text variant="subtext" size="xs" className="italic">
-                No subscription contribution periods allocated.
+                No contribution periods allocated.
               </Text>
             </View>
           )}

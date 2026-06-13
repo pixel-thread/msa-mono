@@ -1,13 +1,8 @@
+import type { ContributionStatus, ContributionPeriod } from './contribution-period.types';
+
+export type { ContributionStatus, ContributionPeriod };
+
 export type PaymentStatus = 'PENDING' | 'PAID' | 'FAILED';
-
-export type ContributionStatus = 'DUE' | 'PAID' | 'PARTIAL' | 'WAIVED';
-
-export type ContributionPeriod = {
-  status: ContributionStatus; // your enum
-  year: number;
-  month: number;
-  expectedAmount: number;
-};
 
 export type Allocation = {
   id: string;
@@ -23,7 +18,7 @@ export type Transaction = {
   id: string;
   createdAt: Date;
   updatedAt: Date;
-  status: PaymentStatus; // replace with your enum
+  status: PaymentStatus;
   associationId: string;
   amount: number;
   currency: string;

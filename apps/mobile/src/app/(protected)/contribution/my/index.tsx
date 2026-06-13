@@ -1,4 +1,4 @@
-import { SubscriptionScreen } from '@src/features/subscription';
+import { MyContributionsScreen } from '@src/features/contributions';
 import { EmptyScreen } from '@src/shared/components/screens';
 import { isExpoGo } from '@src/shared/utils';
 
@@ -9,5 +9,5 @@ export default function page() {
     return <EmptyScreen title="This feature is not available on Expo Go" />;
   }
 
-  return <SubscriptionScreen />;
+  return <MyContributionsScreen />;
 }

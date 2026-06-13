@@ -21,6 +21,7 @@ import {
   UserContributionsParamsSchema,
   WaiveContributionSchema,
 } from '@feature/contributions/validators';
+import type { ContributionsQueryInput } from '@feature/contributions/validators';
 import { validate } from '@lib/validate';
 import { UserRole } from '@prisma/client';
 import { PAGE_SIZE } from '@src/shared/constants';
@@ -59,16 +60,16 @@ export const myContributionsHandler: RequestHandler[] = [
 
     logger.info({ traceId }, 'GET /api/payments/contributions - User authorized');
 
+    const query = req.query as any as ContributionsQueryInput;
     // --- Business logic: build filters and fetch ---
-    const page = (req.query as any)?.page || 1;
+    const page = query?.page || 1;
 
-    const { status, year, month } = req.query;
+    const { status, year } = req.query;
 
     const where: Record<string, unknown> = { associationId: req.user!.associationId };
     where.userId = userId;
     if (status) where.status = status;
     if (year) where.year = year;
-    if (month) where.month = month;
 
     const { contributions, total } = await findContributionPeriods({
       where: where as Parameters<typeof findContributionPeriods>[0]['where'],

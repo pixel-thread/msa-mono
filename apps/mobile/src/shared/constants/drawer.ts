@@ -45,9 +45,9 @@ export const drawerMenuGroups: DrawerMenuGroup[] = [
         href: '/(protected)/(drawer)/(tabs)/profile',
       },
       {
-        label: 'Subscription',
+        label: 'Contribution',
         icon: 'card-outline',
-        href: '/subscription',
+        href: '/(protected)/contribution/my',
       },
       {
         label: 'Privacy Requests',

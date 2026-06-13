@@ -58,11 +58,13 @@ export const RecordContributionSchema = z.object({
 
 export const ContributionsQuerySchema = z.object({
   page: pageNumberValidation,
-  status: z.enum(Object.values(ContributionStatus) as [string, ...string[]]).optional(),
+  status: z.enum(ContributionStatus).optional(),
   userId: z.uuid().optional(),
   year: z.coerce.number().int().min(2020).max(2100).optional(),
   month: z.coerce.number().int().min(1).max(12).optional(),
 });
+
+export type ContributionsQueryInput = z.infer<typeof ContributionsQuerySchema>;
 
 export const ContributionIdParamsSchema = z.object({
   contributionId: z.uuid('Invalid contribution ID'),
