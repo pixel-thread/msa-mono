@@ -47,8 +47,10 @@ export async function allocatePaymentToContributions(
     orderBy: [{ year: 'asc' }, { month: 'asc' }],
   });
 
+  console.log(outstanding);
   const selectedOutStandingAmount = outstanding.reduce((acc, p) => acc + Number(p.dueAmount), 0);
 
+  console.log(totalAmount, selectedOutStandingAmount);
   if (totalAmount !== selectedOutStandingAmount) {
     throw new BadRequestError('Target Amount does not match outstanding contributions');
   }
@@ -142,7 +144,9 @@ export async function generateUserContributions(
       },
     });
 
-    if (activeMembers.length === 0) continue;
+    if (activeMembers.length === 0) {
+      continue;
+    }
 
     for (const member of activeMembers) {
       if (!member.dateOfJoiningAssociation) continue;
@@ -159,9 +163,7 @@ export async function generateUserContributions(
         where: {
           associationId: member.associationId,
           isActive: true,
-          ...(member.memberTypeId
-            ? { memberTypeId: member.memberTypeId }
-            : { isDefault: true }),
+          ...(member.memberTypeId ? { memberTypeId: member.memberTypeId } : { isDefault: true }),
         },
         include: {
           versions: {
@@ -173,12 +175,13 @@ export async function generateUserContributions(
       });
 
       if (!plan || plan.versions.length === 0) continue;
+
       const activeVersion = plan.versions[0];
+
       const expectedAmount = activeVersion.amount;
 
       const planEffectiveFrom = activeVersion.effectiveFrom;
-      const planMonth =
-        planEffectiveFrom.getFullYear() * 12 + planEffectiveFrom.getMonth();
+      const planMonth = planEffectiveFrom.getFullYear() * 12 + planEffectiveFrom.getMonth();
 
       if (targetMonth < planMonth) continue;
 

@@ -32,7 +32,6 @@ router.get('/declarations', listDeclarationsHandler);
 router.get('/', listContributionsHandler);
 router.get('/my', myContributionsHandler);
 router.post('/generate-periodic', generateContributionsHandler);
-router.post('/generate-periodic', generateContributionsHandler);
 router.patch('/waive', waiveContributionHandler);
 router.get('/:contributionId', getContributionHandler);
 
