@@ -47,10 +47,8 @@ export async function allocatePaymentToContributions(
     orderBy: [{ year: 'asc' }, { month: 'asc' }],
   });
 
-  console.log(outstanding);
   const selectedOutStandingAmount = outstanding.reduce((acc, p) => acc + Number(p.dueAmount), 0);
 
-  console.log(totalAmount, selectedOutStandingAmount);
   if (totalAmount !== selectedOutStandingAmount) {
     throw new BadRequestError('Target Amount does not match outstanding contributions');
   }
