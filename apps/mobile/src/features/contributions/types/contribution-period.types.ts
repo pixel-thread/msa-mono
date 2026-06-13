@@ -1,4 +1,4 @@
-export type ContributionStatus = 'DUE' | 'PAID' | 'PARTIAL' | 'WAIVED';
+export type ContributionStatus = 'DUE' | 'PAID' | 'PARTIAL' | 'WAIVED' | 'OVERDUE' | 'PENDING';
 
 export type PaymentTransactionStatus = 'PENDING' | 'PAID' | 'FAILED';
 

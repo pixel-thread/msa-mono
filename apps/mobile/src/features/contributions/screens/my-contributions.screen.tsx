@@ -51,12 +51,9 @@ export const MyContributionsScreen = () => {
             <MyContributions />
           </ScrollView>
         ) : (
-          <ScrollView
-            className="flex-1"
-            contentContainerStyle={{ padding: 24, paddingBottom: 40 }}
-            showsVerticalScrollIndicator={false}>
+          <View className="flex-1">
             <PaymentHistory />
-          </ScrollView>
+          </View>
         )}
       </Container>
     </ErrorBoundary>

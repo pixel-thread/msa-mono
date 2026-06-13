@@ -1,56 +1,101 @@
-import React from 'react';
-import { View, ActivityIndicator } from 'react-native';
+import React, { useCallback } from 'react';
+import { View } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { usePaymentHistory } from '../hooks/use-payment-history';
 import { Text } from '@src/shared/components/ui';
 import { TransactionListItem } from './transaction-list-item.component';
+import type { Transaction } from '../types/payment';
+import { EmptyScreen, LoadingScreen } from '@src/shared/components/screens';
+
+const StatCard = ({ label, value }: { label: string; value: string }) => (
+  <View className="min-w-[45%] flex-1 border border-slate-100 bg-slate-50 p-3 dark:border-slate-800 dark:bg-slate-900/50">
+    <Text variant="subtext" size="xs" className="mb-1 uppercase tracking-wider">
+      {label}
+    </Text>
+    <Text variant="heading" size="lg" className="text-indigo-600 dark:text-indigo-400">
+      {value}
+    </Text>
+  </View>
+);
 
 export const PaymentHistory = () => {
-  const { data, isLoading, isError } = usePaymentHistory();
+  const { data, isLoading, isError, refetch } = usePaymentHistory();
+
+  const renderItem = useCallback(
+    ({ item }: { item: Transaction }) => <TransactionListItem transaction={item} />,
+    []
+  );
+
+  const keyExtractor = useCallback((item: Transaction) => item.id, []);
 
   if (isLoading) {
+    return <LoadingScreen description="Loading payment history..." />;
+  }
+
+  if (isError) {
     return (
-      <View className="items-center justify-center py-12">
-        <ActivityIndicator size="large" color="#4f46e5" />
-      </View>
+      <EmptyScreen
+        title="Error loading payment history"
+        description="Please try again later"
+        refresh={refetch}
+      />
     );
   }
 
-  if (isError || !data) {
+  if (!data) {
     return (
-      <View className="items-center justify-center py-12">
-        <Text variant="subtext" className="text-center">
-          Failed to load payment history. Please try again later.
-        </Text>
-      </View>
+      <>
+        <View className="pb-6">
+          <View className="mb-6 flex-row flex-wrap gap-2">
+            <StatCard label="Total Paid" value={'0'} />
+            <StatCard label="Total Due" value={`0`} />
+            <StatCard label="Overdue" value={`0 m`} />
+            <StatCard label="Paid" value={`0 mo`} />
+          </View>
+          <Text variant="heading" size="sm" className="text-slate-900 dark:text-white">
+            Recent Transactions
+          </Text>
+        </View>
+        <EmptyScreen
+          title="No payment history found"
+          description="Please try again later"
+          refresh={refetch}
+        />
+      </>
     );
   }
 
   const { transactions, summary } = data;
 
-  return (
-    <View className="flex-1">
+  const ListHeader = (
+    <View className="pb-6">
       <View className="mb-6 flex-row flex-wrap gap-2">
-        {[
-          { label: 'Total Paid', value: `${summary.totalPaid}` },
-          { label: 'Total Due', value: `${summary.totalDue}` },
-          { label: 'Overdue', value: `${summary.overdueMonths} mo` },
-          { label: 'Paid', value: `${summary.paidMonths} mo` },
-        ].map((stat, idx) => (
-          <View key={idx} className="min-w-[45%] flex-1 border border-slate-100 bg-slate-50 p-3 dark:border-slate-800 dark:bg-slate-900/50">
-            <Text variant="subtext" size="xs" className="mb-1 uppercase tracking-wider">{stat.label}</Text>
-            <Text variant="heading" size="md" className="text-indigo-600 dark:text-indigo-400">{stat.value}</Text>
-          </View>
-        ))}
+        <StatCard label="Total Paid" value={`${summary.totalPaid}`} />
+        <StatCard label="Total Due" value={`${summary.totalDue}`} />
+        <StatCard label="Overdue" value={`${summary.overdueMonths} mo`} />
+        <StatCard label="Paid" value={`${summary.paidMonths} mo`} />
       </View>
-
-      <Text variant="heading" size="sm" className="mb-4 text-slate-900 dark:text-white">Recent Transactions</Text>
-      {transactions.length === 0 ? (
-        <View className="items-center justify-center border border-dashed border-slate-200 bg-slate-50/50 py-12 dark:border-slate-800 dark:bg-slate-900/30">
-          <Text variant="subtext">No transactions found</Text>
-        </View>
-      ) : (
-        transactions.map((t) => <TransactionListItem key={t.id} transaction={t} />)
-      )}
+      <Text variant="heading" size="sm" className="text-slate-900 dark:text-white">
+        Recent Transactions
+      </Text>
     </View>
+  );
+
+  const ListEmpty = (
+    <View className="items-center justify-center border border-dashed border-slate-200 bg-slate-50/50 py-12 dark:border-slate-800 dark:bg-slate-900/30">
+      <Text variant="subtext">No transactions found</Text>
+    </View>
+  );
+
+  return (
+    <FlashList
+      data={transactions}
+      renderItem={renderItem}
+      keyExtractor={keyExtractor}
+      ListHeaderComponent={ListHeader}
+      ListEmptyComponent={ListEmpty}
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={{ paddingHorizontal: 24, paddingBottom: 40 }}
+    />
   );
 };
