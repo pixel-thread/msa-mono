@@ -52,7 +52,11 @@ export const Redirect = ({ children }: PropsT) => {
 
     if (currentRoute) {
       if (currentRoute.needAuth && !isAuthenticated) {
-        navigate({ to: `/sign-in?redirect=${encodeURIComponent(pathName)}`, replace: true });
+        const redirectUrl = `${window.location.pathname}${window.location.search}`;
+        navigate({
+          to: `/sign-in?redirect=${encodeURIComponent(redirectUrl)}`,
+          replace: true,
+        });
         return;
       }
 

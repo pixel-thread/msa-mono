@@ -18,10 +18,15 @@ import { PaymentSummaryBar } from '../components/payment-summary-bar';
 import { useUserContributions } from '../hooks';
 import { useUserContributionColumns } from '../hooks/useUserContributionColumns';
 import { ContributionPeriod } from '../types';
+import { getRouteApi } from '@tanstack/react-router';
 
 export const RecordContributionPage = () => {
+  const routeApi = getRouteApi('/_dashboard/contributions/record/');
+  const search = routeApi.useSearch();
+  const navigate = routeApi.useNavigate();
+  const memberId = search.member;
   const [selectedPeriods, setSelectedPeriods] = useState<ContributionPeriod[]>([]);
-  const [userId, setUserId] = useState<string>('');
+  const [userId, setUserId] = useState<string>(memberId);
   const [paidAt, setPaidAt] = useState<Date>(new Date());
 
   const selectedTotal = useMemo(
@@ -67,7 +72,7 @@ export const RecordContributionPage = () => {
   const queryClient = useQueryClient();
 
   const { setPage, page } = useUrlFilters({
-    basePath: '/contributions/add-contribution',
+    basePath: '/contributions/record',
   });
 
   const { contributions = [], meta, summary, refetch } = useUserContributions({ page, userId });
@@ -96,6 +101,13 @@ export const RecordContributionPage = () => {
   };
 
   function onMemberChange(value: string) {
+    navigate({
+      to: '.',
+      search: {
+        member: value,
+        page: page,
+      },
+    });
     setSelectedPeriods([]);
     setUserId(value);
   }
