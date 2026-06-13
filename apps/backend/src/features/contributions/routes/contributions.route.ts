@@ -23,7 +23,7 @@ import {
 } from '@feature/contributions/validators';
 import type { ContributionsQueryInput } from '@feature/contributions/validators';
 import { validate } from '@lib/validate';
-import { UserRole } from '@prisma/client';
+import { ContributionStatus, UserRole } from '@prisma/client';
 import { PAGE_SIZE } from '@src/shared/constants';
 import { logger } from '@src/shared/logger';
 import { findUnpaginatedUsers } from '@src/shared/services/user/getUsers';
@@ -96,6 +96,46 @@ export const myContributionsHandler: RequestHandler[] = [
       },
     });
 
+    const { contributions: unfiltered } = await findContributionPeriods({
+      where: where as Parameters<typeof findContributionPeriods>[0]['where'],
+      page: 0,
+      pageSize: PAGE_SIZE,
+      include: {
+        user: { select: { id: true, name: true, email: true, membershipNumber: true } },
+        waiver: true,
+      },
+    });
+
+    const summary = unfiltered.reduce(
+      (acc, c) => {
+        const expected = Number(c.expectedAmount);
+        const paid = Number(c.paidAmount);
+        const due = Number(c.dueAmount);
+
+        acc.totalExpected += expected;
+        acc.totalPaid += paid;
+
+        if (c.status === ContributionStatus.PARTIAL) acc.totalPartial += paid;
+        if (c.status === ContributionStatus.OVERDUE) {
+          acc.overdueCount += 1;
+          acc.overdueAmount += due;
+        }
+        if (c.status === ContributionStatus.DUE || c.status === ContributionStatus.PENDING) acc.pendingCount += 1;
+        if ('waiver' in c && c.waiver) acc.waivedTotal += expected;
+
+        return acc;
+      },
+      {
+        totalExpected: 0,
+        totalPartial: 0,
+        totalPaid: 0,
+        overdueAmount: 0,
+        overdueCount: 0,
+        pendingCount: 0,
+        waivedTotal: 0,
+      },
+    );
+
     // --- Log: success ---
     logger.info(
       { traceId, count: contributions.length },
@@ -103,7 +143,13 @@ export const myContributionsHandler: RequestHandler[] = [
     );
 
     // --- Response ---
-    return success(res, { data: contributions, meta: buildPagination(total, page) });
+    return success(res, {
+      data: {
+        summary,
+        contributions,
+      },
+      meta: buildPagination(total, page),
+    });
   }),
 ];
 

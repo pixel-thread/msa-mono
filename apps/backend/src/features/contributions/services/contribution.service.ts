@@ -284,7 +284,13 @@ export async function getUserContributionSummary(
     where: {
       userId,
       status: {
-        in: [ContributionStatus.DUE, ContributionStatus.PARTIAL, ContributionStatus.OVERDUE],
+        in: [
+          ContributionStatus.DUE,
+          ContributionStatus.PARTIAL,
+          ContributionStatus.OVERDUE,
+          ContributionStatus.PAID,
+          ContributionStatus.PENDING,
+        ],
       },
     },
   });
