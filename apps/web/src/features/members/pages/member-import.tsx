@@ -1,7 +1,9 @@
 'use client';
 
-import { useImportMembers } from '@src/features/members/hooks/useImportMembers';
+import { useRef } from 'react';
 import { useCsvPreview } from '@src/features/members/hooks/useCsvPreview';
+import { useImportMembers } from '@src/features/members/hooks/useImportMembers';
+import { SectionHeader } from '@src/shared/components/section-header';
 import { Button } from '@src/shared/components/ui/button';
 import { Card } from '@src/shared/components/ui/card';
 import {
@@ -12,10 +14,8 @@ import {
   TableHeader,
   TableRow,
 } from '@src/shared/components/ui/table';
-import { SectionHeader } from '@src/shared/components/section-header';
 import { useNavigate } from '@tanstack/react-router';
 import { AlertCircle, CheckCircle2, Download, Upload, X } from 'lucide-react';
-import { useRef } from 'react';
 
 function generateTemplateCsv(): string {
   const headers = [
@@ -160,12 +160,21 @@ export default function MemberImportPage() {
               className="hidden"
               onChange={(e) => handleFileSelect(e.target.files?.[0])}
             />
-            <Upload className="h-10 w-10 mx-auto mb-4 text-muted-foreground" />
-            <p className="text-lg font-medium mb-1">Drop your CSV file here</p>
-            <p className="text-sm text-body mb-4">or click to browse</p>
-            <Button variant="outline" type="button">
-              Select CSV File
-            </Button>
+            {isParsing ? (
+              <div className="flex flex-col items-center gap-2 py-4">
+                <div className="h-10 w-10 rounded-full border-2 border-primary border-t-transparent animate-spin" />
+                <p className="text-sm text-body">Parsing CSV file...</p>
+              </div>
+            ) : (
+              <>
+                <Upload className="h-10 w-10 mx-auto mb-4 text-muted-foreground" />
+                <p className="text-lg font-medium mb-1">Drop your CSV file here</p>
+                <p className="text-sm text-body mb-4">or click to browse</p>
+                <Button variant="outline" type="button">
+                  Select CSV File
+                </Button>
+              </>
+            )}
           </div>
 
           <div className="mt-6 text-center">
