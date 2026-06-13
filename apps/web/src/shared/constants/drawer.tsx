@@ -60,6 +60,10 @@ export const DRAWER_NAV_MAIN: DrawerItem[] = [
         title: 'Membership Applicants',
         url: '/members/applications',
       },
+      {
+        title: 'Import Members',
+        url: '/members/import',
+      },
     ],
   },
   {

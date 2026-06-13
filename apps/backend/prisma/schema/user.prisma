@@ -13,6 +13,8 @@ model User {
   status                   UserStatus    @default(ACTIVE)
   dateOfJoiningGovt        DateTime?
   dateOfJoiningAssociation DateTime?
+  dateOfRetirement         DateTime?
+  dob                      DateTime?
   membershipNumber         String?
   overallConsentStatus     ConsentStatus @default(GRANTED)
   dataRetentionUntil       DateTime      @default(dbgenerated("(NOW() + INTERVAL '7 years')"))

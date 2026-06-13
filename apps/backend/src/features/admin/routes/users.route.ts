@@ -6,11 +6,11 @@
 import { BadRequestError } from '@errors';
 import { prisma } from '@lib/prisma';
 import { UserRole } from '@prisma/client';
+import { rbac } from '@src/middleware';
 import { createUploadMiddleware } from '@src/middleware/file-upload';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
-import { withRole } from '@utils/with-role';
 import csvParser from 'csv-parser';
 import type { RequestHandler } from 'express';
 import type { Request, Response } from 'express';
@@ -25,27 +25,28 @@ const csvUpload = createUploadMiddleware({
 const CsvUserImportRowSchema = z.object({
   email: z.email('Invalid email'),
   name: z.string().min(1, 'Name is required'),
-  mobile: z
-    .string()
-    .regex(/^[6-9]\d{9}$/, 'Invalid Indian mobile number')
-    .optional()
-    .nullable(),
-  designation: z.string().optional().nullable(),
-  dateOfJoiningGovt: z.coerce.date().optional().nullable(),
-  dateOfJoiningAssociation: z.coerce.date().optional().nullable(),
-  membershipNumber: z.string().optional().nullable(),
+  mobile: z.string().regex(/^[6-9]\d{9}$/, 'Invalid Indian mobile number'),
+  dob: z.coerce.date(),
+  designation: z.string().default('').optional().nullable(),
+  dateOfJoiningGovt: z.string().default('').optional(),
+  dateOfJoiningAssociation: z.string().default('').optional().nullable(),
+  dateOfRetirement: z.string().default('').optional().nullable(),
 });
 
 type CsvImportError = { row: number; email: string; reason: string };
 
 export const importUsersCsv: RequestHandler[] = [
+  rbac(UserRole.PRESIDENT),
   csvUpload.single('file'),
   asyncHandler(async (req: Request, res: Response) => {
     const traceId = (req.traceId as string) || '';
-    const user = await withRole(req, UserRole.MEMBER);
+    const associationId = req.user?.associationId;
+    if (!associationId) throw new BadRequestError('Association not found');
 
     const file = req.file;
+
     if (!file) throw new BadRequestError('CSV file is required');
+
     if (!file.size) throw new BadRequestError('CSV file is empty');
 
     logger.info(
@@ -55,6 +56,7 @@ export const importUsersCsv: RequestHandler[] = [
 
     // Parse CSV rows using streaming parser
     const rows: Record<string, string>[] = [];
+
     await new Promise<void>((resolve, reject) => {
       Readable.from([file.buffer])
         .pipe(csvParser())
@@ -89,10 +91,24 @@ export const importUsersCsv: RequestHandler[] = [
       }
     }
 
+    if (errors.length > 0) {
+      // return the error when it not valid
+      return success(res, {
+        message: 'No valid rows to import',
+        data: {
+          errors,
+        },
+      });
+    }
+
+    if (validRows.length === 0) {
+      throw new BadRequestError('No valid rows to import', { errors });
+    }
+
     // Check for existing emails in DB within the same association
     const existingEmails = await prisma.user.findMany({
       where: {
-        associationId: user.associationId,
+        associationId: associationId,
         email: { in: validRows.map((r) => r.email) },
       },
       select: { email: true },
@@ -114,19 +130,17 @@ export const importUsersCsv: RequestHandler[] = [
     if (toCreate.length === 0) {
       throw new BadRequestError('No valid rows to import', { errors });
     }
-
     // Bulk create users with password=null (forces first-login reset)
     await prisma.user.createMany({
       data: toCreate.map((r) => ({
-        associationId: user.associationId,
+        associationId,
         email: r.email,
         name: r.name,
         mobile: r.mobile ?? null,
         designation: r.designation ?? null,
         dateOfJoiningGovt: r.dateOfJoiningGovt ?? null,
         dateOfJoiningAssociation: r.dateOfJoiningAssociation ?? null,
-        membershipNumber: r.membershipNumber ?? null,
-        role: ['MEMBER'],
+        dateOfRetirement: r.dateOfRetirement ?? null,
         password: null,
         status: 'ACTIVE',
       })),
