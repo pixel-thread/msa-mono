@@ -24,7 +24,7 @@ export const RecordContributionPage = () => {
   const routeApi = getRouteApi('/_dashboard/contributions/record/');
   const search = routeApi.useSearch();
   const navigate = routeApi.useNavigate();
-  const memberId = search.member;
+  const memberId = search.member || '';
   const [selectedPeriods, setSelectedPeriods] = useState<ContributionPeriod[]>([]);
   const [userId, setUserId] = useState<string>(memberId);
   const [paidAt, setPaidAt] = useState<Date>(new Date());

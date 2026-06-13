@@ -13,15 +13,6 @@ import { prisma } from '@lib/prisma';
 import { ContributionStatus, Status, type Prisma, type UserRole } from '@prisma/client';
 import { hasHighRoleAccess } from '@utils/has-high-role';
 
-/**
- * Return the last day of the current month at 23:59:59.999.
- * Used as the default upper bound for retroactive adjustments.
- */
-function endOfCurrentMonth(): Date {
-  const now = new Date();
-  return new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
-}
-
 // ---- Interfaces --------------------------------------------------------------
 
 /** Input for updating a subscription plan. */
@@ -245,6 +236,7 @@ async function retroactivelyAdjustContributionsForPlan(
   const fromMonth = effectiveFrom.getMonth() + 1;
   const toYear = effectiveTo.getFullYear();
   const toMonth = effectiveTo.getMonth() + 1;
+  console.log({ effectiveTo: effectiveTo, toMonth });
 
   // 1. Find users associated with this plan via member type
   const plan = await tx.plan.findUnique({
@@ -275,9 +267,7 @@ async function retroactivelyAdjustContributionsForPlan(
     const memberJoinMonth = dateOfJoiningAssociation.getMonth() + 1; // 1-indexed
 
     const userFromYear =
-      memberJoinYear * 12 + memberJoinMonth > fromYear * 12 + fromMonth
-        ? memberJoinYear
-        : fromYear;
+      memberJoinYear * 12 + memberJoinMonth > fromYear * 12 + fromMonth ? memberJoinYear : fromYear;
     const userFromMonth =
       memberJoinYear * 12 + memberJoinMonth > fromYear * 12 + fromMonth
         ? memberJoinMonth
@@ -462,6 +452,10 @@ export async function updatePlan(associationId: string, planId: string, body: Up
       throw new NotFoundError('No active version found for this plan');
     }
 
+    if (Number(currentVersion.amount) > Number(body.amount)) {
+      throw new BadRequestError('Plan price cannot be reduced in a new version');
+    }
+
     const updatedPlan = await prisma.$transaction(async (tx) => {
       await tx.planVersion.update({
         where: { id: currentVersion.id },
@@ -497,7 +491,9 @@ export async function updatePlan(associationId: string, planId: string, body: Up
         body.amount !== undefined &&
         body.amount !== Number(currentVersion.amount)
       ) {
-        const retroEnd = body.effectiveTo ?? endOfCurrentMonth();
+        // if effectiveTo is not provided, default to end of current year month
+        const retroEnd = body.effectiveTo ?? new Date(new Date().getFullYear(), 12);
+
         await retroactivelyAdjustContributionsForPlan(
           tx,
           planId,

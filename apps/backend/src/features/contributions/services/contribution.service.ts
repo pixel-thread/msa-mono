@@ -7,6 +7,7 @@ import {
   Currency,
   PaymentGateway,
   PaymentStatus,
+  Status,
   UserStatus,
 } from '@prisma/client';
 import { recordMemberPayment, recordWaiver } from '@services/accounting';
@@ -152,6 +153,7 @@ export async function generateUserContributions(
       const memberJoinedMonth =
         member.dateOfJoiningAssociation.getFullYear() * 12 +
         member.dateOfJoiningAssociation.getMonth();
+
       const targetMonth = year * 12 + (month - 1);
 
       if (memberJoinedMonth > targetMonth) continue;
@@ -165,7 +167,7 @@ export async function generateUserContributions(
         },
         include: {
           versions: {
-            where: { effectiveTo: null },
+            where: { effectiveTo: null, status: Status.ACTIVE },
             orderBy: { createdAt: 'desc' },
             take: 1,
           },
@@ -179,6 +181,7 @@ export async function generateUserContributions(
       const expectedAmount = activeVersion.amount;
 
       const planEffectiveFrom = activeVersion.effectiveFrom;
+
       const planMonth = planEffectiveFrom.getFullYear() * 12 + planEffectiveFrom.getMonth();
 
       if (targetMonth < planMonth) continue;

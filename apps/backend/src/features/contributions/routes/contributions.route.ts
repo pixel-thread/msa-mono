@@ -197,7 +197,7 @@ export const generateUserContributionsHandler: RequestHandler[] = [
       'POST /api/payments/contributions - Generating contributions',
     );
 
-    const count = await generateUserContributions(userId, req.body.year, req.body.months);
+    const count = await generateUserContributions(userId, req.body.year, 12);
 
     const overdueCount = await markOverdueContributions(req.user!.associationId, userId);
 
