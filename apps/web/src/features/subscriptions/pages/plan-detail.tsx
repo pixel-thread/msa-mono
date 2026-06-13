@@ -7,13 +7,14 @@ import { Badge } from '@src/shared/components/ui/badge';
 import { Button } from '@src/shared/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@src/shared/components/ui/card';
 import { Separator } from '@src/shared/components/ui/separator';
-import { formatDate } from '@src/shared/utils';
-import { useParams } from '@tanstack/react-router';
+import { BILLING_CYCLE } from '@src/shared/types';
+import { formatDate, formattedAmount } from '@src/shared/utils';
 
 import { usePlanVersionColumns } from '../hooks/usePlanVersionColumns';
+import { planRouteApi } from '../lib/route';
 
 export function PlanDetailPage() {
-  const params = useParams({ strict: false });
+  const params = planRouteApi.useParams();
   const { columns } = usePlanVersionColumns();
   const planId = params.planId as string;
 
@@ -22,15 +23,9 @@ export function PlanDetailPage() {
 
   const amount = plan?.activeVersion?.amount ?? 0;
   const currency = plan?.activeVersion?.currency ?? 'INR';
-  const billingCycle = plan?.activeVersion?.billingCycle ?? 'MONTHLY';
+  const billingCycle = plan?.activeVersion?.billingCycle ?? BILLING_CYCLE.MONTHLY;
   const features = plan?.activeVersion?.features as Record<string, unknown> | undefined;
   const effectiveFrom = plan?.activeVersion?.effectiveFrom ?? plan?.createdAt;
-
-  const formattedAmount = new Intl.NumberFormat('en-IN', {
-    style: 'currency',
-    currency,
-    maximumFractionDigits: 0,
-  }).format(amount);
 
   if (isLoading) {
     return (
@@ -84,7 +79,7 @@ export function PlanDetailPage() {
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
                   <p className="text-xs font-medium text-muted-foreground">Amount</p>
-                  <p className="text-lg font-medium text-ink mt-1">{formattedAmount}</p>
+                  <p className="text-lg font-medium text-ink mt-1">{formattedAmount(amount)}</p>
                 </div>
 
                 <div>
