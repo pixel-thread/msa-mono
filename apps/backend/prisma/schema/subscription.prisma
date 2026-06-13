@@ -31,8 +31,8 @@ model PlanVersion {
   amount       Decimal @db.Decimal(10, 2)
   currency     String  @default("INR")
   billingCycle String  @default("MONTHLY")
-  features     Json
   description  String?
+  status       Status  @default(ACTIVE)
 
   effectiveFrom DateTime  @default(now())
   effectiveTo   DateTime?

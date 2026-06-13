@@ -85,14 +85,22 @@ export const setDefaultPlanHandler: RequestHandler[] = [
  *  @role  SUPER_ADMIN */
 export const updatePlanHandler: RequestHandler[] = [
   validate({ body: UpdatePlanSchema }),
+
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
+
     const user = await withRole(req, UserRole.SUPER_ADMIN);
+
     logger.info({ traceId, userId: user.id }, 'PATCH /api/v1/plans/[planId] - User authorized');
+
     if (!req.body) throw new ValidationError('Invalid request body');
+
     const { planId } = req.params;
+
     const updatedPlan = await updatePlan(req.user!.associationId, planId as string, req.body);
+
     logger.info({ traceId, planId }, 'Plan updated successfully');
+
     return success(res, { data: updatedPlan });
   }),
 ];

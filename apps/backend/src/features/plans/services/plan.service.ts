@@ -10,7 +10,7 @@ import { prisma } from '@lib/prisma';
 // ---------------------------------------------------------------------------
 // Prisma
 // ---------------------------------------------------------------------------
-import { ContributionStatus, type Prisma, type UserRole } from '@prisma/client';
+import { ContributionStatus, Status, type Prisma, type UserRole } from '@prisma/client';
 import { hasHighRoleAccess } from '@utils/has-high-role';
 
 // ---- Interfaces --------------------------------------------------------------
@@ -47,7 +47,6 @@ export async function getPlans(
       include: {
         memberType: true,
         versions: {
-          where: { effectiveTo: null },
           orderBy: { createdAt: 'desc' },
         },
       },
@@ -56,7 +55,7 @@ export async function getPlans(
 
     return plans.map((plan) => ({
       ...plan,
-      activeVersion: plan.versions[0] || null,
+      activeVersion: plan.versions.find((v) => v.status === Status.ACTIVE) || null,
       versions: plan.versions,
     }));
   }
@@ -161,7 +160,6 @@ export async function createPlan(associationId: string, body: CreatePlanInput) {
             amount: body.amount,
             currency: body.currency,
             billingCycle: body.billingCycle,
-            features: body.features,
             effectiveFrom: body.effectiveFrom,
             effectiveTo: body.effectiveTo,
             description: body.description,
@@ -370,10 +368,7 @@ async function allocateSurplusToNextPeriods(
           ContributionStatus.OVERDUE,
         ],
       },
-      OR: [
-        { year: { gt: afterYear } },
-        { year: afterYear, month: { gt: afterMonth } },
-      ],
+      OR: [{ year: { gt: afterYear } }, { year: afterYear, month: { gt: afterMonth } }],
     },
     orderBy: [{ year: 'asc' }, { month: 'asc' }],
   });
@@ -413,7 +408,7 @@ async function allocateSurplusToNextPeriods(
  * history. Non-price metadata is updated in-place on the plan record.
  */
 export async function updatePlan(associationId: string, planId: string, body: UpdatePlanInput) {
-  const priceFields = ['amount', 'currency', 'billingCycle', 'features'] as const;
+  const priceFields = ['amount', 'currency', 'billingCycle'] as const;
   const hasPriceChange = priceFields.some((field) => body[field] !== undefined);
 
   if (hasPriceChange) {
@@ -428,7 +423,7 @@ export async function updatePlan(associationId: string, planId: string, body: Up
     const updatedPlan = await prisma.$transaction(async (tx) => {
       await tx.planVersion.update({
         where: { id: currentVersion.id },
-        data: { effectiveTo: new Date() },
+        data: { effectiveTo: new Date(), status: Status.INACTIVE },
       });
 
       const newVersion = await tx.planVersion.create({
@@ -437,15 +432,13 @@ export async function updatePlan(associationId: string, planId: string, body: Up
           amount: body.amount ?? currentVersion.amount,
           currency: body.currency ?? currentVersion.currency,
           billingCycle: body.billingCycle ?? currentVersion.billingCycle,
-          features: (body.features as Prisma.InputJsonValue) ?? currentVersion.features,
           description: body.description ?? currentVersion.description,
           effectiveFrom: body.effectiveFrom,
-          effectiveTo: body.effectiveTo,
         },
       });
 
       const plan = await tx.plan.update({
-        where: { id: planId, associationId },
+        where: { id: planId, associationId, versions: { some: { status: Status.ACTIVE } } },
         data: {
           name: body.name,
           description: body.description,
@@ -477,7 +470,7 @@ export async function updatePlan(associationId: string, planId: string, body: Up
   }
 
   // Strip version-only fields that don't exist on Plan
-  const { effectiveFrom, effectiveTo, ...metadata } = body;
+  const { ...metadata } = body;
   const plan = await prisma.plan.update({
     where: { id: planId, associationId },
     data: metadata,
