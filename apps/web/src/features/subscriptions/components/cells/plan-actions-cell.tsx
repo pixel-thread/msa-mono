@@ -1,25 +1,57 @@
-'use client';
+import { Button } from '@components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@components/ui/dropdown-menu';
+import { MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
 
-import { Button } from '@src/shared/components/ui/button';
-import { Pencil, Trash2 } from 'lucide-react';
-
+import { usePlanStore } from '../../stores';
 import { Plan } from '../../types';
 
-interface PlanActionsCellProps {
+type PlanActionsCellProps = {
   plan: Plan;
-  onDelete: (planId: string) => void;
-  onEdit: (plan: Plan) => void;
-}
+};
 
-export function PlanActionsCell({ plan, onDelete, onEdit }: PlanActionsCellProps) {
+export function PlanActionsCell({ plan }: PlanActionsCellProps) {
+  const { setIsDeletingConfirmOpen: setIsConfirmOpen, setIsEditing, setPlan } = usePlanStore();
+
   return (
-    <div className="flex items-center gap-2 justify-end">
-      <Button size="sm" variant="ghost" onClick={() => onEdit(plan)}>
-        <Pencil className="h-4 w-4" />
-      </Button>
-      <Button size="sm" variant="ghost" onClick={() => onDelete(plan.id)}>
-        <Trash2 className="h-4 w-4 text-destructive" />
-      </Button>
-    </div>
+    <>
+      <div className="flex justify-end">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon">
+              <MoreHorizontal className="h-4 w-4" />
+              <span className="sr-only">Open menu</span>
+            </Button>
+          </DropdownMenuTrigger>
+
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem
+              onClick={() => {
+                setPlan(plan);
+                setIsEditing(true);
+              }}
+            >
+              <Pencil className="mr-2 h-4 w-4" />
+              Edit
+            </DropdownMenuItem>
+
+            <DropdownMenuItem
+              onClick={() => {
+                setPlan(plan);
+                setIsConfirmOpen(true);
+              }}
+              className="text-destructive focus:text-destructive"
+            >
+              <Trash2 className="mr-2 h-4 w-4" />
+              Delete
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+    </>
   );
 }

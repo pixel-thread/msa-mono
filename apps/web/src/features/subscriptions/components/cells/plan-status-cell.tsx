@@ -9,15 +9,16 @@ import {
 } from '@src/shared/components/ui/select';
 import { Plan_STATUS } from '@src/shared/types';
 
+import { usePlanTableActions } from '../../hooks/usePlanTableActions';
 import { Plan } from '../../types';
 import { getPlanStatusBadge } from '../../utils/helper/get-plan-status-badge';
 
 interface PlanStatusCellProps {
   plan: Plan;
-  onStatusChange: (planId: string, isActive: boolean) => void;
 }
 
-export function PlanStatusCell({ plan, onStatusChange }: PlanStatusCellProps) {
+export function PlanStatusCell({ plan }: PlanStatusCellProps) {
+  const { onStatusChange } = usePlanTableActions();
   return (
     <Select
       value={plan.isActive ? 'ACTIVE' : 'INACTIVE'}

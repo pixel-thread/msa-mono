@@ -4,13 +4,14 @@ import { Button } from '@src/shared/components/ui/button';
 import { Star } from 'lucide-react';
 
 import { Plan } from '../../types';
+import { usePlanTableActions } from '../../hooks/usePlanTableActions';
 
 interface PlanDefaultCellProps {
   plan: Plan;
-  onSetDefault: (planId: string) => void;
 }
 
-export function PlanDefaultCell({ plan, onSetDefault }: PlanDefaultCellProps) {
+export function PlanDefaultCell({ plan }: PlanDefaultCellProps) {
+  const { onSetDefault } = usePlanTableActions();
   return (
     <div className="flex items-center justify-center">
       <Button

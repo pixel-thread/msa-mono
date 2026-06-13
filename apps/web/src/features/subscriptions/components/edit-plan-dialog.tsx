@@ -33,6 +33,7 @@ import { useForm } from 'react-hook-form';
 
 import { usePlan } from '../hooks/usePlan';
 import { UpdatePlanInput, UpdatePlanSchema } from '../validators';
+import { usePlanStore } from '../stores';
 
 interface EditPlanDialogProps {
   planId: string;
@@ -44,6 +45,7 @@ export function EditPlanDialog({ planId, open, onOpenChange }: EditPlanDialogPro
   const updatePlan = useUpdatePlan();
   const { data: plan } = usePlan({ planId: planId });
   const { memberTypes } = useMemberTypes();
+  const { setPlan } = usePlanStore();
 
   const form = useForm({
     resolver: zodResolver(UpdatePlanSchema),
@@ -70,9 +72,7 @@ export function EditPlanDialog({ planId, open, onOpenChange }: EditPlanDialogPro
         billingCycle: (activeVersion?.billingCycle ?? 'YEARLY') as 'MONTHLY' | 'YEARLY',
         features: (activeVersion?.features as Record<string, unknown>) || {},
         memberTypeId: plan.memberTypeId || '',
-        effectiveTo: activeVersion?.effectiveTo
-          ? new Date(activeVersion.effectiveTo)
-          : undefined,
+        effectiveTo: activeVersion?.effectiveTo ? new Date(activeVersion.effectiveTo) : undefined,
         effectiveFrom: activeVersion?.effectiveFrom
           ? new Date(activeVersion.effectiveFrom)
           : undefined,
@@ -95,7 +95,12 @@ export function EditPlanDialog({ planId, open, onOpenChange }: EditPlanDialogPro
         isActive,
       },
       {
-        onSuccess: () => onOpenChange(false),
+        onSuccess: ({ success }) => {
+          if (success) {
+            onOpenChange(false);
+            setPlan(null);
+          }
+        },
       },
     );
   };
@@ -150,8 +155,12 @@ export function EditPlanDialog({ planId, open, onOpenChange }: EditPlanDialogPro
                   <FormControl>
                     <Input
                       type="datetime-local"
-                      value={field.value instanceof Date ? field.value.toISOString().slice(0, 16) : ''}
-                      onChange={(e) => field.onChange(e.target.value ? new Date(e.target.value) : undefined)}
+                      value={
+                        field.value instanceof Date ? field.value.toISOString().slice(0, 16) : ''
+                      }
+                      onChange={(e) =>
+                        field.onChange(e.target.value ? new Date(e.target.value) : undefined)
+                      }
                       onBlur={field.onBlur}
                       ref={field.ref}
                       name={field.name}
@@ -171,8 +180,12 @@ export function EditPlanDialog({ planId, open, onOpenChange }: EditPlanDialogPro
                   <FormControl>
                     <Input
                       type="datetime-local"
-                      value={field.value instanceof Date ? field.value.toISOString().slice(0, 16) : ''}
-                      onChange={(e) => field.onChange(e.target.value ? new Date(e.target.value) : undefined)}
+                      value={
+                        field.value instanceof Date ? field.value.toISOString().slice(0, 16) : ''
+                      }
+                      onChange={(e) =>
+                        field.onChange(e.target.value ? new Date(e.target.value) : undefined)
+                      }
                       onBlur={field.onBlur}
                       ref={field.ref}
                       name={field.name}
@@ -207,7 +220,7 @@ export function EditPlanDialog({ planId, open, onOpenChange }: EditPlanDialogPro
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Billing Cycle</FormLabel>
-                  <Select onValueChange={field.onChange} value={field.value ?? ''}>
+                    <Select onValueChange={field.onChange} value={field.value ?? ''}>
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Select billing cycle" />

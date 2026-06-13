@@ -13,28 +13,21 @@ import { DataTableFilters } from '@src/shared/components/data-table-filters';
 import { DataTablePagination } from '@src/shared/components/data-table-pagination';
 import { SectionHeader } from '@src/shared/components/section-header';
 import { useUrlFilters } from '@src/shared/hooks';
+import { usePlanStore } from '../stores';
 
 export default function PlansPage() {
   const { page, setPage } = useUrlFilters({ basePath: '/plans' });
-  const [editingPlan, setEditingPlan] = useState<Plan | null>(null);
-  const [deletingPlan, setDeletingPlan] = useState<Plan | null>(null);
+  const { isDeletingConfirmOpen, plan, isEditing, setIsEditing, setIsDeletingConfirmOpen } =
+    usePlanStore();
 
   const { plans, meta, isLoading } = usePlans({ page });
-  const { onStatusChange, onDelete, onSetDefault, isPending } = usePlanTableActions();
-  const { columns } = usePlanTableColumns({
-    onStatusChange,
-    onSetDefault,
-    onDelete: (planId: string) => {
-      const plan = plans.find((p) => p.id === planId);
-      if (plan) setDeletingPlan(plan);
-    },
-    onEdit: (plan: Plan) => setEditingPlan(plan),
-  });
+  const { onDelete, isPending } = usePlanTableActions();
+
+  const { columns } = usePlanTableColumns();
 
   const handleDeleteConfirm = () => {
-    if (deletingPlan) {
-      onDelete(deletingPlan.id);
-      setDeletingPlan(null);
+    if (plan && isDeletingConfirmOpen) {
+      onDelete(plan.id);
     }
   };
 
@@ -63,19 +56,15 @@ export default function PlansPage() {
       <DataTablePagination meta={meta} onPageChange={setPage} label="plans" />
 
       <EditPlanDialog
-        planId={editingPlan?.id || ''}
-        open={!!editingPlan}
-        onOpenChange={(open) => {
-          if (!open) setEditingPlan(null);
-        }}
+        planId={plan?.id || ''}
+        open={isEditing}
+        onOpenChange={(open) => setIsEditing(open)}
       />
 
       <DeletePlanDialog
-        plan={deletingPlan}
-        open={!!deletingPlan}
-        onOpenChange={(open) => {
-          if (!open) setDeletingPlan(null);
-        }}
+        plan={plan}
+        open={isDeletingConfirmOpen}
+        onOpenChange={(open) => setIsDeletingConfirmOpen(open)}
         onConfirm={handleDeleteConfirm}
         isDeleting={isPending}
       />

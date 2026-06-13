@@ -9,24 +9,12 @@ import { ColumnDef } from '@tanstack/react-table';
 
 import { Plan } from '../types';
 
-interface UsePlanTableColumnsOptions {
-  onStatusChange: (planId: string, isActive: boolean) => void;
-  onDelete: (planId: string) => void;
-  onEdit: (plan: Plan) => void;
-  onSetDefault: (planId: string) => void;
-}
-
-export const usePlanTableColumns = ({
-  onStatusChange,
-  onDelete,
-  onEdit,
-  onSetDefault,
-}: UsePlanTableColumnsOptions): { columns: ColumnDef<Plan>[] } => {
+export const usePlanTableColumns = (): { columns: ColumnDef<Plan>[] } => {
   const columns: ColumnDef<Plan>[] = [
     {
       accessorKey: 'isDefault',
       header: 'Default',
-      cell: ({ row }) => <PlanDefaultCell plan={row.original} onSetDefault={onSetDefault} />,
+      cell: ({ row }) => <PlanDefaultCell plan={row.original} />,
     },
     {
       accessorKey: 'name',
@@ -46,23 +34,30 @@ export const usePlanTableColumns = ({
     {
       accessorKey: 'isActive',
       header: 'Status',
-      cell: ({ row }) => <PlanStatusCell plan={row.original} onStatusChange={onStatusChange} />,
+      cell: ({ row }) => <PlanStatusCell plan={row.original} />,
     },
     {
-      accessorKey: 'effectiveFrom',
       header: 'Effective From',
       cell: ({ row }) => (
         <span className="text-right text-muted-foreground text-sm block ml-auto">
-          {formatDate(row.original.activeVersion?.effectiveFrom ?? row.original.createdAt)}
+          {formatDate(row.original.activeVersion?.effectiveFrom)}
+        </span>
+      ),
+    },
+    {
+      header: 'Effective TO',
+      cell: ({ row }) => (
+        <span className="text-right text-muted-foreground text-sm block ml-auto">
+          {row.original.activeVersion?.effectiveTo
+            ? formatDate(row.original.activeVersion?.effectiveTo)
+            : 'N/A'}
         </span>
       ),
     },
     {
       accessorKey: 'actions',
       header: 'Actions',
-      cell: ({ row }) => (
-        <PlanActionsCell plan={row.original} onDelete={onDelete} onEdit={onEdit} />
-      ),
+      cell: ({ row }) => <PlanActionsCell plan={row.original} />,
     },
   ];
 
