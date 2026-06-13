@@ -1,0 +1,20 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// CONTRIBUTION WAIVERS
+// A separate 1:1 model for contribution waiver data. Extracted from
+// ContributionPeriod to keep the period model lean.
+// ─────────────────────────────────────────────────────────────────────────────
+
+model ContributionWaiver {
+  id        String   @id @default(uuid())
+  periodId  String   @unique
+  waivedAt  DateTime
+  reason    String?
+  waivedBy  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  period ContributionPeriod @relation(fields: [periodId], references: [id], onDelete: Cascade)
+
+  @@index([periodId])
+  @@map("contribution_waivers")
+}
