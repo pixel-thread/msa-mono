@@ -1,5 +1,7 @@
 import { env } from '@src/env';
 import { logger } from '@src/shared/logger';
+import { navigate } from '@src/shared/router';
+import { useAuthStore } from '@src/shared/stores/auth';
 import axios, { AxiosInstance, InternalAxiosRequestConfig } from 'axios';
 import cookie from 'react-cookies';
 
@@ -136,6 +138,9 @@ axiosClient.interceptors.response.use(
       if (refreshed) {
         return axiosClient(originalRequest);
       }
+
+      useAuthStore.getState().setUser(null);
+      navigate('/sign-in');
     }
 
     return Promise.reject(error);

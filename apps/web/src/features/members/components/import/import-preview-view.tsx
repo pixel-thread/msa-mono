@@ -1,10 +1,10 @@
 'use client';
 
+import { DataTable } from '@src/shared/components/data-table';
 import { Button } from '@src/shared/components/ui/button';
 import { Card } from '@src/shared/components/ui/card';
-import { DataTable } from '@src/shared/components/data-table';
-import { AlertCircle, X } from 'lucide-react';
 import type { ColumnDef } from '@tanstack/react-table';
+import { AlertCircle, X } from 'lucide-react';
 
 export type PreviewViewProps = {
   fileName: string;

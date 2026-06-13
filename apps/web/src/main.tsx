@@ -1,4 +1,5 @@
 import { StrictMode } from 'react';
+import { setRouter } from '@src/shared/router';
 import { createRouter, RouterProvider } from '@tanstack/react-router';
 import ReactDOM from 'react-dom/client';
 
@@ -7,6 +8,7 @@ import { routeTree } from './routeTree.gen';
 import './globals.css';
 
 const router = createRouter({ routeTree });
+setRouter(router);
 
 declare module '@tanstack/react-router' {
   interface Register {
