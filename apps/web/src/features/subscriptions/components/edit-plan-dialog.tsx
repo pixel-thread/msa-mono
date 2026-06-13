@@ -28,7 +28,7 @@ import {
   SelectValue,
 } from '@src/shared/components/ui/select';
 import { Switch } from '@src/shared/components/ui/switch';
-import { BILLING_CYCLE, BillingCycle } from '@src/shared/types';
+import { BILLING_CYCLE } from '@src/shared/types';
 import { useForm } from 'react-hook-form';
 
 import { usePlan } from '../hooks/usePlan';
@@ -45,38 +45,37 @@ export function EditPlanDialog({ planId, open, onOpenChange }: EditPlanDialogPro
   const { data: plan } = usePlan({ planId: planId });
   const { memberTypes } = useMemberTypes();
 
-  const form = useForm<UpdatePlanInput>({
+  const form = useForm({
     resolver: zodResolver(UpdatePlanSchema),
     defaultValues: {
       name: '',
       description: '',
       amount: 0,
       currency: 'INR',
-      billingCycle: BILLING_CYCLE.MONTHLY,
+      billingCycle: 'MONTHLY',
       features: {},
       memberTypeId: '',
-      effectiveTo: '',
-      effectiveFrom: '',
       isActive: true,
     },
   });
 
   useEffect(() => {
     if (plan && open) {
+      const activeVersion = plan.activeVersion;
       form.reset({
         name: plan.name,
         description: plan.description || '',
-        amount: plan.activeVersion?.amount ?? 0,
-        currency: plan.activeVersion?.currency ?? 'INR',
-        billingCycle: (plan.activeVersion.billingCycle ?? BILLING_CYCLE.YEARLY) as BillingCycle,
-        features: (plan.activeVersion?.features as Record<string, unknown>) || {},
+        amount: activeVersion?.amount ?? 0,
+        currency: activeVersion?.currency ?? 'INR',
+        billingCycle: (activeVersion?.billingCycle ?? 'YEARLY') as 'MONTHLY' | 'YEARLY',
+        features: (activeVersion?.features as Record<string, unknown>) || {},
         memberTypeId: plan.memberTypeId || '',
-        effectiveTo: plan.activeVersion.effectiveTo
-          ? plan.activeVersion.effectiveTo.slice(0, 16)
-          : '',
-        effectiveFrom: plan.activeVersion.effectiveFrom
-          ? plan.activeVersion.effectiveFrom.slice(0, 16)
-          : '',
+        effectiveTo: activeVersion?.effectiveTo
+          ? new Date(activeVersion.effectiveTo)
+          : undefined,
+        effectiveFrom: activeVersion?.effectiveFrom
+          ? new Date(activeVersion.effectiveFrom)
+          : undefined,
         isActive: plan.isActive,
       });
     }
@@ -151,8 +150,8 @@ export function EditPlanDialog({ planId, open, onOpenChange }: EditPlanDialogPro
                   <FormControl>
                     <Input
                       type="datetime-local"
-                      value={typeof field.value === 'string' ? field.value.slice(0, 16) : ''}
-                      onChange={(e) => field.onChange(e.target.value)}
+                      value={field.value instanceof Date ? field.value.toISOString().slice(0, 16) : ''}
+                      onChange={(e) => field.onChange(e.target.value ? new Date(e.target.value) : undefined)}
                       onBlur={field.onBlur}
                       ref={field.ref}
                       name={field.name}
@@ -172,8 +171,8 @@ export function EditPlanDialog({ planId, open, onOpenChange }: EditPlanDialogPro
                   <FormControl>
                     <Input
                       type="datetime-local"
-                      value={typeof field.value === 'string' ? field.value.slice(0, 16) : ''}
-                      onChange={(e) => field.onChange(e.target.value)}
+                      value={field.value instanceof Date ? field.value.toISOString().slice(0, 16) : ''}
+                      onChange={(e) => field.onChange(e.target.value ? new Date(e.target.value) : undefined)}
                       onBlur={field.onBlur}
                       ref={field.ref}
                       name={field.name}
@@ -208,7 +207,7 @@ export function EditPlanDialog({ planId, open, onOpenChange }: EditPlanDialogPro
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Billing Cycle</FormLabel>
-                    <Select onValueChange={field.onChange} value={field.value}>
+                  <Select onValueChange={field.onChange} value={field.value ?? ''}>
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Select billing cycle" />
@@ -234,7 +233,7 @@ export function EditPlanDialog({ planId, open, onOpenChange }: EditPlanDialogPro
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Member Type (Optional)</FormLabel>
-                  <Select onValueChange={field.onChange} value={field.value}>
+                  <Select onValueChange={field.onChange} value={field.value ?? ''}>
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Select member type" />
