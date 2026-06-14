@@ -90,6 +90,7 @@ axiosClient.interceptors.response.use(
         traceId,
         status: response.status,
         durationMs: duration,
+        error: response?.data?.error,
       });
     }
 
