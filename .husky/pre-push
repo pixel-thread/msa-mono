@@ -1,1 +1,8 @@
-pnpm --filter "...[origin/main]" build
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "Running typecheck..."
+pnpm typecheck
+
+echo "Running tests..."
+pnpm test
