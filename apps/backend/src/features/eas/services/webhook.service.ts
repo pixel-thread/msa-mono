@@ -89,7 +89,10 @@ type EasEventPayload = EasBuildPayload | EasSubmitPayload;
 
 export interface EasWebhookService {
   verifySignature(rawBody: string, signature: string): boolean;
-  processEvent(rawBody: string, signature: string): Promise<{
+  processEvent(
+    rawBody: string,
+    signature: string,
+  ): Promise<{
     status: 'ok' | 'duplicate' | 'unhandled';
     eventId?: string;
   }>;
@@ -101,18 +104,12 @@ export function createEasWebhookService(secret: string): EasWebhookService {
       return false;
     }
 
-    const expectedSignature = crypto
-      .createHmac('sha1', secret)
-      .update(rawBody)
-      .digest('hex');
+    const expectedSignature = crypto.createHmac('sha1', secret).update(rawBody).digest('hex');
 
     const providedSignature = signature.slice(5); // strip 'sha1=' prefix
 
     try {
-      return crypto.timingSafeEqual(
-        Buffer.from(expectedSignature),
-        Buffer.from(providedSignature),
-      );
+      return crypto.timingSafeEqual(Buffer.from(expectedSignature), Buffer.from(providedSignature));
     } catch {
       return false;
     }
@@ -135,9 +132,10 @@ export function createEasWebhookService(secret: string): EasWebhookService {
     // that submit payloads do not. This heuristic is stable across EAS versions
     // since the build/submit schemas diverge at the root level.
     // EAS does not provide an explicit top-level event type discriminator.
-    const eventType = 'artifacts' in payload || 'buildDetailsPageUrl' in payload
-      ? 'BUILD' as const
-      : 'SUBMIT' as const;
+    const eventType =
+      'artifacts' in payload || 'buildDetailsPageUrl' in payload
+        ? ('BUILD' as const)
+        : ('SUBMIT' as const);
 
     const eventId = payload.id;
 

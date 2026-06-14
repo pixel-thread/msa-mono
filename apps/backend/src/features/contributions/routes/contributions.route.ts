@@ -13,6 +13,7 @@ import {
 } from '@feature/contributions/services/contribution.service';
 import { findContributionPeriods } from '@feature/contributions/services/find-contribution-periods';
 import { findUniqueContributionPeriod } from '@feature/contributions/services/find-unique-contribution-period';
+import type { ContributionsQueryInput } from '@feature/contributions/validators';
 import {
   ContributionIdParamsSchema,
   ContributionsQuerySchema,
@@ -21,7 +22,6 @@ import {
   UserContributionsParamsSchema,
   WaiveContributionSchema,
 } from '@feature/contributions/validators';
-import type { ContributionsQueryInput } from '@feature/contributions/validators';
 import { validate } from '@lib/validate';
 import { ContributionStatus, UserRole } from '@prisma/client';
 import { PAGE_SIZE } from '@src/shared/constants';
@@ -120,7 +120,8 @@ export const myContributionsHandler: RequestHandler[] = [
           acc.overdueCount += 1;
           acc.overdueAmount += due;
         }
-        if (c.status === ContributionStatus.DUE || c.status === ContributionStatus.PENDING) acc.pendingCount += 1;
+        if (c.status === ContributionStatus.DUE || c.status === ContributionStatus.PENDING)
+          acc.pendingCount += 1;
         if ('waiver' in c && c.waiver) acc.waivedTotal += expected;
 
         return acc;

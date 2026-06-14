@@ -39,7 +39,7 @@ model Account {
   associationId String
   code          String
   name          String
-  type          String
+  type          AccountType
   description   String?
   isActive      Boolean  @default(true)
   createdAt     DateTime @default(now())

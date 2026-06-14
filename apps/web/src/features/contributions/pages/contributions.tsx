@@ -108,7 +108,7 @@ export default function ContributionsPage() {
           </Select>
           <Button disabled={isGenerating} onClick={onGenerateContributions} className="h-10">
             <Plus className="mr-2 h-4 w-4" />
-            Generate Contributions
+            {isGenerating ? 'Generating...' : 'Generate Contributions'}
           </Button>
         </div>
       </SectionHeader>

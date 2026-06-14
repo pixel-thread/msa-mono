@@ -1,7 +1,13 @@
 import { prisma } from '@lib/prisma';
+import type { AccountType } from '@prisma/client';
 
+type Account = {
+  code: string;
+  name: string;
+  type: AccountType;
+};
 export async function seedChartOfAccounts(associationId: string) {
-  const accounts = [
+  const accounts: Account[] = [
     { code: '1000', name: 'Bank Account', type: 'ASSET' },
     { code: '1100', name: 'Accounts Receivable', type: 'ASSET' },
     { code: '1200', name: 'Cash on Hand', type: 'ASSET' },

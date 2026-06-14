@@ -4,6 +4,7 @@
 import { NotFoundError, ValidationError } from '@errors';
 import { ContextStore } from '@lib';
 import { prisma } from '@lib/prisma';
+import type { AccountType } from '@prisma/client';
 import { ApprovalStatus, Prisma } from '@prisma/client';
 import { logger } from '@src/shared/logger';
 import { buildPaginationParams } from '@utils/helper';
@@ -27,7 +28,7 @@ export interface CreateManualEntryInput {
 export interface CreateAccountInput {
   code: string;
   name: string;
-  type: string;
+  type: AccountType;
   description?: string;
 }
 

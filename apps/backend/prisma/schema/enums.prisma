@@ -302,3 +302,11 @@ enum EasWebhookEventType {
 
   @@map("eas_webhook_event_type")
 }
+
+enum AccountType {
+  ASSET
+  LIABILITY
+  EQUITY
+  INCOME
+  EXPENSE
+}

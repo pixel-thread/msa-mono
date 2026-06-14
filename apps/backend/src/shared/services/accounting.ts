@@ -1,6 +1,6 @@
-import { BadRequestError, NotFoundError } from '@errors';
+import { BadRequestError } from '@errors';
 import type { PaymentMethod, Prisma } from '@prisma/client';
-import { ApprovalStatus } from '@prisma/client';
+import { AccountType, ApprovalStatus } from '@prisma/client';
 
 export interface JournalLine {
   accountCode: string;
@@ -19,10 +19,21 @@ export interface CreateEntryOptions {
 }
 
 async function getAccountByCode(tx: Prisma.TransactionClient, associationId: string, code: string) {
-  const account = await tx.account.findFirst({
+  let account = await tx.account.findFirst({
     where: { associationId, code, isActive: true },
   });
-  if (!account) throw new NotFoundError(`Account not found: ${code}`);
+  // if account does not exist then create
+  if (!account) {
+    account = await tx.account.create({
+      data: {
+        code: '1200',
+        name: 'Cash In Hand',
+        type: AccountType.ASSET,
+        association: { connect: { id: associationId } },
+        description: 'Auto-Generated: Account created since it is missing',
+      },
+    });
+  }
   return account;
 }
 

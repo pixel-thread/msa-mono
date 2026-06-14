@@ -464,7 +464,7 @@ export async function recordContributionPayment(
   });
 
   if (!accountExist) {
-    throw new NotFoundError('Cash account not found for code 1200');
+    throw new NotFoundError(`Account not found: 1200`);
   }
 
   const payment = await createPaymentTransaction({

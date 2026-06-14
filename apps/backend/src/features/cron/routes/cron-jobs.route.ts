@@ -1,7 +1,4 @@
-import {
-  runAnonymizeCron,
-  runDsarSlaCron,
-} from '@feature/cron/services';
+import { runAnonymizeCron, runDsarSlaCron } from '@feature/cron/services';
 import { env } from '@src/env';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';

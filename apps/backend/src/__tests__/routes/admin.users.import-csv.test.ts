@@ -109,10 +109,7 @@ describe('POST /api/v1/admin/users/import-csv', () => {
   });
 
   it('should return 401 without auth token', async () => {
-    const csvContent = [
-      'email,name',
-      `${PREFIX}-noauth@test.com,No Auth`,
-    ].join('\n');
+    const csvContent = ['email,name', `${PREFIX}-noauth@test.com,No Auth`].join('\n');
 
     const res = await request(app)
       .post('/api/v1/admin/users/import-csv')
