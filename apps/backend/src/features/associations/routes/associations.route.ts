@@ -20,6 +20,7 @@ import { prisma } from '@lib/prisma';
 import { uploadToBucket } from '@lib/supabase/storage';
 import { validate } from '@lib/validate';
 import { UserRole } from '@prisma/client';
+import { fileUpload } from '@src/middleware/file-upload';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
@@ -360,11 +361,12 @@ export const postDeactivateAssociation: RequestHandler[] = [
  * @route POST /api/associations/:associationId/logo
  */
 export const postUploadLogo: RequestHandler[] = [
+  fileUpload.single('file'),
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     const traceId = (req.traceId as string) || '';
 
     logger.info(
-      { traceId, associationId: req.user!.associationId },
+      { traceId, associationId: req.user?.associationId },
       'POST /api/associations/[associationId]/logo - Request started',
     );
 
@@ -377,8 +379,8 @@ export const postUploadLogo: RequestHandler[] = [
     );
 
     // Confirm the association record exists
-    const existing = await prisma.association.findUnique({
-      where: { id: req.user!.associationId },
+    const existing = await findUniqueAssociation({
+      where: { id: req.user?.associationId },
     });
 
     if (!existing) {
@@ -391,7 +393,7 @@ export const postUploadLogo: RequestHandler[] = [
     }
 
     // Extract the uploaded file from the request
-    const file = (req as any).file || (req as any).files?.logo;
+    const file = req.file as Express.Multer.File;
 
     // Upload to object storage under the association's slug
     const uploadResult = await uploadToBucket(
@@ -401,13 +403,13 @@ export const postUploadLogo: RequestHandler[] = [
     );
 
     // Persist the logo URL on the association record
-    await prisma.association.update({
-      where: { id: req.user!.associationId },
+    await updateAssociation({
+      where: { id: req.user?.associationId || '' },
       data: { logo: uploadResult.url },
     });
 
     logger.info(
-      { traceId, associationId: req.user!.associationId },
+      { traceId, associationId: req.user?.associationId },
       'POST /api/associations/[associationId]/logo - Success',
     );
 
