@@ -13,6 +13,7 @@ import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
 import type { RequestHandler } from 'express';
 import type { NextFunction, Request, Response } from 'express';
+import { setAccessTokenCookie, setRefreshTokenCookie } from '../utils/helpers';
 
 /**
  * POST /api/auth/refresh — Rotate access and refresh tokens
@@ -101,21 +102,8 @@ export const postRefresh: RequestHandler[] = [
     });
 
     if (!isMobile) {
-      res.cookie('access_token', newAccessToken, {
-        httpOnly: true,
-        secure: env.NODE_ENV === 'production',
-        sameSite: 'strict',
-        maxAge: 15 * 60 * 1000,
-        path: '/',
-      });
-
-      res.cookie('refresh_token', newRefreshToken, {
-        httpOnly: true,
-        secure: env.NODE_ENV === 'production',
-        sameSite: 'strict',
-        maxAge: 7 * 24 * 60 * 60 * 1000,
-        path: '/',
-      });
+      setAccessTokenCookie(res, newAccessToken);
+      setRefreshTokenCookie(res, newRefreshToken);
     }
 
     logger.info({ traceId, userId: user.id }, 'POST /api/auth/refresh - Success');
