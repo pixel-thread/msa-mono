@@ -1,6 +1,6 @@
 import React from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
-import { View,  KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import { View, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import { Link, Redirect } from 'expo-router';
 import { zodResolver } from '@hookform/resolvers/zod';
 
@@ -62,7 +62,7 @@ export const SignInScreen = () => {
 
         <Card>
           <CardHeader className="gap-y-2 p-6">
-            <CardTitle className="text-2xl font-bold tracking-widest">SIGN IN</CardTitle>
+            <CardTitle className="text-2xl tracking-widest">SIGN IN</CardTitle>
             <CardDescription>Enter your email and pasword to continue</CardDescription>
           </CardHeader>
           <CardContent className="">

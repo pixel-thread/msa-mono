@@ -7,11 +7,11 @@ const textVariants = cva('text-foreground font-sans', {
   variants: {
     variant: {
       default: 'text-base',
-      heading: 'font-black font-bold font-sans-bold',
+      heading: 'font-sans-bold',
       subtext: 'text-muted-foreground',
       error: 'text-destructive',
       link: 'text-primary',
-      label: 'text-sm font-medium text-muted-foreground font-sans-medium',
+      label: 'text-sm text-muted-foreground font-sans-medium',
     },
     size: {
       default: 'text-base',
@@ -23,11 +23,11 @@ const textVariants = cva('text-foreground font-sans', {
       '3xl': 'text-3xl',
     },
     weight: {
-      default: 'font-normal',
+      default: '',
       light: 'font-light',
-      medium: 'font-medium font-sans-medium',
-      semibold: 'font-semibold font-sans-bold',
-      bold: 'font-bold font-sans-bold',
+      medium: 'font-sans-medium',
+      semibold: 'font-sans-bold',
+      bold: 'font-sans-bold',
     },
   },
   defaultVariants: {

@@ -13,7 +13,7 @@ const Input = React.forwardRef<React.ElementRef<typeof TextInput>, InputProps>(
       <TextInput
         ref={ref}
         className={cn(
-          'h-10 w-full min-w-0 border border-transparent border-b-input bg-transparent px-0 py-1 pl-2 text-base text-foreground',
+          'h-10 w-full min-w-0 border-x-0 border-t-0 border-b border-b-input bg-transparent px-0 py-1 pl-2 text-base text-foreground',
           'focus:border-b-ring',
           error && 'border-b-destructive',
           className
