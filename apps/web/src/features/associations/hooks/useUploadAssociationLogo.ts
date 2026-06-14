@@ -12,7 +12,7 @@ export function useUploadAssociationLogo() {
   return useMutation({
     mutationFn: ({ id, file }: { id: string; file: File }) => {
       const formData = new FormData();
-      formData.append('logo', file);
+      formData.append('file', file);
       return http.post(ENDPOINTS.ASSOCIATIONS.LOGO(id), formData);
     },
     onSuccess: (data) => {
