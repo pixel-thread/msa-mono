@@ -20,8 +20,8 @@ function getWorkspace(file) {
 export default {
   '*.{js,jsx,ts,tsx}': (files) =>
     [...new Set(files.map(getWorkspace).filter(Boolean))].map(
-      (workspace) => `cd "${workspace}" && pnpm lint`,
+      (workspace) => `cd "${workspace}" && pnpm lint && pnpm format`,
     ),
 
-  '*.{json,md,css,yml,yaml}': ['prettier --write'],
+  // '*.{json,md,css,yml,yaml}': ['prettier --write'],
 };
