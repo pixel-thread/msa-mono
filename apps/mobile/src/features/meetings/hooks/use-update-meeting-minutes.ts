@@ -1,20 +1,20 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { UpdateMeetingMinuteInput } from '../validators/minuites';
+import { UpdateMeetingMinuteInput } from '../validators/minutes';
 import http from '@src/shared/utils/http';
 import { toast } from 'sonner-native';
 import { ENDPOINTS, QUERY_KEYS } from '@repo/shared';
 
 type Props = {
   meetingId: string;
-  meetingMinuiteId: string;
+  meetingMinuteId: string;
 };
 
-export function useUpdateMeetingMinuite({ meetingId, meetingMinuiteId }: Props) {
+export function useUpdateMeetingMinutes({ meetingId, meetingMinuteId }: Props) {
   const queryClient = useQueryClient();
   const url = ENDPOINTS.MEETINGS.MINUTES.DETAIL;
   return useMutation({
     mutationFn: (data: UpdateMeetingMinuteInput) =>
-      http.put(url(meetingId, meetingMinuiteId), data),
+      http.put(url(meetingId, meetingMinuteId), data),
     onSuccess: (data) => {
       if (data.success) {
         toast.success(data.message);

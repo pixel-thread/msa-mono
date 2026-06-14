@@ -7,7 +7,7 @@ type Props = {
   meetingId: string;
 };
 
-export function useMeetingMinuite({ meetingId }: Props) {
+export function useMeetingMinute({ meetingId }: Props) {
   const { isAuthenticated } = useAuthStore();
   return useQuery({
     queryKey: QUERY_KEYS.MEETINGS_KEYS.MINUTES(meetingId),

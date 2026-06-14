@@ -1,6 +1,4 @@
-import type { ContributionStatus, ContributionPeriod } from './contribution-period.types';
-
-export type { ContributionStatus, ContributionPeriod };
+import type { ContributionPeriod } from './contribution-period.types';
 
 export type PaymentStatus = 'PENDING' | 'PAID' | 'FAILED';
 

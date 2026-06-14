@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, ScrollView, RefreshControl } from 'react-native';
+import { View, ScrollView, RefreshControl, Pressable } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useMeeting } from '../hooks';
@@ -10,10 +10,6 @@ import {
   CardContent,
   Text,
   Button,
-  Accordion,
-  AccordionItem,
-  AccordionTrigger,
-  AccordionContent,
   Alert,
   AlertTitle,
   CardHeader,
@@ -28,10 +24,34 @@ import { useAuthStore } from '@src/features/auth';
 import { useQueryClient } from '@tanstack/react-query';
 import { QUERY_KEYS } from '@repo/shared';
 import { MeetingInfoCard } from '../components/meeting-info-card';
-import { IconWithBadge } from '@src/shared/components/common';
-import { truncateText } from '@src/shared/utils';
 
 const ONE_DAY_MS = 24 * 60 * 60 * 1000;
+
+const getRsvpStatusStyle = (status: string) => {
+  switch (status) {
+    case 'ACCEPTED':
+      return { dot: 'bg-emerald-500', text: 'text-emerald-500', label: 'Accepted' };
+    case 'DECLINED':
+      return { dot: 'bg-red-500', text: 'text-red-500', label: 'Declined' };
+    case 'TENTATIVE':
+      return { dot: 'bg-slate-400', text: 'text-slate-400', label: 'Tentative' };
+    default:
+      return { dot: 'bg-slate-400', text: 'text-slate-400', label: 'Pending' };
+  }
+};
+
+const getMeetingStatusStyle = (status: string) => {
+  switch (status) {
+    case 'SCHEDULED':
+      return { dot: 'bg-emerald-500', text: 'text-emerald-500', label: 'Scheduled' };
+    case 'IN_PROGRESS':
+      return { dot: 'bg-blue-500', text: 'text-blue-500', label: 'In Progress' };
+    case 'COMPLETED':
+      return { dot: 'bg-slate-400', text: 'text-slate-400', label: 'Completed' };
+    default:
+      return { dot: 'bg-slate-400', text: 'text-slate-400', label: 'Cancelled' };
+  }
+};
 
 export const MeetingDetailScreen = () => {
   const router = useRouter();
@@ -104,16 +124,15 @@ export const MeetingDetailScreen = () => {
   return (
     <Container>
       <StackHeader
-        title={truncateText({ text: meeting.title })}
+        title={meeting.title}
         showBackButton
         rightAction={
-          <View className="flex-row gap-x-2">
-            <IconWithBadge
-              onPress={() => router.push(`/meetings/${meeting.id}/minutes`)}
-              name="document-text-outline"
-              showBadge={false}
-            />
-          </View>
+          <Pressable
+            onPress={() => router.push(`/meetings/${meeting.id}/minutes`)}
+            accessibilityLabel="View minutes"
+            accessibilityHint="Opens the meeting minutes for this meeting">
+            <Ionicons name="document-text-outline" size={24} color="#6366f1" />
+          </Pressable>
         }
       />
       <ScrollView
@@ -125,16 +144,26 @@ export const MeetingDetailScreen = () => {
         }>
         {/* Hero Section */}
         <View className="px-4 pb-8 pt-6">
-          <View className="mb-3 flex-row items-center gap-x-2"></View>
-
-          <Text variant="heading" size="3xl" className="text-slate-900 dark:text-white">
-            {meeting.title}
-          </Text>
+          <View className="flex-row flex-wrap items-center gap-x-3">
+            <Text variant="heading" size="3xl" selectable className="text-slate-900 dark:text-white">
+              {meeting.title}
+            </Text>
+            <View className="flex-row items-center gap-x-1.5">
+              <View className={cn('h-2 w-2 rounded-full', getMeetingStatusStyle(meeting.status).dot)} />
+              <Text
+                className={getMeetingStatusStyle(meeting.status).text}
+                variant="subtext"
+                size="sm">
+                {getMeetingStatusStyle(meeting.status).label}
+              </Text>
+            </View>
+          </View>
 
           {meeting.description && (
             <Text
               variant="subtext"
               size="sm"
+              selectable
               className="mt-3 leading-relaxed text-slate-600 dark:text-slate-400">
               {meeting.description}
             </Text>
@@ -173,25 +202,28 @@ export const MeetingDetailScreen = () => {
 
             <View className="flex-row justify-evenly">
               <Button
+                variant={isDeclined ? 'outline' : 'default'}
                 loading={isUpdatingRsvp}
-                disabled={isUpdatingRsvp || isAccepted}
+                disabled={isUpdatingRsvp}
                 onPress={() => handleRsvp('ACCEPTED')}
+                accessibilityLabel={isAccepted ? 'Confirmed attendance' : 'Confirm attendance'}
+                accessibilityHint="Marks you as attending this meeting"
                 className="mx-1 h-14 w-1/2">
-                {attendees?.some((a) => a.user.id === user?.id && a.rsvpStatus !== 'PENDING')
-                  ? 'Update RSVP'
-                  : 'Confirm Attendance'}
+                {isAccepted ? 'Confirmed' : 'Confirm Attendance'}
               </Button>
               <Button
-                variant="outline"
+                variant={isAccepted ? 'outline' : 'default'}
                 loading={isUpdatingRsvp}
-                disabled={isUpdatingRsvp || isDeclined}
+                disabled={isUpdatingRsvp}
                 onPress={() => handleRsvp('DECLINED')}
+                accessibilityLabel={isDeclined ? 'Declined attendance' : 'Decline attendance'}
+                accessibilityHint="Marks you as unable to attend this meeting"
                 className="mx-1 h-14 w-1/2">
                 Unable to Attend
               </Button>
             </View>
             <View className="mt-8 items-center">
-              <Text variant="subtext" size="xs" className="opacity-50">
+              <Text variant="subtext" size="xs" selectable className="opacity-50">
                 Reference ID: {meeting.id.toUpperCase()}
               </Text>
             </View>
@@ -203,7 +235,7 @@ export const MeetingDetailScreen = () => {
           <View className="mt-8 px-4">
             <Card>
               <CardHeader>
-                <CardTitle>Order of Business</CardTitle>
+                <CardTitle accessibilityRole="header">Order of Business</CardTitle>
               </CardHeader>
               <CardContent className="p-0">
                 {agenda
@@ -223,11 +255,11 @@ export const MeetingDetailScreen = () => {
                           </Text>
                         </View>
                         <View className="flex-1 gap-2">
-                          <Text weight={'semibold'} className="leading-tight">
+                          <Text weight="semibold" selectable className="leading-tight">
                             {item.title}
                           </Text>
                           {item.description && (
-                            <Text variant={'subtext'} className=" leading-tight">
+                            <Text variant="subtext" selectable className="leading-tight">
                               {item.description}
                             </Text>
                           )}
@@ -240,75 +272,76 @@ export const MeetingDetailScreen = () => {
           </View>
         )}
 
-        {/* Personnel Section */}
+        {/* Attendees Section */}
         <View className="mt-8 px-4">
-          <Text variant="heading" size="lg" className="mb-4 px-1 text-slate-900 dark:text-white">
+          <Text
+            variant="heading"
+            size="lg"
+            accessibilityRole="header"
+            className="mb-4 px-1 text-slate-900 dark:text-white">
             Attendance
           </Text>
-          <Card className="border-slate-200 bg-white shadow-none dark:border-slate-700 dark:bg-slate-900">
-            <Accordion className="px-4">
-              <AccordionItem value="attendees">
-                <AccordionTrigger>
-                  <Text>Registered Attendees</Text>
-                </AccordionTrigger>
-                <AccordionContent>
-                  {attendees?.map((attendee, index) => (
-                    <View key={index} className="flex-row items-center justify-between py-2">
-                      <View className="flex-row items-center gap-x-3">
-                        <View className="w-8 items-center justify-center">
-                          <Text size="sm" weight="bold" className="text-slate-400">
-                            {String(index + 1).padStart(2, '0')}.
-                          </Text>
-                        </View>
-                        <Text className="flex-1 font-medium leading-tight text-slate-900 dark:text-slate-100">
-                          {attendee.user.name}
-                        </Text>
-                        <Text className="flex-1 font-medium leading-tight text-slate-900 dark:text-slate-100">
-                          {attendee.attendeeRole}
-                        </Text>
-                      </View>
-                      <View className="flex-row items-center gap-x-3">
-                        <Text variant={'heading'}>{attendee.rsvpStatus}</Text>
-                      </View>
-                    </View>
-                  ))}
-                </AccordionContent>
-              </AccordionItem>
-
-              <AccordionItem value="organizer" className="border-b-0">
-                <AccordionTrigger>
-                  <View className="flex-row items-center gap-x-3">
-                    <Ionicons name="ribbon-outline" size={20} color="#6366f1" />
-                    <Text weight="medium">Institutional Lead</Text>
-                  </View>
-                </AccordionTrigger>
-                <AccordionContent>
-                  <View className="flex-row items-center gap-x-3 py-2">
-                    <View className="h-10 w-10 items-center justify-center bg-slate-100 dark:bg-slate-800">
-                      <Text weight="bold" className="text-slate-900 dark:text-slate-100">
-                        {meeting.createdBy.name?.charAt(0) ||
-                          meeting.createdBy.email.charAt(0).toUpperCase()}
+          <Card>
+            <CardContent className="p-0">
+              {attendees?.map((attendee, index) => {
+                const rsvpStyle = getRsvpStatusStyle(attendee.rsvpStatus);
+                return (
+                  <View
+                    key={index}
+                    accessibilityLabel={`${attendee.user.name}, ${attendee.attendeeRole}, ${rsvpStyle.label}`}
+                    className={cn(
+                      'flex-row items-center px-4 py-3',
+                      index !== attendees.length - 1 &&
+                        'border-b border-slate-100 dark:border-slate-800'
+                    )}>
+                    <View className="mr-3 h-8 w-8 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800">
+                      <Text size="sm" weight="bold" className="text-slate-900 dark:text-slate-100">
+                        {attendee.user.name.charAt(0).toUpperCase()}
                       </Text>
                     </View>
-                    <View>
-                      <Text
-                        weight="semibold"
-                        size="sm"
-                        className="text-slate-900 dark:text-slate-100">
-                        {meeting.createdBy.name || 'Administrative Office'}
+                    <View className="flex-1">
+                      <Text weight="semibold" size="sm" className="text-slate-900 dark:text-slate-100">
+                        {attendee.user.name}
                       </Text>
                       <Text variant="subtext" size="xs" className="text-slate-500">
-                        {meeting.createdBy.email}
+                        {attendee.attendeeRole}
+                      </Text>
+                    </View>
+                    <View className="flex-row items-center gap-x-1">
+                      <View className={cn('h-2 w-2 rounded-full', rsvpStyle.dot)} />
+                      <Text variant="subtext" size="xs" className={rsvpStyle.text}>
+                        {rsvpStyle.label}
                       </Text>
                     </View>
                   </View>
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
+                );
+              })}
+            </CardContent>
           </Card>
         </View>
 
-        {/* Action Bar */}
+        {/* Organizer Section */}
+        <View className="mt-6 px-4">
+          <View className="border-t border-slate-100 pt-4 dark:border-slate-800">
+            <View className="flex-row items-center gap-x-3">
+              <View className="h-10 w-10 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800">
+                <Text weight="bold" className="text-slate-900 dark:text-slate-100">
+                  {meeting.createdBy.name?.charAt(0) ||
+                    meeting.createdBy.email.charAt(0).toUpperCase()}
+                </Text>
+              </View>
+              <View>
+                <Text weight="semibold" size="sm" className="text-slate-900 dark:text-slate-100">
+                  {meeting.createdBy.name || 'Administrative Office'}
+                </Text>
+                <Text variant="subtext" size="xs" selectable className="text-slate-500">
+                  {meeting.createdBy.email}
+                </Text>
+              </View>
+            </View>
+          </View>
+        </View>
+
       </ScrollView>
     </Container>
   );

@@ -18,6 +18,11 @@ export async function findManySupplements({ associationId, moduleId }: FindManyS
       moduleId,
       module: { associationId },
     },
+    include: {
+      file: {
+        select: { url: true, sizeBytes: true, extension: true, thumbnailUrl: true, mimeType: true },
+      },
+    },
     orderBy: { sortOrder: 'asc' },
   });
 }

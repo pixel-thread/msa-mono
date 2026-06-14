@@ -8,32 +8,32 @@ export type DashboardOverview = {
     pendingDuesAmount: number;
     pendingDuesCount: number;
   };
-  revenueOverTime: Array<{
+  revenueOverTime: {
     month: string;
     revenue: number;
     pending: number;
     refunded: number;
-  }>;
-  memberGrowth: Array<{
+  }[];
+  memberGrowth: {
     month: string;
     newMembers: number;
     totalMembers: number;
-  }>;
-  memberRoleDistribution: Array<{
+  }[];
+  memberRoleDistribution: {
     role: string;
     count: number;
-  }>;
-  paymentMethodDistribution: Array<{
+  }[];
+  paymentMethodDistribution: {
     method: string;
     count: number;
     total: number;
-  }>;
-  recentPayments: Array<{
+  }[];
+  recentPayments: {
     id: string;
     userName: string;
     amount: number;
     status: string;
     method: string | null;
     paymentDate: string;
-  }>;
+  }[];
 };

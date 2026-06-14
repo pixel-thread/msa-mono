@@ -1,12 +1,10 @@
 import React from 'react';
-import { View, RefreshControl } from 'react-native';
+import { RefreshControl } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
-import { useMeetingMinuite } from '../hooks';
+import { useMeetingMinute } from '../hooks';
 import { Container, StackHeader } from '@src/shared/components';
 import { EmptyScreen, LoadingScreen } from '@src/shared/components/screens';
-import { Text } from '@src/shared/components/ui';
-import { MinuteCard } from '../components/meeting-minute-card';
+import { MinuteCard } from '../components';
 import { FlashList } from '@shopify/flash-list';
 
 export const MeetingMinutesScreen = () => {
@@ -17,7 +15,7 @@ export const MeetingMinutesScreen = () => {
     isLoading,
     refetch,
     isRefetching,
-  } = useMeetingMinuite({ meetingId: id as string });
+  } = useMeetingMinute({ meetingId: id as string });
 
   if (isLoading)
     return (
@@ -37,8 +35,13 @@ export const MeetingMinutesScreen = () => {
         }
         renderItem={({ item }) => <MinuteCard minute={item} />}
         className="flex-1 p-4"
+        accessibilityLabel="Meeting minutes list"
         ListEmptyComponent={
-          <EmptyScreen title="No minutes recorded for this meeting." refresh={refetch} />
+          <EmptyScreen
+            title="No minutes recorded"
+            description="Minutes will appear here once they are added to this meeting."
+            refresh={refetch}
+          />
         }
       />
     </Container>

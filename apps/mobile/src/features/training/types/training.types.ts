@@ -2,21 +2,24 @@ import type { UserRole, UserStatus } from '@src/shared/types/role';
 
 export type TrainingAssignmentStatus = 'ASSIGNED' | 'IN_PROGRESS' | 'COMPLETED' | 'EXPIRED';
 
-type SupplementType = 'VIDEO' | 'IMAGE' | 'PDF';
-
 export interface TrainingSupplement {
   id: string;
   moduleId: string;
   title: string;
   description: string;
-  type: SupplementType;
-  fileUrl: 'https://picsum.photos/200/300';
+  downloadUrl: string;
   thumbnailUrl: string | null;
-  mimeType: string;
-  fileSize: number;
-  durationSeconds: number | null;
+  imageUrl: 'https://picsum.photos/200/300';
+  fileId: string;
   sortOrder: number;
   isActive: boolean;
+  file: {
+    url: string;
+    sizeBytes: number;
+    extension: string;
+    thumbnailUrl: string;
+    mimeType: string;
+  };
 }
 
 export interface TrainingModule {

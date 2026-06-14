@@ -1,8 +1,8 @@
-import React from 'react';
-import { RefreshControl, ActivityIndicator } from 'react-native';
+import React, { useCallback } from 'react';
+import { RefreshControl, ActivityIndicator, View } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 import { useMeetings } from '../hooks';
-import { LoadingScreen, ErrorScreen, EmptyScreen } from '@src/shared/components/screens';
+import { ErrorScreen, EmptyScreen } from '@src/shared/components/screens';
 import { MeetingCard } from '../components';
 import { Container, StackHeader } from '@src/shared/components';
 
@@ -22,11 +22,19 @@ export const MeetingListScreen = () => {
     isFetching,
   } = useMeetings();
 
+  const handleEndReached = useCallback(() => {
+    if (hasNextPage && !isFetchingNextPage && !isFetching) {
+      fetchNextPage();
+    }
+  }, [hasNextPage, isFetchingNextPage, isFetching, fetchNextPage]);
+
   if (isLoading) {
     return (
       <>
         <StackHeader title="Meetings" showBackButton={false} showDrawerButton />
-        <LoadingScreen message="Fetching meetings..." />
+        <View className="flex-1 items-center justify-center">
+          <ActivityIndicator size="large" color="#6366f1" />
+        </View>
       </>
     );
   }
@@ -44,12 +52,6 @@ export const MeetingListScreen = () => {
     );
   }
 
-  const handleEndReached = () => {
-    if (hasNextPage && !isFetchingNextPage && !isFetching) {
-      fetchNextPage();
-    }
-  };
-
   return (
     <>
       <StackHeader title="Meetings" showBackButton={false} showDrawerButton />
@@ -58,6 +60,7 @@ export const MeetingListScreen = () => {
           data={data?.meetings}
           renderItem={({ item }) => item && <MeetingCard meeting={item} />}
           keyExtractor={(item) => item.id.toString()}
+          accessibilityLabel="Meetings list"
           contentContainerClassName="p-4"
           showsVerticalScrollIndicator={false}
           onEndReached={handleEndReached}
@@ -69,8 +72,8 @@ export const MeetingListScreen = () => {
           }
           ListEmptyComponent={
             <EmptyScreen
-              title="No Meetings Scheduled"
-              description="Check back later for newly scheduled meetings."
+              title="No meetings yet"
+              description="When meetings are scheduled, they'll appear here."
               icon="calendar-clear-outline"
               refresh={() => refetch()}
             />

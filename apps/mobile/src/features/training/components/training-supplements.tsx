@@ -18,11 +18,13 @@ export const TrainingSupplements = ({ moduleId }: TrainingSupplementsProps) => {
 
   if (isError) {
     return (
-      <ErrorScreen
-        title="Failed to load supplements"
-        message="There was an error loading the supplements. Please try again."
-        onRetry={() => refetch()}
-      />
+      <>
+        <ErrorScreen
+          title="Failed to load supplements"
+          message="There was an error loading the supplements. Please try again."
+          onRetry={() => refetch()}
+        />
+      </>
     );
   }
 
@@ -40,9 +42,9 @@ export const TrainingSupplements = ({ moduleId }: TrainingSupplementsProps) => {
             .sort((a, b) => a.sortOrder - b.sortOrder)
             .map((supplement, index) => {
               const iconName =
-                supplement.type === 'VIDEO'
+                supplement.file.mimeType === 'video/mp4'
                   ? 'videocam-outline'
-                  : supplement.type === 'IMAGE'
+                  : supplement.file.mimeType === 'image/png'
                     ? 'image-outline'
                     : 'document-outline';
 
@@ -67,10 +69,10 @@ export const TrainingSupplements = ({ moduleId }: TrainingSupplementsProps) => {
                       </Text>
                     )}
 
-                    {supplement.thumbnailUrl && (
+                    {supplement.file.mimeType === 'image/png' && (
                       <View className="mt-1 overflow-hidden ">
                         <Image
-                          source={{ uri: supplement.thumbnailUrl }}
+                          source={{ uri: supplement.thumbnailUrl || supplement.file.url }}
                           className="h-32 w-full"
                           resizeMode="cover"
                         />
@@ -81,30 +83,22 @@ export const TrainingSupplements = ({ moduleId }: TrainingSupplementsProps) => {
                       <View className="flex-row items-center gap-x-1">
                         <Ionicons name="document-outline" size={12} color="#94a3b8" />
                         <Text variant="subtext" size="xs" className="text-slate-400">
-                          {formatFileSize(supplement.fileSize)}
+                          {formatFileSize(supplement.file.sizeBytes)}
                         </Text>
                       </View>
-                      {supplement.durationSeconds && (
-                        <View className="flex-row items-center gap-x-1">
-                          <Ionicons name="time-outline" size={12} color="#94a3b8" />
-                          <Text variant="subtext" size="xs" className="text-slate-400">
-                            {Math.round(supplement.durationSeconds / 60)} min
-                          </Text>
-                        </View>
-                      )}
                     </View>
                   </View>
 
                   <View className="flex-row items-center gap-1">
                     <TouchableOpacity
                       activeOpacity={0.7}
-                      onPress={() => handleFileShare(supplement.fileUrl, supplement.title)}
+                      onPress={() => handleFileShare(supplement.downloadUrl, supplement.title)}
                       className="p-2">
                       <Ionicons name="share-outline" size={20} color="#6366f1" />
                     </TouchableOpacity>
                     <TouchableOpacity
                       activeOpacity={0.7}
-                      onPress={() => handleFileDownload(supplement.fileUrl, supplement.title)}
+                      onPress={() => handleFileDownload(supplement.imageUrl, supplement.title)}
                       className="p-2">
                       <Ionicons name="download-outline" size={20} color="#6366f1" />
                     </TouchableOpacity>

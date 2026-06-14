@@ -61,6 +61,8 @@ export const getSupplements: RequestHandler[] = [
       moduleId: req.params.moduleId as string,
     });
 
+    console.log(supplements);
+
     logger.info({ traceId }, 'GET /training/modules/{moduleId}/supplements - Success');
     return success(res, { data: supplements });
   }),

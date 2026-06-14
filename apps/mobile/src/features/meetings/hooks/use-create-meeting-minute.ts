@@ -1,13 +1,13 @@
 import http from '@src/shared/utils/http';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { CreateMeetingMinuteInput } from '../validators/minuites';
+import { CreateMeetingMinuteInput } from '../validators/minutes';
 import { toast } from 'sonner-native';
 import { ENDPOINTS, QUERY_KEYS } from '@repo/shared';
 
 type Props = {
   meetingId: string;
 };
-export const useCreateMeetingMinuite = ({ meetingId }: Props) => {
+export const useCreateMeetingMinute = ({ meetingId }: Props) => {
   const queryClient = useQueryClient();
   const url = ENDPOINTS.MEETINGS.MINUTES.ADD(meetingId);
   return useMutation({
