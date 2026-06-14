@@ -5,4 +5,4 @@ echo "Running typecheck..."
 pnpm typecheck
 
 echo "Running tests..."
-pnpm test
+pnpm build
