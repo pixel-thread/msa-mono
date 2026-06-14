@@ -30,7 +30,7 @@ async function getAccountByCode(tx: Prisma.TransactionClient, associationId: str
         name: 'Cash In Hand',
         type: AccountType.ASSET,
         association: { connect: { id: associationId } },
-        description: 'Auto-Generated: Account created since it is missing',
+        description: 'Auto-Generated: Account created since it is missing.',
       },
     });
   }
