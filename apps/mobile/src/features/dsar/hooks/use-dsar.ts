@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import http from '@src/shared/utils/http';
 import { ENDPOINTS, QUERY_KEYS } from '@repo/shared';
 import { DSARRequest, DSARRequestDetail, SLAReport } from '../types/dsar.types';
+import { useAuthStore } from '@src/shared/store';
 
 /**
  * Hook to fetch the current user's DSAR requests.
@@ -9,10 +10,12 @@ import { DSARRequest, DSARRequestDetail, SLAReport } from '../types/dsar.types';
  * @returns Query result containing the user's DSAR requests
  */
 export const useMyDSARRequests = () => {
+  const { isAuthenticated } = useAuthStore();
   return useQuery({
     queryKey: QUERY_KEYS.DSAR_KEYS.MY(),
     queryFn: () => http.get<DSARRequest[]>(ENDPOINTS.DSAR.MY_LIST),
     select: (data) => data.data,
+    enabled: isAuthenticated,
   });
 };
 
@@ -23,10 +26,12 @@ export const useMyDSARRequests = () => {
  * @returns Query result containing all DSAR requests
  */
 export const useAllDSARRequests = (params?: Record<string, any>) => {
+  const { isAuthenticated } = useAuthStore();
   return useQuery({
     queryKey: QUERY_KEYS.DSAR_KEYS.TICKETS(params),
     queryFn: () => http.get<DSARRequest[]>(ENDPOINTS.DSAR.LIST, { params }),
     select: (data) => data.data,
+    enabled: isAuthenticated,
   });
 };
 
@@ -37,11 +42,12 @@ export const useAllDSARRequests = (params?: Record<string, any>) => {
  * @returns Query result containing the DSAR request detail
  */
 export const useDSARDetail = (ticketId: string) => {
+  const { isAuthenticated } = useAuthStore();
   return useQuery({
     queryKey: QUERY_KEYS.DSAR_KEYS.DETAIL(ticketId),
     queryFn: () => http.get<DSARRequest>(ENDPOINTS.DSAR.DETAIL(ticketId)),
     select: (data) => data.data,
-    enabled: !!ticketId,
+    enabled: !!ticketId && isAuthenticated,
   });
 };
 
@@ -52,11 +58,12 @@ export const useDSARDetail = (ticketId: string) => {
  * @returns Query result containing the DSAR request detail with responses
  */
 export const useMyDSARDetail = (ticketId: string) => {
+  const { isAuthenticated } = useAuthStore();
   return useQuery({
     queryKey: QUERY_KEYS.DSAR_KEYS.MY_DETAIL(ticketId),
     queryFn: () => http.get<DSARRequestDetail>(ENDPOINTS.DSAR.MY_DETAIL(ticketId)),
     select: (data) => data.data,
-    enabled: !!ticketId,
+    enabled: !!ticketId && isAuthenticated,
   });
 };
 
@@ -66,9 +73,11 @@ export const useMyDSARDetail = (ticketId: string) => {
  * @returns Query result containing the SLA report data
  */
 export const useSlaReport = () => {
+  const { isAuthenticated } = useAuthStore();
   return useQuery({
     queryKey: QUERY_KEYS.DSAR_KEYS.SLA_REPORT(),
     queryFn: () => http.get<SLAReport>(ENDPOINTS.DSAR.SLA_REPORT),
     select: (data) => data.data,
+    enabled: isAuthenticated,
   });
 };

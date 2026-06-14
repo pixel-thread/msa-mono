@@ -3,6 +3,7 @@ export const DSAR = {
   SUBMIT: '/dsar/submit',
   MY_LIST: '/dsar/my',
   MY_DETAIL: (ticketId: string) => `/dsar/my/${ticketId}`,
+  MY_CANCEL: (ticketId: string) => `/dsar/my/${ticketId}/cancel`,
   ADMINS: '/dsar/admins',
   SLA_REPORT: '/dsar/sla-report',
   DETAIL: (ticketId: string) => `/dsar/${ticketId}`,

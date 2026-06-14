@@ -30,10 +30,12 @@ export const useCancelCompliance = () => {
   return useMutation({
     mutationFn: (complianceId: string) =>
       http.post<Compliance>(`/compliance/my/${complianceId}/cancel`),
-    onSuccess: (data) => {
+    onSuccess: (data, variables) => {
       if (data.success) {
         queryClient.invalidateQueries({ queryKey: QUERY_KEYS.COMPLIANCE_KEYS.MY() });
-        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.COMPLIANCE_KEYS.MY_DETAIL() });
+        queryClient.invalidateQueries({
+          queryKey: QUERY_KEYS.COMPLIANCE_KEYS.MY_DETAIL(variables),
+        });
         toast.success(data.message || 'Compliance cancelled successfully');
         return data;
       }

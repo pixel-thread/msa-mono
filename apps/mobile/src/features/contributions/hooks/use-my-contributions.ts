@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { buildUrlWithQuery, ENDPOINTS, QUERY_KEYS } from '@repo/shared';
 import http from '@src/shared/utils/http';
 import type { ContributionPeriod } from '../types';
+import { useAuthStore } from '@src/shared/store';
 
 type ContributionsSummary = {
   totalExpected: number;
@@ -12,16 +13,20 @@ type ContributionsSummary = {
   pendingCount: number;
   waivedTotal: number;
 };
+type MyContributionResponse = {
+  contributions: ContributionPeriod[];
+  summary: ContributionsSummary;
+};
 export const useMyContributions = (status?: string, page?: number) => {
   const pageInitial = page || 1;
+  const { isAuthenticated } = useAuthStore();
   const query = useQuery({
     queryKey: QUERY_KEYS.CONTRIBUTIONS_KEYS.LIST(pageInitial, status),
     queryFn: async () =>
-      http.get<{ summary: ContributionsSummary; contributions: ContributionPeriod[] }>(
-        buildUrlWithQuery(ENDPOINTS.CONTRIBUTION.MY, {
-          status,
-        })
+      http.get<MyContributionResponse>(
+        buildUrlWithQuery(ENDPOINTS.CONTRIBUTION.MY, { status, page: pageInitial })
       ),
+    enabled: isAuthenticated,
   });
 
   return {

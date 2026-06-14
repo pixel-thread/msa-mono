@@ -87,11 +87,11 @@ export const useAssignDSAR = () => {
 export const useCancelDSAR = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (ticketId: string) => http.post<DSARRequest>(`/dsar/my/${ticketId}/cancel`),
-    onSuccess: (data) => {
+    mutationFn: (ticketId: string) => http.post<DSARRequest>(ENDPOINTS.DSAR.MY_CANCEL(ticketId)),
+    onSuccess: (data, variables) => {
       if (data.success) {
         queryClient.invalidateQueries({ queryKey: QUERY_KEYS.DSAR_KEYS.MY() });
-        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.DSAR_KEYS.MY_DETAIL() });
+        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.DSAR_KEYS.MY_DETAIL(variables) });
         toast.success(data.message || 'Request cancelled successfully');
         return data;
       }

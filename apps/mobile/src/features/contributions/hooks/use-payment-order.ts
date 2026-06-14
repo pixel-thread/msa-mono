@@ -7,7 +7,9 @@ import { toast } from 'sonner-native';
 export function usePaymentOption() {
   return useMutation({
     mutationFn: (contributionPeriodId: string) =>
-      http.post<RazorpayOptions>(ENDPOINTS.PAYMENTS.RAZORPAY.CREATE_ORDER, { contributionPeriodId }),
+      http.post<RazorpayOptions>(ENDPOINTS.PAYMENTS.RAZORPAY.CREATE_ORDER, {
+        contributionPeriodId,
+      }),
     onSuccess: (data) => {
       if (data.success) {
         return data.data;
