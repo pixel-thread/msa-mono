@@ -9,15 +9,17 @@ import { CONTRIBUTION } from "./contributions";
 import { CRON } from "./cron";
 import { DASHBOARD } from "./dashboard";
 import { DSAR } from "./dsar";
+import { EAS } from "./eas";
 import { HEALTH } from "./health";
 import { LEDGER } from "./ledger";
 import { LOGS } from "./logs";
 import { MEETINGS } from "./meetings";
 import { MEMBERS } from "./members";
 import { MEMBER_TYPES } from "./member-types";
+import { MEMBERSHIP_APPLICATIONS } from "./membership-applications";
 import { NOTIFICATIONS } from "./notifications";
 import { PAYMENTS } from "./payments";
-import { PLANS } from "./subscriptions";
+import { PLANS } from "./plans";
 import { TRAINING } from "./training";
 import { USER } from "./user";
 
@@ -33,12 +35,14 @@ export const ENDPOINTS = {
   CRON,
   DASHBOARD,
   DSAR,
+  EAS,
   HEALTH,
   LEDGER,
   LOGS,
   MEETINGS,
   MEMBERS,
   MEMBER_TYPES,
+  MEMBERSHIP_APPLICATIONS,
   NOTIFICATIONS,
   PAYMENTS,
   PLANS,

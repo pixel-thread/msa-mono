@@ -14,7 +14,7 @@ import { MEMBERS_KEYS } from './members'
 import { MEMBER_TYPES_KEYS } from './member-types'
 import { MEMBERSHIP_APPLICATIONS_KEYS } from './membership-applications'
 import { PAYMENTS_KEYS } from './payments'
-import { PLANS_KEYS } from './subscriptions'
+import { PLANS_KEYS } from './plans'
 import { TRAINING_KEYS } from './training'
 import { USER_KEYS } from './user'
 

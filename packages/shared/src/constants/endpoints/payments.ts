@@ -6,6 +6,7 @@ export const PAYMENTS = {
   DETAIL: (id: string) => `/payments/${id}`,
   RECEIPT: (id: string) => `/payments/${id}/receipt`,
   TRANSFER: '/payments/transfer',
+  TRANSFER_REFERENCE_FILE: (entryId: string) => `/payments/transfer/${entryId}/references/files`,
   RECORD: '/payments/record',
   RAZORPAY: {
     CREATE_ORDER: '/payments/order',
