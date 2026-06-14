@@ -11,6 +11,10 @@
     "test": "turbo test"
   },
   "devDependencies": {
+    "@commitlint/cli": "^21.0.2",
+    "@commitlint/config-conventional": "^21.0.2",
+    "commitizen": "^4.3.2",
+    "cz-git": "^1.13.1",
     "husky": "^9.1.7",
     "lint-staged": "^17.0.7",
     "turbo": "^2.0.0",
