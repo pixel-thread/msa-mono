@@ -40,13 +40,10 @@ export const postSignIn: RequestHandler[] = [
 
     const user = await getUserFirst({ where: { email: req.body?.email } });
     // check origin
-    let isMobile = false;
 
     const deviceType = req.headers['x-device-type'];
 
-    if (deviceType === 'mobile') {
-      isMobile = true;
-    }
+    const isMobile = deviceType === 'mobile';
 
     // ---- Handle invalid credentials & ----
     if (!user) {
@@ -178,6 +175,7 @@ export const postSignIn: RequestHandler[] = [
 
     // Set secure httpOnly cookies for both tokens
     setAccessTokenCookie(res, accessToken);
+
     setRefreshTokenCookie(res, refreshToken);
 
     return success(res, {
