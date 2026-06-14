@@ -19,6 +19,9 @@ export function useUploadAssociationLogo() {
       if (data.success) {
         toast.success('Logo uploaded successfully');
         queryClient.invalidateQueries({ queryKey: QUERY_KEYS.ASSOCIATIONS_KEYS.ALL() });
+        queryClient.invalidateQueries({
+          queryKey: QUERY_KEYS.ASSOCIATIONS_KEYS.CURRENT(),
+        });
         queryClient.invalidateQueries({ queryKey: QUERY_KEYS.ASSOCIATIONS_KEYS.LIST() });
         return;
       }
