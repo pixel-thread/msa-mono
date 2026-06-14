@@ -3,9 +3,10 @@ import { View, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTrainingSupplements } from '../hooks/use-training-supplements';
 import { formatFileSize, handleFileDownload, handleFileShare } from '../utils';
-import { LoadingScreen, ErrorScreen } from '@src/shared/components/screens';
+import { LoadingScreen, ErrorScreen, EmptyScreen } from '@src/shared/components/screens';
 import { Text, Image } from '@src/shared/components/ui';
 import { cn } from '@lib/cn';
+import { StackHeader } from '@src/shared/components';
 
 interface TrainingSupplementsProps {
   moduleId: string;
@@ -14,11 +15,18 @@ interface TrainingSupplementsProps {
 export const TrainingSupplements = ({ moduleId }: TrainingSupplementsProps) => {
   const { data: supplements, isLoading, isError, refetch } = useTrainingSupplements(moduleId);
 
-  if (isLoading) return <LoadingScreen message="Loading supplements..." />;
+  if (isLoading)
+    return (
+      <>
+        <StackHeader showBackButton title="Supplements" />
+        <LoadingScreen message="Loading supplements..." />
+      </>
+    );
 
   if (isError) {
     return (
       <>
+        <StackHeader showBackButton title="Supplements" />
         <ErrorScreen
           title="Failed to load supplements"
           message="There was an error loading the supplements. Please try again."
@@ -28,7 +36,13 @@ export const TrainingSupplements = ({ moduleId }: TrainingSupplementsProps) => {
     );
   }
 
-  if (!supplements || supplements.length === 0) return null;
+  if (!supplements || supplements.length === 0)
+    return (
+      <>
+        <StackHeader showBackButton title="Supplements" />
+        <EmptyScreen description="There are no supplements for this module." />
+      </>
+    );
 
   return (
     <View className="px-4 pb-8">
