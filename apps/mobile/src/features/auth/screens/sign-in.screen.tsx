@@ -18,10 +18,11 @@ import {
   CardFooter,
 } from '@src/shared/components/ui';
 import { useRateLimit } from '@src/shared/hooks/use-rate-limiting';
-import { useAuthStore } from '../store';
+import { useAuthStore, useSecureTokenStore } from '../store';
 
 export const SignInScreen = () => {
   const { isAuthenticated } = useAuthStore();
+  const { refreshToken } = useSecureTokenStore();
   const { isProcessing, isLimited, executeWithLimit } = useRateLimit('SIGN_IN', {
     limit: 3,
     windowMs: 10000,
@@ -36,7 +37,7 @@ export const SignInScreen = () => {
 
   const onSubmit = (data: SignInFormData) => executeWithLimit(() => signIn(data));
 
-  if (isAuthenticated) {
+  if (isAuthenticated && refreshToken) {
     return <Redirect href={'/'} />;
   }
 
