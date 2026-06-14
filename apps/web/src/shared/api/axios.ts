@@ -44,6 +44,8 @@ async function attemptTokenRefresh(): Promise<boolean> {
   return refreshPromise;
 }
 
+const isLogEndpoint = (url: string) => url.includes('/logs/batch');
+
 axiosClient.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     const traceId = crypto.randomUUID();
@@ -64,9 +66,11 @@ axiosClient.interceptors.request.use(
 
     (config as ExtendedConfig).__startTime = Date.now();
 
-    logger.info(`[→ ${method}] ${path}`, {
-      traceId,
-    });
+    if (!isLogEndpoint(path)) {
+      logger.info(`[→ ${method}] ${path}`, {
+        traceId,
+      });
+    }
 
     return config;
   },
@@ -81,11 +85,13 @@ axiosClient.interceptors.response.use(
     const duration = config.__startTime ? Date.now() - config.__startTime : 0;
     const traceId = (config.headers?.['x-trace-id'] as string) ?? '';
 
-    logger.info(`[← ${method}] ${path} — ${response.status} (${duration}ms)`, {
-      traceId,
-      status: response.status,
-      durationMs: duration,
-    });
+    if (!isLogEndpoint(path)) {
+      logger.info(`[← ${method}] ${path} — ${response.status} (${duration}ms)`, {
+        traceId,
+        status: response.status,
+        durationMs: duration,
+      });
+    }
 
     return response;
   },
@@ -98,12 +104,14 @@ axiosClient.interceptors.response.use(
     const status = error.response?.status ?? 0;
     const errorMessage = error.message;
 
-    logger.error(`[← ${method}] ${path} — ${status} (${duration}ms) — ${errorMessage}`, {
-      traceId,
-      status,
-      durationMs: duration,
-      error: errorMessage,
-    });
+    if (!isLogEndpoint(path)) {
+      logger.error(`[← ${method}] ${path} — ${status} (${duration}ms) — ${errorMessage}`, {
+        traceId,
+        status,
+        durationMs: duration,
+        error: errorMessage,
+      });
+    }
 
     if (status === 403 && originalRequest && !originalRequest._retry) {
       const isCsrfError = error.response?.data?.message

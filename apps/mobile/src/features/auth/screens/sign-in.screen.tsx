@@ -65,7 +65,7 @@ export const SignInScreen = () => {
             <CardTitle className="text-2xl tracking-widest">SIGN IN</CardTitle>
             <CardDescription>Enter your email and pasword to continue</CardDescription>
           </CardHeader>
-          <CardContent className="">
+          <CardContent>
             <FormProvider {...methods}>
               <View className="gap-y-2">
                 <FieldInput

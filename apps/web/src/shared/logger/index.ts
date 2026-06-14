@@ -1,7 +1,6 @@
 'use client';
 import { env } from '@src/env';
 
-import { axiosClient } from '../api';
 import { safeStringify } from '../utils/helper/safe-stringify';
 
 type LogLevel = 'info' | 'warn' | 'error' | 'debug';
@@ -41,7 +40,15 @@ const formatMessage = (level: LogLevel, message: string, context?: LogContext): 
 };
 
 const flushClient = async (batch: QueuedLog[]) => {
-  await axiosClient.post(`${env.NEXT_PUBLIC_API_BASE_URL}/logs/batch`, { logs: batch });
+  const response = await fetch(`${env.NEXT_PUBLIC_API_BASE_URL}/logs/batch`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ logs: batch }),
+    credentials: 'include',
+  });
+  if (!response.ok) {
+    throw new Error(`Log flush failed: ${response.status}`);
+  }
 };
 
 const flush = async () => {
