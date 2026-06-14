@@ -10,7 +10,7 @@ export function timeout(ms: number) {
       controller.abort();
 
       if (!res.headersSent) {
-        res.status(408).json({
+        return res.status(408).json({
           success: false,
           message: 'Request timeout: Connection timed out',
         });

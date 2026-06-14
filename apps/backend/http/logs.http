@@ -50,21 +50,101 @@ POST {{NEXT_PUBLIC_API_BASE_URL}}/logs/batch
 Content-Type: application/json
 
 {
-  "logs": [
-    {
-      "level": "error",
-      "message": "Payment failed",
-      "context": { "userId": "{{userId}}" }
+"logs":[
+  {
+    "level": "info",
+    "message": "[→ GET] /auth/me",
+    "context": {
+      "traceId": "234bd84c-5847-4826-9e77-5f4bd282af79"
     },
-    {
-      "level": "warn",
-      "message": "Slow query detected",
-      "context": { "duration": 2500 }
+    "timestamp": "2026-06-14T07:20:07.937Z"
+  },
+  {
+    "level": "error",
+    "message": "[← GET] /auth/me — 401 (1197ms) — Request failed with status code 401",
+    "context": {
+      "traceId": "234bd84c-5847-4826-9e77-5f4bd282af79",
+      "status": 401,
+      "durationMs": 1197,
+      "error": "Request failed with status code 401"
     },
-    {
-      "level": "info",
-      "message": "User logged in",
-      "context": { "userId": "{{userId}}" }
-    }
-  ]
+    "timestamp": "2026-06-14T07:20:09.134Z"
+  },
+  {
+    "level": "info",
+    "message": "[→ POST] https://msa-mono.onrender.com/api/v1/logs/batch",
+    "context": {
+      "traceId": "60776f00-8e36-4a1d-ab82-220f24da1747"
+    },
+    "timestamp": "2026-06-14T07:20:12.939Z"
+  },
+  {
+    "level": "info",
+    "message": "[→ GET] /auth/me",
+    "context": {
+      "traceId": "ce703824-6f21-46ce-860b-0b70f9780440"
+    },
+    "timestamp": "2026-06-14T07:20:13.217Z"
+  },
+  {
+    "level": "error",
+    "message": "[← POST] https://msa-mono.onrender.com/api/v1/logs/batch — 400 (475ms) — Request failed with status code 400",
+    "context": {
+      "traceId": "60776f00-8e36-4a1d-ab82-220f24da1747",
+      "status": 400,
+      "durationMs": 475,
+      "error": "Request failed with status code 400"
+    },
+    "timestamp": "2026-06-14T07:20:13.414Z"
+  },
+  {
+    "level": "error",
+    "message": "[← GET] /auth/me — 401 (705ms) — Request failed with status code 401",
+    "context": {
+      "traceId": "ce703824-6f21-46ce-860b-0b70f9780440",
+      "status": 401,
+      "durationMs": 705,
+      "error": "Request failed with status code 401"
+    },
+    "timestamp": "2026-06-14T07:20:13.922Z"
+  },
+  {
+    "level": "info",
+    "message": "[→ POST] https://msa-mono.onrender.com/api/v1/logs/batch",
+    "context": {
+      "traceId": "0ff05c99-8c3e-4e0c-899f-f8357478599b"
+    },
+    "timestamp": "2026-06-14T07:20:17.940Z"
+  },
+  {
+    "level": "error",
+    "message": "[← POST] https://msa-mono.onrender.com/api/v1/logs/batch — 400 (482ms) — Request failed with status code 400",
+    "context": {
+      "traceId": "0ff05c99-8c3e-4e0c-899f-f8357478599b",
+      "status": 400,
+      "durationMs": 482,
+      "error": "Request failed with status code 400"
+    },
+    "timestamp": "2026-06-14T07:20:18.421Z"
+  },
+  {
+    "level": "info",
+    "message": "[→ POST] https://msa-mono.onrender.com/api/v1/logs/batch",
+    "context": {
+      "traceId": "b008c2dc-81ca-46af-b9d2-598a33e33421"
+    },
+    "timestamp": "2026-06-14T07:20:22.938Z"
+  },
+  {
+    "level": "error",
+    "message": "[← POST] https://msa-mono.onrender.com/api/v1/logs/batch — 400 (766ms) — Request failed with status code 400",
+    "context": {
+      "traceId": "b008c2dc-81ca-46af-b9d2-598a33e33421",
+      "status": 400,
+      "durationMs": 766,
+      "error": "Request failed with status code 400"
+    },
+    "timestamp": "2026-06-14T07:20:23.704Z"
+  }
+]
 }

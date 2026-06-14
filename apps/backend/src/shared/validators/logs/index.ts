@@ -13,6 +13,7 @@ const LogEntrySchema = z
     level: z.enum(['info', 'warn', 'error', 'debug']),
     message: z.string().min(1),
     context: z.record(z.string(), z.unknown()).optional(),
+    timestamp: z.string().default(new Date().toISOString()).optional(),
   })
   .strict();
 

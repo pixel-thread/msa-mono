@@ -22,7 +22,7 @@ import type { NextFunction, Request, Response } from 'express';
 export const postLog: RequestHandler[] = [
   // ---- Validate input
 
-  validate({ body: LogIngestSchema.strict() }),
+  validate({ body: LogIngestSchema }),
 
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
     // ---- Setup
