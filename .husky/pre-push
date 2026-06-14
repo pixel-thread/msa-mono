@@ -5,4 +5,4 @@ echo "Running typecheck..."
 pnpm typecheck
 
 echo "Running tests..."
-pnpm build
+pnpm turbo run build --filter=[origin/master]
