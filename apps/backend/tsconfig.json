@@ -32,6 +32,6 @@
       "@sharedType/*": ["./src/shared/types/*"]
     }
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "**/*.ts" ],
   "exclude": ["node_modules", "dist", "src/__tests__", "src/__mocks__"]
 }
