@@ -3,75 +3,58 @@ import { View, ScrollView, TouchableOpacity, RefreshControl } from 'react-native
 import { Ionicons } from '@expo/vector-icons';
 import { useAuthStore } from '@src/shared/store';
 import { Container, StackHeader } from '@components/common';
-import { Card, CardContent, Text } from '@components/ui';
+import { Card, Text } from '@components/ui';
 import { useRouter } from 'expo-router';
-import { useMeetings } from '@features/meetings/hooks';
-import { useTrainingModules } from '@features/training/hooks';
-import { useAnnouncements } from '@features/announcements/hooks';
-import { useNotifications } from '@src/shared/hooks/use-notifications';
-import { formattedDate, formattedTime } from '@utils/format';
-import { LoadingScreen } from '@components/screens';
-import { DashboardActivityCard } from '../components/dashboard-activity-card';
-import { DashboardBentoCard } from '../components/dasboard-bento-card';
+import { formattedDate } from '@utils/format';
+import { ErrorScreen, LoadingScreen } from '@components/screens';
+import { useDashboard } from '../hooks';
 import { DashboardRightActions } from '../components/dashboard-right-actions';
+
+const quickActions = [
+  {
+    icon: 'calendar-outline' as const,
+    label: 'Schedule',
+    route: '/(protected)/(drawer)/(tabs)/meetings' as const,
+  },
+  { icon: 'document-text-outline' as const, label: 'Docs', route: null },
+  { icon: 'school-outline' as const, label: 'Training', route: '/(protected)/training' as const },
+  { icon: 'people-outline' as const, label: 'Members', route: null },
+  { icon: 'settings-outline' as const, label: 'Settings', route: null },
+];
 
 export const DashboardScreen = () => {
   const { user } = useAuthStore();
-
   const router = useRouter();
-
-  const {
-    data: meetingsData,
-    isFetching: isMeetingsFetching,
-    refetch: refetchMeetings,
-  } = useMeetings({ limit: 1 });
-
-  const {
-    data: trainingModules,
-    isFetching: isTrainingFetching,
-    refetch: refetchTraining,
-  } = useTrainingModules();
-
-  const {
-    data: announcements,
-    isFetching: isAnnouncementsFetching,
-    refetch: refetchAnnouncements,
-  } = useAnnouncements();
-
-  const { notification } = useNotifications();
-
-  const nextMeeting = meetingsData?.meetings?.[0];
-  const latestAnnouncement = announcements?.[0];
-  const pendingTrainingCount = trainingModules?.length || 0; // Simplified for now
-
-  const isFetching = isMeetingsFetching || isTrainingFetching || isAnnouncementsFetching;
+  const { data: overview, isFetching, refetch, isError, error } = useDashboard();
 
   const onRefresh = React.useCallback(() => {
-    refetchMeetings();
-    refetchTraining();
-    refetchAnnouncements();
-  }, [refetchMeetings, refetchTraining, refetchAnnouncements]);
+    refetch();
+  }, [refetch]);
 
-  if (isFetching || !meetingsData || !trainingModules) {
+  if (isFetching && !overview) {
     return (
       <>
         <StackHeader
           title={'Home'}
           showDrawerButton={true}
-          rightAction={
-            <View className="px-2">
-              <TouchableOpacity
-                onPress={() => router.push('/announcements')}
-                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
-                <Ionicons name="megaphone-outline" size={28} />
-              </TouchableOpacity>
-            </View>
-          }
+          rightAction={<DashboardRightActions />}
         />
         <LoadingScreen message="Loading..." />
       </>
     );
   }
+
+  if (isError) {
+    return (
+      <>
+        <StackHeader title="Home" showDrawerButton={true} rightAction={<DashboardRightActions />} />
+        <ErrorScreen message={error?.message} title="Something went wrong" retryText="Retry" />
+      </>
+    );
+  }
+
+  const stats = overview?.stats;
+  const recentPayments = overview?.recentPayments ?? [];
 
   return (
     <Container>
@@ -98,120 +81,175 @@ export const DashboardScreen = () => {
           </Text>
         </View>
 
-        {/* Bento Grid: Row 1 (Quick Actions & Training) */}
-        <View className="mb-4 flex-row gap-4 px-4">
-          <View className="flex-1 gap-4">
-            <DashboardBentoCard
-              icon="calendar"
-              title="Schedule"
-              subtitle="View all"
-              color="bg-indigo-600"
-              iconColor="#fff"
-              textColor="text-white"
-              onPress={() => router.push('/(protected)/(drawer)/(tabs)/meetings')}
-            />
-            <DashboardBentoCard
-              icon="document-text"
-              title="Docs"
-              subtitle="Library"
-              color="bg-slate-800"
-              iconColor="#fff"
-              textColor="text-white"
-              onPress={() => {}}
-            />
-          </View>
-          <View className="flex-1">
-            <DashboardBentoCard
-              className="w-full flex-1 items-center justify-center bg-emerald-50 dark:bg-emerald-950/30"
-              icon="school"
-              title="Training"
-              subtitle={`${pendingTrainingCount} pending`}
-              color="bg-transparent"
-              iconColor="text-emerald-600 dark:text-emerald-400"
-              textColor="text-slate-900 dark:text-white"
-              iconSize={48}
-              onPress={() => router.push('/(protected)/training')}
-            />
-          </View>
-        </View>
-
-        {/* Bento Grid: Row 2 (Next Meeting) */}
-        {nextMeeting && (
-          <View className="mb-4 px-4">
-            <TouchableOpacity
-              activeOpacity={0.9}
-              onPress={() => router.push(`/(protected)/meetings/${nextMeeting.id}`)}>
-              <Card className="overflow-hidden border-0 bg-white shadow-sm dark:bg-slate-900">
-                <View className="absolute right-0 top-0 h-32 w-32 -translate-y-10 translate-x-10 bg-indigo-500/10 dark:bg-indigo-500/5" />
-                <CardContent className="p-6">
-                  <View className="mb-4 flex-row items-center justify-between">
-                    <View className="flex-row items-center gap-2">
-                      <View className="h-2 w-2 bg-indigo-500" />
-                      <Text
-                        weight="bold"
-                        size="xs"
-                        className="uppercase tracking-widest text-indigo-500">
-                        Next Up
-                      </Text>
-                    </View>
-                    <Ionicons name="arrow-forward" size={20} color="#64748b" />
-                  </View>
-                  <Text
-                    variant="heading"
-                    size="2xl"
-                    className="mb-3 text-slate-900 dark:text-white"
-                    numberOfLines={1}>
-                    {nextMeeting.title}
-                  </Text>
-                  <View className="flex-row items-center gap-x-4">
-                    <View className="flex-row items-center gap-x-1.5 bg-slate-50 px-3 py-1.5 dark:bg-slate-800">
-                      <Ionicons name="time" size={16} color="#4f46e5" />
-                      <Text
-                        weight="semibold"
-                        size="sm"
-                        className="text-slate-700 dark:text-slate-300">
-                        {formattedTime(new Date(nextMeeting.scheduledAt))}
-                      </Text>
-                    </View>
-                  </View>
-                </CardContent>
-              </Card>
-            </TouchableOpacity>
+        {/* Stats Row */}
+        {stats && (
+          <View className="mb-6 flex-row gap-2 bg-slate-200 px-4 dark:bg-slate-800">
+            <View className="flex-1 bg-white p-4 dark:bg-slate-900">
+              <Ionicons name="people" size={22} color="#4f46e5" />
+              <Text size="2xl" weight="bold" className="mt-2 text-slate-900 dark:text-white">
+                {stats.totalMembers}
+              </Text>
+              <Text size="xs" className="text-slate-500 dark:text-slate-400">
+                Members
+              </Text>
+            </View>
+            <View className="flex-1 bg-white p-4 dark:bg-slate-900">
+              <Ionicons name="cash" size={22} color="#059669" />
+              <Text size="2xl" weight="bold" className="mt-2 text-slate-900 dark:text-white">
+                ₹{stats.totalRevenueMonth}
+              </Text>
+              <Text size="xs" className="text-slate-500 dark:text-slate-400">
+                Revenue
+              </Text>
+            </View>
+            <View className="flex-1 bg-white p-4 dark:bg-slate-900">
+              <Ionicons name="alert-circle" size={22} color="#dc2626" />
+              <Text size="2xl" weight="bold" className="mt-2 text-slate-900 dark:text-white">
+                ₹{stats.pendingDuesAmount}
+              </Text>
+              <Text size="xs" className="text-slate-500 dark:text-slate-400">
+                Dues
+              </Text>
+            </View>
           </View>
         )}
 
-        {/* Bento Grid: Row 3 (Recent Activity / Feed) */}
+        {/* Quick Actions */}
+        <View className="mb-6 border-b border-t border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
+          <View className="flex-row px-4 py-5">
+            {quickActions.map((action) => (
+              <TouchableOpacity
+                key={action.label}
+                onPress={() => {
+                  if (action.route) router.push(action.route);
+                }}
+                activeOpacity={0.6}
+                className="flex-1 items-center gap-1.5">
+                <View className="items-center justify-center border border-slate-200 px-5 py-3 dark:border-slate-700">
+                  <Ionicons name={action.icon} size={22} color="#64748b" />
+                </View>
+                <Text size="xs" className="text-slate-500 dark:text-slate-400">
+                  {action.label}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </View>
+
+        {/* Recent Payments */}
+        {recentPayments.length > 0 && (
+          <View className="mb-6 px-4">
+            <Text variant="heading" size="lg" className="mb-3 px-1 text-slate-900 dark:text-white">
+              Recent Payments
+            </Text>
+            <Card className="overflow-hidden border-0 bg-white shadow-sm dark:bg-slate-900">
+              {recentPayments.slice(0, 5).map((payment, index) => (
+                <View
+                  key={payment.id}
+                  className={`flex-row items-center justify-between px-5 py-4 ${
+                    index < recentPayments.slice(0, 5).length - 1
+                      ? 'border-b border-slate-100 dark:border-slate-800'
+                      : ''
+                  }`}>
+                  <View className="flex-1 flex-row items-center gap-3">
+                    <View
+                      className={`h-10 w-10 items-center justify-center ${
+                        payment.status === 'COMPLETED'
+                          ? 'bg-emerald-50 dark:bg-emerald-950/30'
+                          : 'bg-amber-50 dark:bg-amber-950/30'
+                      }`}>
+                      <Ionicons
+                        name={payment.status === 'COMPLETED' ? 'checkmark' : 'time'}
+                        size={18}
+                        color={payment.status === 'COMPLETED' ? '#059669' : '#d97706'}
+                      />
+                    </View>
+                    <View className="flex-1">
+                      <Text
+                        weight="semibold"
+                        size="sm"
+                        className="text-slate-900 dark:text-white"
+                        numberOfLines={1}>
+                        {payment.userName}
+                      </Text>
+                      <Text size="xs" className="text-slate-500 dark:text-slate-400">
+                        {new Date(payment.paymentDate).toLocaleDateString()}
+                      </Text>
+                    </View>
+                  </View>
+                  <View className="items-end">
+                    <Text
+                      weight="bold"
+                      className={
+                        payment.status === 'COMPLETED'
+                          ? 'text-slate-900 dark:text-white'
+                          : 'text-amber-600'
+                      }>
+                      ₹{payment.amount}
+                    </Text>
+                    {payment.method && (
+                      <Text size="xs" className="text-slate-400 dark:text-slate-500">
+                        {payment.method}
+                      </Text>
+                    )}
+                  </View>
+                </View>
+              ))}
+            </Card>
+          </View>
+        )}
+
+        {/* Activity Section */}
         <View className="px-4 pb-12">
           <Text variant="heading" size="lg" className="mb-4 px-1 text-slate-900 dark:text-white">
             Activity
           </Text>
-          <View className="gap-3">
-            {notification && (
-              <DashboardActivityCard
-                icon="notifications"
-                color="bg-rose-50 dark:bg-rose-950/30"
-                iconColor="text-rose-500"
-                title={notification.request.content.title || 'New Notification'}
-                description={notification.request.content.body || 'Tap to view details'}
-              />
+          <View className="gap-px bg-slate-200 dark:bg-slate-800">
+            {stats && stats.newMembersThisMonth > 0 && (
+              <View className="flex-row items-center gap-4 bg-white p-4 dark:bg-slate-900">
+                <View className="h-12 w-12 items-center justify-center bg-indigo-100 dark:bg-indigo-900/50">
+                  <Ionicons name="person-add" size={22} color="#4f46e5" />
+                </View>
+                <View className="flex-1">
+                  <Text weight="semibold" size="sm" className="text-slate-900 dark:text-white">
+                    {stats.newMembersThisMonth} new member
+                    {stats.newMembersThisMonth !== 1 ? 's' : ''}
+                  </Text>
+                  <Text size="xs" className="text-slate-500 dark:text-slate-400">
+                    Joined this month
+                  </Text>
+                </View>
+              </View>
             )}
-
-            {latestAnnouncement ? (
-              <DashboardActivityCard
-                icon="megaphone"
-                color="bg-amber-50 dark:bg-amber-950/30"
-                iconColor="text-amber-500"
-                title={latestAnnouncement.title}
-                description={latestAnnouncement.content}
-              />
-            ) : (
-              <DashboardActivityCard
-                icon="checkmark-circle"
-                color="bg-slate-50 dark:bg-slate-800/50"
-                iconColor="text-slate-400"
-                title="All caught up"
-                description="No new announcements"
-              />
+            {stats && stats.activeMembers > 0 && (
+              <View className="flex-row items-center gap-4 bg-white p-4 dark:bg-slate-900">
+                <View className="h-12 w-12 items-center justify-center bg-emerald-100 dark:bg-emerald-900/50">
+                  <Ionicons name="people" size={22} color="#059669" />
+                </View>
+                <View className="flex-1">
+                  <Text weight="semibold" size="sm" className="text-slate-900 dark:text-white">
+                    {stats.activeMembers} active member{stats.activeMembers !== 1 ? 's' : ''}
+                  </Text>
+                  <Text size="xs" className="text-slate-500 dark:text-slate-400">
+                    Out of {stats.totalMembers} total
+                  </Text>
+                </View>
+              </View>
+            )}
+            {!stats?.newMembersThisMonth && !stats?.activeMembers && (
+              <View className="flex-row items-center gap-4 bg-white p-4 dark:bg-slate-900">
+                <View className="h-12 w-12 items-center justify-center bg-slate-200 dark:bg-slate-700">
+                  <Ionicons name="checkmark-circle" size={22} color="#94a3b8" />
+                </View>
+                <View className="flex-1">
+                  <Text weight="semibold" size="sm" className="text-slate-900 dark:text-white">
+                    All caught up
+                  </Text>
+                  <Text size="xs" className="text-slate-500 dark:text-slate-400">
+                    No recent activity
+                  </Text>
+                </View>
+              </View>
             )}
           </View>
         </View>

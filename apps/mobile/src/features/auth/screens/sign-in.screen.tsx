@@ -1,6 +1,6 @@
 import React from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
-import { View, Image, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import { View,  KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import { Link, Redirect } from 'expo-router';
 import { zodResolver } from '@hookform/resolvers/zod';
 
