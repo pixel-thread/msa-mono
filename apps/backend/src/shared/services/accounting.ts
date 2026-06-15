@@ -19,8 +19,8 @@ export interface CreateEntryOptions {
 }
 
 async function getAccountByCode(tx: Prisma.TransactionClient, associationId: string, code: string) {
-  let account = await tx.account.findFirst({
-    where: { associationId, code, isActive: true },
+  let account = await tx.account.findUnique({
+    where: { associationId_code: { associationId, code }, isActive: true },
   });
   // if account does not exist then create
   if (!account) {

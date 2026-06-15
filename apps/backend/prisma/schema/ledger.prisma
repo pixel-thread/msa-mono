@@ -42,6 +42,7 @@ model Account {
   type          AccountType
   description   String?
   isActive      Boolean  @default(true)
+  status        Status @default(ACTIVE)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
@@ -50,6 +51,7 @@ model Account {
 
   @@index([associationId])
   @@index([code])
+  @@index([associationId, code])
   @@unique([associationId, code])
   @@map("accounts")
 }
