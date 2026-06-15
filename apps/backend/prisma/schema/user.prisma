@@ -7,6 +7,9 @@ model User {
   associationId            String
   email                    String        @unique
   name                     String
+  firstName                String
+  middleName               String?
+  lastName                 String?
   mobile                   String?
   designation              String?
   role                     UserRole[]
@@ -70,7 +73,8 @@ model MembershipApplication {
   phone           String
   associationSlug String
   firstName       String?
-  lastName        String
+  middleName      String?
+  lastName        String?
   dateOfBirth     DateTime
   age             Int
   gender          String?

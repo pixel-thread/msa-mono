@@ -30,7 +30,8 @@ export const MembershipApplicationSchema = z
     phone: z.string().min(10, 'Phone number must be at least 10 digits'),
     associationSlug: z.enum(associationsSlug, 'Invalid association'),
     firstName: z.string().min(3, 'First name must be at least 3 characters'),
-    lastName: z.string().min(3, 'Last name must be at least 3 characters'),
+    lastName: z.string().min(3, 'Last name must be at least 3 characters').optional(),
+    middleName: z.string().optional(),
     dateOfBirth: z.coerce.date('Invalid date of birth').transform((val) => new Date(val)),
     age: z
       .number('Age must be a number')

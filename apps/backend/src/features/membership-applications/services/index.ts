@@ -23,7 +23,8 @@ type CreateApplicationProps = {
   phone: string;
   associationSlug: string;
   firstName: string;
-  lastName: string;
+  middleName?: string;
+  lastName?: string;
   dateOfBirth: Date;
   age: number;
   gender: string;
@@ -97,7 +98,8 @@ export async function createMembershipApplication(data: CreateApplicationProps) 
       phone: data.phone,
       associationSlug: data.associationSlug,
       firstName: data.firstName,
-      lastName: data.lastName,
+      lastName: data.lastName ?? '',
+      middleName: data.middleName ?? '',
       dateOfBirth: new Date(data.dateOfBirth),
       age: data.age,
       gender: data.gender,
@@ -233,7 +235,10 @@ export async function approveMembershipApplication({
     const user = await tx.user.create({
       data: {
         email: application.email,
-        name: `${application.firstName} ${application.lastName}`,
+        name: `${application.firstName} ${application.middleName} ${application.lastName}`,
+        firstName: application.firstName,
+        middleName: application.middleName,
+        lastName: application.lastName,
         mobile: application.phone,
         associationId: association.id,
         role: [role],
@@ -246,7 +251,9 @@ export async function approveMembershipApplication({
       select: {
         id: true,
         email: true,
-        name: true,
+        firstName: true,
+        middleName: true,
+        lastName: true,
         role: true,
         status: true,
       },
