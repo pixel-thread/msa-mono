@@ -191,7 +191,7 @@ export function SignUpPage() {
                     </Alert>
                   )}
 
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-3 gap-4">
                     <FormField
                       control={form.control}
                       name="firstName"
@@ -200,6 +200,20 @@ export function SignUpPage() {
                           <FormLabel>First Name</FormLabel>
                           <FormControl>
                             <Input placeholder="First name" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="middleName"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Last Name</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Middle name" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
