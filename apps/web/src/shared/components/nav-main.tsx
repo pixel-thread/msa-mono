@@ -89,7 +89,7 @@ export function NavMain({
                               buttonVariants({
                                 variant: subItem.url === pathname ? 'link' : 'ghost',
                                 size: 'xs',
-                                className: 'w-full justify-start text-muted',
+                                className: 'w-full font-medium justify-start text-muted',
                               }),
                             )}
                             to={subItem.url}
