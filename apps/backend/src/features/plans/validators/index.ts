@@ -49,3 +49,7 @@ export const SetDefaultPlanSchema = z.object({
 
 /** Schema for plan ID path parameter. */
 export const PlanParamsSchema = z.object({ planId: z.uuid() });
+
+export const PlanQuerySchema = z.object({
+  page: pageNumberValidation,
+});

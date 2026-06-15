@@ -23,5 +23,15 @@ type Props = {
 //   handlers so that write access goes through a single Prisma gateway.
 // ---------------------------------------------------------------------------
 export async function updateMember({ data, where }: Props) {
-  return await prisma.user.update({ where, data });
+  return await prisma.user.update({
+    where,
+    data,
+    omit: {
+      password: true,
+      passwordResetExpires: true,
+      passwordResetToken: true,
+      failedLoginAttempts: true,
+      lockedUntil: true,
+    },
+  });
 }

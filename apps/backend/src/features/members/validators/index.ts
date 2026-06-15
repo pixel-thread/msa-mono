@@ -48,6 +48,14 @@ export const UpdateMemberRoleSchema = z
 
 export type UpdateMemberRoleInput = z.infer<typeof UpdateMemberRoleSchema>;
 
+export const UpdateMemberTypeSchema = z
+  .object({
+    memberTypeId: z.uuid('Member type is required'),
+  })
+  .strict();
+
+export type UpdateMemberTypeInput = z.infer<typeof UpdateMemberTypeSchema>;
+
 export const MemberOnboardingSchema = z
   .object({
     dateOfJoiningGovt: z.coerce

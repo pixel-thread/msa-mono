@@ -1,5 +1,6 @@
 import { PrismaPg } from '@prisma/adapter-pg';
-import { AccountType, Prisma, PrismaClient, UserRole, UserStatus } from '@prisma/client';
+import type { AccountType} from '@prisma/client';
+import { Prisma, PrismaClient, UserRole, UserStatus } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 import { Pool } from 'pg';
 

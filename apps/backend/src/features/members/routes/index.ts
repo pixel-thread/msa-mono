@@ -7,6 +7,7 @@
 import { auth } from '@src/middleware/auth';
 import { Router } from 'express';
 
+import { changeMemberType, removeMemberType } from './change-member-type.route';
 import { addRole, removeRole } from './change-role.route';
 import { deleteMember } from './delete-member.route';
 import { getMember } from './get-member.route';
@@ -41,6 +42,10 @@ router.post('/:memberId/suspend', suspendMember);
 // ── Roles ──────────────────────────────────────────────────────────────────
 router.post('/:memberId/role', addRole);
 router.put('/:memberId/role', removeRole);
+
+// ── Member type ──────────────────────────────────────────────────────────────────
+router.post('/:memberId/type', changeMemberType);
+router.put('/:memberId/type', removeMemberType);
 
 // ── Ledger / onboarding ────────────────────────────────────────────────────
 router.get('/:memberId/ledger', getMemberLedger);

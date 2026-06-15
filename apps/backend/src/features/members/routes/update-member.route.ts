@@ -84,7 +84,7 @@ export const updateMemberRoute: RequestHandler[] = [
           dateOfJoiningAssociation: body.dateOfJoiningAssociation,
         }),
         ...(body.membershipNumber && { membershipNumber: body.membershipNumber }),
-        ...(body.associationId && { associationId: body.associationId }),
+        // ...(body.associationId && { associationId: body.associationId }),
       },
     });
 

@@ -11,6 +11,7 @@ import { prisma } from '@lib/prisma';
 // Prisma
 // ---------------------------------------------------------------------------
 import { ContributionStatus, type Prisma, Status, type UserRole } from '@prisma/client';
+import { buildPaginationParams } from '@src/shared/utils';
 import { hasHighRoleAccess } from '@utils/has-high-role';
 
 // ---- Interfaces --------------------------------------------------------------
@@ -40,10 +41,16 @@ interface UpdatePlanInput {
 export async function getPlans(
   associationId: string,
   user: { role: UserRole[]; memberTypeId?: string | null },
+  page?: number,
 ) {
+  const initialPage = page || 1;
+  const { take, skip } = buildPaginationParams(initialPage);
+
   if (hasHighRoleAccess(user.role)) {
     const plans = await prisma.plan.findMany({
       where: { associationId },
+      take,
+      skip,
       include: {
         memberType: true,
         versions: {
@@ -69,6 +76,7 @@ export async function getPlans(
     whereClause.memberTypeId = user.memberTypeId;
   } else {
     whereClause.memberTypeId = null;
+    whereClause.isDefault = true;
   }
 
   const plans = await prisma.plan.findMany({

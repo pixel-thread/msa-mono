@@ -15,8 +15,9 @@ import { validate } from '@lib/validate';
 // ---------------------------------------------------------------------------
 // Prisma
 // ---------------------------------------------------------------------------
-import { UserRole } from '@prisma/client';
+import { AuditAction, UserRole } from '@prisma/client';
 import { logger } from '@src/shared/logger';
+import { logAction } from '@src/shared/services';
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';
@@ -161,6 +162,17 @@ export const removeRole: RequestHandler[] = [
     const updatedUser = await updateMember({
       where: { id: params?.memberId },
       data: { role: userRole.filter((role) => role !== removeRoleVal) },
+    });
+
+    await logAction({
+      actorId: userId,
+      action: AuditAction.UPDATE,
+      resourceType: 'MEMBER',
+      resourceId: params?.memberId,
+      associationId: target?.associationId || '',
+      oldValues: { role: target?.role },
+      newValues: { role: userRole },
+      traceId,
     });
 
     // ── Result log & response ───────────────────────────────────────────────

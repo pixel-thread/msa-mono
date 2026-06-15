@@ -19,6 +19,7 @@ import {
 import {
   CreatePlanSchema,
   PlanParamsSchema,
+  PlanQuerySchema,
   SetDefaultPlanSchema,
   UpdatePlanSchema,
 } from '@feature/plans/validators';
@@ -41,9 +42,12 @@ import type { NextFunction, Request, Response } from 'express';
 /** @desc  List plans for the association
  *  @role  MEMBER */
 export const getPlansHandler: RequestHandler[] = [
+  validate({ query: PlanQuerySchema }),
   asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
+    const page = parseInt(req.query.page as string) || 1;
+
     const traceId = (req.traceId as string) || '';
-    const user = await withRole(req, UserRole.MEMBER);
+    const user = await withRole(req, UserRole.FINANCE);
     logger.info({ traceId, role: user.role }, 'GET /api/v1/plans - Fetching plans');
     const data = await getPlans(req.user!.associationId, user);
     return success(res, { data });
