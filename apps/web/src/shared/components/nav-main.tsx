@@ -57,7 +57,14 @@ export function NavMain({
                 >
                   <Link preload="intent" to={item.url}>
                     {item.icon}
-                    <span>{item.title}</span>
+                    <span
+                      className={cn(
+                        'flex items-center',
+                        item.url === pathname ? 'font-bold underline' : 'font-normal',
+                      )}
+                    >
+                      {item.title}
+                    </span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -89,12 +96,15 @@ export function NavMain({
                               buttonVariants({
                                 variant: subItem.url === pathname ? 'link' : 'ghost',
                                 size: 'xs',
-                                className: 'w-full font-medium justify-start text-muted',
+                                className: cn(
+                                  'w-full justify-start text-muted',
+                                  subItem.url === pathname ? 'font-bold' : 'font-normal',
+                                ),
                               }),
                             )}
                             to={subItem.url}
                           >
-                            {subItem.url === pathname && <ArrowRight className="mr-2" />}
+                            {subItem.url === pathname && <ArrowRight className="mr-2 font-bold" />}
                             <span className="text-secondary-foreground capitalize">
                               {subItem.title}
                             </span>
