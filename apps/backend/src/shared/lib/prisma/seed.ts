@@ -1,5 +1,5 @@
 import { PrismaPg } from '@prisma/adapter-pg';
-import type { AccountType} from '@prisma/client';
+import type { AccountType } from '@prisma/client';
 import { Prisma, PrismaClient, UserRole, UserStatus } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 import { Pool } from 'pg';
@@ -47,6 +47,13 @@ const ASSOCIATIONS = [
     slug: 'mfsa',
     short: 'mfsa',
     name: 'Meghalaya Finance Service Association',
+    primaryColor: '#1e3a8a',
+    secondaryColor: '#3b82f6',
+  },
+  {
+    slug: 'mpsa',
+    short: 'mpsa',
+    name: 'Meghalaya Police Service Association',
     primaryColor: '#1e3a8a',
     secondaryColor: '#3b82f6',
   },

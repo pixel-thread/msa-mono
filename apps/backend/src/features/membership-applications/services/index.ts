@@ -10,7 +10,9 @@ import { generateRandomPassword, hashPassword } from '@lib/password';
 import { prisma } from '@lib/prisma';
 import type { Prisma } from '@prisma/client';
 import { ApplicationStatus, UserRole } from '@prisma/client';
+import { updateUser } from '@src/features/user/services';
 import { PAGE_SIZE } from '@src/shared/constants';
+import { findUniqueUser } from '@src/shared/services';
 import { buildPagination } from '@src/shared/utils/helper/build-pagination';
 
 // ---- Types (Private)
@@ -44,6 +46,7 @@ type ApproveApplicationProps = {
   memberTypeId?: string | null;
   role?: UserRole;
   dateOfJoiningGovt?: Date;
+  associationId: string;
   reviewedBy: string;
 };
 
@@ -159,11 +162,17 @@ export async function approveMembershipApplication({
   applicationId,
   memberTypeId,
   role = UserRole.MEMBER,
+  associationId,
   dateOfJoiningGovt,
   reviewedBy,
 }: ApproveApplicationProps) {
+  const association = await prisma.association.findUnique({
+    where: { id: associationId },
+    select: { slug: true, id: true },
+  });
+
   const application = await prisma.membershipApplication.findUnique({
-    where: { id: applicationId },
+    where: { id: applicationId, associationSlug: association?.slug },
   });
 
   if (!application) {
@@ -178,49 +187,47 @@ export async function approveMembershipApplication({
     throw new ConflictError('Application has been rejected and cannot be approved');
   }
 
-  const association = await prisma.association.findFirst({
-    where: { slug: application.associationSlug },
-    select: { id: true },
-  });
-
   if (!association) {
     throw new NotFoundError('Association not found');
-  }
-
-  const existingUser = await prisma.user.findFirst({
-    where: {
-      email: application.email,
-      associationId: association.id,
-    },
-  });
-
-  if (existingUser) {
-    throw new ConflictError('A user with this email already exists in the association');
-  }
-
-  let planForCurrentUser;
-
-  if (memberTypeId) {
-    planForCurrentUser = await prisma.plan.findFirst({
-      where: { memberTypeId, isActive: true },
-      include: { versions: { take: 1, orderBy: { createdAt: 'desc' } } },
-    });
-  }
-
-  if (!planForCurrentUser) {
-    planForCurrentUser = await prisma.plan.findFirst({
-      where: { isDefault: true, isActive: true },
-      include: { versions: { take: 1, orderBy: { createdAt: 'desc' } } },
-    });
-  }
-
-  if (!planForCurrentUser) {
-    throw new NotFoundError('Cannot create user: Without any active plan');
   }
 
   const randomPassword = generateRandomPassword();
 
   const hashedPassword = await hashPassword(randomPassword);
+
+  const existingUser = await findUniqueUser({
+    where: { email: application.email },
+  });
+
+  if (existingUser) {
+    const { user, updatedApplication } = await prisma.$transaction(async (tx) => {
+      const updatedApplication = await tx.membershipApplication.update({
+        where: { id: applicationId },
+        data: {
+          status: ApplicationStatus.APPROVED,
+          reviewedAt: new Date(),
+          reviewedBy,
+        },
+      });
+      const transferedUser = await updateUser({
+        where: { id: existingUser.id },
+        data: {
+          role: [UserRole.MEMBER],
+          dateOfJoiningAssociation: new Date(),
+          dateOfJoiningGovt,
+          failedLoginAttempts: 0,
+          memberType: { connect: { id: memberTypeId || '' } },
+          association: { connect: { id: association.id } },
+          lockedUntil: null,
+          password: hashedPassword,
+          passwordResetToken: null,
+          passwordResetExpires: null,
+        },
+      });
+      return { updatedApplication, user: transferedUser };
+    });
+    return { user, application: updatedApplication };
+  }
 
   const { user, updatedApplication } = await prisma.$transaction(async (tx) => {
     const user = await tx.user.create({
@@ -253,16 +260,12 @@ export async function approveMembershipApplication({
         reviewedBy,
       },
     });
-    return {
-      user,
-      updatedApplication,
-    };
+    return { user, updatedApplication };
   });
 
   return {
     user,
     application: updatedApplication,
-    tempPassword: randomPassword,
   };
 }
 

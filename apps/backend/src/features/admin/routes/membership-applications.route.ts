@@ -17,7 +17,7 @@ import {
   RejectApplicationSchema,
 } from '@feature/membership-applications/validators';
 import { validate } from '@lib/validate';
-import { UserRole } from '@prisma/client';
+import { type Prisma, UserRole } from '@prisma/client';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
@@ -53,7 +53,9 @@ export const getMembershipApplicationsHandler: RequestHandler[] = [
     const query = req.query as any;
     const status = query?.status;
     const page = query?.page || 1;
-    const where = status ? { status } : {};
+    const where: Prisma.MembershipApplicationWhereInput = status
+      ? { status, associationSlug: req.user?.associationSlug }
+      : {};
 
     const result = await getMembershipApplications({ where, page });
 
@@ -118,14 +120,18 @@ export const postApproveApplication: RequestHandler[] = [
 
       throw new NotFoundError('User not found');
     }
+    if (!req.user?.associationSlug) {
+      throw new NotFoundError('User Association Slug not found');
+    }
 
     // Approve and create the user account
     const result = await approveMembershipApplication({
       applicationId,
-      memberTypeId: req.body!.memberTypeId,
-      role: req.body!.role,
-      dateOfJoiningGovt: req.body!.dateOfJoiningGovt,
+      memberTypeId: req.body.memberTypeId,
+      dateOfJoiningGovt: req.body.dateOfJoiningGovt,
       reviewedBy: userId,
+      associationSlug: req.user?.associationSlug,
+      associationId: req.user?.associationId,
     });
 
     logger.info(
@@ -142,7 +148,6 @@ export const postApproveApplication: RequestHandler[] = [
           status: result.application.status,
           reviewedAt: result.application.reviewedAt,
         },
-        tempPassword: result.tempPassword,
       },
     });
   }),

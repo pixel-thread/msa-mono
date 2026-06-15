@@ -61,9 +61,9 @@ export const postSignUp: RequestHandler[] = [
     }
 
     // Prevent duplicate active accounts for the same email address
-    if (user && user.status === 'ACTIVE') {
+    if (user?.associationId === association.id) {
       logger.error({ traceId, email }, 'POST /api/auth/sign-up - Active User already exists');
-      throw new ConflictError('Active User already exists');
+      throw new ConflictError('Active User already exist');
     }
 
     // ---- Create membership application ----

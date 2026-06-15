@@ -13,6 +13,7 @@ import type { RequestHandler } from 'express';
 import type { Request, Response } from 'express';
 
 import { importUsersCsvService } from '../services/import-users-csv';
+import { withRole } from '@src/shared/utils/with-role';
 
 const csvUpload = createUploadMiddleware({
   maxFileSizeMB: 10,
@@ -27,13 +28,12 @@ const csvUpload = createUploadMiddleware({
  * creation to importUsersCsvService.
  */
 export const importUsersCsv: RequestHandler[] = [
-  rbac(UserRole.PRESIDENT),
   csvUpload.single('file'),
   asyncHandler(async (req: Request, res: Response) => {
     const traceId = (req.traceId as string) || '';
 
     const associationId = req.user?.associationId;
-
+    await withRole(req, UserRole.PRESIDENT);
     if (!associationId) throw new BadRequestError('Association not found');
 
     const file = req.file;
