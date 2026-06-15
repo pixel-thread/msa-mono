@@ -142,11 +142,6 @@ async function seedAssociation(data: (typeof ASSOCIATIONS)[number]) {
   // USERS
   // ---------------------------------------------------------------------------
 
-  const rolePlanMap: Partial<Record<UserRole, (typeof plans)[number]>> = {
-    [UserRole.MEMBER]: plans[0],
-    [UserRole.SUPER_ADMIN]: plans[0],
-  };
-
   const roleMemberTypeMap: Partial<Record<UserRole, (typeof memberTypes)[number]>> = {
     [UserRole.MEMBER]: regular,
     [UserRole.SUPER_ADMIN]: regular,
@@ -155,7 +150,6 @@ async function seedAssociation(data: (typeof ASSOCIATIONS)[number]) {
   const roles: UserRole[] = [UserRole.MEMBER, UserRole.SUPER_ADMIN];
 
   for (const role of roles) {
-    const plan = rolePlanMap[role];
     const memberType = roleMemberTypeMap[role];
 
     await prisma.user.create({
@@ -164,6 +158,7 @@ async function seedAssociation(data: (typeof ASSOCIATIONS)[number]) {
         email: buildUserEmail(role, data.short),
         name: buildUserName(role, data.short),
         mobile: '9999999999',
+        firstName: buildUserName(role, data.short),
         designation: role,
         role: [role],
         password,

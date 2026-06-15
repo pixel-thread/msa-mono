@@ -4,7 +4,7 @@
 
 // ---- External Libraries
 
-import { ConflictError, NotFoundError } from '@errors';
+import { BadRequestError, ConflictError, NotFoundError } from '@errors';
 import { generateRandomPassword, hashPassword } from '@lib/password';
 // ---- Shared Utilities
 import { prisma } from '@lib/prisma';
@@ -230,6 +230,9 @@ export async function approveMembershipApplication({
     });
     return { user, application: updatedApplication };
   }
+
+  if (!application.firstName || application.firstName === null)
+    throw new BadRequestError('First name is required');
 
   const { user, updatedApplication } = await prisma.$transaction(async (tx) => {
     const user = await tx.user.create({

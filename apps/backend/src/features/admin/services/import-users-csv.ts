@@ -5,6 +5,7 @@
 
 import { BadRequestError } from '@errors';
 import { prisma } from '@lib/prisma';
+import { UserStatus } from '@prisma/client';
 import { logger } from '@src/shared/logger';
 import csvParser from 'csv-parser';
 import { Readable } from 'node:stream';
@@ -107,14 +108,17 @@ export async function importUsersCsvService(
     data: toCreate.map((r) => ({
       associationId,
       email: r.email,
-      name: r.name,
+      name: `${r.firstName} ${r.middleName} ${r.lastName}`,
+      firstName: r.firstName,
+      lastName: r.lastName ?? null,
+      middleName: r.middleName ?? null,
       mobile: r.mobile ?? null,
       designation: r.designation ?? null,
       dateOfJoiningGovt: r.dateOfJoiningGovt ?? null,
       dateOfJoiningAssociation: r.dateOfJoiningAssociation ?? null,
       dateOfRetirement: r.dateOfRetirement ?? null,
       password: null,
-      status: 'ACTIVE',
+      status: UserStatus.ACTIVE,
     })),
   });
 
