@@ -5,6 +5,7 @@ import { StatusCell } from '@src/features/members/components/cells/status-cell';
 import type { User } from '@src/shared/types';
 import { formatDate } from '@src/shared/utils';
 import { ColumnDef } from '@tanstack/react-table';
+import { MemberTypeCell } from '../components/cells/type-cell';
 
 interface UseMemberTableColumnsOptions {
   onRoleChange: (memberId: string, role: string, action: 'add' | 'remove') => void;
@@ -46,6 +47,11 @@ export const useMemberTableColumns = ({
       accessorKey: 'status',
       header: 'Status',
       cell: ({ row }) => <StatusCell member={row.original} onStatusChange={onStatusChange} />,
+    },
+    {
+      accessorKey: 'memberTypeId',
+      header: 'Level',
+      cell: ({ row }) => <MemberTypeCell member={row.original} />,
     },
     {
       accessorKey: 'createdAt',

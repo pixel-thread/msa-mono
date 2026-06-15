@@ -53,6 +53,7 @@ export async function getMembers({ where, page = 1, search }: Props) {
         status: true,
         membershipNumber: true,
         associationId: true,
+        memberTypeId: true,
         createdAt: true,
       },
 

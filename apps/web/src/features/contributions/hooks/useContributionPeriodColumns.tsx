@@ -17,7 +17,8 @@ export function useContributionPeriodColumns() {
         return (
           <>
             <Link
-              to={`/payments/users/${cp.userId}`}
+              to={`/payments/users/$userId`}
+              params={{ userId: cp.userId }}
               className="text-sm text-primary hover:underline"
             >
               {cp.user?.name || cp.userId.slice(0, 8)}
@@ -31,7 +32,12 @@ export function useContributionPeriodColumns() {
       id: 'period',
       header: 'Period',
       cell: ({ row }) => (
-        <Link to={`/payments/contributions/${row.original.id}`} className="text-sm font-medium">
+        <Link
+          to={`/contributions/$contributionId`}
+          params={{ contributionId: row.original.id }}
+          className="text-sm font-medium"
+          preload={'intent'}
+        >
           {getMonthName(row.original.month)} {row.original.year}
         </Link>
       ),
