@@ -37,7 +37,7 @@ model LedgerLine {
 model Account {
   id            String   @id @default(uuid())
   associationId String
-  code          String
+  code          String 
   name          String
   type          AccountType
   description   String?
@@ -50,5 +50,6 @@ model Account {
 
   @@index([associationId])
   @@index([code])
+  @@unique([associationId, code])
   @@map("accounts")
 }
