@@ -19,10 +19,10 @@ function generateTemplateCsv(): string {
     'dateOfRetirement',
   ];
   const sampleRow = [
-    'john2@example.com',
+    'john@example.com',
     'John',
-    null,
-    null,
+    'Doe',
+    "Doe's",
     '1990-01-01',
     '9876543210',
     'Secretary',
