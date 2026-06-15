@@ -8,7 +8,10 @@ import type { RefObject } from 'react';
 function generateTemplateCsv(): string {
   const headers = [
     'email',
-    'name',
+    'firstName',
+    'middleName',
+    'lastName',
+    'dob',
     'mobile',
     'designation',
     'dateOfJoiningGovt',
@@ -16,8 +19,11 @@ function generateTemplateCsv(): string {
     'dateOfRetirement',
   ];
   const sampleRow = [
-    'john@example.com',
-    'John Doe',
+    'john2@example.com',
+    'John',
+    null,
+    null,
+    '1990-01-01',
     '9876543210',
     'Secretary',
     '2020-06-01',

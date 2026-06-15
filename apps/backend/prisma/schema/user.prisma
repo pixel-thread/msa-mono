@@ -72,7 +72,7 @@ model MembershipApplication {
   email           String
   phone           String
   associationSlug String
-  firstName       String?
+  firstName       String
   middleName      String?
   lastName        String?
   dateOfBirth     DateTime
