@@ -130,7 +130,6 @@ export const postApproveApplication: RequestHandler[] = [
       memberTypeId: req.body.memberTypeId,
       dateOfJoiningGovt: req.body.dateOfJoiningGovt,
       reviewedBy: userId,
-      associationSlug: req.user?.associationSlug,
       associationId: req.user?.associationId,
     });
 

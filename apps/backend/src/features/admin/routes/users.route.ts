@@ -5,15 +5,14 @@
 
 import { BadRequestError } from '@errors';
 import { UserRole } from '@prisma/client';
-import { rbac } from '@src/middleware';
 import { createUploadMiddleware } from '@src/middleware/file-upload';
+import { withRole } from '@src/shared/utils/with-role';
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
 import type { RequestHandler } from 'express';
 import type { Request, Response } from 'express';
 
 import { importUsersCsvService } from '../services/import-users-csv';
-import { withRole } from '@src/shared/utils/with-role';
 
 const csvUpload = createUploadMiddleware({
   maxFileSizeMB: 10,

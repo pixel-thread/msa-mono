@@ -5,6 +5,7 @@ import { StatusCell } from '@src/features/members/components/cells/status-cell';
 import type { User } from '@src/shared/types';
 import { formatDate } from '@src/shared/utils';
 import { ColumnDef } from '@tanstack/react-table';
+
 import { MemberTypeCell } from '../components/cells/type-cell';
 
 interface UseMemberTableColumnsOptions {
