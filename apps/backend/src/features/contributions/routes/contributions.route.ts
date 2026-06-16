@@ -23,7 +23,8 @@ import {
   WaiveContributionSchema,
 } from '@feature/contributions/validators';
 import { validate } from '@lib/validate';
-import { ContributionStatus, UserRole } from '@prisma/client';
+import { AuditAction, ContributionStatus, UserRole } from '@prisma/client';
+import { logAction } from '@services/audit-logs';
 import { PAGE_SIZE } from '@src/shared/constants';
 import { logger } from '@src/shared/logger';
 import { findUnpaginatedUsers } from '@src/shared/services/user/getUsers';
@@ -251,6 +252,21 @@ export const generateUserContributionsHandler: RequestHandler[] = [
 
     const overdueCount = await markOverdueContributions(req.user!.associationId, userId);
 
+    await logAction({
+      associationId: req.user!.associationId,
+      actorId: req.user!.id,
+      action: AuditAction.CREATE,
+      resourceType: 'ContributionPeriod',
+      resourceId: userId,
+      newValues: {
+        year: req.body.year,
+        months: req.body.months,
+        generatedCount: count,
+        markedOverdue: overdueCount,
+      },
+      traceId,
+    });
+
     // --- Log: success ---
     logger.info(
       { traceId, generated: count, markedOverdue: overdueCount },
@@ -305,6 +321,20 @@ export const generateContributionsHandler: RequestHandler[] = [
 
     const overdueCount = await markOverdueContributions(associationId);
 
+    await logAction({
+      associationId: req.user!.associationId,
+      actorId: req.user!.id,
+      action: AuditAction.CREATE,
+      resourceType: 'ContributionPeriod',
+      newValues: {
+        year: req.body.year,
+        months: req.body.months,
+        generatedCount: count ?? 0,
+        markedOverdue: overdueCount,
+      },
+      traceId,
+    });
+
     // --- Log: success ---
     logger.info(
       { traceId, generated: count, markedOverdue: overdueCount },
@@ -349,6 +379,16 @@ export const waiveContributionHandler: RequestHandler[] = [
 
     // --- Business logic: waive the contribution period ---
     const waived = await waiveContribution(req.body.contributionPeriodId, req.body.reason, user.id);
+
+    await logAction({
+      associationId: req.user!.associationId,
+      actorId: user.id,
+      action: AuditAction.PAYMENT_WAIVED,
+      resourceType: 'ContributionPeriod',
+      resourceId: req.body.contributionPeriodId,
+      newValues: { reason: req.body.reason },
+      traceId,
+    });
 
     // --- Log: success ---
     logger.info(

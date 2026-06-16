@@ -1,6 +1,7 @@
 import { validate } from '@lib/validate';
-import { UserRole } from '@prisma/client';
+import { AuditAction, UserRole } from '@prisma/client';
 import { prisma } from '@src/shared/lib';
+import { logAction } from '@services/audit-logs';
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';
@@ -14,6 +15,7 @@ export const recordContributionHandler: RequestHandler[] = [
   validate({ body: RecordContributionSchema }),
   asyncHandler(async (req, res) => {
     const user = await withRole(req, UserRole.FINANCE);
+    const traceId = (req.traceId as string) || '';
 
     const { userId, amount, paymentMethod, contributionPeriodIds, paidAt } =
       req.body as RecordContributionInput;
@@ -29,6 +31,21 @@ export const recordContributionHandler: RequestHandler[] = [
         user.id,
         tx,
       );
+    });
+
+    await logAction({
+      associationId: user.associationId,
+      actorId: user.id,
+      action: AuditAction.PAYMENT_RECORD,
+      resourceType: 'PaymentTransaction',
+      resourceId: result.id,
+      newValues: {
+        userId,
+        amount,
+        paymentMethod,
+        contributionPeriodIds,
+      },
+      traceId,
     });
 
     return success(res, {

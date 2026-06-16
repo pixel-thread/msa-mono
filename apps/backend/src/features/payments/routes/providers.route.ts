@@ -26,7 +26,8 @@ import {
   VerifyPaymentSchema,
 } from '@feature/payments/validators';
 import { validate } from '@lib/validate';
-import { UserRole } from '@prisma/client';
+import { AuditAction, UserRole } from '@prisma/client';
+import { logAction } from '@services/audit-logs';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
@@ -82,6 +83,20 @@ export const createProviderHandler: RequestHandler[] = [
       keySecret: req.body.keySecret,
       webhookSecret: req.body.webhookSecret,
       isActive: req.body.isActive,
+    });
+
+    await logAction({
+      associationId: req.user!.associationId,
+      actorId: req.user!.id,
+      action: AuditAction.CREATE,
+      resourceType: 'PaymentProvider',
+      resourceId: result.id,
+      newValues: {
+        provider: req.body.provider,
+        keyId: req.body.keyId,
+        isActive: result.isActive,
+      },
+      traceId,
     });
 
     // --- Log: success ---
@@ -213,6 +228,21 @@ export const updateProviderHandler: RequestHandler[] = [
       isActive: req.body?.isActive,
     });
 
+    await logAction({
+      associationId: req.user!.associationId,
+      actorId: req.user!.id,
+      action: AuditAction.UPDATE,
+      resourceType: 'PaymentProvider',
+      resourceId: req.params.providerId as string,
+      newValues: {
+        keyIdChanged: req.body?.keyId !== undefined,
+        keySecretChanged: req.body?.keySecret !== undefined,
+        webhookSecretChanged: req.body?.webhookSecret !== undefined,
+        isActive: req.body?.isActive,
+      },
+      traceId,
+    });
+
     // --- Log: success ---
     logger.info(
       { traceId, providerId: req.params.providerId },
@@ -251,6 +281,15 @@ export const deleteProviderHandler: RequestHandler[] = [
 
     // --- Business logic: delete provider ---
     await deleteProvider(req.params.providerId as string, req.user!.associationId);
+
+    await logAction({
+      associationId: req.user!.associationId,
+      actorId: req.user!.id,
+      action: AuditAction.DELETE,
+      resourceType: 'PaymentProvider',
+      resourceId: req.params.providerId as string,
+      traceId,
+    });
 
     // --- Log: success ---
     logger.info(
@@ -301,6 +340,17 @@ export const activateProvider: RequestHandler[] = [
     const result = await setActiveProvider(provderExist.id, req.user!.associationId);
     const activatedMessage = 'Provider successfully activated';
     const deActivatedMessage = 'Provider successfully de-activated';
+
+    await logAction({
+      associationId: req.user!.associationId,
+      actorId: req.user!.id,
+      action: AuditAction.UPDATE,
+      resourceType: 'PaymentProvider',
+      resourceId: providerId as string,
+      newValues: { isActive: result.isActive },
+      oldValues: { isActive: provderExist.isActive },
+      traceId,
+    });
 
     // --- Log: success ---
     logger.info(
@@ -360,6 +410,20 @@ export const testProvider: RequestHandler[] = [
       associationId: req.user!.associationId,
       userId: user.id,
       providerId: req.params.providerId as string,
+    });
+
+    const transactionId = (options as any).transaction_id;
+    await logAction({
+      associationId: req.user!.associationId,
+      actorId: user.id,
+      action: AuditAction.PAYMENT_CREATED,
+      resourceType: 'PaymentTransaction',
+      resourceId: transactionId,
+      newValues: {
+        isTest: true,
+        providerId: req.params.providerId,
+      },
+      traceId,
     });
 
     // --- Log: success ---

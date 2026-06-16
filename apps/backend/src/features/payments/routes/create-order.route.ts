@@ -13,7 +13,8 @@ import { createPaymentOrder } from '@feature/payments/services/payment.service';
 import { getActiveProvider } from '@feature/payments/services/payment-provider.service';
 import { type CreateOrderInput, CreateOrderSchema } from '@feature/payments/validators';
 import { validate } from '@lib/validate';
-import { UserRole } from '@prisma/client';
+import { AuditAction, UserRole } from '@prisma/client';
+import { logAction } from '@services/audit-logs';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
@@ -116,6 +117,20 @@ export const createOrder: RequestHandler[] = [
       amount: parseInt(activeVersion.amount.toFixed(2)),
       notes: req.body?.notes,
       contributionPeriodId,
+    });
+
+    const transactionId = (orderDetails as any).transaction_id;
+    await logAction({
+      associationId: req.user!.associationId,
+      actorId: user.id,
+      action: AuditAction.PAYMENT_CREATED,
+      resourceType: 'PaymentTransaction',
+      resourceId: transactionId,
+      newValues: {
+        amount: parseInt(activeVersion.amount.toFixed(2)),
+        contributionPeriodId: body.contributionPeriodId || null,
+      },
+      traceId,
     });
 
     // --- Log: success ---

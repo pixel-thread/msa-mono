@@ -1,7 +1,8 @@
 import { NotFoundError } from '@errors';
 import { validate } from '@lib/validate';
-import { DeclarationStatus, UserRole } from '@prisma/client';
+import { AuditAction, DeclarationStatus, UserRole } from '@prisma/client';
 import { hasHighRoleAccess } from '@utils';
+import { logAction } from '@services/audit-logs';
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';
@@ -26,12 +27,27 @@ import {
 export const createUserDeclarationHandler: RequestHandler[] = [
   validate({ body: CreateUserDeclarations }),
   asyncHandler(async (req, res) => {
+    const traceId = (req.traceId as string) || '';
     const associationId = req.user?.associationId;
     const user = await withRole(req, UserRole.MEMBER);
 
     const { amount } = req.body as CreateUserDeclarationsInput;
 
     const declear = await submitDeclaration(user.id, associationId || '', amount);
+
+    await logAction({
+      associationId: associationId || '',
+      actorId: user.id,
+      action: AuditAction.CREATE,
+      resourceType: 'Declaration',
+      resourceId: declear.id,
+      newValues: {
+        amount: req.body.amount,
+        declerationStartDate: declear.declerationStartDate,
+        declerationEndDate: declear.declerationEndDate,
+      },
+      traceId,
+    });
 
     return success(res, {
       data: {
@@ -134,6 +150,18 @@ export const approveDeclarationsHandler: RequestHandler[] = [
       req.body.remark,
     );
 
+    if (!wasAlreadyApproved) {
+      await logAction({
+        associationId: associationId!,
+        actorId: userId,
+        action: AuditAction.UPDATE,
+        resourceType: 'Declaration',
+        resourceId: declarationId,
+        newValues: { status: 'APPROVED', remark: req.body.remark },
+        traceId: (req.traceId as string) || '',
+      });
+    }
+
     return success(res, {
       data: declaration,
       message: wasAlreadyApproved
@@ -162,6 +190,18 @@ export const rejectDeclarationsHandler: RequestHandler[] = [
       userId,
       req.body.remark,
     );
+
+    if (!wasAlreadyRejected) {
+      await logAction({
+        associationId: associationId!,
+        actorId: userId,
+        action: AuditAction.UPDATE,
+        resourceType: 'Declaration',
+        resourceId: declarationId,
+        newValues: { status: 'REJECTED', remark: req.body.remark },
+        traceId: (req.traceId as string) || '',
+      });
+    }
 
     return success(res, {
       data: declaration,
