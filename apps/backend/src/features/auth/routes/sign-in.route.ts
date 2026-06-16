@@ -132,11 +132,14 @@ export const postSignIn: RequestHandler[] = [
       if (env.NODE_ENV === 'development') logger.debug(`OTP: ${otp}`);
 
       if (env.NODE_ENV === 'production') {
-        logger.info(
-          { traceId, userId: user.id, mfaEnable: user.mfaEnabled },
-          'POST /api/auth/sign-in - MFA Signin email sent',
-        );
-        await sendVerificationEmail(user.email, otp, 'LOGIN_MFA');
+        try {
+          await sendVerificationEmail(user.email, otp, 'LOGIN_MFA');
+        } catch (error) {
+          logger.error(
+            { traceId, error, userId: user.id },
+            'Failed to send MFA verification email',
+          );
+        }
       }
 
       const mfaTempToken = await signMfaTempToken(user.id);

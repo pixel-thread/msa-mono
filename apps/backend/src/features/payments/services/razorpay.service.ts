@@ -1,4 +1,4 @@
-import { NotFoundError } from '@errors';
+import { NotFoundError, PaymentError } from '@errors';
 import { env } from '@src/env';
 import * as crypto from 'crypto';
 import Razorpay from 'razorpay';
@@ -152,6 +152,12 @@ export async function getRazorpayClientForAssociation(associationId: string) {
     throw new NotFoundError('No payment provider configured for association');
   }
 
-  const keySecret = decrypt(provider.encryptedKeySecret);
+  let keySecret: string;
+
+  try {
+    keySecret = decrypt(provider.encryptedKeySecret);
+  } catch {
+    throw new PaymentError('Failed to decrypt payment provider credentials');
+  }
   return createRazorpayClient(provider.keyId, keySecret);
 }

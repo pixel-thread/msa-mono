@@ -4,6 +4,14 @@ import { env } from '@src/env';
 import { logger } from '@src/shared/logger';
 import crypto from 'node:crypto';
 
+function validateDate(value: string | undefined | null, field: string): Date {
+  const date = new Date(value ?? '');
+  if (isNaN(date.getTime())) {
+    throw new Error(`Invalid date for ${field}: ${value}`);
+  }
+  return date;
+}
+
 // ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
@@ -227,8 +235,8 @@ async function handleBuildEvent(payload: EasBuildPayload, eventId: string): Prom
       message: meta?.message ?? null,
       runFromCI: meta?.runFromCI ?? false,
       metrics: payload.metrics ? JSON.stringify(payload.metrics) : undefined,
-      createdAt: new Date(payload.createdAt),
-      completedAt: payload.completedAt ? new Date(payload.completedAt) : null,
+      createdAt: validateDate(payload.createdAt, 'createdAt'),
+      completedAt: payload.completedAt ? validateDate(payload.completedAt, 'completedAt') : null,
       rawEventId: eventId,
     },
     update: {
@@ -236,7 +244,7 @@ async function handleBuildEvent(payload: EasBuildPayload, eventId: string): Prom
       buildUrl: payload.artifacts?.buildUrl ?? null,
       errorMessage: payload.error?.message ?? null,
       errorCode: payload.error?.errorCode ?? null,
-      completedAt: payload.completedAt ? new Date(payload.completedAt) : null,
+      completedAt: payload.completedAt ? validateDate(payload.completedAt, 'completedAt') : null,
     },
   });
 
@@ -259,8 +267,8 @@ async function handleSubmitEvent(payload: EasSubmitPayload, eventId: string): Pr
       errorCode: payload.submissionInfo?.error?.errorCode ?? null,
       logsUrl: payload.submissionInfo?.logsUrl ?? null,
       submissionDetailsPageUrl: payload.submissionDetailsPageUrl ?? null,
-      createdAt: new Date(payload.createdAt),
-      completedAt: payload.completedAt ? new Date(payload.completedAt) : null,
+      createdAt: validateDate(payload.createdAt, 'createdAt'),
+      completedAt: payload.completedAt ? validateDate(payload.completedAt, 'completedAt') : null,
       rawEventId: eventId,
     },
     update: {
@@ -268,7 +276,7 @@ async function handleSubmitEvent(payload: EasSubmitPayload, eventId: string): Pr
       archiveUrl: payload.archiveUrl ?? null,
       errorMessage: payload.submissionInfo?.error?.message ?? null,
       errorCode: payload.submissionInfo?.error?.errorCode ?? null,
-      completedAt: payload.completedAt ? new Date(payload.completedAt) : null,
+      completedAt: payload.completedAt ? validateDate(payload.completedAt, 'completedAt') : null,
     },
   });
 

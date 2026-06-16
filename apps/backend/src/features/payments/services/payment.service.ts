@@ -87,7 +87,11 @@ export async function createPaymentOrder(input: CreateOrderInput) {
 
   if (provider) {
     keyId = provider.keyId;
-    keySecret = decrypt(provider.encryptedKeySecret);
+    try {
+      keySecret = decrypt(provider.encryptedKeySecret);
+    } catch {
+      throw new PaymentError('Failed to decrypt payment provider credentials');
+    }
   } else {
     keyId = env.RAZORPAY_KEY_ID ?? '';
     keySecret = env.RAZORPAY_KEY_SECRET ?? '';
@@ -185,7 +189,12 @@ export async function createTestPaymentOrder(input: CreateTestOrderInput) {
     throw new NotFoundError('Provider not found');
   }
 
-  const keySecret = decrypt(fullProvider.encryptedKeySecret);
+  let keySecret: string;
+  try {
+    keySecret = decrypt(fullProvider.encryptedKeySecret);
+  } catch {
+    throw new PaymentError('Failed to decrypt payment provider credentials');
+  }
 
   const razorpayClient = createRazorpayClient(provider.keyId, keySecret);
 
@@ -274,7 +283,11 @@ export async function verifyAndCompletePayment(input: VerifyAndCompleteInput) {
   let keySecret: string | undefined;
 
   if (provider) {
-    keySecret = decrypt(provider.encryptedKeySecret);
+    try {
+      keySecret = decrypt(provider.encryptedKeySecret);
+    } catch {
+      throw new PaymentError('Failed to decrypt payment provider credentials');
+    }
   }
 
   const isValid = verifyPaymentSignature(
@@ -342,8 +355,13 @@ export async function verifyTestPayment(input: VerifyAndCompleteInput) {
   const provider = await getActiveProvider(transaction.associationId, 'RAZORPAY');
 
   let keySecret: string | undefined;
+
   if (provider) {
-    keySecret = decrypt(provider.encryptedKeySecret);
+    try {
+      keySecret = decrypt(provider.encryptedKeySecret);
+    } catch {
+      throw new PaymentError('Failed to decrypt payment provider credentials');
+    }
   }
 
   const isValid = verifyPaymentSignature(

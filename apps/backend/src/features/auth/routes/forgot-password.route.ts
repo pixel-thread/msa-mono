@@ -8,6 +8,7 @@ import { validate } from '@lib/validate';
 import { getUserFirst } from '@services/user/get-user-first';
 import { env } from '@src/env';
 import { logger } from '@src/shared/logger';
+import { getTraceId } from '@src/shared/utils';
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
 import type { RequestHandler } from 'express';
@@ -48,7 +49,12 @@ export const postForgotPassword: RequestHandler[] = [
 
     // Send the reset email in production; log the token in development
     if (env.NODE_ENV === 'production') {
-      await sendPasswordResetEmail(user.email, resetToken);
+      try {
+        await sendPasswordResetEmail(user.email, resetToken);
+      } catch (error) {
+        const traceId = getTraceId(req);
+        logger.error({ traceId, error, userId: user.id }, 'Failed to send password reset email');
+      }
     }
     if (env.NODE_ENV === 'development') {
       logger.debug({ token: resetToken }, 'Reset password Token');

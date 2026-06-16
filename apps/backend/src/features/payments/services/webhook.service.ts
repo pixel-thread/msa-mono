@@ -86,7 +86,13 @@ export async function processWebhookEvent(
   rawBody: string,
   signature: string,
 ): Promise<{ status: 'ok' | 'duplicate' | 'unhandled'; eventId?: string }> {
-  const payload: RazorpayWebhookPayload = JSON.parse(rawBody);
+  let payload: RazorpayWebhookPayload;
+
+  try {
+    payload = JSON.parse(rawBody);
+  } catch {
+    throw new WebhookSignatureError('Invalid JSON payload');
+  }
 
   let webhookSecret: string | undefined;
 

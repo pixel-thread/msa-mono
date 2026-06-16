@@ -2,6 +2,7 @@ import { ForbiddenError, UnauthorizedError } from '@errors';
 import { getDashboardOverview } from '@feature/dashboard/services/dashboard.service';
 import { prisma } from '@lib/prisma';
 import { auth } from '@src/middleware/auth';
+import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
 import { Router } from 'express';
 
@@ -12,33 +13,29 @@ import { Router } from 'express';
 
 const router: Router = Router();
 
-router.get('/overview', auth, async (req, res, next) => {
-  try {
-    // ----- Verify authenticated user
-    const userId = req.user?.id;
+router.get('/overview', auth, asyncHandler(async (req, res, _next) => {
+  // ----- Verify authenticated user
+  const userId = req.user?.id;
 
-    if (!userId) throw new UnauthorizedError('Unauthorized');
+  if (!userId) throw new UnauthorizedError('Unauthorized');
 
-    // ----- Resolve user's association
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-      include: { association: true },
-    });
+  // ----- Resolve user's association
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    include: { association: true },
+  });
 
-    if (!user || !user.associationId) throw new ForbiddenError('User association not found 2');
+  if (!user || !user.associationId) throw new ForbiddenError('User association not found 2');
 
-    // ----- Fetch dashboard data
-    const association = {
-      id: user.association.id,
-      slug: user.association.slug,
-      name: user.association.name,
-    };
-    const data = await getDashboardOverview(association.id);
+  // ----- Fetch dashboard data
+  const association = {
+    id: user.association.id,
+    slug: user.association.slug,
+    name: user.association.name,
+  };
+  const data = await getDashboardOverview(association.id);
 
-    return success(res, { data });
-  } catch (e) {
-    next(e);
-  }
-});
+  return success(res, { data });
+}));
 
 export default router;

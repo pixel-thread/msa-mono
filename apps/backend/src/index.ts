@@ -127,6 +127,10 @@ export function createApp(): express.Express {
 
 const app = createApp();
 
+// Note: Node 15+ throws by default on unhandledRejection regardless of this handler.
+// This catches rejections in Node <15. For Node 15+, set --unhandled-rejections=warn
+// or ensure zero unhandled rejections across the codebase.
+
 process.on('unhandledRejection', (reason) => {
   logger.error({ error: reason }, 'Unhandled promise rejection — keeping server alive');
 });

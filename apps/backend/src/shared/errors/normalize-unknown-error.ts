@@ -56,14 +56,14 @@ export function isSupabaseStorageError(error: unknown): boolean {
  * Handles JWT, Zod, Prisma, Supabase, and generic errors.
  */
 export const normalizeUnknownError = (error: unknown): AppError => {
-  const isProd = env.NODE_ENV === 'production';
+  const isProd = (env?.NODE_ENV ?? 'production') === 'production';
   const userId = ContextStore.getByKey('userId');
   const traceId = ContextStore.getByKey('requestId');
   const associationId = ContextStore.getByKey('associationId');
 
   if (isJwtError(error)) {
     logger.error({ error, traceId, userId, associationId }, error.message);
-    return new UnauthorizedError(error.message);
+    return new UnauthorizedError('Invalid or expired token');
   }
 
   if (error instanceof UnauthorizedError) {
