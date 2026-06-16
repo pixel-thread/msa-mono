@@ -1,10 +1,21 @@
 'use client';
 
+import { useMemo, useState } from 'react';
 import { DataTable } from '@src/shared/components/data-table';
+import { DataTableFilters } from '@src/shared/components/data-table-filters';
+import type { FilterField } from '@src/shared/components/data-table-filters';
+import { DataTablePagination } from '@src/shared/components/data-table-pagination';
 import { Button } from '@src/shared/components/ui/button';
 import { Card } from '@src/shared/components/ui/card';
+import type { PaginationMeta } from '@src/shared/types';
 import type { ColumnDef } from '@tanstack/react-table';
 import { AlertCircle, X } from 'lucide-react';
+
+const PAGE_SIZE = 30;
+
+const filterFields: FilterField[] = [
+  { type: 'search', id: 'globalSearch', placeholder: 'Search all columns...' },
+];
 
 export type PreviewViewProps = {
   fileName: string;
@@ -29,8 +40,37 @@ export function ImportPreviewView({
   onClear,
   onImport,
 }: PreviewViewProps) {
+  const [searchText, setSearchText] = useState('');
+  const [page, setPage] = useState(1);
+
   const importButtonText = isPending ? 'Importing...' : 'Import Members';
   const rowLabel = totalRows === 1 ? 'row' : 'rows';
+
+  const filteredRows = useMemo(() => {
+    if (!searchText) return rows;
+    const query = searchText.toLowerCase();
+    return rows.filter((row) =>
+      Object.values(row).some((value) => value.toLowerCase().includes(query)),
+    );
+  }, [rows, searchText]);
+
+  const paginatedRows = useMemo(() => {
+    const start = (page - 1) * PAGE_SIZE;
+    return filteredRows.slice(start, start + PAGE_SIZE);
+  }, [filteredRows, page]);
+
+  const paginationMeta: PaginationMeta = {
+    page,
+    pageSize: PAGE_SIZE,
+    total: filteredRows.length,
+    totalPages: Math.max(1, Math.ceil(filteredRows.length / PAGE_SIZE)),
+    hasMore: page * PAGE_SIZE < filteredRows.length,
+  };
+
+  const handleFilterChange = (filters: Record<string, string | undefined>) => {
+    setSearchText(filters.globalSearch ?? '');
+    setPage(1);
+  };
 
   return (
     <>
@@ -59,7 +99,9 @@ export function ImportPreviewView({
           </div>
         </div>
 
-        <DataTable data={rows} columns={columns} />
+        <DataTableFilters fields={filterFields} onFilterChange={handleFilterChange} />
+        <DataTable data={paginatedRows} columns={columns} />
+        <DataTablePagination meta={paginationMeta} onPageChange={setPage} label="rows" />
       </div>
 
       {importError && (
