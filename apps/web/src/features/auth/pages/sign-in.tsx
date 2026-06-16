@@ -88,6 +88,13 @@ export function SignInPage() {
             return;
           }
           toast.error(data.message);
+          return;
+        },
+        onError: (error) => {
+          if (error instanceof Error) {
+            toast.error(error.message);
+            return;
+          }
         },
       });
 
