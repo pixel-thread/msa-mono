@@ -232,6 +232,12 @@ export async function setDefaultPlan(associationId: string, planId: string) {
  *
  * Surplus from overpaid periods is carried forward FIFO to the user's
  * next outstanding period(s) after the date range.
+ *
+ * Creates a RetroactiveAdjustment audit record and one RetroactiveAffectedUser
+ * record per adjusted period, enabling historical queries of who was impacted
+ * by a given price change and by how much.
+ *
+ * @param oldAmount - The plan's previous amount, stored as audit context.
  */
 async function retroactivelyAdjustContributionsForPlan(
   tx: Prisma.TransactionClient,
