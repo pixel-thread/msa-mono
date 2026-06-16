@@ -28,6 +28,7 @@ async function setupTestData(opts: {
     data: {
       associationId: association.id,
       email: `user-${Date.now()}@test.com`,
+      firstName: 'Test',
       name: 'Test User',
       status: UserStatus.ACTIVE,
       dateOfJoiningAssociation: opts.memberJoinDate,
