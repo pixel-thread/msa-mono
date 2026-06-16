@@ -236,6 +236,7 @@ export async function setDefaultPlan(associationId: string, planId: string) {
 async function retroactivelyAdjustContributionsForPlan(
   tx: Prisma.TransactionClient,
   planId: string,
+  oldAmount: Prisma.Decimal,
   newAmount: Prisma.Decimal,
   effectiveFrom: Date,
   effectiveTo: Date,
@@ -252,6 +253,18 @@ async function retroactivelyAdjustContributionsForPlan(
   });
 
   if (!plan) return;
+
+  // ── Create audit trail record for this adjustment batch ──────────
+  const adjustment = await tx.retroactiveAdjustment.create({
+    data: {
+      associationId: plan.associationId,
+      planId,
+      oldAmount,
+      newAmount,
+      effectiveFrom,
+      effectiveTo,
+    },
+  });
 
   const users = await tx.user.findMany({
     where: {
@@ -311,6 +324,9 @@ async function retroactivelyAdjustContributionsForPlan(
       // Never touch waived periods — they are intentionally set to 0
       if (period.status === ContributionStatus.WAIVED) continue;
 
+      const previousExpected = Number(period.expectedAmount);
+      const adjustmentAmount = newExpected - previousExpected;
+
       const paidAmount = Number(period.paidAmount);
       const totalPaid = paidAmount + surplus;
 
@@ -363,6 +379,18 @@ async function retroactivelyAdjustContributionsForPlan(
           },
         });
       }
+
+      // ── Audit trail ──────────────────────────────────────────────
+      await tx.retroactiveAffectedUser.create({
+        data: {
+          retroactiveAdjustmentId: adjustment.id,
+          userId,
+          contributionPeriodId: period.id,
+          previousExpectedAmount: previousExpected,
+          newExpectedAmount: newExpected,
+          adjustmentAmount,
+        },
+      });
     }
 
     // 3. If surplus remains after the last period in range, forward-allocate
@@ -504,6 +532,7 @@ export async function updatePlan(associationId: string, planId: string, body: Up
         await retroactivelyAdjustContributionsForPlan(
           tx,
           planId,
+          currentVersion.amount,  // ← oldAmount
           newVersion.amount,
           body.effectiveFrom,
           retroEnd,
