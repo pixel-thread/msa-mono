@@ -2,6 +2,10 @@ import { prisma } from '@lib/prisma';
 import { ContributionStatus, Status, UserStatus } from '@prisma/client';
 import { updatePlan } from '@feature/plans/services/plan.service';
 
+/**
+ * Helper: create test association, user, plan, plan version,
+ * and contribution periods for retroactive audit trail tests.
+ */
 async function setupTestData(opts: {
   memberJoinDate: Date;
   planAmount: number;
@@ -48,7 +52,7 @@ async function setupTestData(opts: {
   });
 
   for (const c of opts.contributions) {
-    const dueDate = new Date(c.year, c.month, 0);
+    const dueDate = new Date(c.year, c.month, 0); // last day of month
     await prisma.contributionPeriod.create({
       data: {
         associationId: association.id,
@@ -132,9 +136,12 @@ describe('Retroactive Adjustment Audit Trail', () => {
     expect(Number(affectedUsers[1].previousExpectedAmount)).toBe(100);
     expect(Number(affectedUsers[1].newExpectedAmount)).toBe(150);
     expect(Number(affectedUsers[1].adjustmentAmount)).toBe(50);
+
+    expect(affectedUsers[0].userId).toBe(user.id);
+    expect(affectedUsers[1].userId).toBe(user.id);
   });
 
-  it('should NOT create audit records when price does not change retroactively', async () => {
+  it('should NOT create audit records when price does not change', async () => {
     const { association, plan } = await setupTestData({
       memberJoinDate: new Date('2026-01-01'),
       planAmount: 100,
@@ -145,7 +152,8 @@ describe('Retroactive Adjustment Audit Trail', () => {
     });
 
     await updatePlan(association.id, plan.id, {
-      amount: 200,
+      amount: 100,
+      effectiveFrom: new Date('2026-03-01'),
     });
 
     const adjustments = await prisma.retroactiveAdjustment.count({
