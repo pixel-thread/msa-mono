@@ -26,10 +26,11 @@ model ContributionPeriod {
 
   user User @relation(fields: [userId], references: [id])
 
-  allocations        PaymentAllocation[]
-  declarations       Declarations[]
-  waiver             ContributionWaiver?
-  paymentTransaction PaymentTransaction?
+  allocations              PaymentAllocation[]
+  declarations             Declarations[]
+  waiver                   ContributionWaiver?
+  paymentTransaction       PaymentTransaction?
+  retroactiveAffectedUsers RetroactiveAffectedUser[]
 
   @@unique([userId, year, month])
   @@index([associationId])
