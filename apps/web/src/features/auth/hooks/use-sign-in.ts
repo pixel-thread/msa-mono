@@ -18,6 +18,7 @@ export function useSignIn() {
         fetchUser();
         return data;
       }
+      return data;
     },
   });
 }

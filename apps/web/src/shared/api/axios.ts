@@ -60,6 +60,7 @@ axiosClient.interceptors.request.use(
     config.headers['x-association-slug'] = env.NEXT_PUBLIC_ASSOCIATION_SLUG || 'unknown';
 
     const token = cookie.load('csrf_token');
+
     if (token) {
       config.headers['X-CSRF-Token'] = token;
     }

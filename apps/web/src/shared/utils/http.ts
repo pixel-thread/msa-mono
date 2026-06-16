@@ -1,4 +1,4 @@
-import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
+import { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 
 import { axiosClient } from '../api/axios';
 import { PaginationMeta } from '../types';
@@ -55,9 +55,6 @@ const http = {
       const response = await axiosClient.get(url, config);
       return handleResponse<T>(response);
     } catch (error) {
-      if (axios.isAxiosError(error) && error.response?.status === 401) {
-        throw error;
-      }
       return handleAxiosError<T>(error);
     }
   },
@@ -75,9 +72,6 @@ const http = {
       const response = await axiosClient.post(url, data, requestConfig);
       return handleResponse<T>(response);
     } catch (error) {
-      if (axios.isAxiosError(error) && error.response?.status === 401) {
-        throw error;
-      }
       return handleAxiosError<T>(error);
     }
   },
@@ -91,9 +85,6 @@ const http = {
       const response = await axiosClient.put(url, data, config);
       return handleResponse<T>(response);
     } catch (error) {
-      if (axios.isAxiosError(error) && error.response?.status === 401) {
-        throw error;
-      }
       return handleAxiosError<T>(error);
     }
   },
@@ -111,9 +102,6 @@ const http = {
       const response = await axiosClient.patch(url, data, requestConfig);
       return handleResponse<T>(response);
     } catch (error) {
-      if (axios.isAxiosError(error) && error.response?.status === 401) {
-        throw error;
-      }
       return handleAxiosError<T>(error);
     }
   },
@@ -123,9 +111,6 @@ const http = {
       const response = await axiosClient.delete(url, config);
       return handleResponse<T>(response);
     } catch (error) {
-      if (axios.isAxiosError(error) && error.response?.status === 401) {
-        throw error;
-      }
       return handleAxiosError<T>(error);
     }
   },

@@ -81,7 +81,15 @@ export function SignInPage() {
 
   const onSubmit = async (values: SignInInput) => {
     try {
-      const result = await signInMutation.mutateAsync(values);
+      const result = await signInMutation.mutateAsync(values, {
+        onSuccess: (data) => {
+          if (data.success) {
+            toast.success(data.message);
+            return;
+          }
+          toast.error(data.message);
+        },
+      });
 
       if (result.data?.mfaRequired) {
         setMfaTempToken(result.data.tempToken || null);
