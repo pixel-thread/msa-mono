@@ -8,3 +8,4 @@ export * from './use-training-assignments';
 export * from './use-assign-training';
 export * from './use-bulk-assign-training';
 export * from './use-remove-training-assignment';
+export * from './use-training-supplements';
