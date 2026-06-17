@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react';
-import { RefreshControl, ActivityIndicator, View } from 'react-native';
+import { RefreshControl, ActivityIndicator } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 import { useMeetings } from '../hooks';
-import { ErrorScreen, EmptyScreen } from '@src/shared/components/screens';
+import { ErrorScreen, EmptyScreen, LoadingScreen } from '@src/shared/components/screens';
 import { MeetingCard } from '../components';
 import { Container, StackHeader } from '@src/shared/components';
 
@@ -32,9 +32,7 @@ export const MeetingListScreen = () => {
     return (
       <>
         <StackHeader title="Meetings" showBackButton={false} showDrawerButton />
-        <View className="flex-1 items-center justify-center">
-          <ActivityIndicator size="large" color="#6366f1" />
-        </View>
+        <LoadingScreen message="Loading meetings..." />
       </>
     );
   }

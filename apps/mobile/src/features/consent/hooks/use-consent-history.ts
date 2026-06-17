@@ -13,7 +13,7 @@ export const useConsentHistory = () => {
     enabled: isAuthenticated,
     queryFn: ({ pageParam }) =>
       http.get<ConsentReceiptRecord[]>(
-        buildUrlWithQuery(ENDPOINTS.CONSENT.HISTORY, { page: pageParam }),
+        buildUrlWithQuery(ENDPOINTS.CONSENT.HISTORY, { page: pageParam })
       ),
 
     getNextPageParam: (lastPage) => {

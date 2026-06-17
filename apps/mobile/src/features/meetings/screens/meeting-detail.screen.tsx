@@ -145,11 +145,17 @@ export const MeetingDetailScreen = () => {
         {/* Hero Section */}
         <View className="px-4 pb-8 pt-6">
           <View className="flex-row flex-wrap items-center gap-x-3">
-            <Text variant="heading" size="3xl" selectable className="text-slate-900 dark:text-white">
+            <Text
+              variant="heading"
+              size="3xl"
+              selectable
+              className="text-slate-900 dark:text-white">
               {meeting.title}
             </Text>
             <View className="flex-row items-center gap-x-1.5">
-              <View className={cn('h-2 w-2 rounded-full', getMeetingStatusStyle(meeting.status).dot)} />
+              <View
+                className={cn('h-2 w-2 rounded-full', getMeetingStatusStyle(meeting.status).dot)}
+              />
               <Text
                 className={getMeetingStatusStyle(meeting.status).text}
                 variant="subtext"
@@ -300,7 +306,10 @@ export const MeetingDetailScreen = () => {
                       </Text>
                     </View>
                     <View className="flex-1">
-                      <Text weight="semibold" size="sm" className="text-slate-900 dark:text-slate-100">
+                      <Text
+                        weight="semibold"
+                        size="sm"
+                        className="text-slate-900 dark:text-slate-100">
                         {attendee.user.name}
                       </Text>
                       <Text variant="subtext" size="xs" className="text-slate-500">
@@ -341,7 +350,6 @@ export const MeetingDetailScreen = () => {
             </View>
           </View>
         </View>
-
       </ScrollView>
     </Container>
   );

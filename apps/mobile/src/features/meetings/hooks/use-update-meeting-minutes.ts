@@ -13,8 +13,7 @@ export function useUpdateMeetingMinutes({ meetingId, meetingMinuteId }: Props) {
   const queryClient = useQueryClient();
   const url = ENDPOINTS.MEETINGS.MINUTES.DETAIL;
   return useMutation({
-    mutationFn: (data: UpdateMeetingMinuteInput) =>
-      http.put(url(meetingId, meetingMinuteId), data),
+    mutationFn: (data: UpdateMeetingMinuteInput) => http.put(url(meetingId, meetingMinuteId), data),
     onSuccess: (data) => {
       if (data.success) {
         toast.success(data.message);

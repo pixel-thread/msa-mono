@@ -12,9 +12,7 @@ export const useMyCompliance = () => {
     initialPageParam: 1,
     enabled: isAuthenticated,
     queryFn: ({ pageParam }) =>
-      http.get<Compliance[]>(
-        buildUrlWithQuery(ENDPOINTS.COMPLIANCE.MY_LIST, { page: pageParam }),
-      ),
+      http.get<Compliance[]>(buildUrlWithQuery(ENDPOINTS.COMPLIANCE.MY_LIST, { page: pageParam })),
 
     getNextPageParam: (lastPage) => {
       if (!lastPage.meta?.hasMore) return undefined;

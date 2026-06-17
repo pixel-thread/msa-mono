@@ -72,10 +72,7 @@ export const MeetingCard = ({ meeting }: MeetingCardProps) => {
 
                 <View className="flex-row items-center gap-x-1.5">
                   <View className={cn('h-2 w-2 rounded-full', statusColor)} />
-                  <Text
-                    size="xs"
-                    weight="medium"
-                    className="text-slate-600 dark:text-slate-400">
+                  <Text size="xs" weight="medium" className="text-slate-600 dark:text-slate-400">
                     {meeting.status.replace('_', ' ')}
                   </Text>
                 </View>

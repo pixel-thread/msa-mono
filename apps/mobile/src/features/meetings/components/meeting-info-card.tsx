@@ -30,7 +30,11 @@ export const MeetingInfoCard = ({
           <Text variant="label" size="xs" className="uppercase tracking-widest">
             {label}
           </Text>
-          <Text weight="bold" size="sm" className="mt-0.5 text-slate-900 dark:text-white" selectable>
+          <Text
+            weight="bold"
+            size="sm"
+            className="mt-0.5 text-slate-900 dark:text-white"
+            selectable>
             {value}
           </Text>
         </View>
