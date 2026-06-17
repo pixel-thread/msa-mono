@@ -1,0 +1,8 @@
+node_modules
+.expo
+.turbo
+android
+ios
+package-lock.json
+expo-env.d.ts
+.env
