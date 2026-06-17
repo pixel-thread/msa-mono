@@ -12,8 +12,8 @@ import {
 } from '@components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@components/ui/tabs';
 
-import { useIncomeStatement } from '../hooks/useIncomeStatement';
-import { useTrialBalance } from '../hooks/useTrialBalance';
+import { useIncomeStatement } from '../hooks/use-income-statement';
+import { useTrialBalance } from '../hooks/use-trial-balance';
 
 function formatCurrency(amount: string) {
   const num = Number(amount);

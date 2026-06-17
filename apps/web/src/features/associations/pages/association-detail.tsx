@@ -3,8 +3,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useAssociation } from '@hooks/use-association';
-import { useUpdateAssociation } from '@src/features/associations/hooks/useUpdateAssociation';
-import { useUploadAssociationLogo } from '@src/features/associations/hooks/useUploadAssociationLogo';
+import { useUpdateAssociation } from '@src/features/associations/hooks/use-update-association';
+import { useUploadAssociationLogo } from '@src/features/associations/hooks/use-upload-association-logo';
 import {
   UpdateAssociationInput,
   UpdateAssociationSchema,

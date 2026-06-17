@@ -13,10 +13,10 @@ import { useNavigate, useParams } from '@tanstack/react-router';
 import { ArrowLeftIcon } from 'lucide-react';
 import { toast } from 'sonner';
 
-import { useLedgerAccounts } from '../../../shared/hooks/useLedgerAccounts';
-import { useLedgerLineColumns } from '../hooks/columns/useLedgerLineColumns';
-import { useApproveEntry } from '../hooks/useApproveEntry';
-import { useLedgerEntries } from '../hooks/useLedgerEntries';
+import { useLedgerAccounts } from '../../../shared/hooks/use-ledger-accounts';
+import { useLedgerLineColumns } from '../hooks/columns/use-ledger-line-columns';
+import { useApproveEntry } from '../hooks/use-approve-entry';
+import { useLedgerEntries } from '../hooks/use-ledger-entries';
 
 export default function LedgerEntryDetailPage() {
   const params = useParams({ strict: false });

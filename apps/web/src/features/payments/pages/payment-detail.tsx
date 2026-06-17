@@ -1,6 +1,6 @@
 'use client';
 
-import { usePaymentDetail } from '@src/features/payments/hooks/usePaymentDetail';
+import { usePaymentDetail } from '@src/features/payments/hooks/use-payment-detail';
 import { SectionHeader } from '@src/shared/components/section-header';
 import { Button } from '@src/shared/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@src/shared/components/ui/card';

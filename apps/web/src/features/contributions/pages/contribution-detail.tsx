@@ -4,7 +4,7 @@ import { Loading } from '@components/loading';
 import { SectionHeader } from '@components/section-header';
 import { Button } from '@components/ui/button';
 import { ContributionDetail } from '@feature/contributions/components/contribution-detail';
-import { useContributionDetail } from '@feature/contributions/hooks/useContributionDetail';
+import { useContributionDetail } from '@feature/contributions/hooks/use-contribution-detail';
 import { EmptyState } from '@src/shared/components/empty-state';
 import { useParams } from '@tanstack/react-router';
 import { ArrowLeft } from 'lucide-react';

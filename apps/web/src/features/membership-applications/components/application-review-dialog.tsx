@@ -1,9 +1,9 @@
 import React from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMemberTypes } from '@src/features/members/hooks/useMemberTypes';
+import { useMemberTypes } from '@src/features/members/hooks/use-member-types';
 import { ROLES } from '@src/features/members/utils/constants';
-import { useApproveApplication } from '@src/features/membership-applications/hooks/useApproveApplication';
-import { useRejectApplication } from '@src/features/membership-applications/hooks/useRejectApplication';
+import { useApproveApplication } from '@src/features/membership-applications/hooks/use-approve-application';
+import { useRejectApplication } from '@src/features/membership-applications/hooks/use-reject-application';
 import { Button } from '@src/shared/components/ui/button';
 import { Calendar } from '@src/shared/components/ui/calendar';
 import {

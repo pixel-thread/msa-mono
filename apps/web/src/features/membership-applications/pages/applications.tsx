@@ -8,9 +8,9 @@ import { Button } from '@src/shared/components/ui/button';
 import { useUrlFilters } from '@src/shared/hooks';
 
 import { ApplicationReviewDialog } from '../components/application-review-dialog';
-import { useMembershipApplicationColumns } from '../hooks/useMembershipApplicationColumns';
-import { useMembershipApplications } from '../hooks/useMembershipApplications';
-import { useRejectApplication } from '../hooks/useRejectApplication';
+import { useMembershipApplicationColumns } from '../hooks/use-membership-application-columns';
+import { useMembershipApplications } from '../hooks/use-membership-applications';
+import { useRejectApplication } from '../hooks/use-reject-application';
 import { MembershipApplicationListItem } from '../types';
 
 export function MembershipApplicationsPage() {

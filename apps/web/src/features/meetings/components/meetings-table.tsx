@@ -12,7 +12,7 @@ import {
 } from '@src/shared/components/ui/card';
 
 import { useMeetings } from '../hooks';
-import { useMeetingTableColumns } from '../hooks/useMeetingTableColumns';
+import { useMeetingTableColumns } from '../hooks/use-meeting-table-columns';
 
 export function MeetingsTable() {
   useMeetingTableColumns();

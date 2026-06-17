@@ -22,8 +22,8 @@ import {
 import { Textarea } from '@src/shared/components/ui/textarea';
 import { AlertTriangle, CheckCircle2, Plus, X } from 'lucide-react';
 
-import { useLedgerAccounts } from '../../../shared/hooks/useLedgerAccounts';
-import { useCreateEntry } from '../hooks/useCreateEntry';
+import { useLedgerAccounts } from '../../../shared/hooks/use-ledger-accounts';
+import { useCreateEntry } from '../hooks/use-create-entry';
 
 interface CreateEntryDialogProps {
   open: boolean;

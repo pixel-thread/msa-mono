@@ -1,5 +1,5 @@
 'use client';
-import type { LedgerLineResponse } from '@feature/ledger/hooks/useLedgerEntries';
+import type { LedgerLineResponse } from '@feature/ledger/hooks/use-ledger-entries';
 import { Link } from '@tanstack/react-router';
 import { ColumnDef } from '@tanstack/react-table';
 

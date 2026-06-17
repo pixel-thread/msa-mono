@@ -1,3 +1,3 @@
 export * from './use-mobile';
 export * from './use-url-filters';
-export * from './useDashboard';
+export * from './use-dashboard';

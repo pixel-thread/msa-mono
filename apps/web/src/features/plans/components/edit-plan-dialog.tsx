@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMemberTypes } from '@src/features/members/hooks/useMemberTypes';
-import { useUpdatePlan } from '@src/features/plans/hooks/useUpdatePlan';
+import { useMemberTypes } from '@src/features/members/hooks/use-member-types';
+import { useUpdatePlan } from '@src/features/plans/hooks/use-update-plan';
 import { Button } from '@src/shared/components/ui/button';
 import {
   Dialog,
@@ -31,7 +31,7 @@ import { Switch } from '@src/shared/components/ui/switch';
 import { BILLING_CYCLE } from '@src/shared/types';
 import { useForm } from 'react-hook-form';
 
-import { usePlan } from '../hooks/usePlan';
+import { usePlan } from '../hooks/use-plan';
 import { usePlanStore } from '../stores';
 import { UpdatePlanInput, UpdatePlanSchema } from '../validators';
 

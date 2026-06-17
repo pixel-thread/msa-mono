@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { useAssociationsList } from '@src/features/associations/hooks/useAssociationsList';
+import { useAssociationsList } from '@src/features/associations/hooks/use-associations-list';
 import {
   AlertDialog,
   AlertDialogAction,

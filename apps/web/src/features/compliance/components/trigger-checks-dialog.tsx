@@ -15,7 +15,7 @@ import {
 import { Label } from '@src/shared/components/ui/label';
 import { Play } from 'lucide-react';
 
-import { useTriggerComplianceCheck } from '../hooks/useTriggerComplianceCheck';
+import { useTriggerComplianceCheck } from '../hooks/use-trigger-compliance-check';
 import { ALL_CHECK_TYPES } from '../validators/compliance';
 
 const checkTypeLabels: Record<string, string> = {

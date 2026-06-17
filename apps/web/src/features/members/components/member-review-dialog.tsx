@@ -1,8 +1,8 @@
 import React from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useApproveMember } from '@src/features/members/hooks/useApproveMember';
-import { useMemberTypes } from '@src/features/members/hooks/useMemberTypes';
-import { useRejectMember } from '@src/features/members/hooks/useRejectMember';
+import { useApproveMember } from '@src/features/members/hooks/use-approve-member';
+import { useMemberTypes } from '@src/features/members/hooks/use-member-types';
+import { useRejectMember } from '@src/features/members/hooks/use-reject-member';
 import { Button } from '@src/shared/components/ui/button';
 import { Calendar } from '@src/shared/components/ui/calendar';
 import {

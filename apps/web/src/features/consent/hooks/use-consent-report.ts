@@ -4,16 +4,16 @@ import type { ApiResponse } from '@src/shared/utils/http';
 import http from '@src/shared/utils/http';
 import { useQuery } from '@tanstack/react-query';
 
-import type { ComplianceEvidence } from '../types/compliance.types';
+import type { ConsentSummaryReport } from '../types/consent-types';
 
-export function useComplianceEvidence() {
+export function useConsentReport() {
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: QUERY_KEYS.COMPLIANCE_KEYS.EVIDENCE(),
-    queryFn: async () => http.get<ComplianceEvidence>(ENDPOINTS.COMPLIANCE.EVIDENCE),
+    queryKey: QUERY_KEYS.CONSENT_KEYS.REPORT(),
+    queryFn: async () => http.get<ConsentSummaryReport[]>(ENDPOINTS.CONSENT.REPORT),
   });
 
   return {
-    evidence: (data as ApiResponse<ComplianceEvidence>)?.data ?? null,
+    report: ((data as ApiResponse<ConsentSummaryReport[]>)?.data as ConsentSummaryReport[]) ?? [],
     isLoading,
     error,
     refetch,

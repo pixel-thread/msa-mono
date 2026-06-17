@@ -1,8 +1,8 @@
 'use client';
 
-import { useMembers } from '@src/features/members/hooks/useMembers';
-import { useMemberTableActions } from '@src/features/members/hooks/useMemberTableActions';
-import { useMemberTableColumns } from '@src/features/members/hooks/useMemberTableColumns';
+import { useMembers } from '@src/features/members/hooks/use-members';
+import { useMemberTableActions } from '@src/features/members/hooks/use-member-table-actions';
+import { useMemberTableColumns } from '@src/features/members/hooks/use-member-table-columns';
 import { DataTable } from '@src/shared/components/data-table';
 import { DataTableFilters } from '@src/shared/components/data-table-filters';
 import { DataTablePagination } from '@src/shared/components/data-table-pagination';

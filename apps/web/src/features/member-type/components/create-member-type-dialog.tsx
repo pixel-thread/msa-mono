@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useCreateMemberType } from '@src/features/member-type/hooks/useCreateMemberType';
+import { useCreateMemberType } from '@src/features/member-type/hooks/use-create-member-type';
 import {
   CreateMemberTypeInput,
   CreateMemberTypeSchema,

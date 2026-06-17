@@ -1,4 +1,4 @@
-import type { LedgerEntryResponse } from '@feature/ledger/hooks/useLedgerEntries';
+import type { LedgerEntryResponse } from '@feature/ledger/hooks/use-ledger-entries';
 import { Badge } from '@src/shared/components/ui/badge';
 import { Button } from '@src/shared/components/ui/button';
 import { formatDate } from '@src/shared/utils/format';

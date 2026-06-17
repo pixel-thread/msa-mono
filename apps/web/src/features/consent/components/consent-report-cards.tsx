@@ -3,7 +3,7 @@
 import { ConsentPurpose } from '@sharedType/enums';
 import { Skeleton } from '@src/shared/components/ui/skeleton';
 
-import { useConsentReport } from '../hooks/useConsentReport';
+import { useConsentReport } from '../hooks/use-consent-report';
 
 const purposeLabels: Record<ConsentPurpose, string> = {
   PAYMENTS: 'Payments',

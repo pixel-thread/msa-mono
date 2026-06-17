@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useUpdateAssociation } from '@src/features/associations/hooks/useUpdateAssociation';
+import { useUpdateAssociation } from '@src/features/associations/hooks/use-update-association';
 import {
   UpdateAssociationInput,
   UpdateAssociationSchema,

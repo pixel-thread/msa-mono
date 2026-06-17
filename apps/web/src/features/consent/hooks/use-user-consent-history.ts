@@ -4,7 +4,7 @@ import type { ApiResponse } from '@src/shared/utils/http';
 import http from '@src/shared/utils/http';
 import { useQuery } from '@tanstack/react-query';
 
-import type { ConsentReceiptRecord } from '../types/consent.types';
+import type { ConsentReceiptRecord } from '../types/consent-types';
 
 export function useUserConsentHistory(userId: string | null) {
   const { data, isLoading, error } = useQuery({

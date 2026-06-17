@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useLedgerAccounts } from '@hooks/useLedgerAccounts';
+import { useLedgerAccounts } from '@hooks/use-ledger-accounts';
 import { Button, buttonVariants } from '@src/shared/components/ui/button';
 import {
   Dialog,
@@ -37,7 +37,7 @@ import { ArrowRight, ArrowRightLeft } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
-import { useTransferAccountBalance } from '../hooks/useTransferAccountBalance';
+import { useTransferAccountBalance } from '../hooks/use-transfer-account-balance';
 import { TransferAccountBalanceSchema } from '../validators';
 
 import { ConfirmTransferDialog } from './confirm-transfer-dialog';

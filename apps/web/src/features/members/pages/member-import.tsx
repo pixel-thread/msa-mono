@@ -6,8 +6,8 @@ import {
   ImportResultView,
   ImportUploadView,
 } from '@src/features/members/components/import';
-import { useCsvPreview } from '@src/features/members/hooks/useCsvPreview';
-import { useImportMembers } from '@src/features/members/hooks/useImportMembers';
+import { useCsvPreview } from '@src/features/members/hooks/use-csv-preview';
+import { useImportMembers } from '@src/features/members/hooks/use-import-members';
 import { SectionHeader } from '@src/shared/components/section-header';
 import { useNavigate } from '@tanstack/react-router';
 import type { ColumnDef } from '@tanstack/react-table';

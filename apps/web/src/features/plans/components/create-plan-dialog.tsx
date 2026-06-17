@@ -1,8 +1,8 @@
 'use client';
 import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMemberTypes } from '@src/features/members/hooks/useMemberTypes';
-import { useCreatePlan } from '@src/features/plans/hooks/useCreatePlan';
+import { useMemberTypes } from '@src/features/members/hooks/use-member-types';
+import { useCreatePlan } from '@src/features/plans/hooks/use-create-plan';
 import { Button } from '@src/shared/components/ui/button';
 import {
   Dialog,

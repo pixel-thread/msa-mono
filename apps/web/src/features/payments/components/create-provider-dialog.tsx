@@ -2,7 +2,7 @@
 
 import { QUERY_KEYS } from '@repo/shared';
 import { ProviderForm } from '@src/features/payments/components/provider-form';
-import { useCreateProvider } from '@src/features/payments/hooks/usePaymentProviders';
+import { useCreateProvider } from '@src/features/payments/hooks/use-payment-providers';
 import {
   Dialog,
   DialogContent,

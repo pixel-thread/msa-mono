@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import { env } from '@src/env';
-import { AppProviders } from '@src/shared/providers/AppProviders';
+import { AppProviders } from '@src/shared/providers/app-providers';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { createRootRoute, Outlet } from '@tanstack/react-router';
 

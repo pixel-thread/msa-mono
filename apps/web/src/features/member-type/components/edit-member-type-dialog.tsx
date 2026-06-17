@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useUpdateMemberType } from '@src/features/member-type/hooks/useUpdateMemberType';
+import { useUpdateMemberType } from '@src/features/member-type/hooks/use-update-member-type';
 import {
   UpdateMemberTypeInput,
   UpdateMemberTypeSchema,

@@ -9,7 +9,7 @@ import { RevenueLineChart } from '@components/dashboard/revenue-line-chart';
 import { RolesRadarChart } from '@components/dashboard/roles-radar-chart';
 import { StatsCards } from '@components/dashboard/stats-cards';
 import { SectionHeader } from '@components/section-header';
-import { useDashboard } from '@hooks/useDashboard';
+import { useDashboard } from '@hooks/use-dashboard';
 
 /**
  * Main dashboard page component.

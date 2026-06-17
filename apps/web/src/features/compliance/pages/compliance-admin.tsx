@@ -12,7 +12,7 @@ import { ComplianceStatusCards } from '../components/compliance-status-cards';
 import { DeleteComplianceDialog } from '../components/delete-compliance-dialog';
 import { TriggerChecksDialog } from '../components/trigger-checks-dialog';
 import { useComplianceChecks, useComplianceColumns, useDeleteComplianceCheck } from '../hooks';
-import type { ComplianceRecord } from '../types/compliance.types';
+import type { ComplianceRecord } from '../types/compliance-types';
 import { ALL_CHECK_TYPES, ComplianceCheckStatusEnum } from '../validators/compliance';
 
 export default function ComplianceAdminPage() {

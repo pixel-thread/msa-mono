@@ -1,2 +1,2 @@
-export { AddCertificateDialog } from './AddCertificateDialog';
-export { RemoveCertificateAlertDialog } from './RemoveCertificateAlertDialog';
+export { AddCertificateDialog } from './add-certificate-dialog';
+export { RemoveCertificateAlertDialog } from './remove-certificate-alert-dialog';

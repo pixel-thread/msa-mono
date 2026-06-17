@@ -29,12 +29,12 @@ import {
 } from '@src/shared/components/ui/select';
 import { useForm } from 'react-hook-form';
 
-import { useUpdateConsentReceipt } from '../hooks/useUpdateConsentReceipt';
-import type { ConsentRecord } from '../types/consent.types';
+import { useUpdateConsentReceipt } from '../hooks/use-update-consent-receipt';
+import type { ConsentRecord } from '../types/consent-types';
 import {
   UpdateConsentReceiptInput,
   UpdateConsentReceiptSchema,
-} from '../validators/consent.validators';
+} from '../validators/consent-validators';
 
 interface EditConsentDialogProps {
   record: ConsentRecord | null;

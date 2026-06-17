@@ -3,7 +3,7 @@
 import { Button } from '@src/shared/components/ui/button';
 import { toast } from 'sonner';
 
-import { useTestPayment } from '../hooks/useRazorpayCheckout';
+import { useTestPayment } from '../hooks/use-razorpay-checkout';
 
 interface TestPaymentButtonProps {
   providerId: string;

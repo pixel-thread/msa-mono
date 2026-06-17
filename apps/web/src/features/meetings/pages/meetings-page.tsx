@@ -6,9 +6,9 @@ import { DataTableFilters } from '@components/data-table-filters';
 import { DataTablePagination } from '@components/data-table-pagination';
 import { SectionHeader } from '@components/section-header';
 import { Button } from '@components/ui/button';
-import { CreateMeetingDialog } from '@feature/meetings/components/CreateMeetingDialog';
+import { CreateMeetingDialog } from '@feature/meetings/components/create-meeting-dialog';
 import { useMeetings } from '@feature/meetings/hooks';
-import { useMeetingTableColumns } from '@feature/meetings/hooks/useMeetingTableColumns';
+import { useMeetingTableColumns } from '@feature/meetings/hooks/use-meeting-table-columns';
 import { useUrlFilters } from '@hooks/use-url-filters';
 import { Plus } from 'lucide-react';
 

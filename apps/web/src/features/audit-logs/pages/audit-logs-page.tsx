@@ -2,8 +2,8 @@
 
 import { useCallback, useState } from 'react';
 import { AuditLogDetailsDialog } from '@src/features/audit-logs/components/audit-log-details-dialog';
-import { useAuditLogColumns } from '@src/features/audit-logs/hooks/useAuditLogColumns';
-import { useAuditLogs } from '@src/features/audit-logs/hooks/useAuditLogs';
+import { useAuditLogColumns } from '@src/features/audit-logs/hooks/use-audit-log-columns';
+import { useAuditLogs } from '@src/features/audit-logs/hooks/use-audit-logs';
 import type { AuditLogEntry } from '@src/features/audit-logs/types';
 import { DataTable } from '@src/shared/components/data-table';
 import { DataTableFilters } from '@src/shared/components/data-table-filters';

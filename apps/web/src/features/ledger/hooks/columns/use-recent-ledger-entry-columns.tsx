@@ -1,5 +1,5 @@
 'use client';
-import type { LedgerEntryResponse } from '@feature/ledger/hooks/useLedgerEntries';
+import type { LedgerEntryResponse } from '@feature/ledger/hooks/use-ledger-entries';
 import { ColumnDef } from '@tanstack/react-table';
 import { formatDate } from '@utils/format';
 

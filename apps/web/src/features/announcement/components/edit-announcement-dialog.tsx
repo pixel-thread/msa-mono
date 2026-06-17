@@ -1,8 +1,8 @@
 import { useEffect, useRef } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AnnouncementPriority, AnnouncementStatus } from '@sharedType/enums';
-import { useUpdateAnnouncement } from '@src/features/announcement/hooks/useUpdateAnnouncement';
-import { useUploadAnnouncementImage } from '@src/features/announcement/hooks/useUploadAnnouncementImage';
+import { useUpdateAnnouncement } from '@src/features/announcement/hooks/use-update-announcement';
+import { useUploadAnnouncementImage } from '@src/features/announcement/hooks/use-upload-announcement-image';
 import type { Announcement } from '@src/features/announcement/types';
 import {
   UpdateAnnouncementInput,

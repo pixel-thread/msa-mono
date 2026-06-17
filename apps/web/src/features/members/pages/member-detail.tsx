@@ -6,7 +6,7 @@ import { DatesCard } from '@src/features/members/components/detail/dates-card';
 import { PaymentsCard } from '@src/features/members/components/detail/payments-card';
 import { PersonalInfoCard } from '@src/features/members/components/detail/personal-info-card';
 import { StatusCard } from '@src/features/members/components/detail/status-card';
-import { useMember } from '@src/features/members/hooks/useMember';
+import { useMember } from '@src/features/members/hooks/use-member';
 import { SectionHeader } from '@src/shared/components/section-header';
 import { Button } from '@src/shared/components/ui/button';
 import { useParams } from '@tanstack/react-router';

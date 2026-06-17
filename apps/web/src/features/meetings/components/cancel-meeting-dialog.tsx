@@ -11,7 +11,7 @@ import {
 } from '@src/shared/components/ui/dialog';
 import { CalendarX } from 'lucide-react';
 
-import { useCancelMeeting } from '../hooks/useCancelMeeting';
+import { useCancelMeeting } from '../hooks/use-cancel-meeting';
 
 interface CancelMeetingDialogProps {
   meetingId: string;

@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import { useMemberSearch } from '@src/features/payments/hooks/useMemberSearch';
+import { useMemberSearch } from '@src/features/payments/hooks/use-member-search';
 import { Button } from '@src/shared/components/ui/button';
 import { Input } from '@src/shared/components/ui/input';
 import { Search, User, X } from 'lucide-react';

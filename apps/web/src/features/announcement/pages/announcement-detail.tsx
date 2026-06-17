@@ -3,9 +3,9 @@
 import { useState } from 'react';
 import { DeleteAnnouncementDialog } from '@src/features/announcement/components/delete-announcement-dialog';
 import { EditAnnouncementDialog } from '@src/features/announcement/components/edit-announcement-dialog';
-import { useAnnouncement } from '@src/features/announcement/hooks/useAnnouncement';
-import { useDeleteAnnouncement } from '@src/features/announcement/hooks/useDeleteAnnouncement';
-import { useMarkAnnouncementRead } from '@src/features/announcement/hooks/useMarkAnnouncementRead';
+import { useAnnouncement } from '@src/features/announcement/hooks/use-announcement';
+import { useDeleteAnnouncement } from '@src/features/announcement/hooks/use-delete-announcement';
+import { useMarkAnnouncementRead } from '@src/features/announcement/hooks/use-mark-announcement-read';
 import { SectionHeader } from '@src/shared/components/section-header';
 import { Badge } from '@src/shared/components/ui/badge';
 import { Button } from '@src/shared/components/ui/button';

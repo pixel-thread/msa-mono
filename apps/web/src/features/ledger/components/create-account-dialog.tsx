@@ -20,7 +20,7 @@ import {
   SelectValue,
 } from '@src/shared/components/ui/select';
 
-import { useCreateAccount } from '../hooks/useCreateAccount';
+import { useCreateAccount } from '../hooks/use-create-account';
 
 interface CreateAccountDialogProps {
   open: boolean;

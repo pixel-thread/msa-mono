@@ -4,7 +4,7 @@ import http from '@src/shared/utils/http';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
-import type { UpdateConsentReceiptInput } from '../validators/consent.validators';
+import type { UpdateConsentReceiptInput } from '../validators/consent-validators';
 
 export function useUpdateConsentReceipt() {
   const queryClient = useQueryClient();

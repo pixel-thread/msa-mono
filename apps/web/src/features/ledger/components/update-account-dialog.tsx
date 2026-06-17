@@ -13,7 +13,7 @@ import { Input } from '@src/shared/components/ui/input';
 import { Label } from '@src/shared/components/ui/label';
 import type { Account } from '@src/shared/types';
 
-import { useUpdateAccount } from '../hooks/useUpdateAccount';
+import { useUpdateAccount } from '../hooks/use-update-account';
 
 interface UpdateAccountDialogProps {
   account: Account | null;

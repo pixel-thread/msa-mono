@@ -1,2 +1,2 @@
-export * from './useAuditLogs';
-export * from './useAuditLogColumns';
+export * from './use-audit-logs';
+export * from './use-audit-log-columns';

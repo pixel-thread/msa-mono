@@ -11,7 +11,7 @@ import {
   AlertDialogTrigger,
 } from '@components/ui/alert-dialog';
 import { Button } from '@components/ui/button';
-import { useCancelMeeting } from '@feature/meetings/hooks/useCancelMeeting';
+import { useCancelMeeting } from '@feature/meetings/hooks/use-cancel-meeting';
 import { CalendarX } from 'lucide-react';
 
 interface CancelMeetingCellProps {

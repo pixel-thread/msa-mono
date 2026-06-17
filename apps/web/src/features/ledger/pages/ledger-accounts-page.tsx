@@ -7,15 +7,15 @@ import { DataTablePagination } from '@components/data-table-pagination';
 import { SectionHeader } from '@components/section-header';
 import { Button } from '@components/ui/button';
 import { Card, CardContent } from '@components/ui/card';
-import { useLedgerAccounts } from '@hooks/useLedgerAccounts';
+import { useLedgerAccounts } from '@hooks/use-ledger-accounts';
 import { useUrlFilters } from '@src/shared/hooks';
 import type { Account } from '@src/shared/types';
 import { BanknoteIcon, Plus, Sprout } from 'lucide-react';
 
 import { CreateAccountDialog } from '../components/create-account-dialog';
 import { UpdateAccountDialog } from '../components/update-account-dialog';
-import { useLedgerAccountColumns } from '../hooks/columns/useLedgerAccountColumns';
-import { useSeedAccounts } from '../hooks/useSeedAccounts';
+import { useLedgerAccountColumns } from '../hooks/columns/use-ledger-account-columns';
+import { useSeedAccounts } from '../hooks/use-seed-accounts';
 
 export default function LedgerAccountsPage() {
   const { page, setPage } = useUrlFilters({ basePath: '/ledger/accounts' });

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useCreateAssociation } from '@src/features/associations/hooks/useCreateAssociation';
+import { useCreateAssociation } from '@src/features/associations/hooks/use-create-association';
 import {
   CreateAssociationInput,
   CreateAssociationSchema,

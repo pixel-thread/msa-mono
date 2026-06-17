@@ -14,18 +14,18 @@ import {
   DropdownMenuTrigger,
 } from '@components/ui/dropdown-menu';
 import { Separator } from '@components/ui/separator';
-import { CancelMeetingDialog } from '@feature/meetings/components/CancelMeetingDialog';
-import { DeleteMeetingDialog } from '@feature/meetings/components/DeleteMeetingDialog';
-import { EditMeetingDialog } from '@feature/meetings/components/EditMeetingDialog';
-import { ManageAttendeesDialog } from '@feature/meetings/components/ManageAttendeesDialog';
+import { CancelMeetingDialog } from '@feature/meetings/components/cancel-meeting-dialog';
+import { DeleteMeetingDialog } from '@feature/meetings/components/delete-meeting-dialog';
+import { EditMeetingDialog } from '@feature/meetings/components/edit-meeting-dialog';
+import { ManageAttendeesDialog } from '@feature/meetings/components/manage-attendees-dialog';
 import { useMeetingAttendees } from '@feature/meetings/hooks';
 import {
   type AgendaItem,
   type Attendee,
   useMeetingDetail,
-} from '@feature/meetings/hooks/useMeetingDetail';
+} from '@feature/meetings/hooks/use-meeting-detail';
 import type { AssignAttendeeInput } from '@feature/meetings/validators';
-import { useMembers } from '@feature/members/hooks/useMembers';
+import { useMembers } from '@feature/members/hooks/use-members';
 import { useNavigate, useParams, useSearch } from '@tanstack/react-router';
 import { formatDate } from '@utils/format';
 import { getRsvpBadge, getStatusBadge, getTypeBadge } from '@utils/helper';

@@ -3,8 +3,8 @@ import type { Account } from '@src/shared/types';
 import http from '@src/shared/utils/http';
 import { useQuery } from '@tanstack/react-query';
 
-import type { IncomeStatementLine } from './useIncomeStatement';
-import type { TrialBalanceLine } from './useTrialBalance';
+import type { IncomeStatementLine } from './use-income-statement';
+import type { TrialBalanceLine } from './use-trial-balance';
 
 export interface AccountDetailResponse extends Account {
   report: {

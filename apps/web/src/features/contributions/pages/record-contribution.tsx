@@ -17,7 +17,7 @@ import { toast } from 'sonner';
 import { ContributionStatsPanel } from '../components/contribution-stats-panel';
 import { PaymentSummaryBar } from '../components/payment-summary-bar';
 import { useUserContributions } from '../hooks';
-import { useUserContributionColumns } from '../hooks/useUserContributionColumns';
+import { useUserContributionColumns } from '../hooks/use-user-contribution-columns';
 import { ContributionPeriod } from '../types';
 
 export const RecordContributionPage = () => {

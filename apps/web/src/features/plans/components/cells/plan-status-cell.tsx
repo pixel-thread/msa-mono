@@ -9,7 +9,7 @@ import {
 } from '@src/shared/components/ui/select';
 import { Plan_STATUS } from '@src/shared/types';
 
-import { usePlanTableActions } from '../../hooks/usePlanTableActions';
+import { usePlanTableActions } from '../../hooks/use-plan-table-actions';
 import { Plan } from '../../types';
 import { getPlanStatusBadge } from '../../utils/helper/get-plan-status-badge';
 

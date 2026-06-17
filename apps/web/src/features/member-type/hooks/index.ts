@@ -1,5 +1,5 @@
-export { useMemberTypesList } from './useMemberTypesList';
-export { useCreateMemberType } from './useCreateMemberType';
-export { useUpdateMemberType } from './useUpdateMemberType';
-export { useDeleteMemberType } from './useDeleteMemberType';
-export { useMemberTypeColumns } from './useMemberTypeColumns';
+export { useMemberTypesList } from './use-member-types-list';
+export { useCreateMemberType } from './use-create-member-type';
+export { useUpdateMemberType } from './use-update-member-type';
+export { useDeleteMemberType } from './use-delete-member-type';
+export { useMemberTypeColumns } from './use-member-type-columns';

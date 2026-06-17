@@ -9,8 +9,8 @@ import {
 } from '@src/shared/components/ui/select';
 import type { User } from '@src/shared/types';
 
-import { useChangeMemberType } from '../../hooks/useChangeMemberType';
-import { useMemberTypes } from '../../hooks/useMemberTypes';
+import { useChangeMemberType } from '../../hooks/use-change-member-type';
+import { useMemberTypes } from '../../hooks/use-member-types';
 
 interface TypeCellProps {
   member: User;

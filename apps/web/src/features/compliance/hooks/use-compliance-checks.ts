@@ -5,7 +5,7 @@ import type { ApiResponse } from '@src/shared/utils/http';
 import http from '@src/shared/utils/http';
 import { useQuery } from '@tanstack/react-query';
 
-import type { ComplianceRecord } from '../types/compliance.types';
+import type { ComplianceRecord } from '../types/compliance-types';
 
 interface UseComplianceChecksOptions {
   page?: number;

@@ -1,8 +1,8 @@
 'use client';
 
 import { useUrlFilters } from '@hooks/use-url-filters';
-import { useUserContributionColumns } from '@src/features/contributions/hooks/useUserContributionColumns';
-import { useUserContributions } from '@src/features/contributions/hooks/useUserContributions';
+import { useUserContributionColumns } from '@src/features/contributions/hooks/use-user-contribution-columns';
+import { useUserContributions } from '@src/features/contributions/hooks/use-user-contributions';
 import { DataTable } from '@src/shared/components/data-table';
 import { DataTableFilters } from '@src/shared/components/data-table-filters';
 import { DataTablePagination } from '@src/shared/components/data-table-pagination';

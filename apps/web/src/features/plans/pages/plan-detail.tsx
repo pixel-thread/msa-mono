@@ -1,6 +1,6 @@
 'use client';
 
-import { usePlans } from '@src/features/plans/hooks/usePlans';
+import { usePlans } from '@src/features/plans/hooks/use-plans';
 import { DataTable } from '@src/shared/components/data-table';
 import { SectionHeader } from '@src/shared/components/section-header';
 import { Badge } from '@src/shared/components/ui/badge';
@@ -10,7 +10,7 @@ import { Separator } from '@src/shared/components/ui/separator';
 import { BILLING_CYCLE } from '@src/shared/types';
 import { formatDate, formattedAmount } from '@src/shared/utils';
 
-import { usePlanVersionColumns } from '../hooks/usePlanVersionColumns';
+import { usePlanVersionColumns } from '../hooks/use-plan-version-columns';
 import { planRouteApi } from '../lib/route';
 
 export function PlanDetailPage() {

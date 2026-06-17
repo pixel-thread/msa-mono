@@ -1,7 +1,7 @@
 'use client';
 
-import { usePaymentTransactionColumns } from '@src/features/payments/hooks/usePaymentTransactionColumns';
-import { useUserPayments } from '@src/features/payments/hooks/useUserPayments';
+import { usePaymentTransactionColumns } from '@src/features/payments/hooks/use-payment-transaction-columns';
+import { useUserPayments } from '@src/features/payments/hooks/use-user-payments';
 import { DataTable } from '@src/shared/components/data-table';
 import { DataTableFilters } from '@src/shared/components/data-table-filters';
 import { DataTablePagination } from '@src/shared/components/data-table-pagination';

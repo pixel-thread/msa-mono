@@ -1,11 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import { usePaymentProviderColumns } from '@src/features/payments/hooks/usePaymentProviderColumns';
+import { usePaymentProviderColumns } from '@src/features/payments/hooks/use-payment-provider-columns';
 import {
   useDeleteProvider,
   usePaymentProviders,
-} from '@src/features/payments/hooks/usePaymentProviders';
+} from '@src/features/payments/hooks/use-payment-providers';
 import { DataTable } from '@src/shared/components/data-table';
 import { DataTableFilters } from '@src/shared/components/data-table-filters';
 import { SectionHeader } from '@src/shared/components/section-header';

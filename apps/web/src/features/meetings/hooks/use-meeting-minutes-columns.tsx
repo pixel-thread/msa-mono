@@ -1,5 +1,5 @@
 'use client';
-import type { MeetingMinute } from '@src/features/meetings/hooks/useMeetingMinutes';
+import type { MeetingMinute } from '@src/features/meetings/hooks/use-meeting-minutes';
 import { Badge } from '@src/shared/components/ui/badge';
 import { Button } from '@src/shared/components/ui/button';
 import { ColumnDef } from '@tanstack/react-table';

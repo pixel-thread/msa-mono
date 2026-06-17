@@ -6,7 +6,7 @@ import { ProviderDetail } from '@src/features/payments/components/provider-detai
 import {
   useDeleteProvider,
   useProviderDetail,
-} from '@src/features/payments/hooks/usePaymentProviders';
+} from '@src/features/payments/hooks/use-payment-providers';
 import { Button } from '@src/shared/components/ui/button';
 import {
   Dialog,

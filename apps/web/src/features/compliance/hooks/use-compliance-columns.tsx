@@ -2,7 +2,7 @@ import { Badge } from '@src/shared/components/ui/badge';
 import { ColumnDef } from '@tanstack/react-table';
 
 import { ComplianceActionsCell } from '../components/cells/compliance-actions-cell';
-import type { ComplianceRecord } from '../types/compliance.types';
+import type { ComplianceRecord } from '../types/compliance-types';
 
 interface UseComplianceColumnsOptions {
   onViewDetail: (record: ComplianceRecord) => void;

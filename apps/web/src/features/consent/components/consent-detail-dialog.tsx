@@ -10,7 +10,7 @@ import {
   DialogTitle,
 } from '@src/shared/components/ui/dialog';
 
-import type { ConsentRecord } from '../types/consent.types';
+import type { ConsentRecord } from '../types/consent-types';
 
 interface ConsentDetailDialogProps {
   record: ConsentRecord | null;

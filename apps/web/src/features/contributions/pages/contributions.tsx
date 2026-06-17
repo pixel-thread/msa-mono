@@ -1,8 +1,8 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { useContributionPeriodColumns } from '@src/features/contributions/hooks/useContributionPeriodColumns';
-import { useContributions } from '@src/features/contributions/hooks/useContributions';
+import { useContributionPeriodColumns } from '@src/features/contributions/hooks/use-contribution-period-columns';
+import { useContributions } from '@src/features/contributions/hooks/use-contributions';
 import { DataTable } from '@src/shared/components/data-table';
 import { DataTableFilters, type FilterField } from '@src/shared/components/data-table-filters';
 import { DataTablePagination } from '@src/shared/components/data-table-pagination';
@@ -19,7 +19,7 @@ import { useUrlFilters } from '@src/shared/hooks';
 import { Plus } from 'lucide-react';
 import { toast } from 'sonner';
 
-import { useGeneratePeriodicContribution } from '../hooks/useGeneratePeriodicContribution';
+import { useGeneratePeriodicContribution } from '../hooks/use-generate-periodic-contribution';
 
 const currentYear = new Date().getFullYear();
 

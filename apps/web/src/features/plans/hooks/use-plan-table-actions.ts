@@ -1,8 +1,8 @@
 import { usePlanStore } from '../stores';
 
-import { useDeletePlan } from './useDeletePlan';
-import { useSetDefaultPlan } from './useSetDefaultPlan';
-import { useUpdatePlan } from './useUpdatePlan';
+import { useDeletePlan } from './use-delete-plan';
+import { useSetDefaultPlan } from './use-set-default-plan';
+import { useUpdatePlan } from './use-update-plan';
 
 export function usePlanTableActions() {
   const updatePlan = useUpdatePlan();

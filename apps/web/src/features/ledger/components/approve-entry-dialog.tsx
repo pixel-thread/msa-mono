@@ -10,7 +10,7 @@ import {
   DialogTitle,
 } from '@src/shared/components/ui/dialog';
 
-import { useApproveEntry } from '../hooks/useApproveEntry';
+import { useApproveEntry } from '../hooks/use-approve-entry';
 
 interface ApproveEntryDialogProps {
   entryId: string | null;

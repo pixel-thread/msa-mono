@@ -12,7 +12,7 @@ import { ConsentReportCards } from '../components/consent-report-cards';
 import { DeleteConsentDialog } from '../components/delete-consent-dialog';
 import { EditConsentDialog } from '../components/edit-consent-dialog';
 import { useConsentColumns, useConsentRecords, useDeleteConsentReceipt } from '../hooks';
-import type { ConsentRecord } from '../types/consent.types';
+import type { ConsentRecord } from '../types/consent-types';
 
 export default function ConsentAdminPage() {
   const [page, setPage] = useState(1);

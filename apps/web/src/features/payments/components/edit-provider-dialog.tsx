@@ -5,7 +5,7 @@ import { ProviderForm } from '@src/features/payments/components/provider-form';
 import {
   useProviderDetail,
   useUpdateProvider,
-} from '@src/features/payments/hooks/usePaymentProviders';
+} from '@src/features/payments/hooks/use-payment-providers';
 import {
   Dialog,
   DialogContent,

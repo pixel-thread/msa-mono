@@ -30,8 +30,8 @@ import {
   EditModuleDialog,
   RemoveCertificateAlertDialog,
 } from '../components';
-import { RemoveModuleAlertDialog } from '../components/RemoveModuleAlertDialog';
-import { RemoveSupplementAlertDialog } from '../components/supplements/RemoveSupplementAlertDialog';
+import { RemoveModuleAlertDialog } from '../components/remove-module-alert-dialog';
+import { RemoveSupplementAlertDialog } from '../components/supplements/remove-supplement-alert-dialog';
 import {
   useModuleAssignedUsers,
   useTrainingCertificates,

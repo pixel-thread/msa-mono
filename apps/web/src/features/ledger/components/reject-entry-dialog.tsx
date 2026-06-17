@@ -13,7 +13,7 @@ import {
 import { Input } from '@src/shared/components/ui/input';
 import { Label } from '@src/shared/components/ui/label';
 
-import { useRejectEntry } from '../hooks/useRejectEntry';
+import { useRejectEntry } from '../hooks/use-reject-entry';
 
 interface RejectEntryDialogProps {
   entryId: string | null;

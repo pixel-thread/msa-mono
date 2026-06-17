@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import { MemberSearch } from '@src/features/payments/components/member-search';
-import { usePaymentTransactionColumns } from '@src/features/payments/hooks/usePaymentTransactionColumns';
-import { useUserPayments } from '@src/features/payments/hooks/useUserPayments';
+import { usePaymentTransactionColumns } from '@src/features/payments/hooks/use-payment-transaction-columns';
+import { useUserPayments } from '@src/features/payments/hooks/use-user-payments';
 import { DataTable } from '@src/shared/components/data-table';
 import { DataTableFilters } from '@src/shared/components/data-table-filters';
 import { SectionHeader } from '@src/shared/components/section-header';

@@ -9,7 +9,7 @@ import {
   DialogTitle,
 } from '@src/shared/components/ui/dialog';
 
-import type { ComplianceRecord } from '../types/compliance.types';
+import type { ComplianceRecord } from '../types/compliance-types';
 
 interface ComplianceDetailDialogProps {
   record: ComplianceRecord | null;

@@ -13,6 +13,7 @@ import { Award, Plus } from 'lucide-react';
 import { CreateModuleDialog } from '../components';
 import { useModuleTableColumns, useTrainingModules, useUpdateTrainingModule } from '../hooks';
 
+
 export function TrainingListPage() {
   const navigate = useNavigate();
 

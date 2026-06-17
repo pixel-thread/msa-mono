@@ -8,9 +8,9 @@ import { useUrlFilters } from '@src/shared/hooks';
 import { useNavigate, useParams } from '@tanstack/react-router';
 import { Award } from 'lucide-react';
 
-import { useTrainingCompletions } from '../hooks/completions/useTrainingCompletions';
-import { useTrainingCompletionsColumns } from '../hooks/completions/useTrainingCompletionsColumns';
-import { useTrainingModule } from '../hooks/useTrainingModules';
+import { useTrainingCompletions } from '../hooks/completions/use-training-completions';
+import { useTrainingCompletionsColumns } from '../hooks/completions/use-training-completions-columns';
+import { useTrainingModule } from '../hooks/use-training-modules';
 
 export function TrainingCompletionsPage() {
   const navigate = useNavigate();

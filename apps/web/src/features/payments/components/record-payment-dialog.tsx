@@ -1,7 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useLedgerAccounts } from '@hooks/useLedgerAccounts';
+import { useLedgerAccounts } from '@hooks/use-ledger-accounts';
 import { QUERY_KEYS } from '@repo/shared';
 import { RecordManualPaymentSchema } from '@src/features/payments/validators';
 import { Button } from '@src/shared/components/ui/button';

@@ -12,8 +12,8 @@ import { Plus } from 'lucide-react';
 import { ApproveEntryDialog } from '../components/approve-entry-dialog';
 import { CreateEntryDialog } from '../components/create-entry-dialog';
 import { RejectEntryDialog } from '../components/reject-entry-dialog';
-import { useLedgerEntriesColumns } from '../hooks/columns/useLedgerEntriesColumns';
-import { type LedgerEntryResponse, useLedgerEntries } from '../hooks/useLedgerEntries';
+import { useLedgerEntriesColumns } from '../hooks/columns/use-ledger-entries-columns';
+import { type LedgerEntryResponse, useLedgerEntries } from '../hooks/use-ledger-entries';
 
 export default function LedgerEntriesPage() {
   const navigate = useNavigate();

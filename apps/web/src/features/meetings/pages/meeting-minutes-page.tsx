@@ -10,12 +10,12 @@ import {
   DeleteMinuteDialog,
   EditMinuteDialog,
 } from '@feature/meetings/components';
-import { useMeetingDetail } from '@feature/meetings/hooks/useMeetingDetail';
+import { useMeetingDetail } from '@feature/meetings/hooks/use-meeting-detail';
 import {
   type MeetingMinute as MeetingMinuteType,
   useMeetingMinutes,
-} from '@feature/meetings/hooks/useMeetingMinutes';
-import { useMeetingMinutesColumns } from '@feature/meetings/hooks/useMeetingMinutesColumns';
+} from '@feature/meetings/hooks/use-meeting-minutes';
+import { useMeetingMinutesColumns } from '@feature/meetings/hooks/use-meeting-minutes-columns';
 import type {
   CreateMeetingMinuteInput,
   UpdateMeetingMinuteInput,

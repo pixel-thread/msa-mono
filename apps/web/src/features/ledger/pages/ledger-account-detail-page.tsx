@@ -15,9 +15,9 @@ import {
 import { formatCurrency } from '@src/shared/utils/format';
 import { useNavigate, useParams } from '@tanstack/react-router';
 
-import { useLedgerAccount } from '../../../shared/hooks/useLedgerAccount';
-import { useLedgerEntriesColumns } from '../hooks/columns/useLedgerEntriesColumns';
-import { useLedgerEntries } from '../hooks/useLedgerEntries';
+import { useLedgerAccount } from '../../../shared/hooks/use-ledger-account';
+import { useLedgerEntriesColumns } from '../hooks/columns/use-ledger-entries-columns';
+import { useLedgerEntries } from '../hooks/use-ledger-entries';
 
 export default function LedgerAccountDetailPage() {
   const params = useParams({ strict: false });

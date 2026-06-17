@@ -3,7 +3,7 @@
 import { useMemo } from 'react';
 import { Skeleton } from '@src/shared/components/ui/skeleton';
 
-import { useComplianceChecks } from '../hooks/useComplianceChecks';
+import { useComplianceChecks } from '../hooks/use-compliance-checks';
 import { ALL_CHECK_TYPES } from '../validators/compliance';
 
 const checkTypeLabels: Record<string, string> = {
