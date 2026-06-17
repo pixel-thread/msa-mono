@@ -5,6 +5,8 @@ import http from '@src/shared/utils/http';
 import { toast } from 'sonner-native';
 import { useAuthStore, useSecureTokenStore } from '../store';
 import { ENDPOINTS } from '@repo/shared';
+import { SecureStorageManager } from '@src/shared/store';
+import { SECURE_STORE_KEYS } from '@src/shared/constants';
 
 type SignInSuccessData = {
   mfaRequired?: boolean;
@@ -67,7 +69,6 @@ type SignInSuccessData = {
  */
 export const useSignIn = () => {
   const router = useRouter();
-  const { setAccessToken, setRefreshToken, setMfaTempToken } = useSecureTokenStore();
   const { fetchUser } = useAuthStore();
 
   return useMutation({
@@ -75,24 +76,24 @@ export const useSignIn = () => {
     onSuccess: (response) => {
       if (response.success) {
         if (response.data?.mfaRequired && response.data.tempToken) {
-          setMfaTempToken(response.data.tempToken);
+          const mfaTempToken = response.data.tempToken;
+          SecureStorageManager.setItem(SECURE_STORE_KEYS.MFA_TEMP_TOKEN, mfaTempToken);
           router.push('/(auth)/sign-in-verify');
         } else {
           const refreshToken = response.data?.refresh_token;
           const accessToken = response.data?.access_token;
           if (accessToken) {
-            setAccessToken(accessToken);
+            SecureStorageManager.setItem(SECURE_STORE_KEYS.ACCESS_TOKEN, accessToken);
           }
 
           if (refreshToken) {
-            setRefreshToken(refreshToken);
+            SecureStorageManager.setItem(SECURE_STORE_KEYS.REFRESH_TOKEN, refreshToken);
           }
           fetchUser();
           return;
         }
         return response;
       } else {
-        console.log(response);
         toast.error(response.message);
         return response;
       }

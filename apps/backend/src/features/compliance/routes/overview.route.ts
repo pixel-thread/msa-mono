@@ -100,7 +100,7 @@ export const createComplaintHandler: RequestHandler[] = [
       'POST /compliance - Request started',
     );
 
-    const user = await withRole(req, UserRole.DPO);
+    const user = await withRole(req, UserRole.MEMBER);
 
     logger.info(
       { traceId, userId: user.id, roles: user.role },
@@ -117,6 +117,6 @@ export const createComplaintHandler: RequestHandler[] = [
 
     // ── Result log & response ───────────────────────────────────────────────
     logger.info({ traceId, complaintId: complaint.id }, 'POST /compliance - Success');
-    return success(res, { data: complaint }, 201);
+    return success(res, { data: complaint, message: 'Complaint created successfully' }, 201);
   }),
 ];

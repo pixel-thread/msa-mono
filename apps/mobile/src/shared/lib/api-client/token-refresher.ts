@@ -1,10 +1,10 @@
-import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
 import { SECURE_STORE_KEYS } from '@src/shared/constants';
 import { logger } from '@utils/logger';
 import { API_BASE_URL } from './constants';
 import { QueueItem } from './types';
-import { useSecureTokenStore } from '@src/features/auth/store/secure-token.store';
+import apiClient from '.';
+import { SecureStorageManager } from '@src/shared/store';
 
 /** Flag indicating if a token refresh request is currently in flight */
 export let isRefreshing = false;
@@ -41,6 +41,11 @@ export const processQueue = (error: unknown, token: string | null = null) => {
  * @throws Error if no refresh token is found or if the refresh request fails.
  * @returns The new access token.
  */
+type RefreshResponse = {
+  access_token: string;
+  refresh_token: string;
+};
+
 export const refreshToken = async (): Promise<string> => {
   const refreshToken = await SecureStore.getItemAsync(SECURE_STORE_KEYS.REFRESH_TOKEN);
 
@@ -49,27 +54,26 @@ export const refreshToken = async (): Promise<string> => {
   }
 
   logger.debug('Refreshing token Started');
-  const response = await axios.post<{
-    data?: { access_token: string; refresh_token: string };
-  }>(`${API_BASE_URL}/auth/refresh`, { token: refreshToken }, { withCredentials: true });
+  const response = await apiClient.post<{ data?: RefreshResponse }>(
+    `${API_BASE_URL}/auth/refresh`,
+    { token: refreshToken },
+    { withCredentials: true }
+  );
   logger.debug('Refreshing token Completed');
 
   const newAccessToken = response.data?.data?.access_token;
 
-  if (!newAccessToken) {
-    throw new Error('No access token in refresh response');
+  if (newAccessToken) {
+    logger.debug('Access token updated');
+    SecureStorageManager.setItem(SECURE_STORE_KEYS.ACCESS_TOKEN, newAccessToken);
   }
-
-  await SecureStore.setItemAsync(SECURE_STORE_KEYS.ACCESS_TOKEN, newAccessToken);
-
-  const { setAccessToken, setRefreshToken } = useSecureTokenStore.getState();
-  setAccessToken(newAccessToken);
 
   const newRefreshToken = response.data?.data?.refresh_token;
+
   if (newRefreshToken) {
-    await SecureStore.setItemAsync(SECURE_STORE_KEYS.REFRESH_TOKEN, newRefreshToken);
-    setRefreshToken(newRefreshToken);
+    logger.debug('Refresh token updated');
+    SecureStorageManager.setItem(SECURE_STORE_KEYS.REFRESH_TOKEN, newRefreshToken);
   }
   logger.debug('Token Refreshed');
-  return newAccessToken;
+  return newAccessToken || '';
 };
