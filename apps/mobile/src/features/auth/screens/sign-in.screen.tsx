@@ -20,6 +20,10 @@ import {
 import { useRateLimit } from '@src/shared/hooks/use-rate-limiting';
 import { useAuthStore, useSecureTokenStore } from '../store';
 
+const defaultValues: SignInFormData = {
+  email: process.env.EXPO_PUBLIC_EMAIL || '',
+  password: process.env.EXPO_PUBLIC_PASSWORD || '',
+};
 export const SignInScreen = () => {
   const { isAuthenticated } = useAuthStore();
   const { refreshToken } = useSecureTokenStore();
@@ -31,6 +35,7 @@ export const SignInScreen = () => {
   const methods = useForm<SignInFormData>({
     resolver: zodResolver(SignInSchema),
     mode: 'onBlur',
+    defaultValues,
   });
 
   const { mutate: signIn, isPending } = useSignIn();
