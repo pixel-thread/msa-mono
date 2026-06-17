@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, RefreshControl, TouchableOpacity } from 'react-native';
+import React, { useCallback } from 'react';
+import { View, RefreshControl, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -11,7 +11,23 @@ import { Text } from '@src/shared/components/ui';
 
 export const DeclarationListScreen = () => {
   const router = useRouter();
-  const { data, isLoading, isError, refetch, isRefetching } = useDeclarations();
+  const {
+    data,
+    isLoading,
+    isError,
+    refetch,
+    isRefetching,
+    fetchNextPage,
+    isFetchingNextPage,
+    hasNextPage,
+    isFetching,
+  } = useDeclarations();
+
+  const handleEndReached = useCallback(() => {
+    if (hasNextPage && !isFetchingNextPage && !isFetching) {
+      fetchNextPage();
+    }
+  }, [hasNextPage, isFetchingNextPage, isFetching, fetchNextPage]);
 
   if (isLoading) {
     return (
@@ -49,14 +65,17 @@ export const DeclarationListScreen = () => {
         }
       />
       <FlashList
-        data={data}
+        data={data?.declarations}
         renderItem={({ item }) => <DeclarationCard declaration={item} />}
         keyExtractor={(item) => item.id}
         contentContainerClassName="p-4"
         showsVerticalScrollIndicator={false}
+        onEndReached={handleEndReached}
+        onEndReachedThreshold={0.1}
         refreshControl={
           <RefreshControl refreshing={isRefetching} onRefresh={refetch} tintColor="#6366f1" />
         }
+        ListFooterComponent={isFetchingNextPage ? <ActivityIndicator /> : null}
         ListEmptyComponent={
           <EmptyScreen
             title="No declarations"
