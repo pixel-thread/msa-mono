@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { View, ActivityIndicator, RefreshControl, TouchableOpacity } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 import { useRouter } from 'expo-router';
@@ -7,13 +7,30 @@ import { Text } from '@src/shared/components/ui/text';
 import { Button } from '@src/shared/components/ui/button';
 import { Container } from '@src/shared/components/common/Container';
 import { StackHeader } from '@src/shared/components/common/header/stack-header.component';
+import { ErrorScreen } from '@src/shared/components/screens/error-screen';
 import { useMyCompliance } from '../hooks/use-my-compliance';
 import { ComplianceListItem } from '../components/ComplianceListItem';
 import { Compliance } from '../types/compliance.types';
 
 export const MemberComplianceListScreen = () => {
   const router = useRouter();
-  const { data: compliance, isLoading, refetch, isRefetching } = useMyCompliance();
+  const {
+    data,
+    isLoading,
+    isError,
+    refetch,
+    isRefetching,
+    fetchNextPage,
+    isFetchingNextPage,
+    hasNextPage,
+    isFetching,
+  } = useMyCompliance();
+
+  const handleEndReached = useCallback(() => {
+    if (hasNextPage && !isFetchingNextPage && !isFetching) {
+      fetchNextPage();
+    }
+  }, [hasNextPage, isFetchingNextPage, isFetching, fetchNextPage]);
 
   const handleNewCompliance = () => {
     router.push('/(protected)/compliance/submit');
@@ -23,13 +40,26 @@ export const MemberComplianceListScreen = () => {
     router.push(`/(protected)/compliance/${compliance.id}`);
   };
 
-  if (isLoading && !compliance) {
+  if (isLoading) {
     return (
       <Container>
         <StackHeader showBackButton title="Compliance" />
         <View className="flex-1 items-center justify-center">
           <ActivityIndicator size="large" color="#4F46E5" />
         </View>
+      </Container>
+    );
+  }
+
+  if (isError) {
+    return (
+      <Container>
+        <StackHeader showBackButton title="Compliance" />
+        <ErrorScreen
+          title="Failed to load compliance"
+          message="There was an error retrieving your compliance records. Please try again."
+          onRetry={() => refetch()}
+        />
       </Container>
     );
   }
@@ -47,15 +77,18 @@ export const MemberComplianceListScreen = () => {
       />
 
       <FlashList
-        data={compliance}
+        data={data?.compliance}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <ComplianceListItem compliance={item} onPress={handleViewDetail} />
         )}
         contentContainerStyle={{ padding: 16, paddingBottom: 40 }}
+        onEndReached={handleEndReached}
+        onEndReachedThreshold={0.1}
         refreshControl={
           <RefreshControl refreshing={isRefetching} onRefresh={refetch} tintColor="#6366f1" />
         }
+        ListFooterComponent={isFetchingNextPage ? <ActivityIndicator /> : null}
         ListEmptyComponent={
           <View className="flex-1 items-center justify-center px-8 py-20">
             <View className="mb-6 bg-slate-100 p-6">
