@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { View, RefreshControl, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { RefreshControl, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -7,7 +7,6 @@ import { useDeclarations } from '../hooks';
 import { DeclarationCard } from '../components';
 import { Container, StackHeader } from '@src/shared/components';
 import { LoadingScreen, ErrorScreen, EmptyScreen } from '@src/shared/components/screens';
-import { Text } from '@src/shared/components/ui';
 
 export const DeclarationListScreen = () => {
   const router = useRouter();

@@ -67,17 +67,3 @@ export const drawerFooterItems: DrawerMenuItem[] = [
     href: '/(protected)/legal/privacy-policy',
   },
 ];
-
-export const adminDrawerMenuGroups: DrawerMenuGroup[] = [
-  ...drawerMenuGroups,
-  {
-    title: 'Managements',
-    items: [
-      {
-        label: 'Payment Providers',
-        icon: 'cash-outline',
-        href: '/(protected)/payments/providers',
-      },
-    ],
-  },
-];
