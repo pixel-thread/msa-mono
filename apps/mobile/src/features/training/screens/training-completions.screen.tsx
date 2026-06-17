@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { View, RefreshControl, TouchableOpacity, Linking } from 'react-native';
+import { ActivityIndicator, View, RefreshControl, TouchableOpacity, Linking } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 import { Ionicons } from '@expo/vector-icons';
 import { useMyTrainingCompletions } from '../hooks';
@@ -139,6 +139,7 @@ export const TrainingCompletionsScreen = () => {
         showsVerticalScrollIndicator={false}
         onEndReached={handleEndReached}
         onEndReachedThreshold={0.5}
+        ListFooterComponent={isFetchingNextPage ? <ActivityIndicator /> : null}
         refreshing={isRefetching}
         refreshControl={
           <RefreshControl refreshing={isRefetching} onRefresh={refetch} tintColor="#6366f1" />

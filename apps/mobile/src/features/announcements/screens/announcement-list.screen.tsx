@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { RefreshControl } from 'react-native';
+import { ActivityIndicator, RefreshControl } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 import { useAnnouncements } from '../hooks';
 import { LoadingScreen, ErrorScreen, EmptyScreen } from '@src/shared/components/screens';
@@ -57,6 +57,7 @@ export const AnnouncementListScreen = () => {
         showsVerticalScrollIndicator={false}
         onEndReached={handleEndReached}
         onEndReachedThreshold={0.5}
+        ListFooterComponent={isFetchingNextPage ? <ActivityIndicator /> : null}
         refreshing={isRefetching}
         refreshControl={
           <RefreshControl refreshing={isRefetching} onRefresh={refetch} tintColor="#6366f1" />

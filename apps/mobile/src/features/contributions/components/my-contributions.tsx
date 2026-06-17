@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { View, RefreshControl } from 'react-native';
+import { ActivityIndicator, View, RefreshControl } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 import { useMyContributions } from '../hooks';
 import { ContributionRow } from './contribution-row';
@@ -59,6 +59,7 @@ export const MyContributions = () => {
         showsVerticalScrollIndicator={false}
         onEndReached={handleEndReached}
         onEndReachedThreshold={0.1}
+        ListFooterComponent={isFetchingNextPage ? <ActivityIndicator /> : null}
         refreshing={isRefetching}
         onRefresh={refetch}
         refreshControl={

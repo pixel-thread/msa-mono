@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { View } from 'react-native';
+import { ActivityIndicator, View } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 import { usePaymentHistory } from '../hooks/use-payment-history';
 import { Text } from '@src/shared/components/ui';
@@ -105,6 +105,7 @@ export const PaymentHistory = () => {
       ListHeaderComponent={ListHeader}
       onEndReached={handleEndReached}
       onEndReachedThreshold={0.5}
+      ListFooterComponent={isFetchingNextPage ? <ActivityIndicator /> : null}
       refreshing={isRefetching}
       ListEmptyComponent={
         <EmptyScreen
