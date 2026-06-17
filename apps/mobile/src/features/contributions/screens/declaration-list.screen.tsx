@@ -17,6 +17,14 @@ const FILTERS: DeclarationFilter[] = ['ALL', 'PENDING', 'APPROVED', 'REJECTED'];
 export const DeclarationListScreen = () => {
   const router = useRouter();
   const [activeFilter, setActiveFilter] = useState<DeclarationFilter>('ALL');
+
+  const handleViewDetail = useCallback(
+    (id: string) => {
+      router.push(`/(protected)/declarations/${id}`);
+    },
+    [router]
+  );
+
   const {
     data,
     isLoading,
@@ -97,7 +105,9 @@ export const DeclarationListScreen = () => {
 
       <FlashList
         data={data?.declarations}
-        renderItem={({ item }) => <DeclarationCard declaration={item} />}
+        renderItem={({ item }) => (
+          <DeclarationCard declaration={item} onPress={() => handleViewDetail(item.id)} />
+        )}
         keyExtractor={(item) => item.id}
         contentContainerClassName="p-4"
         showsVerticalScrollIndicator={false}

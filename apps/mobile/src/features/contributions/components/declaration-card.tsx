@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Card, CardContent, Text } from '@src/shared/components/ui';
 import { formattedDate } from '@src/shared/utils/format';
@@ -8,14 +8,15 @@ import type { Declaration } from '../types';
 
 interface DeclarationCardProps {
   declaration: Declaration;
+  onPress?: () => void;
 }
 
-export const DeclarationCard = ({ declaration }: DeclarationCardProps) => {
+export const DeclarationCard = ({ declaration, onPress }: DeclarationCardProps) => {
   const startDate = new Date(declaration.declerationStartDate);
   const endDate = new Date(declaration.declerationEndDate);
 
   return (
-    <View className="mb-4">
+    <TouchableOpacity onPress={onPress} disabled={!onPress} className="mb-4">
       <Card className="overflow-hidden border-slate-100 shadow-sm dark:border-slate-800">
         <CardContent className="p-4">
           <View className="flex-row items-start justify-between">
@@ -55,6 +56,6 @@ export const DeclarationCard = ({ declaration }: DeclarationCardProps) => {
           </View>
         </CardContent>
       </Card>
-    </View>
+    </TouchableOpacity>
   );
 };
