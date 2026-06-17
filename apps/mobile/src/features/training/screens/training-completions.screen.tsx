@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { View, RefreshControl, TouchableOpacity, Linking } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 import { Ionicons } from '@expo/vector-icons';
 import { useMyTrainingCompletions } from '../hooks';
-import { LoadingScreen, ErrorScreen } from '@src/shared/components/screens';
+import { LoadingScreen, ErrorScreen, EmptyScreen } from '@src/shared/components/screens';
 import { Container, StackHeader } from '@src/shared/components';
 import { Card, CardContent, Text } from '@src/shared/components/ui';
 import type { TrainingCompletionWithModule } from '../types';
@@ -95,7 +95,17 @@ export const TrainingCompletionsScreen = () => {
     isError,
     refetch,
     isRefetching,
+    isFetching,
+    isFetchingNextPage,
+    fetchNextPage,
+    hasNextPage,
   } = useMyTrainingCompletions();
+
+  const handleEndReached = useCallback(() => {
+    if (hasNextPage && !isFetchingNextPage && !isFetching) {
+      fetchNextPage();
+    }
+  }, [hasNextPage, isFetchingNextPage, isFetching, fetchNextPage]);
 
   if (isLoading)
     return (
@@ -127,21 +137,18 @@ export const TrainingCompletionsScreen = () => {
         keyExtractor={(item) => item.id}
         contentContainerClassName="p-4"
         showsVerticalScrollIndicator={false}
+        onEndReached={handleEndReached}
+        onEndReachedThreshold={0.5}
+        refreshing={isRefetching}
         refreshControl={
           <RefreshControl refreshing={isRefetching} onRefresh={refetch} tintColor="#6366f1" />
         }
         ListEmptyComponent={
-          <View className="items-center justify-center py-24">
-            <View className="mb-6 h-20 w-20 items-center justify-center bg-slate-100 dark:bg-slate-900">
-              <Ionicons name="school-outline" size={32} color="#64748b" />
-            </View>
-            <Text variant="heading" size="lg" className="text-slate-900 dark:text-white">
-              No completed training yet
-            </Text>
-            <Text variant="subtext" size="sm" className="mt-2 text-center">
-              Complete a training module to see it here.
-            </Text>
-          </View>
+          <EmptyScreen
+            title="No completions found"
+            description="You have not completed any training modules yet."
+            refresh={refetch}
+          />
         }
       />
     </Container>

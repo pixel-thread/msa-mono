@@ -9,6 +9,7 @@ import {
   processQueue,
   refreshToken,
 } from './token-refresher';
+import { triggerSessionExpired } from './session-expired-handler';
 
 /**
  * Creates the response interceptor that handles 401 errors by attempting
@@ -73,6 +74,7 @@ export const createResponseInterceptor = (apiClient: AxiosInstance) => {
           await SecureStore.deleteItemAsync(SECURE_STORE_KEYS.ACCESS_TOKEN);
           await SecureStore.deleteItemAsync(SECURE_STORE_KEYS.REFRESH_TOKEN);
           await SecureStore.deleteItemAsync(SECURE_STORE_KEYS.MFA_TEMP_TOKEN);
+          triggerSessionExpired();
 
           // Resolve the original 401 so the application-level handlers can manage the logout/redirect
           if (error.response) return Promise.resolve(error.response);

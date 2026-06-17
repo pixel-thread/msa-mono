@@ -4,6 +4,7 @@ import { useRouter } from 'expo-router';
 
 import { useAuthStore } from '@src/shared/store';
 import { useSecureTokenStore } from '@features/auth/store';
+import { setSessionExpiredHandler } from '@src/shared/lib/api-client/session-expired-handler';
 import { isConnectedToNetwork } from '@src/shared/utils/helper/is-connect-to-network';
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
@@ -34,6 +35,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     if (!isReady || !isConnected) return;
     fetchUser();
   }, [isReady, isConnected, fetchUser]);
+
+  useEffect(() => {
+    setSessionExpiredHandler(() => {
+      useAuthStore.setState({ user: null, isAuthenticated: false, isAuthLoading: false });
+      useSecureTokenStore.getState().clearAll();
+    });
+    return () => setSessionExpiredHandler(null);
+  }, []);
 
   useEffect(() => {
     if (!isReady || isAuthLoading) return;

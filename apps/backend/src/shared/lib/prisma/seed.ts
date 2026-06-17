@@ -131,20 +131,24 @@ async function seedBulkTestData(associationId: string, users: { id: string }[]) 
     await prisma.trainingAssignment.createMany({ data: assignmentData.slice(i, i + 100) });
   }
 
-  const completionData = modules.flatMap((m) =>
-    users.map((u) => ({
-      moduleId: m.id,
-      userId: u.id,
-      scorePercent: new Prisma.Decimal(70 + Math.floor(Math.random() * 31)),
-      completedAt: new Date('2025-06-01'),
-    })),
+  const completionData = modules.flatMap((m, modIndex) =>
+    users
+      .filter((_, userIndex) => (modIndex + userIndex) % 3 !== 0)
+      .map((u) => ({
+        moduleId: m.id,
+        userId: u.id,
+        scorePercent: new Prisma.Decimal(70 + Math.floor(Math.random() * 31)),
+        completedAt: new Date('2025-06-01'),
+      })),
   );
 
   for (let i = 0; i < completionData.length; i += 100) {
     await prisma.trainingCompletion.createMany({ data: completionData.slice(i, i + 100) });
   }
 
-  console.log(`  ✓ Training: ${modules.length} modules, ${assignmentData.length} assignments, ${completionData.length} completions`);
+  console.log(
+    `  ✓ Training: ${modules.length} modules, ${assignmentData.length} assignments, ${completionData.length} completions`,
+  );
 
   // -------------------------------------------------------------------------
   // MEETINGS + ATTENDEES
@@ -514,6 +518,7 @@ async function seedAssociation(data: (typeof ASSOCIATIONS)[number]) {
   const roleMemberTypeMap: Partial<Record<UserRole, (typeof memberTypes)[number]>> = {
     [UserRole.MEMBER]: regular,
     [UserRole.SUPER_ADMIN]: regular,
+    [UserRole.DPO]: regular,
   };
 
   const roles: UserRole[] = [UserRole.MEMBER, UserRole.SUPER_ADMIN];

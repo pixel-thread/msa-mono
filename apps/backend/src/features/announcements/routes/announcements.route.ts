@@ -94,6 +94,9 @@ export const getAnnouncements: RequestHandler[] = [
         priority: query.priority,
         search: query.search,
       },
+      pagination: {
+        page: query.page,
+      },
     });
 
     logger.info(
