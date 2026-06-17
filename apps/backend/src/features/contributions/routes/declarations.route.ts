@@ -1,8 +1,8 @@
 import { NotFoundError } from '@errors';
 import { validate } from '@lib/validate';
 import { AuditAction, DeclarationStatus, UserRole } from '@prisma/client';
-import { hasHighRoleAccess } from '@utils';
 import { logAction } from '@services/audit-logs';
+import { hasHighRoleAccess } from '@utils';
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';

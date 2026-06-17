@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { View, RefreshControl, TouchableOpacity } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useTrainingModules, useMyTrainingCompletions } from '../hooks';
-import { LoadingScreen, ErrorScreen } from '@src/shared/components/screens';
+import { LoadingScreen, ErrorScreen, EmptyScreen } from '@src/shared/components/screens';
 import { Container, StackHeader } from '@src/shared/components';
 import { Card, CardContent, Text } from '@src/shared/components/ui';
 import { cn } from '@lib/cn';
@@ -91,12 +91,29 @@ const TrainingCard: React.FC<TrainingCardProps> = ({ module, isCompleted, onPres
 
 export const TrainingListScreen = () => {
   const router = useRouter();
-  const { data: modules, isLoading, isError, refetch, isRefetching } = useTrainingModules();
+  const {
+    data: modules,
+    isLoading,
+    isError,
+    refetch,
+    isRefetching,
+    isFetching,
+    isFetchingNextPage,
+    hasNextPage,
+    fetchNextPage,
+  } = useTrainingModules();
+
   const { data: completions } = useMyTrainingCompletions();
 
   const completedModuleIds = new Set(completions?.map((c) => c.moduleId) || []);
 
   const activeModules = modules?.filter((m) => m.isActive) || [];
+
+  const handleEndReached = useCallback(() => {
+    if (hasNextPage && !isFetchingNextPage && !isFetching) {
+      fetchNextPage();
+    }
+  }, [hasNextPage, isFetchingNextPage, isFetching, fetchNextPage]);
 
   if (isLoading)
     return (
@@ -134,21 +151,18 @@ export const TrainingListScreen = () => {
         keyExtractor={(item) => item.id}
         contentContainerClassName="p-4"
         showsVerticalScrollIndicator={false}
+        onEndReached={handleEndReached}
+        onEndReachedThreshold={0.5}
+        refreshing={isRefetching}
         refreshControl={
           <RefreshControl refreshing={isRefetching} onRefresh={refetch} tintColor="#6366f1" />
         }
         ListEmptyComponent={
-          <View className="items-center justify-center py-24">
-            <View className="mb-6 h-20 w-20 items-center justify-center bg-slate-100 dark:bg-slate-900">
-              <Ionicons name="school-outline" size={32} color="#64748b" />
-            </View>
-            <Text variant="heading" size="lg" className="text-slate-900 dark:text-white">
-              No training available
-            </Text>
-            <Text variant="subtext" size="sm" className="mt-2 text-center">
-              Check back later for new training modules.
-            </Text>
-          </View>
+          <EmptyScreen
+            title="No training modules found"
+            description="There are currently no training modules available. Check back later."
+            refresh={refetch}
+          />
         }
       />
     </Container>

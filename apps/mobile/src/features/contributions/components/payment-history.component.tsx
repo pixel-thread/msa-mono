@@ -19,7 +19,17 @@ const StatCard = ({ label, value }: { label: string; value: string }) => (
 );
 
 export const PaymentHistory = () => {
-  const { data, isLoading, isError, refetch } = usePaymentHistory();
+  const {
+    data,
+    isLoading,
+    isRefetching,
+    isFetchingNextPage,
+    hasNextPage,
+    isFetching,
+    fetchNextPage,
+    isError,
+    refetch,
+  } = usePaymentHistory();
 
   const renderItem = useCallback(
     ({ item }: { item: Transaction }) => <TransactionListItem transaction={item} />,
@@ -27,6 +37,12 @@ export const PaymentHistory = () => {
   );
 
   const keyExtractor = useCallback((item: Transaction) => item.id, []);
+
+  const handleEndReached = useCallback(() => {
+    if (hasNextPage && !isFetchingNextPage && !isFetching) {
+      fetchNextPage();
+    }
+  }, [hasNextPage, isFetchingNextPage, isFetching, fetchNextPage]);
 
   if (isLoading) {
     return <LoadingScreen description="Loading payment history..." />;
@@ -81,19 +97,22 @@ export const PaymentHistory = () => {
     </View>
   );
 
-  const ListEmpty = (
-    <View className="items-center justify-center border border-dashed border-slate-200 bg-slate-50/50 py-12 dark:border-slate-800 dark:bg-slate-900/30">
-      <Text variant="subtext">No transactions found</Text>
-    </View>
-  );
-
   return (
     <FlashList
       data={transactions}
       renderItem={renderItem}
       keyExtractor={keyExtractor}
       ListHeaderComponent={ListHeader}
-      ListEmptyComponent={ListEmpty}
+      onEndReached={handleEndReached}
+      onEndReachedThreshold={0.5}
+      refreshing={isRefetching}
+      ListEmptyComponent={
+        <EmptyScreen
+          title="No payment history found"
+          description="Please try again later"
+          refresh={refetch}
+        />
+      }
       showsVerticalScrollIndicator={false}
       contentContainerStyle={{ paddingHorizontal: 24, paddingBottom: 40 }}
     />

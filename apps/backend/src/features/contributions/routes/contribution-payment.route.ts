@@ -1,7 +1,7 @@
 import { validate } from '@lib/validate';
 import { AuditAction, UserRole } from '@prisma/client';
-import { prisma } from '@src/shared/lib';
 import { logAction } from '@services/audit-logs';
+import { prisma } from '@src/shared/lib';
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';

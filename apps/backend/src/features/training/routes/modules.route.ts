@@ -40,7 +40,7 @@ export const getModules: RequestHandler[] = [
     );
 
     // Determine query scope based on user's access level
-    const isManager = hasHighRoleAccess(user.role) || user.role.includes(UserRole.DPO);
+    const isManager = hasHighRoleAccess(user.role);
     const isActive = isManager ? undefined : true;
     const role = isManager ? undefined : user.role;
     const page = parseInt(req.query.page as string) || 1;
