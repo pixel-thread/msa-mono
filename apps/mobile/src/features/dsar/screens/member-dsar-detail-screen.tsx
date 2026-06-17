@@ -22,14 +22,14 @@ import {
   CardHeader,
   CardTitle,
 } from '@src/shared/components/ui/card';
-import { Container } from '@src/shared/components/common/Container';
+import { Container } from '@src/shared/components/common/container';
 import { StackHeader } from '@src/shared/components/common/header/stack-header.component';
 import { LoadingScreen } from '@src/shared/components/screens/loading';
 import { ErrorScreen } from '@src/shared/components/screens/error-screen';
 import { useMyDSARDetail } from '../hooks/use-dsar';
 import { useCancelDSAR } from '../hooks/use-dsar-mutations';
-import { DSARStatusBadge } from '../components/DSARStatusBadge';
-import { SLAIndicator } from '../components/SLAIndicator';
+import { DSARStatusBadge } from '../components/dsar-status-badge';
+import { SLAIndicator } from '../components/sla-indicator';
 import { DSARResponse } from '../types/dsar.types';
 import { formatDate } from '@src/shared/utils/format';
 import { cn } from '@src/shared/lib/cn';

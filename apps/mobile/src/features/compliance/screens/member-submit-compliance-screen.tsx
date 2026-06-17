@@ -4,7 +4,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { Container } from '@src/shared/components/common/Container';
+import { Container } from '@src/shared/components/common/container';
 import { StackHeader } from '@src/shared/components/common/header/stack-header.component';
 import { Button } from '@src/shared/components/ui/button';
 import { Text } from '@src/shared/components/ui/text';

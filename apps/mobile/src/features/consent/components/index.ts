@@ -1,3 +1,3 @@
-export * from './ConsentToggleCard';
-export * from './ConsentHistoryItem';
-export * from './ConsentReportWidget';
+export * from './consent-toggle-card';
+export * from './consent-history-item';
+export * from './consent-report-widget';

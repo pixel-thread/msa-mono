@@ -5,10 +5,10 @@ import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { Text } from '@src/shared/components/ui/text';
 import { Button } from '@src/shared/components/ui/button';
-import { Container } from '@src/shared/components/common/Container';
+import { Container } from '@src/shared/components/common/container';
 import { StackHeader } from '@src/shared/components/common/header/stack-header.component';
 import { useMyDSARRequests } from '../hooks/use-dsar';
-import { DSARListItem } from '../components/DSARListItem';
+import { DSARListItem } from '../components/dsar-list-item';
 
 import { DSARRequest } from '../types/dsar.types';
 

@@ -251,16 +251,16 @@ Every file and every folder in the project uses `kebab-case`. No exceptions.
 ✅ audit-log.service.ts
 
 ❌ createModule.ts          ← camelCase — FORBIDDEN for file names
-❌ FindManyMeetings.ts      ← PascalCase — FORBIDDEN for file names (except React components)
+❌ FindManyMeetings.ts      ← PascalCase — FORBIDDEN for file names
 ❌ trainingModules.ts       ← FORBIDDEN
 ```
 
-### React Components — `PascalCase` (file name AND export)
+### React Components — `kebab-case.tsx` (file name), `PascalCase` (export)
 
 ```
-✅ TrainingListPage.tsx
-✅ CreateModuleDialog.tsx
-✅ MeetingsTable.tsx
+✅ training-list-page.tsx (export: TrainingListPage)
+✅ create-module-dialog.tsx (export: CreateModuleDialog)
+✅ meetings-table.tsx (export: MeetingsTable)
 ```
 
 ### Hooks — `camelCase` with `use` prefix
@@ -316,7 +316,7 @@ Export: export const ADMIN_ROUTES = [...]
 | --------------------------- | ---------------------- | ---------------------------------- |
 | Folders                     | `kebab-case`           | `membership-applications/`         |
 | Non-component files         | `kebab-case`           | `create-module.ts`                 |
-| React component files       | `PascalCase`           | `TrainingListPage.tsx`             |
+| React component files       | `kebab-case.tsx`       | `training-list-page.tsx`               |
 | React component exports     | `PascalCase`           | `export function TrainingListPage` |
 | Hooks (file + export)       | `camelCase` with `use` | `useTrainingModules`               |
 | Service functions           | `camelCase`            | `createModule()`                   |
@@ -419,7 +419,7 @@ src/features/<feature-name>/
 ## Component Rules
 
 - **One component per file.** No exceptions.
-- Component file names use `PascalCase.tsx`.
+- Component file names use `kebab-case.tsx`.
 - Shared reusable UI → `shared/components/`.
 - Feature-specific UI → `features/<name>/components/`.
 - shadcn/ui primitives → `shared/components/ui/` only (never modified directly).
@@ -515,16 +515,16 @@ features/training/validators/
 ```
 
 features/training/components/
-TrainingCard.tsx
-TrainingTable.tsx
+training-card.tsx
+training-table.tsx
 index.ts
 
 ```
 
 ```ts
 // index.ts
-export * from './TrainingCard';
-export * from './TrainingTable';
+export * from './training-card';
+export * from './training-table';
 ```
 
 ### Rule
@@ -696,7 +696,7 @@ Before submitting any code change, verify every item in this list:
 ### Naming
 
 - [ ] All new folders and non-component files use `kebab-case`.
-- [ ] All new React component files use `PascalCase`.
+- [ ] All new React component files use `kebab-case.tsx`.
 - [ ] All new hooks start with `use`.
 - [ ] All new API route segments use `kebab-case`.
 - [ ] New route added to the correct constant in `shared/constants/routes.ts`.

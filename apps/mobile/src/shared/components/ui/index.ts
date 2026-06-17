@@ -7,7 +7,7 @@ export * from './dialog';
 export * from './field-input';
 export * from './image';
 export * from './input';
-export * from './SearchInput';
+export * from './search-input';
 export * from './skeleton';
 export * from './text-input';
 export * from './text';

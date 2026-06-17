@@ -16,14 +16,14 @@ import {
 import { Text } from '@src/shared/components/ui/text';
 import { Button } from '@src/shared/components/ui/button';
 import { Card, CardContent } from '@src/shared/components/ui/card';
-import { Container } from '@src/shared/components/common/Container';
+import { Container } from '@src/shared/components/common/container';
 import { StackHeader } from '@src/shared/components/common/header/stack-header.component';
 import { LoadingScreen } from '@src/shared/components/screens/loading';
 import { ErrorScreen } from '@src/shared/components/screens/error-screen';
 import { useMyComplianceDetail } from '../hooks/use-compliance-detail';
 import { useCancelCompliance } from '../hooks/use-compliance-mutations';
-import { ComplianceStatusBadge } from '../components/ComplianceStatusBadge';
-import { ComplianceResponseCard } from '../components/ComplianceResponseCard';
+import { ComplianceStatusBadge } from '../components/compliance-status-badge';
+import { ComplianceResponseCard } from '../components/compliance-response-card';
 import { formatDate } from '@src/shared/utils/format';
 
 export const MemberComplianceDetailScreen = () => {

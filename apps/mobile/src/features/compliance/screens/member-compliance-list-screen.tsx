@@ -5,11 +5,11 @@ import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { Text } from '@src/shared/components/ui/text';
 import { Button } from '@src/shared/components/ui/button';
-import { Container } from '@src/shared/components/common/Container';
+import { Container } from '@src/shared/components/common/container';
 import { StackHeader } from '@src/shared/components/common/header/stack-header.component';
 import { ErrorScreen } from '@src/shared/components/screens/error-screen';
 import { useMyCompliance } from '../hooks/use-my-compliance';
-import { ComplianceListItem } from '../components/ComplianceListItem';
+import { ComplianceListItem } from '../components/compliance-list-item';
 import { Compliance } from '../types/compliance.types';
 
 export const MemberComplianceListScreen = () => {

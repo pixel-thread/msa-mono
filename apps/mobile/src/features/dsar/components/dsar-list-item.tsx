@@ -3,7 +3,7 @@ import { View, TouchableOpacity } from 'react-native';
 import { Text } from '@src/shared/components/ui/text';
 import { Card, CardContent } from '@src/shared/components/ui/card';
 import { DSARRequest } from '../types/dsar.types';
-import { DSARStatusBadge } from './DSARStatusBadge';
+import { DSARStatusBadge } from './dsar-status-badge';
 import { formatDate } from '@src/shared/utils/format';
 
 interface Props {

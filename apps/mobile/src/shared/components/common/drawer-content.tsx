@@ -1,7 +1,7 @@
 import { DrawerContentComponentProps } from '@react-navigation/drawer';
 import { useAuthStore } from '@src/features/auth';
 import { useSegments } from 'expo-router';
-import { Container } from './Container';
+import { Container } from './container';
 import { ScrollView, TouchableOpacity, View, Image } from 'react-native';
 import { Text } from '@components/ui';
 import { DrawerItem } from '../ui/drawer-item';

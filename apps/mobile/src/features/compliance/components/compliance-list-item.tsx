@@ -3,7 +3,7 @@ import { View, TouchableOpacity } from 'react-native';
 import { Text } from '@src/shared/components/ui/text';
 import { Card, CardContent } from '@src/shared/components/ui/card';
 import { Compliance } from '../types/compliance.types';
-import { ComplianceStatusBadge } from './ComplianceStatusBadge';
+import { ComplianceStatusBadge } from './compliance-status-badge';
 import { formatDate } from '@src/shared/utils/format';
 
 interface Props {

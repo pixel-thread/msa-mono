@@ -4,7 +4,7 @@ import { useRouter } from 'expo-router';
 import { toast } from 'sonner-native';
 import { useProviders } from '../hooks/use-payment-providers';
 import { useActivateProvider, useDeleteProvider } from '../hooks/use-payment-provider-mutations';
-import { ProviderCard } from '../components/ProviderCard';
+import { ProviderCard } from '../components/provider-card';
 import { Container, StackHeader } from '@src/shared/components';
 
 export const ProvidersListScreen = () => {
