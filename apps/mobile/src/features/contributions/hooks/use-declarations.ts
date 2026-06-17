@@ -1,19 +1,23 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { ENDPOINTS, QUERY_KEYS, buildUrlWithQuery } from '@repo/shared';
 import http from '@src/shared/utils/http';
-import type { Declaration } from '../types';
+import type { Declaration, DeclarationStatus } from '../types';
 import { useAuthStore } from '@src/shared/store';
 
-export const useDeclarations = () => {
+type UseDeclarations = {
+  status: 'ALL' | DeclarationStatus;
+};
+
+export const useDeclarations = ({ status }: UseDeclarations) => {
   const { isAuthenticated } = useAuthStore();
 
   return useInfiniteQuery({
-    queryKey: QUERY_KEYS.CONTRIBUTIONS_KEYS.DECLARATIONS(),
+    queryKey: QUERY_KEYS.CONTRIBUTIONS_KEYS.DECLARATIONS(1, status),
     initialPageParam: 1,
     enabled: isAuthenticated,
     queryFn: ({ pageParam }) =>
       http.get<Declaration[]>(
-        buildUrlWithQuery(ENDPOINTS.CONTRIBUTION.DECLARATIONS, { page: pageParam }),
+        buildUrlWithQuery(ENDPOINTS.CONTRIBUTION.DECLARATIONS, { page: pageParam, status })
       ),
 
     getNextPageParam: (lastPage) => {

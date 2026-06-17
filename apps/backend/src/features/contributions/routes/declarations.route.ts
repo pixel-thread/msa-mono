@@ -101,6 +101,8 @@ export const listDeclarationsHandler: RequestHandler[] = [
 
     if (status) where.status = status;
 
+    if (status === 'ALL') delete where.status;
+
     let result;
 
     if (hasHighRoleAccess(user.role)) {
