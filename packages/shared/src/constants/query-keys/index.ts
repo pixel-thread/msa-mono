@@ -6,6 +6,7 @@ import { COMPLIANCE_KEYS } from './compliance'
 import { CONSENT_KEYS } from './consent'
 import { CONTRIBUTIONS_KEYS } from './contributions'
 import { DASHBOARD_KEYS } from './dashboard'
+import { DECLARATIONS_KEYS } from './declarations'
 import { DSAR_KEYS } from './dsar'
 import { INVOICE_KEYS } from './invoice'
 import { LEDGER_KEYS } from './ledger'
@@ -27,6 +28,7 @@ export const QUERY_KEYS = {
   CONSENT_KEYS,
   CONTRIBUTIONS_KEYS,
   DASHBOARD_KEYS,
+  DECLARATIONS_KEYS,
   DSAR_KEYS,
   INVOICE_KEYS,
   LEDGER_KEYS,

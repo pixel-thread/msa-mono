@@ -6,8 +6,8 @@ import type { Declaration } from '../../types';
 
 export function useDeclarationDetail(id: string) {
   const { data, isLoading, error } = useQuery({
-    queryKey: QUERY_KEYS.CONTRIBUTIONS_KEYS.DECLARATION(id),
-    queryFn: () => http.get<Declaration>(ENDPOINTS.CONTRIBUTION.DECLARATION(id)),
+    queryKey: QUERY_KEYS.DECLARATIONS_KEYS.DETAIL(id),
+    queryFn: () => http.get<Declaration>(ENDPOINTS.DECLARATION.DETAIL(id)),
     enabled: !!id,
   });
 

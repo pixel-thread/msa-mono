@@ -7,6 +7,7 @@ import complianceRouter from '@feature/compliance/routes/index';
 import consentRouter from '@feature/consent/routes/index';
 import contributions from '@feature/contributions/routes/index';
 import cronRouter from '@feature/cron/routes/index';
+import declarationsRouter from '@feature/declarations/routes/index';
 import dashboardRouter from '@feature/dashboard/routes/index';
 import dsarRouter from '@feature/dsar/routes/index';
 import easRouter from '@feature/eas/routes/index';
@@ -65,6 +66,7 @@ export function createApp(): express.Express {
   app.use('/api/v1/audit-logs', auditLogsRouter);
   app.use('/api/v1/auth', authRouter);
   app.use('/api/v1/contributions', contributions);
+  app.use('/api/v1/declarations', declarationsRouter);
   app.use('/api/v1/compliance', complianceRouter);
   app.use('/api/v1/consent', consentRouter);
   app.use('/api/v1/cron', cronRouter);

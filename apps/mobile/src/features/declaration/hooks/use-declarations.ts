@@ -12,12 +12,12 @@ export const useDeclarations = ({ status }: UseDeclarations) => {
   const { isAuthenticated } = useAuthStore();
 
   return useInfiniteQuery({
-    queryKey: QUERY_KEYS.CONTRIBUTIONS_KEYS.DECLARATIONS(1, status),
+    queryKey: QUERY_KEYS.DECLARATIONS_KEYS.LIST(1, status),
     initialPageParam: 1,
     enabled: isAuthenticated,
     queryFn: ({ pageParam }) =>
       http.get<Declaration[]>(
-        buildUrlWithQuery(ENDPOINTS.CONTRIBUTION.DECLARATIONS, { page: pageParam, status })
+        buildUrlWithQuery(ENDPOINTS.DECLARATION.LIST, { page: pageParam, status })
       ),
 
     getNextPageParam: (lastPage) => {

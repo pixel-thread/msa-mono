@@ -10,23 +10,11 @@ import {
   myContributionsHandler,
   waiveContributionHandler,
 } from './contributions.route';
-import {
-  approveDeclarationsHandler,
-  createUserDeclarationHandler,
-  getDeclarationHandler,
-  listDeclarationsHandler,
-  rejectDeclarationsHandler,
-} from './declarations.route';
 import { listUserContributionsHandler } from './user-contributions.route';
 
 const router: Router = Router();
 
 router.use(auth);
-
-// members
-router.post('/declarations', createUserDeclarationHandler);
-router.get('/declarations/:id', getDeclarationHandler);
-router.get('/declarations', listDeclarationsHandler);
 
 // Contributions
 router.get('/', listContributionsHandler);
@@ -40,8 +28,6 @@ router.get('/users/:userId', listUserContributionsHandler);
 router.post('/users/:userId', generateUserContributionsHandler);
 
 // ADMIN
-router.post('/declarations/:id/approve', approveDeclarationsHandler);
-router.post('/declarations/:id/reject', rejectDeclarationsHandler);
 router.post('/record', recordContributionHandler);
 
 export default router;

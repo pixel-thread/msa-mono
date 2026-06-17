@@ -13,14 +13,14 @@ interface UseDeclarationsOptions {
 export function useDeclarations(options: UseDeclarationsOptions = {}) {
   const { page = 1, status, search } = options;
 
-  const url = buildUrlWithQuery(ENDPOINTS.CONTRIBUTION.DECLARATIONS, {
+  const url = buildUrlWithQuery(ENDPOINTS.DECLARATION.LIST, {
     page,
     status,
     search,
   });
 
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: QUERY_KEYS.CONTRIBUTIONS_KEYS.DECLARATIONS(page, status, search),
+    queryKey: QUERY_KEYS.DECLARATIONS_KEYS.LIST(page, status, search),
     queryFn: () => http.get<Declaration[]>(url),
   });
 

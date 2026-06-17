@@ -8,6 +8,7 @@ import { CONSENT } from "./consent";
 import { CONTRIBUTION } from "./contributions";
 import { CRON } from "./cron";
 import { DASHBOARD } from "./dashboard";
+import { DECLARATION } from "./declarations";
 import { DSAR } from "./dsar";
 import { EAS } from "./eas";
 import { HEALTH } from "./health";
@@ -34,6 +35,7 @@ export const ENDPOINTS = {
   CONTRIBUTION,
   CRON,
   DASHBOARD,
+  DECLARATION,
   DSAR,
   EAS,
   HEALTH,

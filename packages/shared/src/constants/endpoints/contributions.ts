@@ -1,9 +1,4 @@
 export const CONTRIBUTION = {
-  DECLARATIONS: '/contributions/declarations',
-  DECLARATION: (id: string) => `/contributions/declarations/${id}`,
-  APPROVE_DECLARATION: (id: string) => `/contributions/declarations/${id}/approve`,
-  REJECT_DECLARATION: (id: string) => `/contributions/declarations/${id}/reject`,
-
   LIST: '/contributions',
   MY: '/contributions/my',
   GENERATE: '/contributions/generate-periodic',

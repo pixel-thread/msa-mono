@@ -7,8 +7,8 @@ import { Declaration } from '../types';
 export const useDeclaration = (id: string) => {
   const { isAuthenticated } = useAuthStore();
   return useQuery({
-    queryFn: () => http.get<Declaration>(ENDPOINTS.CONTRIBUTION.DECLARATION(id)),
-    queryKey: QUERY_KEYS.CONTRIBUTIONS_KEYS.DECLARATION(id),
+    queryFn: () => http.get<Declaration>(ENDPOINTS.DECLARATION.DETAIL(id)),
+    queryKey: QUERY_KEYS.DECLARATIONS_KEYS.DETAIL(id),
     enabled: !!id && isAuthenticated,
     select: (data) => data.data,
   });
