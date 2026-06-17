@@ -3,14 +3,13 @@ import RazorpayCheckout from 'react-native-razorpay';
 
 import { Text, Button } from '@src/shared/components/ui';
 import { logger } from '@src/shared/utils';
-import { cn } from '@lib/cn';
 
 import { isRazorpayError } from '../types/razorpay';
 import { usePaymentOption } from '../hooks/use-payment-order';
 import { useVerifyPayment } from '../hooks/use-verify-payment';
 import { useRateLimit } from '@src/shared/hooks/use-rate-limiting';
 import { usePaymentProviderStatus } from '@src/shared/hooks/use-payment-status';
-import type { ContributionStatus } from '../types/payment';
+import { ContributionStatus } from '../types';
 
 interface PayContributionButtonProps {
   contributionPeriodId: string;
@@ -18,6 +17,18 @@ interface PayContributionButtonProps {
   dueAmount: number;
   status: ContributionStatus;
   onSuccess?: () => void;
+}
+
+async function canReachRazorpay() {
+  try {
+    await fetch('https://api.razorpay.com', {
+      method: 'HEAD',
+    });
+
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 export const PayContributionButton = ({
@@ -40,7 +51,12 @@ export const PayContributionButton = ({
 
   const handlePay = useCallback(async () => {
     try {
+      if (!(await canReachRazorpay())) {
+        throw new Error('Razorpay is not reachable');
+      }
+
       const { data } = await createPaymentOrder(contributionPeriodId);
+
       if (data) {
         await RazorpayCheckout.open(data).then((response) => {
           verifyPayment({
