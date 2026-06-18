@@ -138,3 +138,14 @@ export const getPlanDetailsHandler: RequestHandler[] = [
     return success(res, { data: plan });
   }),
 ];
+
+export const getPlanVersionsHandler: RequestHandler[] = [
+  asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
+    const traceId = (req.traceId as string) || '';
+    await withRole(req, UserRole.MEMBER);
+    const { planId } = req.params;
+    const plan = await getPlan(planId as string, req.user!.associationId);
+    logger.info({ traceId, planId }, 'GET /api/v1/plans/[planId] - Success');
+    return success(res, { data: plan.versions });
+  }),
+];

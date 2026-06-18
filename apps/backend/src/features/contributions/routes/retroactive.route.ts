@@ -1,11 +1,11 @@
+import { getRetroactiveAffectedUsers } from '@feature/contributions/services/get-retroactive-affected-users';
+import { RetroactiveAffectedUsersSchema } from '@feature/contributions/validators/retroactive.validator';
 import { validate } from '@lib/validate';
 import { UserRole } from '@prisma/client';
+import { buildPagination } from '@src/shared/utils/helper/build-pagination';
+import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
 import { withRole } from '@utils/with-role';
-import { asyncHandler } from '@utils/async-handler';
-import { buildPagination } from '@src/shared/utils/helper/build-pagination';
-import { RetroactiveAffectedUsersSchema } from '@feature/contributions/validators/retroactive.validator';
-import { getRetroactiveAffectedUsers } from '@feature/contributions/services/get-retroactive-affected-users';
 import type { RequestHandler } from 'express';
 
 export const retroactiveAffectedUsersHandler: RequestHandler[] = [

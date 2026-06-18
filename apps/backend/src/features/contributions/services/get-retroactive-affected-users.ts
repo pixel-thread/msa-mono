@@ -1,12 +1,12 @@
-import { prisma } from '@lib/prisma';
-import { PAGE_SIZE } from '@src/shared/constants';
-import type { Prisma } from '@prisma/client';
 import type { RetroactiveAffectedUsersInput } from '@feature/contributions/validators';
+import { prisma } from '@lib/prisma';
+import type { Prisma } from '@prisma/client';
+import { PAGE_SIZE } from '@src/shared/constants';
 
 export async function getRetroactiveAffectedUsers(
   associationId: string,
   filters: RetroactiveAffectedUsersInput,
-  page: number = 1,
+  page = 1,
   limit: number = PAGE_SIZE || 20,
 ) {
   const { planVersionId, startDate, endDate } = filters;
@@ -25,7 +25,16 @@ export async function getRetroactiveAffectedUsers(
     prisma.retroactiveAffectedUser.findMany({
       where,
       include: {
-        user: true,
+        user: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            mobile: true,
+            imageUrl: true,
+            memberTypeId: true,
+          },
+        },
         contributionPeriod: true,
         retroactiveAdjustment: true,
       },

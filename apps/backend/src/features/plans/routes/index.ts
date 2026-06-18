@@ -12,6 +12,7 @@ import {
   deletePlanHandler,
   getPlanDetailsHandler,
   getPlansHandler,
+  getPlanVersionsHandler,
   setDefaultPlanHandler,
   updatePlanHandler,
 } from './plans.route';
@@ -29,5 +30,7 @@ router.post('/default', setDefaultPlanHandler);
 router.get('/:planId', getPlanDetailsHandler);
 router.patch('/:planId', updatePlanHandler);
 router.delete('/:planId', deletePlanHandler);
+// ---- Plan Versions -----------------------------------------------------------
+router.get('/:planId/versions', getPlanVersionsHandler);
 
 export default router;

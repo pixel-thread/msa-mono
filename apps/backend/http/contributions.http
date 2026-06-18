@@ -114,7 +114,7 @@ Content-Type: application/json
 Authorization: Bearer {{TOKEN}}
 
 {
-  "planVersionId": "REPLACE_WITH_PLAN_VERSION_ID"
+  "planVersionId": "6d30e31f-4786-449b-978c-494747cd1715"
 }
 
 ###
@@ -124,6 +124,6 @@ Content-Type: application/json
 Authorization: Bearer {{TOKEN}}
 
 {
-  "startDate": "2026-01-01",
-  "endDate": "2026-06-01"
+  "startDate": "2025-01-01",
+  "endDate": "2026-12-31"
 }

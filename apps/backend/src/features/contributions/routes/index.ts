@@ -11,8 +11,8 @@ import {
   myContributionsOverviewHandler,
   waiveContributionHandler,
 } from './contributions.route';
-import { listUserContributionsHandler } from './user-contributions.route';
 import { retroactiveAffectedUsersHandler } from './retroactive.route';
+import { listUserContributionsHandler } from './user-contributions.route';
 
 const router: Router = Router();
 
