@@ -1,12 +1,12 @@
+import { UserRole } from '@prisma/client';
 import { ForbiddenError, UnauthorizedError } from '@src/shared/errors';
 import { prisma } from '@src/shared/lib';
+import { withRole } from '@src/shared/utils/with-role';
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
 import type { RequestHandler } from 'express';
 
 import { getDashboardOverview } from '../services/dashboard.service';
-import { withRole } from '@src/shared/utils/with-role';
-import { UserRole } from '@prisma/client';
 
 export const overviewRouteHandler: RequestHandler[] = [
   asyncHandler(async (req, res) => {
