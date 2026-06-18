@@ -9,8 +9,7 @@ export function useCreatePlan() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: CreatePlanInput) =>
-      http.post(ENDPOINTS.PLANS.PLANS, data),
+    mutationFn: (data: CreatePlanInput) => http.post(ENDPOINTS.PLANS.PLANS, data),
     onSuccess: (data) => {
       if (data.success) {
         toast.success('Plan created successfully');

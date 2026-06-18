@@ -13,8 +13,7 @@ export function usePlans(options: UsePlansOptions = {}) {
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: QUERY_KEYS.PLANS_KEYS.PLANS(page),
-    queryFn: () =>
-      http.get<Plan[]>(buildUrlWithQuery(ENDPOINTS.PLANS.PLANS, { page })),
+    queryFn: () => http.get<Plan[]>(buildUrlWithQuery(ENDPOINTS.PLANS.PLANS, { page })),
   });
 
   return {

@@ -15,12 +15,13 @@ Enhance the shared `DataTable` component with optional client-side pagination an
 
 ### 1. `DataTable` — New Optional Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `pageSize` | `number` | `10` | Rows per page when > 0. Enables `getPaginationRowModel` from tanstack table. |
+| Prop                 | Type      | Default | Description                                                                           |
+| -------------------- | --------- | ------- | ------------------------------------------------------------------------------------- |
+| `pageSize`           | `number`  | `10`    | Rows per page when > 0. Enables `getPaginationRowModel` from tanstack table.          |
 | `enableGlobalFilter` | `boolean` | `false` | Shows a search input that filters all visible columns. Enables `getFilteredRowModel`. |
 
 When `pageSize` or `enableGlobalFilter` is enabled, the component internally adds:
+
 - `getFilteredRowModel()` (for global filter)
 - `getPaginationRowModel()` (for pagination)
 
@@ -53,9 +54,9 @@ The default for `pageSize` will be `0` (falsy → no pagination). When explicitl
 
 ## File Changes
 
-| File | Change |
-|------|--------|
-| `src/shared/components/data-table.tsx` | Add new props, models, and UI |
+| File                                                             | Change                                         |
+| ---------------------------------------------------------------- | ---------------------------------------------- |
+| `src/shared/components/data-table.tsx`                           | Add new props, models, and UI                  |
 | `src/features/members/components/import/import-preview-view.tsx` | Pass `pageSize={30} enableGlobalFilter={true}` |
 
 ## Test Plan
