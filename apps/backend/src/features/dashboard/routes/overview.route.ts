@@ -5,11 +5,14 @@ import { success } from '@utils/responses';
 import type { RequestHandler } from 'express';
 
 import { getDashboardOverview } from '../services/dashboard.service';
+import { withRole } from '@src/shared/utils/with-role';
+import { UserRole } from '@prisma/client';
 
 export const overviewRouteHandler: RequestHandler[] = [
   asyncHandler(async (req, res) => {
     // ----- Verify authenticated user
     const userId = req.user?.id;
+    await withRole(req, UserRole.MEMBER);
 
     if (!userId) throw new UnauthorizedError('Unauthorized');
 
@@ -40,6 +43,8 @@ export const myOverviewRouteHandler: RequestHandler[] = [
     const userId = req.user?.id;
 
     if (!userId) throw new UnauthorizedError('Unauthorized');
+
+    await withRole(req, UserRole.MEMBER);
 
     // ----- Resolve user's association
     const user = await prisma.user.findUnique({

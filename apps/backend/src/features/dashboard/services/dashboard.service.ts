@@ -160,11 +160,11 @@ function buildRoleDistribution(
 
 // ---- Data Access ------------------------------------------------------------
 
-/** Retrieve payment-method usage distribution for an association. */
-async function getPaymentMethodDistribution(associationId: string) {
+/** Retrieve payment-method usage distribution for an association (optionally scoped to a user). */
+async function getPaymentMethodDistribution(associationId: string, userId?: string) {
   const rows = await prisma.paymentTransaction.groupBy({
     by: ['method'],
-    where: { associationId, status: PaymentStatus.COMPLETED },
+    where: { associationId, userId, status: PaymentStatus.COMPLETED },
     _count: { id: true },
     _sum: { amount: true },
   });
@@ -176,10 +176,10 @@ async function getPaymentMethodDistribution(associationId: string) {
   }));
 }
 
-/** Retrieve the 10 most recent payments for an association. */
-async function getRecentPayments(associationId: string) {
+/** Retrieve the 10 most recent payments for an association (optionally scoped to a user). */
+async function getRecentPayments(associationId: string, userId?: string) {
   const payments = await prisma.paymentTransaction.findMany({
-    where: { associationId },
+    where: { associationId, userId },
     orderBy: { paymentDate: Prisma.SortOrder.desc },
     take: 10,
     include: { user: { select: { name: true } } },
@@ -211,40 +211,50 @@ export async function getDashboardOverview(
   const startOfYear = new Date(now.getFullYear(), 0, 1);
   const twelveMonthsAgo = new Date(now.getFullYear() - 1, now.getMonth(), 1);
 
-  // ----- Aggregate stats in parallel
-  const [totalMembers, activeMembers, newMembersThisMonth, monthRevenue, yearRevenue, duesAgg] =
-    await Promise.all([
-      prisma.user.count({ where: { associationId } }),
-      prisma.user.count({ where: { associationId, status: 'ACTIVE' } }),
-      prisma.user.count({
-        where: { associationId, createdAt: { gte: startOfMonth } },
-      }),
-      prisma.paymentTransaction.aggregate({
-        where: {
-          associationId,
-          status: PaymentStatus.COMPLETED,
-          paidAt: { gte: startOfMonth },
+  // Member stats stay association-wide — they describe the org, not the individual
+  const [totalMembers, activeMembers, newMembersThisMonth] = await Promise.all([
+    prisma.user.count({ where: { associationId } }),
+    prisma.user.count({ where: { associationId, status: 'ACTIVE' } }),
+    prisma.user.count({
+      where: { associationId, createdAt: { gte: startOfMonth } },
+    }),
+  ]);
+
+  // Revenue / dues queries are optionally scoped to the user
+  const userFilter = userId ? { userId } : {};
+  const userDuesFilter = userId ? { userId } : {};
+
+  const [monthRevenue, yearRevenue, duesAgg] = await Promise.all([
+    prisma.paymentTransaction.aggregate({
+      where: {
+        associationId,
+        ...userFilter,
+        status: PaymentStatus.COMPLETED,
+        paidAt: { gte: startOfMonth },
+      },
+      _sum: { amount: true },
+    }),
+    prisma.paymentTransaction.aggregate({
+      where: {
+        associationId,
+        ...userFilter,
+        status: PaymentStatus.COMPLETED,
+        paidAt: { gte: startOfYear },
+      },
+      _sum: { amount: true },
+    }),
+    prisma.contributionPeriod.aggregate({
+      where: {
+        associationId,
+        ...userDuesFilter,
+        status: {
+          in: [ContributionStatus.DUE, ContributionStatus.PARTIAL, ContributionStatus.OVERDUE],
         },
-        _sum: { amount: true },
-      }),
-      prisma.paymentTransaction.aggregate({
-        where: {
-          associationId,
-          status: PaymentStatus.COMPLETED,
-          paidAt: { gte: startOfYear },
-        },
-        _sum: { amount: true },
-      }),
-      prisma.contributionPeriod.aggregate({
-        where: {
-          associationId,
-          status: {
-            in: [ContributionStatus.DUE, ContributionStatus.PARTIAL, ContributionStatus.OVERDUE],
-          },
-        },
-        _sum: { dueAmount: true },
-      }),
-    ]);
+      },
+      _sum: { dueAmount: true },
+      _count: { id: true },
+    }),
+  ]);
 
   const pendingDuesAmount = Number(duesAgg._sum.dueAmount || 0);
 
@@ -253,6 +263,7 @@ export async function getDashboardOverview(
     prisma.paymentTransaction.findMany({
       where: {
         associationId,
+        ...userFilter,
         paidAt: { gte: twelveMonthsAgo },
         status: {
           in: [PaymentStatus.COMPLETED, PaymentStatus.PENDING, PaymentStatus.REFUNDED],
@@ -276,10 +287,13 @@ export async function getDashboardOverview(
   const memberGrowth = buildMemberGrowthSeries(memberGrowthRaw, twelveMonthsAgo, totalMembers);
   const memberRoleDistribution = buildRoleDistribution(activeUsers);
 
+  // Dues count is user-specific when userId is provided, otherwise association-wide
+  const pendingDuesCount = userId ? duesAgg._count.id : memberGrowthRaw.length;
+
   // ----- Fetch payment-specific data
   const [paymentMethodDist, recentPaymentsRaw] = await Promise.all([
-    getPaymentMethodDistribution(associationId),
-    getRecentPayments(associationId),
+    getPaymentMethodDistribution(associationId, userId),
+    getRecentPayments(associationId, userId),
   ]);
 
   return {
@@ -290,7 +304,7 @@ export async function getDashboardOverview(
       totalRevenueMonth: Number(monthRevenue._sum.amount || 0),
       totalRevenueYear: Number(yearRevenue._sum.amount || 0),
       pendingDuesAmount,
-      pendingDuesCount: memberGrowthRaw.length,
+      pendingDuesCount,
     },
     revenueOverTime,
     memberGrowth,
