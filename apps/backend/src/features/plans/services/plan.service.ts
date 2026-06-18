@@ -242,6 +242,7 @@ export async function setDefaultPlan(associationId: string, planId: string) {
 async function retroactivelyAdjustContributionsForPlan(
   tx: Prisma.TransactionClient,
   planId: string,
+  planVersionId: string,
   oldAmount: Prisma.Decimal,
   newAmount: Prisma.Decimal,
   effectiveFrom: Date,
@@ -265,6 +266,7 @@ async function retroactivelyAdjustContributionsForPlan(
     data: {
       associationId: plan.associationId,
       planId,
+      planVersionId,
       oldAmount,
       newAmount,
       effectiveFrom,
@@ -538,6 +540,7 @@ export async function updatePlan(associationId: string, planId: string, body: Up
         await retroactivelyAdjustContributionsForPlan(
           tx,
           planId,
+          newVersion.id,
           currentVersion.amount,  // ← oldAmount
           newVersion.amount,
           body.effectiveFrom,

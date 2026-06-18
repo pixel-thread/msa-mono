@@ -12,6 +12,7 @@ import {
   waiveContributionHandler,
 } from './contributions.route';
 import { listUserContributionsHandler } from './user-contributions.route';
+import { retroactiveAffectedUsersHandler } from './retroactive.route';
 
 const router: Router = Router();
 
@@ -31,5 +32,8 @@ router.post('/users/:userId', generateUserContributionsHandler);
 
 // ADMIN
 router.post('/record', recordContributionHandler);
+
+// Retroactive
+router.post('/retroactive/affected-users', retroactiveAffectedUsersHandler);
 
 export default router;

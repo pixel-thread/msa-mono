@@ -104,3 +104,26 @@ Authorization: Bearer {{TOKEN}}
 GET {{NEXT_PUBLIC_API_BASE_URL}}/contributions/{{contributionId}}
 Content-Type: application/json
 Authorization: Bearer {{TOKEN}}
+
+### ----------------- RETROACTIVE ------------------
+
+###
+# @name getRetroactiveAffectedUsersByPlanVersion
+POST {{NEXT_PUBLIC_API_BASE_URL}}/contributions/retroactive/affected-users
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "planVersionId": "REPLACE_WITH_PLAN_VERSION_ID"
+}
+
+###
+# @name getRetroactiveAffectedUsersByDate
+POST {{NEXT_PUBLIC_API_BASE_URL}}/contributions/retroactive/affected-users
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "startDate": "2026-01-01",
+  "endDate": "2026-06-01"
+}

@@ -41,6 +41,8 @@ model PlanVersion {
 
   plan Plan @relation(fields: [planId], references: [id], onDelete: Cascade)
 
+  retroactiveAdjustments RetroactiveAdjustment[]
+
   @@index([planId])
   @@map("plan_versions")
 }

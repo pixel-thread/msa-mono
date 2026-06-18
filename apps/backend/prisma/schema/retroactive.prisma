@@ -9,6 +9,7 @@ model RetroactiveAdjustment {
 
   associationId String
   planId        String
+  planVersionId String
 
   oldAmount Decimal @db.Decimal(10, 2)
   newAmount Decimal @db.Decimal(10, 2)
@@ -19,9 +20,11 @@ model RetroactiveAdjustment {
   createdAt DateTime @default(now())
 
   affectedUsers RetroactiveAffectedUser[]
+  planVersion   PlanVersion @relation(fields: [planVersionId], references: [id])
 
   @@index([associationId])
   @@index([planId])
+  @@index([planVersionId])
   @@index([createdAt])
   @@map("retroactive_adjustments")
 }
