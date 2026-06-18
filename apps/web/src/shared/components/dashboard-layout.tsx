@@ -9,7 +9,7 @@ import { MoonIcon, SunIcon } from 'lucide-react';
 import { useTheme } from '../providers/theme-provider';
 
 import { Button } from './ui/button';
-import { Ternary } from './Ternary';
+import { Ternary } from './ternary';
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
