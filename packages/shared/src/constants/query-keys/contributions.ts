@@ -14,4 +14,5 @@ export const CONTRIBUTIONS_KEYS = {
   DETAIL: (id: string) => ['contribution-detail', id].filter(Boolean),
   MY: () => ['my-contributions'].filter(Boolean),
   MY_OVERVIEW: () => ['my-overview'].filter(Boolean),
+  RETROACTIVE_USERS: ['retroactive-users'].filter(Boolean),
 };
