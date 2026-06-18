@@ -1,5 +1,5 @@
 import http from '@src/shared/utils/http';
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import { QUERY_KEYS, ENDPOINTS, buildUrlWithQuery } from '@repo/shared';
 import { PaymentSummary, Transaction } from '../types/payment';
 import { useAuthStore } from '@src/shared/store';

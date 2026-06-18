@@ -1,4 +1,3 @@
-import { DrawerContentComponentProps } from '@react-navigation/drawer';
 import { useAuthStore } from '@src/features/auth';
 import { useSegments } from 'expo-router';
 import { Container } from './container';
@@ -7,28 +6,22 @@ import { Text } from '@components/ui';
 import { DrawerItem } from '../ui/drawer-item';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as Constants from 'expo-constants';
-import {
-  adminDrawerMenuGroups,
-  drawerFooterItems,
-  drawerMenuGroups,
-} from '@src/shared/constants/drawer';
+import { drawerFooterItems, drawerMenuGroups } from '@src/shared/constants/drawer';
 import { cn } from '@src/shared/lib/cn';
 import { Ionicons } from '@expo/vector-icons';
-import { hasHighRoleAccess } from '@src/features/meetings';
 import { DrawerMenuGroup } from '@src/shared/types/drawer';
 import { useAssociation } from '@src/shared/hooks/use-association';
 import { Ternary } from '../ternary';
 
-export const CustomDrawerContent = (props: DrawerContentComponentProps) => {
+export const CustomDrawerContent = () => {
   const segments = useSegments();
-  const { logout, user, isAuthLoading } = useAuthStore();
+  const { logout, isAuthLoading } = useAuthStore();
   const { data: association } = useAssociation();
-  const isHighRole = hasHighRoleAccess(user?.role);
   const inset = useSafeAreaInsets();
 
   const currentPath = segments.join('/');
 
-  const menu: DrawerMenuGroup[] = isHighRole ? adminDrawerMenuGroups : drawerMenuGroups;
+  const menu: DrawerMenuGroup[] = drawerMenuGroups;
   const associationLogoUrl = association?.logo;
   const isLogoValidUrl = associationLogoUrl && associationLogoUrl.startsWith('http');
 

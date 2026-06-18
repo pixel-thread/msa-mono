@@ -53,6 +53,7 @@ export const DialogContent = ({ children, className, onClose, ...props }: Dialog
     return () => {
       progress.value = 0;
     };
+    // eslint-disable-next-line
   }, []);
 
   const backdropStyle = useAnimatedStyle(() => ({

@@ -52,7 +52,7 @@ export const AnnouncementListScreen = () => {
       <FlashList
         data={data}
         renderItem={({ item }) => <AnnouncementCard announcement={item} />}
-        keyExtractor={(item, i) => item.id}
+        keyExtractor={(item) => item.id}
         contentContainerClassName="px-4 pt-4"
         showsVerticalScrollIndicator={false}
         onEndReached={handleEndReached}

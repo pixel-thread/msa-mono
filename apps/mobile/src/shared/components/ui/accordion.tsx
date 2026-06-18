@@ -123,6 +123,7 @@ export const AccordionContent = ({
     } else {
       heightValue.value = withTiming(0, { duration: 250 });
     }
+    // eslint-disable-next-line
   }, [isOpen]);
 
   return (

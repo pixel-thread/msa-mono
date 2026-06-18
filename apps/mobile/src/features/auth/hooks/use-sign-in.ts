@@ -3,7 +3,7 @@ import { useRouter } from 'expo-router';
 import type { SignInFormData } from '../validators';
 import http from '@src/shared/utils/http';
 import { toast } from 'sonner-native';
-import { useAuthStore, useSecureTokenStore } from '../store';
+import { useAuthStore } from '../store';
 import { ENDPOINTS } from '@repo/shared';
 import { SecureStorageManager } from '@src/shared/store';
 import { SECURE_STORE_KEYS } from '@src/shared/constants';

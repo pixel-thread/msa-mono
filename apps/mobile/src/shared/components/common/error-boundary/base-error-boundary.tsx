@@ -1,5 +1,5 @@
+import { logger } from '@src/shared/utils';
 import { Component, ErrorInfo, ReactNode } from 'react';
-import { logger } from '@src/shared/utils/logger';
 
 interface BaseErrorBoundaryProps {
   children: ReactNode;
@@ -30,20 +30,20 @@ export class BaseErrorBoundary extends Component<BaseErrorBoundaryProps, BaseErr
     const context = name || 'UnknownSource';
     const scope = isComponentError ? `Component:[${context}]` : 'GlobalBoundary';
 
-    // logger.error(`[ErrorBoundary] ${scope} - ${error.message}`, {
-    //   error: {
-    //     name: error.name,
-    //     message: error.message,
-    //     stack: error.stack,
-    //   },
-    //   errorInfo: {
-    //     componentStack: errorInfo.componentStack,
-    //   },
-    //   tags: {
-    //     isComponentError,
-    //     source: context,
-    //   },
-    // });
+    logger.error(`[ErrorBoundary] ${scope} - ${error.message}`, {
+      error: {
+        name: error.name,
+        message: error.message,
+        stack: error.stack,
+      },
+      errorInfo: {
+        componentStack: errorInfo.componentStack,
+      },
+      tags: {
+        isComponentError,
+        source: context,
+      },
+    });
   }
 
   resetError = () => {

@@ -6,7 +6,6 @@ import * as Device from 'expo-device';
 import * as Application from 'expo-application';
 import { getDeviceType } from '@utils/helper/get-device-type';
 import { SecureStorageManager } from '@src/shared/store';
-import { logger } from '@src/shared/utils';
 
 /**
  * Creates the request interceptor that attaches the access token and device headers

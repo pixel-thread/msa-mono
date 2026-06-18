@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { View, ScrollView, Image } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { useAnnouncement } from '../hooks';
@@ -21,13 +21,7 @@ export const AnnouncementDetailScreen = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { data: announcement, isLoading, isError, refetch } = useAnnouncement(id || '');
   const { user } = useAuthStore();
-  const { mutate } = useMarkAnnouncementRead();
-
-  useEffect(() => {
-    if (id) {
-      mutate(id);
-    }
-  }, []);
+  const { isFetching } = useMarkAnnouncementRead(id);
 
   if (isLoading)
     return (
@@ -80,7 +74,7 @@ export const AnnouncementDetailScreen = () => {
           {!isRead && (
             <View className="bg-indigo-50 px-3 py-1.5 dark:bg-indigo-900/20">
               <Text size="sm" weight="medium" className="text-indigo-700 dark:text-indigo-400">
-                Unread
+                {isFetching ? 'Loading...' : 'New'}
               </Text>
             </View>
           )}

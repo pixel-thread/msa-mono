@@ -5,7 +5,9 @@ export type AnnouncementStatus = 'DRAFT' | 'PUBLISHED' | 'ARCHIVED';
 
 export type AnnouncementPriority = 'LOW' | 'NORMAL' | 'HIGH' | 'URGENT';
 
-export interface Association extends AssociationT {}
+export interface Association extends AssociationT {
+  slug: string;
+}
 
 export interface User {
   id: string;

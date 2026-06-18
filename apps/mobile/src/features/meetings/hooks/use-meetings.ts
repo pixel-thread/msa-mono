@@ -18,7 +18,9 @@ export const useMeetings = (params?: UseMeetingsParams) => {
     initialPageParam: 1,
     enabled: isAuthenticated,
     queryFn: async ({ pageParam }) => {
-      return http.get<Meeting[]>(buildUrlWithQuery(ENDPOINTS.MEETINGS.LIST, { page: pageParam }));
+      return http.get<Meeting[]>(
+        buildUrlWithQuery(ENDPOINTS.MEETINGS.LIST, { page: pageParam, ...params })
+      );
     },
 
     getNextPageParam: (lastPage) => {

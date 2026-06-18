@@ -154,7 +154,7 @@ export const PayContributionButton = ({
     } finally {
       setIsLoading(false);
     }
-  }, [contributionPeriodId, createPaymentOrder, verifyPayment, onSuccess]);
+  }, [contributionPeriodId, user?.id, createPaymentOrder, verifyPayment, onSuccess]);
 
   if (status === 'WAIVED' || status === 'PAID') return null;
 
