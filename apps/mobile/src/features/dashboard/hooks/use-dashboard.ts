@@ -7,8 +7,8 @@ import type { DashboardOverview } from '../types';
 export function useDashboard() {
   const { isAuthenticated } = useAuthStore();
   return useQuery({
-    queryKey: QUERY_KEYS.DASHBOARD_KEYS.OVERVIEW(),
-    queryFn: async () => http.get<DashboardOverview>(ENDPOINTS.DASHBOARD.OVERVIEW),
+    queryKey: QUERY_KEYS.DASHBOARD_KEYS.MY_OVERVIEW(),
+    queryFn: async () => http.get<DashboardOverview>(ENDPOINTS.DASHBOARD.MY_OVERVIEW),
     select: (data) => data?.data,
     enabled: isAuthenticated,
   });
