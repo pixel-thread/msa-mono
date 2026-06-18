@@ -44,12 +44,7 @@ export const MyContributionsScreen = () => {
         </View>
 
         {activeTab === 'contributions' ? (
-          <ScrollView
-            className="flex-1"
-            contentContainerStyle={{ padding: 24, paddingBottom: 40 }}
-            showsVerticalScrollIndicator={false}>
-            <MyContributions />
-          </ScrollView>
+          <MyContributions />
         ) : (
           <View className="flex-1">
             <PaymentHistory />

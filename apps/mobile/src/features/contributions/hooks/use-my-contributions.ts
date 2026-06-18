@@ -27,12 +27,11 @@ const summeryDefault = {
   waivedTotal: 0,
 };
 
-export const useMyContributions = (status?: string, page?: number) => {
-  const pageInitial = page || 1;
+export const useMyContributions = (status: string) => {
   const { isAuthenticated } = useAuthStore();
 
   const query = useInfiniteQuery({
-    queryKey: QUERY_KEYS.CONTRIBUTIONS_KEYS.LIST(pageInitial, status),
+    queryKey: QUERY_KEYS.CONTRIBUTIONS_KEYS.LIST(status),
     initialPageParam: 1,
     enabled: isAuthenticated,
     queryFn: async ({ pageParam }) => {
@@ -40,6 +39,8 @@ export const useMyContributions = (status?: string, page?: number) => {
         buildUrlWithQuery(ENDPOINTS.CONTRIBUTION.MY, { page: pageParam, status })
       );
     },
+
+    retryOnMount: false,
 
     getNextPageParam: (nextPage) => {
       if (!nextPage.meta?.hasMore) {

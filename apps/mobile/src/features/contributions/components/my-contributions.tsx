@@ -1,17 +1,15 @@
 import React, { useCallback, useState } from 'react';
-import { ActivityIndicator, View, RefreshControl } from 'react-native';
+import { ActivityIndicator, RefreshControl } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 import { useMyContributions } from '../hooks';
 import { ContributionRow } from './contribution-row';
+import { ContributionFilterBar, type FilterType } from './contribution-filter-bar';
+import { EmptyScreen } from '@src/shared/components/screens';
 import { ContributionSummaryCards } from './contribution-summary-cards';
-import { ContributionFilterBar } from './contribution-filter-bar';
-import type { FilterType } from './contribution-filter-bar';
-import { EmptyScreen, LoadingScreen } from '@src/shared/components/screens';
+import { Container } from '@src/shared/components';
 
 export const MyContributions = () => {
   const [activeFilter, setActiveFilter] = useState<FilterType>('ALL');
-
-  const page = 1;
 
   const {
     data,
@@ -20,21 +18,15 @@ export const MyContributions = () => {
     isFetchingNextPage,
     fetchNextPage,
     summary,
-    isLoading,
     isError,
     refetch,
-    isRefetching,
-  } = useMyContributions(activeFilter, page);
+  } = useMyContributions(activeFilter);
 
   const handleEndReached = useCallback(() => {
     if (hasNextPage && !isFetchingNextPage && !isFetching) {
       fetchNextPage();
     }
   }, [hasNextPage, isFetchingNextPage, isFetching, fetchNextPage]);
-
-  if (isLoading) {
-    return <LoadingScreen />;
-  }
 
   if (isError) {
     return (
@@ -48,9 +40,7 @@ export const MyContributions = () => {
   }
 
   return (
-    <View className="flex-1">
-      <ContributionSummaryCards summary={summary} />
-      <ContributionFilterBar activeFilter={activeFilter} onFilterChange={setActiveFilter} />
+    <Container className="flex-1 px-4">
       <FlashList
         data={data}
         renderItem={({ item }) => <ContributionRow item={item} />}
@@ -58,22 +48,28 @@ export const MyContributions = () => {
         keyExtractor={(item) => item.id}
         showsVerticalScrollIndicator={false}
         onEndReached={handleEndReached}
-        onEndReachedThreshold={0.1}
+        onEndReachedThreshold={0.4}
+        ListHeaderComponent={
+          <>
+            <ContributionSummaryCards summary={summary} />
+            <ContributionFilterBar activeFilter={activeFilter} onFilterChange={setActiveFilter} />
+          </>
+        }
         ListFooterComponent={isFetchingNextPage ? <ActivityIndicator /> : null}
-        refreshing={isRefetching}
-        onRefresh={refetch}
         refreshControl={
-          <RefreshControl refreshing={isRefetching} onRefresh={refetch} tintColor="#6366f1" />
+          <RefreshControl refreshing={isFetching} onRefresh={refetch} tintColor="#6366f1" />
         }
         ListEmptyComponent={
-          <EmptyScreen
-            icon="alert-circle-outline"
-            refresh={refetch}
-            title="No contributions found"
-            description="No contributions found. Please try again later."
-          />
+          isFetching ? null : (
+            <EmptyScreen
+              icon="alert-circle-outline"
+              refresh={refetch}
+              title="No contributions found"
+              description="No contributions found. Please try again later."
+            />
+          )
         }
       />
-    </View>
+    </Container>
   );
 };
