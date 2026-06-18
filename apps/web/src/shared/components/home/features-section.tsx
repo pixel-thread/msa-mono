@@ -35,7 +35,8 @@ const FEATURES = [
   {
     icon: Payment01Icon,
     title: 'Contribution Plans',
-    description: 'Configurable contribution plans with automated period generation, payment allocation, receipt tracking, and waiver management.',
+    description:
+      'Configurable contribution plans with automated period generation, payment allocation, receipt tracking, and waiver management.',
   },
   {
     icon: ShieldBlockchainIcon,

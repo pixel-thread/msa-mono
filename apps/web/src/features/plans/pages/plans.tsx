@@ -3,9 +3,9 @@
 import { CreatePlanDialog } from '@src/features/plans/components/create-plan-dialog';
 import { DeletePlanDialog } from '@src/features/plans/components/delete-plan-dialog';
 import { EditPlanDialog } from '@src/features/plans/components/edit-plan-dialog';
-import { usePlans } from '@src/features/plans/hooks/use-plans';
 import { usePlanTableActions } from '@src/features/plans/hooks/use-plan-table-actions';
 import { usePlanTableColumns } from '@src/features/plans/hooks/use-plan-table-columns';
+import { usePlans } from '@src/features/plans/hooks/use-plans';
 import { DataTable } from '@src/shared/components/data-table';
 import { DataTableFilters } from '@src/shared/components/data-table-filters';
 import { DataTablePagination } from '@src/shared/components/data-table-pagination';
