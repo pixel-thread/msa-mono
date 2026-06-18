@@ -89,11 +89,7 @@ export function ImportPreviewView({
               <X className="h-4 w-4 mr-1" />
               Clear
             </Button>
-            <Button
-              size="sm"
-              onClick={onImport}
-              disabled={isPending || totalRows === 0}
-            >
+            <Button size="sm" onClick={onImport} disabled={isPending || totalRows === 0}>
               {importButtonText}
             </Button>
           </div>

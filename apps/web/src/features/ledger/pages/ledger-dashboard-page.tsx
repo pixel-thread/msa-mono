@@ -2,13 +2,10 @@
 
 import { SectionHeader } from '@src/shared/components/section-header';
 import { Card, CardContent, CardHeader, CardTitle } from '@src/shared/components/ui/card';
+import { formatCurrency } from '@src/shared/utils';
 import { ArrowDownRight, ArrowUpRight, Clock, Scale } from 'lucide-react';
 
 import { useLedgerSummary } from '../hooks/use-ledger-summary';
-
-export function formatCurrency(amount: number) {
-  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
-}
 
 export default function LedgerDashboardPage() {
   const { summaryData, isLoading } = useLedgerSummary();
