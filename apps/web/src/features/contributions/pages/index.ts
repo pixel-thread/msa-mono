@@ -4,3 +4,4 @@ export { RecordContributionPage as AddContributionPage } from './record-contribu
 export { UserContributionsPage } from './user-contributions';
 export { default as DeclarationsPage } from './declarations';
 export { DeclarationDetailPage } from './declaration-detail';
+export { default as RetroactivePage } from './retroactive';
