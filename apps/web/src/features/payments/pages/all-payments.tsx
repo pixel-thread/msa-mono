@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import { RecordPaymentDialog, TransferPaymentDialog } from '@src/features/payments/components';
-import { usePayments } from '@src/features/payments/hooks/use-payments';
 import { usePaymentTransactionColumns } from '@src/features/payments/hooks/use-payment-transaction-columns';
+import { usePayments } from '@src/features/payments/hooks/use-payments';
 import { DataTable } from '@src/shared/components/data-table';
 import { DataTableFilters } from '@src/shared/components/data-table-filters';
 import { DataTablePagination } from '@src/shared/components/data-table-pagination';
