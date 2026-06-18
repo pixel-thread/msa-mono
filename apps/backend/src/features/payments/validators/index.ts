@@ -1,7 +1,13 @@
 // ---------------------------------------------------------------------------
 // Shared imports
 // ---------------------------------------------------------------------------
-import { ContributionStatus, DocumentReferenceType, PaymentMethod } from '@prisma/client';
+import {
+  ContributionStatus,
+  DocumentReferenceType,
+  PaymentGateway,
+  PaymentMethod,
+  PaymentProviderType,
+} from '@prisma/client';
 import { pageNumberValidation, pageSizeValidation } from '@validator/common';
 import { z } from 'zod';
 
@@ -36,9 +42,7 @@ export const RecordManualPaymentSchema = z
     incomeAccountId: z.uuid('Invalid income account ID'),
     paidAt: z.coerce.date('Invalid Payment date'),
     reference: z.string("Instrument can't be empty").optional(),
-    referenceType: z
-      .enum(['CASH', 'BANK_TRANSFER', 'CHEQUE', 'PAYSLIP', 'ONLINE_PAYMENT', 'TEXT', 'FILE'])
-      .optional(),
+    referenceType: z.enum(DocumentReferenceType).optional(),
   })
   .strict();
 
@@ -49,11 +53,13 @@ export const PaymentHistoryQuerySchema = z.object({
   pageSize: pageSizeValidation,
 });
 
+export type PaymentHistoryQueryInput = z.infer<typeof PaymentHistoryQuerySchema>;
+
 export const GetTransactionsQuerySchema = z.object({
   userId: z.uuid().optional(),
-  status: z.enum(['PENDING', 'COMPLETED', 'FAILED', 'REFUNDED', 'WAIVED']).optional(),
-  method: z.enum(['CASH', 'BANK_TRANSFER', 'UPI', 'CHEQUE', 'ONLINE']).optional(),
-  gateway: z.enum(['RAZORPAY', 'MANUAL']).optional(),
+  status: z.enum(ContributionStatus).optional(),
+  method: z.enum(PaymentMethod).optional(),
+  gateway: z.enum(PaymentGateway).optional(),
   search: z.string().optional(),
   startDate: z.coerce.date().optional(),
   endDate: z.coerce.date().optional(),
@@ -71,7 +77,7 @@ export const CollectionReportQuerySchema = z.object({
 // ---- Payment Provider CRUD ----
 
 export const UpsertPaymentProviderSchema = z.object({
-  provider: z.enum(['RAZORPAY', 'STRIPE', 'PAYU', 'CASHFREE']),
+  provider: z.enum(PaymentProviderType),
   keyId: z.string().min(1, 'keyId is required'),
   keySecret: z.string().min(1, 'keySecret is required'),
   webhookSecret: z.string().optional(),
