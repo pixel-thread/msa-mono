@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { ActivityIndicator, RefreshControl } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
-import { useMyContributions } from '../hooks';
+import { useMyContributionOverView, useMyContributions } from '../hooks';
 import { ContributionRow } from './contribution-row';
 import { ContributionFilterBar, type FilterType } from './contribution-filter-bar';
 import { EmptyScreen } from '@src/shared/components/screens';
@@ -11,16 +11,10 @@ import { Container } from '@src/shared/components';
 export const MyContributions = () => {
   const [activeFilter, setActiveFilter] = useState<FilterType>('ALL');
 
-  const {
-    data,
-    hasNextPage,
-    isFetching,
-    isFetchingNextPage,
-    fetchNextPage,
-    summary,
-    isError,
-    refetch,
-  } = useMyContributions(activeFilter);
+  const { data, hasNextPage, isFetching, isFetchingNextPage, fetchNextPage, isError, refetch } =
+    useMyContributions(activeFilter);
+
+  const { data: summary } = useMyContributionOverView();
 
   const handleEndReached = useCallback(() => {
     if (hasNextPage && !isFetchingNextPage && !isFetching) {

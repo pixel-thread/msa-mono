@@ -1,6 +1,7 @@
 export const CONTRIBUTION = {
   LIST: '/contributions',
   MY: '/contributions/my',
+  MY_OVERVIEW: '/contributions/my/overview',
   GENERATE: '/contributions/generate-periodic',
   WAIVE: '/contributions/waive',
   DETAIL: (id: string) => `/contributions/${id}`,

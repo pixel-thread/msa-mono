@@ -2,51 +2,42 @@ import React from 'react';
 import { View } from 'react-native';
 import { Text } from '@src/shared/components/ui';
 import { formatCurrency } from '@src/shared/utils/format';
-
-interface ContributionsSummary {
-  totalExpected: number;
-  totalPaid: number;
-  totalPartial: number;
-  overdueCount: number;
-  overdueAmount: number;
-  pendingCount: number;
-  waivedTotal: number;
-}
+import { ContributionOverview } from '../types';
 
 interface ContributionSummaryCardsProps {
-  summary: ContributionsSummary;
+  summary: ContributionOverview | undefined | null;
 }
 
 export const ContributionSummaryCards = ({ summary }: ContributionSummaryCardsProps) => {
   const cards = [
     {
       label: 'Total Expected',
-      value: formatCurrency(summary.totalExpected || 0),
+      value: formatCurrency(summary?.totalExpected || 0),
       color: 'text-indigo-600',
     },
     {
       label: 'Total Paid',
-      value: formatCurrency(summary.totalPaid || 0),
+      value: formatCurrency(summary?.totalPaid || 0),
       color: 'text-green-600',
     },
     {
       label: 'Total Partial',
-      value: formatCurrency(summary.totalPartial || 0),
+      value: formatCurrency(summary?.totalPartial || 0),
       color: 'text-green-600',
     },
     {
       label: 'Overdue',
-      value: `${summary.overdueCount} (${formatCurrency(summary.overdueAmount || 0)})`,
+      value: `${summary?.overdueCount} (${formatCurrency(summary?.overdueAmount || 0)})`,
       color: 'text-amber-600',
     },
     {
       label: 'Pending',
-      value: String(summary.pendingCount),
+      value: String(summary?.pendingCount),
       color: 'text-slate-600',
     },
     {
       label: 'Waived',
-      value: formatCurrency(summary.waivedTotal || 0),
+      value: formatCurrency(summary?.waivedTotal || 0),
       color: 'text-slate-400',
     },
   ];

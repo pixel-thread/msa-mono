@@ -8,6 +8,7 @@ import {
   getContributionHandler,
   listContributionsHandler,
   myContributionsHandler,
+  myContributionsOverviewHandler,
   waiveContributionHandler,
 } from './contributions.route';
 import { listUserContributionsHandler } from './user-contributions.route';
@@ -19,6 +20,7 @@ router.use(auth);
 // Contributions
 router.get('/', listContributionsHandler);
 router.get('/my', myContributionsHandler);
+router.get('/my/overview', myContributionsOverviewHandler);
 router.post('/generate-periodic', generateContributionsHandler);
 router.patch('/waive', waiveContributionHandler);
 router.get('/:contributionId', getContributionHandler);

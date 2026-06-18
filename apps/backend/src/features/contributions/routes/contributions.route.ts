@@ -97,6 +97,51 @@ export const myContributionsHandler: RequestHandler[] = [
       },
     });
 
+    // --- Log: success ---
+    logger.info(
+      { traceId, count: contributions.length },
+      'GET /api/payments/contributions - Success',
+    );
+
+    // --- Response ---
+    return success(res, {
+      data: contributions,
+      meta: buildPagination(total, page),
+    });
+  }),
+];
+
+export const myContributionsOverviewHandler: RequestHandler[] = [
+  // Step 1: Validate query params
+  validate({ query: ContributionsQuerySchema }),
+
+  // Step 2: Execute
+  asyncHandler(async (req: Request, res: Response, _next: NextFunction) => {
+    const traceId = (req.traceId as string) || '';
+    const userId = req.user?.id;
+
+    if (!userId) throw new UnauthorizedError('User not found');
+
+    // --- Log: request started ---
+    logger.info({ traceId, query: req.query }, 'GET /api/payments/contributions - Request started');
+
+    // --- Auth: enforce FINANCE role ---
+    // Only finance officers can view the full contributions list
+    await withRole(req, UserRole.MEMBER);
+
+    logger.info({ traceId }, 'GET /api/payments/contributions - User authorized');
+
+    const query = req.query as any as ContributionsQueryInput;
+    // --- Business logic: build filters and fetch ---
+    const page = query?.page || 1;
+
+    const { status, year } = req.query;
+
+    const where: Record<string, unknown> = { associationId: req.user!.associationId };
+    where.userId = userId;
+    if (status !== 'ALL') where.status = status;
+    if (year) where.year = year;
+
     const { contributions: unfiltered } = await findContributionPeriods({
       where: where as Parameters<typeof findContributionPeriods>[0]['where'],
       page: 0,
@@ -107,7 +152,7 @@ export const myContributionsHandler: RequestHandler[] = [
       },
     });
 
-    const summary = unfiltered.reduce(
+    const overview = unfiltered.reduce(
       (acc, c) => {
         const expected = Number(c.expectedAmount);
         const paid = Number(c.paidAmount);
@@ -139,19 +184,10 @@ export const myContributionsHandler: RequestHandler[] = [
     );
 
     // --- Log: success ---
-    logger.info(
-      { traceId, count: contributions.length },
-      'GET /api/payments/contributions - Success',
-    );
+    logger.info({ traceId, overview }, 'GET /api/payments/contributions - Success');
 
     // --- Response ---
-    return success(res, {
-      data: {
-        summary,
-        contributions,
-      },
-      meta: buildPagination(total, page),
-    });
+    return success(res, { data: overview });
   }),
 ];
 

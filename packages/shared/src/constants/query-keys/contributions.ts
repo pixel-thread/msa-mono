@@ -12,4 +12,6 @@ export const CONTRIBUTIONS_KEYS = {
     page?: number,
   ) => ['user-contributions', userId, fromYear, fromMonth, toYear, toMonth, page].filter(Boolean),
   DETAIL: (id: string) => ['contribution-detail', id].filter(Boolean),
+  MY: () => ['my-contributions'].filter(Boolean),
+  MY_OVERVIEW: () => ['my-overview'].filter(Boolean),
 };

@@ -4,29 +4,6 @@ import http from '@src/shared/utils/http';
 import type { ContributionPeriod } from '../types';
 import { useAuthStore } from '@src/shared/store';
 
-type ContributionsSummary = {
-  totalExpected: number;
-  totalPartial: number;
-  totalPaid: number;
-  overdueAmount: number;
-  overdueCount: number;
-  pendingCount: number;
-  waivedTotal: number;
-};
-type MyContributionResponse = {
-  contributions: ContributionPeriod[];
-  summary: ContributionsSummary;
-};
-const summeryDefault = {
-  totalExpected: 0,
-  totalPaid: 0,
-  totalPartial: 0,
-  overdueCount: 0,
-  overdueAmount: 0,
-  pendingCount: 0,
-  waivedTotal: 0,
-};
-
 export const useMyContributions = (status: string) => {
   const { isAuthenticated } = useAuthStore();
 
@@ -35,7 +12,7 @@ export const useMyContributions = (status: string) => {
     initialPageParam: 1,
     enabled: isAuthenticated,
     queryFn: async ({ pageParam }) => {
-      return http.get<MyContributionResponse>(
+      return http.get<ContributionPeriod>(
         buildUrlWithQuery(ENDPOINTS.CONTRIBUTION.MY, { page: pageParam, status })
       );
     },
@@ -59,11 +36,9 @@ export const useMyContributions = (status: string) => {
     },
 
     select: (data) => {
-      const contributions = data.pages.flatMap((page) => page.data?.contributions ?? []);
-      const summary = data.pages.flatMap((page) => page.data?.summary ?? summeryDefault)[0];
+      const contributions = data.pages.flatMap((page) => page.data ?? []);
       return {
         contributions,
-        summary,
         meta: data.pages[data.pages.length - 1]?.meta,
       };
     },
@@ -72,7 +47,6 @@ export const useMyContributions = (status: string) => {
   return {
     ...query,
     data: query.data?.contributions ?? [],
-    summary: query.data?.summary ?? summeryDefault,
     meta: query.data?.meta,
   };
 };

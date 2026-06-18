@@ -28,7 +28,7 @@ interface ContributionRowProps {
 export const ContributionRow = ({ item }: ContributionRowProps) => {
   const monthLabel = MONTHS[item.month - 1] ?? `Month ${item.month}`;
 
-  const dueDate = formatDate(item.dueDate);
+  const dueDate = formatDate(item.dueDate || '');
 
   return (
     <View className="mb-3">
