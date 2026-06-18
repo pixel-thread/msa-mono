@@ -219,6 +219,9 @@ importers:
       axios:
         specifier: ^1.16.0
         version: 1.17.0
+      bcryptjs:
+        specifier: ^2.4.3
+        version: 2.4.3
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
@@ -352,6 +355,9 @@ importers:
       '@babel/plugin-transform-react-jsx':
         specifier: ^7.29.7
         version: 7.29.7(@babel/core@7.29.7)
+      '@types/bcryptjs':
+        specifier: ^2.4.6
+        version: 2.4.6
       '@types/react':
         specifier: ~19.1.10
         version: 19.1.17

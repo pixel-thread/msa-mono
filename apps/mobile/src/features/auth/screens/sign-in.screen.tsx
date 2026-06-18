@@ -24,6 +24,7 @@ const defaultValues: SignInFormData = {
   email: process.env.EXPO_PUBLIC_EMAIL || '',
   password: process.env.EXPO_PUBLIC_PASSWORD || '',
 };
+
 export const SignInScreen = () => {
   const { isAuthenticated } = useAuthStore();
   const { refreshToken } = useSecureTokenStore();
@@ -40,7 +41,14 @@ export const SignInScreen = () => {
 
   const { mutate: signIn, isPending } = useSignIn();
 
-  const onSubmit = (data: SignInFormData) => executeWithLimit(() => signIn(data));
+  const onSubmit = async (data: SignInFormData) => {
+    const payload = {
+      email: data.email,
+      password: data.password,
+    };
+
+    executeWithLimit(() => signIn(payload));
+  };
 
   if (isAuthenticated && refreshToken) {
     return <Redirect href={'/'} />;
