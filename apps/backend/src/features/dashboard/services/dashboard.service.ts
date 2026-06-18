@@ -202,7 +202,10 @@ async function getRecentPayments(associationId: string) {
  * Aggregates member counts, revenue figures, dues, and derived time-series
  * for revenue, member growth, role distribution, payment methods, and recent payments.
  */
-export async function getDashboardOverview(associationId: string): Promise<DashboardOverview> {
+export async function getDashboardOverview(
+  associationId: string,
+  userId?: string,
+): Promise<DashboardOverview> {
   const now = new Date();
   const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
   const startOfYear = new Date(now.getFullYear(), 0, 1);
