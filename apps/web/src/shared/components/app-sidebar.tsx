@@ -22,6 +22,7 @@ import { DRAWER_NAV_MAIN } from '../constants/drawer';
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { user } = useAuthStore();
   const { data } = useAssociation();
+  const { data: association } = useAssociation();
 
   const sidebarUser = {
     name: user?.name || '',
@@ -39,7 +40,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               className="data-[state=open]:bg-background data-[state=open]:text-sidebar-accent-foreground"
             >
               <div className="flex aspect-square size-8 items-center justify-center bg-sidebar-primary text-sidebar-primary-foreground">
-                <GalleryVerticalEndIcon className="size-4" />
+                {association?.logo ? (
+                  <img
+                    className="w-full h-full object-contain"
+                    src={association?.logo || ''}
+                    alt={data?.name || ''}
+                  />
+                ) : (
+                  <GalleryVerticalEndIcon className="size-4" />
+                )}
               </div>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-medium">{data?.slug.toUpperCase()}</span>
