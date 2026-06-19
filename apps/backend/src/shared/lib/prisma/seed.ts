@@ -185,7 +185,22 @@ async function seedBulkTestData(associationId: string, users: { id: string }[]) 
     await prisma.meetingAttendee.createMany({ data: attendeeData.slice(i, i + 100) });
   }
 
-  console.log(`  ✓ Meetings: ${meetings.length} meetings, ${attendeeData.length} attendees`);
+  const minutesData = meetings.map((m) => ({
+    meetingId: m.id,
+    agendaPoint: 'General discussion and updates',
+    decision: 'Agenda items reviewed and noted',
+    actionItems: [
+      {
+        assigneeId: superAdminId,
+        task: 'Follow up on action items',
+        dueDate: '2025-02-01',
+      },
+    ],
+  }));
+
+  await prisma.meetingMinutes.createMany({ data: minutesData });
+
+  console.log(`  ✓ Meetings: ${meetings.length} meetings, ${attendeeData.length} attendees, ${minutesData.length} minutes`);
 
   // -------------------------------------------------------------------------
   // CONTRIBUTION PERIODS (2 users × 500 periods = 1000)

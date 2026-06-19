@@ -9,18 +9,7 @@ import { formattedDate } from '@utils/format';
 import { ErrorScreen, LoadingScreen } from '@components/screens';
 import { useDashboard } from '../hooks';
 import { DashboardRightActions } from '../components/dashboard-right-actions';
-
-const quickActions = [
-  {
-    icon: 'calendar-outline' as const,
-    label: 'Schedule',
-    route: '/(protected)/(drawer)/(tabs)/meetings' as const,
-  },
-  { icon: 'document-text-outline' as const, label: 'Docs', route: null },
-  { icon: 'school-outline' as const, label: 'Training', route: '/(protected)/training' as const },
-  { icon: 'people-outline' as const, label: 'Members', route: null },
-  { icon: 'settings-outline' as const, label: 'Settings', route: null },
-];
+import { DASHBOARD_QUICK_ACTIONS } from '../utils/constants';
 
 export const DashboardScreen = () => {
   const { user } = useAuthStore();
@@ -83,7 +72,7 @@ export const DashboardScreen = () => {
 
         {/* Stats Row */}
         {stats && (
-          <View className="mb-6 flex-row gap-2 bg-slate-200 px-4 dark:bg-slate-800">
+          <View className="mb-6 flex-row gap-2 bg-slate-200 p-4 dark:bg-slate-800">
             <View className="flex-1 bg-white p-4 dark:bg-slate-900">
               <Ionicons name="people" size={22} color="#4f46e5" />
               <Text size="2xl" weight="bold" className="mt-2 text-slate-900 dark:text-white">
@@ -117,7 +106,7 @@ export const DashboardScreen = () => {
         {/* Quick Actions */}
         <View className="mb-6 border-b border-t border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
           <View className="flex-row px-4 py-5">
-            {quickActions.map((action) => (
+            {DASHBOARD_QUICK_ACTIONS.map((action) => (
               <TouchableOpacity
                 key={action.label}
                 onPress={() => {
