@@ -70,7 +70,14 @@ export function deviceMiddleware(req: Request, _res: Response, next: NextFunctio
   const parsed = parseUserAgent(ua);
 
   logger.info(
-    { traceId, type: parsed.type, os: parsed.os, browser: parsed.browser, version: parsed.version },
+    {
+      traceId,
+      type: parsed.type,
+      os: parsed.os,
+      browser: parsed.browser,
+      version: parsed.version,
+      agent: ua,
+    },
     'middleware/device - Request started',
   );
   req.device = parsed;
