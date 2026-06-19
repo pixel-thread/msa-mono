@@ -1,19 +1,13 @@
 import '@src/shared/styles/global.css';
+import '@src/shared/lib/reanimated';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import * as SplashScreen from 'expo-splash-screen';
-import { configureReanimatedLogger, ReanimatedLogLevel } from 'react-native-reanimated';
-
-configureReanimatedLogger({
-  level: ReanimatedLogLevel.warn,
-  strict: false,
-});
 import {
   useFonts,
   JetBrainsMono_400Regular,
   JetBrainsMono_500Medium,
   JetBrainsMono_700Bold,
 } from '@expo-google-fonts/jetbrains-mono';
-import { MutationCache, QueryCache, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { StatusBar } from 'expo-status-bar';
 
@@ -25,21 +19,6 @@ import { Toaster } from '@components/ui/toaster';
 export const unstable_settings = {
   initialRouteName: '(drawer)',
 };
-
-const queryClient = new QueryClient({
-  mutationCache: new MutationCache(),
-  queryCache: new QueryCache(),
-  defaultOptions: {
-    queries: {
-      networkMode: 'offlineFirst',
-      retry: 3,
-    },
-    mutations: {
-      networkMode: 'offlineFirst',
-      retry: 1,
-    },
-  },
-});
 
 SplashScreen.setOptions({
   duration: 1000,
@@ -70,9 +49,7 @@ export default function RootLayout() {
       <StatusBar translucent={false} style="auto" />
       <SafeAreaProvider>
         <GestureHandlerRootView className="flex-1 bg-background">
-          <QueryClientProvider client={queryClient}>
-            <AppProviders />
-          </QueryClientProvider>
+          <AppProviders />
           <Toaster />
         </GestureHandlerRootView>
       </SafeAreaProvider>
