@@ -28,7 +28,7 @@ export default ({ config }: ConfigContext): ExpoConfig => {
     scheme: 'msa',
     platforms: ['ios', 'android'],
     splash: {
-      image: './src/shared/assets/icons/ios-icon.png.png',
+      image: './src/shared/assets/icons/ios-icon.png',
       resizeMode: 'contain',
       backgroundColor: '#ffffff',
     },
