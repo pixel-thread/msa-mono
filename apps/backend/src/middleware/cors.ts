@@ -23,15 +23,10 @@ export const cors = corsLib({
   allowedHeaders: [
     'Content-Type',
     'Authorization',
-    'x-user-id',
-    'x-client-type',
     'x-csrf-token',
     'x-trace-id',
     'x-association-slug',
-    'x-platform',
-    'x-os-version',
     'x-device-type',
-    'x-client-version',
   ],
 
   exposedHeaders: ['x-trace-id'],
