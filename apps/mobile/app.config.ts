@@ -23,12 +23,12 @@ export default ({ config }: ConfigContext): ExpoConfig => {
     slug: 'msa',
     version: '1.0.0',
     orientation: 'portrait',
-    icon: './src/shared/assets/icon.png',
+    icon: './src/shared/assets/icons/ios-icon.png',
     userInterfaceStyle: 'light',
     scheme: 'msa',
     platforms: ['ios', 'android'],
     splash: {
-      image: './src/shared/assets/splash.png',
+      image: './src/shared/assets/icons/ios-icon.png.png',
       resizeMode: 'contain',
       backgroundColor: '#ffffff',
     },
@@ -39,7 +39,7 @@ export default ({ config }: ConfigContext): ExpoConfig => {
     },
     android: {
       adaptiveIcon: {
-        foregroundImage: './src/shared/assets/adaptive-icon.png',
+        foregroundImage: './src/shared/assets/icons/android-icon.png',
         backgroundColor: '#ffffff',
       },
       package: getIdentifier(),
