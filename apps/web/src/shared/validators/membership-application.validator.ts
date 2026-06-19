@@ -1,7 +1,5 @@
 import z from 'zod';
 
-const associationsSlug = ['mfsa', 'mpsa', 'mpsc'];
-
 /**
  * Zod schema for membership applications.
  * Validates personal details, association selection, and age requirements.
@@ -10,7 +8,6 @@ export const MembershipApplicationSchema = z
   .object({
     email: z.email('Invalid email address'),
     phone: z.string().min(10, 'Phone number must be at least 10 digits'),
-    associationSlug: z.enum(associationsSlug as [string, ...string[]]),
     firstName: z.string().min(3, 'First name must be at least 3 characters'),
     middleName: z.string().optional(),
     lastName: z.string().min(3, 'Last name must be at least 3 characters').optional(),

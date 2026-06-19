@@ -31,7 +31,6 @@ export const postSignUp: RequestHandler[] = [
     const {
       email,
       phone,
-      associationSlug,
       firstName,
       middleName,
       lastName,
@@ -44,12 +43,12 @@ export const postSignUp: RequestHandler[] = [
       country,
       postalCode,
     } = req.body as MembershipApplicationInput;
-
+    const associationSlug = req.headers['x-association-slug'] as string | undefined;
     // ---- Validate association and check for existing user ----
     // Run both lookups in parallel since they are independent of each other
     const [association, user] = await Promise.all([
       findFirstAssociation({
-        where: { slug: associationSlug || env.NEXT_PUBLIC_ASSOCIATION_SLUG },
+        where: { slug: associationSlug },
         select: { id: true, name: true },
       }),
       findFirstMember({ where: { email } }),

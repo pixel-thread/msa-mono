@@ -28,7 +28,6 @@ import {
   UserIdVerificationIcon,
 } from '@hugeicons/core-free-icons';
 import { HugeiconsIcon } from '@hugeicons/react';
-import { env } from '@src/env';
 import { logger } from '@src/shared/logger';
 import { Link } from '@tanstack/react-router';
 import {
@@ -90,7 +89,6 @@ export function SignUpPage() {
       state: '',
       country: 'IN',
       postalCode: '',
-      associationSlug: env.NEXT_PUBLIC_ASSOCIATION_SLUG,
     },
   });
 

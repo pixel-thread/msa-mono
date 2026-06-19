@@ -41,9 +41,7 @@ export const postSignIn: RequestHandler[] = [
     const user = await getUserFirst({ where: { email: req.body?.email } });
     // check origin
 
-    const deviceType = req.headers['x-device-type'];
-
-    const isMobile = deviceType === 'mobile';
+    const isMobile = req.device.type === 'phone';
 
     // ---- Handle invalid credentials & ----
     if (!user) {
@@ -152,7 +150,7 @@ export const postSignIn: RequestHandler[] = [
       );
       return success(res, {
         message: 'MFA verification required',
-        data: isMobile ? null : { tempToken: mfaTempToken, mfaRequired: true },
+        data: !isMobile ? null : { tempToken: mfaTempToken, mfaRequired: true },
       });
     }
 
@@ -183,7 +181,7 @@ export const postSignIn: RequestHandler[] = [
 
     return success(res, {
       message: 'Signed in successfully',
-      data: isMobile ? null : { access_token: accessToken, refresh_token: refreshToken },
+      data: !isMobile ? null : { access_token: accessToken, refresh_token: refreshToken },
     });
   }),
 ];

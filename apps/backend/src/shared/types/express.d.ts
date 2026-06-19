@@ -17,6 +17,7 @@ declare global {
       user?: AuthenticatedUser;
 
       signal?: AbortSignal;
+      device: import('../../middleware/device').DeviceInfo;
     }
   }
 }

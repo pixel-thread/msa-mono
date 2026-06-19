@@ -2,8 +2,6 @@ import { InternalAxiosRequestConfig } from 'axios';
 import { SECURE_STORE_KEYS } from '@src/shared/constants';
 import uuid from 'react-native-uuid';
 import 'react-native-get-random-values';
-import * as Device from 'expo-device';
-import * as Application from 'expo-application';
 import { getDeviceType } from '@utils/helper/get-device-type';
 import { SecureStorageManager } from '@src/shared/store';
 
@@ -17,9 +15,6 @@ export const createRequestInterceptor = () => {
   return async (config: InternalAxiosRequestConfig) => {
     const token = await SecureStorageManager.getItem(SECURE_STORE_KEYS.ACCESS_TOKEN);
     config.headers['x-trace-id'] = uuid.v4();
-    config.headers['x-platform'] = Device.osName?.toLowerCase() || 'unknown';
-    config.headers['x-os-version'] = Device.osVersion || 'unknown';
-    config.headers['x-client-version'] = Application.nativeApplicationVersion || 'unknown';
     config.headers['x-device-type'] = getDeviceType();
     config.headers['x-association-slug'] = process.env.EXPO_PUBLIC_ASSOCIATION_SLUG || 'unknown';
 

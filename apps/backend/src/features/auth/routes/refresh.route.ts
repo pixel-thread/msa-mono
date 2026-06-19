@@ -33,8 +33,7 @@ export const postRefresh: RequestHandler[] = [
     logger.info({ traceId }, 'POST /api/auth/refresh - Request started');
 
     const bodyToken = req.body?.token;
-    const deviceType = req.headers['x-device-type'];
-    const isMobile = deviceType === 'mobile';
+    const isMobile = req.device.type === 'mobile';
 
     const refreshCookie = req.cookies?.refresh_token || bodyToken;
 
