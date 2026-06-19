@@ -43,8 +43,10 @@ export const postSignUp: RequestHandler[] = [
       country,
       postalCode,
     } = req.body as MembershipApplicationInput;
+
     const associationSlug = req.headers['x-association-slug'] as string | undefined;
     // ---- Validate association and check for existing user ----
+    if (!associationSlug) throw new BadRequestError('Invalid association');
     // Run both lookups in parallel since they are independent of each other
     const [association, user] = await Promise.all([
       findFirstAssociation({

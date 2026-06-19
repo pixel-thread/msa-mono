@@ -2,6 +2,7 @@
 # @name signUp
 POST {{NEXT_PUBLIC_API_BASE_URL}}/auth/sign-up
 Content-Type: application/json
+x-association-slug: mfsa
 
 {
   "email": "member.1@mfsa.org",
@@ -10,8 +11,7 @@ Content-Type: application/json
   "dateOfBirth":"12-12-2024",
   "phone":"1234567892",
   "age":18,
-  "gender":"MALE",
-  "associationSlug": "mfsa"
+  "gender":"MALE"
 }
 
 ###
