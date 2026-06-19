@@ -1,6 +1,8 @@
+import { BadRequestError } from '@src/shared/errors';
+import { logger } from '@src/shared/logger';
 import type { NextFunction, Request, Response } from 'express';
 
-export type DeviceType = 'mobile' | 'tablet' | 'desktop';
+export type DeviceType = 'phone' | 'tablet' | 'desktop';
 export type DeviceOS = 'iOS' | 'Android' | 'Windows' | 'macOS' | 'Linux' | 'Unknown';
 export type DeviceBrowser = 'Chrome' | 'Safari' | 'Firefox' | 'Edge' | 'Opera' | 'IE' | 'Unknown';
 
@@ -15,11 +17,11 @@ function parseUserAgent(ua: string): DeviceInfo {
   const lower = ua.toLowerCase();
 
   let type: DeviceType = 'desktop';
-  if (/android/.test(lower) && /mobile/.test(lower)) type = 'mobile';
+  if (/android/.test(lower) && /phone/.test(lower)) type = 'phone';
   else if (/android/.test(lower)) type = 'tablet';
   else if (/ipad|tablet|playbook|silk/.test(lower)) type = 'tablet';
-  else if (/iphone|ipod/.test(lower)) type = 'mobile';
-  else if (/windows phone/.test(lower)) type = 'mobile';
+  else if (/iphone|ipod/.test(lower)) type = 'phone';
+  else if (/windows phone/.test(lower)) type = 'phone';
 
   let os: DeviceOS = 'Unknown';
   if (/windows nt/.test(lower)) os = 'Windows';
@@ -29,6 +31,7 @@ function parseUserAgent(ua: string): DeviceInfo {
   else if (/(cros|linux)/.test(lower)) os = 'Linux';
 
   let browser: DeviceBrowser = 'Unknown';
+
   let version = '';
 
   const match = ua.match(
@@ -49,23 +52,25 @@ function parseUserAgent(ua: string): DeviceInfo {
 }
 
 export function deviceMiddleware(req: Request, _res: Response, next: NextFunction) {
+  const traceId = (req.traceId as string) || '';
   const ua = req.headers['user-agent'] || '';
-  const deviceTypeHeader = req.headers['x-device-type'] as DeviceType | undefined;
+  const deviceTypeHeader = req.headers['x-device-type'] as string | undefined;
+
+  if (deviceTypeHeader && deviceTypeHeader !== 'phone') {
+    logger.warn({ traceId, deviceTypeHeader, agent: ua }, 'Invalid x-device-type');
+    throw new BadRequestError(`Invalid device`);
+  }
 
   const parsed = parseUserAgent(ua);
 
-  const deviceTypeMap: Record<string, DeviceType> = {
-    mobile: 'mobile',
-    phone: 'mobile',
-    tablet: 'tablet',
-    desktop: 'desktop',
-    web: 'desktop',
-  };
-
-  if (deviceTypeHeader && deviceTypeHeader in deviceTypeMap) {
-    parsed.type = deviceTypeMap[deviceTypeHeader];
+  if (deviceTypeHeader === 'phone') {
+    parsed.type = 'phone';
   }
 
+  logger.info(
+    { traceId, type: parsed.type, os: parsed.os, browser: parsed.browser, version: parsed.version },
+    'middleware/device - Request started',
+  );
   req.device = parsed;
   next();
 }

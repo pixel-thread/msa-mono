@@ -1,4 +1,5 @@
 import type { UserRole } from '@prisma/client';
+import type { DeviceInfo } from '@src/middleware';
 
 interface AuthenticatedUser {
   id: string;
@@ -17,7 +18,7 @@ declare global {
       user?: AuthenticatedUser;
 
       signal?: AbortSignal;
-      device: import('../../middleware/device').DeviceInfo;
+      device: DeviceInfo;
     }
   }
 }
