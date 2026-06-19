@@ -30,8 +30,16 @@ export const CustomDrawerContent = () => {
       <View className="items-center gap-2 border-b border-slate-100 px-6 py-8 dark:border-slate-900">
         <Ternary
           condition={!!isLogoValidUrl}
-          trueComponent={<Image source={{ uri: associationLogoUrl }} className="h-12 w-12" />}
-          falseComponent={null}
+          trueComponent={
+            <Image source={{ uri: associationLogoUrl }} className="h-12 w-12" alt="App logo" />
+          }
+          falseComponent={
+            <Image
+              source={require('@assets/icons/splash-icon.png')}
+              className="h-20 w-20"
+              alt="App Logo"
+            />
+          }
         />
         <View>
           <Text
@@ -44,7 +52,7 @@ export const CustomDrawerContent = () => {
         </View>
       </View>
 
-      <ScrollView className="flex-1 py-2">
+      <ScrollView className="flex-1 py-2" showsVerticalScrollIndicator>
         {menu.map((group, groupIndex) => (
           <View
             key={group.title}

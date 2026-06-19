@@ -1,6 +1,6 @@
 import React from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
-import { View, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import { View, KeyboardAvoidingView, Platform, ScrollView, Image } from 'react-native';
 import { Link, Redirect } from 'expo-router';
 import { zodResolver } from '@hookform/resolvers/zod';
 
@@ -63,7 +63,12 @@ export const SignInScreen = () => {
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}>
         <View className="mb-12 w-full max-w-sm items-center justify-center">
-          <View>
+          <View className="flex-1 items-center justify-center gap-y-2">
+            <Image
+              source={require('@assets/icons/splash-icon.png')}
+              className="h-32 w-32"
+              alt="msa-logo"
+            />
             <Text variant="heading" className="text-center" weight={'semibold'} size="3xl">
               Sign In to {process.env.EXPO_PUBLIC_ASSOCIATION_SLUG?.toLocaleUpperCase()} Connect
             </Text>
