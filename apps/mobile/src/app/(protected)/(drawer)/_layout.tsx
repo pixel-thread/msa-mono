@@ -4,9 +4,7 @@ import { CustomDrawerContent } from '@src/shared/components/common/drawer-conten
 
 const DrawerLayout = () => {
   return (
-    <Drawer
-      drawerContent={(props) => <CustomDrawerContent {...props} />}
-      screenOptions={{ headerShown: false }}>
+    <Drawer drawerContent={() => <CustomDrawerContent />} screenOptions={{ headerShown: false }}>
       <Drawer.Screen name="(tabs)" options={{ drawerLabel: 'Home' }} />
     </Drawer>
   );
