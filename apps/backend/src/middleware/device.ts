@@ -51,21 +51,23 @@ function parseUserAgent(ua: string): DeviceInfo {
   return { type, os, browser, version };
 }
 
+const allowDeviceHeader = ['phone'];
+
 export function deviceMiddleware(req: Request, _res: Response, next: NextFunction) {
   const traceId = (req.traceId as string) || '';
-  const ua = req.headers['user-agent'] || '';
-  const deviceTypeHeader = req.headers['x-device-type'] as string | undefined;
 
-  if (deviceTypeHeader && deviceTypeHeader !== 'phone') {
+  const ua = req.headers['user-agent'] || '';
+
+  const raw = req.headers['x-device-type'];
+
+  const deviceTypeHeader = Array.isArray(raw) ? raw[0].toLowerCase() : raw?.toLowerCase();
+
+  if (deviceTypeHeader && !allowDeviceHeader.includes(deviceTypeHeader)) {
     logger.warn({ traceId, deviceTypeHeader, agent: ua }, 'Invalid x-device-type');
     throw new BadRequestError(`Invalid device`);
   }
 
   const parsed = parseUserAgent(ua);
-
-  if (deviceTypeHeader === 'phone') {
-    parsed.type = 'phone';
-  }
 
   logger.info(
     { traceId, type: parsed.type, os: parsed.os, browser: parsed.browser, version: parsed.version },

@@ -20,7 +20,6 @@ POST {{NEXT_PUBLIC_API_BASE_URL}}/auth/sign-in
 Content-Type: application/json
 x-device-type: phone
 
-
 {
   "email": "{{EMAIL}}",
   "password": "{{PASSWORD}}"
