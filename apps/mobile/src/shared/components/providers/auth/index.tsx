@@ -1,18 +1,15 @@
 import { useEffect, useState } from 'react';
-import * as Network from 'expo-network';
 import { useRouter } from 'expo-router';
 
 import { useAuthStore } from '@src/shared/store';
 import { useSecureTokenStore } from '@features/auth/store';
 import { setSessionExpiredHandler } from '@src/shared/lib/api-client/session-expired-handler';
-import { isConnectedToNetwork } from '@src/shared/utils/helper/is-connect-to-network';
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
   const { fetchUser, setHydrated, isAuthLoading, isAuthenticated } = useAuthStore();
   const { init: initTokens } = useSecureTokenStore();
   const [isReady, setIsReady] = useState(false);
-  const [isConnected, setIsConnected] = useState<boolean>(false);
 
   useEffect(() => {
     let mounted = true;
@@ -32,9 +29,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, [initTokens, setHydrated]);
 
   useEffect(() => {
-    if (!isReady || !isConnected) return;
+    if (!isReady) return;
     fetchUser();
-  }, [isReady, isConnected, fetchUser]);
+  }, [isReady, fetchUser]);
 
   useEffect(() => {
     setSessionExpiredHandler(() => {
@@ -50,21 +47,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       router.replace('/(auth)/sign-in');
     }
   }, [isReady, isAuthLoading, isAuthenticated, router]);
-
-  useEffect(() => {
-    async function checkConnection() {
-      const connected = await isConnectedToNetwork();
-      setIsConnected(connected);
-    }
-
-    checkConnection();
-
-    const subscription = Network.addNetworkStateListener((state) => {
-      setIsConnected(Boolean(state.isConnected && state.isInternetReachable));
-    });
-
-    return () => subscription.remove();
-  }, []);
 
   return <>{children}</>;
 };
