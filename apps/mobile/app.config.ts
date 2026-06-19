@@ -12,7 +12,7 @@ export default ({ config }: ConfigContext): ExpoConfig => {
   };
 
   const getIdentifier = () => {
-    if (variant === 'development') return 'com.pixelthread.msa';
+    if (variant === 'development') return 'com.pixelthread.msa.dev';
     if (variant === 'preview') return 'com.pixelthread.msa';
     return 'com.pixelthread.msa';
   };
