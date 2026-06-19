@@ -3,11 +3,13 @@ import { logger } from '@src/shared/logger';
 import type { NextFunction, Request, Response } from 'express';
 
 export type DeviceType = 'phone' | 'tablet' | 'desktop';
+export type NormalizedDeviceType = 'mobile' | 'tablet' | 'desktop';
 export type DeviceOS = 'iOS' | 'Android' | 'Windows' | 'macOS' | 'Linux' | 'Unknown';
 export type DeviceBrowser = 'Chrome' | 'Safari' | 'Firefox' | 'Edge' | 'Opera' | 'IE' | 'Unknown';
 
 export interface DeviceInfo {
   type: DeviceType;
+  deviceType: NormalizedDeviceType;
   os: DeviceOS;
   browser: DeviceBrowser;
   version: string;
@@ -22,6 +24,8 @@ function parseUserAgent(ua: string): DeviceInfo {
   else if (/ipad|tablet|playbook|silk/.test(lower)) type = 'tablet';
   else if (/iphone|ipod/.test(lower)) type = 'phone';
   else if (/windows phone/.test(lower)) type = 'phone';
+
+  const deviceType: NormalizedDeviceType = type === 'phone' ? 'mobile' : type === 'tablet' ? 'tablet' : 'desktop';
 
   let os: DeviceOS = 'Unknown';
   if (/windows nt/.test(lower)) os = 'Windows';
@@ -48,7 +52,7 @@ function parseUserAgent(ua: string): DeviceInfo {
     else if (/MSIE|Trident/.test(name)) browser = 'IE';
   }
 
-  return { type, os, browser, version };
+  return { type, deviceType, os, browser, version };
 }
 
 const allowDeviceHeader = ['phone'];
@@ -63,11 +67,18 @@ export function deviceMiddleware(req: Request, _res: Response, next: NextFunctio
   const deviceTypeHeader = Array.isArray(raw) ? raw[0].toLowerCase() : raw?.toLowerCase();
 
   if (deviceTypeHeader && !allowDeviceHeader.includes(deviceTypeHeader)) {
-    logger.warn({ traceId, deviceTypeHeader, agent: ua }, 'Invalid x-device-type');
+    logger.warn(
+      { traceId, deviceTypeHeader, agent: ua },
+      'middleware/device - Invalid x-device-type',
+    );
     throw new BadRequestError(`Invalid device`);
   }
 
   const parsed = parseUserAgent(ua);
+
+  if (deviceTypeHeader === 'phone') {
+    parsed.deviceType = 'mobile';
+  }
 
   logger.info(
     {

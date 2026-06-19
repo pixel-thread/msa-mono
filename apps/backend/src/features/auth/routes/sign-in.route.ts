@@ -41,7 +41,7 @@ export const postSignIn: RequestHandler[] = [
     const user = await getUserFirst({ where: { email: req.body?.email } });
     // check origin
 
-    const isMobile = req.device.type === 'phone';
+    const isMobile = req.device.deviceType === 'mobile';
 
     // ---- Handle invalid credentials & ----
     if (!user) {
