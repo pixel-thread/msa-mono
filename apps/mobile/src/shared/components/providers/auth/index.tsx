@@ -1,37 +1,50 @@
-import { useEffect, useState } from 'react';
-import { useRouter } from 'expo-router';
+import { useEffect } from 'react';
+import { AppState } from 'react-native';
 
 import { useAuthStore } from '@src/shared/store';
 import { useSecureTokenStore } from '@features/auth/store';
 import { setSessionExpiredHandler } from '@src/shared/lib/api-client/session-expired-handler';
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const router = useRouter();
-  const { fetchUser, setHydrated, isAuthLoading, isAuthenticated } = useAuthStore();
+  const { fetchUser, refreshUser, setHydrated } = useAuthStore();
   const { init: initTokens } = useSecureTokenStore();
-  const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
-    let mounted = true;
-
     const bootstrap = async () => {
       await initTokens();
-      if (mounted) {
-        setHydrated(true);
-        setIsReady(true);
+
+      if (!useAuthStore.persist.hasHydrated()) {
+        await new Promise<void>((resolve) => {
+          const unsub = useAuthStore.persist.onFinishHydration(() => {
+            unsub();
+            resolve();
+          });
+        });
+      }
+
+      setHydrated(true);
+
+      const user = useAuthStore.getState().user;
+      if (user) {
+        refreshUser();
+      } else {
+        fetchUser();
       }
     };
-
     bootstrap();
-    return () => {
-      mounted = false;
-    };
-  }, [initTokens, setHydrated]);
+  }, [initTokens, setHydrated, refreshUser, fetchUser]);
 
   useEffect(() => {
-    if (!isReady) return;
-    fetchUser();
-  }, [isReady, fetchUser]);
+    const subscription = AppState.addEventListener('change', (state) => {
+      if (state === 'active') {
+        const user = useAuthStore.getState().user;
+        if (user) {
+          refreshUser();
+        }
+      }
+    });
+    return () => subscription.remove();
+  }, [refreshUser]);
 
   useEffect(() => {
     setSessionExpiredHandler(() => {
@@ -40,13 +53,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     });
     return () => setSessionExpiredHandler(null);
   }, []);
-
-  useEffect(() => {
-    if (!isReady || isAuthLoading) return;
-    if (!isAuthenticated) {
-      router.replace('/(auth)/sign-in');
-    }
-  }, [isReady, isAuthLoading, isAuthenticated, router]);
 
   return <>{children}</>;
 };

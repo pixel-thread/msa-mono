@@ -8,6 +8,7 @@ interface AuthGuardProps {
   children: React.ReactNode;
   publicRoutes?: Route[];
 }
+
 const authRoutes: Route[] = [
   '/(auth)/sign-in',
   '/(auth)/sign-in-verify',
@@ -19,15 +20,12 @@ const authRoutes: Route[] = [
 export const AuthGuard = ({ children, publicRoutes = authRoutes }: AuthGuardProps) => {
   const router = useRouter();
   const segments = useSegments();
-  const { user, isAuthenticated, isAuthLoading, isHydrated } = useAuthStore();
-  const [isChecking, setIsChecking] = useState(true);
+  const { user, isAuthLoading, isHydrated } = useAuthStore();
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    if (!isMounted) {
-      setIsMounted(true);
-    }
-  }, [isMounted]);
+    setIsMounted(true);
+  }, []);
 
   useEffect(() => {
     if (!isHydrated || !isMounted) return;
@@ -35,16 +33,14 @@ export const AuthGuard = ({ children, publicRoutes = authRoutes }: AuthGuardProp
     const currentPath = '/' + segments.join('/');
     const isPublicRoute = publicRoutes.some((route) => currentPath.startsWith(route));
 
-    if (isPublicRoute && isAuthenticated && user) {
+    if (isPublicRoute && user) {
       router.replace('/');
-    } else if (!isPublicRoute && !isAuthenticated && !user) {
+    } else if (!isPublicRoute && !user) {
       router.replace('/(auth)/sign-in');
     }
+  }, [isHydrated, isMounted, user, segments, publicRoutes, router]);
 
-    setIsChecking(false);
-  }, [isHydrated, isMounted, isAuthenticated, user, segments, publicRoutes, router]);
-
-  if (isChecking || isAuthLoading) {
+  if (!isHydrated || !isMounted || isAuthLoading) {
     return <LoadingScreen />;
   }
 

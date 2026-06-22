@@ -13,6 +13,7 @@ interface AuthState {
   isHydrated: boolean;
   setUser: (user: AuthUser | null) => void;
   fetchUser: () => Promise<void>;
+  refreshUser: () => Promise<void>;
   logout: () => void;
   setHydrated: (value: boolean) => void;
 }
@@ -44,6 +45,16 @@ export const useAuthStore = create<AuthState>()(
         } catch (error) {
           logger.error('Failed to fetch user', { error });
           set({ user: null, isAuthenticated: false, isAuthLoading: false });
+        }
+      },
+      refreshUser: async () => {
+        try {
+          const response = await http.get<AuthUser>('/auth/me');
+          if (response.success && response.data) {
+            set({ user: response.data, isAuthenticated: true });
+          }
+        } catch (error) {
+          logger.error('Failed to refresh user silently', { error });
         }
       },
       logout: async () => {
