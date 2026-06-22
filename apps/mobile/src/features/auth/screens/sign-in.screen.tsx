@@ -58,9 +58,9 @@ export const SignInScreen = () => {
   }
 
   return (
-    <KeyboardSafeView>
+    <KeyboardSafeView className="flex-1">
       <ScrollView
-        contentContainerClassName="flex-grow justify-center items-center px-6 py-12"
+        contentContainerClassName="flex-grow flex-1 justify-center items-center px-6 py-12"
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}>
         <View className="mb-12 w-full max-w-sm items-center justify-center">
@@ -73,7 +73,7 @@ export const SignInScreen = () => {
             <Text variant="heading" className="text-center" weight={'semibold'} size="3xl">
               Sign In to {process.env.EXPO_PUBLIC_ASSOCIATION_SLUG?.toLocaleUpperCase()} Connect
             </Text>
-            <Text variant="subtext" size="sm" className="mt-2 text-center">
+            <Text variant="subtext" size="sm" className="mt-2 w-full max-w-xs flex-1 text-center">
               Secure authentication for authorized personnel
             </Text>
           </View>
@@ -116,7 +116,7 @@ export const SignInScreen = () => {
                   loading={isPending || isProcessing || isLimited}
                   variant={'default'}
                   className="mt-4 h-14 ">
-                  {isPending ? 'Signing in' : 'Signin'}
+                  Continue
                 </Button>
               </View>
             </FormProvider>
