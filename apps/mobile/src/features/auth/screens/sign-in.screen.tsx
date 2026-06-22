@@ -1,6 +1,6 @@
 import React from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
-import { View, KeyboardAvoidingView, Platform, ScrollView, Image } from 'react-native';
+import { View, ScrollView, Image } from 'react-native';
 import { Link, Redirect } from 'expo-router';
 import { zodResolver } from '@hookform/resolvers/zod';
 
@@ -16,9 +16,12 @@ import {
   CardTitle,
   CardDescription,
   CardFooter,
+  textVariants,
 } from '@src/shared/components/ui';
 import { useRateLimit } from '@src/shared/hooks/use-rate-limiting';
 import { useAuthStore, useSecureTokenStore } from '../store';
+import { KeyboardSafeView } from '@src/shared/components/common/keyboard-safe-view';
+import { cn } from '@src/shared/lib/cn';
 
 const defaultValues: SignInFormData = {
   email: process.env.EXPO_PUBLIC_EMAIL || '',
@@ -55,9 +58,7 @@ export const SignInScreen = () => {
   }
 
   return (
-    <KeyboardAvoidingView
-      className="flex-1"
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+    <KeyboardSafeView>
       <ScrollView
         contentContainerClassName="flex-grow justify-center items-center px-6 py-12"
         keyboardShouldPersistTaps="handled"
@@ -103,8 +104,8 @@ export const SignInScreen = () => {
                 />
 
                 <View className="flex-row justify-end py-1">
-                  <Link href="/(auth)/forgot-password" className="border-b border-primary">
-                    <Text className="uppercase" variant="link" size="sm" weight="medium">
+                  <Link href="/(auth)/forgot-password">
+                    <Text className="flex-1 uppercase" variant="link" size="sm" weight="medium">
                       Forgot Password?
                     </Text>
                   </Link>
@@ -122,25 +123,29 @@ export const SignInScreen = () => {
           </CardContent>
           <CardFooter className="w-full">
             <View className="w-full flex-row items-center justify-center gap-x-2">
-              <Text variant="subtext" size="sm">
-                Don&apos;t have an account?
-              </Text>
-              <Link href="/(auth)/sign-up" className="border-b border-primary">
-                <Text variant="link" className="uppercase" size="sm" weight="bold">
-                  Sign Up
+              <View>
+                <Text variant="subtext" size="sm" className="w-auto flex-1">
+                  Don&apos;t have an account?
                 </Text>
-              </Link>
+              </View>
+              <View>
+                <Link
+                  href="/(auth)/sign-up"
+                  className={cn(
+                    textVariants({
+                      className: 'flex-1 border-b border-primary uppercase',
+                      variant: 'link',
+                      size: 'sm',
+                      weight: 'bold',
+                    })
+                  )}>
+                  Sign-Up
+                </Link>
+              </View>
             </View>
           </CardFooter>
         </Card>
-
-        <View className="mt-12 items-center">
-          <Text variant="subtext" size="xs" className="text-center">
-            Protected by end-to-end encryption.{'\n'}
-            Unauthorized access is strictly prohibited.
-          </Text>
-        </View>
       </ScrollView>
-    </KeyboardAvoidingView>
+    </KeyboardSafeView>
   );
 };
