@@ -58,13 +58,13 @@ export const SignInScreen = () => {
   }
 
   return (
-    <KeyboardSafeView className="flex-1">
+    <KeyboardSafeView>
       <ScrollView
-        contentContainerClassName="flex-grow flex-1 justify-center items-center px-6 py-12"
+        contentContainerClassName="flex-grow justify-center items-center px-6 py-12"
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}>
         <View className="mb-12 w-full max-w-sm items-center justify-center">
-          <View className="flex-1 items-center justify-center gap-y-2">
+          <View className="items-center justify-center gap-y-2">
             <Image
               source={require('@assets/icons/splash-icon.png')}
               className="h-32 w-32"
@@ -73,7 +73,7 @@ export const SignInScreen = () => {
             <Text variant="heading" className="text-center" weight={'semibold'} size="3xl">
               Sign In to {process.env.EXPO_PUBLIC_ASSOCIATION_SLUG?.toLocaleUpperCase()} Connect
             </Text>
-            <Text variant="subtext" size="sm" className="mt-2 w-full max-w-xs flex-1 text-center">
+            <Text variant="subtext" size="sm" className="mt-2 text-center">
               Secure authentication for authorized personnel
             </Text>
           </View>
