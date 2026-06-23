@@ -5,7 +5,14 @@ import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
   {
-    ignores: ['dist', 'node_modules', '.pnpm-store', 'src/__tests__', 'src/__mocks__', 'src/**/*.tsx'],
+    ignores: [
+      'dist',
+      'node_modules',
+      '.pnpm-store',
+      'src/__tests__',
+      'src/__mocks__',
+      'src/**/*.tsx',
+    ],
   },
 
   js.configs.recommended,
@@ -49,20 +56,6 @@ export default tseslint.config(
           varsIgnorePattern: '^_',
         },
       ],
-
-      'simple-import-sort/imports': [
-        'error',
-        {
-          groups: [
-            ['^react$', '^@?\\w'], // packages
-            ['^@/'], // aliases
-            ['^\\.\\.(?!/?$)', '^\\.\\./?$'], // parent imports
-            ['^\\./(?=.*/)(?!/?$)', '^\\.(?!/?$)', '^\\./?$'], // sibling imports
-            ['^.+\\.?(css)$'], // styles
-          ],
-        },
-      ],
-
       'no-console': 'warn',
     },
   },

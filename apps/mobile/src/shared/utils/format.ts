@@ -27,7 +27,7 @@ export const formatCurrency = (amount: number, currency: string = 'INR') => {
   }).format(amount);
 };
 
-export function formatSubscriptionBillingCycle(cycle: 'MONTHLY' | 'YEARLY'): string {
+export function formatBillingCycle(cycle: 'MONTHLY' | 'YEARLY'): string {
   const map: Record<string, string> = {
     MONTHLY: 'month',
     QUARTERLY: 'quarter',
