@@ -21,10 +21,9 @@ const NAV_ITEMS = [
 ];
 
 export function PublicHeader() {
-  const { user, isLoading: isAuthLoading } = useAuthStore();
+  const { user, isLoading: isAuthLoading, isSignedIn: isSignIn } = useAuthStore();
   const { mutate: logout, isPending: isLoading } = useSignOut();
   const pathname = useLocation().pathname;
-  const isSignIn = pathname.startsWith('/sign-in');
   const isSignUp = pathname.startsWith('/sign-up');
 
   return (
