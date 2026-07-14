@@ -8,16 +8,21 @@ import type { Meeting } from '../types';
 import type { CreateMeetingInput } from '../validators';
 
 interface UseMeetingsOptions {
+  options?: {
+    search?: string;
+  };
   page?: number;
 }
 
-export function useMeetings(options: UseMeetingsOptions = {}) {
-  const { page = 1 } = options;
+export function useMeetings({ options: filter = { search: '' }, page }: UseMeetingsOptions = {}) {
+  const { search } = filter;
+
   const queryClient = useQueryClient();
 
   const { data, isLoading, error } = useQuery({
-    queryKey: QUERY_KEYS.MEETINGS_KEYS.LIST(page),
-    queryFn: async () => http.get<Meeting[]>(buildUrlWithQuery(ENDPOINTS.MEETINGS.LIST, { page })),
+    queryKey: QUERY_KEYS.MEETINGS_KEYS.LIST(search, page),
+    queryFn: async () =>
+      http.get<Meeting[]>(buildUrlWithQuery(ENDPOINTS.MEETINGS.LIST, { page, search })),
   });
 
   const createMeetingMutation = useMutation({
