@@ -10,14 +10,12 @@ export function useCreateAnnouncement() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: CreateAnnouncementInput) => http.post(ENDPOINTS.ANNOUNCEMENTS.ROOT, data),
+    mutationFn: (data: CreateAnnouncementInput) => http.post(ENDPOINTS.ANNOUNCEMENTS.LIST, data),
     onSuccess: (data) => {
       if (data.success) {
-        toast.success('Announcement created successfully');
         queryClient.invalidateQueries({ queryKey: QUERY_KEYS.ANNOUNCEMENTS_KEYS.LISTS() });
         return;
       }
-      toast.error(data.message);
     },
     onError: () => {
       toast.error('Failed to create announcement');

@@ -10,7 +10,7 @@ export function useAnnouncementsList(status?: string, page: number = 1) {
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: QUERY_KEYS.ANNOUNCEMENTS_KEYS.LIST({ status, page }),
     queryFn: async () =>
-      http.get<Announcement[]>(buildUrlWithQuery(ENDPOINTS.ANNOUNCEMENTS.ROOT, { page, status })),
+      http.get<Announcement[]>(buildUrlWithQuery(ENDPOINTS.ANNOUNCEMENTS.LIST, { page, status })),
   });
 
   return {
