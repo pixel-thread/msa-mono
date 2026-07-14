@@ -35,6 +35,7 @@ import {
 import { Textarea } from '@src/shared/components/ui/textarea';
 import { Plus } from 'lucide-react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 
 export function CreateAnnouncementDialog() {
   const [open, setOpen] = useState(false);
@@ -55,9 +56,15 @@ export function CreateAnnouncementDialog() {
 
   const onSubmit = (data: CreateAnnouncementInput) => {
     createAnnouncement.mutate(data, {
-      onSuccess: () => {
-        setOpen(false);
-        form.reset();
+      onSuccess: (data) => {
+        if (data.success) {
+          setOpen(false);
+          form.reset();
+          toast.success(data.message);
+          return;
+        }
+        toast.error(data.message);
+        return;
       },
     });
   };
