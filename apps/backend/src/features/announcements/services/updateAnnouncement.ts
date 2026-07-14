@@ -80,6 +80,9 @@ export async function updateAnnouncement({
   data,
 }: UpdateAnnouncementProps) {
   // 1. Verification: Ensure the announcement exists within the association scope
+
+  if (!data) throw new ForbiddenError('Invalid request body');
+
   const announcement = await prisma.announcement.findFirst({
     where: {
       id: announcementId,
