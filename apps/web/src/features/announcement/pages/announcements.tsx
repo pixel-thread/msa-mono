@@ -15,13 +15,9 @@ import { DataTablePagination } from '@src/shared/components/data-table-paginatio
 import { SectionHeader } from '@src/shared/components/section-header';
 import { useUrlFilters } from '@src/shared/hooks';
 
-interface AnnouncementsPageProps {
-  status?: string;
-}
-
-export default function AnnouncementsPage({ status }: AnnouncementsPageProps) {
-  const basePath = useMemo(() => `/announcement`, [status]);
-  const { page, setPage, setFilters, filters } = useUrlFilters({ basePath });
+export default function AnnouncementsPage() {
+  const basePath = useMemo(() => `/announcement`, []);
+  const { page = 1, setPage, setFilters, filters } = useUrlFilters({ basePath });
 
   const [editingAnnouncement, setEditingAnnouncement] = useState<Announcement | null>(null);
   const [deletingAnnouncement, setDeletingAnnouncement] = useState<Announcement | null>(null);
