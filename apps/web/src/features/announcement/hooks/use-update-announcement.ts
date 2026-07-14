@@ -14,11 +14,9 @@ export function useUpdateAnnouncement() {
       http.put(ENDPOINTS.ANNOUNCEMENTS.DETAILS(id), data),
     onSuccess: (data) => {
       if (data.success) {
-        toast.success('Announcement updated successfully');
         queryClient.invalidateQueries({ queryKey: QUERY_KEYS.ANNOUNCEMENTS_KEYS.LISTS() });
         return;
       }
-      toast.error(data.message);
     },
     onError: () => {
       toast.error('Failed to update announcement');
