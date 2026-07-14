@@ -12,18 +12,19 @@ import { useMeetingTableColumns } from '@feature/meetings/hooks/use-meeting-tabl
 import { useUrlFilters } from '@hooks/use-url-filters';
 import { Plus } from 'lucide-react';
 
+import { meetingListFilters } from '../utils/constants';
+
 /**
  * Meetings List Page component.
  * Displays a list of all meetings with filtering and pagination.
  */
 export function MeetingsPage() {
-  const { page, setPage } = useUrlFilters({ basePath: '/meetings' });
+  const { page, setPage, filters, setFilters } = useUrlFilters({ basePath: '/meetings' });
 
   const [createOpen, setCreateOpen] = useState(false);
 
-  const { meetings, meta, isLoading } = useMeetings({
-    page,
-  });
+  const { meetings, meta, isLoading } = useMeetings({ options: filters, page });
+
   const { columns } = useMeetingTableColumns();
 
   return (
@@ -38,14 +39,8 @@ export function MeetingsPage() {
       <CreateMeetingDialog open={createOpen} onOpenChange={setCreateOpen} />
 
       <DataTableFilters
-        fields={[
-          {
-            type: 'search',
-            id: 'search',
-            placeholder: 'Search meetings...',
-          },
-        ]}
-        onFilterChange={() => {}}
+        fields={meetingListFilters}
+        onFilterChange={(filters) => setFilters(filters)}
       />
 
       <DataTable loading={isLoading} data={meetings} columns={columns} />
