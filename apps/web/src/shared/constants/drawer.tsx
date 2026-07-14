@@ -33,16 +33,8 @@ export const DRAWER_NAV_MAIN: DrawerItem[] = [
     isActive: true,
     items: [
       {
-        title: 'Published',
+        title: 'List',
         url: '/announcement',
-      },
-      {
-        title: 'Drafts',
-        url: '/announcement/draft',
-      },
-      {
-        title: 'Archive',
-        url: '/announcement/archived',
       },
     ],
   },

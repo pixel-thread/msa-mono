@@ -26,7 +26,7 @@ export function useUrlFilters(options: UseUrlFiltersOptions = {}): UseUrlFilters
   const navigate = useNavigate();
   const location = useLocation();
   const pathname = location.pathname;
-  const searchParams = useMemo(() => new URLSearchParams(location.search), [location.search]);
+  const searchParams = useMemo(() => new URLSearchParams(location?.search), [location.search]);
   const resolvedPath = basePath ?? pathname;
 
   const doNavigate = useCallback(

@@ -118,9 +118,7 @@ export default function RetroactivePage() {
                 >
                   <SelectTrigger className="w-[240px] h-10">
                     <SelectValue
-                      placeholder={
-                        selectedPlanId ? 'Select a version' : 'Select a plan first'
-                      }
+                      placeholder={selectedPlanId ? 'Select a version' : 'Select a plan first'}
                     />
                   </SelectTrigger>
                   <SelectContent>
@@ -160,11 +158,7 @@ export default function RetroactivePage() {
           <Button
             onClick={handleSearch}
             className="h-10"
-            disabled={
-              searchMode === 'planVersion'
-                ? !selectedVersionId
-                : !(startDate && endDate)
-            }
+            disabled={searchMode === 'planVersion' ? !selectedVersionId : !(startDate && endDate)}
           >
             Search
           </Button>

@@ -29,10 +29,10 @@ import {
   ArrowRight01Icon,
   BankIcon,
   CheckmarkBadge01Icon,
-  Shield01Icon,
-  UserGroupIcon,
   EyeClosedIcon,
   EyeIcon,
+  Shield01Icon,
+  UserGroupIcon,
 } from '@hugeicons/core-free-icons';
 import { HugeiconsIcon } from '@hugeicons/react';
 import { logger } from '@src/shared/logger';

@@ -6,11 +6,26 @@ import { useQuery } from '@tanstack/react-query';
 
 import type { Announcement } from '../types';
 
-export function useAnnouncementsList(status?: string, page: number = 1) {
+type FilterOptions = {
+  search?: string;
+  status?: string;
+  priority?: string;
+};
+
+type UseAnnouncementsList = {
+  options: FilterOptions;
+  page?: number;
+};
+
+export function useAnnouncementsList({ options, page = 1 }: UseAnnouncementsList) {
+  const { search = '', status = 'PUBLISHED', priority = 'NORMAL' } = options;
+
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: QUERY_KEYS.ANNOUNCEMENTS_KEYS.LIST({ status, page }),
+    queryKey: QUERY_KEYS.ANNOUNCEMENTS_KEYS.LIST(search, status, priority, page.toString()),
     queryFn: async () =>
-      http.get<Announcement[]>(buildUrlWithQuery(ENDPOINTS.ANNOUNCEMENTS.LIST, { page, status })),
+      http.get<Announcement[]>(
+        buildUrlWithQuery(ENDPOINTS.ANNOUNCEMENTS.LIST, { search, status, priority, page }),
+      ),
   });
 
   return {

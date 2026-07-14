@@ -8,6 +8,7 @@ import { useAnnouncementColumns } from '@src/features/announcement/hooks/use-ann
 import { useAnnouncementsList } from '@src/features/announcement/hooks/use-announcements-list';
 import { useDeleteAnnouncement } from '@src/features/announcement/hooks/use-delete-announcement';
 import type { Announcement } from '@src/features/announcement/types';
+import { announcementListFilters } from '@src/features/announcement/utils/constants';
 import { DataTable } from '@src/shared/components/data-table';
 import { DataTableFilters } from '@src/shared/components/data-table-filters';
 import { DataTablePagination } from '@src/shared/components/data-table-pagination';
@@ -19,16 +20,13 @@ interface AnnouncementsPageProps {
 }
 
 export default function AnnouncementsPage({ status }: AnnouncementsPageProps) {
-  const basePath = useMemo(
-    () => `/announcement${status ? `/${status.toLowerCase()}` : ''}`,
-    [status],
-  );
-  const { page, setPage } = useUrlFilters({ basePath });
+  const basePath = useMemo(() => `/announcement`, [status]);
+  const { page, setPage, setFilters, filters } = useUrlFilters({ basePath });
 
   const [editingAnnouncement, setEditingAnnouncement] = useState<Announcement | null>(null);
   const [deletingAnnouncement, setDeletingAnnouncement] = useState<Announcement | null>(null);
 
-  const { announcements, meta, isLoading } = useAnnouncementsList(status, page);
+  const { announcements, meta, isLoading } = useAnnouncementsList({ options: filters, page });
   const deleteAnnouncement = useDeleteAnnouncement();
 
   const { columns } = useAnnouncementColumns({
@@ -51,14 +49,8 @@ export default function AnnouncementsPage({ status }: AnnouncementsPageProps) {
       </SectionHeader>
 
       <DataTableFilters
-        fields={[
-          {
-            type: 'search',
-            id: 'search',
-            placeholder: 'Search announcements...',
-          },
-        ]}
-        onFilterChange={() => {}}
+        fields={announcementListFilters}
+        onFilterChange={(filters) => setFilters(filters)}
       />
 
       <DataTable loading={isLoading} data={announcements} columns={columns} />
