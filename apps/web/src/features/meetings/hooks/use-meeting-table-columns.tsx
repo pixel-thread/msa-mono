@@ -15,7 +15,7 @@ import { Link } from '@tanstack/react-router';
 import { ColumnDef } from '@tanstack/react-table';
 import { getStatusBadge } from '@utils/helper/get-status-badge';
 import { getTypeBadge } from '@utils/helper/get-type-badge';
-import { Eye, MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
+import { Eye, MoreHorizontal, Trash2 } from 'lucide-react';
 
 export const useMeetingTableColumns = (): {
   columns: ColumnDef<Meeting>[];
@@ -33,7 +33,8 @@ export const useMeetingTableColumns = (): {
         return (
           <Link
             className="text-sm font-medium text-ink hover:underline"
-            to={`/meetings/${meeting.id}`}
+            to={`/meetings/$meetingId`}
+            params={{ meetingId: meeting.id }}
           >
             {meeting.title}
           </Link>
@@ -99,29 +100,10 @@ export const useMeetingTableColumns = (): {
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem asChild>
-                <Link to={`/meetings/${meeting.id}`}>
+                <Link to={'/meetings/$meetingId'} params={{ meetingId }}>
                   <Eye className="mr-2 h-4 w-4" />
                   View Details
                 </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link to={`/meetings/${meetingId}`}>
-                  <Pencil className="mr-2 h-4 w-4" />
-                  Edit
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                className="text-destructive focus:text-destructive"
-                onClick={() => {
-                  if (confirm('Are you sure you want to delete this meeting?')) {
-                    deleteMeeting(meeting.id);
-                  }
-                }}
-                disabled={isDeleting}
-              >
-                <Trash2 className="mr-2 h-4 w-4" />
-                Delete
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem
