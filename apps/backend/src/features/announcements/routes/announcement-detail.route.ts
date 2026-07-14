@@ -110,7 +110,7 @@ export const putAnnouncement: RequestHandler[] = [
       announcementId: announcementId as string,
       associationId: req.user!.associationId,
       authorId: userId,
-      ...req.body,
+      data: { ...req.body },
     });
 
     logger.info({ traceId, announcementId }, 'PUT /api/announcements/[id] - Success');
