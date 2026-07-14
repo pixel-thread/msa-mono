@@ -55,6 +55,7 @@ export const MeetingQuerySchema = z
     type: z.enum(MeetingType, { message: 'Invalid meeting type' }).optional(),
     status: z.enum(MeetingStatus, { message: 'Invalid meeting status' }).optional(),
     page: pageNumberValidation,
+    search: z.string().max(100).optional(),
   })
   .strict();
 

@@ -27,17 +27,18 @@ export const getMeetings: RequestHandler[] = [
       'GET /api/meetings - User authorized',
     );
 
-    const query = req.query as { page?: number; type?: string; status?: string };
+    const query = req.query as { page?: number; type?: string; status?: string; search?: string };
+
     if (!query) throw new ForbiddenError('Invalid query parameters');
 
     const userId = req.user?.id as string;
-    const { page, type, status } = query;
+    const { page, type, status, search } = query;
 
     if (hasHighRoleAccess(user.role)) {
       const result = await findManyMeetings({
         role: user.role,
         associationId: req.user!.associationId,
-        filters: { type, status } as any,
+        filters: { type, status, search } as any,
         pagination: { page: page ?? 1 },
       });
       logger.info({ traceId, count: result.meetings.length }, 'GET /api/meetings - Success');
