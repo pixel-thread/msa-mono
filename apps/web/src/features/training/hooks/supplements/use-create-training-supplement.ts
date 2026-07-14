@@ -1,9 +1,7 @@
-import { ENDPOINTS } from '@repo/shared';
+import { ENDPOINTS, QUERY_KEYS } from '@repo/shared';
 import http from '@src/shared/utils/http';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
-
-import { trainingQueryKeys } from '../../utils/constants';
 
 export function useCreateTrainingSupplement(moduleId: string | null) {
   const queryClient = useQueryClient();
@@ -14,7 +12,7 @@ export function useCreateTrainingSupplement(moduleId: string | null) {
     onSuccess: (res) => {
       if (res.success) {
         queryClient.invalidateQueries({
-          queryKey: trainingQueryKeys.supplements.all(moduleId),
+          queryKey: QUERY_KEYS.TRAINING_KEYS.SUPPLEMENTS(moduleId),
         });
         toast.success(res.message);
         return res;

@@ -1,10 +1,9 @@
-import { ENDPOINTS } from '@repo/shared';
+import { ENDPOINTS, QUERY_KEYS } from '@repo/shared';
 import http from '@src/shared/utils/http';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
 import type { TrainingModuleListItem } from '../types';
-import { trainingQueryKeys } from '../utils/constants';
 import type { UpdateTrainingModuleInput } from '../validators/training';
 
 export function useUpdateTrainingModule() {
@@ -16,10 +15,10 @@ export function useUpdateTrainingModule() {
     onSuccess: (res, variables) => {
       if (res.success) {
         queryClient.invalidateQueries({
-          queryKey: trainingQueryKeys.modules.all(),
+          queryKey: QUERY_KEYS.TRAINING_KEYS.MODULES_LIST(),
         });
         queryClient.invalidateQueries({
-          queryKey: trainingQueryKeys.modules.detail(variables.moduleId),
+          queryKey: QUERY_KEYS.TRAINING_KEYS.MODULE_DETAIL(variables.moduleId),
         });
         toast.success('Training module updated successfully');
         return res;

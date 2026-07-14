@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@repo/eslint-config": "workspace:*",
+    "@repo/types": "workspace:*",
     "zod": "^4.4.3"
   },
   "devDependencies": {

@@ -1,9 +1,7 @@
-import { ENDPOINTS } from '@repo/shared';
+import { ENDPOINTS, QUERY_KEYS } from '@repo/shared';
 import http from '@src/shared/utils/http';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
-
-import { trainingQueryKeys } from '../../utils/constants';
 
 /**
  * Uploads a certificate template file and links it to the training module.
@@ -18,7 +16,7 @@ export function useUploadCertificateTemplate(moduleId: string | null) {
     onSuccess: (res) => {
       if (res.success) {
         queryClient.invalidateQueries({
-          queryKey: trainingQueryKeys.modules.detail(moduleId),
+          queryKey: QUERY_KEYS.TRAINING_KEYS.MODULE_DETAIL(moduleId),
         });
         toast.success(res.message || 'Certificate template uploaded');
         return res;
@@ -41,7 +39,7 @@ export function useRemoveCertificateTemplate(moduleId: string | null) {
     onSuccess: (res) => {
       if (res.success) {
         queryClient.invalidateQueries({
-          queryKey: trainingQueryKeys.modules.detail(moduleId),
+          queryKey: QUERY_KEYS.TRAINING_KEYS.MODULE_DETAIL(moduleId),
         });
         toast.success('Certificate template removed');
         return res;

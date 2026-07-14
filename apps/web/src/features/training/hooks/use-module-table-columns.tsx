@@ -27,7 +27,7 @@ export const useModuleTableColumns = (options: {
       cell: ({ row }) => {
         const mod = row.original;
         return (
-          <Link to={`/training/${mod.id}`} className="flex flex-col max-w-md">
+          <Link to={`/training`} className="flex flex-col max-w-md">
             <span className="text-sm font-semibold text-ink">{mod.title}</span>
             {mod.description && (
               <span className="text-xs text-muted-foreground truncate">{mod.description}</span>

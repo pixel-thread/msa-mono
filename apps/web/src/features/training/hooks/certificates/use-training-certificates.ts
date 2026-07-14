@@ -1,13 +1,12 @@
-import { ENDPOINTS } from '@repo/shared';
+import { ENDPOINTS, QUERY_KEYS } from '@repo/shared';
 import http from '@src/shared/utils/http';
 import { useQuery } from '@tanstack/react-query';
 
 import { TrainingCertificateItem } from '../../types';
-import { trainingQueryKeys } from '../../utils/constants';
 
 export function useTrainingCertificates(moduleId: string | null) {
   const query = useQuery({
-    queryKey: trainingQueryKeys.certificates.all(moduleId),
+    queryKey: QUERY_KEYS.TRAINING_KEYS.CERTIFICATES(moduleId),
     queryFn: async () =>
       http.get<TrainingCertificateItem[]>(ENDPOINTS.TRAINING.MODULE_CERTIFICATES(moduleId!)),
     enabled: !!moduleId,

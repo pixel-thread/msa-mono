@@ -1,10 +1,9 @@
-import { ENDPOINTS } from '@repo/shared';
+import { ENDPOINTS, QUERY_KEYS } from '@repo/shared';
 import http from '@src/shared/utils/http';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
 import type { TrainingModuleListItem } from '../types';
-import { trainingQueryKeys } from '../utils/constants';
 import type { CreateTrainingModuleInput } from '../validators/training';
 
 export function useCreateTrainingModule() {
@@ -16,7 +15,7 @@ export function useCreateTrainingModule() {
     onSuccess: (res) => {
       if (res.success) {
         queryClient.invalidateQueries({
-          queryKey: trainingQueryKeys.modules.all(),
+          queryKey: QUERY_KEYS.TRAINING_KEYS.MODULES_LIST(),
         });
         toast.success('Training module created successfully');
         return res;

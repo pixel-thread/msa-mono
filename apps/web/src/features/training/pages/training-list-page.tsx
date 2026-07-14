@@ -16,7 +16,7 @@ import { useModuleTableColumns, useTrainingModules, useUpdateTrainingModule } fr
 export function TrainingListPage() {
   const navigate = useNavigate();
 
-  const { page, setPage, setFilters } = useUrlFilters({
+  const { page, setPage, setFilters, filters } = useUrlFilters({
     basePath: '/training',
   });
 
