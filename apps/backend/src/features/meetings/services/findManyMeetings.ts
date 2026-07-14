@@ -12,6 +12,7 @@ interface FindManyMeetingsProps {
   filters?: {
     type?: MeetingType;
     status?: MeetingStatus;
+    search?: string;
   };
   pagination: {
     page: number;
@@ -32,6 +33,12 @@ export async function findManyMeetings({
     associationId,
     ...(filters?.type && { type: filters.type }),
     ...(filters?.status && { status: filters.status }),
+    ...(filters?.search && {
+      OR: [
+        { title: { contains: filters.search, mode: 'insensitive' } },
+        { venue: { contains: filters.search, mode: 'insensitive' } },
+      ],
+    }),
   };
 
   if (!isHighRole) {
