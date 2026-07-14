@@ -115,7 +115,7 @@ export const putAnnouncement: RequestHandler[] = [
 
     logger.info({ traceId, announcementId }, 'PUT /api/announcements/[id] - Success');
 
-    return success(res, { data: announcement });
+    return success(res, { data: announcement, message: 'Announcement updated successfully' });
   }),
 ];
 
@@ -166,7 +166,7 @@ export const deleteAnnouncement: RequestHandler[] = [
 
     logger.info({ traceId, announcementId }, 'DELETE /api/announcements/[id] - Success');
 
-    return success(res, { data: { success: true } });
+    return success(res, { data: { success: true, message: 'Announcement deleted successfully' } });
   }),
 ];
 
