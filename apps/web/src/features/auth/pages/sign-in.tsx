@@ -31,6 +31,8 @@ import {
   CheckmarkBadge01Icon,
   Shield01Icon,
   UserGroupIcon,
+  EyeClosedIcon,
+  EyeIcon,
 } from '@hugeicons/core-free-icons';
 import { HugeiconsIcon } from '@hugeicons/react';
 import { logger } from '@src/shared/logger';
@@ -69,6 +71,7 @@ const BENEFITS = [
  */
 export function SignInPage() {
   const signInMutation = useSignIn();
+  const [isShowPassword, setIsShowPassword] = useState(false);
   const [mfaTempToken, setMfaTempToken] = useState<string | null>(null);
 
   const form = useForm<SignInInput>({
@@ -78,6 +81,8 @@ export function SignInPage() {
       password: '',
     },
   });
+
+  const onToggleShowPassword = () => setIsShowPassword(!isShowPassword);
 
   const onSubmit = async (values: SignInInput) => {
     try {
@@ -187,7 +192,21 @@ export function SignInPage() {
                     <FormItem>
                       <FormLabel>Password</FormLabel>
                       <FormControl>
-                        <Input type="password" placeholder="Password" {...field} />
+                        <div className="flex gap-2 flex-row">
+                          <Input
+                            type={isShowPassword ? 'text' : 'password'}
+                            placeholder="Password"
+                            {...field}
+                          />
+                          <Button
+                            type={'button'}
+                            variant={'ghost'}
+                            size={'icon-lg'}
+                            onClick={onToggleShowPassword}
+                          >
+                            <HugeiconsIcon icon={isShowPassword ? EyeIcon : EyeClosedIcon} />
+                          </Button>
+                        </div>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
