@@ -36,6 +36,7 @@ import {
 import { Textarea } from '@src/shared/components/ui/textarea';
 import { ImageIcon, Upload, X } from 'lucide-react';
 import { useForm, useWatch } from 'react-hook-form';
+import { toast } from 'sonner';
 
 interface EditAnnouncementDialogProps {
   announcement: Announcement | null;
@@ -89,8 +90,13 @@ export function EditAnnouncementDialog({
     updateAnnouncement.mutate(
       { id: announcement.id, data },
       {
-        onSuccess: () => {
-          onOpenChange(false);
+        onSuccess: (data) => {
+          if (data.success) {
+            onOpenChange(false);
+            toast.success(data.message);
+            return;
+          }
+          toast.error(data.message);
         },
       },
     );
