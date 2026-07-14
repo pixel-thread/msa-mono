@@ -7,7 +7,6 @@ import { RefreshTokenSchema } from '@feature/auth/validators';
 import { signAccessToken, signRefreshToken, verifyRefreshToken } from '@lib/jwt';
 import { hashToken } from '@lib/password';
 import { validate } from '@lib/validate';
-import { env } from '@src/env';
 import { logger } from '@src/shared/logger';
 import { asyncHandler } from '@utils/async-handler';
 import { success } from '@utils/responses';
