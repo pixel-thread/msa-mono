@@ -1,16 +1,15 @@
-import { buildUrlWithQuery, ENDPOINTS } from '@repo/shared';
+import { buildUrlWithQuery, ENDPOINTS, QUERY_KEYS } from '@repo/shared';
 import http from '@src/shared/utils/http';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
 import type { AssignedUserWithCompletion } from '../types';
-import { trainingQueryKeys } from '../utils/constants';
 
 export function useModuleAssignedUsers(moduleId: string | null, page?: number) {
   const queryClient = useQueryClient();
 
   const { data, isLoading, refetch } = useQuery({
-    queryKey: trainingQueryKeys.assignedUsers.all(moduleId, page),
+    queryKey: QUERY_KEYS.TRAINING_KEYS.ASSIGNED_USERS(moduleId, page),
     queryFn: async () =>
       http.get<AssignedUserWithCompletion[]>(
         buildUrlWithQuery(ENDPOINTS.TRAINING.MODULE_ASSIGNED_USERS(moduleId!), { page }),
@@ -47,13 +46,13 @@ export function useModuleAssignedUsers(moduleId: string | null, page?: number) {
     onSuccess: (res) => {
       if (res.success) {
         queryClient.invalidateQueries({
-          queryKey: trainingQueryKeys.assignedUsers.base,
+          queryKey: QUERY_KEYS.TRAINING_KEYS.ASSIGNED_USERS_BASE(),
         });
         queryClient.invalidateQueries({
-          queryKey: trainingQueryKeys.completions.admin,
+          queryKey: QUERY_KEYS.TRAINING_KEYS.COMPLETIONS_ADMIN(),
         });
         queryClient.invalidateQueries({
-          queryKey: trainingQueryKeys.completions.my,
+          queryKey: QUERY_KEYS.TRAINING_KEYS.COMPLETIONS_MY(),
         });
         toast.success('User marked as completed successfully');
         return res;
